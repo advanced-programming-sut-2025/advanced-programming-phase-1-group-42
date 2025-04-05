@@ -2,7 +2,8 @@ package org.example.views;
 
 import java.util.Scanner;
 
-public class GameMenu implements AppMenu {
+public class ProfileMenu implements AppMenu {
+
     @Override
     public void check(Scanner scanner) {
 

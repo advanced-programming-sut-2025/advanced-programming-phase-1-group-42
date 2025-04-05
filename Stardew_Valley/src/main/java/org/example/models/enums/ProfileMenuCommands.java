@@ -3,16 +3,17 @@ package org.example.models.enums;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-public enum LoginRegisterCommands implements Command {
-    Exit(""),
-    ShowCurrentMenu(""),
-    Register(""),
-    Login(""),
-    ForgetPassword("");
+public enum ProfileMenuCommands implements Command {
+    ChangeUsername(""),
+    ChangeNickname(""),
+    ChangeEmail(""),
+    ChangePassword(""),
+    UserInfo(""),
+    Exit("");
 
 
     private final String pattern;
-    LoginRegisterCommands(String pattern) {
+    ProfileMenuCommands(String pattern) {
         this.pattern = pattern;
     }
 
