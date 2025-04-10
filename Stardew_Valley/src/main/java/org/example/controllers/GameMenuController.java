@@ -154,20 +154,123 @@ public class GameMenuController extends Controller {
 
 
     //TODO: Parsa
+    //Weather methods
+    public Result cheatThunder(Int x, Int y) {
+        //TODO
+    }
+
+    public Result weather() {
+        //TODO
+    }
+
+    public Result weatherForecast() {
+        //TODO
+    }
+
+    public Result cheatWeatherSet(String weather) {
+        //TODO
+    }
+
+    public Result greenHouseBuild() {
+        //TODO
+    }
 
     //TODO: Parsa
+    //Map methods
+    public Result walk(Int x, Int y) {
+        //TODO
+    }
+
+    public Result printMap(Int x, Int y, Int size) {
+        //TODO
+    }
+
+    public Result helpReadingMap() {
+        //TODO
+    }
 
     //TODO: Parsa
+    //inventory & Energy methods
+    public Result energyShow() {
+        //TODO
+    }
+    public Result cheatEnergySet(Int value) {
+        //TODO
+    }
+    public Result cheatEnergyUnlimited() {
+        //TODO
+    }
+    public Result inventoryTrashItem(String itemName, Int number) {
+        //TODO
+    }
+    public Result inventoryShow() {
+        //TODO
+    }
 
     //TODO: Arani
 
     //TODO: Arani
 
     //TODO: Parsa
+    //Animals & Fishing methods
+    public Result buildBuilding(String buildingName, Int x, Int y) {
+        //TODO
+    }
+    public Result buyAnimal(String animalType, String animalName) {
+        //TODO
+    }
+    public Result petAnimal(String animalName) {
+        //TODO
+    }
+    public Result animalList() {
+        //TODO
+    }
+    public Result cheatSetAnimalFriendship(String animalName , Int amount) {
+        //TODO
+    }
+    public Result shepherdAnimal(String animalName, Int x , Int y) {
+        //TODO
+    }
+    public Result feedHay(String animalName) {
+        //TODO
+    }
+    public Result animalProductionList() {
+        //TODO
+    }
+    public Result collectProduct(String animalName) {
+        //TODO
+    }
+    public Result sellAnimal(String animalName) {
+        //TODO
+    }
+
+    public Result fishing(String fishingPole) {
+        //TODO
+    }
 
     //TODO: Arani
 
     //TODO: Parsa
-
+    //Trading methods
+    public Result startTrade() {
+        //TODO
+    }
+    public Result tradeWithMoney(String receiver, String tradeType, String Item,
+                        Int amount, Int Price) {
+        //TODO
+    }
+    public Result tradeWithGoods(String receiver, String tradeType, String Item,
+                        Int amount, String targetItem, Int targetAmount) {
+        //TODO
+    }
+    public Result tradeList() {
+        //TODO
+    }
+    public Result tradeResponse(String response, Int tradeID) {
+        //TODO
+    }
+    public Result tradeHistory() {
+        //TODO
+    }
 
 }
