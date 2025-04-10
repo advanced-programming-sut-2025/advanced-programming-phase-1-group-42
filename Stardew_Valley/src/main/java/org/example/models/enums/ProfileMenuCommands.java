@@ -4,6 +4,8 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 public enum ProfileMenuCommands implements Command {
+
+    //TODO: Arani
     ChangeUsername(""),
     ChangeNickname(""),
     ChangeEmail(""),
