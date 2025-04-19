@@ -1,5 +1,4 @@
 package org.example.models.interactions;
 
-public class Building {
-
+public interface Building {
 }

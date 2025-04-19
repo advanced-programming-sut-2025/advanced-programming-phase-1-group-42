@@ -83,7 +83,8 @@ public class GameMenuController extends Controller {
 
     //TODO: Parsa
     //Map methods
-    public Result walk(String x, String y) {
+    public Result walk(String x,        //TODO
+                       String y) {
         //TODO
     }
 
@@ -102,7 +103,6 @@ public class GameMenuController extends Controller {
     }
 
     public Result cheatEnergySet(String value) {
-        //TODO
     }
 
     public Result cheatEnergyUnlimited() {

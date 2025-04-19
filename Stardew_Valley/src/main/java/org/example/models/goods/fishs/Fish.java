@@ -1,4 +1,4 @@
-package org.example.models.goods.fishings;
+package org.example.models.goods.fishs;
 
 import org.example.models.goods.Good;
 
