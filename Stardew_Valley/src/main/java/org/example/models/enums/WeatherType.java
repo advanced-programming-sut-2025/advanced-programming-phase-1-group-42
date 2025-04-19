@@ -1,6 +1,6 @@
 package org.example.models.enums;
 
-import org.example.models.game_structure.*;
+import org.example.models.game_structure.weathers.*;
 
 public enum WeatherType {
     Sunny(new Sunny()),
