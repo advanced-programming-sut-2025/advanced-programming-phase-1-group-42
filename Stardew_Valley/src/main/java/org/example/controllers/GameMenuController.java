@@ -1,18 +1,65 @@
 package org.example.controllers;
 
+import org.example.models.App;
+import org.example.models.Game;
 import org.example.models.Result;
+import org.example.models.game_structure.Map;
+import org.example.models.interactions.Player;
+import org.example.models.interactions.User;
 
 public class GameMenuController extends Controller {
 
 
     //game setting methods
 
+    //Nader
     public Result newGame(String username_1, String username_2, String username_3) {
-        //TODO
+        if (username_1 == null || username_2 == null || username_3 == null) {
+            return new Result(false, "You need to add 3 players to start the game");
+        }
+        Player mainPlayer = new Player(App.getCurrentUser());
+        Player player1 = null;
+        Player player2 = null;
+        Player player3 = null;
+        for (User user : App.users) {
+            if (user.getUsername().equals(username_1)) {
+                if (user.getPlaying().equals(true)) {
+                    return new Result(false, "This user is playing in another game");
+                } else {
+                    player1 = new Player(user);
+                }
+            } else if (user.getUsername().equals(username_2)) {
+                if (user.getPlaying().equals(true)) {
+                    return new Result(false, "This user is playing in another game");
+                } else {
+                    player2 = new Player(user);
+                }
+            } else if (user.getUsername().equals(username_3)) {
+                if (user.getPlaying().equals(true)) {
+                    return new Result(false, "This user is playing in another game");
+                } else {
+                    player3 = new Player(user);
+                }
+            }
+        }
+
+        if (player1 == null || player2 == null || player3 == null) {
+            return new Result(false, "Added users are unavailable");
+        }
+
+        App.setCurrentGame(new Game(App.getCurrentUser()));
+        return new Result(true, "Users have been added to the game successfully!");
     }
 
     public Result mapGame(String mapNumber) {
-        //TODO
+        int mapNumberInt = Integer.parseInt(mapNumber.trim());
+        for (Map map : App.maps) {
+            if (map.getMapNumber() == mapNumberInt) {
+                App.getCurrentGame().setCurrentMap(map);
+                return new Result(true, "Map number " + mapNumber + " has been selected");
+            }
+        }
+        return new Result(false, "Map number is unavailable");
     }
 
     public Result loadGame() {
@@ -20,11 +67,13 @@ public class GameMenuController extends Controller {
     }
 
     public Result exitGame() {
-        //TODO
+        if (App.getCurrentGame().getGameCreator() != App.getCurrentUser()) {
+            return new Result(false, "Just game creator can exit the game!");
+        }
     }
 
     public Result nextTurn() {
-        //TODO
+        App.getCurrentGame().nextPlayer();
     }
 
 
