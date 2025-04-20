@@ -10,11 +10,11 @@ public enum GameMenuCommands implements Command {
 
     //TODO: Nader
     // Game Commands
-    NEW_GAME(""),
-    GAME_MAP(""),
-    LOAD_GAME(""),
-    EXIT_GAME(""),
-    NEXT_TURN(""),
+    NEW_GAME("game new\\s-u\\s(?<username_1>.*)\\s(?<username_1>.*)\\s(?<username_2>.*)\\s(?<username_3>.*)"),
+    GAME_MAP("game map\\s(?<map_number>.*)"),
+    LOAD_GAME("load game"),
+    EXIT_GAME("exit game"),
+    NEXT_TURN("next turn"),
 
     //TODO: Nader
     //  Date & Time Commands

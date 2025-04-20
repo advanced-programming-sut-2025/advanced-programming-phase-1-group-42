@@ -31,6 +31,11 @@ public class Player {
     private ArrayList<Quest> questList;
 
 
+    public Player(User user) {
+        this.user = user;
+    }
+
+
 
     // Funciton for walk
     public void walk() {
