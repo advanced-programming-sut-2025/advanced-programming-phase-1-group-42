@@ -4,6 +4,7 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 public enum MainMenuCommands implements Command {
+    //TODO: Arani
     MenuEnter(""),
     Exit(""),
     Logout("");

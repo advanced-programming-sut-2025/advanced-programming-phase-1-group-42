@@ -4,13 +4,14 @@ import java.awt.*;
 import java.util.ArrayList;
 
 import org.example.models.enums.Menu;
+import org.example.models.game_structure.Game;
 import org.example.models.game_structure.Map;
 import org.example.models.interactions.User;
 
 public class App {
-    private static Menu currentMenu = Menu.LoginRegisterMenu;
+    private final static ArrayList<User> users = new ArrayList<>();
 
-    public static ArrayList<User> users = new ArrayList<>();
+    private static Menu currentMenu = Menu.LoginRegisterMenu;
 
     public static ArrayList<Map> maps = new ArrayList<>();
 
@@ -18,6 +19,9 @@ public class App {
 
     private static Game currentGame = null;
 
+    public static ArrayList<User> getUsers() {
+        return users;
+    }
 
     public static Menu getCurrentMenu() {
         return currentMenu;
@@ -26,6 +30,7 @@ public class App {
     public static void setCurrentMenu(Menu currentMenu) {
         App.currentMenu = currentMenu;
     }
+
 
     public static User getCurrentUser() {
         return currentUser;
@@ -42,4 +47,6 @@ public class App {
     public static Game getCurrentGame() {
         return currentGame;
     }
+
+
 }

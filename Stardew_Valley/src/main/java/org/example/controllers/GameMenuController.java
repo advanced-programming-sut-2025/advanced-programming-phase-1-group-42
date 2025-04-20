@@ -1,19 +1,18 @@
 package org.example.controllers;
 
 import org.example.models.App;
-import org.example.models.Game;
 import org.example.models.Result;
+import org.example.models.game_structure.Game;
 import org.example.models.game_structure.Map;
 import org.example.models.interactions.Player;
 import org.example.models.interactions.User;
 
 public class GameMenuController extends Controller {
 
-
+    //TODO: Nader
     //game setting methods
-
-    //Nader
     public Result newGame(String username_1, String username_2, String username_3) {
+        //TODO
         if (username_1 == null || username_2 == null || username_3 == null) {
             return new Result(false, "You need to add 3 players to start the game");
         }
@@ -21,7 +20,7 @@ public class GameMenuController extends Controller {
         Player player1 = null;
         Player player2 = null;
         Player player3 = null;
-        for (User user : App.users) {
+        for (User user : App.getUsers()) {
             if (user.getUsername().equals(username_1)) {
                 if (user.getPlaying().equals(true)) {
                     return new Result(false, "This user is playing in another game");
@@ -52,6 +51,7 @@ public class GameMenuController extends Controller {
     }
 
     public Result mapGame(String mapNumber) {
+        //TODO
         int mapNumberInt = Integer.parseInt(mapNumber.trim());
         for (Map map : App.maps) {
             if (map.getMapNumber() == mapNumberInt) {
@@ -77,6 +77,7 @@ public class GameMenuController extends Controller {
     }
 
 
+    //TODO: Nader
     // date & time methods
     public Result time() {
         //TODO
@@ -107,8 +108,115 @@ public class GameMenuController extends Controller {
     }
 
 
-    // crafting methods
+    //TODO: Parsa
+    //Weather methods
+    public Result cheatThunder(String x, String y) {
+        //TODO
+    }
 
+    public Result weather() {
+        //TODO
+    }
+
+    public Result weatherForecast() {
+        //TODO
+    }
+
+    public Result cheatWeatherSet(String weather) {
+        //TODO
+    }
+
+    public Result greenHouseBuild() {
+        //TODO
+    }
+
+
+    //TODO: Parsa
+    //Map methods
+    public Result walk(String x,        //TODO
+                       String y) {
+        //TODO
+    }
+
+    public Result printMap(String x, String y, String size) {
+        //TODO
+    }
+
+    public Result helpReadingMap() {
+        //TODO
+    }
+
+    //TODO: Parsa
+    //inventory & Energy methods
+    public Result energyShow() {
+        //TODO
+    }
+
+    public Result cheatEnergySet(String value) {
+    }
+
+    public Result cheatEnergyUnlimited() {
+        //TODO
+    }
+
+    public Result inventoryTrashItem(String itemName, String number) {
+        //TODO
+    }
+
+    public Result inventoryShow() {
+        //TODO
+    }
+
+    //TODO: Arani
+    // Tools
+    public Result toolsEquipment(String toolName) {
+        //TODO
+    }
+
+    public Result toolsShowCurrent() {
+        //TODO
+    }
+
+    public Result toolsShowAvailable() {
+        //TODO
+    }
+
+    public Result toolsUpgrade(String toolName) {
+        //TODO
+    }
+
+    public Result toolsUse(String direction) {
+        //TODO
+    }
+
+    //TODO: Arani
+    // Craft Info
+    public Result craftInfo(String craftName) {
+        //TODO
+    }
+
+
+    //TODO: Arani
+    // Planting
+    public Result plantSeed(String seed, String direction) {
+        //TODO
+    }
+
+    public Result showPlant(String direction) {
+        //TODO
+    }
+
+    public Result fertilize(String fertilizer, String direction) {
+        //TODO
+    }
+
+    public Result howMuchWater() {
+        //TODO
+    }
+
+
+    //TODO: Nader
+    // crafting methods
     public Result showCraftingRecipes() {
         //TODO
     }
@@ -126,8 +234,8 @@ public class GameMenuController extends Controller {
     }
 
 
-    //cooking methods
-
+    //TODO: Nader
+    // cooking methods
     public Result cookingRefrigerator(String status, String itemName) {
         //TODO
     }
@@ -145,8 +253,55 @@ public class GameMenuController extends Controller {
     }
 
 
-    // artisan methods
+    //TODO: Parsa
+    // Animals & Fishing methods
+    public Result buildBuilding(String buildingName, String x, String y) {
+        //TODO
+    }
 
+    public Result buyAnimal(String animalType, String animalName) {
+        //TODO
+    }
+
+    public Result petAnimal(String animalName) {
+        //TODO
+    }
+
+    public Result animalList() {
+        //TODO
+    }
+
+    public Result cheatSetAnimalFriendship(String animalName , String amount) {
+        //TODO
+    }
+
+    public Result shepherdAnimal(String animalName, String x , String y) {
+        //TODO
+    }
+
+    public Result feedHay(String animalName) {
+        //TODO
+    }
+
+    public Result animalProductionList() {
+        //TODO
+    }
+
+    public Result collectProduct(String animalName) {
+        //TODO
+    }
+
+    public Result sellAnimal(String animalName) {
+        //TODO
+    }
+
+    public Result fishing(String fishingPole) {
+        //TODO
+    }
+
+
+    //TODO: Nader
+    // artisan methods
     public Result artisanUse(String artisanName) {
         //TODO
     }
@@ -155,9 +310,8 @@ public class GameMenuController extends Controller {
         //TODO
     }
 
-
+    //TODO: Nader
     // buy & sell methods
-
     public Result showAllProducts() {
         //TODO
     }
@@ -178,9 +332,83 @@ public class GameMenuController extends Controller {
         //TODO
     }
 
+    //TODO: Arani
+    // Friendships methods
+    public Result friendships() {
+        //TODO
+    }
 
+    public Result talk(String username, String message) {
+        //TODO
+    }
+
+    public Result talkHistory(String username) {
+        //TODO
+    }
+
+    public Result gift(String username, String item, String amount) {
+        //TODO
+    }
+
+    public Result giftList() {
+        //TODO
+    }
+
+    public Result giftRate(String giftNumber, String rate) {
+        //TODO
+    }
+
+    public Result giftHistory(String username) {
+        //TODO
+    }
+
+    public Result hug(String username) {
+        //TODO
+    }
+
+    public Result flower(String username) {
+        //TODO
+    }
+
+    public Result askMarriage(String username, String ring) {
+        //TODO
+    }
+
+    public Result respond(String status, String username) {
+        //TODO
+    }
+
+
+    //TODO: Parsa
+    // Trading methods
+    public Result startTrade() {
+        //TODO
+    }
+
+    public Result tradeWithMoney(String receiver, String tradeType, String Item,
+                                 String amount, String Price) {
+        //TODO
+    }
+
+    public Result tradeWithGoods(String receiver, String tradeType, String Item,
+                                 String amount, String targetItem, String targetAmount) {
+        //TODO
+    }
+
+    public Result tradeList() {
+        //TODO
+    }
+
+    public Result tradeResponse(String response, String tradeID) {
+        //TODO
+    }
+
+    public Result tradeHistory() {
+        //TODO
+    }
+
+    //TODO: Nader
     // NPC methods
-
     public Result meetNPC(String npcName) {
         //TODO
     }
@@ -200,23 +428,6 @@ public class GameMenuController extends Controller {
     public Result questsFinish(String index) {
         //TODO
     }
-
-
-    //TODO: Parsa
-
-    //TODO: Parsa
-
-    //TODO: Parsa
-
-    //TODO: Arani
-
-    //TODO: Arani
-
-    //TODO: Parsa
-
-    //TODO: Arani
-
-    //TODO: Parsa
 
 
 }

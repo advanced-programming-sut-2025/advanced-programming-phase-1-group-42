@@ -1,4 +1,4 @@
 package org.example.models.interactions;
 
-public class PlayerBuilding extends Building {
+public class PlayerBuilding implements Building {
 }
