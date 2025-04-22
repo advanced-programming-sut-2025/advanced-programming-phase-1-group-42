@@ -25,5 +25,9 @@ public class Map {
         this.mapNumber = mapNumber;
     }
 
+    public ArrayList<Tile> getTiles() {
+        return tiles;
+    }
+
 
 }

@@ -5,8 +5,8 @@ public class Energy {
     private int maxValue;
 
     // Functions
-    public void energySet() {
-        //TODO
+    public void energySet(int value) {
+        this.value -= value;
     }
 
     public void energyUnlimited() {

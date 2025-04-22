@@ -19,7 +19,7 @@ public class Player {
     private int points;
     private Wallet wallet;
     private Farm farm;
-    private Energy energy;
+    private Energy energy ;
     private TrashCan trashCan;
     private Skill skill;
     private HashMap<Player, Integer> friendShipLevel;
@@ -36,7 +36,6 @@ public class Player {
     }
 
 
-
     // Funciton for walk
     public void walk() {
         //TODO
@@ -45,6 +44,30 @@ public class Player {
     // Function for eat
     public void eat() {
         //TODO
+    }
+
+    public Inventory getInventory() {
+        return inventory;
+    }
+
+    public Skill getSkill() {
+        return skill;
+    }
+
+    public Energy getEnergy() {
+        return energy;
+    }
+
+    public ArrayList<CraftingRecipe> getCraftingRecipes() {
+        return craftingRecipes;
+    }
+
+    public ArrayList<CookingRecipe> getCookingRecipes() {
+        return cookingRecipes;
+    }
+
+    public Cordinate getCordinate() {
+        return cordinate;
     }
 
 

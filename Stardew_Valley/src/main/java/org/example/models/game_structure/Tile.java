@@ -10,4 +10,16 @@ public class Tile {
     private TileType tileType;
     private ArrayList<Good> goods;
 
+    public ArrayList<Good> getGoods() {
+        return goods;
+    }
+
+    public Cordinate getCordinate() {
+        return cordinate;
+    }
+
+
+
+
+
 }

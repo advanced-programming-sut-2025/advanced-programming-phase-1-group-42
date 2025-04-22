@@ -4,10 +4,24 @@ import org.example.models.App;
 import org.example.models.Result;
 import org.example.models.game_structure.Game;
 import org.example.models.game_structure.Map;
+import org.example.models.game_structure.Tile;
+import org.example.models.goods.Good;
+import org.example.models.goods.recipes.CraftingFunctions;
+import org.example.models.goods.recipes.CraftingRecipe;
+import org.example.models.goods.recipes.Recipe;
 import org.example.models.interactions.Player;
 import org.example.models.interactions.User;
 
+import java.util.ArrayList;
+import java.util.Iterator;
+
 public class GameMenuController extends Controller {
+
+    Game thisGame;
+
+    public void setThisGame(Game thisGame) {
+        this.thisGame = thisGame;
+    }
 
     //TODO: Nader
     //game setting methods
@@ -46,7 +60,10 @@ public class GameMenuController extends Controller {
             return new Result(false, "Added users are unavailable");
         }
 
-        App.setCurrentGame(new Game(App.getCurrentUser()));
+        Game game = new Game(App.getCurrentUser());
+        App.setCurrentGame(game);
+
+
         return new Result(true, "Users have been added to the game successfully!");
     }
 
@@ -80,23 +97,30 @@ public class GameMenuController extends Controller {
     //TODO: Nader
     // date & time methods
     public Result time() {
-        //TODO
+        return new Result(true, App.getCurrentGame().getTime() + ":00");
     }
 
     public Result date() {
-        //TODO
+        return new Result(true,
+                App.getCurrentGame().getYear() + "/" +
+                        App.getCurrentGame().getSeasonOfYearInt() + "/" +
+                        App.getCurrentGame().getDayOfSeason());
     }
 
     public Result dateTime() {
-        //TODO
+        return new Result(true,
+                App.getCurrentGame().getYear() + "/" +
+                        App.getCurrentGame().getSeasonOfYearInt() + "/" +
+                        App.getCurrentGame().getDayOfSeason() + "/" +
+                        App.getCurrentGame().getTime() + ":00");
     }
 
     public Result dayOfTheWeek() {
-        //TODO
+        return new Result(true, App.getCurrentGame().getDayOfWeek());
     }
 
     public Result showSeason() {
-        //TODO
+        return new Result(true, App.getCurrentGame().getSeasonOfYear());
     }
 
     public Result cheatAdvanceTime(String hour) {
@@ -218,16 +242,91 @@ public class GameMenuController extends Controller {
     //TODO: Nader
     // crafting methods
     public Result showCraftingRecipes() {
-        //TODO
+        for (CraftingRecipe craftingRecipe : App.getCurrentGame().getCurrentPlayingPlayer().getCraftingRecipes()) {
+            System.out.println(craftingRecipe.getName());
+            System.out.println(craftingRecipe.getType().getIngredients());
+            System.out.println("-------------------------------------------");
+        }
+        return new Result(true, "");
     }
 
     public Result craftingCraft(String itemName) {
-        //TODO
+        for (CraftingRecipe craftingRecipe : App.getCurrentGame().getCurrentPlayingPlayer().getCraftingRecipes()) {
+            if (craftingRecipe.getName().equals(itemName)) {
+                CraftingFunctions craftingFunctions = new CraftingFunctions();
+                craftingFunctions.checkCraftingFunctions(craftingRecipe.getType());
+                return new Result(true, "");
+            }
+        }
+        return new Result(false, "");
     }
 
     public Result placeItem(String itemName, String direction) {
-        //TODO
+
+        Good goodTemp = null;
+        boolean found = false;
+        int newX = 0;
+        int newY = 0;
+        for (ArrayList<Good> goodArrayList : App.getCurrentGame().getCurrentPlayingPlayer().getInventory().getList()) {
+            Iterator<Good> iterator = goodArrayList.iterator();
+            while (iterator.hasNext()) {
+                Good good = iterator.next();
+                if (good.getName().equals(itemName)) {
+                    goodTemp = good;
+                    iterator.remove();
+                    found = true;
+                    break;
+                }
+            }
+            if (found) break;
+        }
+        if (!found) {
+            return new Result(false, "Item " + itemName + " not found");
+        }
+
+        switch (direction) {
+            case "up":
+                newY = App.getCurrentGame().getCurrentPlayingPlayer().getCordinate().getY() + 1;
+                break;
+            case "down":
+                newY = App.getCurrentGame().getCurrentPlayingPlayer().getCordinate().getY() - 1;
+                break;
+            case "left":
+                newX = App.getCurrentGame().getCurrentPlayingPlayer().getCordinate().getX() - 1;
+                break;
+            case "right":
+                newX = App.getCurrentGame().getCurrentPlayingPlayer().getCordinate().getX() + 1;
+                break;
+            case "up-right":
+                newX = App.getCurrentGame().getCurrentPlayingPlayer().getCordinate().getX() + 1;
+                newY = App.getCurrentGame().getCurrentPlayingPlayer().getCordinate().getY() + 1;
+                break;
+            case "up-left":
+                newX = App.getCurrentGame().getCurrentPlayingPlayer().getCordinate().getX() - 1;
+                newY = App.getCurrentGame().getCurrentPlayingPlayer().getCordinate().getY() + 1;
+                break;
+            case "down-right":
+                newX = App.getCurrentGame().getCurrentPlayingPlayer().getCordinate().getX() + 1;
+                newY = App.getCurrentGame().getCurrentPlayingPlayer().getCordinate().getY() - 1;
+                break;
+            case "down-left":
+                newX = App.getCurrentGame().getCurrentPlayingPlayer().getCordinate().getX() - 1;
+                newY = App.getCurrentGame().getCurrentPlayingPlayer().getCordinate().getY() - 1;
+                break;
+            default:
+                return new Result(false, "Direction not recognized");
+        }
+
+        for (Tile tile : App.getCurrentGame().getMap().getTiles()) {
+            if (tile.getCordinate().getX() == newX && tile.getCordinate().getY() == newY) {
+                tile.getGoods().add(goodTemp);
+                return new Result(true, "Item has been dropped!");
+            }
+        }
+        return new Result(true, "");
+
     }
+
 
     public Result cheatAddItem(String itemName, String count) {
         //TODO
@@ -271,11 +370,11 @@ public class GameMenuController extends Controller {
         //TODO
     }
 
-    public Result cheatSetAnimalFriendship(String animalName , String amount) {
+    public Result cheatSetAnimalFriendship(String animalName, String amount) {
         //TODO
     }
 
-    public Result shepherdAnimal(String animalName, String x , String y) {
+    public Result shepherdAnimal(String animalName, String x, String y) {
         //TODO
     }
 

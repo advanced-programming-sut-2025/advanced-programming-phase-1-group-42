@@ -18,14 +18,14 @@ public enum GameMenuCommands implements Command {
 
     //TODO: Nader
     //  Date & Time Commands
-    TIME(""),
-    DATE(""),
-    DATE_TIME(""),
-    DAY_OF_THE_WEEK(""),
-    SEASON(""),
+    TIME("time"),
+    DATE("date"),
+    DATE_TIME("datetime"),
+    DAY_OF_THE_WEEK("day of the week"),
+    SEASON("season"),
     // --> cheat codes
-    CHEAT_ADVANCE_TIME(""),
-    CHEAT_ADVANCE_DATE(""),
+    CHEAT_ADVANCE_TIME("cheat advance time\\(?<X>.*)h"),
+    CHEAT_ADVANCE_DATE("cheat advance date\\(?<X>.*)d"),
 
     //TODO: Parsa
     //Weather
@@ -73,9 +73,9 @@ public enum GameMenuCommands implements Command {
 
     //TODO: Nader
     // Crafting Commands
-    SHOW_CRAFTING_RECIPES(""),
-    CRAFTING_CRAFT(""),
-    PLACE_ITEM(""),
+    SHOW_CRAFTING_RECIPES("crafting show recipes"),
+    CRAFTING_CRAFT("crafting craft\\s(?<item_name>)"),
+    PLACE_ITEM("place item -n\\s(?<item_name>.*)\\s-d\\s(?<direction>.*"),
     // --> cheat codes
     CHEAT_ADD_ITEM(""),
 
