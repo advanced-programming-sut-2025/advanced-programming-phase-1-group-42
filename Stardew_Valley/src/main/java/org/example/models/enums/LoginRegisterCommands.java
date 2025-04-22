@@ -5,11 +5,21 @@ import java.util.regex.Pattern;
 
 public enum LoginRegisterCommands implements Command {
     //TODO: Arani
-    Exit(""),
-    ShowCurrentMenu(""),
-    Register(""),
-    Login(""),
-    ForgetPassword("");
+    Exit("\\s*menu\\s+exit\\s*"),
+
+    ShowCurrentMenu("\\s*show\\s+current\\s+menu\\s*"),
+
+    Register("\\s*register\\s+-u\\s+(?<username>\\S+)\\s+-p\\s+(?<password>(\\S+\\s+\\S+)|RANDOM_PASSWORD)\\s+" +
+            "-n\\s+(?<nickname>\\S+)\\s+-e\\s+(?<email>\\S+)\\s+-g\\s+(?<gender>\\S+)\\s*"),
+
+    PickQuestion("\\s*pick\\s+question\\s+-q\\s+(?<questionNumber>\\S+)\\s+-a\\s+(?<answer>\\S+)\\s+-c\\s+" +
+            "(?<answerConfirm>\\S+)\\s*"),
+
+    Login("\\s*login\\s+-u\\s+(?<username>\\S+)\\s+-p\\s+(?<password>\\S+)\\s*(?<stayLogin>-stay-logged-in)?\\s*"),
+
+    ForgetPassword("\\s*forget\\s+password\\s+-u\\s+(?<username>\\S+)\\s*"),
+
+    AnswerQuestion("\\s*answer\\s*-a\\s*(?<answer>\\S+)\\s*");
 
 
     private final String pattern;
