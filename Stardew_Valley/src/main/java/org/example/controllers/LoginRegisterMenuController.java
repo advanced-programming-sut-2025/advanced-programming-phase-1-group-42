@@ -43,19 +43,19 @@ public class LoginRegisterMenuController extends Controller {
 
             System.out.println("Do you confirm this username to continue? (y/n)");
             String confirm = scanner.nextLine();
-            if(!confirm.equals("y")) {
-                return  new Result(true, "Ok, Try again later!");
+            if(!confirm.equals("n")) {
+                return  new Result(false, "Ok, Try again later!");
             }
         }
 
         // Checking Username format
         if(!username.matches("[A-Za-z0-9\\-]")) {
-            return new Result(true, "Invalid username format!");
+            return new Result(false, "Invalid username format!");
         }
 
         // Checking Email Format
         if(!checkEmailFormat(email)) {
-            return new Result(true, "Invalid email format!");
+            return new Result(false, "Invalid email format!");
         }
 
         // Checking Password Format
@@ -69,7 +69,7 @@ public class LoginRegisterMenuController extends Controller {
                     break;
                 }
                 else if(input.equals("quit")) {
-                    return new Result(true, "Redirecting to Login/Register Menu...");
+                    return new Result(false, "Redirecting to Login/Register Menu...");
                 }
             }
         }
@@ -79,9 +79,9 @@ public class LoginRegisterMenuController extends Controller {
             String confirmPassword = matcher.group("confirmPassword");
 
             if(!password.matches("[a-zA-Z0-9?><,\"'\\\\;:/|\\]\\[}{+=)(*&^%$#!]+"))
-                return new Result(true, "Invalid password format!");
+                return new Result(false, "Invalid password format!");
             if(!checkPasswordStrength(password).success())
-                return new Result(true, checkPasswordStrength(password).toString());
+                return new Result(false, checkPasswordStrength(password).toString());
 
             if(!password.equals(confirmPassword)) {
                 String input = "";
@@ -93,7 +93,7 @@ public class LoginRegisterMenuController extends Controller {
                         break;
                     }
                     if(input.equals("quit")) {
-                        return new Result(true, "Redirecting to Login/Register Menu...");
+                        return new Result(false, "Redirecting to Login/Register Menu...");
                     }
                 }
             }
@@ -107,7 +107,7 @@ public class LoginRegisterMenuController extends Controller {
 
         Matcher matcher = LoginRegisterCommands.PickQuestion.matcher(scanner.nextLine());
         if(matcher == null)
-            return new Result(true, "Invalid pick question format!");
+            return new Result(false, "Invalid pick question format!");
 
         String number = matcher.group("questionNumber").trim();
         int num = 0;
@@ -116,7 +116,7 @@ public class LoginRegisterMenuController extends Controller {
             if(num > 3 || num < 1)
                 throw new NumberFormatException();
         } catch (NumberFormatException e) {
-            return new Result(true, "Security question number is invalid!");
+            return new Result(false, "Security question number is invalid!");
         }
 
         String answer = matcher.group("answer").trim();

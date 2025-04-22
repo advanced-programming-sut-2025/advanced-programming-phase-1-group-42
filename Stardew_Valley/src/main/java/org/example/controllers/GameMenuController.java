@@ -171,6 +171,8 @@ public class GameMenuController extends Controller {
     }
 
     public Result cheatEnergySet(String value) {
+        //TODO
+        return new Result(true, "");
     }
 
     public Result cheatEnergyUnlimited() {
