@@ -10,6 +10,7 @@ public enum GameMenuCommands implements Command {
 
     //TODO: Nader
     // Game Commands
+<<<<<<< Updated upstream
     NEW_GAME("game new\\s-u\\s(?<username_1>.*)\\s(?<username_1>.*)\\s(?<username_2>.*)\\s(?<username_3>.*)"),
     GAME_MAP("game map\\s(?<map_number>.*)"),
     LOAD_GAME("load game"),
@@ -26,56 +27,98 @@ public enum GameMenuCommands implements Command {
     // --> cheat codes
     CHEAT_ADVANCE_TIME("cheat advance time\\(?<X>.*)h"),
     CHEAT_ADVANCE_DATE("cheat advance date\\(?<X>.*)d"),
+=======
+    NEW_GAME("\\s*game\\s*new\\s-u\\s(?<username_1>\\S+)\\s(?<username_1>\\S+)\\s(?<username_2>\\S+)\\s(?<username_3>\\S+)\\s*"),
+    GAME_MAP("\\s*game\\s*map\\s(?<map_number>\\S+)\\s*"),
+    LOAD_GAME("\\s*load\\s*game\\s*"),
+    EXIT_GAME("\\s*exit\\s*game\\s*"),
+    NEXT_TURN("\\s*next\\s*turn\\s*"),
+
+    //TODO: Nader
+    //  Date & Time Commands
+    TIME("\\s*time\\s*"),
+    DATE("\\s*date\\s*"),
+    DATE_TIME("\\s*datetime\\s*"),
+    DAY_OF_THE_WEEK("\\s*day\\s*of\\s*the\\s*week\\s*"),
+    SEASON("\\s*season\\s*"),
+    // --> cheat codes
+    CHEAT_ADVANCE_TIME("\\s*cheat\\s*advance\\s*time\\s(?<X>\\S+)\\sh\\s*"),
+    CHEAT_ADVANCE_DATE("\\s*cheat\\s*advance\\s*date\\s(?<X>\\S+)\\sd\\s*"),
+>>>>>>> Stashed changes
 
     //TODO: Parsa
     //Weather
-    CHEAT_THUNDER(""),
-    WEATHER(""),
-    WEATHER_FORECAST(""),
-    CHEAT_WEATHER_SET(""),
-    GREEN_HOUSE_BUILD(""),
+    CHEAT_THUNDER("\\s*cheat\\s+thunder\\s(?<x>\\S+)\\s(?<y>\\S+)\\s*"),
+    WEATHER("\\s*weather\\s*"),
+    WEATHER_FORECAST("\\s*weather\\s+forecast\\s*"),
+    CHEAT_WEATHER_SET("\\s*cheat\\s+weather\\s+set\\s(?<weather>\\S+)\\s*"),
+    GREEN_HOUSE_BUILD("\\s*green\\s+house\\s+build\\s*"),
 
     //TODO: Parsa
     //Map
-    WALK(""),
-    PRINT_MAP(""),
-    HELP_READING_MAP(""),
+    WALK("\\s*walk\\s-l\\s(?<x>\\S)\\s(?<y>\\S)\\s*"),
+    PRINT_MAP("\\s*print\\s*map\\s-l\\s(?<x>\\S+)\\s(?<y>\\S+)\\s*\\s-s\\s(?<size>\\S+)\\s*"),
+    HELP_READING_MAP("\\s*help\\s*reading\\s*map\\s*"),
 
     //TODO: Parsa
     //inventory & Energy
-    ENERGY_SHOW(""),
-    CHEAT_ENERGY_SET(""),
-    CHEAT_ENERGY_UNLIMITED(""),
-    INVENTORY_TRASH_ITEM(""),
-    INVENTORY_SHOW(""),
+    ENERGY_SHOW("\\s*show\\s+energy\\s*"),
+    CHEAT_ENERGY_SET("cheat energy set\\s(?<value>\\S+)\\s*"),
+    CHEAT_ENERGY_UNLIMITED("\\s*cheat\\s+energy\\s+unlimited\\s*"),
+    INVENTORY_TRASH_ITEM("\\s*inventory\\s+trash\\s-i\\s(?<item>\\S+)\\s-n\\s(?<number>\\S+)\\s*"),
+    INVENTORY_SHOW("\\s*inventory\\s+show\\s*"),
 
     //TODO: Arani
     // Tools
+<<<<<<< Updated upstream
     TOOLS_EQUIPMENT("\\s*tools\\s+equip\\s+(?<toolName>\\S+)\\s*"),
     TOOLS_SHOW_CURRENT("\\s*tools\\s+show\\s+current\\s*"),
     TOOLS_SHOW_AVAILABLE("\\s*tools\\s+show\\s+available\\s*"),
     TOOLS_UPGRADE("\\s*tools\\s+upgrade\\s+(?<toolName>\\S+)\\s*"),
     TOOLS_USE("\\s*tools\\s+use\\s+-d\\s+(?<direction>\\S+)\\s+"),
+=======
+    TOOLS_EQUIPMENT("\\s*tools\\s*equip\\s(?<tool_name>\\S+)\\s*"),
+    TOOLS_SHOW_CURRENT("\\s*tools\\s*show\\s*current\\s*"),
+    TOOLS_SHOW_AVAILABLE("\\s*tools\\s*show\\s*available\\s*"),
+    TOOLS_UPGRADE("\\s*tools\\s*upgrade\\s(?<tool_name>\\S+)\\s*"),
+    TOOLS_USE("\\s*tools\\s*use\\s-d\\s(?<direction>\\S+)\\s*"),
+>>>>>>> Stashed changes
 
 
     //TODO: Arani
     // Craft Info
+<<<<<<< Updated upstream
     CRAFT_INFO("\\s*craftinfo\\s+-n\\s+(?<craftName>\\S+)\\s*"),
+=======
+    CRAFT_INFO("\\s*craftinfo\\s-n\\s(?<craft_name>\\S+)\\s*"),
+>>>>>>> Stashed changes
 
 
     //TODO: Arani
     // Planting
+<<<<<<< Updated upstream
     PLANT_SEED("\\s*plant\\s+-s\\s+(?<seedName>\\S+)\\s+-d\\s+(?<direction>\\S+)\\s*"),
     SHOW_PLANT("\\s*showplant\\s+-l\\s+(?<x>\\S+)\\s+(?<y>\\S+)\\s*"),
     FERTILIZE("\\s*fertilize\\s+-f\\s+(?<fertilizer>\\S+)\\s+-d\\s+(?<direction>\\S+)\\s*"),
     HOW_MUCH_WATER(""),
+=======
+    PLANT_SEED("\\s*plant\\s-s\\s(?<seed>\\S+)\\s*\\s-d\\s(?<direction>\\S+)\\s*"),
+    SHOW_PLANT("\\s*showplant\\s-l\\s(?<x>\\S+)\\s*\\s(?<y>\\S+)\\s*"),
+    FERTILIZE("\\s*fertilize\\s-f\\s(?<fertilizer>\\S++)\\s-d\\s(?<direction>\\S+)\\s*"),
+    HOW_MUCH_WATER("\\s*howmuch\\s*water\\s*"),
+>>>>>>> Stashed changes
 
 
     //TODO: Nader
     // Crafting Commands
     SHOW_CRAFTING_RECIPES("crafting show recipes"),
+<<<<<<< Updated upstream
     CRAFTING_CRAFT("crafting craft\\s(?<item_name>)"),
     PLACE_ITEM("place item -n\\s(?<item_name>.*)\\s-d\\s(?<direction>.*"),
+=======
+    CRAFTING_CRAFT("crafting craft\\s(?<item_name>\\S+)\\s*"),
+    PLACE_ITEM("place item -n\\s(?<item_name>\\S+)\\s-d\\s(?<direction>`\\S+`"),
+>>>>>>> Stashed changes
     // --> cheat codes
     CHEAT_ADD_ITEM(""),
 
@@ -84,10 +127,13 @@ public enum GameMenuCommands implements Command {
     COOKING_REFRIGERATOR(""),
     SHOW_COOKING_RECIPES(""),
     COOKING_PREPARE(""),
+
+
     EAT(""),
 
     //TODO: Parsa
     // Animals & Fishing
+<<<<<<< Updated upstream
     BUILD_BUILDING(""),
     BUY_ANIMAL(""),
     PET_ANIMAL(""),
@@ -97,6 +143,17 @@ public enum GameMenuCommands implements Command {
     FEED_HAY(""),
     ANIMAL_PRODUCTION_LIST(""),
     COLLECT_PRODUCT(""),
+=======
+    BUILD_BUILDING("\\s*build\\s-a\\s(?<building_name>\\S+)\\s-l\\s(?<x>\\S+)\\s(?<y>\\S+)\\s*"),
+    BUY_ANIMAL("\\s*build\\s-a\\s(?<building_name>\\S+)\\s-n\\s(?<number>\\S+)\\s*"),
+    PET_ANIMAL("\\s*pet\\s-n\\s(?<petName>\\S+)\\s*"),
+    ANIMAL_LIST("\\s*animal\\s*"),
+    CHEAT_SET_ANIMAL_FRIENDSHIP("\\s*cheat\\s*set\\s*friendship\\s-n\\s(?<animal name>\\S+)\\s-c\\s(?<amount>\\S+)\\s*"),
+    SHEPHERD_ANIMAL("\\s*shepherd\\s*animals\\s-n\\s(?<animal_name>\\S+)\\s-l\\s(?<x>\\S+)\\s*\\s(?<y>\\S+)\\s*"),
+    FEED_HAY("\\s*feed\\s*hay\\s-n\\s(?<anima_name>\\S+)\\s*"),
+    ANIMAL_PRODUCTION_LIST("\\s*produces\\s*"),
+    COLLECT_PRODUCT("\\s*collect\\s*produce\\s-n\\s(?<name>\\S+)\\s*"),
+>>>>>>> Stashed changes
     SELL_ANIMAL(""),
     FISHING(""),
 

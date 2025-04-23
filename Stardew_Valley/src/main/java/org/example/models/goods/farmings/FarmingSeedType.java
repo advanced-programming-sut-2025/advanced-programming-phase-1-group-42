@@ -1,5 +1,6 @@
 package org.example.models.goods.farmings;
 
+<<<<<<< Updated upstream
 import org.example.models.enums.Season;
 import org.example.models.goods.GoodType;
 
@@ -128,4 +129,9 @@ public enum FarmingSeedType implements GoodType {
     private int otherSeasonPrice;
     private ArrayList<Season> seasons;
     private boolean canBecomeGiant;
+=======
+public enum FarmingSeedType {
+    //TODO
+    //Giant Farming seeds do not forget to implement
+>>>>>>> Stashed changes
 }

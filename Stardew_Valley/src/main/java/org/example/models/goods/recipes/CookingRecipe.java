@@ -6,6 +6,7 @@ import org.example.models.goods.foods.Food;
 import java.util.ArrayList;
 
 public class CookingRecipe extends Recipe {
+<<<<<<< Updated upstream
     CookingRecipeType type;
 
     CookingRecipe(CookingRecipeType type) {
@@ -24,6 +25,13 @@ public class CookingRecipe extends Recipe {
     @Override
     public int getSellPrice() {
         return 0;
+=======
+
+
+    @Override
+    public String getName(){
+        //TODO
+>>>>>>> Stashed changes
     }
 
 }

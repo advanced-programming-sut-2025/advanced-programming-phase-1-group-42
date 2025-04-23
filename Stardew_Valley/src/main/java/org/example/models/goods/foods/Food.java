@@ -4,6 +4,7 @@ import org.example.models.goods.Good;
 
 public class Food extends Good {
 
+<<<<<<< Updated upstream
     FoodType foodType;
     private int energy;
 
@@ -24,4 +25,7 @@ public class Food extends Good {
     public int getSellPrice() {
         return foodType.getSellPrice();
     }
+=======
+
+>>>>>>> Stashed changes
 }

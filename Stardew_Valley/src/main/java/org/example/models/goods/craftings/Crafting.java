@@ -4,6 +4,7 @@ import org.example.models.goods.Good;
 
 public class Crafting extends Good {
 
+<<<<<<< Updated upstream
     private final CraftingType craftingType;
 
     public Crafting(CraftingType craftingType) {
@@ -20,4 +21,7 @@ public class Crafting extends Good {
     public int getSellPrice() {
         return craftingType.getSellPrice();
     }
+=======
+
+>>>>>>> Stashed changes
 }

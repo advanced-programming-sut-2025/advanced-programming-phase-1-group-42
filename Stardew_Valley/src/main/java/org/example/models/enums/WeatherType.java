@@ -13,5 +13,8 @@ public enum WeatherType {
     WeatherType(Weather weather) {
         this.weather = weather;
     }
+    public Weather getWeather(){
+        return weather;
+    }
 }
 

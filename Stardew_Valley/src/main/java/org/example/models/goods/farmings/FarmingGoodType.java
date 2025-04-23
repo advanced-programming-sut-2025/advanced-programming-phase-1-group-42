@@ -1,5 +1,6 @@
 package org.example.models.goods.farmings;
 
+<<<<<<< Updated upstream
 import org.example.models.enums.Season;
 import org.example.models.goods.GoodType;
 
@@ -97,4 +98,9 @@ public enum FarmingGoodType implements GoodType {
     public int getBaseSellPrice() {
         return baseSellPrice;
     }
+=======
+public enum FarmingGoodType {
+    //TODO
+    //Giant Farming Goods do not forget to implement
+>>>>>>> Stashed changes
 }

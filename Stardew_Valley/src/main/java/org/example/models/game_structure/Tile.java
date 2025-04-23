@@ -10,6 +10,11 @@ public class Tile {
     private TileType tileType;
     private ArrayList<Good> goods;
 
+<<<<<<< Updated upstream
+=======
+
+
+>>>>>>> Stashed changes
     public ArrayList<Good> getGoods() {
         return goods;
     }
