@@ -11,6 +11,7 @@ import static javax.swing.UIManager.put;
 
 
 public enum CookingRecipeType {
+
     FRIED_EGG(new ArrayList<>(Arrays.asList(
             new HashMap<FoodType, Integer>() {{
                 put(FoodType.EGG, 1);
