@@ -2,6 +2,8 @@ package org.example.controllers;
 
 import org.example.models.App;
 import org.example.models.Result;
+import org.example.models.goods.foods.artisans.Artisan;
+import org.example.models.goods.foods.artisans.ArtisanType;
 import org.example.models.interactions.User;
 
 import java.util.HashSet;
@@ -16,6 +18,10 @@ public class Controller {
                 return user;
             }
         }
+
+        Artisan artisan = new Artisan();
+        artisan.setArtisanType(ArtisanType.Dried_Mashrooms);
+//        artisan.getArtisanType().getSellPrice(new )
         return null;
     }
 
