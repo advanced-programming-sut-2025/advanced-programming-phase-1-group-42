@@ -95,30 +95,30 @@ public class GameMenuController extends Controller {
     //TODO: Nader
     // date & time methods
     public Result time() {
-        return new Result(true, App.getCurrentGame().getTime() + ":00");
+        return new Result(true, App.getCurrentGame().getDateTime().getTime() + ":00");
     }
 
     public Result date() {
         return new Result(true,
-                App.getCurrentGame().getYear() + "/" +
-                        App.getCurrentGame().getSeasonOfYearInt() + "/" +
-                        App.getCurrentGame().getDayOfSeason());
+                App.getCurrentGame().getDateTime().getYear() + "/" +
+                        App.getCurrentGame().getDateTime().getSeasonOfYearInt() + "/" +
+                        App.getCurrentGame().getDateTime().getDayOfSeason());
     }
 
     public Result dateTime() {
         return new Result(true,
-                App.getCurrentGame().getYear() + "/" +
-                        App.getCurrentGame().getSeasonOfYearInt() + "/" +
-                        App.getCurrentGame().getDayOfSeason() + "/" +
-                        App.getCurrentGame().getTime() + ":00");
+                App.getCurrentGame().getDateTime().getYear() + "/" +
+                        App.getCurrentGame().getDateTime().getSeasonOfYearInt() + "/" +
+                        App.getCurrentGame().getDateTime().getDayOfSeason() + "/" +
+                        App.getCurrentGame().getDateTime().getTime() + ":00");
     }
 
     public Result dayOfTheWeek() {
-        return new Result(true, App.getCurrentGame().getDayOfWeek());
+        return new Result(true, App.getCurrentGame().getDateTime().getDayOfWeek());
     }
 
     public Result showSeason() {
-        return new Result(true, App.getCurrentGame().getSeasonOfYear());
+        return new Result(true, App.getCurrentGame().getDateTime().getSeasonOfYear());
     }
 
     public Result cheatAdvanceTime(String hour) {
