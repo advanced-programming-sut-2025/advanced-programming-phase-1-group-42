@@ -9,12 +9,10 @@ import org.example.models.goods.Good;
 import org.example.models.goods.foods.Food;
 import org.example.models.goods.recipes.CraftingFunctions;
 import org.example.models.goods.recipes.CraftingRecipe;
-import org.example.models.goods.recipes.Recipe;
 import org.example.models.interactions.Player;
 import org.example.models.interactions.User;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Iterator;
 
 public class GameMenuController extends Controller {
@@ -81,7 +79,7 @@ public class GameMenuController extends Controller {
     }
 
     public Result exitGame() {
-        if (App.getCurrentGame().getGameCreator() != App.getCurrentUser()) {
+        if (App.getCurrentGame().getGameAdmin() != App.getCurrentUser()) {
             return new Result(false, "Just game creator can exit the game!");
         }
         return new Result(true, "");

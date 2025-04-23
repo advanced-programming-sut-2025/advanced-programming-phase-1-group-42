@@ -5,11 +5,7 @@ import org.example.models.interactions.Player;
 
 import java.util.ArrayList;
 
-import org.example.models.game_structure.Map;
-import org.example.models.interactions.Player;
 import org.example.models.interactions.User;
-
-import java.util.ArrayList;
 
 public class Game {
 
@@ -18,15 +14,14 @@ public class Game {
     private Tomorrow tomorrow;
     private final ArrayList<Player> players = new ArrayList<>();
     private Player currentPlayer;
-    private Map map;
-    private User gameCreator;
+    private User gameAdmin;
     private Map CurrentMap = null;
     private Player currentPlayingPlayer;
     private int counter = 0;
 
 
-    public Game(User gameCreator) {
-        this.gameCreator = gameCreator;
+    public Game(User gameAdmin) {
+        this.gameAdmin = gameAdmin;
     }
 
     public void setCurrentMap(Map map) {
@@ -37,12 +32,12 @@ public class Game {
         return CurrentMap;
     }
 
-    public User getGameCreator() {
-        return gameCreator;
+    public User getGameAdmin() {
+        return gameAdmin;
     }
 
-    public void setGameCreator(User gameCreator) {
-        this.gameCreator = gameCreator;
+    public void setGameAdmin(User gameAdmin) {
+        this.gameAdmin = gameAdmin;
     }
 
     public Player getCurrentPlayingPlayer() {
