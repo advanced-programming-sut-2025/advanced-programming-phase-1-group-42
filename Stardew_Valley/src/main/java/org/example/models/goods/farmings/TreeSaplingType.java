@@ -1,4 +1,6 @@
 package org.example.models.goods.farmings;
 
-public enum TreeSaplingType {
+import org.example.models.goods.GoodType;
+
+public enum TreeSaplingType implements GoodType {
 }

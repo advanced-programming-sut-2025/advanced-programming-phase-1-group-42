@@ -1,4 +1,6 @@
 package org.example.models.goods.foods;
 
-public enum FoodType {
+import org.example.models.goods.GoodType;
+
+public enum FoodType implements GoodType {
 }

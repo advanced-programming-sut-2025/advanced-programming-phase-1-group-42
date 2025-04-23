@@ -1,4 +1,6 @@
 package org.example.models.goods.artisans;
 
-public enum ArtisanType {
+import org.example.models.goods.GoodType;
+
+public enum ArtisanType implements GoodType {
 }

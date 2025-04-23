@@ -1,4 +1,6 @@
 package org.example.models.goods.foragings;
 
-public enum CropType {
+import org.example.models.goods.GoodType;
+
+public enum CropType implements GoodType {
 }

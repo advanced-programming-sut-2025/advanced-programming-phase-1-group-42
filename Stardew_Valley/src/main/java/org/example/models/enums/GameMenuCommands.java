@@ -51,23 +51,23 @@ public enum GameMenuCommands implements Command {
 
     //TODO: Arani
     // Tools
-    TOOLS_EQUIPMENT(""),
-    TOOLS_SHOW_CURRENT(""),
-    TOOLS_SHOW_AVAILABLE(""),
-    TOOLS_UPGRADE(""),
-    TOOLS_USE(""),
+    TOOLS_EQUIPMENT("\\s*tools\\s+equip\\s+(?<toolName>\\S+)\\s*"),
+    TOOLS_SHOW_CURRENT("\\s*tools\\s+show\\s+current\\s*"),
+    TOOLS_SHOW_AVAILABLE("\\s*tools\\s+show\\s+available\\s*"),
+    TOOLS_UPGRADE("\\s*tools\\s+upgrade\\s+(?<toolName>\\S+)\\s*"),
+    TOOLS_USE("\\s*tools\\s+use\\s+-d\\s+(?<direction>\\S+)\\s+"),
 
 
     //TODO: Arani
     // Craft Info
-    CRAFT_INFO(""),
+    CRAFT_INFO("\\s*craftinfo\\s+-n\\s+(?<craftName>\\S+)\\s*"),
 
 
     //TODO: Arani
     // Planting
-    PLANT_SEED(""),
-    SHOW_PLANT(""),
-    FERTILIZE(""),
+    PLANT_SEED("\\s*plant\\s+-s\\s+(?<seedName>\\S+)\\s+-d\\s+(?<direction>\\S+)\\s*"),
+    SHOW_PLANT("\\s*showplant\\s+-l\\s+(?<x>\\S+)\\s+(?<y>\\S+)\\s*"),
+    FERTILIZE("\\s*fertilize\\s+-f\\s+(?<fertilizer>\\S+)\\s+-d\\s+(?<direction>\\S+)\\s*"),
     HOW_MUCH_WATER(""),
 
 

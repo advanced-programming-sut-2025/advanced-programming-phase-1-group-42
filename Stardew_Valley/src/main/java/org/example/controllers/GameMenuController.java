@@ -13,15 +13,10 @@ import org.example.models.interactions.Player;
 import org.example.models.interactions.User;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Iterator;
 
 public class GameMenuController extends Controller {
-
-    Game thisGame;
-
-    public void setThisGame(Game thisGame) {
-        this.thisGame = thisGame;
-    }
 
     //TODO: Nader
     //game setting methods
@@ -213,7 +208,7 @@ public class GameMenuController extends Controller {
     //TODO: Arani
     // Tools
     public Result toolsEquipment(String toolName) {
-        //TODO
+
         return new Result(true, "");
     }
 

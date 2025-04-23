@@ -1,4 +1,6 @@
 package org.example.models.goods.foragings;
 
-public enum TreeType {
+import org.example.models.goods.GoodType;
+
+public enum TreeType implements GoodType {
 }

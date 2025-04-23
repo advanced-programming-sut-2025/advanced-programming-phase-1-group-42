@@ -1,4 +1,7 @@
 package org.example.models.goods.tools;
 
-public enum FishingPoleType {
+import org.example.models.goods.Good;
+import org.example.models.goods.GoodType;
+
+public enum FishingPoleType implements GoodType {
 }

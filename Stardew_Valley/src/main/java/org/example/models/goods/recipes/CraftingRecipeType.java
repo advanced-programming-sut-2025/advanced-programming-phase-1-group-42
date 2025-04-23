@@ -1,9 +1,11 @@
 package org.example.models.goods.recipes;
 
+import org.example.models.goods.GoodType;
+
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-public enum CraftingRecipeType {
+public enum CraftingRecipeType implements GoodType {
     CHERRY_BOMB("cherry Bomb", "4 copper ore + 1 coal"),
     BOMB("bomb" , "4 iron ore + 1 coal"),
     MEGA_BOMB("Mega Bomb","4 gold ore + 1 coal"),

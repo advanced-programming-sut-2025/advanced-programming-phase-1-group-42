@@ -1,4 +1,6 @@
 package org.example.models.goods.minerals;
 
-public enum MineralType {
+import org.example.models.goods.GoodType;
+
+public enum MineralType implements GoodType {
 }

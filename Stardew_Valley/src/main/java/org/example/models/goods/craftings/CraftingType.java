@@ -1,4 +1,6 @@
 package org.example.models.goods.craftings;
 
-public enum CraftingType {
+import org.example.models.goods.GoodType;
+
+public enum CraftingType implements GoodType {
 }

@@ -1,6 +1,8 @@
 package org.example.models.goods.recipes;
 
-public enum CookingRecipeType {
+import org.example.models.goods.GoodType;
+
+public enum CookingRecipeType implements GoodType {
     MEOW("meow");
     //TODO
 
