@@ -2,20 +2,16 @@ package org.example.controllers;
 
 import org.example.models.App;
 import org.example.models.Result;
-import org.example.models.game_structure.Game;
+import org.example.models.game_structure.*;
 import org.example.models.game_structure.Map;
-import org.example.models.game_structure.Tile;
 import org.example.models.goods.Good;
 import org.example.models.goods.foods.Food;
-import org.example.models.goods.recipes.CraftingFunctions;
-import org.example.models.goods.recipes.CraftingRecipe;
-import org.example.models.goods.recipes.Recipe;
+import org.example.models.goods.foods.FoodType;
+import org.example.models.goods.recipes.*;
 import org.example.models.interactions.Player;
 import org.example.models.interactions.User;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Iterator;
+import java.util.*;
 
 public class GameMenuController extends Controller {
 
@@ -362,18 +358,141 @@ public class GameMenuController extends Controller {
     //TODO: Nader
     // cooking methods
     public Result cookingRefrigerator(String status, String itemName) {
-        //TODO
-        return new Result(true, "");
+        Fridge fridge = App.getCurrentGame().getCurrentPlayingPlayer().getFridge();
+        Inventory inventory = App.getCurrentGame().getCurrentPlayingPlayer().getInventory();
+        Food item = null;
+        boolean found = false;
+
+        if (status.equals("pick")) {
+
+            for (ArrayList<Food> fridgeList : fridge.getInFridgeItems()) {
+                Iterator<Food> iterator = fridgeList.iterator();
+                while (iterator.hasNext()) {
+                    Food food = iterator.next();
+                    if (food.getName().equalsIgnoreCase(itemName)) {
+                        item = food;
+                        iterator.remove();
+                        found = true;
+                        break;
+                    }
+                }
+                if (found) break;
+            }
+
+            if (!found) {
+                return new Result(false, "Item is not available in the fridge");
+            }
+
+            if(App.getCurrentGame().getCurrentPlayingPlayer().getInventory().addGood(item)){
+                return new Result(true, item.getName() + " added to the inventory");
+            }
+            return new Result(false, "Inventory is full");
+
+        } else if (status.equals("put")) {
+            for (ArrayList<Good> inventoryList : inventory.getList()) {
+                Iterator<Good> iterator = inventoryList.iterator();
+                while (iterator.hasNext()) {
+                    Good good = iterator.next();
+                    if (good instanceof Food && good.getName().equalsIgnoreCase(itemName)) {
+                        item = (Food) good;
+                        iterator.remove();
+                        found = true;
+                        break;
+                    }
+                }
+                if (found) break;
+            }
+
+            if (!found) {
+                return new Result(false, "Item is not available in the Inventory");
+            }
+
+            for (ArrayList<Food> fridgeList : fridge.getInFridgeItems()) {
+                if (fridgeList.isEmpty() || fridgeList.get(0).getName().equalsIgnoreCase(itemName)) {
+                    fridgeList.add(item);
+                    return new Result(true, "You put " + itemName + " into the fridge");
+                }
+            }
+            return new Result(false, "Fridge is full");
+        }
+
+        return new Result(false, "Invalid operation");
     }
 
     public Result showCookingRecipes() {
-        //TODO
+        for (CookingRecipe cookingRecipe : App.getCurrentGame().getCurrentPlayingPlayer().getCookingRecipes()) {
+            System.out.println(cookingRecipe.getName());
+        }
         return new Result(true, "");
     }
 
     public Result cookingPrepare(String recipeName) {
-        //TODO
-        return new Result(true, "");
+        CookingRecipe recipe = null;
+        boolean found = false;
+        boolean valid = false;
+
+        for (CookingRecipeType type : CookingRecipeType.values()) {
+            if (type.name().equalsIgnoreCase(recipeName)) {
+                valid = true;
+                break;
+            }
+        }
+        if (!valid) {
+            return new Result(false, "This recipe is invalid");
+        }
+
+        for (CookingRecipe cookingRecipe : App.getCurrentGame().getCurrentPlayingPlayer().getCookingRecipes()){
+            if (cookingRecipe.getName().equals(recipeName)){
+                recipe = cookingRecipe;
+                found = true;
+                break;
+            }
+        }
+        if (!found) {
+            return new Result(false, "You don't have this cooking recipe");
+        }
+
+        for (HashMap<FoodType, Integer> ingredient : recipe.getType().getIngredients()) {
+
+            FoodType ingredientType = ingredient.keySet().iterator().next();
+            int requiredAmount = ingredient.get(ingredientType);
+            if (!checkCanCook(ingredientType, requiredAmount)) {
+                return new Result(false, "Not enough " + ingredientType.getName() +
+                        " (needed: " + requiredAmount + ")");
+            }
+        }
+
+        Food food = new Food(recipe.getType().getFoodType());
+
+        for (ArrayList<Good> goods: App.getCurrentGame().getCurrentPlayingPlayer().getInventory().getList()) {
+            if (goods.getFirst().getName().equalsIgnoreCase(recipeName)) {
+                goods.add(food);
+                return new Result(true, "You put " + food.getName() + " into the inventory");
+            } else if (goods.isEmpty()){
+                goods.add(food);
+                return new Result(true, "You put " + food.getName() + " into the inventory");
+            }
+        }
+
+        return new Result(false, "Your inventory is full");
+
+
+
+    }
+
+    public boolean checkCanCook(FoodType foodType, int requiredAmount) {
+        for (ArrayList<Good> good : App.getCurrentGame().getCurrentPlayingPlayer().getInventory().getList()) {
+            if (good.getFirst().getName().equalsIgnoreCase(foodType.getName())) {
+                return true;
+            }
+        }
+        for (ArrayList<Food> foods : App.getCurrentGame().getCurrentPlayingPlayer().getFridge().getInFridgeItems()) {
+            if (foods.getFirst().getName().equalsIgnoreCase(foodType.getName())) {
+                return true;
+            }
+        }
+        return false;
+
     }
 
     public Result eat(String foodName) {
@@ -383,15 +502,18 @@ public class GameMenuController extends Controller {
             while (iterator.hasNext()) {
                 food = iterator.next();
                 if (food.getName().equals(foodName)) {
-                    if (food instanceof Food){
+                    if (food instanceof Food) {
                         iterator.remove();
                         break;
                     }
                 }
             }
         }
-        App.getCurrentGame().getCurrentPlayingPlayer()
-        return new Result(true, "");
+        if (food == null) {
+            return new Result(false, "This item is not eatable!");
+        }
+        App.getCurrentGame().getCurrentPlayingPlayer().eat((Food) food);
+        return new Result(true, "Khosmaz, Yum Yum!");
     }
 
 

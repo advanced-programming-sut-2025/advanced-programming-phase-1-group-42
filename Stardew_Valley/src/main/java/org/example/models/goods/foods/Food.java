@@ -4,19 +4,24 @@ import org.example.models.goods.Good;
 
 public class Food extends Good {
 
+    FoodType foodType;
     private int energy;
 
+    public Food(FoodType foodType) {
+        this.foodType = foodType;
+    }
+
     public int getEnergy() {
-        return energy;
+        return foodType.getEnergy();
     }
 
     @Override
     public String getName() {
-        return name;
+        return foodType.getName();
     }
 
     @Override
     public int getSellPrice() {
-        return price;
+        return foodType.getSellPrice();
     }
 }

@@ -2,6 +2,7 @@ package org.example.models.goods.recipes;
 
 public class CraftingRecipe extends Recipe {
     CraftingRecipeType type;
+
     CraftingRecipe(CraftingRecipeType type) {
         this.type = type;
     }

@@ -13,4 +13,5 @@ public class Fridge {
     public ArrayList<ArrayList<Food>> getInFridgeItems() {
         return inFridgeItems;
     }
+    
 }

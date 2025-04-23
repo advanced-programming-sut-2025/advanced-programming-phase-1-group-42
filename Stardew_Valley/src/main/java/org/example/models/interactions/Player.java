@@ -1,7 +1,9 @@
 package org.example.models.interactions;
 
+import org.example.models.App;
 import org.example.models.game_structure.*;
 import org.example.models.goods.Good;
+import org.example.models.goods.foods.Food;
 import org.example.models.goods.recipes.CookingRecipe;
 import org.example.models.goods.recipes.CraftingRecipe;
 import org.example.models.goods.recipes.Recipe;
@@ -32,6 +34,7 @@ public class Player {
     private ArrayList<Trade> tradeHistory;
     private ArrayList<Gift> giftHistory;
     private ArrayList<Quest> questList;
+    private Fridge fridge;
 
 
     public Player(User user) {
@@ -45,8 +48,12 @@ public class Player {
     }
 
     // Function for eat
-    public void eat() {
-        //TODO
+    public void eat(Food food) {
+        App.getCurrentGame().getCurrentPlayingPlayer().getEnergy().energySet(food.getEnergy());
+        Buff currentBuff = App.getCurrentGame().getCurrentPlayingPlayer().getBuff();
+        if (currentBuff != null) {
+            App.getCurrentGame().getCurrentPlayingPlayer().setBuff(currentBuff);
+        }
     }
 
     public Inventory getInventory() {
@@ -60,6 +67,7 @@ public class Player {
     public Energy getEnergy() {
         return energy;
     }
+
 
     public ArrayList<CraftingRecipe> getCraftingRecipes() {
         return craftingRecipes;
@@ -83,5 +91,9 @@ public class Player {
 
     public Tool getCurrentTool() {
         return this.currentTool;
+    }
+
+    public Fridge getFridge() {
+       return fridge;
     }
 }
