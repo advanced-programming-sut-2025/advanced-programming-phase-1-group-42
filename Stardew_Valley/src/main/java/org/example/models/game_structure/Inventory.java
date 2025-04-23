@@ -32,7 +32,6 @@ public class Inventory {
 
         for(ArrayList<Good> goods : list) {
             if(goods.isEmpty()) {
-                goods = new ArrayList<>();
                 goods.add(good);
                 return true;
             }
