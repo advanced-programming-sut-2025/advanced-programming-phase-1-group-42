@@ -9,6 +9,6 @@ public enum TreeSaplingType implements GoodType {
     private String name;
     private ArrayList<Integer> stages;
     private int totalHarvestTime;
-    
+
 
 }
