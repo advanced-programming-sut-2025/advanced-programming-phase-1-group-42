@@ -5,7 +5,6 @@ import org.example.models.goods.Good;
 import org.example.models.goods.recipes.CookingRecipe;
 import org.example.models.goods.recipes.CraftingRecipe;
 import org.example.models.goods.recipes.Recipe;
-import org.example.models.goods.tools.Tool;
 import org.example.models.goods.tools.TrashCan;
 
 import java.util.ArrayList;
@@ -14,7 +13,6 @@ import java.util.HashMap;
 public class Player {
     private Cordinate cordinate;
     private Inventory inventory;
-    private Tool currentTool;
     private ArrayList<CookingRecipe> cookingRecipes;
     private ArrayList<CraftingRecipe> craftingRecipes;
     private User user;
@@ -24,6 +22,7 @@ public class Player {
     private Energy energy ;
     private TrashCan trashCan;
     private Skill skill;
+    private Buff buff = null;
     private HashMap<Player, Integer> friendShipLevel;
     private HashMap<Player, Integer> friendShipScore;
     private HashMap<Player, ArrayList<String>> talkHistory;
@@ -72,11 +71,13 @@ public class Player {
         return cordinate;
     }
 
-    public Tool getCurrentTool() {
-        return currentTool;
+    public void setBuff(Buff buff) {
+        this.buff = buff;
     }
 
-    public void setCurrentTool(Tool currentTool) {
-        this.currentTool = currentTool;
+    public Buff getBuff() {
+        return buff;
     }
+
+
 }

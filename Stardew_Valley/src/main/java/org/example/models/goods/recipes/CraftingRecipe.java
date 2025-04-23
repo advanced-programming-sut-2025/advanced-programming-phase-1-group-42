@@ -15,5 +15,10 @@ public class CraftingRecipe extends Recipe {
         return type.getName();
     }
 
+    @Override
+    public int getSellPrice() {
+        return 0;
+    }
+
 
 }
