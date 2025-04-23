@@ -73,17 +73,17 @@ public enum GameMenuCommands implements Command {
 
     //TODO: Nader
     // Crafting Commands
-    SHOW_CRAFTING_RECIPES("crafting show recipes"),
-    CRAFTING_CRAFT("crafting craft\\s(?<item_name>\\S+)\\s*"),
-    PLACE_ITEM("place item -n\\s(?<item_name>\\S+)\\s-d\\s(?<direction>`\\S+`"),
+    SHOW_CRAFTING_RECIPES("\\s*crafting\\s*show\\s*recipes\\s*"),
+    CRAFTING_CRAFT("\\s*crafting\\s*craft\\s(?<item_name>\\S+)\\s*"),
+    PLACE_ITEM("\\s*place\\s*item\\s+-n\\s(?<item_name>\\S+)\\s-d\\s(?<direction>\\S+)\\s*"),
     // --> cheat codes
-    CHEAT_ADD_ITEM(""),
+    CHEAT_ADD_ITEM("\\s*cheat\\s*add\\s*item\\s+-n\\s(?<item_name>\\S)\\s+-c\\s(?<count>\\S)\\s*"),
 
     //TODO: Nader
     // Cooking Commands
-    COOKING_REFRIGERATOR(""),
-    SHOW_COOKING_RECIPES(""),
-    COOKING_PREPARE(""),
+    COOKING_REFRIGERATOR("\\s*cooking\\s*refrigerator\\s*(?<type>put|pick)\\s*(?<item>\\S)\\s*"),
+    SHOW_COOKING_RECIPES("\\s*cooking\\s*show\\s*recipes\\s*"),
+    COOKING_PREPARE("\\s*cooking\\s*prepare\\s(?<recipe_name>\\S)\\s*"),
 
 
     EAT(""),
@@ -99,12 +99,12 @@ public enum GameMenuCommands implements Command {
     FEED_HAY("\\s*feed\\s*hay\\s-n\\s(?<anima_name>\\S+)\\s*"),
     ANIMAL_PRODUCTION_LIST("\\s*produces\\s*"),
     COLLECT_PRODUCT("\\s*collect\\s*produce\\s-n\\s(?<name>\\S+)\\s*"),
-    SELL_ANIMAL(""),
-    FISHING(""),
+    SELL_ANIMAL("\\s*sell\\s*animal\\s+-n\\s*(?<name>\\S)\\s*"),
+    FISHING("\\s*fishing\\s+-p\\s(?<fishing pole>\\S)\\s*"),
 
     //TODO: Nader
     // Artisan Commands
-    ARTISAN_USE(""),
+    ARTISAN_USE("\\s*artisan\\s*use\\s(?<artisan_name>\\S)\\s*\\s(?<item1_name>\\S)\\s*"),
     ARTISAN_GET(""),
 
     //TODO: Nader
