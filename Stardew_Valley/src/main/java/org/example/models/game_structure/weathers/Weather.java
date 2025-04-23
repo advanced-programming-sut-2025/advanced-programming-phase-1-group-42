@@ -1,13 +1,3 @@
-<<<<<<< Updated upstream
-<<<<<<< Updated upstream
-package org.example.models.game_structure.weathers;
-
-public abstract class Weather {
-
-}
-=======
-=======
->>>>>>> Stashed changes
 package org.example.models.game_structure.weathers;
 
 import org.example.models.App;
@@ -30,7 +20,3 @@ public abstract class Weather {
 
     public abstract String getName();
 }
-<<<<<<< Updated upstream
->>>>>>> Stashed changes
-=======
->>>>>>> Stashed changes

@@ -39,17 +39,4 @@ public enum CraftingType implements GoodType {
     public int getSellPrice() {
         return sellPrice;
     }
-<<<<<<< Updated upstream
-<<<<<<< Updated upstream
-
-    @Override
-    public int getEnergy() {
-        return 0;
-    }
-
-
-=======
->>>>>>> Stashed changes
-=======
->>>>>>> Stashed changes
 }
