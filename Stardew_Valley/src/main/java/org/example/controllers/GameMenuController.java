@@ -383,7 +383,7 @@ public class GameMenuController extends Controller {
                 return new Result(false, "Item is not available in the fridge");
             }
 
-            if(App.getCurrentGame().getCurrentPlayingPlayer().getInventory().addGood(item)){
+            if (App.getCurrentGame().getCurrentPlayingPlayer().getInventory().addGood(item)) {
                 return new Result(true, item.getName() + " added to the inventory");
             }
             return new Result(false, "Inventory is full");
@@ -407,13 +407,11 @@ public class GameMenuController extends Controller {
                 return new Result(false, "Item is not available in the Inventory");
             }
 
-            for (ArrayList<Food> fridgeList : fridge.getInFridgeItems()) {
-                if (fridgeList.isEmpty() || fridgeList.get(0).getName().equalsIgnoreCase(itemName)) {
-                    fridgeList.add(item);
-                    return new Result(true, "You put " + itemName + " into the fridge");
-                }
+            if (App.getCurrentGame().getCurrentPlayingPlayer().getFridge().addItemToFridge(item)) {
+                return new Result(true, item.getName() + " added to the fridge");
             }
             return new Result(false, "Fridge is full");
+
         }
 
         return new Result(false, "Invalid operation");
@@ -441,8 +439,8 @@ public class GameMenuController extends Controller {
             return new Result(false, "This recipe is invalid");
         }
 
-        for (CookingRecipe cookingRecipe : App.getCurrentGame().getCurrentPlayingPlayer().getCookingRecipes()){
-            if (cookingRecipe.getName().equals(recipeName)){
+        for (CookingRecipe cookingRecipe : App.getCurrentGame().getCurrentPlayingPlayer().getCookingRecipes()) {
+            if (cookingRecipe.getName().equals(recipeName)) {
                 recipe = cookingRecipe;
                 found = true;
                 break;
@@ -464,18 +462,17 @@ public class GameMenuController extends Controller {
 
         Food food = new Food(recipe.getType().getFoodType());
 
-        for (ArrayList<Good> goods: App.getCurrentGame().getCurrentPlayingPlayer().getInventory().getList()) {
+        for (ArrayList<Good> goods : App.getCurrentGame().getCurrentPlayingPlayer().getInventory().getList()) {
             if (goods.getFirst().getName().equalsIgnoreCase(recipeName)) {
                 goods.add(food);
                 return new Result(true, "You put " + food.getName() + " into the inventory");
-            } else if (goods.isEmpty()){
+            } else if (goods.isEmpty()) {
                 goods.add(food);
                 return new Result(true, "You put " + food.getName() + " into the inventory");
             }
         }
 
         return new Result(false, "Your inventory is full");
-
 
 
     }
