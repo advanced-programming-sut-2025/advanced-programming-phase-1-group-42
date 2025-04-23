@@ -27,7 +27,9 @@ public class App {
             "What is your favorite movie of all time?"
     ));
 
-
+    public static ArrayList<Farm> getFarms() {
+        return farms;
+    }
 
     public static ArrayList<User> getUsers() {
         return users;

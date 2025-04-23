@@ -9,5 +9,13 @@ public class Farm {
     private GreenHouse greenHouse;
     private ArrayList<Tile> lakes;
     private ArrayList<Tile> quarry;
+    private int farmNumber;
 
+    public int getFarmNumber() {
+        return farmNumber;
+    }
+
+    public void setFarmNumber(int farmNumber) {
+        this.farmNumber = farmNumber;
+    }
 }

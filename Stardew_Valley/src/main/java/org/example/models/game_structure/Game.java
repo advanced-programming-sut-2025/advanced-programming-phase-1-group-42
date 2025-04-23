@@ -57,7 +57,7 @@ public class Game {
     }
 
     public Map getMap() {
-        return map;
+        return this.getCurrentMap();
     }
 
     public DateTime getDateTime() {

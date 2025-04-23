@@ -8,7 +8,6 @@ public class Map {
     private final ArrayList<Tile> tiles = new ArrayList<>();
     private final ArrayList<Farm> farms = new ArrayList<>();
     private final ArrayList<GameBuilding> gameBuildings = new ArrayList<>();
-    private int mapNumber;
 
     // A function to print map
     public String printMap() {
@@ -22,13 +21,7 @@ public class Map {
         return "";
     }
 
-    public int getMapNumber() {
-        return mapNumber;
-    }
 
-    public void setMapNumber(int mapNumber) {
-        this.mapNumber = mapNumber;
-    }
 
     public ArrayList<Tile> getTiles() {
         return tiles;
