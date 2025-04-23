@@ -7,6 +7,7 @@ import org.example.models.goods.foods.FoodType;
 import java.util.ArrayList;
 
 public enum TreeSaplingType implements GoodType {
+    ;
 
     private String name;
     private ArrayList<Integer> stages;
