@@ -7,6 +7,7 @@ import java.util.ArrayList;
 
 public class CookingRecipe extends Recipe {
 <<<<<<< Updated upstream
+<<<<<<< Updated upstream
     CookingRecipeType type;
 
     CookingRecipe(CookingRecipeType type) {
@@ -26,11 +27,16 @@ public class CookingRecipe extends Recipe {
     public int getSellPrice() {
         return 0;
 =======
+=======
+>>>>>>> Stashed changes
 
 
     @Override
     public String getName(){
         //TODO
+<<<<<<< Updated upstream
+>>>>>>> Stashed changes
+=======
 >>>>>>> Stashed changes
     }
 

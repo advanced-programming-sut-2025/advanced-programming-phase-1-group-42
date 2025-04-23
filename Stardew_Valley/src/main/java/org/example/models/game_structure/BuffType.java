@@ -2,6 +2,7 @@ package org.example.models.game_structure;
 
 public enum BuffType {
 <<<<<<< Updated upstream
+<<<<<<< Updated upstream
     ENERGY_BUFF,
     FARMING_BUFF,
     FORAGING_BUFF,
@@ -12,6 +13,8 @@ public enum BuffType {
 
 
 
+=======
+>>>>>>> Stashed changes
 =======
 >>>>>>> Stashed changes
 }

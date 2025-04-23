@@ -12,6 +12,7 @@ import static javax.swing.UIManager.put;
 
 public enum CookingRecipeType {
 <<<<<<< Updated upstream
+<<<<<<< Updated upstream
 
     FRIED_EGG(new ArrayList<>(Arrays.asList(
             new HashMap<FoodType, Integer>() {{
@@ -206,6 +207,8 @@ public enum CookingRecipeType {
     }
 
 =======
+=======
+>>>>>>> Stashed changes
     MEOW("meow");
     //TODO
 
@@ -216,5 +219,8 @@ public enum CookingRecipeType {
     public String getName() {
         return name;
     }
+<<<<<<< Updated upstream
+>>>>>>> Stashed changes
+=======
 >>>>>>> Stashed changes
 }

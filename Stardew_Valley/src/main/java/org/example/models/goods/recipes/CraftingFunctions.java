@@ -2,11 +2,15 @@ package org.example.models.goods.recipes;
 
 import org.example.models.App;
 <<<<<<< Updated upstream
+<<<<<<< Updated upstream
 import org.example.models.Result;
 import org.example.models.game_structure.Game;
 import org.example.models.goods.Good;
 import org.example.models.goods.craftings.Crafting;
 import org.example.models.goods.craftings.CraftingType;
+=======
+import org.example.models.goods.Good;
+>>>>>>> Stashed changes
 =======
 import org.example.models.goods.Good;
 >>>>>>> Stashed changes
@@ -288,6 +292,7 @@ public class CraftingFunctions {
 
         if (checkIsEnough2Item("copper ore", "coal", 4, 1, "mining", 1)) {
 <<<<<<< Updated upstream
+<<<<<<< Updated upstream
             Crafting crafting = new Crafting(CraftingType.CHERRY_BOMB);
             if (App.getCurrentGame().getCurrentPlayingPlayer().getInventory().addGood(crafting)){
                 System.out.println(crafting.getName()+" added to inventory");
@@ -295,6 +300,11 @@ public class CraftingFunctions {
             } else {
                 System.out.println("Your inventory is full");
             }
+=======
+            //empty 3 tiles
+            //Todo --> build a new good
+            App.getCurrentGame().getCurrentPlayingPlayer().getEnergy().setDayEnergyLeft(2);
+>>>>>>> Stashed changes
 =======
             //empty 3 tiles
             //Todo --> build a new good
@@ -310,6 +320,7 @@ public class CraftingFunctions {
 
         if (checkIsEnough2Item("iron ore", "coal", 4, 1, "mining", 2)) {
 <<<<<<< Updated upstream
+<<<<<<< Updated upstream
             Crafting crafting = new Crafting(CraftingType.BOMB);
             if (App.getCurrentGame().getCurrentPlayingPlayer().getInventory().addGood(crafting)){
                 System.out.println(crafting.getName()+" added to inventory");
@@ -317,6 +328,11 @@ public class CraftingFunctions {
             } else {
                 System.out.println("Your inventory is full");
             }
+=======
+            //empty 3 tiles
+            //Todo --> build a new good
+            App.getCurrentGame().getCurrentPlayingPlayer().getEnergy().setDayEnergyLeft(2);
+>>>>>>> Stashed changes
 =======
             //empty 3 tiles
             //Todo --> build a new good
@@ -332,6 +348,7 @@ public class CraftingFunctions {
 
         if (checkIsEnough2Item("gold ore", "coal", 4, 1, "mining", 3)) {
 <<<<<<< Updated upstream
+<<<<<<< Updated upstream
             Crafting crafting = new Crafting(CraftingType.MEGA_BOMB);
             if (App.getCurrentGame().getCurrentPlayingPlayer().getInventory().addGood(crafting)){
                 System.out.println(crafting.getName()+" added to inventory");
@@ -340,10 +357,15 @@ public class CraftingFunctions {
                 System.out.println("Your inventory is full");
             }
 =======
+=======
+>>>>>>> Stashed changes
             //empty 3 tiles
             //Todo --> build a new good
             App.getCurrentGame().getCurrentPlayingPlayer().getEnergy().setDayEnergyLeft(2);
 
+<<<<<<< Updated upstream
+>>>>>>> Stashed changes
+=======
 >>>>>>> Stashed changes
         } else {
             System.out.println("You don't have enough items to craft");
@@ -355,6 +377,7 @@ public class CraftingFunctions {
 
         if (checkIsEnough2Item("copper bar", "iron bar", 1, 1, "farming", 1)) {
 <<<<<<< Updated upstream
+<<<<<<< Updated upstream
             Crafting crafting = new Crafting(CraftingType.SPRINKLER);
             if (App.getCurrentGame().getCurrentPlayingPlayer().getInventory().addGood(crafting)){
                 System.out.println(crafting.getName()+" added to inventory");
@@ -363,10 +386,15 @@ public class CraftingFunctions {
                 System.out.println("Your inventory is full");
             }
 =======
+=======
+>>>>>>> Stashed changes
             //empty 3 tiles
             //Todo --> build a new good
             App.getCurrentGame().getCurrentPlayingPlayer().getEnergy().setDayEnergyLeft(2);
 
+<<<<<<< Updated upstream
+>>>>>>> Stashed changes
+=======
 >>>>>>> Stashed changes
         } else {
             System.out.println("You don't have enough items to craft");
@@ -378,6 +406,7 @@ public class CraftingFunctions {
 
         if (checkIsEnough2Item("iron bar", "gold bar", 4, 1, "farming", 2)) {
 <<<<<<< Updated upstream
+<<<<<<< Updated upstream
             Crafting crafting = new Crafting(CraftingType.QUALITY_SPRINKLER);
             if (App.getCurrentGame().getCurrentPlayingPlayer().getInventory().addGood(crafting)){
                 System.out.println(crafting.getName()+" added to inventory");
@@ -385,6 +414,11 @@ public class CraftingFunctions {
             } else {
                 System.out.println("Your inventory is full");
             }
+=======
+            //empty 3 tiles
+            //Todo --> build a new good
+            App.getCurrentGame().getCurrentPlayingPlayer().getEnergy().setDayEnergyLeft(2);
+>>>>>>> Stashed changes
 =======
             //empty 3 tiles
             //Todo --> build a new good
@@ -400,6 +434,7 @@ public class CraftingFunctions {
 
         if (checkIsEnough2Item("gold bar", "iridium bar", 4, 1, "farming", 3)) {
 <<<<<<< Updated upstream
+<<<<<<< Updated upstream
             Crafting crafting = new Crafting(CraftingType.IRIDIUM_SPRINKLER);
             if (App.getCurrentGame().getCurrentPlayingPlayer().getInventory().addGood(crafting)){
                 System.out.println(crafting.getName()+" added to inventory");
@@ -408,10 +443,15 @@ public class CraftingFunctions {
                 System.out.println("Your inventory is full");
             }
 =======
+=======
+>>>>>>> Stashed changes
             //empty 3 tiles
             //Todo --> build a new good
             App.getCurrentGame().getCurrentPlayingPlayer().getEnergy().setDayEnergyLeft(2);
 
+<<<<<<< Updated upstream
+>>>>>>> Stashed changes
+=======
 >>>>>>> Stashed changes
         } else {
             System.out.println("You don't have enough items to craft");
@@ -422,6 +462,7 @@ public class CraftingFunctions {
 
         if (checkIsEnough2Item("wood", "copper bar", 20, 2, "foraging", 1)) {
 <<<<<<< Updated upstream
+<<<<<<< Updated upstream
             Crafting crafting = new Crafting(CraftingType.CHARCOAL_KILN);
             if (App.getCurrentGame().getCurrentPlayingPlayer().getInventory().addGood(crafting)){
                 System.out.println(crafting.getName()+" added to inventory");
@@ -430,10 +471,15 @@ public class CraftingFunctions {
                 System.out.println("Your inventory is full");
             }
 =======
+=======
+>>>>>>> Stashed changes
             //empty 3 tiles
             //Todo --> build a new good
             App.getCurrentGame().getCurrentPlayingPlayer().getEnergy().setDayEnergyLeft(2);
 
+<<<<<<< Updated upstream
+>>>>>>> Stashed changes
+=======
 >>>>>>> Stashed changes
         } else {
             System.out.println("You don't have enough items to craft");
@@ -444,6 +490,7 @@ public class CraftingFunctions {
 
         if (checkIsEnough2Item("copper ore", "stone", 20, 25, "null", 0)) {
 <<<<<<< Updated upstream
+<<<<<<< Updated upstream
             Crafting crafting = new Crafting(CraftingType.FURNACE);
             if (App.getCurrentGame().getCurrentPlayingPlayer().getInventory().addGood(crafting)){
                 System.out.println(crafting.getName()+" added to inventory");
@@ -452,10 +499,15 @@ public class CraftingFunctions {
                 System.out.println("Your inventory is full");
             }
 =======
+=======
+>>>>>>> Stashed changes
             //empty 3 tiles
             //Todo --> build a new good
             App.getCurrentGame().getCurrentPlayingPlayer().getEnergy().setDayEnergyLeft(2);
 
+<<<<<<< Updated upstream
+>>>>>>> Stashed changes
+=======
 >>>>>>> Stashed changes
         } else {
             System.out.println("You don't have enough items to craft");
@@ -467,6 +519,7 @@ public class CraftingFunctions {
         if (checkIsEnough3Item("wood", "coal", "fibre", 50, 1, 20,
                 "null", 0)) {
 <<<<<<< Updated upstream
+<<<<<<< Updated upstream
             Crafting crafting = new Crafting(CraftingType.SCARECROW);
             if (App.getCurrentGame().getCurrentPlayingPlayer().getInventory().addGood(crafting)){
                 System.out.println(crafting.getName()+" added to inventory");
@@ -475,10 +528,15 @@ public class CraftingFunctions {
                 System.out.println("Your inventory is full");
             }
 =======
+=======
+>>>>>>> Stashed changes
             //empty 3 tiles
             //Todo --> build a new good
             App.getCurrentGame().getCurrentPlayingPlayer().getEnergy().setDayEnergyLeft(2);
 
+<<<<<<< Updated upstream
+>>>>>>> Stashed changes
+=======
 >>>>>>> Stashed changes
         } else {
             System.out.println("You don't have enough items to craft");
@@ -490,6 +548,7 @@ public class CraftingFunctions {
         if (checkIsEnough4Item("wood", "coal", "fibre", "iridium", 50, 1, 20,
                 1, "null", 0)) {
 <<<<<<< Updated upstream
+<<<<<<< Updated upstream
             Crafting crafting = new Crafting(CraftingType.DELUXE_SCARECROW);
             if (App.getCurrentGame().getCurrentPlayingPlayer().getInventory().addGood(crafting)){
                 System.out.println(crafting.getName()+" added to inventory");
@@ -498,10 +557,15 @@ public class CraftingFunctions {
                 System.out.println("Your inventory is full");
             }
 =======
+=======
+>>>>>>> Stashed changes
             //empty 3 tiles
             //Todo --> build a new good
             App.getCurrentGame().getCurrentPlayingPlayer().getEnergy().setDayEnergyLeft(2);
 
+<<<<<<< Updated upstream
+>>>>>>> Stashed changes
+=======
 >>>>>>> Stashed changes
         } else {
             System.out.println("You don't have enough items to craft");
@@ -513,6 +577,7 @@ public class CraftingFunctions {
         if (checkIsEnough3Item("wood", "coal", "iron bar", 40, 8, 1,
                 "farming", 1)) {
 <<<<<<< Updated upstream
+<<<<<<< Updated upstream
             Crafting crafting = new Crafting(CraftingType.BEE_HOUSE);
             if (App.getCurrentGame().getCurrentPlayingPlayer().getInventory().addGood(crafting)){
                 System.out.println(crafting.getName()+" added to inventory");
@@ -521,10 +586,15 @@ public class CraftingFunctions {
                 System.out.println("Your inventory is full");
             }
 =======
+=======
+>>>>>>> Stashed changes
             //empty 3 tiles
             //Todo --> build a new good
             App.getCurrentGame().getCurrentPlayingPlayer().getEnergy().setDayEnergyLeft(2);
 
+<<<<<<< Updated upstream
+>>>>>>> Stashed changes
+=======
 >>>>>>> Stashed changes
         } else {
             System.out.println("You don't have enough items to craft");
@@ -536,6 +606,7 @@ public class CraftingFunctions {
         if (checkIsEnough3Item("wood", "stone", "copper bar", 45, 45, 1,
                 "farming", 2)) {
 <<<<<<< Updated upstream
+<<<<<<< Updated upstream
             Crafting crafting = new Crafting(CraftingType.CHEESE_PRESS);
             if (App.getCurrentGame().getCurrentPlayingPlayer().getInventory().addGood(crafting)){
                 System.out.println(crafting.getName()+" added to inventory");
@@ -544,10 +615,15 @@ public class CraftingFunctions {
                 System.out.println("Your inventory is full");
             }
 =======
+=======
+>>>>>>> Stashed changes
             //empty 3 tiles
             //Todo --> build a new good
             App.getCurrentGame().getCurrentPlayingPlayer().getEnergy().setDayEnergyLeft(2);
 
+<<<<<<< Updated upstream
+>>>>>>> Stashed changes
+=======
 >>>>>>> Stashed changes
         } else {
             System.out.println("You don't have enough items to craft");
@@ -559,6 +635,7 @@ public class CraftingFunctions {
         if (checkIsEnough3Item("wood", "copper bar", "iron bar", 30, 1, 1,
                 "farming", 3)) {
 <<<<<<< Updated upstream
+<<<<<<< Updated upstream
             Crafting crafting = new Crafting(CraftingType.KEG);
             if (App.getCurrentGame().getCurrentPlayingPlayer().getInventory().addGood(crafting)){
                 System.out.println(crafting.getName()+" added to inventory");
@@ -567,10 +644,15 @@ public class CraftingFunctions {
                 System.out.println("Your inventory is full");
             }
 =======
+=======
+>>>>>>> Stashed changes
             //empty 3 tiles
             //Todo --> build a new good
             App.getCurrentGame().getCurrentPlayingPlayer().getEnergy().setDayEnergyLeft(2);
 
+<<<<<<< Updated upstream
+>>>>>>> Stashed changes
+=======
 >>>>>>> Stashed changes
         } else {
             System.out.println("You don't have enough items to craft");
@@ -582,6 +664,7 @@ public class CraftingFunctions {
         if (checkIsEnough2Item("wood", "fiber", 60, 30,
                 "farming", 3)) {
 <<<<<<< Updated upstream
+<<<<<<< Updated upstream
             Crafting crafting = new Crafting(CraftingType.LOOM);
             if (App.getCurrentGame().getCurrentPlayingPlayer().getInventory().addGood(crafting)){
                 System.out.println(crafting.getName()+" added to inventory");
@@ -590,10 +673,15 @@ public class CraftingFunctions {
                 System.out.println("Your inventory is full");
             }
 =======
+=======
+>>>>>>> Stashed changes
             //empty 3 tiles
             //Todo --> build a new good
             App.getCurrentGame().getCurrentPlayingPlayer().getEnergy().setDayEnergyLeft(2);
 
+<<<<<<< Updated upstream
+>>>>>>> Stashed changes
+=======
 >>>>>>> Stashed changes
         } else {
             System.out.println("You don't have enough items to craft");
@@ -605,6 +693,7 @@ public class CraftingFunctions {
         if (checkIsEnough3Item("wood", "stone", "copper bar", 15, 15, 1,
                 "null", 3)) {
 <<<<<<< Updated upstream
+<<<<<<< Updated upstream
             Crafting crafting = new Crafting(CraftingType.MAYONNAISE_MACHINE);
             if (App.getCurrentGame().getCurrentPlayingPlayer().getInventory().addGood(crafting)){
                 System.out.println(crafting.getName()+" added to inventory");
@@ -613,10 +702,15 @@ public class CraftingFunctions {
                 System.out.println("Your inventory is full");
             }
 =======
+=======
+>>>>>>> Stashed changes
             //empty 3 tiles
             //Todo --> build a new good
             App.getCurrentGame().getCurrentPlayingPlayer().getEnergy().setDayEnergyLeft(2);
 
+<<<<<<< Updated upstream
+>>>>>>> Stashed changes
+=======
 >>>>>>> Stashed changes
         } else {
             System.out.println("You don't have enough items to craft");
@@ -629,6 +723,7 @@ public class CraftingFunctions {
         if (checkIsEnough3Item("wood", "gold bar", "iron bar", 100, 1, 1,
                 "farming", 3)) {
 <<<<<<< Updated upstream
+<<<<<<< Updated upstream
             Crafting crafting = new Crafting(CraftingType.OIL_MAKER);
             if (App.getCurrentGame().getCurrentPlayingPlayer().getInventory().addGood(crafting)){
                 System.out.println(crafting.getName()+" added to inventory");
@@ -637,10 +732,15 @@ public class CraftingFunctions {
                 System.out.println("Your inventory is full");
             }
 =======
+=======
+>>>>>>> Stashed changes
             //empty 3 tiles
             //Todo --> build a new good
             App.getCurrentGame().getCurrentPlayingPlayer().getEnergy().setDayEnergyLeft(2);
 
+<<<<<<< Updated upstream
+>>>>>>> Stashed changes
+=======
 >>>>>>> Stashed changes
         } else {
             System.out.println("You don't have enough items to craft");
@@ -653,6 +753,7 @@ public class CraftingFunctions {
         if (checkIsEnough3Item("wood", "stone", "coal", 50, 40, 8,
                 "farming", 2)) {
 <<<<<<< Updated upstream
+<<<<<<< Updated upstream
             Crafting crafting = new Crafting(CraftingType.PRESERVES_JAR);
             if (App.getCurrentGame().getCurrentPlayingPlayer().getInventory().addGood(crafting)){
                 System.out.println(crafting.getName()+" added to inventory");
@@ -661,10 +762,15 @@ public class CraftingFunctions {
                 System.out.println("Your inventory is full");
             }
 =======
+=======
+>>>>>>> Stashed changes
             //empty 3 tiles
             //Todo --> build a new good
             App.getCurrentGame().getCurrentPlayingPlayer().getEnergy().setDayEnergyLeft(2);
 
+<<<<<<< Updated upstream
+>>>>>>> Stashed changes
+=======
 >>>>>>> Stashed changes
         } else {
             System.out.println("You don't have enough items to craft");
@@ -677,6 +783,7 @@ public class CraftingFunctions {
         if (checkIsEnough3Item("wood", "stone", "fiber", 30, 20, 30,
                 "null", 3)) {
 <<<<<<< Updated upstream
+<<<<<<< Updated upstream
             Crafting crafting = new Crafting(CraftingType.DEHYDRATOR);
             if (App.getCurrentGame().getCurrentPlayingPlayer().getInventory().addGood(crafting)){
                 System.out.println(crafting.getName()+" added to inventory");
@@ -685,10 +792,15 @@ public class CraftingFunctions {
                 System.out.println("Your inventory is full");
             }
 =======
+=======
+>>>>>>> Stashed changes
             // store check
             //Todo --> build a new good
             App.getCurrentGame().getCurrentPlayingPlayer().getEnergy().setDayEnergyLeft(2);
 
+<<<<<<< Updated upstream
+>>>>>>> Stashed changes
+=======
 >>>>>>> Stashed changes
         } else {
             System.out.println("You don't have enough items to craft");
@@ -701,6 +813,7 @@ public class CraftingFunctions {
         if (checkIsEnough3Item("wood", "iron bar", "coal", 50, 3, 10,
                 "null", 3)) {
 <<<<<<< Updated upstream
+<<<<<<< Updated upstream
             Crafting crafting = new Crafting(CraftingType.FISH_SMOKER);
             if (App.getCurrentGame().getCurrentPlayingPlayer().getInventory().addGood(crafting)){
                 System.out.println(crafting.getName()+" added to inventory");
@@ -709,11 +822,16 @@ public class CraftingFunctions {
                 System.out.println("Your inventory is full");
             }
 =======
+=======
+>>>>>>> Stashed changes
             //empty 3 tiles
             // store check
             //Todo --> build a new good
             App.getCurrentGame().getCurrentPlayingPlayer().getEnergy().setDayEnergyLeft(2);
 
+<<<<<<< Updated upstream
+>>>>>>> Stashed changes
+=======
 >>>>>>> Stashed changes
         } else {
             System.out.println("You don't have enough items to craft");
@@ -727,6 +845,7 @@ public class CraftingFunctions {
                 5, 5, 5,
                 "foraging", 4)) {
 <<<<<<< Updated upstream
+<<<<<<< Updated upstream
             Crafting crafting = new Crafting(CraftingType.MYSTIC_TREE_SEED);
             if (App.getCurrentGame().getCurrentPlayingPlayer().getInventory().addGood(crafting)){
                 System.out.println(crafting.getName()+" added to inventory");
@@ -735,10 +854,15 @@ public class CraftingFunctions {
                 System.out.println("Your inventory is full");
             }
 =======
+=======
+>>>>>>> Stashed changes
             //empty 3 tiles
             //Todo --> build a new good
             App.getCurrentGame().getCurrentPlayingPlayer().getEnergy().setDayEnergyLeft(2);
 
+<<<<<<< Updated upstream
+>>>>>>> Stashed changes
+=======
 >>>>>>> Stashed changes
         } else {
             System.out.println("You don't have enough items to craft");

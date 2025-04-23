@@ -3,7 +3,10 @@ package org.example.models.goods.recipes;
 public class CraftingRecipe extends Recipe {
     CraftingRecipeType type;
 <<<<<<< Updated upstream
+<<<<<<< Updated upstream
 
+=======
+>>>>>>> Stashed changes
 =======
 >>>>>>> Stashed changes
     CraftingRecipe(CraftingRecipeType type) {
@@ -20,11 +23,14 @@ public class CraftingRecipe extends Recipe {
     }
 
 <<<<<<< Updated upstream
+<<<<<<< Updated upstream
     @Override
     public int getSellPrice() {
         return 0;
     }
 
+=======
+>>>>>>> Stashed changes
 =======
 >>>>>>> Stashed changes
 

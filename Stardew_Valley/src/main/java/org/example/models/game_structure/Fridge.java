@@ -1,4 +1,5 @@
 <<<<<<< Updated upstream
+<<<<<<< Updated upstream
 package org.example.models.game_structure;
 
 import org.example.models.App;
@@ -17,8 +18,13 @@ public class Fridge {
     
 }
 =======
+=======
+>>>>>>> Stashed changes
 package org.example.models.game_structure;
 
 public class Fridge {
 }
+<<<<<<< Updated upstream
+>>>>>>> Stashed changes
+=======
 >>>>>>> Stashed changes

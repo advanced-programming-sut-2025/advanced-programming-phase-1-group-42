@@ -11,6 +11,11 @@ public class Tile {
     private ArrayList<Good> goods;
 
 <<<<<<< Updated upstream
+<<<<<<< Updated upstream
+=======
+
+
+>>>>>>> Stashed changes
 =======
 
 

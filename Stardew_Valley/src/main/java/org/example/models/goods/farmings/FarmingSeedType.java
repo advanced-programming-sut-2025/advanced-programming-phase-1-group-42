@@ -133,5 +133,8 @@ public enum FarmingSeedType implements GoodType {
 public enum FarmingSeedType {
     //TODO
     //Giant Farming seeds do not forget to implement
+<<<<<<< Updated upstream
+>>>>>>> Stashed changes
+=======
 >>>>>>> Stashed changes
 }

@@ -1,4 +1,5 @@
 <<<<<<< Updated upstream
+<<<<<<< Updated upstream
 package org.example.models.game_structure;
 
 public class Energy {
@@ -32,6 +33,8 @@ public class Energy {
     }
 }
 =======
+=======
+>>>>>>> Stashed changes
 package org.example.models.game_structure;
 
 public class Energy {
@@ -64,4 +67,7 @@ public class Energy {
         //TODO
     }
 }
+<<<<<<< Updated upstream
+>>>>>>> Stashed changes
+=======
 >>>>>>> Stashed changes

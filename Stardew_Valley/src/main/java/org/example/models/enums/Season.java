@@ -2,11 +2,14 @@ package org.example.models.enums;
 
 public enum Season {
 <<<<<<< Updated upstream
+<<<<<<< Updated upstream
     SPRING(),
     SUMMER(),
     FALL(),
     WINTER();
 =======
+=======
+>>>>>>> Stashed changes
     SPRING("Spring",1),
     SUMMER("Summer",2),
     FALL("Fall",3),
@@ -27,5 +30,8 @@ public enum Season {
     public int getValue() {
         return value;
     }
+<<<<<<< Updated upstream
+>>>>>>> Stashed changes
+=======
 >>>>>>> Stashed changes
 }

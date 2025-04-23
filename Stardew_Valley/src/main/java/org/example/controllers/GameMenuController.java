@@ -3,6 +3,7 @@ package org.example.controllers;
 import org.example.models.App;
 import org.example.models.Result;
 <<<<<<< Updated upstream
+<<<<<<< Updated upstream
 import org.example.models.game_structure.*;
 import org.example.models.game_structure.Map;
 import org.example.models.goods.Good;
@@ -36,10 +37,34 @@ public class GameMenuController extends Controller {
 
     Game thisGame;
 
+=======
+import org.example.models.enums.WeatherType;
+import org.example.models.game_structure.Game;
+import org.example.models.game_structure.Map;
+import org.example.models.game_structure.Tile;
+
+import org.example.models.goods.Good;
+import org.example.models.goods.recipes.CraftingFunctions;
+import org.example.models.goods.recipes.CraftingRecipe;
+import org.example.models.interactions.Player;
+import org.example.models.interactions.User;
+
+
+import java.util.ArrayList;
+import java.util.Iterator;
+
+public class GameMenuController extends Controller {
+
+    Game thisGame;
+
+>>>>>>> Stashed changes
     public void setThisGame(Game thisGame) {
         this.thisGame = thisGame;
     }
 
+<<<<<<< Updated upstream
+>>>>>>> Stashed changes
+=======
 >>>>>>> Stashed changes
     //TODO: Nader
     //game setting methods
@@ -138,11 +163,21 @@ public class GameMenuController extends Controller {
 
     public Result dayOfTheWeek() {
 <<<<<<< Updated upstream
+<<<<<<< Updated upstream
         return new Result(true, App.getCurrentGame().getDateTime().getDayOfWeek());
     }
 
     public Result showSeason() {
         return new Result(true, App.getCurrentGame().getDateTime().getSeasonOfYear());
+=======
+        return new Result(true, App.getCurrentGame()
+                .getDateTime().getDayOfWeek());
+    }
+
+    public Result showSeason() {
+        return new Result(true, App.getCurrentGame().getDateTime()
+                .getSeasonOfYear().getName());
+>>>>>>> Stashed changes
 =======
         return new Result(true, App.getCurrentGame()
                 .getDateTime().getDayOfWeek());
@@ -169,7 +204,13 @@ public class GameMenuController extends Controller {
     //Weather methods
     public Result cheatThunder(String x, String y) {
 <<<<<<< Updated upstream
+<<<<<<< Updated upstream
         //TODO
+=======
+        int xInt = Integer.parseInt(x);
+        int yInt = Integer.parseInt(y);
+        App.getCurrentGame().getWeather().Thunder(xInt , yInt, /*TODO*/);
+>>>>>>> Stashed changes
 =======
         int xInt = Integer.parseInt(x);
         int yInt = Integer.parseInt(y);
@@ -181,7 +222,11 @@ public class GameMenuController extends Controller {
     public Result weather() {
         //TODO
 <<<<<<< Updated upstream
+<<<<<<< Updated upstream
         return new Result(true, "");
+=======
+        return new Result(true, App.getCurrentGame().getWeatherName());
+>>>>>>> Stashed changes
 =======
         return new Result(true, App.getCurrentGame().getWeatherName());
 >>>>>>> Stashed changes
@@ -190,7 +235,11 @@ public class GameMenuController extends Controller {
     public Result weatherForecast() {
         //TODO
 <<<<<<< Updated upstream
+<<<<<<< Updated upstream
         return new Result(true, "");
+=======
+        return new Result(true, App.getCurrentGame().getTomorrow().weatherForecast().getName());
+>>>>>>> Stashed changes
 =======
         return new Result(true, App.getCurrentGame().getTomorrow().weatherForecast().getName());
 >>>>>>> Stashed changes
@@ -199,7 +248,10 @@ public class GameMenuController extends Controller {
     public Result cheatWeatherSet(String weather) {
         //TODO
 <<<<<<< Updated upstream
+<<<<<<< Updated upstream
 =======
+=======
+>>>>>>> Stashed changes
         switch(weather){
             case "Sunny":
                App.getCurrentGame().cheatSetWeather(WeatherType.Sunny.getWeather());
@@ -214,6 +266,9 @@ public class GameMenuController extends Controller {
                App.getCurrentGame().cheatSetWeather(WeatherType.Snow.getWeather());
            break;
         }
+<<<<<<< Updated upstream
+>>>>>>> Stashed changes
+=======
 >>>>>>> Stashed changes
         return new Result(true, "");
     }
@@ -227,9 +282,15 @@ public class GameMenuController extends Controller {
     //TODO: Parsa
     //Map methods
 <<<<<<< Updated upstream
+<<<<<<< Updated upstream
     public Result walk(String x,        //TODO
                        String y) {
         //TODO
+=======
+    public Result walk(String x, String y) {
+        //TODO
+
+>>>>>>> Stashed changes
 =======
     public Result walk(String x, String y) {
         //TODO
@@ -252,8 +313,14 @@ public class GameMenuController extends Controller {
     //inventory & Energy methods
     public Result energyShow() {
 <<<<<<< Updated upstream
+<<<<<<< Updated upstream
         //TODO
         return new Result(true, "");
+=======
+
+        return new Result(true, (App.getCurrentGame().
+                getCurrentPlayingPlayer().getEnergy()).getDayEnergyLeft() + "");
+>>>>>>> Stashed changes
 =======
 
         return new Result(true, (App.getCurrentGame().
@@ -264,6 +331,11 @@ public class GameMenuController extends Controller {
     public Result cheatEnergySet(String value) {
         //TODO
 <<<<<<< Updated upstream
+<<<<<<< Updated upstream
+=======
+        int valueInt = Integer.parseInt(value);
+        App.getCurrentGame().getCurrentPlayingPlayer().getEnergy().setDayEnergyLeft(valueInt);
+>>>>>>> Stashed changes
 =======
         int valueInt = Integer.parseInt(value);
         App.getCurrentGame().getCurrentPlayingPlayer().getEnergy().setDayEnergyLeft(valueInt);
@@ -273,7 +345,12 @@ public class GameMenuController extends Controller {
 
     public Result cheatEnergyUnlimited() {
 <<<<<<< Updated upstream
+<<<<<<< Updated upstream
         //TODO
+=======
+        App.getCurrentGame().getCurrentPlayingPlayer().getEnergy().setMaxDayEnergy(Integer.MAX_VALUE);
+        App.getCurrentGame().getCurrentPlayingPlayer().getEnergy().setMaxTurnEnergy(Integer.MAX_VALUE);
+>>>>>>> Stashed changes
 =======
         App.getCurrentGame().getCurrentPlayingPlayer().getEnergy().setMaxDayEnergy(Integer.MAX_VALUE);
         App.getCurrentGame().getCurrentPlayingPlayer().getEnergy().setMaxTurnEnergy(Integer.MAX_VALUE);
@@ -284,6 +361,10 @@ public class GameMenuController extends Controller {
     public Result inventoryTrashItem(String itemName, String number) {
         //TODO
 <<<<<<< Updated upstream
+<<<<<<< Updated upstream
+=======
+        int numberInt = Integer.parseInt(number);
+>>>>>>> Stashed changes
 =======
         int numberInt = Integer.parseInt(number);
 >>>>>>> Stashed changes
@@ -292,9 +373,12 @@ public class GameMenuController extends Controller {
 
     public Result inventoryShow() {
 <<<<<<< Updated upstream
+<<<<<<< Updated upstream
         //TODO
         return new Result(true, "");
 =======
+=======
+>>>>>>> Stashed changes
         StringBuilder inventoryList = new StringBuilder();
         for (ArrayList<Good> good : App.getCurrentGame().getCurrentPlayingPlayer().getInventory().getList()){
             if(!good.isEmpty()){
@@ -302,6 +386,9 @@ public class GameMenuController extends Controller {
             }
         }
         return new Result(true, inventoryList.toString());
+<<<<<<< Updated upstream
+>>>>>>> Stashed changes
+=======
 >>>>>>> Stashed changes
     }
 
@@ -309,7 +396,11 @@ public class GameMenuController extends Controller {
     // Tools
     public Result toolsEquipment(String toolName) {
 <<<<<<< Updated upstream
+<<<<<<< Updated upstream
 
+=======
+        //TODO
+>>>>>>> Stashed changes
 =======
         //TODO
 >>>>>>> Stashed changes
@@ -466,6 +557,7 @@ public class GameMenuController extends Controller {
     // cooking methods
     public Result cookingRefrigerator(String status, String itemName) {
 <<<<<<< Updated upstream
+<<<<<<< Updated upstream
         Fridge fridge = App.getCurrentGame().getCurrentPlayingPlayer().getFridge();
         Inventory inventory = App.getCurrentGame().getCurrentPlayingPlayer().getInventory();
         Food item = null;
@@ -532,17 +624,23 @@ public class GameMenuController extends Controller {
             System.out.println(cookingRecipe.getName());
         }
 =======
+=======
+>>>>>>> Stashed changes
         //TODO
         return new Result(true, "");
     }
 
     public Result showCookingRecipes() {
         //TODO
+<<<<<<< Updated upstream
+>>>>>>> Stashed changes
+=======
 >>>>>>> Stashed changes
         return new Result(true, "");
     }
 
     public Result cookingPrepare(String recipeName) {
+<<<<<<< Updated upstream
 <<<<<<< Updated upstream
         CookingRecipe recipe = null;
         boolean found = false;
@@ -632,6 +730,8 @@ public class GameMenuController extends Controller {
         App.getCurrentGame().getCurrentPlayingPlayer().eat((Food) food);
         return new Result(true, "Khosmaz, Yum Yum!");
 =======
+=======
+>>>>>>> Stashed changes
         //TODO
         return new Result(true, "");
     }
@@ -639,6 +739,9 @@ public class GameMenuController extends Controller {
     public Result eat(String foodName) {
         //TODO
         return new Result(true, "");
+<<<<<<< Updated upstream
+>>>>>>> Stashed changes
+=======
 >>>>>>> Stashed changes
     }
 

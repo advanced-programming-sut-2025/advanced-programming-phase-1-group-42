@@ -1,4 +1,5 @@
 <<<<<<< Updated upstream
+<<<<<<< Updated upstream
 package org.example.models.game_structure;
 
 import org.example.models.enums.Season;
@@ -74,6 +75,8 @@ public class DateTime {
 
 }
 =======
+=======
+>>>>>>> Stashed changes
 package org.example.models.game_structure;
 
 import org.example.models.App;
@@ -152,4 +155,7 @@ public class DateTime {
 
 
 }
+<<<<<<< Updated upstream
+>>>>>>> Stashed changes
+=======
 >>>>>>> Stashed changes

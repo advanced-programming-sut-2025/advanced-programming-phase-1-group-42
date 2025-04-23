@@ -1,9 +1,12 @@
 <<<<<<< Updated upstream
+<<<<<<< Updated upstream
 package org.example.models.game_structure.weathers;
 
 public class Storm extends Weather {
 }
 =======
+=======
+>>>>>>> Stashed changes
 package org.example.models.game_structure.weathers;
 
 public class Storm extends Weather {
@@ -24,4 +27,7 @@ public class Storm extends Weather {
 
     public String getCurrentWeather() { return "Storm"; }
 }
+<<<<<<< Updated upstream
+>>>>>>> Stashed changes
+=======
 >>>>>>> Stashed changes

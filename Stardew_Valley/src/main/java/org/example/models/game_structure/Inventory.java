@@ -1,4 +1,5 @@
 <<<<<<< Updated upstream
+<<<<<<< Updated upstream
 package org.example.models.game_structure;
 
 import org.example.models.App;
@@ -43,6 +44,8 @@ public class Inventory {
 
 }
 =======
+=======
+>>>>>>> Stashed changes
 package org.example.models.game_structure;
 
 import org.example.models.goods.Good;
@@ -61,4 +64,7 @@ public class Inventory {
     }
 
 }
+<<<<<<< Updated upstream
+>>>>>>> Stashed changes
+=======
 >>>>>>> Stashed changes

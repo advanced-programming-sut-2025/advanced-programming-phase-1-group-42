@@ -3,8 +3,11 @@ package org.example.controllers;
 import org.example.models.App;
 import org.example.models.Result;
 <<<<<<< Updated upstream
+<<<<<<< Updated upstream
 import org.example.models.goods.foods.artisans.Artisan;
 import org.example.models.goods.foods.artisans.ArtisanType;
+=======
+>>>>>>> Stashed changes
 =======
 >>>>>>> Stashed changes
 import org.example.models.interactions.User;
@@ -22,10 +25,13 @@ public class Controller {
             }
         }
 <<<<<<< Updated upstream
+<<<<<<< Updated upstream
 
         Artisan artisan = new Artisan();
         artisan.setArtisanType(ArtisanType.Dried_Mashrooms);
         artisan.getArtisanType().getSellPrice(new )
+=======
+>>>>>>> Stashed changes
 =======
 >>>>>>> Stashed changes
         return null;
