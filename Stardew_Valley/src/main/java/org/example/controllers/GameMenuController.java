@@ -6,6 +6,7 @@ import org.example.models.game_structure.Game;
 import org.example.models.game_structure.Map;
 import org.example.models.game_structure.Tile;
 import org.example.models.goods.Good;
+import org.example.models.goods.foods.Food;
 import org.example.models.goods.recipes.CraftingFunctions;
 import org.example.models.goods.recipes.CraftingRecipe;
 import org.example.models.goods.recipes.Recipe;
@@ -381,7 +382,20 @@ public class GameMenuController extends Controller {
     }
 
     public Result eat(String foodName) {
-        //TODO
+        Good food = null;
+        for (ArrayList<Good> goodArrayList : App.getCurrentGame().getCurrentPlayingPlayer().getInventory().getList()) {
+            Iterator<Good> iterator = goodArrayList.iterator();
+            while (iterator.hasNext()) {
+                food = iterator.next();
+                if (food.getName().equals(foodName)) {
+                    if (food instanceof Food){
+                        iterator.remove();
+                        break;
+                    }
+                }
+            }
+        }
+        App.getCurrentGame().getCurrentPlayingPlayer()
         return new Result(true, "");
     }
 

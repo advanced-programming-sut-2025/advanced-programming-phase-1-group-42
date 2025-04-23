@@ -22,6 +22,7 @@ public class Player {
     private Energy energy ;
     private TrashCan trashCan;
     private Skill skill;
+    private Buff buff = null;
     private HashMap<Player, Integer> friendShipLevel;
     private HashMap<Player, Integer> friendShipScore;
     private HashMap<Player, ArrayList<String>> talkHistory;
@@ -68,6 +69,14 @@ public class Player {
 
     public Cordinate getCordinate() {
         return cordinate;
+    }
+
+    public void setBuff(Buff buff) {
+        this.buff = buff;
+    }
+
+    public Buff getBuff() {
+        return buff;
     }
 
 
