@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 
 import org.example.models.enums.Menu;
+import org.example.models.game_structure.Farm;
 import org.example.models.game_structure.Game;
 import org.example.models.game_structure.Map;
 import org.example.models.interactions.User;
@@ -14,7 +15,7 @@ public class App {
 
     private static Menu currentMenu = Menu.LoginRegisterMenu;
 
-    public static ArrayList<Map> maps = new ArrayList<>();
+    public static ArrayList<Farm> farms = new ArrayList<>();
 
     private static User currentUser = null;
 
@@ -26,7 +27,9 @@ public class App {
             "What is your favorite movie of all time?"
     ));
 
-
+    public static ArrayList<Farm> getFarms() {
+        return farms;
+    }
 
     public static ArrayList<User> getUsers() {
         return users;

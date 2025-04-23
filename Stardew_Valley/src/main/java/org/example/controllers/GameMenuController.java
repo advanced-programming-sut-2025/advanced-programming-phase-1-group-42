@@ -3,7 +3,6 @@ package org.example.controllers;
 import org.example.models.App;
 import org.example.models.Result;
 import org.example.models.game_structure.*;
-import org.example.models.game_structure.Map;
 import org.example.models.goods.Good;
 import org.example.models.goods.foods.Food;
 import org.example.models.goods.foods.FoodType;
@@ -59,16 +58,9 @@ public class GameMenuController extends Controller {
         return new Result(true, "Users have been added to the game successfully!");
     }
 
-    public Result mapGame(String mapNumber) {
+    public Result farmGame(String farmNumber) {
         //TODO
-        int mapNumberInt = Integer.parseInt(mapNumber.trim());
-        for (Map map : App.maps) {
-            if (map.getMapNumber() == mapNumberInt) {
-                App.getCurrentGame().setCurrentMap(map);
-                return new Result(true, "Map number " + mapNumber + " has been selected");
-            }
-        }
-        return new Result(false, "Map number is unavailable");
+        return new Result(true, "");
     }
 
     public Result loadGame() {
@@ -77,7 +69,7 @@ public class GameMenuController extends Controller {
     }
 
     public Result exitGame() {
-        if (App.getCurrentGame().getGameCreator() != App.getCurrentUser()) {
+        if (App.getCurrentGame().getGameAdmin() != App.getCurrentUser()) {
             return new Result(false, "Just game creator can exit the game!");
         }
         return new Result(true, "");
