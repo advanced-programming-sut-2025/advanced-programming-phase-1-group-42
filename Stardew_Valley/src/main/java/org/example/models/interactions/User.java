@@ -14,15 +14,23 @@ public class User {
     private String gender;
     private int questionNumber;
     private String answer;
-    private static ArrayList<String> securityQuestions = new ArrayList<>();
     private Boolean isPlaying;
+    private int maxPoints;
+    private int gamePlay;
 
-    public User(String username , String password, String nickname, String email, String gender) {
+    public User(String username, String password, String nickname, String email, String gender, int questionNumber, String answer) {
         this.username = username;
         this.password = password;
         this.nickname = nickname;
         this.email = email;
         this.gender = gender;
+        this.questionNumber = questionNumber;
+        this.answer = answer;
+        this.earnedPoints = 0;
+        this.game = null;
+        this.isPlaying = false;
+        this.maxPoints = 0;
+        this.gamePlay = 0;
     }
 
     public void changeUsername(String username) {
@@ -71,5 +79,47 @@ public class User {
     public void setPlaying(Boolean playing) {
         isPlaying = playing;
     }
+
+    public Game getGame() {
+        return game;
+    }
+
+    public int getEarnedPoints() {
+        return earnedPoints;
+    }
+
+    public int getQuestionNumber() {
+        return questionNumber;
+    }
+
+    public String getAnswer() {
+        return answer;
+    }
+
+    public void setPassword(String password) {
+        this.password = password;
+    }
+
+    public void setUsername(String username) {
+        this.username = username;
+    }
+
+    public void setNickname(String nickname) {
+        this.nickname = nickname;
+    }
+
+    public void setEmail(String email) {
+        this.email = email;
+    }
+
+    public String showInfo() {
+        String info = "";
+        info += "Username: " + this.username + "\n";
+        info += "Nickname: " + this.nickname + "\n";
+        info += "MaxPoints: " + this.maxPoints + "\n";
+        info += "GamePlay: " + this.gamePlay + "\n";
+        return info;
+    }
+
 
 }

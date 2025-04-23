@@ -5,9 +5,9 @@ import java.util.regex.Pattern;
 
 public enum MainMenuCommands implements Command {
     //TODO: Arani
-    MenuEnter(""),
-    Exit(""),
-    Logout("");
+    MenuEnter("\\s*menu\\s+enter\\s+(?<targetMenu>avatar|profile|game)\\s*"),
+    Exit("\\s*menu\\s+exit\\s*"),
+    Logout("\\s*user\\s+logout\\s*");
 
 
     private final String pattern;

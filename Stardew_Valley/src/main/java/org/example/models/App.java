@@ -2,6 +2,7 @@ package org.example.models;
 
 import java.awt.*;
 import java.util.ArrayList;
+import java.util.Arrays;
 
 import org.example.models.enums.Menu;
 import org.example.models.game_structure.Game;
@@ -18,6 +19,14 @@ public class App {
     private static User currentUser = null;
 
     private static Game currentGame = null;
+
+    private static ArrayList<String> securityQuestions = new ArrayList<>(Arrays.asList(
+            "What was the make and model of your first car?",
+            "What city were you born in?",
+            "What is your favorite movie of all time?"
+    ));
+
+
 
     public static ArrayList<User> getUsers() {
         return users;
@@ -48,5 +57,11 @@ public class App {
         return currentGame;
     }
 
+    public static ArrayList<String> getSecurityQuestions() {
+        return securityQuestions;
+    }
 
+    public static void startGame() {
+
+    }
 }
