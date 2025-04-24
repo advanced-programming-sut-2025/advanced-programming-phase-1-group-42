@@ -1,4 +1,6 @@
 package org.example.models.goods.tools;
 
-public enum ToolType {
+import org.example.models.goods.GoodType;
+
+public enum ToolType implements GoodType {
 }

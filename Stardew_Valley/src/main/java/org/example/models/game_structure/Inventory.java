@@ -1,5 +1,6 @@
 package org.example.models.game_structure;
 
+import org.example.models.App;
 import org.example.models.goods.Good;
 
 import java.util.ArrayList;

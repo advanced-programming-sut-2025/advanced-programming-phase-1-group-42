@@ -44,8 +44,8 @@ public enum GameMenuCommands implements Command {
     //TODO: Parsa
     //inventory & Energy
     ENERGY_SHOW("\\s*show\\s+energy\\s*"),
-    CHEAT_ENERGY_SET("cheat energy set\\s(?<value>\\S+)\\s*"),
-    CHEAT_ENERGY_UNLIMITED("\\s*cheat\\s+energy\\s+unlimited\\s*"),
+    CHEAT_ENERGY_SET("\\s*cheat\\s*energy\\s*set\\s(?<value>\\S+)\\s*"),
+    CHEAT_ENERGY_UNLIMITED("\\s*cheat\\s*energy\\s*unlimited\\s*"),
     INVENTORY_TRASH_ITEM("\\s*inventory\\s+trash\\s-i\\s(?<item>\\S+)\\s-n\\s(?<number>\\S+)\\s*"),
     INVENTORY_SHOW("\\s*inventory\\s+show\\s*"),
 
@@ -60,7 +60,7 @@ public enum GameMenuCommands implements Command {
 
     //TODO: Arani
     // Craft Info
-    CRAFT_INFO("\\s*craftinfo\\s-n\\s(?<craft_name>\\S+)\\s*"),
+    CRAFT_INFO("\\s*craftinfo\\s+-n\\s+(?<craftName>\\S+)\\s*"),
 
 
     //TODO: Arani
@@ -81,12 +81,12 @@ public enum GameMenuCommands implements Command {
 
     //TODO: Nader
     // Cooking Commands
-    COOKING_REFRIGERATOR("\\s*cooking\\s*refrigerator\\s*(?<type>put|pick)\\s*(?<item>\\S)\\s*"),
+    COOKING_REFRIGERATOR(""),
     SHOW_COOKING_RECIPES("\\s*cooking\\s*show\\s*recipes\\s*"),
-    COOKING_PREPARE("\\s*cooking\\s*prepare\\s(?<recipe_name>\\S)\\s*"),
+    COOKING_PREPARE("\\s*cooking\\s*prepare\\s(?<recipe_name>\\S+)\\s*"),
 
 
-    EAT(""),
+    EAT("\\s*eat\\s(?<food_name>\\S+)\\s*"),
 
     //TODO: Parsa
     // Animals & Fishing
@@ -99,55 +99,55 @@ public enum GameMenuCommands implements Command {
     FEED_HAY("\\s*feed\\s*hay\\s-n\\s(?<anima_name>\\S+)\\s*"),
     ANIMAL_PRODUCTION_LIST("\\s*produces\\s*"),
     COLLECT_PRODUCT("\\s*collect\\s*produce\\s-n\\s(?<name>\\S+)\\s*"),
-    SELL_ANIMAL("\\s*sell\\s*animal\\s+-n\\s*(?<name>\\S)\\s*"),
-    FISHING("\\s*fishing\\s+-p\\s(?<fishing pole>\\S)\\s*"),
+    SELL_ANIMAL("\\s*sell\\s*animal\\s+-n\\s(?<name>\\S+)\\s*"),
+    FISHING("\\s*fishing\\s+-p\\s(?<fishing pole>\\S+)\\s*"),
 
     //TODO: Nader
     // Artisan Commands
-    ARTISAN_USE("\\s*artisan\\s*use\\s(?<artisan_name>\\S)\\s*\\s(?<item1_name>\\S)\\s*"),
-    ARTISAN_GET(""),
+    ARTISAN_USE("\\s*artisan\\s*use\\s(?<artisan_name>\\S+)\\s(?<item1_name>\\S+)\\s*"),
+    ARTISAN_GET("\\s*artisan\\s*get\\s(?<artisan_name>\\S+)\\s*"),
 
     //TODO: Nader
     // Sell & Buy Commands
-    SHOW_ALL_PRODUCTS(""),
-    SHOW_ALL_AVAILABLE_PRODUCTS(""),
-    PURCHASE(""),
-    SELL(""),
+    SHOW_ALL_PRODUCTS("\\s*show\\s*all\\s*products\\s*"),
+    SHOW_ALL_AVAILABLE_PRODUCTS("\\s*show\\s*all\\s*available\\s*products\\s*"),
+    PURCHASE("\\s*purchase\\s(?<product_name>\\S+)\\s+-n\\s(?<count>\\S+)\\s*"),
+    SELL("\\s*sell\\s(?<product_name>\\S+)\\s+-n\\s(?<count>\\S+)\\s*"),
     // --> cheat codes
-    CHEAT_ADD_DOLLARS(""),
+    CHEAT_ADD_DOLLARS("\\s*cheat\\s*add\\s(?<count>\\S+)\\s*dollars\\s*"),
 
     //TODO: Arani
     // Friendships
-    FRIENDSHIPS(""),
-    TALK(""),
-    TALK_HISTORY(""),
-    GIFT(""),
-    GIFT_LIST(""),
-    GIFT_RATE(""),
-    GIFT_HISTORY(""),
-    HUG(""),
-    FLOWER(""),
-    ASK_MARRIAGE(""),
+    FRIENDSHIPS("\\s*friendships\\s*"),
+    TALK("\\s*talk\\s+-u\\s(?<username>\\S+)\\s+-m\\s(?<message>\\S+)\\s*"),
+    TALK_HISTORY("\\s*talk\\s*history\\s+-u\\s(?<username>\\S+)\\s*"),
+    GIFT("\\s*gift\\s+-u\\s(?<username>\\S+)\\s+-i\\s(?<item>\\S+)\\s+-a\\s(?<amount>\\S+)\\s*"),
+    GIFT_LIST("\\s*gift\\s*list\\s*"),
+    GIFT_RATE("\\s*gift\\s*rate\\s+-i\\s(?<gift-number>\\S+)\\s+-r\\s(?<rate>\\S+)\\s*"),
+    GIFT_HISTORY("\\s*gift\\s*history\\s+-u\\s(?<username>\\S+)\\s*"),
+    HUG("\\s*hug\\s+-u\\s(?<username>\\S+)\\s*"),
+    FLOWER("\\s*flower\\s+-u\\s(?<username>\\S+)\\s*"),
+    ASK_MARRIAGE("\\s*ask\\s*marriage\\s+-u\\s(?<username>\\S+)\\s+-r\\s(?<ring>\\S+)\\s*"),
     RESPOND(""),
 
 
     //TODO: Parsa
     //Trading
-    START_TRADE(""),
+    START_TRADE("\\s*start\\s*trade\\s*"),
     TRADE_WITH_MONEY(""),
     TRADE_WITH_GOODS(""),
-    TRADE_LIST(""),
+    TRADE_LIST("\\s*trade\\s*list\\s*"),
     TRADE_RESPONSE(""),
-    TRADE_HISTORY(""),
+    TRADE_HISTORY("\\s*trade\\s*history\\s*"),
 
 
     //TODO: Nader
     // NPC
-    MEET_NPC(""),
-    GIFT_NPC(""),
-    FRIENDSHIP_NPC_LIST(""),
-    QUESTS_LIST(""),
-    QUESTS_FINISH("");
+    MEET_NPC("\\s*meet\\s*NPC\\s(?<npc_name>\\S+)\\s*"),
+    GIFT_NPC("\\s*gift\\s*NPC\\s(?<npc_name>\\S+)\\s+-i\\s(?<item>\\S+)\\s*"),
+    FRIENDSHIP_NPC_LIST("\\s*friendship\\s*NPC\\s*list\\s*"),
+    QUESTS_LIST("\\s*quests\\s*list\\s*"),
+    QUESTS_FINISH("\\s*quests\\s*finish\\s+-i\\s(?<index>\\S+)\\s*"),;
 
 
 

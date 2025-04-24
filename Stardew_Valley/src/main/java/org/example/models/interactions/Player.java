@@ -1,10 +1,13 @@
 package org.example.models.interactions;
 
+import org.example.models.App;
 import org.example.models.game_structure.*;
 import org.example.models.goods.Good;
+import org.example.models.goods.foods.Food;
 import org.example.models.goods.recipes.CookingRecipe;
 import org.example.models.goods.recipes.CraftingRecipe;
 import org.example.models.goods.recipes.Recipe;
+import org.example.models.goods.tools.Tool;
 import org.example.models.goods.tools.TrashCan;
 
 import java.util.ArrayList;
@@ -13,6 +16,7 @@ import java.util.HashMap;
 public class Player {
     private Cordinate cordinate;
     private Inventory inventory;
+    private Tool currentTool;
     private ArrayList<CookingRecipe> cookingRecipes;
     private ArrayList<CraftingRecipe> craftingRecipes;
     private User user;
@@ -24,6 +28,7 @@ public class Player {
 
     private TrashCan trashCan;
     private Skill skill;
+    private Buff buff = null;
     private HashMap<Player, Integer> friendShipLevel;
     private HashMap<Player, Integer> friendShipScore;
     private HashMap<Player, ArrayList<String>> talkHistory;
@@ -31,6 +36,7 @@ public class Player {
     private ArrayList<Trade> tradeHistory;
     private ArrayList<Gift> giftHistory;
     private ArrayList<Quest> questList;
+    private Fridge fridge;
 
 
     public Player(User user) {
@@ -44,8 +50,12 @@ public class Player {
     }
 
     // Function for eat
-    public void eat() {
-        //TODO
+    public void eat(Food food) {
+        App.getCurrentGame().getCurrentPlayingPlayer().getEnergy().setDayEnergyLeft(food.getEnergy());
+        Buff currentBuff = App.getCurrentGame().getCurrentPlayingPlayer().getBuff();
+        if (currentBuff != null) {
+            App.getCurrentGame().getCurrentPlayingPlayer().setBuff(currentBuff);
+        }
     }
 
     public Inventory getInventory() {
@@ -61,8 +71,6 @@ public class Player {
         return energy;
     }
 
-    public int getMaxValueEnergy() {return maxValueEnergy;}
-    public void setMaxValueEnergy(int maxValueEnergy) {this.maxValueEnergy = maxValueEnergy;}
 
     public ArrayList<CraftingRecipe> getCraftingRecipes() {
         return craftingRecipes;
@@ -76,5 +84,19 @@ public class Player {
         return cordinate;
     }
 
+    public void setBuff(Buff buff) {
+        this.buff = buff;
+    }
 
+    public Buff getBuff() {
+        return buff;
+    }
+
+    public Tool getCurrentTool() {
+        return this.currentTool;
+    }
+
+    public Fridge getFridge() {
+       return fridge;
+    }
 }

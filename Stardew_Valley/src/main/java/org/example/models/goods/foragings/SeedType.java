@@ -1,4 +1,6 @@
 package org.example.models.goods.foragings;
 
-public enum SeedType {
+import org.example.models.goods.GoodType;
+
+public enum SeedType implements GoodType {
 }

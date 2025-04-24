@@ -2,6 +2,7 @@ package org.example.models.goods.recipes;
 
 public class CraftingRecipe extends Recipe {
     CraftingRecipeType type;
+
     CraftingRecipe(CraftingRecipeType type) {
         this.type = type;
     }
@@ -13,6 +14,11 @@ public class CraftingRecipe extends Recipe {
     @Override
     public String getName(){
         return type.getName();
+    }
+
+    @Override
+    public int getSellPrice() {
+        return 0;
     }
 
 

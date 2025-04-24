@@ -33,7 +33,9 @@ public class GameMenu implements AppMenu {
         System.out.print(controller.greenHouseBuild());
     }
     //Map & Walk
-    else if()
+
+
+
     //Inventory
     else if((matcher = GameMenuCommands.INVENTORY_TRASH_ITEM.matcher(input)) != null){
         System.out.print(controller.inventoryTrashItem(matcher.group("item")

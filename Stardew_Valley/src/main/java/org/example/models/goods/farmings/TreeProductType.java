@@ -1,4 +1,7 @@
 package org.example.models.goods.farmings;
 
-public enum TreeProductType {
+import org.example.models.goods.GoodType;
+
+public enum TreeProductType implements GoodType {
+
 }
