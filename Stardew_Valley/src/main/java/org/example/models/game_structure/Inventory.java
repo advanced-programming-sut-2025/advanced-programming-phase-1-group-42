@@ -22,21 +22,33 @@ public class Inventory {
     }
 
 
-    public boolean addGood(Good good) {
+    public boolean addGood(Good good , int count) {
         for (ArrayList<Good> goods : list) {
             if (!goods.isEmpty() && goods.getFirst().getName().equals(good.getName())) {
-                goods.add(good);
+                for (int i = 0; i < count; i++) {
+                    goods.add(good);
+                }
                 return true;
             }
         }
 
         for(ArrayList<Good> goods : list) {
             if(goods.isEmpty()) {
-                goods.add(good);
+                for (int i = 0; i < count; i++) {
+                    goods.add(good);
+                }
                 return true;
             }
         }
         return false;
+    }
+
+    public int howManyInInventory(Good good) {
+        for (ArrayList<Good> goods : list) {
+            if (goods.contains(good)) {
+                return goods.size();
+            }
+        }
     }
 
 }

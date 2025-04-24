@@ -413,7 +413,7 @@ public class GameMenuController extends Controller {
                 return new Result(false, "Item is not available in the fridge");
             }
 
-            if (App.getCurrentGame().getCurrentPlayingPlayer().getInventory().addGood(item)) {
+            if (App.getCurrentGame().getCurrentPlayingPlayer().getInventory().addGood(item,1)) {
                 return new Result(true, item.getName() + " added to the inventory");
             }
             return new Result(false, "Inventory is full");

@@ -2,10 +2,11 @@ package org.example.models.goods.foods;
 
 import org.example.models.game_structure.Buff;
 import org.example.models.game_structure.BuffType;
+import org.example.models.goods.GoodType;
 
 import java.util.ArrayList;
 
-public enum FoodType {
+public enum FoodType implements GoodType {
 
     FRIED_EGG("Fried_Egg", 50, 35,new Buff(BuffType.ENERGY_BUFF,0,0)),
     BAKED_FISH("Baked_Fish", 75, 100,new Buff(BuffType.ENERGY_BUFF,0,0)),

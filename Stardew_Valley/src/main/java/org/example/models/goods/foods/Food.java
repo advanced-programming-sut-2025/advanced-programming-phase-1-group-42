@@ -1,6 +1,7 @@
 package org.example.models.goods.foods;
 
 import org.example.models.goods.Good;
+import org.example.models.goods.GoodType;
 
 public class Food extends Good {
 
@@ -24,4 +25,11 @@ public class Food extends Good {
     public int getSellPrice() {
         return foodType.getSellPrice();
     }
+
+    @Override
+    public GoodType getType() {
+        return foodType;
+    }
+
+
 }

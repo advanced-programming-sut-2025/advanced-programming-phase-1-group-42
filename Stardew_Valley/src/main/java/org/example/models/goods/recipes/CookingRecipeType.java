@@ -195,6 +195,10 @@ public enum CookingRecipeType {
         return foodType;
     }
 
+    public String getName(){
+        return foodType.getName()+" recipe";
+    }
+
     public static CookingRecipeType getRecipeForFood(FoodType foodType) {
         for (CookingRecipeType recipe : values()) {
             if (recipe.getFoodType() == foodType) {

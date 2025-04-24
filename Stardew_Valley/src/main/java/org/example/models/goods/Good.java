@@ -6,6 +6,5 @@ public abstract class Good {
     public abstract int getSellPrice();
     protected int price;
     protected String name;
-
-
+    public abstract GoodType getType();
 }
