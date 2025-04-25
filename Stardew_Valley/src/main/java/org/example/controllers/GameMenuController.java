@@ -14,6 +14,8 @@ import org.example.models.goods.foods.FoodType;
 import org.example.models.goods.recipes.*;
 import org.example.models.goods.recipes.CraftingFunctions;
 import org.example.models.goods.recipes.CraftingRecipe;
+import org.example.models.interactions.NPCs.NPC;
+import org.example.models.interactions.NPCs.NPCFriendship;
 import org.example.models.interactions.Player;
 import org.example.models.interactions.User;
 
@@ -138,7 +140,7 @@ public class GameMenuController extends Controller {
     public Result cheatThunder(String x, String y) {
         int xInt = Integer.parseInt(x);
         int yInt = Integer.parseInt(y);
-        App.getCurrentGame().getWeather().Thunder(xInt , yInt, /*TODO*/);
+        App.getCurrentGame().getWeather().Thunder(xInt, yInt, /*TODO*/);
         return new Result(true, "");
     }
 
@@ -154,19 +156,19 @@ public class GameMenuController extends Controller {
 
     public Result cheatWeatherSet(String weather) {
         //TODO
-        switch(weather){
+        switch (weather) {
             case "Sunny":
-               App.getCurrentGame().cheatSetWeather(WeatherType.Sunny.getWeather());
-           break;
-           case "Rain":
+                App.getCurrentGame().cheatSetWeather(WeatherType.Sunny.getWeather());
+                break;
+            case "Rain":
                 App.getCurrentGame().cheatSetWeather(WeatherType.Rain.getWeather());
-           break;
+                break;
             case "Storm":
-                 App.getCurrentGame().cheatSetWeather(WeatherType.Storm.getWeather());
-           break;
+                App.getCurrentGame().cheatSetWeather(WeatherType.Storm.getWeather());
+                break;
             case "Snow":
-               App.getCurrentGame().cheatSetWeather(WeatherType.Snow.getWeather());
-           break;
+                App.getCurrentGame().cheatSetWeather(WeatherType.Snow.getWeather());
+                break;
         }
         return new Result(true, "");
     }
@@ -224,8 +226,8 @@ public class GameMenuController extends Controller {
 
     public Result inventoryShow() {
         StringBuilder inventoryList = new StringBuilder();
-        for (ArrayList<Good> good : App.getCurrentGame().getCurrentPlayingPlayer().getInventory().getList()){
-            if(!good.isEmpty()){
+        for (ArrayList<Good> good : App.getCurrentGame().getCurrentPlayingPlayer().getInventory().getList()) {
+            if (!good.isEmpty()) {
                 inventoryList.append(good.getFirst().getName()).append(" ").append(good.size()).append("\n");
             }
         }
@@ -413,7 +415,7 @@ public class GameMenuController extends Controller {
                 return new Result(false, "Item is not available in the fridge");
             }
 
-            if (App.getCurrentGame().getCurrentPlayingPlayer().getInventory().addGood(item,1)) {
+            if (App.getCurrentGame().getCurrentPlayingPlayer().getInventory().addGood(item, 1)) {
                 return new Result(true, item.getName() + " added to the inventory");
             }
             return new Result(false, "Inventory is full");
@@ -736,27 +738,96 @@ public class GameMenuController extends Controller {
     //TODO: Nader
     // NPC methods
     public Result meetNPC(String npcName) {
-        //TODO
+        for (NPC npc : App.getCurrentGame().getNPCs()) {
+            if (npc.getType().getName().equals(npcName)) {
+                if (Math.abs(npc.getCordinate().getX() -
+                        App.getCurrentGame().getCurrentPlayingPlayer().getCordinate().getX()) == 1 &&
+                        Math.abs(npc.getCordinate().getY() -
+                                App.getCurrentGame().getCurrentPlayingPlayer().getCordinate().getY()) == 1) {
+                    npc.getFriendship();
+                    npc.npcDialogs();
+                    return new Result(true, "");
+                } else {
+                    return new Result(true, "Too far away. Approach the NPC to speak.");
+                }
+            }
+        }
         return new Result(true, "");
     }
 
     public Result giftNPC(String npcName, String itemName) {
-        //TODO
-        return new Result(true, "");
+        Good good = null;
+        boolean found = false;
+        for (ArrayList<Good> goods : App.getCurrentGame().getCurrentPlayingPlayer().getInventory().getList()) {
+            if (!goods.isEmpty() && goods.getFirst().getName().equals(itemName)) {
+                good = goods.get(goods.size() - 1);
+                found = true;
+                goods.remove(good);
+                break;
+            }
+        }
+        if (!found) {
+            return new Result(false, "You don't have this item in your inventory.");
+        }
+        for (NPC npc : App.getCurrentGame().getNPCs()) {
+            if (npc.getType().getName().equals(npcName)) {
+                npc.getGift(good);
+                return new Result(true, "You sent a gift to " + npcName);
+
+            }
+        }
+        return new Result(false, "NPC not found.");
     }
 
     public Result friendshipNPCList() {
-        //TODO
-        return new Result(true, "");
+        for (NPC npc : App.getCurrentGame().getNPCs()) {
+            System.out.println("------------------------------");
+            System.out.println("NPC Name: " + npc.getType().getName());
+            System.out.println("Friendship Level: " + npc.getFriendship().getFriendshipLevel());
+            System.out.println("Friendship points: " + npc.getFriendship().getFriendshipPoints());
+        }
+        return new Result(true, "------------------------------");
     }
 
     public Result questsList() {
-        //TODO
-        return new Result(true, "");
+        for (NPC npc : App.getCurrentGame().getNPCs()) {
+            if (npc.getFriendship().getAvailableQuests().contains(1)) {
+                System.out.print(npc.getType().getRequests().get(0).getFirst() + " ");
+                System.out.println(npc.getType().getRequests().get(0).getSecond());
+            }
+            if (npc.getFriendship().getAvailableQuests().contains(2)) {
+                System.out.print(npc.getType().getRequests().get(1).getFirst() + " ");
+                System.out.println(npc.getType().getRequests().get(1).getSecond());
+            }
+            if (npc.getFriendship().getAvailableQuests().contains(3)) {
+                System.out.print(npc.getType().getRequests().get(2).getFirst() + " ");
+                System.out.println(npc.getType().getRequests().get(2).getSecond());
+            }
+
+        }
+
+        return new Result(true, "------------------------------");
     }
 
     public Result questsFinish(String index) {
-        //TODO
+        int indexInt = Integer.parseInt(index);
+        NPC targetNPC = null;
+        boolean found = false;
+        for (NPC npc : App.getCurrentGame().getNPCs()) {
+            if (Math.abs(npc.getCordinate().getX() -
+                    App.getCurrentGame().getCurrentPlayingPlayer().getCordinate().getX()) == 1 &&
+                    Math.abs(npc.getCordinate().getY() -
+                            App.getCurrentGame().getCurrentPlayingPlayer().getCordinate().getY()) == 1) {
+                targetNPC = npc;
+                found = true;
+                break;
+            }
+        }
+        if (!found) {
+            return new Result(true, "Too far away. Approach the NPC to speak.");
+        }
+        targetNPC.finishQuest(indexInt);
+        //  no next line
         return new Result(true, "");
     }
 

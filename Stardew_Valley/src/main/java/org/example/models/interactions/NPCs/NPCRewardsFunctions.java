@@ -1,6 +1,7 @@
 package org.example.models.interactions.NPCs;
 
 import org.example.models.App;
+import org.example.models.Pair;
 import org.example.models.game_structure.Inventory;
 import org.example.models.goods.Good;
 import org.example.models.goods.GoodType;
@@ -12,21 +13,29 @@ import org.example.models.goods.foods.FoodType;
 import org.example.models.goods.recipes.CookingRecipe;
 import org.example.models.goods.recipes.CookingRecipeType;
 
+import java.util.ArrayList;
+
 public class NPCRewardsFunctions {
 
-    public static void sebastianRewards(Good good, NPCFriendship npcFriendship) {
+    public static void sebastianRewards(int index, NPCFriendship npcFriendship) {
         //some types are not completed
+        ArrayList<Pair<GoodType,Integer>> requests =npcFriendship.getNpc().getType().getRequests();
         if (npcFriendship.getAvailableQuests().contains(1) &&
-                App.getCurrentGame().getCurrentPlayingPlayer().getInventory().howManyInInventory(good) == 50) {
+                App.getCurrentGame().getCurrentPlayingPlayer().getInventory().howManyInInventoryByType
+                        (requests.get(0).getFirst()) >=  requests.get(0).getSecond()) {
             int rewardCount = 2;
+            App.getCurrentGame().getCurrentPlayingPlayer().getInventory().removeItemsFromInventory(
+                    requests.get(0).getFirst() , requests.get(0).getSecond());
             System.out.println("Quest Finished, You received" + rewardCount * npcFriendship.getFriendshipLevel()
                     + "Diamonds"); //? diamonds type
             App.getCurrentGame().getCurrentPlayingPlayer().getInventory()
                     .addGood(good, rewardCount * npcFriendship.getFriendshipLevel());
             npcFriendship.getAvailableQuests().remove(1);
         } else if (npcFriendship.getAvailableQuests().contains(2) &&
-                App.getCurrentGame().getCurrentPlayingPlayer().getInventory().howManyInInventory(good) == 1 &&
-                good.getType().equals(FoodType.PUMPKIN_PIE)) {
+                App.getCurrentGame().getCurrentPlayingPlayer().getInventory().howManyInInventoryByType
+                        (requests.get(1).getFirst()) == 1) {
+            App.getCurrentGame().getCurrentPlayingPlayer().getInventory().removeItemsFromInventory(
+                    requests.get(1).getFirst() , requests.get(1).getSecond());
             int rewardCount = 5000;
             System.out.println("Quest Finished, You received " + rewardCount * npcFriendship.getFriendshipLevel() +
                     " Golds");
@@ -34,7 +43,10 @@ public class NPCRewardsFunctions {
                     .addGood(good, rewardCount * npcFriendship.getFriendshipLevel());
             npcFriendship.getAvailableQuests().remove(2);
         } else if (npcFriendship.getAvailableQuests().contains(3) &&
-                App.getCurrentGame().getCurrentPlayingPlayer().getInventory().howManyInInventory(good) == 150){
+                App.getCurrentGame().getCurrentPlayingPlayer().getInventory().howManyInInventoryByType
+                        (requests.get(2).getFirst()) == 150){
+            App.getCurrentGame().getCurrentPlayingPlayer().getInventory().removeItemsFromInventory(
+                    requests.get(2).getFirst() , requests.get(2).getSecond());
             int rewardCount = 50;
             System.out.println("Quest Finished, You received " + rewardCount + " Quartz");
             App.getCurrentGame().getCurrentPlayingPlayer().getInventory()
@@ -44,56 +56,64 @@ public class NPCRewardsFunctions {
 
     }
 
+    public static void abigailRewards(int index, NPCFriendship npcFriendship) {
+        ArrayList<Pair<GoodType, Integer>> requests = npcFriendship.getNpc().getType().getRequests();
 
-    public static void abigailRewards(Good good, NPCFriendship npcFriendship) {
-        //some types are not completed
-        //gold
         if (npcFriendship.getAvailableQuests().contains(1) &&
-                App.getCurrentGame().getCurrentPlayingPlayer().getInventory().howManyInInventory(good) == 1) {
+                App.getCurrentGame().getCurrentPlayingPlayer().getInventory().howManyInInventoryByType
+                        (requests.get(0).getFirst()) >= requests.get(0).getSecond()) {
+            App.getCurrentGame().getCurrentPlayingPlayer().getInventory().removeItemsFromInventory(
+                    requests.get(0).getFirst(), requests.get(0).getSecond());
             npcFriendship.setFriendshipLevel();
             npcFriendship.getAvailableQuests().remove(1);
-            // pumpkin
         } else if (npcFriendship.getAvailableQuests().contains(2) &&
-                App.getCurrentGame().getCurrentPlayingPlayer().getInventory().howManyInInventory(good) == 1 &&
-                good.getType().equals(FoodType.PUMPKIN_PIE)) {
+                App.getCurrentGame().getCurrentPlayingPlayer().getInventory().howManyInInventoryByType
+                        (requests.get(1).getFirst()) >= requests.get(1).getSecond()) {
+            App.getCurrentGame().getCurrentPlayingPlayer().getInventory().removeItemsFromInventory(
+                    requests.get(1).getFirst(), requests.get(1).getSecond());
             int rewardCount = 500;
-            System.out.println("Quest Finished, You received " + rewardCount * npcFriendship.getFriendshipLevel() +
-                    " Pumpkins");
+            System.out.println("Quest Finished, You received " + rewardCount * npcFriendship.getFriendshipLevel() + " Pumpkins");
             App.getCurrentGame().getCurrentPlayingPlayer().getInventory()
                     .addGood(good, rewardCount * npcFriendship.getFriendshipLevel());
             npcFriendship.getAvailableQuests().remove(2);
-            // wheat
         } else if (npcFriendship.getAvailableQuests().contains(3) &&
-                App.getCurrentGame().getCurrentPlayingPlayer().getInventory().howManyInInventory(good) == 50){
-            System.out.println("Quest Finished, You received a" + CraftingType.IRIDIUM_SPRINKLER.getName());
+                App.getCurrentGame().getCurrentPlayingPlayer().getInventory().howManyInInventoryByType
+                        (requests.get(2).getFirst()) >= requests.get(2).getSecond()) {
+            App.getCurrentGame().getCurrentPlayingPlayer().getInventory().removeItemsFromInventory(
+                    requests.get(2).getFirst(), requests.get(2).getSecond());
+            System.out.println("Quest Finished, You received a " + CraftingType.IRIDIUM_SPRINKLER.getName());
             Crafting crafting = new Crafting(CraftingType.IRIDIUM_SPRINKLER);
-            App.getCurrentGame().getCurrentPlayingPlayer().getInventory().addGood(crafting,1);
+            App.getCurrentGame().getCurrentPlayingPlayer().getInventory().addGood(crafting, 1);
             npcFriendship.getAvailableQuests().remove(3);
         }
     }
 
+    public static void harveyRewards(int index, NPCFriendship npcFriendship) {
+        ArrayList<Pair<GoodType, Integer>> requests = npcFriendship.getNpc().getType().getRequests();
 
-    public static void harveyRewards(Good good, NPCFriendship npcFriendship) {
-        //some types are not completed
-        //any crops
         if (npcFriendship.getAvailableQuests().contains(1) &&
-                App.getCurrentGame().getCurrentPlayingPlayer().getInventory().howManyInInventory(good) == 12) {
+                App.getCurrentGame().getCurrentPlayingPlayer().getInventory().howManyInInventoryByType
+                        (requests.get(0).getFirst()) >= requests.get(0).getSecond()) {
+            App.getCurrentGame().getCurrentPlayingPlayer().getInventory().removeItemsFromInventory(
+                    requests.get(0).getFirst(), requests.get(0).getSecond());
             int rewardCount = 750;
-            System.out.println("Quest Finished, You received" + rewardCount * npcFriendship.getFriendshipLevel()
-                    + "Golds"); //? diamonds type
-
+            System.out.println("Quest Finished, You received " + rewardCount * npcFriendship.getFriendshipLevel() + " Golds");
             App.getCurrentGame().getCurrentPlayingPlayer().getInventory()
                     .addGood(good, rewardCount * npcFriendship.getFriendshipLevel());
             npcFriendship.getAvailableQuests().remove(1);
-            // pumpkin
         } else if (npcFriendship.getAvailableQuests().contains(2) &&
-                App.getCurrentGame().getCurrentPlayingPlayer().getInventory().howManyInInventory(good) == 1 &&
+                App.getCurrentGame().getCurrentPlayingPlayer().getInventory().howManyInInventoryByType
+                        (requests.get(1).getFirst()) >= requests.get(1).getSecond() &&
                 good.getType().equals(FoodType.SALMON_DINNER)) {
+            App.getCurrentGame().getCurrentPlayingPlayer().getInventory().removeItemsFromInventory(
+                    requests.get(1).getFirst(), requests.get(1).getSecond());
             npcFriendship.setFriendshipLevel();
             npcFriendship.getAvailableQuests().remove(2);
-            // salads
         } else if (npcFriendship.getAvailableQuests().contains(3) &&
-                App.getCurrentGame().getCurrentPlayingPlayer().getInventory().howManyInInventory(good) == 50){
+                App.getCurrentGame().getCurrentPlayingPlayer().getInventory().howManyInInventoryByType
+                        (requests.get(2).getFirst()) >= requests.get(2).getSecond()) {
+            App.getCurrentGame().getCurrentPlayingPlayer().getInventory().removeItemsFromInventory(
+                    requests.get(2).getFirst(), requests.get(2).getSecond());
             int rewardCount = 5;
             System.out.println("Quest Finished, You received " + rewardCount + " Salads");
             Food food = new Food(FoodType.SALAD);
@@ -103,67 +123,76 @@ public class NPCRewardsFunctions {
         }
     }
 
-    public static void leahRewards(Good good, NPCFriendship npcFriendship) {
-        //some types are not completed
-        // rough woods
+    public static void leahRewards(int index, NPCFriendship npcFriendship) {
+        ArrayList<Pair<GoodType, Integer>> requests = npcFriendship.getNpc().getType().getRequests();
+
         if (npcFriendship.getAvailableQuests().contains(1) &&
-                App.getCurrentGame().getCurrentPlayingPlayer().getInventory().howManyInInventory(good) == 10) {
+                App.getCurrentGame().getCurrentPlayingPlayer().getInventory().howManyInInventoryByType
+                        (requests.get(0).getFirst()) >= requests.get(0).getSecond()) {
+            App.getCurrentGame().getCurrentPlayingPlayer().getInventory().removeItemsFromInventory(
+                    requests.get(0).getFirst(), requests.get(0).getSecond());
             int rewardCount = 500;
-            System.out.println("Quest Finished, You received" + rewardCount * npcFriendship.getFriendshipLevel()
-                    + "Golds");
+            System.out.println("Quest Finished, You received " + rewardCount * npcFriendship.getFriendshipLevel() + " Golds");
             App.getCurrentGame().getCurrentPlayingPlayer().getInventory()
                     .addGood(good, rewardCount * npcFriendship.getFriendshipLevel());
             npcFriendship.getAvailableQuests().remove(1);
-            // salmon fish
         } else if (npcFriendship.getAvailableQuests().contains(2) &&
-                App.getCurrentGame().getCurrentPlayingPlayer().getInventory().howManyInInventory(good) == 1 &&
+                App.getCurrentGame().getCurrentPlayingPlayer().getInventory().howManyInInventoryByType
+                        (requests.get(1).getFirst()) >= requests.get(1).getSecond() &&
                 good.getType().equals(FoodType.SALMON_DINNER)) {
-            System.out.println("Quest Finished, You received" + CookingRecipeType.SALMON_DINNER.getFoodType().getName());
+            App.getCurrentGame().getCurrentPlayingPlayer().getInventory().removeItemsFromInventory(
+                    requests.get(1).getFirst(), requests.get(1).getSecond());
+            System.out.println("Quest Finished, You received " + CookingRecipeType.SALMON_DINNER.getFoodType().getName());
             App.getCurrentGame().getCurrentPlayingPlayer().getCookingRecipes()
                     .add(new CookingRecipe(CookingRecipeType.SALMON_DINNER));
             npcFriendship.getAvailableQuests().remove(2);
-            // woods
         } else if (npcFriendship.getAvailableQuests().contains(3) &&
-                App.getCurrentGame().getCurrentPlayingPlayer().getInventory().howManyInInventory(good) == 200){
+                App.getCurrentGame().getCurrentPlayingPlayer().getInventory().howManyInInventoryByType
+                        (requests.get(2).getFirst()) >= requests.get(2).getSecond()) {
+            App.getCurrentGame().getCurrentPlayingPlayer().getInventory().removeItemsFromInventory(
+                    requests.get(2).getFirst(), requests.get(2).getSecond());
             Crafting crafting = new Crafting(CraftingType.DELUXE_SCARECROW);
-            System.out.println("Quest Finished, You received" + 3 * npcFriendship.getFriendshipLevel()
-                    + " " + crafting.getName());
+            System.out.println("Quest Finished, You received " + 3 * npcFriendship.getFriendshipLevel() + " " + crafting.getName());
             App.getCurrentGame().getCurrentPlayingPlayer().getInventory()
-                    .addGood(crafting,3 * npcFriendship.getFriendshipLevel());
-
+                    .addGood(crafting, 3 * npcFriendship.getFriendshipLevel());
+            npcFriendship.getAvailableQuests().remove(3);
         }
     }
 
-    public static void robinRewards(Good good, NPCFriendship npcFriendship) {
-        //some types are not completed
-        // woods
+    public static void robinRewards(int index, NPCFriendship npcFriendship) {
+        ArrayList<Pair<GoodType, Integer>> requests = npcFriendship.getNpc().getType().getRequests();
+
         if (npcFriendship.getAvailableQuests().contains(1) &&
-                App.getCurrentGame().getCurrentPlayingPlayer().getInventory().howManyInInventory(good) == 80) {
+                App.getCurrentGame().getCurrentPlayingPlayer().getInventory().howManyInInventoryByType
+                        (requests.get(0).getFirst()) >= requests.get(0).getSecond()) {
+            App.getCurrentGame().getCurrentPlayingPlayer().getInventory().removeItemsFromInventory(
+                    requests.get(0).getFirst(), requests.get(0).getSecond());
             int rewardCount = 1000;
-            System.out.println("Quest Finished, You received" + rewardCount * npcFriendship.getFriendshipLevel()
-                    + "Golds");
+            System.out.println("Quest Finished, You received " + rewardCount * npcFriendship.getFriendshipLevel() + " Golds");
             App.getCurrentGame().getCurrentPlayingPlayer().getInventory()
                     .addGood(good, rewardCount * npcFriendship.getFriendshipLevel());
             npcFriendship.getAvailableQuests().remove(1);
-            // iron bar
         } else if (npcFriendship.getAvailableQuests().contains(2) &&
-                App.getCurrentGame().getCurrentPlayingPlayer().getInventory().howManyInInventory(good) == 10 ) {
+                App.getCurrentGame().getCurrentPlayingPlayer().getInventory().howManyInInventoryByType
+                        (requests.get(1).getFirst()) >= requests.get(1).getSecond()) {
+            App.getCurrentGame().getCurrentPlayingPlayer().getInventory().removeItemsFromInventory(
+                    requests.get(1).getFirst(), requests.get(1).getSecond());
             Crafting crafting = new Crafting(CraftingType.BEE_HOUSE);
-            System.out.println("Quest Finished, You received" + 3 * npcFriendship.getFriendshipLevel()
-                    + " " + crafting.getName());
+            System.out.println("Quest Finished, You received " + 3 * npcFriendship.getFriendshipLevel() + " " + crafting.getName());
             App.getCurrentGame().getCurrentPlayingPlayer().getInventory()
-                    .addGood(crafting,3 * npcFriendship.getFriendshipLevel());
+                    .addGood(crafting, 3 * npcFriendship.getFriendshipLevel());
             npcFriendship.getAvailableQuests().remove(2);
-            // woods
         } else if (npcFriendship.getAvailableQuests().contains(3) &&
-                App.getCurrentGame().getCurrentPlayingPlayer().getInventory().howManyInInventory(good) == 1000){
+                App.getCurrentGame().getCurrentPlayingPlayer().getInventory().howManyInInventoryByType
+                        (requests.get(2).getFirst()) >= requests.get(2).getSecond()) {
+            App.getCurrentGame().getCurrentPlayingPlayer().getInventory().removeItemsFromInventory(
+                    requests.get(2).getFirst(), requests.get(2).getSecond());
             Crafting crafting = new Crafting(CraftingType.DELUXE_SCARECROW);
             int rewardCount = 25000;
-            System.out.println("Quest Finished, You received" + rewardCount * npcFriendship.getFriendshipLevel()+
-                    " Golds");
+            System.out.println("Quest Finished, You received " + rewardCount * npcFriendship.getFriendshipLevel() + " Golds");
             App.getCurrentGame().getCurrentPlayingPlayer().getInventory()
-                    .addGood(crafting,3 * npcFriendship.getFriendshipLevel());
-
+                    .addGood(crafting, 3 * npcFriendship.getFriendshipLevel());
+            npcFriendship.getAvailableQuests().remove(3);
         }
     }
 

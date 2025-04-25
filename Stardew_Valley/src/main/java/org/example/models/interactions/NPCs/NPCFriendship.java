@@ -8,6 +8,7 @@ import java.util.ArrayList;
 
 public class NPCFriendship {
     private Player player;
+    private NPC npc;
     private int friendshipPoints;
     private int friendshipLevel;
     private ArrayList<Good> gifts;
@@ -15,12 +16,13 @@ public class NPCFriendship {
     private int firstMeetSeason;
     private boolean gotGiftToday = false;
 
-    public NPCFriendship(Player player) {
+    public NPCFriendship(Player player , NPC npc) {
         friendshipPoints = 0;
         friendshipLevel = 0;
         gifts = new ArrayList<>();
         availableQuests.add(1);
         this.player = player;
+        this.npc = npc;
         firstMeetSeason = App.getCurrentGame().getDateTime().getSeasonOfYearInt();
     }
 
@@ -83,6 +85,10 @@ public class NPCFriendship {
 
     public boolean getGotGiftToday() {
         return gotGiftToday;
+    }
+
+    public NPC getNpc() {
+        return npc;
     }
 
 
