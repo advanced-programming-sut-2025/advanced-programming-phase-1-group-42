@@ -9,6 +9,8 @@ public class Map {
     private final ArrayList<Farm> farms = new ArrayList<>();
     private final ArrayList<GameBuilding> gameBuildings = new ArrayList<>();
 
+
+
     // A function to print map
     public String printMap() {
         //TODO
@@ -21,7 +23,41 @@ public class Map {
         return "";
     }
 
+    public void setFarms(ArrayList<Farm> farms) {
+        this.farms.addAll(farms);
+    }
 
+    public boolean dfsCheck(Cordinate start, Cordinate end) {
+        //TODO
+    }
+
+    public GameBuilding getBlackSmith() {
+        return this.gameBuildings.get(0);
+    }
+
+    public GameBuilding getJojoMart() {
+        return this.gameBuildings.get(1);
+    }
+
+    public GameBuilding getPierreGeneralStore() {
+        return this.gameBuildings.get(2);
+    }
+
+    public GameBuilding getCarpenterShop() {
+        return this.gameBuildings.get(3);
+    }
+
+    public GameBuilding getFishShop() {
+        return this.gameBuildings.get(4);
+    }
+
+    public GameBuilding getMarnieRanch() {
+        return this.gameBuildings.get(5);
+    }
+
+    public GameBuilding getTheStarDropSaloon() {
+        return this.gameBuildings.get(6);
+    }
 
     public ArrayList<Tile> getTiles() {
         return tiles;

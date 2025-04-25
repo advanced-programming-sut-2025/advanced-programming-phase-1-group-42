@@ -2,9 +2,17 @@ package org.example.models.enums;
 
 public enum TileType {
     GREEN_HOUSE(),
-    SEA(),
+
+    QUARRY(),
     FARM(),
+    PREPARED_FARM(),
+
+    SEA(),
     PLAIN(),
-    BUILDING(),
-    QUARRY();
+    ROAD(),
+    STONE_WALL(),
+    SQUARE(),
+
+    PLAYER_BUILDING(),
+    GAME_BUILDING();
 }

@@ -8,6 +8,8 @@ import java.util.ArrayList;
 public class Inventory {
     private ArrayList<ArrayList<Good>> list;
     private int size = 12;
+
+
     public ArrayList<ArrayList<Good>> getList() {
         return list;
     }
@@ -19,6 +21,25 @@ public class Inventory {
     }
     public void setSize(int size) {
         this.size = size;
+    }
+
+    public static boolean decreaseGoods(ArrayList<Good> goods, int number) {
+        if(goods.size() < number)
+            return false;
+
+        for(int i = 0; i < number; i++) {
+            goods.removeLast();
+        }
+        return true;
+    }
+
+    public ArrayList<Good> isInInventory(Good good) {
+        for (int i = 0; i < size; i++) {
+            if(!list.get(i).isEmpty() && list.get(i).getFirst().getName().equals(good.getName())) {
+                return list.get(i);
+            }
+        }
+        return null;
     }
 
 

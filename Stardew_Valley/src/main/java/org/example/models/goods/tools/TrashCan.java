@@ -1,4 +1,4 @@
 package org.example.models.goods.tools;
 
-public class TrashCan {
+public class TrashCan extends Tool {
 }

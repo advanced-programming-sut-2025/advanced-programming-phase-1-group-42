@@ -18,4 +18,12 @@ public class Farm {
     public void setFarmNumber(int farmNumber) {
         this.farmNumber = farmNumber;
     }
+
+    public GreenHouse getGreenHouse() {
+        return greenHouse;
+    }
+
+    public void setGreenHouse(GreenHouse greenHouse) {
+        this.greenHouse = greenHouse;
+    }
 }
