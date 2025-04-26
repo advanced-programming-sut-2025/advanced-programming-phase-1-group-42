@@ -1,14 +1,17 @@
-package org.example.models.goods;
+package org.example.models.goods.tools;
 
-public enum GoodLevel {
+import org.example.models.goods.GoodLevel;
+
+public enum ToolLevel {
     ORDINARY(0),
-    STEEL(1),
-    GOLD(2),
-    IRIDIUM(3);
+    COPPER(1),
+    IRON(2),
+    GOLD(3),
+    IRIDIUM(4);
 
     private int levelNumber;
 
-    GoodLevel(int levelNumber) {
+    ToolLevel(int levelNumber) {
         this.levelNumber = levelNumber;
     }
 
@@ -20,16 +23,17 @@ public enum GoodLevel {
         this.levelNumber = levelNumber;
     }
 
-    public GoodLevel increaseGoodLevel() {
+    public ToolLevel increaseGoodLevel() {
         switch (levelNumber) {
             case 0:
-                return STEEL;
+                return COPPER;
             case 1:
-                return GOLD;
+                return IRON;
             case 2:
+                return GOLD;
+            case 3:
                 return IRIDIUM;
         }
-
         return null;
     }
 }

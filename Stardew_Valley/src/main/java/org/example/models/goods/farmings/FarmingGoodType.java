@@ -8,7 +8,6 @@ import java.util.Arrays;
 
 public enum FarmingGoodType implements GoodType {
 
-    BLUE_JAZZ("Blue_Jazz", FarmingSeedType.JAZZ_SEEDS, true, 45, 50),
     // Spring Crops
     BLUE_JAZZ("Blue_Jazz", FarmingSeedType.JAZZ_SEEDS, true, 45, 50),
     CARROT("Carrot", FarmingSeedType.CARROT_SEEDS, true, 75, 35),
@@ -90,6 +89,11 @@ public enum FarmingGoodType implements GoodType {
         return isEdible;
     }
 
+    @Override
+    public int getSellPrice() {
+            return 0;
+    }
+
     public int getEnergy() {
         return energy;
     }
@@ -97,4 +101,6 @@ public enum FarmingGoodType implements GoodType {
     public int getBaseSellPrice() {
         return baseSellPrice;
     }
+
+
 }

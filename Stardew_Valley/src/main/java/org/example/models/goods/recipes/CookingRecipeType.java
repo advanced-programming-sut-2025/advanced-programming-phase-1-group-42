@@ -1,5 +1,7 @@
 package org.example.models.goods.recipes;
 
+import org.example.models.goods.Good;
+import org.example.models.goods.GoodType;
 import org.example.models.goods.foods.Food;
 import org.example.models.goods.foods.FoodType;
 
@@ -10,7 +12,7 @@ import java.util.HashMap;
 import static javax.swing.UIManager.put;
 
 
-public enum CookingRecipeType {
+public enum CookingRecipeType implements GoodType {
 
     FRIED_EGG(new ArrayList<>(Arrays.asList(
             new HashMap<FoodType, Integer>() {{

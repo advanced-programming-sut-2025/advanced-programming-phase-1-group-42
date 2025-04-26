@@ -7,7 +7,7 @@ public enum TileType {
     FARM(),
     PREPARED_FARM(),
 
-    SEA(),
+    WATER(),
     PLAIN(),
     ROAD(),
     STONE_WALL(),

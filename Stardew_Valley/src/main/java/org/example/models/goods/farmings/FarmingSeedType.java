@@ -128,4 +128,15 @@ public enum FarmingSeedType implements GoodType {
     private int otherSeasonPrice;
     private ArrayList<Season> seasons;
     private boolean canBecomeGiant;
+
+
+    @Override
+    public int getSellPrice() {
+        return 0;
+    }
+
+    @Override
+    public int getEnergy() {
+        return 0;
+    }
 }

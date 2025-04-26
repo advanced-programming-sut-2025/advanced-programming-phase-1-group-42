@@ -19,6 +19,7 @@ import org.example.models.goods.recipes.*;
 import org.example.models.goods.recipes.CraftingFunctions;
 import org.example.models.goods.recipes.CraftingRecipe;
 import org.example.models.goods.tools.Tool;
+import org.example.models.goods.tools.ToolType;
 import org.example.models.interactions.Player;
 import org.example.models.interactions.User;
 import org.example.models.interactions.game_buildings.Blacksmith;
@@ -271,7 +272,7 @@ public class GameMenuController extends Controller {
     public Result cheatEnergySet(String value) {
         //TODO
         int valueInt = Integer.parseInt(value);
-        App.getCurrentGame().getCurrentPlayer().getEnergy().setDayEnergyLeft(valueInt);
+        App.getCurrentGame().getCurrentPlayer().getEnergy().increaseDayEnergyLeft(valueInt);
         return new Result(true, "");
     }
 
@@ -341,7 +342,7 @@ public class GameMenuController extends Controller {
             return new Result(false, "You are not inside the BlackSmith Shop!");
         if(game.getCurrentPlayer().getInHandGood() instanceof Tool) {
             Blacksmith blacksmith = (Blacksmith) game.getMap().getBlackSmith();
-            if(((Tool) game.getCurrentPlayer().getInHandGood()).getGoodLevel().getLevelNumber() == 3)
+            if(((ToolType) game.getCurrentPlayer().getInHandGood().getType()).getLevel().getLevelNumber() == 4)
                 return new Result(true, "Your tool is already in the highest level!");
 
             if(blacksmith.upgradeTool((Tool) game.getCurrentPlayer().getInHandGood())) {
@@ -356,8 +357,23 @@ public class GameMenuController extends Controller {
     }
 
     public Result toolsUse(String direction) {
-        //TODO
-        return new Result(true, "");
+        if(App.getCurrentGame().getCurrentPlayer().getInHandGood() instanceof Tool) {
+            Tool tool = (Tool) App.getCurrentGame().getCurrentPlayer().getInHandGood();
+            Cordinate cordinate = Cordinate.getDirection(direction);
+            if(cordinate == null)
+                return new Result(false, "Direction not recognized");
+
+            if(App.getCurrentGame().getCurrentPlayer().getEnergy().getDayEnergyLeft() < tool.getType().getEnergy())
+                return new Result(false, "You don't have enough energy to use " + tool.getName() + "!");
+            if(App.getCurrentGame().getMap().findTile(cordinate) == null)
+                return new Result(false, "Tile not found");
+
+            App.getCurrentGame().getCurrentPlayer().getEnergy().decreaseDayEnergyLeft(tool.getType().getEnergy());
+
+            return tool.useTool(cordinate);
+        }
+        else
+            return new Result(false, "You don't have tool in your hand!");
     }
 
     //TODO: Arani
@@ -396,7 +412,7 @@ public class GameMenuController extends Controller {
     public Result showCraftingRecipes() {
         for (CraftingRecipe craftingRecipe : App.getCurrentGame().getCurrentPlayer().getCraftingRecipes()) {
             System.out.println(craftingRecipe.getName());
-            System.out.println(craftingRecipe.getType().getIngredients());
+            System.out.println(((CraftingRecipeType) craftingRecipe.getType()).getIngredients());
             System.out.println("-------------------------------------------");
         }
         return new Result(true, "");
@@ -406,7 +422,7 @@ public class GameMenuController extends Controller {
         for (CraftingRecipe craftingRecipe : App.getCurrentGame().getCurrentPlayer().getCraftingRecipes()) {
             if (craftingRecipe.getName().equals(itemName)) {
                 CraftingFunctions craftingFunctions = new CraftingFunctions();
-                craftingFunctions.checkCraftingFunctions(craftingRecipe.getType());
+                craftingFunctions.checkCraftingFunctions((CraftingRecipeType) craftingRecipe.getType());
                 return new Result(true, "");
             }
         }
@@ -436,37 +452,13 @@ public class GameMenuController extends Controller {
             return new Result(false, "Item " + itemName + " not found");
         }
 
-        switch (direction) {
-            case "up":
-                newY = App.getCurrentGame().getCurrentPlayer().getCordinate().getY() + 1;
-                break;
-            case "down":
-                newY = App.getCurrentGame().getCurrentPlayer().getCordinate().getY() - 1;
-                break;
-            case "left":
-                newX = App.getCurrentGame().getCurrentPlayer().getCordinate().getX() - 1;
-                break;
-            case "right":
-                newX = App.getCurrentGame().getCurrentPlayer().getCordinate().getX() + 1;
-                break;
-            case "up-right":
-                newX = App.getCurrentGame().getCurrentPlayer().getCordinate().getX() + 1;
-                newY = App.getCurrentGame().getCurrentPlayer().getCordinate().getY() + 1;
-                break;
-            case "up-left":
-                newX = App.getCurrentGame().getCurrentPlayer().getCordinate().getX() - 1;
-                newY = App.getCurrentGame().getCurrentPlayer().getCordinate().getY() + 1;
-                break;
-            case "down-right":
-                newX = App.getCurrentGame().getCurrentPlayer().getCordinate().getX() + 1;
-                newY = App.getCurrentGame().getCurrentPlayer().getCordinate().getY() - 1;
-                break;
-            case "down-left":
-                newX = App.getCurrentGame().getCurrentPlayer().getCordinate().getX() - 1;
-                newY = App.getCurrentGame().getCurrentPlayer().getCordinate().getY() - 1;
-                break;
-            default:
+        Cordinate cordinate = Cordinate.getDirection(direction);
+        switch (cordinate) {
+            case null:
                 return new Result(false, "Direction not recognized");
+            default:
+                newX = cordinate.getX();
+                newY = cordinate.getY();
         }
 
         for (Tile tile : App.getCurrentGame().getMap().getTiles()) {
@@ -581,7 +573,7 @@ public class GameMenuController extends Controller {
             return new Result(false, "You don't have this cooking recipe");
         }
 
-        for (HashMap<FoodType, Integer> ingredient : recipe.getType().getIngredients()) {
+        for (HashMap<FoodType, Integer> ingredient :  ((CookingRecipeType) recipe.getType()).getIngredients()) {
 
             FoodType ingredientType = ingredient.keySet().iterator().next();
             int requiredAmount = ingredient.get(ingredientType);
@@ -591,7 +583,7 @@ public class GameMenuController extends Controller {
             }
         }
 
-        Food food = new Food(recipe.getType().getFoodType());
+        Food food = new Food(((CookingRecipeType) recipe.getType()).getFoodType());
 
         for (ArrayList<Good> goods : App.getCurrentGame().getCurrentPlayer().getInventory().getList()) {
             if (goods.getFirst().getName().equalsIgnoreCase(recipeName)) {

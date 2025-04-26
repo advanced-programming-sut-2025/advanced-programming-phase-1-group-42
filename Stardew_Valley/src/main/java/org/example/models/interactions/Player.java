@@ -6,7 +6,6 @@ import org.example.models.goods.Good;
 import org.example.models.goods.foods.Food;
 import org.example.models.goods.recipes.CookingRecipe;
 import org.example.models.goods.recipes.CraftingRecipe;
-import org.example.models.goods.tools.Tool;
 import org.example.models.goods.tools.TrashCan;
 
 import java.util.ArrayList;
@@ -59,7 +58,7 @@ public class Player {
 
     // Function for eat
     public void eat(Food food) {
-        App.getCurrentGame().getCurrentPlayer().getEnergy().setDayEnergyLeft(food.getEnergy());
+        App.getCurrentGame().getCurrentPlayer().getEnergy().increaseDayEnergyLeft(food.getEnergy());
         Buff currentBuff = App.getCurrentGame().getCurrentPlayer().getBuff();
         if (currentBuff != null) {
             App.getCurrentGame().getCurrentPlayer().setBuff(currentBuff);

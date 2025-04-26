@@ -63,5 +63,11 @@ public class Map {
         return tiles;
     }
 
-
+    public Tile findTile(Cordinate cordinate) {
+        for (Tile tile : this.tiles) {
+            if(tile.getCordinate().equals(cordinate))
+                return tile;
+        }
+        return null;
+    }
 }

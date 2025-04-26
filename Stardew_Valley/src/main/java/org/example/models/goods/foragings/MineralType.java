@@ -19,7 +19,7 @@ public enum MineralType implements GoodType {
     PRISMATIC_SHARD("Prismatic_Shard", 2000),
     COPPER("Copper", 5),
     IRON("Iron", 10),
-    GOLD("Gold", 25),
+    GOLD("GOLD", 25),
     IRIDIUM("Iridium", 100),
     COAL("Coal", 15);
 
