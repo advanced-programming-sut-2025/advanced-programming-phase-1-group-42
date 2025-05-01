@@ -14,7 +14,7 @@ public class DateTime {
     // A Function to change game base of the cycle of players and moves the game forward
     public void timeFlow() {
         time++;
-        if (time >= 23) {
+        if (time >= 24) {
             App.getCurrentGame().gameFlow();
             time = 9;
             dayOfWeek++;

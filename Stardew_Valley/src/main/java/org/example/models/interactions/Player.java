@@ -1,6 +1,7 @@
 package org.example.models.interactions;
 
 import org.example.models.App;
+import org.example.models.Pair;
 import org.example.models.game_structure.*;
 import org.example.models.goods.Good;
 import org.example.models.goods.foods.Food;
@@ -10,7 +11,6 @@ import org.example.models.goods.tools.Tool;
 import org.example.models.goods.tools.ToolType;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 
 public class Player {
     private Cordinate cordinate;
@@ -26,9 +26,9 @@ public class Player {
     private Tool trashCan;
     private Skill skill;
     private Buff buff = null;
-    private HashMap<Player, Integer> friendShipLevel;
-    private HashMap<Player, Integer> friendShipScore;
-    private HashMap<Player, ArrayList<String>> talkHistory;
+    private Pair<Player, Integer> friendShipLevel;
+    private Pair<Player, Integer> friendShipScore;
+    private Pair<Player, ArrayList<String>> talkHistory;
     private ArrayList<Trade> tradeList;
     private ArrayList<Trade> tradeHistory;
     private ArrayList<Gift> giftHistory;

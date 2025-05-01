@@ -1,37 +1,38 @@
 package org.example.models.goods.foods.artisans;
 
+import org.example.models.Pair;
 import org.example.models.goods.GoodType;
+import org.example.models.goods.artisans.ArtisanType;
 import org.example.models.goods.foods.Food;
-
-import java.util.HashMap;
+import org.example.models.goods.foods.FoodType;
 
 public class Artisan extends Food {
 
-    private HashMap<GoodType, Integer> ingredients;
+    private Pair<GoodType, Integer> ingredients;
     private ArtisanType artisanType;
+
+    public Artisan(FoodType foodType) {
+        super(foodType);
+    }
+
     @Override
     public String getName() {
-        return "";
+        return artisanType.getName();
     }
 
     @Override
     public int getPrice() {
-        return ;
+        return artisanType.getSellPrice() ;
     }
 
-    public ArtisanType getArtisanType() {
+    public ArtisanType getType() {
         return artisanType;
     }
 
-//    public int getEnergy() {
-//        return ;
-//    }
-
-    public void setArtisanType(ArtisanType artisanType) {
-        this.artisanType = artisanType;
-    }
 
     public int getSellPrice() {
-        return this.artisanType.getSellPrice(ingredients.keySet().iterator().next());
+        return this.artisanType.getSellPrice(ingredients);
     }
+
+
 }

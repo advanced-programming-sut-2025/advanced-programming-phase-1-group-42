@@ -1,6 +1,7 @@
 package org.example.models.game_structure;
 
 import org.example.models.game_structure.weathers.Weather;
+import org.example.models.interactions.NPCs.NPC;
 import org.example.models.interactions.Player;
 
 import java.util.ArrayList;
@@ -14,6 +15,8 @@ public class Game {
     private Player currentPlayer;
     private Player gameAdmin;
     private Map CurrentMap = null;
+    private Player currentPlayingPlayer;
+    private final ArrayList<NPC> NPCs = new ArrayList<>();
     private int counter = 0;
 
     public void setPlayers(ArrayList<Player> players) {
@@ -78,14 +81,18 @@ public class Game {
     }
 
     public void gameFlow(){
-
         // Weather setups for next day
         this.weather = tomorrow.getWeather();
         tomorrow.setWeather(weather);
 
         // Check weather
-
     }
+
+    public  ArrayList<NPC> getNPCs() {
+        return NPCs;
+    }
+
+
 
 
 }

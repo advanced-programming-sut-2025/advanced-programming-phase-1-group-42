@@ -39,6 +39,12 @@ public enum ToolType implements GoodType {
         return Math.max(finalEnergy, 0);
     }
 
+    @Override
+    public String getName() {
+        return name;
+    }
+
+
     private final String name;
     private final int price;
     private final int energy;
@@ -59,8 +65,7 @@ public enum ToolType implements GoodType {
         this.level = level;
     }
 
-    public String getName() {
-        return name;
-    }
+
+
 
 }

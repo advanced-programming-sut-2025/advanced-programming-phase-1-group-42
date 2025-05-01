@@ -11,7 +11,7 @@ public class DBInteractor {
 
     public static Game loadGameToDB(String username) {
         //TODO: need to be implemented
-
+        return new Game();
     }
 
     public static void saveGameToDB(Game game) {

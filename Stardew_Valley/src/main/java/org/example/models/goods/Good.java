@@ -7,5 +7,4 @@ public abstract class Good {
     public abstract GoodType getType();
     protected int price;
     protected String name;
-
 }
