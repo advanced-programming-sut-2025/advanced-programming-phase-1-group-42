@@ -15,8 +15,6 @@ public class App {
 
     private static Menu currentMenu = Menu.LoginRegisterMenu;
 
-    public static ArrayList<Farm> farms = new ArrayList<>();
-
     private static User currentUser = null;
 
     private static Game currentGame = null;
@@ -26,10 +24,6 @@ public class App {
             "What city were you born in?",
             "What is your favorite movie of all time?"
     ));
-
-    public static ArrayList<Farm> getFarms() {
-        return farms;
-    }
 
     public static ArrayList<User> getUsers() {
         return users;

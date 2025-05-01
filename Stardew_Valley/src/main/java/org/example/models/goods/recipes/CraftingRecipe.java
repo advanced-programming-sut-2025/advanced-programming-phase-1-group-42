@@ -1,5 +1,8 @@
 package org.example.models.goods.recipes;
 
+import org.example.models.goods.GoodLevel;
+import org.example.models.goods.GoodType;
+
 public class CraftingRecipe extends Recipe {
     CraftingRecipeType type;
 
@@ -7,7 +10,7 @@ public class CraftingRecipe extends Recipe {
         this.type = type;
     }
 
-    public CraftingRecipeType getType() {
+    public GoodType getType() {
         return type;
     }
 

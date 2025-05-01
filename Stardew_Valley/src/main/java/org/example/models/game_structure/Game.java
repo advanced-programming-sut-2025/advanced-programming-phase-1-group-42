@@ -1,14 +1,10 @@
 package org.example.models.game_structure;
 
-import org.example.models.App;
-import org.example.models.enums.WeatherType;
 import org.example.models.game_structure.weathers.Weather;
 import org.example.models.interactions.NPCs.NPC;
 import org.example.models.interactions.Player;
 
 import java.util.ArrayList;
-
-import org.example.models.interactions.User;
 
 public class Game {
 
@@ -17,15 +13,18 @@ public class Game {
     private Tomorrow tomorrow;
     private final ArrayList<Player> players = new ArrayList<>();
     private Player currentPlayer;
-    private User gameAdmin;
+    private Player gameAdmin;
     private Map CurrentMap = null;
     private Player currentPlayingPlayer;
     private final ArrayList<NPC> NPCs = new ArrayList<>();
     private int counter = 0;
 
+    public void setPlayers(ArrayList<Player> players) {
+        this.players.addAll(players);
+    }
 
-    public Game(User gameAdmin) {
-        this.gameAdmin = gameAdmin;
+    public ArrayList<Player> getPlayers() {
+        return players;
     }
 
     public void setCurrentMap(Map map) {
@@ -36,20 +35,20 @@ public class Game {
         return CurrentMap;
     }
 
-    public User getGameAdmin() {
+    public Player getGameAdmin() {
         return gameAdmin;
     }
 
-    public void setGameAdmin(User gameAdmin) {
+    public void setGameAdmin(Player gameAdmin) {
         this.gameAdmin = gameAdmin;
     }
 
-    public Player getCurrentPlayingPlayer() {
-        return currentPlayingPlayer;
+    public Player getCurrentPlayer() {
+        return currentPlayer;
     }
 
-    public void setCurrentPlayingPlayer(Player currentPlayingPlayer) {
-        this.currentPlayingPlayer = currentPlayingPlayer;
+    public void setCurrentPlayer(Player currentPlayer) {
+        this.currentPlayer = currentPlayer;
     }
 
     public void nextPlayer() {
@@ -58,7 +57,7 @@ public class Game {
             counter = 0;
             this.dateTime.timeFlow();
         }
-        currentPlayingPlayer = players.get(counter);
+        currentPlayer = players.get(counter);
     }
 
     public Map getMap() {

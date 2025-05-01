@@ -18,4 +18,21 @@ public class Farm {
     public void setFarmNumber(int farmNumber) {
         this.farmNumber = farmNumber;
     }
+
+    public GreenHouse getGreenHouse() {
+        return greenHouse;
+    }
+
+    public void setGreenHouse(GreenHouse greenHouse) {
+        this.greenHouse = greenHouse;
+    }
+
+    public Tile checkInFarm(Cordinate cordinate) {
+        for (Tile tile : tiles) {
+            if(tile.getCordinate().equals(cordinate)) {
+                return tile;
+            }
+        }
+        return null;
+    }
 }
