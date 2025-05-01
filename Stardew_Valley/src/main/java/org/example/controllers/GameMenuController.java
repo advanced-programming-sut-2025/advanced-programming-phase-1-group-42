@@ -1,6 +1,7 @@
 package org.example.controllers;
 
 import org.example.models.App;
+import org.example.models.Pair;
 import org.example.models.Result;
 import org.example.models.enums.WeatherType;
 import org.example.models.game_structure.Game;
@@ -482,10 +483,10 @@ public class GameMenuController extends Controller {
             return new Result(false, "You don't have this cooking recipe");
         }
 
-        for (HashMap<FoodType, Integer> ingredient : recipe.getType().getIngredients()) {
+        for (Pair<FoodType, Integer> ingredient : recipe.getType().getIngredients()) {
 
-            FoodType ingredientType = ingredient.keySet().iterator().next();
-            int requiredAmount = ingredient.get(ingredientType);
+            FoodType ingredientType = ingredient.getFirst();
+            int requiredAmount = ingredient.getSecond();
             if (!checkCanCook(ingredientType, requiredAmount)) {
                 return new Result(false, "Not enough " + ingredientType.getName() +
                         " (needed: " + requiredAmount + ")");

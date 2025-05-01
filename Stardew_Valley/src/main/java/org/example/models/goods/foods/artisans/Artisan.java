@@ -1,15 +1,14 @@
 package org.example.models.goods.foods.artisans;
 
+import org.example.models.Pair;
 import org.example.models.goods.GoodType;
 import org.example.models.goods.artisans.ArtisanType;
 import org.example.models.goods.foods.Food;
 import org.example.models.goods.foods.FoodType;
 
-import java.util.HashMap;
-
 public class Artisan extends Food {
 
-    private HashMap<GoodType, Integer> ingredients;
+    private Pair<GoodType, Integer> ingredients;
     private ArtisanType artisanType;
 
     public Artisan(FoodType foodType) {
@@ -32,7 +31,7 @@ public class Artisan extends Food {
 
 
     public int getSellPrice() {
-        return this.artisanType.getSellPrice(ingredients.keySet().iterator().next());
+        return this.artisanType.getSellPrice(ingredients);
     }
 
 

@@ -1,5 +1,6 @@
 package org.example.models.goods.foods.artisans;
 
+import org.example.models.Pair;
 import org.example.models.goods.Good;
 import org.example.models.goods.GoodType;
 import org.example.models.goods.craftings.CraftingType;
@@ -7,7 +8,6 @@ import org.example.models.goods.recipes.CraftingRecipeType;
 
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.HashMap;
 
 public enum ArtisanType implements GoodType {
 
@@ -45,7 +45,7 @@ public enum ArtisanType implements GoodType {
     private final double energyRatio;
     private final int processingHour;
     private final int processingDay;
-    private final ArrayList<HashMap<GoodType, Integer>> ingredients;
+    private final ArrayList<Pair<GoodType, Integer>> ingredients;
     private final double ratio;
     private final int base;
     private final CraftingRecipeType craftingRecipeType;
@@ -56,7 +56,7 @@ public enum ArtisanType implements GoodType {
                 double energyRatio,
                 int processingDay,
                 int processingHour,
-                ArrayList<HashMap<GoodType, Integer>> ingredients,
+                ArrayList<Pair<GoodType, Integer>> ingredients,
                 double ratio, int base) {
 
         this.name = name;
@@ -82,7 +82,7 @@ public enum ArtisanType implements GoodType {
 
 
 
-    public ArrayList<HashMap<GoodType, Integer>> getIngredients() {
+    public ArrayList<Pair<GoodType, Integer>> getIngredients() {
         return ingredients;
     }
 
