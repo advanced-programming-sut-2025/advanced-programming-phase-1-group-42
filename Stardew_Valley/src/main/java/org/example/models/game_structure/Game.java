@@ -15,7 +15,10 @@ public class Game {
     private Player currentPlayer;
     private Player gameAdmin;
     private Map CurrentMap = null;
+<<<<<<< Updated upstream
     private Player currentPlayingPlayer;
+=======
+>>>>>>> Stashed changes
     private final ArrayList<NPC> NPCs = new ArrayList<>();
     private int counter = 0;
 
@@ -86,6 +89,10 @@ public class Game {
         tomorrow.setWeather(weather);
 
         // Check weather
+    }
+
+    public ArrayList<NPC> getNPCs() {
+        return NPCs;
     }
 
     public ArrayList<NPC> getNPCs() {

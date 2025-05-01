@@ -96,11 +96,19 @@ public class NPC {
 
     public NPCFriendship getFriendship() {
         for (NPCFriendship friendship : friendships) {
+<<<<<<< Updated upstream
             if (friendship.getPlayer().equals(App.getCurrentGame().getCurrentPlayingPlayer())) {
                 return friendship;
             }
         }
         friendships.add(new NPCFriendship(App.getCurrentGame().getCurrentPlayingPlayer(),this));
+=======
+            if (friendship.getPlayer().equals(App.getCurrentGame().getCurrentPlayer())) {
+                return friendship;
+            }
+        }
+        friendships.add(new NPCFriendship(App.getCurrentGame().getCurrentPlayer(),this));
+>>>>>>> Stashed changes
         return null;
     }
 
@@ -130,4 +138,8 @@ public class NPC {
         }
 
     }
+<<<<<<< Updated upstream
 }
+=======
+}
+>>>>>>> Stashed changes

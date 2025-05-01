@@ -3,8 +3,11 @@ package org.example.models.game_structure;
 import org.example.models.App;
 import org.example.models.goods.Good;
 import org.example.models.goods.GoodType;
+<<<<<<< Updated upstream
 import org.example.models.goods.GoodType;
 import org.example.models.goods.foods.FoodType;
+=======
+>>>>>>> Stashed changes
 
 import java.util.ArrayList;
 
@@ -49,6 +52,10 @@ public class Inventory {
     }
 
 
+<<<<<<< Updated upstream
+=======
+
+>>>>>>> Stashed changes
     public boolean addGood(Good good, int count) {
         for (ArrayList<Good> goods : list) {
             if (!goods.isEmpty()) {
@@ -120,5 +127,8 @@ public class Inventory {
 
     }
 
+<<<<<<< Updated upstream
 
+=======
+>>>>>>> Stashed changes
 }

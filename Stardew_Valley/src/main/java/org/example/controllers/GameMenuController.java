@@ -24,6 +24,7 @@ import org.example.models.interactions.NPCs.NPC;
 import org.example.models.interactions.NPCs.NPCFriendship;
 import org.example.models.goods.tools.Tool;
 import org.example.models.goods.tools.ToolType;
+import org.example.models.interactions.NPCs.NPC;
 import org.example.models.interactions.Player;
 import org.example.models.interactions.User;
 import org.example.models.interactions.game_buildings.Blacksmith;
@@ -510,7 +511,11 @@ public class GameMenuController extends Controller {
                 return new Result(false, "Item is not available in the fridge");
             }
 
+<<<<<<< Updated upstream
             if (App.getCurrentGame().getCurrentPlayer().getInventory().addGood(item, 1)) {
+=======
+            if (App.getCurrentGame().getCurrentPlayer().getInventory().addGood(item,1)) {
+>>>>>>> Stashed changes
                 return new Result(true, item.getName() + " added to the inventory");
             }
             return new Result(false, "Inventory is full");
@@ -875,6 +880,10 @@ public class GameMenuController extends Controller {
     }
 
     public Result friendshipNPCList() {
+<<<<<<< Updated upstream
+=======
+
+>>>>>>> Stashed changes
         for (NPC npc : App.getCurrentGame().getNPCs()) {
             System.out.println("------------------------------");
             System.out.println("NPC Name: " + npc.getType().getName());
@@ -885,6 +894,10 @@ public class GameMenuController extends Controller {
     }
 
     public Result questsList() {
+<<<<<<< Updated upstream
+=======
+
+>>>>>>> Stashed changes
         for (NPC npc : App.getCurrentGame().getNPCs()) {
             if (npc.getFriendship().getAvailableQuests().contains(1)) {
                 System.out.print(npc.getType().getRequests().get(0).getFirst() + " ");
@@ -905,6 +918,10 @@ public class GameMenuController extends Controller {
     }
 
     public Result questsFinish(String index) {
+<<<<<<< Updated upstream
+=======
+        //TODO
+>>>>>>> Stashed changes
         int indexInt = Integer.parseInt(index);
         NPC targetNPC = null;
         boolean found = false;

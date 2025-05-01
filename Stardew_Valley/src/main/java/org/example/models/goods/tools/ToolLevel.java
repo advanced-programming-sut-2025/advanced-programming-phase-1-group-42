@@ -1,6 +1,6 @@
 package org.example.models.goods.tools;
 
-import org.example.models.goods.GoodLevel;
+import org.example.models.goods.*;
 
 public enum ToolLevel {
     ORDINARY(0),

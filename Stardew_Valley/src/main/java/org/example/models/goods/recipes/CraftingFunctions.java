@@ -284,7 +284,7 @@ public class CraftingFunctions {
 
         if (checkIsEnough2Item("copper ore", "coal", 4, 1, "mining", 1)) {
             Crafting crafting = new Crafting(CraftingType.CHERRY_BOMB);
-            if (App.getCurrentGame().getCurrentPlayer().getInventory().addGood(crafting)){
+            if (App.getCurrentGame().getCurrentPlayer().getInventory().addGood(crafting,1)){
                 System.out.println(crafting.getName()+" added to inventory");
                 App.getCurrentGame().getCurrentPlayer().getEnergy().increaseDayEnergyLeft(2);
             } else {
@@ -300,7 +300,7 @@ public class CraftingFunctions {
 
         if (checkIsEnough2Item("iron ore", "coal", 4, 1, "mining", 2)) {
             Crafting crafting = new Crafting(CraftingType.BOMB);
-            if (App.getCurrentGame().getCurrentPlayer().getInventory().addGood(crafting)){
+            if (App.getCurrentGame().getCurrentPlayer().getInventory().addGood(crafting,1)){
                 System.out.println(crafting.getName()+" added to inventory");
                 App.getCurrentGame().getCurrentPlayer().getEnergy().increaseDayEnergyLeft(2);
             } else {
@@ -316,7 +316,7 @@ public class CraftingFunctions {
 
         if (checkIsEnough2Item("gold ore", "coal", 4, 1, "mining", 3)) {
             Crafting crafting = new Crafting(CraftingType.MEGA_BOMB);
-            if (App.getCurrentGame().getCurrentPlayer().getInventory().addGood(crafting)){
+            if (App.getCurrentGame().getCurrentPlayer().getInventory().addGood(crafting,1)){
                 System.out.println(crafting.getName()+" added to inventory");
                 App.getCurrentGame().getCurrentPlayer().getEnergy().increaseDayEnergyLeft(2);
             } else {
@@ -332,7 +332,7 @@ public class CraftingFunctions {
 
         if (checkIsEnough2Item("copper bar", "iron bar", 1, 1, "farming", 1)) {
             Crafting crafting = new Crafting(CraftingType.SPRINKLER);
-            if (App.getCurrentGame().getCurrentPlayer().getInventory().addGood(crafting)){
+            if (App.getCurrentGame().getCurrentPlayer().getInventory().addGood(crafting,1)){
                 System.out.println(crafting.getName()+" added to inventory");
                 App.getCurrentGame().getCurrentPlayer().getEnergy().increaseDayEnergyLeft(2);
             } else {
@@ -348,7 +348,7 @@ public class CraftingFunctions {
 
         if (checkIsEnough2Item("iron bar", "gold bar", 4, 1, "farming", 2)) {
             Crafting crafting = new Crafting(CraftingType.QUALITY_SPRINKLER);
-            if (App.getCurrentGame().getCurrentPlayer().getInventory().addGood(crafting)){
+            if (App.getCurrentGame().getCurrentPlayer().getInventory().addGood(crafting,1)){
                 System.out.println(crafting.getName()+" added to inventory");
                 App.getCurrentGame().getCurrentPlayer().getEnergy().increaseDayEnergyLeft(2);
             } else {
@@ -364,7 +364,7 @@ public class CraftingFunctions {
 
         if (checkIsEnough2Item("gold bar", "iridium bar", 4, 1, "farming", 3)) {
             Crafting crafting = new Crafting(CraftingType.IRIDIUM_SPRINKLER);
-            if (App.getCurrentGame().getCurrentPlayer().getInventory().addGood(crafting)){
+            if (App.getCurrentGame().getCurrentPlayer().getInventory().addGood(crafting,1)){
                 System.out.println(crafting.getName()+" added to inventory");
                 App.getCurrentGame().getCurrentPlayer().getEnergy().increaseDayEnergyLeft(2);
             } else {
@@ -379,7 +379,7 @@ public class CraftingFunctions {
 
         if (checkIsEnough2Item("wood", "copper bar", 20, 2, "foraging", 1)) {
             Crafting crafting = new Crafting(CraftingType.CHARCOAL_KILN);
-            if (App.getCurrentGame().getCurrentPlayer().getInventory().addGood(crafting)){
+            if (App.getCurrentGame().getCurrentPlayer().getInventory().addGood(crafting,1)){
                 System.out.println(crafting.getName()+" added to inventory");
                 App.getCurrentGame().getCurrentPlayer().getEnergy().increaseDayEnergyLeft(2);
             } else {
@@ -394,7 +394,7 @@ public class CraftingFunctions {
 
         if (checkIsEnough2Item("copper ore", "stone", 20, 25, "null", 0)) {
             Crafting crafting = new Crafting(CraftingType.FURNACE);
-            if (App.getCurrentGame().getCurrentPlayer().getInventory().addGood(crafting)){
+            if (App.getCurrentGame().getCurrentPlayer().getInventory().addGood(crafting,1)){
                 System.out.println(crafting.getName()+" added to inventory");
                 App.getCurrentGame().getCurrentPlayer().getEnergy().increaseDayEnergyLeft(2);
             } else {
@@ -410,7 +410,7 @@ public class CraftingFunctions {
         if (checkIsEnough3Item("wood", "coal", "fibre", 50, 1, 20,
                 "null", 0)) {
             Crafting crafting = new Crafting(CraftingType.SCARECROW);
-            if (App.getCurrentGame().getCurrentPlayer().getInventory().addGood(crafting)){
+            if (App.getCurrentGame().getCurrentPlayer().getInventory().addGood(crafting,1)){
                 System.out.println(crafting.getName()+" added to inventory");
                 App.getCurrentGame().getCurrentPlayer().getEnergy().increaseDayEnergyLeft(2);
             } else {
@@ -426,7 +426,7 @@ public class CraftingFunctions {
         if (checkIsEnough4Item("wood", "coal", "fibre", "iridium", 50, 1, 20,
                 1, "null", 0)) {
             Crafting crafting = new Crafting(CraftingType.DELUXE_SCARECROW);
-            if (App.getCurrentGame().getCurrentPlayer().getInventory().addGood(crafting)){
+            if (App.getCurrentGame().getCurrentPlayer().getInventory().addGood(crafting,1)){
                 System.out.println(crafting.getName()+" added to inventory");
                 App.getCurrentGame().getCurrentPlayer().getEnergy().increaseDayEnergyLeft(2);
             } else {
@@ -442,7 +442,7 @@ public class CraftingFunctions {
         if (checkIsEnough3Item("wood", "coal", "iron bar", 40, 8, 1,
                 "farming", 1)) {
             Crafting crafting = new Crafting(CraftingType.BEE_HOUSE);
-            if (App.getCurrentGame().getCurrentPlayer().getInventory().addGood(crafting)){
+            if (App.getCurrentGame().getCurrentPlayer().getInventory().addGood(crafting,1)){
                 System.out.println(crafting.getName()+" added to inventory");
                 App.getCurrentGame().getCurrentPlayer().getEnergy().increaseDayEnergyLeft(2);
             } else {
@@ -458,7 +458,7 @@ public class CraftingFunctions {
         if (checkIsEnough3Item("wood", "stone", "copper bar", 45, 45, 1,
                 "farming", 2)) {
             Crafting crafting = new Crafting(CraftingType.CHEESE_PRESS);
-            if (App.getCurrentGame().getCurrentPlayer().getInventory().addGood(crafting)){
+            if (App.getCurrentGame().getCurrentPlayer().getInventory().addGood(crafting,1)){
                 System.out.println(crafting.getName()+" added to inventory");
                 App.getCurrentGame().getCurrentPlayer().getEnergy().increaseDayEnergyLeft(2);
             } else {
@@ -474,7 +474,7 @@ public class CraftingFunctions {
         if (checkIsEnough3Item("wood", "copper bar", "iron bar", 30, 1, 1,
                 "farming", 3)) {
             Crafting crafting = new Crafting(CraftingType.KEG);
-            if (App.getCurrentGame().getCurrentPlayer().getInventory().addGood(crafting)){
+            if (App.getCurrentGame().getCurrentPlayer().getInventory().addGood(crafting,1)){
                 System.out.println(crafting.getName()+" added to inventory");
                 App.getCurrentGame().getCurrentPlayer().getEnergy().increaseDayEnergyLeft(2);
             } else {
@@ -490,7 +490,7 @@ public class CraftingFunctions {
         if (checkIsEnough2Item("wood", "fiber", 60, 30,
                 "farming", 3)) {
             Crafting crafting = new Crafting(CraftingType.LOOM);
-            if (App.getCurrentGame().getCurrentPlayer().getInventory().addGood(crafting)){
+            if (App.getCurrentGame().getCurrentPlayer().getInventory().addGood(crafting,1)){
                 System.out.println(crafting.getName()+" added to inventory");
                 App.getCurrentGame().getCurrentPlayer().getEnergy().increaseDayEnergyLeft(2);
             } else {
@@ -506,7 +506,7 @@ public class CraftingFunctions {
         if (checkIsEnough3Item("wood", "stone", "copper bar", 15, 15, 1,
                 "null", 3)) {
             Crafting crafting = new Crafting(CraftingType.MAYONNAISE_MACHINE);
-            if (App.getCurrentGame().getCurrentPlayer().getInventory().addGood(crafting)){
+            if (App.getCurrentGame().getCurrentPlayer().getInventory().addGood(crafting,1)){
                 System.out.println(crafting.getName()+" added to inventory");
                 App.getCurrentGame().getCurrentPlayer().getEnergy().increaseDayEnergyLeft(2);
             } else {
@@ -523,7 +523,7 @@ public class CraftingFunctions {
         if (checkIsEnough3Item("wood", "gold bar", "iron bar", 100, 1, 1,
                 "farming", 3)) {
             Crafting crafting = new Crafting(CraftingType.OIL_MAKER);
-            if (App.getCurrentGame().getCurrentPlayer().getInventory().addGood(crafting)){
+            if (App.getCurrentGame().getCurrentPlayer().getInventory().addGood(crafting,1)){
                 System.out.println(crafting.getName()+" added to inventory");
                 App.getCurrentGame().getCurrentPlayer().getEnergy().increaseDayEnergyLeft(2);
             } else {
@@ -540,7 +540,7 @@ public class CraftingFunctions {
         if (checkIsEnough3Item("wood", "stone", "coal", 50, 40, 8,
                 "farming", 2)) {
             Crafting crafting = new Crafting(CraftingType.PRESERVES_JAR);
-            if (App.getCurrentGame().getCurrentPlayer().getInventory().addGood(crafting)){
+            if (App.getCurrentGame().getCurrentPlayer().getInventory().addGood(crafting,1)){
                 System.out.println(crafting.getName()+" added to inventory");
                 App.getCurrentGame().getCurrentPlayer().getEnergy().increaseDayEnergyLeft(2);
             } else {
@@ -557,7 +557,7 @@ public class CraftingFunctions {
         if (checkIsEnough3Item("wood", "stone", "fiber", 30, 20, 30,
                 "null", 3)) {
             Crafting crafting = new Crafting(CraftingType.DEHYDRATOR);
-            if (App.getCurrentGame().getCurrentPlayer().getInventory().addGood(crafting)){
+            if (App.getCurrentGame().getCurrentPlayer().getInventory().addGood(crafting,1)){
                 System.out.println(crafting.getName()+" added to inventory");
                 App.getCurrentGame().getCurrentPlayer().getEnergy().increaseDayEnergyLeft(2);
             } else {
@@ -574,7 +574,7 @@ public class CraftingFunctions {
         if (checkIsEnough3Item("wood", "iron bar", "coal", 50, 3, 10,
                 "null", 3)) {
             Crafting crafting = new Crafting(CraftingType.FISH_SMOKER);
-            if (App.getCurrentGame().getCurrentPlayer().getInventory().addGood(crafting)){
+            if (App.getCurrentGame().getCurrentPlayer().getInventory().addGood(crafting,1)){
                 System.out.println(crafting.getName()+" added to inventory");
                 App.getCurrentGame().getCurrentPlayer().getEnergy().increaseDayEnergyLeft(2);
             } else {
@@ -592,7 +592,7 @@ public class CraftingFunctions {
                 5, 5, 5,
                 "foraging", 4)) {
             Crafting crafting = new Crafting(CraftingType.MYSTIC_TREE_SEED);
-            if (App.getCurrentGame().getCurrentPlayer().getInventory().addGood(crafting)){
+            if (App.getCurrentGame().getCurrentPlayer().getInventory().addGood(crafting,1)){
                 System.out.println(crafting.getName()+" added to inventory");
                 App.getCurrentGame().getCurrentPlayer().getEnergy().increaseDayEnergyLeft(2);
             } else {
