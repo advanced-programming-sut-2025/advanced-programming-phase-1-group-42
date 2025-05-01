@@ -6,7 +6,8 @@ import org.example.models.goods.Good;
 import org.example.models.goods.foods.Food;
 import org.example.models.goods.recipes.CookingRecipe;
 import org.example.models.goods.recipes.CraftingRecipe;
-import org.example.models.goods.tools.TrashCan;
+import org.example.models.goods.tools.Tool;
+import org.example.models.goods.tools.ToolType;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -22,7 +23,7 @@ public class Player {
     private Wallet wallet;
     private Farm farm;
     private Energy energy;
-    private TrashCan trashCan;
+    private Tool trashCan;
     private Skill skill;
     private Buff buff = null;
     private HashMap<Player, Integer> friendShipLevel;
@@ -54,6 +55,7 @@ public class Player {
 
     public Player(User user) {
         this.user = user;
+        this.trashCan = new Tool(ToolType.TRASH_CAN);
     }
 
     // Function for eat

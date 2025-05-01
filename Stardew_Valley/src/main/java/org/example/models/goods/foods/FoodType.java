@@ -1,13 +1,8 @@
 package org.example.models.goods.foods;
 
-import org.example.models.enums.Season;
 import org.example.models.game_structure.Buff;
 import org.example.models.game_structure.BuffType;
-import org.example.models.goods.Good;
 import org.example.models.goods.GoodType;
-
-import java.util.ArrayList;
-import java.util.Arrays;
 
 public enum FoodType implements GoodType {
 
@@ -15,14 +10,17 @@ public enum FoodType implements GoodType {
 
     BAKED_FISH("Baked_Fish", 75, 100, new Buff(BuffType.ENERGY_BUFF,0,0)),
 
+    // Cooking Recipe
     SALAD("Salad", 113, 110, new Buff(BuffType.ENERGY_BUFF,0,0)),
 
     OMELET("Omelet", 100, 125, new Buff(BuffType.ENERGY_BUFF,0,0)),
 
     PUMPKIN_PIE("Pumpkin_Pie", 225, 385, new Buff(BuffType.ENERGY_BUFF,0,0)),
 
+    // Cooking Recipe
     SPAGHETTI("Spaghetti", 75, 120, new Buff(BuffType.ENERGY_BUFF,0,0)),
 
+    // Cooking Recipe
     PIZZA("Pizza", 150, 300, new Buff(BuffType.ENERGY_BUFF,0,0)),
 
     TORTILLA("Tortilla", 50, 50, new Buff(BuffType.ENERGY_BUFF,0,0)),
@@ -41,6 +39,7 @@ public enum FoodType implements GoodType {
 
     RED_PLATE("Red_Plate", 240, 400, new Buff(BuffType.ENERGY_BUFF,3,50)),
 
+    // Cooking Recipe
     BREAD("Bread", 50, 60, new Buff(BuffType.ENERGY_BUFF,0,0)),
 
     SALMON_DINNER("Salmon_Dinner", 125, 300, new Buff(BuffType.ENERGY_BUFF,0,0)),
@@ -79,7 +78,14 @@ public enum FoodType implements GoodType {
 
     COMMON_MUSHROOM("Common_Mushroom", 38, 40, null),
 
-    MYSTIC_SYRUP("Mystic_Syrup", 500, 1000, null);
+    MYSTIC_SYRUP("Mystic_Syrup", 500, 1000, null),
+
+    // TODO: the price should be get times 2 in Stardrop saloon Shop
+    BEER("Beer", 0, 20, null),
+
+    COFFEE("Coffee", 0, 150, null);
+
+
 
     private final String name;
     private final int energy;
@@ -109,7 +115,5 @@ public enum FoodType implements GoodType {
         return buff;
     }
 
-    public ArrayList<Season> getSeasons() {
-        return seasons;
-    }
+
 }

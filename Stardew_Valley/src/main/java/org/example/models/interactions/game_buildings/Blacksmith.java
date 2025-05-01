@@ -7,7 +7,6 @@ import org.example.models.goods.Good;
 import org.example.models.goods.foragings.MineralType;
 import org.example.models.goods.tools.Tool;
 import org.example.models.goods.tools.ToolType;
-import org.example.models.goods.tools.TrashCan;
 import org.example.models.interactions.Player;
 
 import java.util.ArrayList;
@@ -28,11 +27,11 @@ public class Blacksmith extends GameBuilding {
         Player player = App.getCurrentGame().getCurrentPlayer();
         int nextLevel = ((ToolType) tool.getType()).getLevel().getLevelNumber();
 
-        ArrayList<Good> goods = player.getInventory().isInInventory((Good) upgradeIngredients.get(nextLevel).getFirst());
-        if(goods == null || goods.size() < (Integer) upgradeIngredients.get(nextLevel).getSecond())
+        ArrayList<Good> goods = player.getInventory().isInInventory((Good) upgradeIngredients.get(nextLevel).first());
+        if(goods == null || goods.size() < (Integer) upgradeIngredients.get(nextLevel).second())
             return false;
 
-        if(tool instanceof TrashCan) {
+        if(tool.getType() == ToolType.TRASH_CAN) {
             if(player.getWallet().getBalance() < upgradeTrashCanCost.get(nextLevel))
                 return false;
             player.getWallet().decreaseBalance(upgradeTrashCanCost.get(nextLevel));
@@ -43,7 +42,7 @@ public class Blacksmith extends GameBuilding {
             player.getWallet().decreaseBalance(upgradeToolCost.get(nextLevel));
         }
 
-        Inventory.decreaseGoods(goods, (Integer) upgradeIngredients.get(nextLevel).getSecond());
+        Inventory.decreaseGoods(goods, (Integer) upgradeIngredients.get(nextLevel).second());
         ((ToolType) tool.getType()).setLevel(((ToolType) tool.getType()).getLevel().increaseGoodLevel());
         return true;
     }

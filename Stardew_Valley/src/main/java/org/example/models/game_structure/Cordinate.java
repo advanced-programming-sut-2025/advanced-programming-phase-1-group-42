@@ -2,7 +2,7 @@ package org.example.models.game_structure;
 
 import org.example.models.App;
 
-public class Cordinate {
+public class Cordinate{
     private int x;
     private int y;
 

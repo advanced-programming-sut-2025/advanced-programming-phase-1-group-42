@@ -28,16 +28,6 @@ public enum TreeSaplingType implements GoodType {
             new ArrayList<>(Arrays.asList(Season.FALL)), 6000),
 
     // Special Trees
-    OAK_SAPLING("Oak_Sapling", TreeType.OAK_TREE, CropType.OAK_RESIN,
-            new ArrayList<>(Arrays.asList(Season.SPRING, Season.SUMMER, Season.FALL, Season.WINTER)), -1),
-    MAPLE_SAPLING("Maple_Sapling", TreeType.MAPLE_TREE, CropType.MAPLE_SYRUP,
-            new ArrayList<>(Arrays.asList(Season.SPRING, Season.SUMMER, Season.FALL, Season.WINTER)), -1),
-    PINE_SAPLING("Pine_Sapling", TreeType.PINE_TREE, CropType.PINE_TAR,
-            new ArrayList<>(Arrays.asList(Season.SPRING, Season.SUMMER, Season.FALL, Season.WINTER)), -1),
-    MAHOGANY_SAPLING("Mahogany_Sapling", TreeType.MAHOGANY_TREE, FoodType.SAP,
-            new ArrayList<>(Arrays.asList(Season.SPRING, Season.SUMMER, Season.FALL, Season.WINTER)), -1),
-    MUSHROOM_SAPLING("Mushroom_Sapling", TreeType.MUSHROOM_TREE, FoodType.COMMON_MUSHROOM,
-            new ArrayList<>(Arrays.asList(Season.SPRING, Season.SUMMER, Season.FALL, Season.WINTER)), -1),
     MYSTIC_SAPLING("Mystic_Sapling", TreeType.MYSTIC_TREE, FoodType.MYSTIC_SYRUP,
             new ArrayList<>(Arrays.asList(Season.SPRING, Season.SUMMER, Season.FALL, Season.WINTER)), -1);
 

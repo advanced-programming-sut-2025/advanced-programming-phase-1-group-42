@@ -33,19 +33,19 @@ public enum TreeType implements GoodType {
     POMEGRANATE_TREE("Pomegranate_Tree", TreeSaplingType.POMEGRANATE_SAPLING, FoodType.POMEGRANATE, 1,
             new ArrayList<>(Arrays.asList(Season.FALL))),
 
-    OAK_TREE("Oak_Tree", TreeSaplingType.OAK_SAPLING, CropType.OAK_RESIN, 7,
+    OAK_TREE("Oak_Tree", org.example.models.goods.foragings.TreeType.ACORNS, CropType.OAK_RESIN, 7,
             new ArrayList<>(Arrays.asList(Season.SPRING, Season.SUMMER, Season.FALL, Season.WINTER))),
 
-    MAPLE_TREE("Maple_Tree", TreeSaplingType.MAPLE_SAPLING, CropType.MAPLE_SYRUP, 9,
+    MAPLE_TREE("Maple_Tree", org.example.models.goods.foragings.TreeType.MAPLE_SEEDS, CropType.MAPLE_SYRUP, 9,
             new ArrayList<>(Arrays.asList(Season.SPRING, Season.SUMMER, Season.FALL, Season.WINTER))),
 
-    PINE_TREE("Pine_Tree", TreeSaplingType.PINE_SAPLING, CropType.PINE_TAR, 5,
+    PINE_TREE("Pine_Tree", org.example.models.goods.foragings.TreeType.PINE_CONES, CropType.PINE_TAR, 5,
             new ArrayList<>(Arrays.asList(Season.SPRING, Season.SUMMER, Season.FALL, Season.WINTER))),
 
-    MAHOGANY_TREE("Mahogany_Tree", TreeSaplingType.MAHOGANY_SAPLING, FoodType.SAP, 1,
+    MAHOGANY_TREE("Mahogany_Tree", org.example.models.goods.foragings.TreeType.MAHOGANY_SEEDS, FoodType.SAP, 1,
             new ArrayList<>(Arrays.asList(Season.SPRING, Season.SUMMER, Season.FALL, Season.WINTER))),
 
-    MUSHROOM_TREE("Mushroom_Tree", TreeSaplingType.MUSHROOM_SAPLING, FoodType.COMMON_MUSHROOM, 1,
+    MUSHROOM_TREE("Mushroom_Tree", org.example.models.goods.foragings.TreeType.MUSHROOM_TREE_SEEDS, FoodType.COMMON_MUSHROOM, 1,
             new ArrayList<>(Arrays.asList(Season.SPRING, Season.SUMMER, Season.FALL, Season.WINTER))),
 
     MYSTIC_TREE("Mystic_Tree", TreeSaplingType.MYSTIC_SAPLING, FoodType.MYSTIC_SYRUP, 7,
@@ -53,16 +53,16 @@ public enum TreeType implements GoodType {
 
 
     private String name;
-    private TreeSaplingType treeSaplingType;
+    private GoodType saplingType;
     private GoodType goodType;
     private int fruitHarvestCycle;
     private ArrayList<Season> seasons;
 
 
-    TreeType(String name, TreeSaplingType treeSaplingType, GoodType goodType, int fruitHarvestCycle,
+    TreeType(String name, GoodType saplingType, GoodType goodType, int fruitHarvestCycle,
              ArrayList<Season> seasons) {
         this.name = name;
-        this.treeSaplingType = treeSaplingType;
+        this.saplingType = saplingType;
         this.goodType = goodType;
         this.fruitHarvestCycle = fruitHarvestCycle;
         this.seasons = seasons;
@@ -70,11 +70,11 @@ public enum TreeType implements GoodType {
 
     @Override
     public int getSellPrice() {
-        return 0;
+        return -1;
     }
 
     @Override
     public int getEnergy() {
-        return 0;
+        return -1;
     }
 }

@@ -13,6 +13,7 @@ import org.example.models.game_structure.Tile;
 
 import org.example.models.game_structure.*;
 import org.example.models.goods.Good;
+import org.example.models.goods.GoodType;
 import org.example.models.goods.foods.Food;
 import org.example.models.goods.foods.FoodType;
 import org.example.models.goods.recipes.*;
@@ -573,9 +574,9 @@ public class GameMenuController extends Controller {
             return new Result(false, "You don't have this cooking recipe");
         }
 
-        for (HashMap<FoodType, Integer> ingredient :  ((CookingRecipeType) recipe.getType()).getIngredients()) {
+        for (HashMap<GoodType, Integer> ingredient : ((CookingRecipeType) recipe.getType()).getIngredients()) {
 
-            FoodType ingredientType = ingredient.keySet().iterator().next();
+            FoodType ingredientType = (FoodType) ingredient.keySet().iterator().next();
             int requiredAmount = ingredient.get(ingredientType);
             if (!checkCanCook(ingredientType, requiredAmount)) {
                 return new Result(false, "Not enough " + ingredientType.getName() +
@@ -583,7 +584,7 @@ public class GameMenuController extends Controller {
             }
         }
 
-        Food food = new Food(((CookingRecipeType) recipe.getType()).getFoodType());
+        Food food = new Food((FoodType) ((CookingRecipeType) recipe.getType()).getGoodType());
 
         for (ArrayList<Good> goods : App.getCurrentGame().getCurrentPlayer().getInventory().getList()) {
             if (goods.getFirst().getName().equalsIgnoreCase(recipeName)) {
