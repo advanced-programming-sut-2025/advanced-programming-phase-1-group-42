@@ -3,9 +3,6 @@ package org.example.models.goods.recipes;
 import org.example.models.goods.GoodType;
 import org.example.models.goods.craftings.CraftingType;
 
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
-
 public enum CraftingRecipeType implements GoodType {
 
     CHERRY_BOMB(CraftingType.CHERRY_BOMB, "4 copper ore + 1 coal"),
@@ -36,9 +33,22 @@ public enum CraftingRecipeType implements GoodType {
         this.craftingType = craftingType;
         this.ingredients = ingredients;
     }
+
+    @Override
+    public int getSellPrice() {
+        return 0;
+    }
+
+    @Override
+    public int getEnergy() {
+        return 0;
+    }
+
     public String getName() {
         return craftingType.getName();
     }
+
+
 
     public String getIngredients() {
         return ingredients;

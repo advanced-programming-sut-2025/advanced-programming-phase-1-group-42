@@ -7,7 +7,11 @@ import org.example.models.enums.TileType;
 import org.example.models.game_structure.Cordinate;
 import org.example.models.game_structure.Tile;
 import org.example.models.goods.Good;
+import org.example.models.goods.farmings.FarmingTree;
+import org.example.models.goods.farmings.FarmingTreeSapling;
 import org.example.models.goods.fishs.FishType;
+import org.example.models.goods.foragings.ForagingSeed;
+import org.example.models.goods.foragings.ForagingTree;
 
 import java.util.ArrayList;
 
@@ -59,12 +63,12 @@ public class ToolFunctions {
     private static Result useHoe(Tool tool, Cordinate cordinate) {
         Tile tile = App.getCurrentGame().getCurrentPlayer().getFarm().checkInFarm(cordinate);
         if(tile == null)
-            return new Result(false, "You are not in your farm");
+            return new Result(false, "Selected Tile should be in your farm");
 
         if(tile.getTileType() != TileType.FARM)
             return new Result(false, "You can only use your tool in farm tiles!");
 
-        tile.setTileType(TileType.PREPARED_FARM);
+        tile.setTileType(TileType.PLOWED_FARM);
         return new Result(true, ((ToolType) tool.getType()).getName() + " used!");
     }
 
@@ -72,9 +76,9 @@ public class ToolFunctions {
     private static Result usePickaxe(Tool tool, Cordinate cordinate){
         Tile tile = App.getCurrentGame().getCurrentPlayer().getFarm().checkInFarm(cordinate);
         if(tile == null)
-            return new Result(false, "You are not in your farm");
+            return new Result(false, "Selected Tile should be in your farm");
 
-        if(tile.getTileType() == TileType.PREPARED_FARM)
+        if(tile.getTileType() == TileType.PLOWED_FARM)
             tile.setTileType(TileType.FARM);
         ArrayList<Good> newGoods = new ArrayList<>();
         for (Good good : tile.getGoods()) {
@@ -88,7 +92,7 @@ public class ToolFunctions {
     private static Result useAxe(Tool tool, Cordinate cordinate) {
         Tile tile = App.getCurrentGame().getCurrentPlayer().getFarm().checkInFarm(cordinate);
         if(tile == null)
-            return new Result(false, "You are not in your farm");
+            return new Result(false, "Selected Tile should be in your farm");
 
         return null;
         //TODO
@@ -96,6 +100,9 @@ public class ToolFunctions {
 
     private static Result useWateringCan(Tool tool, Cordinate cordinate) {
         Tile tile = App.getCurrentGame().getMap().findTile(cordinate);
+        if(tile == null)
+            return new Result(false, "Tile not found!");
+
         if(tile.getTileType() == TileType.WATER) {
             switch (((ToolType) tool.getType()).getLevel()) {
                 case ToolLevel.ORDINARY ->
@@ -113,31 +120,37 @@ public class ToolFunctions {
         }
 
         if(App.getCurrentGame().getCurrentPlayer().getFarm().checkInFarm(cordinate) == null)
-            return new Result(false, "You are not in your farm");
+            return new Result(false, "Selected Tile should be in your farm");
 
         if(tool.capacity == 0)
             return new Result(false, "Your " + ((ToolType) tool.getType()).getName() + " is empty");
 
         tool.capacity--;
-        tile.setWatered(true);
+        for (Good good : tile.getGoods()) {
+            if(good instanceof FarmingTreeSapling || good instanceof FarmingTree ||
+                    good instanceof ForagingSeed || good instanceof ForagingTree)
+            //TODO
+        }
         return new Result(true, ((ToolType) tool.getType()).getName() + " used");
     }
 
     private static Result useTrainingFishingPole(Tool tool, Cordinate cordinate) {
         Tile tile = App.getCurrentGame().getMap().findTile(cordinate);
+        if(tile == null)
+            return new Result(false, "Tile not found!");
         if(tile.getTileType() != TileType.WATER)
             return new Result(false, "You should use " + ((ToolType) tool.getType()).getName() + " in Water Tiles!");
 
         Good good = null;
         switch (App.getCurrentGame().getDateTime().getSeasonOfYear()) {
             case Season.SPRING ->
-                    good = tile.findGoods(FishType.HERRING);
+                    good = tile.findGood(FishType.HERRING);
             case Season.SUMMER ->
-                    good = tile.findGoods(FishType.SUNFISH);
+                    good = tile.findGood(FishType.SUNFISH);
             case Season.FALL ->
-                    good = tile.findGoods(FishType.SARDINE);
+                    good = tile.findGood(FishType.SARDINE);
             case Season.WINTER ->
-                    good = tile.findGoods(FishType.PERCH);
+                    good = tile.findGood(FishType.PERCH);
         }
 
         //TODO
@@ -162,7 +175,7 @@ public class ToolFunctions {
     private static Result useScythe(Tool tool, Cordinate cordinate) {
         Tile tile = App.getCurrentGame().getCurrentPlayer().getFarm().checkInFarm(cordinate);
         if(tile == null)
-            return new Result(false, "You are not in your farm");
+            return new Result(false, "Selected Tile should be in your farm");
 
         return null;
     }

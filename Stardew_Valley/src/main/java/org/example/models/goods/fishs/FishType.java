@@ -6,6 +6,7 @@ import org.example.models.goods.GoodType;
 public enum FishType implements GoodType {
     // Regular Fish
 
+    ANONYMOUS("Anonymous_Fish", -1, Season.SPRING),
     //Spring
     FLOUNDER("Flounder", 100, Season.SPRING),
     LIONFISH("Lionfish", 100, Season.SPRING),

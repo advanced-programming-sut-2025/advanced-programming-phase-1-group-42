@@ -3,6 +3,7 @@ package org.example.models.goods.tools;
 import org.example.models.Result;
 import org.example.models.game_structure.Cordinate;
 import org.example.models.goods.Good;
+import org.example.models.goods.GoodType;
 
 
 public class Tool extends Good {
@@ -27,7 +28,10 @@ public class Tool extends Good {
         return toolType.getSellPrice();
     }
 
+    @Override
+    public GoodType getType() {
+        return toolType;
+    }
 
 
-    public abstract Result useTool(Cordinate cordinate);
 }

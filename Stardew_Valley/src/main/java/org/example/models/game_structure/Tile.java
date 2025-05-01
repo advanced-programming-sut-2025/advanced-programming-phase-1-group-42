@@ -10,15 +10,6 @@ public class Tile {
     private Cordinate cordinate;
     private TileType tileType;
     private ArrayList<Good> goods;
-    private boolean isWatered;
-
-    public boolean isWatered() {
-        return isWatered;
-    }
-
-    public void setWatered(boolean watered) {
-        isWatered = watered;
-    }
 
     public ArrayList<Good> getGoods() {
         return goods;
@@ -40,9 +31,17 @@ public class Tile {
         this.goods = goods;
     }
 
-    public Good findGoods(GoodType goodType) {
+    public Good findGood(GoodType goodType) {
         for (Good good : this.goods) {
             if(good.getType() == goodType)
+                return good;
+        }
+        return null;
+    }
+
+    public Good findGood(String goodName) {
+        for (Good good : this.goods) {
+            if(good.getName().equals(goodName))
                 return good;
         }
         return null;

@@ -2,6 +2,7 @@ package org.example.models.game_structure;
 
 import org.example.models.App;
 import org.example.models.goods.Good;
+import org.example.models.goods.GoodType;
 
 import java.util.ArrayList;
 
@@ -36,6 +37,15 @@ public class Inventory {
     public ArrayList<Good> isInInventory(Good good) {
         for (int i = 0; i < size; i++) {
             if(!list.get(i).isEmpty() && list.get(i).getFirst().getName().equals(good.getName())) {
+                return list.get(i);
+            }
+        }
+        return null;
+    }
+
+    public ArrayList<Good> isInInventory(String goodName) {
+        for (int i = 0; i < size; i++) {
+            if(!list.get(i).isEmpty() && list.get(i).getFirst().getName().equals(goodName)) {
                 return list.get(i);
             }
         }

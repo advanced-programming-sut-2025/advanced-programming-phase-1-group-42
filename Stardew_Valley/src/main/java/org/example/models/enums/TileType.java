@@ -5,7 +5,7 @@ public enum TileType {
 
     QUARRY(),
     FARM(),
-    PREPARED_FARM(),
+    PLOWED_FARM(),
 
     WATER(),
     PLAIN(),

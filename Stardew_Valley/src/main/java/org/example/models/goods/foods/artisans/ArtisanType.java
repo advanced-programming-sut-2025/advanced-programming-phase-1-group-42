@@ -1,12 +1,9 @@
 package org.example.models.goods.foods.artisans;
 
-import org.example.models.goods.Good;
 import org.example.models.goods.GoodType;
-import org.example.models.goods.craftings.CraftingType;
 import org.example.models.goods.recipes.CraftingRecipeType;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.HashMap;
 
 public enum ArtisanType implements GoodType {

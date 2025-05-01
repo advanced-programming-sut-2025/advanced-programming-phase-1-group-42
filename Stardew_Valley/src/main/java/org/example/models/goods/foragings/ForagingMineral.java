@@ -1,20 +1,14 @@
-package org.example.models.goods.foods;
+package org.example.models.goods.foragings;
 
-import org.example.models.goods.Good;
+import org.example.models.enums.Season;
 import org.example.models.goods.GoodType;
 
-public class Food extends Good {
+import java.util.ArrayList;
+import java.util.Arrays;
 
-    private FoodType type;
-    private int energy;
+public class ForagingMineral extends Foraging{
+    private MineralType type;
 
-    public Food(FoodType type) {
-        this.type = type;
-    }
-
-    public int getEnergy() {
-        return type.getEnergy();
-    }
 
     @Override
     public String getName() {

@@ -83,8 +83,20 @@ public enum FoodType implements GoodType {
     // TODO: the price should be get times 2 in Stardrop saloon Shop
     BEER("Beer", 0, 20, null),
 
-    COFFEE("Coffee", 0, 150, null);
+    COFFEE("Coffee", 0, 150, null),
 
+    // Base Types
+    EGG("Egg", -1, -1, null),
+
+    MILK("Milk", -1, -1, null),
+
+    WHEAT_FLOUR("Wheat_Flour", -1, -1, null),
+
+    SUGAR("Sugar", -1, -1, null),
+
+    CHEESE("Cheese", -1, -1, null),
+
+    RICE("Rice", -1, -1, null);
 
 
     private final String name;

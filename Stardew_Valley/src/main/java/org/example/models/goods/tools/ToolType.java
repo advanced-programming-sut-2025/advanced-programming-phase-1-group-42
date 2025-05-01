@@ -1,7 +1,6 @@
 package org.example.models.goods.tools;
 
 import org.example.models.App;
-import org.example.models.goods.GoodLevel;
 import org.example.models.goods.GoodType;
 
 public enum ToolType implements GoodType {

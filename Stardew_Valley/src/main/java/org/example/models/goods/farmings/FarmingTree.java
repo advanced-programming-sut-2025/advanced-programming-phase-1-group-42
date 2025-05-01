@@ -1,20 +1,11 @@
-package org.example.models.goods.foods;
+package org.example.models.goods.farmings;
 
-import org.example.models.goods.Good;
 import org.example.models.goods.GoodType;
 
-public class Food extends Good {
+public class FarmingTree extends Farming {
+    private FarmingTreeType type;
+    private boolean isWatered;
 
-    private FoodType type;
-    private int energy;
-
-    public Food(FoodType type) {
-        this.type = type;
-    }
-
-    public int getEnergy() {
-        return type.getEnergy();
-    }
 
     @Override
     public String getName() {
@@ -29,5 +20,13 @@ public class Food extends Good {
     @Override
     public GoodType getType() {
         return type;
+    }
+
+    public boolean isWatered() {
+        return isWatered;
+    }
+
+    public void setWatered(boolean watered) {
+        isWatered = watered;
     }
 }

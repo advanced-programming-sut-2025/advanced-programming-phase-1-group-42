@@ -1,20 +1,11 @@
-package org.example.models.goods.foods;
+package org.example.models.goods.foragings;
 
-import org.example.models.goods.Good;
 import org.example.models.goods.GoodType;
+import org.example.models.goods.foods.Food;
 
-public class Food extends Good {
+public class ForagingCrop extends Foraging {
+    private ForagingCropType type;
 
-    private FoodType type;
-    private int energy;
-
-    public Food(FoodType type) {
-        this.type = type;
-    }
-
-    public int getEnergy() {
-        return type.getEnergy();
-    }
 
     @Override
     public String getName() {

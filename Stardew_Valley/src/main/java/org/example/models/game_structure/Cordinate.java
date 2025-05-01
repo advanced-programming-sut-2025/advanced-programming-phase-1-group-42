@@ -16,10 +16,10 @@ public class Cordinate{
         int newY = App.getCurrentGame().getCurrentPlayer().getCordinate().getY();
         switch (direction) {
             case "up":
-                newY += 1;
+                newY -= 1;
                 break;
             case "down":
-                newY -= 1;
+                newY += 1;
                 break;
             case "left":
                 newX -= 1;
@@ -29,19 +29,19 @@ public class Cordinate{
                 break;
             case "up-right":
                 newX += 1;
-                newY += 1;
+                newY -= 1;
                 break;
             case "up-left":
                 newX -= 1;
-                newY += 1;
+                newY -= 1;
                 break;
             case "down-right":
                 newX += 1;
-                newY -= 1;
+                newY += 1;
                 break;
             case "down-left":
                 newX -= 1;
-                newY -= 1;
+                newY += 1;
                 break;
             default:
                 return null;
@@ -67,5 +67,10 @@ public class Cordinate{
         }
         else
             return false;
+    }
+
+    @Override
+    public String toString() {
+        return "x:" + x + " y:" + y;
     }
 }

@@ -7,6 +7,7 @@ import org.example.models.builders.Director;
 import org.example.models.builders.concrete_builders.WholeGameBuilder;
 import org.example.models.builders.concrete_builders.WholeMapBuilder;
 import org.example.models.enums.GameMenuCommands;
+import org.example.models.enums.TileType;
 import org.example.models.enums.WeatherType;
 import org.example.models.game_structure.Game;
 import org.example.models.game_structure.Tile;
@@ -14,12 +15,17 @@ import org.example.models.game_structure.Tile;
 import org.example.models.game_structure.*;
 import org.example.models.goods.Good;
 import org.example.models.goods.GoodType;
+import org.example.models.goods.farmings.FarmingCropType;
+import org.example.models.goods.farmings.FarmingTree;
+import org.example.models.goods.farmings.FarmingTreeSapling;
 import org.example.models.goods.foods.Food;
 import org.example.models.goods.foods.FoodType;
+import org.example.models.goods.foragings.*;
 import org.example.models.goods.recipes.*;
 import org.example.models.goods.recipes.CraftingFunctions;
 import org.example.models.goods.recipes.CraftingRecipe;
 import org.example.models.goods.tools.Tool;
+import org.example.models.goods.tools.ToolFunctions;
 import org.example.models.goods.tools.ToolType;
 import org.example.models.interactions.Player;
 import org.example.models.interactions.User;
@@ -56,6 +62,21 @@ public class GameMenuController extends Controller {
             }
         }
         return farms;
+    }
+
+    private GoodType findCraft(String craftName) {
+        for (FarmingCropType value : FarmingCropType.values()) {
+            if(value.getName().equals(craftName)) {
+                return value;
+            }
+        }
+
+        for (ForagingMineral.ForagingCropType value : ForagingMineral.ForagingCropType.values()) {
+            if(value.getName().equals(craftName)) {
+                return value;
+            }
+        }
+        return null;
     }
 
     //TODO: Nader
@@ -371,7 +392,7 @@ public class GameMenuController extends Controller {
 
             App.getCurrentGame().getCurrentPlayer().getEnergy().decreaseDayEnergyLeft(tool.getType().getEnergy());
 
-            return tool.useTool(cordinate);
+            return ToolFunctions.tooluse(tool, cordinate);
         }
         else
             return new Result(false, "You don't have tool in your hand!");
@@ -380,21 +401,59 @@ public class GameMenuController extends Controller {
     //TODO: Arani
     // Craft Info
     public Result craftInfo(String craftName) {
-        //TODO
-        return new Result(true, "");
+        GoodType craft = findCraft(craftName);
+        if(craft == null)
+            return new Result(false, "Craft not found");
+
+        return new Result(true, "Craft Info:\n" + craft.toString());
     }
 
 
     //TODO: Arani
     // Planting
     public Result plantSeed(String seed, String direction) {
-        //TODO
-        return new Result(true, "");
+        Cordinate cordinate = Cordinate.getDirection(direction);
+        Tile tile = App.getCurrentGame().getCurrentPlayer().getFarm().checkInFarm(cordinate);
+        if(tile == null)
+            return new Result(false, "Selected Tile should be in your farm!");
+
+        if(tile.getTileType() != TileType.PLOWED_FARM)
+            return new Result(false, "Selected Tile is not plowed for planting!");
+
+        ArrayList<Good> seeds = App.getCurrentGame().getCurrentPlayer().getInventory().isInInventory(seed);
+        if(seeds == null)
+            return new Result(false, "You don't have " + seed + " in your inventory!");
+        for(Good good : tile.getGoods()) {
+            if(good instanceof FarmingTreeSapling || good instanceof FarmingTree ||
+            good instanceof ForagingSeed || good instanceof ForagingTree || good instanceof ForagingMineral)
+                return new Result(true, "A seed already planted in this tile!");
+        }
+
+        tile.getGoods().add(seeds.getLast());
+        seeds.removeLast();
+
+        return new Result(true, "A plant seed has been planted on tile " + cordinate + "!");
     }
 
     public Result showPlant(String direction) {
         //TODO
-        return new Result(true, "");
+        Cordinate cordinate = Cordinate.getDirection(direction);
+        Tile tile = App.getCurrentGame().getCurrentPlayer().getFarm().checkInFarm(cordinate);
+        if(tile == null)
+            return new Result(false, "Selected Tile should be in your farm!");
+
+        Good plant = null;
+        for (Good good : tile.getGoods()) {
+            if(good instanceof FarmingTreeSapling || good instanceof FarmingTree ||
+                    good instanceof ForagingSeed || good instanceof ForagingTree) {
+                plant = good;
+                break;
+            }
+        }
+        if(plant == null)
+            return new Result(false, "There is no plant in this location!");
+
+        return new Result(true, "Plant Info:\n" + plant.toString());
     }
 
     public Result fertilize(String fertilizer, String direction) {
@@ -403,8 +462,8 @@ public class GameMenuController extends Controller {
     }
 
     public Result howMuchWater() {
-        //TODO
-        return new Result(true, "");
+        Tool tool = (Tool) App.getCurrentGame().getCurrentPlayer().getInventory().isInInventory(ToolType.WATERING_CAN.getName()).getFirst();
+        return new Result(true, "Your watering can have capacity:" + tool.capacity);
     }
 
 
@@ -468,7 +527,7 @@ public class GameMenuController extends Controller {
                 return new Result(true, "Item has been dropped!");
             }
         }
-        return new Result(true, "");
+        return new Result(true, "Tile not found to drop item!");
 
     }
 
