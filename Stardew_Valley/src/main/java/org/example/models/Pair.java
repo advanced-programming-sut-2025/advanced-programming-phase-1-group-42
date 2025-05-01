@@ -9,11 +9,11 @@ public class Pair<A, B> {
         this.second = second;
     }
 
-    public A getFirst() { return first; }
-    public B getSecond() { return second; }
+    public A getFirst() {
+        return first;
+    }
 
-<<<<<<< Updated upstream
+    public B getSecond() {
+        return second;
+    }
 }
-=======
-}
->>>>>>> Stashed changes

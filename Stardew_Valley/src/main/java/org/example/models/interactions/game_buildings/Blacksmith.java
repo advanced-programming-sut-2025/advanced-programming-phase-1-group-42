@@ -20,15 +20,15 @@ public class Blacksmith extends GameBuilding {
     public Blacksmith() {
         upgradeToolCost.addAll(Arrays.asList(2000, 5000, 10000, 25000));
         upgradeTrashCanCost.addAll(Arrays.asList(1000, 2500, 5000, 12500));
-        upgradeIngredients.addAll(Arrays.asList(new Pair(MineralType.COPPER, 5), new Pair(MineralType.IRON, 5), new Pair(MineralType.GOLD, 5), new Pair(MineralType.IRIDIUM, 5)));
+        upgradeIngredients.addAll(Arrays.asList(new Pair<>(MineralType.COPPER, 5), new Pair<>(MineralType.IRON, 5), new Pair<>(MineralType.GOLD, 5), new Pair<>(MineralType.IRIDIUM, 5)));
     }
 
     public boolean upgradeTool(Tool tool) {
         Player player = App.getCurrentGame().getCurrentPlayer();
         int nextLevel = ((ToolType) tool.getType()).getLevel().getLevelNumber();
 
-        ArrayList<Good> goods = player.getInventory().isInInventory((Good) upgradeIngredients.get(nextLevel).first());
-        if(goods == null || goods.size() < (Integer) upgradeIngredients.get(nextLevel).second())
+        ArrayList<Good> goods = player.getInventory().isInInventory((Good) upgradeIngredients.get(nextLevel).getFirst());
+        if(goods == null || goods.size() < (Integer) upgradeIngredients.get(nextLevel).getSecond())
             return false;
 
         if(tool.getType() == ToolType.TRASH_CAN) {
@@ -42,7 +42,7 @@ public class Blacksmith extends GameBuilding {
             player.getWallet().decreaseBalance(upgradeToolCost.get(nextLevel));
         }
 
-        Inventory.decreaseGoods(goods, (Integer) upgradeIngredients.get(nextLevel).second());
+        Inventory.decreaseGoods(goods, (Integer) upgradeIngredients.get(nextLevel).getSecond());
         ((ToolType) tool.getType()).setLevel(((ToolType) tool.getType()).getLevel().increaseGoodLevel());
         return true;
     }

@@ -48,4 +48,9 @@ public enum TreeType implements GoodType {
     public int getEnergy() {
         return -1;
     }
+
+    @Override
+    public String getName() {
+        return "";
+    }
 }

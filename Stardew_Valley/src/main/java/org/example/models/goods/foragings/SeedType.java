@@ -138,4 +138,9 @@ public enum SeedType implements GoodType {
         return 0;
     }
 
+    @Override
+    public String getName() {
+        return "";
+    }
+
 }

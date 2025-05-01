@@ -1,6 +1,6 @@
 package org.example.models.game_structure;
 
-import org.example.models.interactions.game_buildings.ShopType;
+import org.example.models.interactions.game_buildings.GameBuilding;
 
 import java.util.ArrayList;
 
@@ -8,7 +8,6 @@ public class Map {
     private final ArrayList<Tile> tiles = new ArrayList<>();
     private final ArrayList<Farm> farms = new ArrayList<>();
     private final ArrayList<ShopType> gameBuildings = new ArrayList<>();
-
 
 
     // A function to print map

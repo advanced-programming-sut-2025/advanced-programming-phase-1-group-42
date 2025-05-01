@@ -59,4 +59,9 @@ public enum TreeSaplingType implements GoodType {
     public int getEnergy() {
         return 0;
     }
+
+    @Override
+    public String getName() {
+        return "";
+    }
 }

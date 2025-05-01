@@ -8,6 +8,7 @@ import org.example.models.enums.Menu;
 import org.example.models.game_structure.Farm;
 import org.example.models.game_structure.Game;
 import org.example.models.game_structure.Map;
+import org.example.models.interactions.NPCs.NPC;
 import org.example.models.interactions.User;
 
 public class App {
