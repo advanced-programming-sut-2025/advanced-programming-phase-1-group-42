@@ -25,6 +25,8 @@ import org.example.models.goods.foragings.*;
 import org.example.models.goods.recipes.*;
 import org.example.models.goods.recipes.CraftingFunctions;
 import org.example.models.goods.recipes.CraftingRecipe;
+import org.example.models.interactions.Animals.Animal;
+import org.example.models.interactions.Animals.AnimalProduct;
 import org.example.models.interactions.NPCs.NPC;
 import org.example.models.interactions.NPCs.NPCFriendship;
 import org.example.models.goods.tools.Tool;
@@ -32,6 +34,7 @@ import org.example.models.goods.tools.ToolFunctions;
 import org.example.models.goods.tools.ToolType;
 import org.example.models.interactions.NPCs.NPC;
 import org.example.models.interactions.Player;
+import org.example.models.interactions.PlayerBuildings.FarmBuilding;
 import org.example.models.interactions.User;
 import org.example.models.interactions.game_buildings.Blacksmith;
 
@@ -704,22 +707,28 @@ public class GameMenuController extends Controller {
     //TODO: Parsa
     // Animals & Fishing methods
     public Result buildBuilding(String buildingName, String x, String y) {
-        //TODO
+        //?
         return new Result(true, "");
     }
 
     public Result buyAnimal(String animalType, String animalName) {
-        //TODO
+        //?
         return new Result(true, "");
     }
 
     public Result petAnimal(String animalName) {
-        //TODO
+        //?
         return new Result(true, "");
     }
 
     public Result animalList() {
-        //TODO
+        for (FarmBuilding building : App.getCurrentGame().getCurrentPlayer().getFarmBuildings()) {
+            for (Animal animal : building.getAnimals()){
+                System.out.println(building.getName() + " " + animal.getName() + " " + animal.getFriendship()
+                + " is fed:" + animal.isFed() + " " + " is petted:" + animal.isPetted());
+                System.out.println("------------------------------");
+            }
+        }
         return new Result(true, "");
     }
 
@@ -739,7 +748,16 @@ public class GameMenuController extends Controller {
     }
 
     public Result animalProductionList() {
-        //TODO
+        for (FarmBuilding building : App.getCurrentGame().getCurrentPlayer().getFarmBuildings()) {
+            for (Animal animal : building.getAnimals()){
+                System.out.print(building.getAnimals() + " " + animal.getName());
+                for (AnimalProduct animalProduct : animal.getProducts()){
+                    System.out.print(" " + animalProduct.getName() + " " + animalProduct.getQuality());
+                }
+                System.out.println();
+                System.out.println("------------------------------");
+            }
+        }
         return new Result(true, "");
     }
 
@@ -749,7 +767,7 @@ public class GameMenuController extends Controller {
     }
 
     public Result sellAnimal(String animalName) {
-        //TODO
+        //?
         return new Result(true, "");
     }
 

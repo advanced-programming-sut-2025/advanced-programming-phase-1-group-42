@@ -52,22 +52,88 @@ public class Inventory {
         return null;
     }
 
-
-    public boolean addGood(Good good) {
-        for (ArrayList<Good> goods : list) {
-            if (!goods.isEmpty() && goods.getFirst().getName().equals(good.getName())) {
-                goods.add(good);
-                return true;
-            }
-        }
-
-        for(ArrayList<Good> goods : list) {
-            if(goods.isEmpty()) {
-                goods.add(good);
+    public boolean isInInventory(GoodType goodName) {
+        for (int i = 0; i < size; i++) {
+            if(!list.get(i).isEmpty() && list.get(i).getFirst().getType().equals(goodName)) {
                 return true;
             }
         }
         return false;
+    }
+
+
+
+
+
+    public boolean addGood(Good good, int count) {
+        for (ArrayList<Good> goods : list) {
+            if (!goods.isEmpty()) {
+                for (Good g : goods) {
+                    if (g.getType() == good.getType()) {
+                        for (int i = 0; i < count; i++) {
+                            goods.add(good);
+                        }
+                    }
+                    return true;
+                }
+            }
+        }
+
+        for (ArrayList<Good> goods : list) {
+            if (goods.isEmpty()) {
+                for (int i = 0; i < count; i++) {
+                    goods.add(good);
+                }
+                return true;
+            }
+        }
+        return false;
+    }
+
+    public int howManyInInventory(Good good) {
+        int count = 0;
+        for (ArrayList<Good> goods : list) {
+            if (!goods.isEmpty()) {
+                for (Good g : goods) {
+                    if (g.getType() == good.getType()) {
+                        count++;
+                    }
+                }
+                if (count > 0) {
+                    return count;
+                }
+            }
+        }
+        return 0;
+    }
+
+    public int howManyInInventoryByType(GoodType type) {
+        int count = 0;
+        for (ArrayList<Good> goods : list) {
+            if (!goods.isEmpty()) {
+                for (Good g : goods) {
+                    if (g.getType() == type) {
+                        count++;
+                    }
+                }
+                if (count > 0) {
+                    return count;
+                }
+            }
+        }
+        return 0;
+    }
+
+    public void removeItemsFromInventory(GoodType type , int count) {
+        if (!(howManyInInventoryByType(type)>=count)){
+            return;
+        }
+        for (ArrayList<Good> goods : list) {
+            if (!goods.isEmpty()) {
+                goods.removeIf(g -> g.getType() == type);
+            }
+        }
+
     }
 
 }

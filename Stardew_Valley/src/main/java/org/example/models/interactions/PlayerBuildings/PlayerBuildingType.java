@@ -1,9 +1,8 @@
-package org.example.models.interactions;
+package org.example.models.interactions.PlayerBuildings;
 
 import org.example.models.goods.GoodType;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 
 public enum PlayerBuildingType {
 

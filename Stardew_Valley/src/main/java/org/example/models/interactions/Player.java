@@ -9,6 +9,7 @@ import org.example.models.goods.recipes.CookingRecipe;
 import org.example.models.goods.recipes.CraftingRecipe;
 import org.example.models.goods.tools.Tool;
 import org.example.models.goods.tools.ToolType;
+import org.example.models.interactions.PlayerBuildings.FarmBuilding;
 
 import java.util.ArrayList;
 
@@ -29,6 +30,7 @@ public class Player {
     private Pair<Player, Integer> friendShipLevel;
     private Pair<Player, Integer> friendShipScore;
     private Pair<Player, ArrayList<String>> talkHistory;
+    private ArrayList<FarmBuilding> farmBuildings;
     private ArrayList<Trade> tradeList;
     private ArrayList<Trade> tradeHistory;
     private ArrayList<Gift> giftHistory;
@@ -114,5 +116,9 @@ public class Player {
 
     public Wallet getWallet() {
         return wallet;
+    }
+
+    public ArrayList<FarmBuilding> getFarmBuildings() {
+        return farmBuildings;
     }
 }
