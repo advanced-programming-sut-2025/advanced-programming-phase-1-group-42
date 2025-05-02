@@ -29,7 +29,7 @@ public class Animal {
 
     public ArrayList<AnimalProduct> getProducts() {
         if (animalType.equals(AnimalTypes.COW)) {
-            if (App.getCurrentGame().getCurrentPlayer().getInventory().isInInventory(ToolType.MILK_PAIL)) {
+            if (App.getCurrentGame().getCurrentPlayer().getInventory().isInInventoryBoolean(ToolType.MILK_PAIL)) {
                 friendShip += 5;
                 return products;
             } else {
@@ -37,7 +37,7 @@ public class Animal {
                 return null;
             }
         } else if (animalType.equals(AnimalTypes.GOAT)) {
-            if (App.getCurrentGame().getCurrentPlayer().getInventory().isInInventory(ToolType.MILK_PAIL)) {
+            if (App.getCurrentGame().getCurrentPlayer().getInventory().isInInventoryBoolean(ToolType.MILK_PAIL)) {
                 friendShip += 5;
                 return products;
             } else {
@@ -45,7 +45,7 @@ public class Animal {
                 return null;
             }
         } else if (animalType.equals(AnimalTypes.SHEEP)) {
-            if (App.getCurrentGame().getCurrentPlayer().getInventory().isInInventory(ToolType.SHEAR)) {
+            if (App.getCurrentGame().getCurrentPlayer().getInventory().isInInventoryBoolean(ToolType.SHEAR)) {
                 friendShip += 5;
                 return products;
             } else {
