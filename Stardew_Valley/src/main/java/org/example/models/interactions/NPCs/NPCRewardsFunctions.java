@@ -71,7 +71,7 @@ public class NPCRewardsFunctions {
             int rewardCount = 500;
             System.out.println("Quest Finished, You received " + rewardCount * npcFriendship.getFriendshipLevel() + " Pumpkins");
             App.getCurrentGame().getCurrentPlayer().getInventory()
-                    .addGood(good, rewardCount * npcFriendship.getFriendshipLevel());
+                    .addGood(null, rewardCount * npcFriendship.getFriendshipLevel());
             npcFriendship.getAvailableQuests().remove(2);
         } else if (npcFriendship.getAvailableQuests().contains(3) &&
                 App.getCurrentGame().getCurrentPlayer().getInventory().howManyInInventoryByType
