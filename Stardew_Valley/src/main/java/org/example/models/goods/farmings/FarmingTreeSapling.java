@@ -4,7 +4,10 @@ import org.example.models.goods.GoodType;
 
 public class FarmingTreeSapling extends Farming {
     private FarmingTreeSaplingType type;
-    private boolean isWatered;
+
+    public FarmingTreeSapling(FarmingTreeSaplingType type) {
+        this.type = type;
+    }
 
     @Override
     public String getName() {
@@ -19,13 +22,5 @@ public class FarmingTreeSapling extends Farming {
     @Override
     public GoodType getType() {
         return type;
-    }
-
-    public boolean isWatered() {
-        return isWatered;
-    }
-
-    public void setWatered(boolean watered) {
-        isWatered = watered;
     }
 }

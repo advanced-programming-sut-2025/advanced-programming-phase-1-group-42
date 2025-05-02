@@ -2,7 +2,7 @@ package org.example.models.goods.foragings;
 
 import org.example.models.goods.GoodType;
 
-public enum MineralType implements GoodType {
+public enum ForagingMineralType implements GoodType {
 
     // Minerals from Foraging Minerals tab
     QUARTZ("Quartz", 25),
@@ -42,7 +42,7 @@ public enum MineralType implements GoodType {
     private String name;
     private int sellPrice;
 
-    MineralType(String name, int sellPrice) {
+    ForagingMineralType(String name, int sellPrice) {
         this.name = name;
         this.sellPrice = sellPrice;
     }

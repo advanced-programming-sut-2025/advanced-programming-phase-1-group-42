@@ -4,7 +4,10 @@ import org.example.models.goods.GoodType;
 
 public class ForagingTree extends Foraging{
     private ForagingTreeType type;
-    private boolean isWatered;
+
+    public ForagingTree(ForagingTreeType type) {
+        this.type = type;
+    }
 
     @Override
     public String getName() {
@@ -21,11 +24,5 @@ public class ForagingTree extends Foraging{
         return type;
     }
 
-    public boolean isWatered() {
-        return isWatered;
-    }
 
-    public void setWatered(boolean watered) {
-        isWatered = watered;
-    }
 }

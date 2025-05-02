@@ -4,9 +4,9 @@ import org.example.models.goods.GoodLevel;
 import org.example.models.goods.GoodType;
 
 public class CraftingRecipe extends Recipe {
-    CraftingRecipeType type;
+    private CraftingRecipeType type;
 
-    CraftingRecipe(CraftingRecipeType type) {
+    public CraftingRecipe(CraftingRecipeType type) {
         this.type = type;
     }
 

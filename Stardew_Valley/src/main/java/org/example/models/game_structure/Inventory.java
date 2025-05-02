@@ -79,4 +79,12 @@ public class Inventory {
         return false;
     }
 
+    public boolean isFull() {
+        for (ArrayList<Good> goods : list) {
+            if(goods.isEmpty())
+                return false;
+        }
+        return true;
+    }
+
 }

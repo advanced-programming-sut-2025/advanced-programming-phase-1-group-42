@@ -2,7 +2,6 @@ package org.example.models.goods.foods.artisans;
 
 import org.example.models.Pair;
 import org.example.models.goods.GoodType;
-import org.example.models.goods.artisans.ArtisanType;
 import org.example.models.goods.foods.Food;
 import org.example.models.goods.foods.FoodType;
 

@@ -4,8 +4,10 @@ import org.example.models.goods.GoodType;
 
 public class FarmingTree extends Farming {
     private FarmingTreeType type;
-    private boolean isWatered;
 
+    public FarmingTree(FarmingTreeType type) {
+        this.type = type;
+    }
 
     @Override
     public String getName() {
@@ -22,11 +24,4 @@ public class FarmingTree extends Farming {
         return type;
     }
 
-    public boolean isWatered() {
-        return isWatered;
-    }
-
-    public void setWatered(boolean watered) {
-        isWatered = watered;
-    }
 }

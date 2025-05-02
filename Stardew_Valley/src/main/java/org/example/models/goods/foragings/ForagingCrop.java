@@ -6,6 +6,9 @@ import org.example.models.goods.foods.Food;
 public class ForagingCrop extends Foraging {
     private ForagingCropType type;
 
+    public ForagingCrop(ForagingCropType type) {
+        this.type = type;
+    }
 
     @Override
     public String getName() {

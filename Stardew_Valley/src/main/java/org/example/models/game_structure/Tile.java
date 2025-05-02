@@ -10,6 +10,7 @@ public class Tile {
     private Coordinate coordinate;
     private TileType tileType;
     private ArrayList<Good> goods;
+    private boolean isWatered = false;
 
     public ArrayList<Good> getGoods() {
         return goods;
@@ -45,5 +46,14 @@ public class Tile {
                 return good;
         }
         return null;
+    }
+
+
+    public boolean isWatered() {
+        return isWatered;
+    }
+
+    public void setWatered(boolean watered) {
+        isWatered = watered;
     }
 }

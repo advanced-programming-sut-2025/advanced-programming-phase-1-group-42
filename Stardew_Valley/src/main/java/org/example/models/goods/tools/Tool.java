@@ -5,7 +5,8 @@ import org.example.models.goods.GoodType;
 
 
 public class Tool extends Good {
-    protected ToolType toolType;
+    private ToolType toolType;
+    private ToolLevel toolLevel;
     public int capacity;
 
     public Tool(ToolType toolType) {
@@ -31,5 +32,7 @@ public class Tool extends Good {
         return toolType;
     }
 
-
+    public ToolLevel getToolLevel() {
+        return toolLevel;
+    }
 }

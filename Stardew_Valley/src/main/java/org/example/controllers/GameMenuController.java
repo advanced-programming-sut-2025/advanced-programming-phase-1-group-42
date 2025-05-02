@@ -22,7 +22,7 @@ import org.example.models.goods.farmings.FarmingTreeSapling;
 import org.example.models.goods.foods.Food;
 import org.example.models.goods.foods.FoodType;
 import org.example.models.goods.foragings.*;
-import org.example.models.goods.product.ProductType;
+import org.example.models.goods.products.ProductType;
 import org.example.models.goods.recipes.*;
 import org.example.models.goods.recipes.CraftingFunctions;
 import org.example.models.goods.recipes.CraftingRecipe;
@@ -344,9 +344,30 @@ public class GameMenuController extends Controller {
     }
 
     public Result inventoryTrashItem(String itemName, String number) {
-        //TODO
-        int numberInt = Integer.parseInt(number);
-        return new Result(true, "");
+        ArrayList<Good> goods = App.getCurrentGame().getCurrentPlayer().getInventory().isInInventory(itemName);
+        if(goods == null)
+            return new Result(false, "No good with name " + itemName + " found in your inventory!");
+
+        int numberInt = -1;
+        if(number.matches(""))
+            numberInt = goods.size();
+        else if(number.matches("-?\\d+"))
+            numberInt = Integer.parseInt(number);
+        else
+            return new Result(false, "Invalid number format!");
+
+        if(numberInt > goods.size())
+            return new Result(false, "Your don't have enough number of this good!");
+
+        int totalPrice = 0;
+        for (int i = 0; i < numberInt; i++) {
+            totalPrice += goods.getLast().getSellPrice();
+            goods.removeLast();
+        }
+
+        int finalPrice = ToolFunctions.useTrashCan(App.getCurrentGame().getCurrentPlayer().getTrashCan(), totalPrice);
+        App.getCurrentGame().getCurrentPlayer().getWallet().increaseBalance(finalPrice);
+        return new Result(true, "Your earned " + finalPrice + " coins from putting your good into trash can!");
     }
 
     public Result inventoryShow() {
@@ -454,7 +475,7 @@ public class GameMenuController extends Controller {
         Coordinate coordinate = Coordinate.getDirection(direction);
         Tile tile = App.getCurrentGame().getCurrentPlayer().getFarm().checkInFarm(coordinate, App.getCurrentGame().getCurrentPlayer());
         if(tile == null)
-            return new Result(false, "Selected Tile should be in your farm!");
+            return new Result(false, "You don't have access to this tile!");
 
         if(tile.getTileType() != TileType.PLOWED_FARM)
             return new Result(false, "Selected Tile is not plowed for planting!");
@@ -474,13 +495,17 @@ public class GameMenuController extends Controller {
         return new Result(true, "A plant seed has been planted on tile " + coordinate + "!");
     }
 
-    public Result showPlant(String direction) {
+    public Result showPlant(String x, String y) {
         //TODO
-        Coordinate coordinate = Coordinate.getDirection(direction);
+        if(!x.matches("-?\\d+") || !y.matches("-?\\d+"))
+            return new Result(false, "Invalid location format!");
+
+        Coordinate coordinate = new Coordinate(Integer.parseInt(x), Integer.parseInt(y));
         Tile tile = App.getCurrentGame().getCurrentPlayer().getFarm().checkInFarm(coordinate,
                 App.getCurrentGame().getCurrentPlayer());
+
         if(tile == null)
-            return new Result(false, "Selected Tile should be in your farm!");
+            return new Result(false, "You don't have access to this tile!");
 
         Good plant = null;
         for (Good good : tile.getGoods()) {
@@ -496,9 +521,22 @@ public class GameMenuController extends Controller {
         return new Result(true, "Plant Info:\n" + plant.toString());
     }
 
-    public Result fertilize(String fertilizer, String direction) {
-        //TODO
-        return new Result(true, "");
+    public Result fertilize(String fertilizerName, String direction) {
+        Coordinate coordinate = Coordinate.getDirection(direction);
+        Tile tile = App.getCurrentGame().getCurrentPlayer().getFarm().checkInFarm(coordinate,
+                App.getCurrentGame().getCurrentPlayer());
+
+        if(tile == null)
+            return new Result(false, "You don't have access to this tile!");
+
+        ArrayList<Good> fertilizer = App.getCurrentGame().getCurrentPlayer().getInventory().isInInventory(fertilizerName);
+        if(fertilizer == null)
+            return new Result(false, "You don't have " + fertilizerName + " in your inventory!");
+
+        tile.getGoods().add(fertilizer.getLast());
+        fertilizer.removeLast();
+
+        return new Result(true, "You have fertilized tile in location " + coordinate + " with " + fertilizer + "!");
     }
 
     public Result howMuchWater() {
@@ -573,8 +611,21 @@ public class GameMenuController extends Controller {
 
 
     public Result cheatAddItem(String itemName, String count) {
-        //TODO
-        return new Result(true, "");
+        GoodType goodType = Good.newGoodType(itemName);
+        if (goodType == null)
+            return new Result(false, "An item with name '" + itemName + "' not found!");
+
+        if(!count.matches("-?\\d+"))
+            return new Result(false, "Invalid number format!");
+
+        Player player = App.getCurrentGame().getCurrentPlayer();
+        if(player.getInventory().isInInventory(goodType) == null && player.getInventory().isFull())
+            return new Result(false, "Your inventory is full!");
+
+        ArrayList<Good> newGoods = Good.newGoods(goodType, Integer.parseInt(count));
+        player.getInventory().addGood(newGoods);
+
+        return new Result(true, "You have added (cheated) " + count + " number of " + itemName + " to your inventory!");
     }
 
 
@@ -1166,11 +1217,14 @@ public class GameMenuController extends Controller {
             player.getNews().add(mainPlayer.getUser().getUsername() + " has accepted your marriage! Now you can live with her!");
             mainPlayer.getMarriageList().remove(player);
 
-//            for (Player gamePlayer : App.getCurrentGame().getPlayers()) {
-//                if(mainPlayer.getMarriageList().get(gamePlayer) != null) {
-//                    gamePlayer.getInventory().
-//                }
-//            }
+            for (Player gamePlayer : App.getCurrentGame().getPlayers()) {
+                if(mainPlayer.getMarriageList().get(gamePlayer) != null) {
+                    gamePlayer.getInventory().addGood(new ArrayList<>(Arrays.asList(mainPlayer.getMarriageList().get(gamePlayer))));
+                    gamePlayer.getNews().add(mainPlayer.getUser().getUsername() + " has rejected your marriage and married with " + player.getUser().getUsername() + "!");
+                    //TODO
+                }
+            }
+            mainPlayer.getMarriageList().clear();
             return new Result(true, "Your have accepted your marriage from " + username + "! Now you can live with him!");
         }
         else if(status.matches("\\s*-reject\\s*")) {

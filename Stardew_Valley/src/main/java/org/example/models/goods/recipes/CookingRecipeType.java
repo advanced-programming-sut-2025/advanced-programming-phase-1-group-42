@@ -6,11 +6,10 @@ import org.example.models.goods.farmings.FarmingCropType;
 import org.example.models.goods.fishs.FishType;
 import org.example.models.goods.foods.FoodType;
 import org.example.models.goods.foragings.ForagingCropType;
-import org.example.models.goods.product.ProductType;
+import org.example.models.goods.products.ProductType;
 
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.HashMap;
 
 
 public enum CookingRecipeType implements GoodType {

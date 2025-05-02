@@ -18,7 +18,7 @@ public class CookingRecipe extends Recipe {
 
     @Override
     public String getName(){
-        return type.getFoodType().getName() ;
+        return type.getName() ;
     }
 
     @Override

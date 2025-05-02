@@ -174,4 +174,8 @@ public class Player {
     public void setWallet(Wallet wallet) {
         this.wallet = wallet;
     }
+
+    public Tool getTrashCan() {
+        return trashCan;
+    }
 }
