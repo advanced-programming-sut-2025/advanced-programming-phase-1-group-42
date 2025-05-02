@@ -27,8 +27,8 @@ public class Blacksmith extends GameBuilding {
         Player player = App.getCurrentGame().getCurrentPlayer();
         int nextLevel = ((ToolType) tool.getType()).getLevel().getLevelNumber();
 
-        ArrayList<Good> goods = player.getInventory().isInInventory((Good) upgradeIngredients.get(nextLevel).getFirst());
-        if(goods == null || goods.size() < (Integer) upgradeIngredients.get(nextLevel).getSecond())
+        ArrayList<Good> goods = player.getInventory().isInInventory((Good) upgradeIngredients.get(nextLevel).first());
+        if(goods == null || goods.size() < (Integer) upgradeIngredients.get(nextLevel).second())
             return false;
 
         if(tool.getType() == ToolType.TRASH_CAN) {
@@ -42,7 +42,7 @@ public class Blacksmith extends GameBuilding {
             player.getWallet().decreaseBalance(upgradeToolCost.get(nextLevel));
         }
 
-        Inventory.decreaseGoods(goods, (Integer) upgradeIngredients.get(nextLevel).getSecond());
+        Inventory.decreaseGoods(goods, (Integer) upgradeIngredients.get(nextLevel).second());
         ((ToolType) tool.getType()).setLevel(((ToolType) tool.getType()).getLevel().increaseGoodLevel());
         return true;
     }

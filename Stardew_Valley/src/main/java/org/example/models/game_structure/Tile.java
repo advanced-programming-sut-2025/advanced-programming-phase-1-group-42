@@ -7,7 +7,7 @@ import org.example.models.goods.GoodType;
 import java.util.ArrayList;
 
 public class Tile {
-    private Cordinate cordinate;
+    private Coordinate coordinate;
     private TileType tileType;
     private ArrayList<Good> goods;
 
@@ -15,8 +15,8 @@ public class Tile {
         return goods;
     }
 
-    public Cordinate getCordinate() {
-        return cordinate;
+    public Coordinate getCordinate() {
+        return coordinate;
     }
 
     public TileType getTileType() {

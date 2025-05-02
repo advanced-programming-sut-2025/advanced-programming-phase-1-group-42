@@ -1,7 +1,5 @@
 package org.example.models.goods.tools;
 
-import org.example.models.Result;
-import org.example.models.game_structure.Cordinate;
 import org.example.models.goods.Good;
 import org.example.models.goods.GoodType;
 

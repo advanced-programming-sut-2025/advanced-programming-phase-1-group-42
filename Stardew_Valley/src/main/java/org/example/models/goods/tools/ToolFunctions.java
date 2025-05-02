@@ -4,7 +4,7 @@ import org.example.models.App;
 import org.example.models.Result;
 import org.example.models.enums.Season;
 import org.example.models.enums.TileType;
-import org.example.models.game_structure.Cordinate;
+import org.example.models.game_structure.Coordinate;
 import org.example.models.game_structure.Tile;
 import org.example.models.goods.Good;
 import org.example.models.goods.farmings.FarmingTree;
@@ -16,43 +16,43 @@ import org.example.models.goods.foragings.ForagingTree;
 import java.util.ArrayList;
 
 public class ToolFunctions {
-    public static Result tooluse(Tool tool, Cordinate cordinate) {
+    public static Result tooluse(Tool tool, Coordinate coordinate) {
         switch ((ToolType) tool.getType()){
             case ToolType.HOE -> {
-                return useHoe(tool, cordinate);
+                return useHoe(tool, coordinate);
             }
             case ToolType.PICKAXE -> {
-                return usePickaxe(tool, cordinate);
+                return usePickaxe(tool, coordinate);
             }
             case ToolType.AXE -> {
-                return useAxe(tool, cordinate);
+                return useAxe(tool, coordinate);
             }
             case ToolType.WATERING_CAN -> {
-                return useWateringCan(tool, cordinate);
+                return useWateringCan(tool, coordinate);
             }
             case ToolType.TRAINING_FISHING_POLE -> {
-                return useTrainingFishingPole(tool, cordinate);
+                return useTrainingFishingPole(tool, coordinate);
             }
             case ToolType.BAMBOO_FISHING_POLE -> {
-                return useBambooFishingPole(tool, cordinate);
+                return useBambooFishingPole(tool, coordinate);
             }
             case ToolType.FIBERGLASS_FISHING_POLE -> {
-                return useFiberglassFishingPole(tool, cordinate);
+                return useFiberglassFishingPole(tool, coordinate);
             }
             case ToolType.IRIDIUM_FISHING_POLE -> {
-                return useIridiumFishingPole(tool, cordinate);
+                return useIridiumFishingPole(tool, coordinate);
             }
             case ToolType.SCYTHE -> {
-                return useScythe(tool, cordinate);
+                return useScythe(tool, coordinate);
             }
             case ToolType.MILK_PAIL -> {
-                return useMilkPail(tool, cordinate);
+                return useMilkPail(tool, coordinate);
             }
             case ToolType.SHEAR -> {
-                return useShear(tool, cordinate);
+                return useShear(tool, coordinate);
             }
             case ToolType.TRASH_CAN -> {
-                return useTrashCan(tool, cordinate);
+                return useTrashCan(tool, coordinate);
             }
             default -> {
                 return new Result(false, "ToolType is Invalid!");
@@ -60,8 +60,8 @@ public class ToolFunctions {
         }
     }
 
-    private static Result useHoe(Tool tool, Cordinate cordinate) {
-        Tile tile = App.getCurrentGame().getCurrentPlayer().getFarm().checkInFarm(cordinate);
+    private static Result useHoe(Tool tool, Coordinate coordinate) {
+        Tile tile = App.getCurrentGame().getCurrentPlayer().getFarm().checkInFarm(coordinate);
         if(tile == null)
             return new Result(false, "Selected Tile should be in your farm");
 
@@ -73,8 +73,8 @@ public class ToolFunctions {
     }
 
 
-    private static Result usePickaxe(Tool tool, Cordinate cordinate){
-        Tile tile = App.getCurrentGame().getCurrentPlayer().getFarm().checkInFarm(cordinate);
+    private static Result usePickaxe(Tool tool, Coordinate coordinate){
+        Tile tile = App.getCurrentGame().getCurrentPlayer().getFarm().checkInFarm(coordinate);
         if(tile == null)
             return new Result(false, "Selected Tile should be in your farm");
 
@@ -89,8 +89,8 @@ public class ToolFunctions {
         return new Result(true, ((ToolType) tool.getType()).getName() + " used!");
     }
 
-    private static Result useAxe(Tool tool, Cordinate cordinate) {
-        Tile tile = App.getCurrentGame().getCurrentPlayer().getFarm().checkInFarm(cordinate);
+    private static Result useAxe(Tool tool, Coordinate coordinate) {
+        Tile tile = App.getCurrentGame().getCurrentPlayer().getFarm().checkInFarm(coordinate);
         if(tile == null)
             return new Result(false, "Selected Tile should be in your farm");
 
@@ -98,8 +98,8 @@ public class ToolFunctions {
         //TODO
     }
 
-    private static Result useWateringCan(Tool tool, Cordinate cordinate) {
-        Tile tile = App.getCurrentGame().getMap().findTile(cordinate);
+    private static Result useWateringCan(Tool tool, Coordinate coordinate) {
+        Tile tile = App.getCurrentGame().getMap().findTile(coordinate);
         if(tile == null)
             return new Result(false, "Tile not found!");
 
@@ -119,7 +119,7 @@ public class ToolFunctions {
             return new Result(true, ((ToolType) tool.getType()).getName() + "'s capacity gets full");
         }
 
-        if(App.getCurrentGame().getCurrentPlayer().getFarm().checkInFarm(cordinate) == null)
+        if(App.getCurrentGame().getCurrentPlayer().getFarm().checkInFarm(coordinate) == null)
             return new Result(false, "Selected Tile should be in your farm");
 
         if(tool.capacity == 0)
@@ -134,8 +134,8 @@ public class ToolFunctions {
         return new Result(true, ((ToolType) tool.getType()).getName() + " used");
     }
 
-    private static Result useTrainingFishingPole(Tool tool, Cordinate cordinate) {
-        Tile tile = App.getCurrentGame().getMap().findTile(cordinate);
+    private static Result useTrainingFishingPole(Tool tool, Coordinate coordinate) {
+        Tile tile = App.getCurrentGame().getMap().findTile(coordinate);
         if(tile == null)
             return new Result(false, "Tile not found!");
         if(tile.getTileType() != TileType.WATER)
@@ -157,38 +157,38 @@ public class ToolFunctions {
         return null;
     }
 
-    private static Result useBambooFishingPole(Tool tool, Cordinate cordinate) {
+    private static Result useBambooFishingPole(Tool tool, Coordinate coordinate) {
         //TODO
         return null;
     }
 
-    private static Result useFiberglassFishingPole(Tool tool, Cordinate cordinate) {
+    private static Result useFiberglassFishingPole(Tool tool, Coordinate coordinate) {
         //TODO
         return null;
     }
 
-    private static Result useIridiumFishingPole(Tool tool, Cordinate cordinate) {
+    private static Result useIridiumFishingPole(Tool tool, Coordinate coordinate) {
         //TODO
         return null;
     }
 
-    private static Result useScythe(Tool tool, Cordinate cordinate) {
-        Tile tile = App.getCurrentGame().getCurrentPlayer().getFarm().checkInFarm(cordinate);
+    private static Result useScythe(Tool tool, Coordinate coordinate) {
+        Tile tile = App.getCurrentGame().getCurrentPlayer().getFarm().checkInFarm(coordinate);
         if(tile == null)
             return new Result(false, "Selected Tile should be in your farm");
 
         return null;
     }
 
-    private static Result useMilkPail(Tool tool, Cordinate cordinate) {
+    private static Result useMilkPail(Tool tool, Coordinate coordinate) {
         return null;
     }
 
-    private static Result useShear(Tool tool, Cordinate cordinate) {
+    private static Result useShear(Tool tool, Coordinate coordinate) {
         return null;
     }
 
-    private static Result useTrashCan(Tool tool, Cordinate cordinate) {
+    private static Result useTrashCan(Tool tool, Coordinate coordinate) {
         return null;
     }
 

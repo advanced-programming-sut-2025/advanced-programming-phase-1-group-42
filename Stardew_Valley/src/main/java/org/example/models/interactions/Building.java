@@ -1,39 +1,39 @@
 package org.example.models.interactions;
 
-import org.example.models.game_structure.Cordinate;
+import org.example.models.game_structure.Coordinate;
 
 public abstract class Building {
-    protected Cordinate startCordinate;
-    protected Cordinate endCordinate;
-    protected Cordinate size;
+    protected Coordinate startCoordinate;
+    protected Coordinate endCoordinate;
+    protected Coordinate size;
 
-    public Cordinate getStartCordinate() {
-        return startCordinate;
+    public Coordinate getStartCordinate() {
+        return startCoordinate;
     }
 
-    public void setStartCordinate(Cordinate startCordinate) {
-        this.startCordinate = startCordinate;
+    public void setStartCordinate(Coordinate startCoordinate) {
+        this.startCoordinate = startCoordinate;
     }
 
-    public Cordinate getEndCordinate() {
-        return endCordinate;
+    public Coordinate getEndCordinate() {
+        return endCoordinate;
     }
 
-    public void setEndCordinate(Cordinate endCordinate) {
-        this.endCordinate = endCordinate;
+    public void setEndCordinate(Coordinate endCoordinate) {
+        this.endCoordinate = endCoordinate;
     }
 
-    public Cordinate getSize() {
+    public Coordinate getSize() {
         return size;
     }
 
-    public void setSize(Cordinate size) {
+    public void setSize(Coordinate size) {
         this.size = size;
     }
 
-    public boolean isInsideBuilding(Cordinate cordinate) {
-        if(cordinate.getX() >= this.startCordinate.getX() && cordinate.getY() >= this.startCordinate.getY() &&
-        cordinate.getX() <= this.endCordinate.getX() && cordinate.getY() <= this.endCordinate.getY())
+    public boolean isInsideBuilding(Coordinate coordinate) {
+        if(coordinate.getX() >= this.startCoordinate.getX() && coordinate.getY() >= this.startCoordinate.getY() &&
+        coordinate.getX() <= this.endCoordinate.getX() && coordinate.getY() <= this.endCoordinate.getY())
             return true;
         return false;
     }

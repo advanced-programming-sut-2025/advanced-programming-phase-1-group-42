@@ -27,9 +27,22 @@ public class Farm {
         this.greenHouse = greenHouse;
     }
 
-    public Tile checkInFarm(Cordinate cordinate) {
+    public Tile checkInFarm(Coordinate coordinate) {
         for (Tile tile : tiles) {
-            if(tile.getCordinate().equals(cordinate)) {
+            if(tile.getCordinate().equals(coordinate)) {
+                return tile;
+            }
+        }
+        return null;
+    }
+
+    public ArrayList<Tile> getTiles() {
+        return tiles;
+    }
+
+    public Tile findTile(Coordinate coordinate) {
+        for (Tile tile : tiles) {
+            if(tile.getCordinate().equals(coordinate)) {
                 return tile;
             }
         }

@@ -1,6 +1,6 @@
 package org.example.models.interactions;
 
-import org.example.models.game_structure.Cordinate;
+import org.example.models.game_structure.Coordinate;
 import org.example.models.game_structure.Tile;
 
 import java.util.ArrayList;
@@ -9,11 +9,11 @@ public class GreenHouse extends Building {
     private ArrayList<Tile> tiles;
     private boolean isAvailable;
 
-    public GreenHouse(Cordinate startCordinate, Cordinate endCordinate, ArrayList<Tile> tiles) {
-        this.startCordinate = startCordinate;
-        this.endCordinate = endCordinate;
+    public GreenHouse(Coordinate startCoordinate, Coordinate endCoordinate, ArrayList<Tile> tiles) {
+        this.startCoordinate = startCoordinate;
+        this.endCoordinate = endCoordinate;
         this.tiles = tiles;
-        this.size = new Cordinate(6, 5);
+        this.size = new Coordinate(6, 5);
         this.isAvailable = false;
     }
 

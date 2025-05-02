@@ -53,17 +53,17 @@ public class Inventory {
     }
 
 
-    public boolean addGood(Good good) {
+    public boolean addGood(ArrayList<Good> addingGood) {
         for (ArrayList<Good> goods : list) {
-            if (!goods.isEmpty() && goods.getFirst().getName().equals(good.getName())) {
-                goods.add(good);
+            if (!goods.isEmpty() && goods.getFirst().getName().equals(addingGood.getFirst().getName())) {
+                goods.addAll(addingGood);
                 return true;
             }
         }
 
         for(ArrayList<Good> goods : list) {
             if(goods.isEmpty()) {
-                goods.add(good);
+                goods.addAll(addingGood);
                 return true;
             }
         }

@@ -26,11 +26,9 @@ import org.example.models.goods.recipes.*;
 import org.example.models.goods.recipes.CraftingFunctions;
 import org.example.models.goods.recipes.CraftingRecipe;
 import org.example.models.interactions.NPCs.NPC;
-import org.example.models.interactions.NPCs.NPCFriendship;
 import org.example.models.goods.tools.Tool;
 import org.example.models.goods.tools.ToolFunctions;
 import org.example.models.goods.tools.ToolType;
-import org.example.models.interactions.NPCs.NPC;
 import org.example.models.interactions.Player;
 import org.example.models.interactions.User;
 import org.example.models.interactions.game_buildings.Blacksmith;
@@ -75,7 +73,7 @@ public class GameMenuController extends Controller {
             }
         }
 
-        for (ForagingMineral.ForagingCropType value : ForagingMineral.ForagingCropType.values()) {
+        for (ForagingCropType value : ForagingCropType.values()) {
             if(value.getName().equals(craftName)) {
                 return value;
             }
@@ -109,7 +107,7 @@ public class GameMenuController extends Controller {
         ArrayList<Farm> farms = farmsGame(players, scanner);
         WholeMapBuilder wholeMapBuilder = new WholeMapBuilder();
         director.createNewMap(wholeMapBuilder, farms);
-        game.setCurrentMap(wholeMapBuilder.getMap());
+        game.setMap(wholeMapBuilder.getMap());
 
         DBInteractor.saveGameToDB(game);
         this.loadGame();
@@ -271,10 +269,45 @@ public class GameMenuController extends Controller {
 
     //TODO: Parsa
     //Map methods
-    public Result walk(String x, String y) {
-        //TODO
+    public Result walk(String x, String y, Scanner scanner) {
+        if(!x.matches("-?\\d+") || !y.matches("-?\\d+"))
+            return new Result(false, "Invalid Coordinate input!");
 
-        return new Result(true, "");
+        Coordinate goal = new Coordinate(Integer.parseInt(x), Integer.parseInt(y));
+        ArrayList<Pair<Integer, Coordinate>> path = AStar.findPath(App.getCurrentGame().getMap(),
+                App.getCurrentGame().getCurrentPlayer().getCordinate(), goal);
+
+        if(path == null)
+            return new Result(false, "No path " + goal + " found!");
+
+        int energyConsumed = path.getLast().first() / 20;
+        int playerEnergy = App.getCurrentGame().getCurrentPlayer().getEnergy().getDayEnergyLeft();
+        System.out.println("Energy needed to walk to " + goal + " location is " + energyConsumed + "(Your Energy: " +
+                playerEnergy
+                + "). Do you want to continue? (y/n)");
+        String input = scanner.nextLine();
+        if(!input.matches("\\s*y\\s*")) {
+            return new Result(true, "You didn't walked!");
+        }
+
+        Coordinate coordinate = null;
+        for(Pair<Integer, Coordinate> pair : path) {
+            if((pair.first() / 20) < playerEnergy)
+                coordinate = pair.second();
+        }
+
+        if(energyConsumed > playerEnergy) {
+            App.getCurrentGame().getCurrentPlayer().setCoordinate(coordinate);
+            App.getCurrentGame().getCurrentPlayer().getEnergy().decreaseDayEnergyLeft(playerEnergy);
+            App.getCurrentGame().getCurrentPlayer().getEnergy().setAwake(false);
+            return new Result(true, "Your energy was enough to walk to " + goal +
+                    " location! Now your are fainted & your daily energy is 0!");
+        }
+        else {
+            App.getCurrentGame().getCurrentPlayer().setCoordinate(goal);
+            App.getCurrentGame().getCurrentPlayer().getEnergy().decreaseDayEnergyLeft(energyConsumed);
+            return new Result(true, "Your are now in " + goal + " location!");
+        }
     }
 
     public Result printMap(String x, String y, String size) {
@@ -385,18 +418,18 @@ public class GameMenuController extends Controller {
     public Result toolsUse(String direction) {
         if(App.getCurrentGame().getCurrentPlayer().getInHandGood() instanceof Tool) {
             Tool tool = (Tool) App.getCurrentGame().getCurrentPlayer().getInHandGood();
-            Cordinate cordinate = Cordinate.getDirection(direction);
-            if(cordinate == null)
+            Coordinate coordinate = Coordinate.getDirection(direction);
+            if(coordinate == null)
                 return new Result(false, "Direction not recognized");
 
             if(App.getCurrentGame().getCurrentPlayer().getEnergy().getDayEnergyLeft() < tool.getType().getEnergy())
                 return new Result(false, "You don't have enough energy to use " + tool.getName() + "!");
-            if(App.getCurrentGame().getMap().findTile(cordinate) == null)
+            if(App.getCurrentGame().getMap().findTile(coordinate) == null)
                 return new Result(false, "Tile not found");
 
             App.getCurrentGame().getCurrentPlayer().getEnergy().decreaseDayEnergyLeft(tool.getType().getEnergy());
 
-            return ToolFunctions.tooluse(tool, cordinate);
+            return ToolFunctions.tooluse(tool, coordinate);
         }
         else
             return new Result(false, "You don't have tool in your hand!");
@@ -416,8 +449,8 @@ public class GameMenuController extends Controller {
     //TODO: Arani
     // Planting
     public Result plantSeed(String seed, String direction) {
-        Cordinate cordinate = Cordinate.getDirection(direction);
-        Tile tile = App.getCurrentGame().getCurrentPlayer().getFarm().checkInFarm(cordinate);
+        Coordinate coordinate = Coordinate.getDirection(direction);
+        Tile tile = App.getCurrentGame().getCurrentPlayer().getFarm().checkInFarm(coordinate);
         if(tile == null)
             return new Result(false, "Selected Tile should be in your farm!");
 
@@ -436,13 +469,13 @@ public class GameMenuController extends Controller {
         tile.getGoods().add(seeds.getLast());
         seeds.removeLast();
 
-        return new Result(true, "A plant seed has been planted on tile " + cordinate + "!");
+        return new Result(true, "A plant seed has been planted on tile " + coordinate + "!");
     }
 
     public Result showPlant(String direction) {
         //TODO
-        Cordinate cordinate = Cordinate.getDirection(direction);
-        Tile tile = App.getCurrentGame().getCurrentPlayer().getFarm().checkInFarm(cordinate);
+        Coordinate coordinate = Coordinate.getDirection(direction);
+        Tile tile = App.getCurrentGame().getCurrentPlayer().getFarm().checkInFarm(coordinate);
         if(tile == null)
             return new Result(false, "Selected Tile should be in your farm!");
 
@@ -516,13 +549,13 @@ public class GameMenuController extends Controller {
             return new Result(false, "Item " + itemName + " not found");
         }
 
-        Cordinate cordinate = Cordinate.getDirection(direction);
-        switch (cordinate) {
+        Coordinate coordinate = Coordinate.getDirection(direction);
+        switch (coordinate) {
             case null:
                 return new Result(false, "Direction not recognized");
             default:
-                newX = cordinate.getX();
-                newY = cordinate.getY();
+                newX = coordinate.getX();
+                newY = coordinate.getY();
         }
 
         for (Tile tile : App.getCurrentGame().getMap().getTiles()) {
@@ -570,7 +603,7 @@ public class GameMenuController extends Controller {
                 return new Result(false, "Item is not available in the fridge");
             }
 
-            if (App.getCurrentGame().getCurrentPlayer().getInventory().addGood(item,1)) {
+            if (App.getCurrentGame().getCurrentPlayer().getInventory().addGood(new ArrayList<>(Arrays.asList(item)))) {
                 return new Result(true, item.getName() + " added to the inventory");
             }
             return new Result(false, "Inventory is full");
@@ -637,10 +670,10 @@ public class GameMenuController extends Controller {
             return new Result(false, "You don't have this cooking recipe");
         }
 
-        for (Pair<FoodType, Integer> ingredient : recipe.getType().getIngredients()) {
+        for (Pair<GoodType, Integer> ingredient : recipe.getType().getIngredients()) {
 
-            FoodType ingredientType = ingredient.getFirst();
-            int requiredAmount = ingredient.getSecond();
+            FoodType ingredientType = (FoodType) ingredient.first();
+            int requiredAmount = ingredient.second();
             if (!checkCanCook(ingredientType, requiredAmount)) {
                 return new Result(false, "Not enough " + ingredientType.getName() +
                         " (needed: " + requiredAmount + ")");
@@ -801,47 +834,200 @@ public class GameMenuController extends Controller {
     //TODO: Arani
     // Friendships methods
     public Result friendships() {
-        //TODO
-        return new Result(true, "");
+        StringBuilder list = new StringBuilder();
+        list.append("FriendShips:\n");
+        for (Player player : App.getCurrentGame().getPlayers()) {
+            if(App.getCurrentGame().getCurrentPlayer().getFriendShips().get(player) == null)
+                continue;
+
+            list.append("\t").append(player.getUser().getUsername()).append(": \n");
+            list.append("\t\tLevel: ").append(App.getCurrentGame().getCurrentPlayer().getFriendShips().get(player).first()).append("\n");
+            list.append("\t\tValue: ").append(App.getCurrentGame().getCurrentPlayer().getFriendShips().get(player).second()).append("\n");
+        }
+        return new Result(true, list.toString());
     }
 
     public Result talk(String username, String message) {
-        //TODO
-        return new Result(true, "");
+        Player player = App.getCurrentGame().findPlayer(username);
+        if(player == null) {
+            return new Result(false, "Player not found!");
+        }
+
+        if(App.getCurrentGame().getCurrentPlayer().getCordinate().distance(player.getCordinate()) > 1)
+            return new Result(false, "You should be neighbor to " + username + " for talking!");
+
+        player.getTalkHistory().add(new Pair<>(App.getCurrentGame().getCurrentPlayer(),
+                dateTime().message() + ": " + message));
+        App.getCurrentGame().getCurrentPlayer().getTalkHistory().add(new Pair<>(App.getCurrentGame().getCurrentPlayer(),
+                dateTime().message() + ": " + message));
+
+        if(!App.getCurrentGame().getCurrentPlayer().getIsInteracted().get(player)) {
+            player.getFriendShips().computeIfPresent(App.getCurrentGame().getCurrentPlayer(),
+                    (k, pair) -> new Pair<>(pair.first(), pair.second() + 20));
+            App.getCurrentGame().getCurrentPlayer().getFriendShips().computeIfPresent(player,
+                    (k, pair) -> new Pair<>(pair.first(), pair.second() + 20));
+
+            App.getCurrentGame().getCurrentPlayer().getIsInteracted().put(player, true);
+            player.getIsInteracted().put(App.getCurrentGame().getCurrentPlayer(), true);
+            System.out.println("Your friendship value with " + username + " is increased to " +
+                    App.getCurrentGame().getCurrentPlayer().getFriendShips().get(player).second());
+        }
+
+        return new Result(true, "You talked with " + username + "!");
     }
 
     public Result talkHistory(String username) {
-        //TODO
-        return new Result(true, "");
+        StringBuilder list = new StringBuilder();
+        list.append("Talk History:\n");
+        for (Pair<Player, String> talk : App.getCurrentGame().getCurrentPlayer().getTalkHistory()) {
+            list.append("\t<").append(talk.first().getUser().getUsername()).append("> ").append(talk.second()).append("\n");
+            list.append("\n");
+        }
+
+        return new Result(true, list.toString());
     }
 
     public Result gift(String username, String item, String amount) {
-        //TODO
-        return new Result(true, "");
+        Player player = App.getCurrentGame().findPlayer(username);
+        if(player == null) {
+            return new Result(false, "Player not found!");
+        }
+
+        if(App.getCurrentGame().getCurrentPlayer().getCordinate().distance(player.getCordinate()) > 1)
+            return new Result(false, "You should be neighbor to " + username + " for talking!");
+
+        if(App.getCurrentGame().getCurrentPlayer().getFriendShips().get(player).first() < 1)
+            return new Result(false, "Your friendship level with " + username + " should be more than 0");
+
+        ArrayList<Good> goods = App.getCurrentGame().getCurrentPlayer().getInventory().isInInventory(item);
+        if(goods == null)
+            return new Result(false, "Your don't have " + item + " in your inventory!");
+        if(goods.size() < Integer.parseInt(amount))
+            return new Result(false, "Your don't have enough number of " + item + " in your inventory!");
+
+        int number = Integer.parseInt(amount);
+        ArrayList<Good> giftGoods = new ArrayList<>();
+        for (int i = 0; i < number; i++) {
+            giftGoods.add(goods.getLast());
+            goods.removeLast();
+        }
+
+        Gift gift = new Gift(giftGoods);
+        player.getGiftList().add(new Pair<>(player, gift));
+        player.getNews().add("A new gift has been added to your gift list from " + username + "!");
+
+        return new Result(true, "Your gift has been sent to " + username + "!");
     }
 
     public Result giftList() {
-        //TODO
-        return new Result(true, "");
+        StringBuilder list = new StringBuilder();
+        list.append("Gifts List:\n");
+        int ptr = 1;
+        for (Pair<Player, Gift> playerGiftPair : App.getCurrentGame().getCurrentPlayer().getGiftList()) {
+            list.append("\t").append(ptr).append(". From <").append(playerGiftPair.first().getUser().getUsername()).append("> Good Name: ").
+                    append(playerGiftPair.second().getList().getFirst().getName()).append(", Amount : ").
+                    append(playerGiftPair.second().getList().size()).append("\n");
+            ptr++;
+        }
+
+        return new Result(true, list.toString());
     }
 
-    public Result giftRate(String giftNumber, String rate) {
-        //TODO
-        return new Result(true, "");
+    public Result giftRate(String giftNum, String rate) {
+        int giftRate = Integer.parseInt(rate);
+        int giftNumber = Integer.parseInt(giftNum);
+
+        if(giftRate < 1 || giftRate > 5)
+            return new Result(false, "Your gift rate should be an integer from 1 to 5!");
+        if(giftNumber <= 0 || giftNumber > App.getCurrentGame().getCurrentPlayer().getGiftList().size())
+            return new Result(false, "There is no gift with that number in your gift list!");
+
+        giftNumber--;
+        Pair<Player, Gift> gift = App.getCurrentGame().getCurrentPlayer().getGiftList().get(giftNumber);
+        App.getCurrentGame().getCurrentPlayer().getGiftList().remove(gift);
+        App.getCurrentGame().getCurrentPlayer().getInventory().addGood(gift.second().getList());
+        App.getCurrentGame().getCurrentPlayer().getGiftHistory().add(new Pair<>(gift.first(),
+                "A gift from " + gift.first().getUser().getUsername()
+                        + " with " + gift.second().getList().size() + " amount of " + gift.second().getList().getFirst().getName() +
+                        " have been given to you! Your rate : " + giftRate + "."));
+
+        gift.first().getGiftHistory().add(new Pair<>(App.getCurrentGame().getCurrentPlayer(),
+                "A gift with " + gift.second().getList().size() +
+                        " amount of " + gift.second().getList().getFirst().getName() +
+                        " have been given to " + App.getCurrentGame().getCurrentPlayer().getUser().getUsername() + " from you! " +
+                        App.getCurrentGame().getCurrentPlayer().getUser().getUsername() + "'s rate : " + giftRate + "."));
+
+        if(!App.getCurrentGame().getCurrentPlayer().getIsInteracted().get(gift.first())) {
+            int value = (giftRate - 3) * 30 + 15;
+            App.getCurrentGame().getCurrentPlayer().getFriendShips().computeIfPresent(gift.first(),
+                    (k, pair) -> new Pair<>(pair.first(), pair.second() + value));
+            gift.first().getFriendShips().computeIfPresent(App.getCurrentGame().getCurrentPlayer(),
+                    (k, pair) -> new Pair<>(pair.first(), pair.second() + value));
+
+            App.getCurrentGame().getCurrentPlayer().getIsInteracted().put(gift.first(), true);
+            gift.first().getIsInteracted().put(App.getCurrentGame().getCurrentPlayer(), true);
+            System.out.println("Your friendship value with " + gift.first().getUser().getUsername() + " is increased to " +
+                    App.getCurrentGame().getCurrentPlayer().getFriendShips().get(gift.first()).second());
+        }
+
+
+        return new Result(true, "Your have rated gift with number " + giftNum + " with rate " + rate + "!");
     }
 
     public Result giftHistory(String username) {
-        //TODO
-        return new Result(true, "");
+        StringBuilder list = new StringBuilder();
+        list.append("Gifts History:\n");
+        int ptr = 1;
+        for (Pair<Player, String> giftHistory : App.getCurrentGame().getCurrentPlayer().getGiftHistory()) {
+            if(giftHistory.first().getUser().getUsername().equals(username)) {
+                list.append("\t").append(ptr++).append(". ").append(giftHistory.second()).append("\n");
+            }
+        }
+
+        return new Result(true, list.toString());
     }
 
     public Result hug(String username) {
-        //TODO
-        return new Result(true, "");
+        Player player = App.getCurrentGame().findPlayer(username);
+        if(player == null) {
+            return new Result(false, "Player not found!");
+        }
+
+        if(App.getCurrentGame().getCurrentPlayer().getCordinate().distance(player.getCordinate()) > 1)
+            return new Result(false, "You should be neighbor to " + username + " to hug!");
+
+
+        if(!App.getCurrentGame().getCurrentPlayer().getIsInteracted().get(player)) {
+            App.getCurrentGame().getCurrentPlayer().getFriendShips().computeIfPresent(player,
+                    (k, pair) -> new Pair<>(pair.first(), pair.second() + 60));
+            player.getFriendShips().computeIfPresent(App.getCurrentGame().getCurrentPlayer(),
+                    (k, pair) -> new Pair<>(pair.first(), pair.second() + 60));
+
+            App.getCurrentGame().getCurrentPlayer().getIsInteracted().put(player, true);
+            player.getIsInteracted().put(App.getCurrentGame().getCurrentPlayer(), true);
+            System.out.println("Your friendship value with " + username + " is increased to " +
+                    App.getCurrentGame().getCurrentPlayer().getFriendShips().get(player).second());
+        }
+
+        return new Result(true, "You hugged " + username + "!");
     }
 
     public Result flower(String username) {
+        Player player = App.getCurrentGame().findPlayer(username);
+        if(player == null) {
+            return new Result(false, "Player not found!");
+        }
+
+        if(App.getCurrentGame().getCurrentPlayer().getCordinate().distance(player.getCordinate()) > 1)
+            return new Result(false, "You should be neighbor to " + username + " to give flower!");
+
+        if(App.getCurrentGame().getCurrentPlayer().getFriendShips().get(player).first() != 2 ||
+        player.getFriendShips().get(App.getCurrentGame().getCurrentPlayer()).first() != 2)
+            return new Result(false, "Your and " + username + " should have friendship level of 2!");
+
         //TODO
+
+
         return new Result(true, "");
     }
 
@@ -949,16 +1135,16 @@ public class GameMenuController extends Controller {
 
         for (NPC npc : App.getCurrentGame().getNPCs()) {
             if (npc.getFriendship().getAvailableQuests().contains(1)) {
-                System.out.print(npc.getType().getRequests().get(0).getFirst() + " ");
-                System.out.println(npc.getType().getRequests().get(0).getSecond());
+                System.out.print(npc.getType().getRequests().get(0).first() + " ");
+                System.out.println(npc.getType().getRequests().get(0).second());
             }
             if (npc.getFriendship().getAvailableQuests().contains(2)) {
-                System.out.print(npc.getType().getRequests().get(1).getFirst() + " ");
-                System.out.println(npc.getType().getRequests().get(1).getSecond());
+                System.out.print(npc.getType().getRequests().get(1).first() + " ");
+                System.out.println(npc.getType().getRequests().get(1).second());
             }
             if (npc.getFriendship().getAvailableQuests().contains(3)) {
-                System.out.print(npc.getType().getRequests().get(2).getFirst() + " ");
-                System.out.println(npc.getType().getRequests().get(2).getSecond());
+                System.out.print(npc.getType().getRequests().get(2).first() + " ");
+                System.out.println(npc.getType().getRequests().get(2).second());
             }
 
         }
