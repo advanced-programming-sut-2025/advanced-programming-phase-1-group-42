@@ -1,88 +1,167 @@
 package org.example.controllers;
 
 import org.example.models.App;
+import org.example.models.DBInteractor;
+import org.example.models.Pair;
 import org.example.models.Result;
+import org.example.models.builders.*;
+import org.example.models.builders.concrete_builders.WholeGameBuilder;
+import org.example.models.builders.concrete_builders.WholeMapBuilder;
+import org.example.models.enums.GameMenuCommands;
+import org.example.models.enums.TileType;
 import org.example.models.enums.WeatherType;
 import org.example.models.game_structure.Game;
-import org.example.models.game_structure.Map;
 import org.example.models.game_structure.Tile;
 
 import org.example.models.game_structure.*;
 import org.example.models.goods.Good;
+import org.example.models.goods.GoodType;
+import org.example.models.goods.farmings.FarmingCropType;
+import org.example.models.goods.farmings.FarmingTree;
+import org.example.models.goods.farmings.FarmingTreeSapling;
 import org.example.models.goods.foods.Food;
 import org.example.models.goods.foods.FoodType;
+import org.example.models.goods.foragings.*;
+import org.example.models.goods.products.ProductType;
 import org.example.models.goods.recipes.*;
 import org.example.models.goods.recipes.CraftingFunctions;
 import org.example.models.goods.recipes.CraftingRecipe;
+import org.example.models.interactions.Gender;
+import org.example.models.interactions.NPCs.NPC;
+import org.example.models.goods.tools.Tool;
+import org.example.models.goods.tools.ToolFunctions;
+import org.example.models.goods.tools.ToolType;
 import org.example.models.interactions.Player;
 import org.example.models.interactions.User;
+import org.example.models.interactions.game_buildings.Blacksmith;
 
 
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.*;
+import java.util.regex.Matcher;
 
 public class GameMenuController extends Controller {
 
-    //TODO: Nader
-    //game setting methods
-    public Result newGame(String username_1, String username_2, String username_3) {
-        //TODO
-        if (username_1 == null || username_2 == null || username_3 == null) {
-            return new Result(false, "You need to add 3 players to start the game");
+    private ArrayList<Farm> farmGame(ArrayList<Player> players, Scanner scanner) {
+        ArrayList<Farm> farms = new ArrayList<>();
+        String input = "";
+        Matcher matcher;
+        for (Player player : players) {
+            System.out.println("Please enter the number of farm you want to play:");
+            System.out.println("1. Normal Farm");
+            System.out.println("2. Aquatic Farm");
+            while(true) {
+                input = scanner.nextLine();
+                if((matcher = GameMenuCommands.GAME_MAP.matcher(input)) == null ||
+                        !matcher.group("map_number").matches("\\d") ||
+                        Integer.parseInt(matcher.group("map_number")) > 2 ||
+                        Integer.parseInt(matcher.group("map_number")) < 1)
+                    System.out.println("Invalid command for choosing your map, Please try again!");
+
+                int mapNumber = Integer.parseInt(matcher.group("map_number"));
+                Farm farm = DBInteractor.getFarmFromDB(mapNumber);
+                player.setFarm(farm);
+                farms.add(farm);
+            }
         }
-        Player mainPlayer = new Player(App.getCurrentUser());
-        Player player1 = null;
-        Player player2 = null;
-        Player player3 = null;
-        for (User user : App.getUsers()) {
-            if (user.getUsername().equals(username_1)) {
-                if (user.getPlaying().equals(true)) {
-                    return new Result(false, "This user is playing in another game");
-                } else {
-                    player1 = new Player(user);
-                }
-            } else if (user.getUsername().equals(username_2)) {
-                if (user.getPlaying().equals(true)) {
-                    return new Result(false, "This user is playing in another game");
-                } else {
-                    player2 = new Player(user);
-                }
-            } else if (user.getUsername().equals(username_3)) {
-                if (user.getPlaying().equals(true)) {
-                    return new Result(false, "This user is playing in another game");
-                } else {
-                    player3 = new Player(user);
-                }
+        return farms;
+    }
+
+    private GoodType findCraft(String craftName) {
+        for (FarmingCropType value : FarmingCropType.values()) {
+            if(value.getName().equals(craftName)) {
+                return value;
             }
         }
 
-        if (player1 == null || player2 == null || player3 == null) {
-            return new Result(false, "Added users are unavailable");
+        for (ForagingCropType value : ForagingCropType.values()) {
+            if(value.getName().equals(craftName)) {
+                return value;
+            }
         }
-
-        Game game = new Game(App.getCurrentUser());
-        App.setCurrentGame(game);
-
-
-        return new Result(true, "Users have been added to the game successfully!");
+        return null;
     }
 
-    public Result farmGame(String farmNumber) {
+    //TODO: Nader
+    //game setting methods
+    public Result newGame(ArrayList<String> usernames, Scanner scanner) {
         //TODO
-        return new Result(true, "");
+
+        ArrayList<Player> players = new ArrayList<>();
+        players.add(new Player(App.getCurrentUser()));
+        for (String username : usernames) {
+            if(username == null)
+                continue;
+
+            for (User user : App.getUsers()) {
+                if(username.equals(user.getUsername()) && user.getPlaying().equals(true))
+                    return new Result(false, username + " is already playing in other game!");
+                players.add(new Player(user));
+            }
+        }
+
+        Director director = new Director();
+        WholeGameBuilder wholeGameBuilder = new WholeGameBuilder();
+        director.createNewGame(wholeGameBuilder, players);
+        Game game = wholeGameBuilder.getGame();
+
+        ArrayList<Farm> farms = farmGame(players, scanner);
+        WholeMapBuilder wholeMapBuilder = new WholeMapBuilder();
+        director.createNewMap(wholeMapBuilder, farms);
+        game.setMap(wholeMapBuilder.getMap());
+
+        DBInteractor.saveGameToDB(game);
+        this.loadGame();
+        return new Result(true, "New game has successfully created & loaded!");
     }
 
     public Result loadGame() {
-        //TODO
-        return new Result(true, "");
+        Game game = DBInteractor.loadGameToDB(App.getCurrentUser().getUsername());
+        App.setCurrentGame(game);
+
+        for (Player player : game.getPlayers()) {
+            if(player.getUser().getUsername().equals(App.getCurrentUser().getUsername()))
+                App.getCurrentGame().setGameAdmin(player);
+        }
+
+        return new Result(true, "Your game has successfully loaded!");
     }
 
     public Result exitGame() {
-        if (App.getCurrentGame().getGameAdmin() != App.getCurrentUser()) {
-            return new Result(false, "Just game creator can exit the game!");
+        if (App.getCurrentGame().getGameAdmin() != App.getCurrentGame().getCurrentPlayer()) {
+            return new Result(false, "Just game admin can exit the game!");
         }
-        return new Result(true, "");
+        else {
+            DBInteractor.saveGameToDB(App.getCurrentGame());
+            App.setCurrentGame(null);
+            return new Result(true, "You have successfully exited the game!");
+        }
+    }
+
+    public Result forceTerminate(Scanner scanner) {
+        ArrayList<Boolean> poll = new ArrayList<>();
+        poll.add(true);
+        for (int i = 1; i < App.getCurrentGame().getPlayers().size(); i++) {
+            System.out.println(App.getCurrentGame().getPlayers().get(i).getUser().getUsername() +
+                    ", Please give your vote to terminate the game: (y/n)");
+
+            String input = scanner.nextLine();
+            if(input.matches("\\s*y\\s*"))
+                poll.add(true);
+            else
+                poll.add(false);
+        }
+
+        for (Boolean p : poll) {
+            if(!p)
+                return new Result(false, "All players do not agree to terminate the game!");
+        }
+
+        DBInteractor.removeGameFromDB(App.getCurrentGame());
+        App.setCurrentGame(null);
+        return new Result(true, "Game terminated successfully!");
+
     }
 
     public Result nextTurn() {
@@ -143,46 +222,94 @@ public class GameMenuController extends Controller {
     }
 
     public Result weather() {
-        //TODO
         return new Result(true, App.getCurrentGame().getWeatherName());
     }
 
     public Result weatherForecast() {
-        //TODO
         return new Result(true, App.getCurrentGame().getTomorrow().weatherForecast().getName());
     }
 
     public Result cheatWeatherSet(String weather) {
-        //TODO
         switch(weather){
             case "Sunny":
-               App.getCurrentGame().cheatSetWeather(WeatherType.Sunny.getWeather());
-           break;
-           case "Rain":
+                App.getCurrentGame().cheatSetWeather(WeatherType.Sunny.getWeather());
+                break;
+            case "Rain":
                 App.getCurrentGame().cheatSetWeather(WeatherType.Rain.getWeather());
-           break;
+                break;
             case "Storm":
-                 App.getCurrentGame().cheatSetWeather(WeatherType.Storm.getWeather());
-           break;
+                App.getCurrentGame().cheatSetWeather(WeatherType.Storm.getWeather());
+                break;
             case "Snow":
-               App.getCurrentGame().cheatSetWeather(WeatherType.Snow.getWeather());
-           break;
+                App.getCurrentGame().cheatSetWeather(WeatherType.Snow.getWeather());
+                break;
         }
         return new Result(true, "");
     }
 
     public Result greenHouseBuild() {
-        //TODO
-        return new Result(true, "");
+        Game game = App.getCurrentGame();
+        if(game.getCurrentPlayer().getWallet().getBalance() < 1000)
+            return new Result(false, "You have not enough money to build green house!");
+
+
+        boolean flag = false;
+        for (ArrayList<Good> goods : game.getCurrentPlayer().getInventory().getList()) {
+            if(!goods.isEmpty() && goods.getFirst().getName().equals("Wood") && Inventory.decreaseGoods(goods, 500)) {
+                flag = true;
+                break;
+            }
+        }
+        if(!flag)
+            return new Result(false, "You have not enough Wood to build green house!");
+        game.getCurrentPlayer().getWallet().decreaseBalance(1000);
+
+        game.getCurrentPlayer().getFarm().getGreenHouse().setAvailable(true);
+        return new Result(true, "Your green house has been successfully built!");
     }
 
 
     //TODO: Parsa
     //Map methods
-    public Result walk(String x, String y) {
-        //TODO
+    public Result walk(String x, String y, Scanner scanner) {
+        if(!x.matches("-?\\d+") || !y.matches("-?\\d+"))
+            return new Result(false, "Invalid Coordinate input!");
 
-        return new Result(true, "");
+        Coordinate goal = new Coordinate(Integer.parseInt(x), Integer.parseInt(y));
+        ArrayList<Pair<Integer, Coordinate>> path = AStar.findPath(App.getCurrentGame().getMap(),
+                App.getCurrentGame().getCurrentPlayer().getCordinate(), goal);
+
+        if(path == null)
+            return new Result(false, "No path " + goal + " found!");
+
+        int energyConsumed = path.getLast().first() / 20;
+        int playerEnergy = App.getCurrentGame().getCurrentPlayer().getEnergy().getDayEnergyLeft();
+        System.out.println("Energy needed to walk to " + goal + " location is " + energyConsumed + "(Your Energy: " +
+                playerEnergy
+                + "). Do you want to continue? (y/n)");
+        String input = scanner.nextLine();
+        if(!input.matches("\\s*y\\s*")) {
+            return new Result(true, "You didn't walked!");
+        }
+
+        Coordinate coordinate = null;
+        for(Pair<Integer, Coordinate> pair : path) {
+            if((pair.first() / 20) < playerEnergy)
+                coordinate = pair.second();
+        }
+
+        if(energyConsumed > playerEnergy) {
+            App.getCurrentGame().getCurrentPlayer().setCoordinate(coordinate);
+            App.getCurrentGame().getCurrentPlayer().getEnergy().decreaseDayEnergyLeft(playerEnergy);
+            App.getCurrentGame().getCurrentPlayer().getEnergy().setAwake(false);
+            return new Result(true, "Your energy was enough to walk to " + goal +
+                    " location! Now your are fainted & your daily energy is 0!");
+        }
+        else {
+            App.getCurrentGame().getCurrentPlayer().setCoordinate(goal);
+            App.getCurrentGame().getCurrentPlayer().getEnergy().decreaseDayEnergyLeft(energyConsumed);
+            return new Result(true, "Your are now in " + goal + " location!");
+        }
     }
 
     public Result printMap(String x, String y, String size) {
@@ -200,31 +327,52 @@ public class GameMenuController extends Controller {
     public Result energyShow() {
 
         return new Result(true, (App.getCurrentGame().
-                getCurrentPlayingPlayer().getEnergy()).getDayEnergyLeft() + "");
+                getCurrentPlayer().getEnergy()).getDayEnergyLeft() + "");
     }
 
     public Result cheatEnergySet(String value) {
         //TODO
         int valueInt = Integer.parseInt(value);
-        App.getCurrentGame().getCurrentPlayingPlayer().getEnergy().setDayEnergyLeft(valueInt);
+        App.getCurrentGame().getCurrentPlayer().getEnergy().increaseDayEnergyLeft(valueInt);
         return new Result(true, "");
     }
 
     public Result cheatEnergyUnlimited() {
-        App.getCurrentGame().getCurrentPlayingPlayer().getEnergy().setMaxDayEnergy(Integer.MAX_VALUE);
-        App.getCurrentGame().getCurrentPlayingPlayer().getEnergy().setMaxTurnEnergy(Integer.MAX_VALUE);
+        App.getCurrentGame().getCurrentPlayer().getEnergy().setMaxDayEnergy(Integer.MAX_VALUE);
+        App.getCurrentGame().getCurrentPlayer().getEnergy().setMaxTurnEnergy(Integer.MAX_VALUE);
         return new Result(true, "");
     }
 
     public Result inventoryTrashItem(String itemName, String number) {
-        //TODO
-        int numberInt = Integer.parseInt(number);
-        return new Result(true, "");
+        ArrayList<Good> goods = App.getCurrentGame().getCurrentPlayer().getInventory().isInInventory(itemName);
+        if(goods == null)
+            return new Result(false, "No good with name " + itemName + " found in your inventory!");
+
+        int numberInt = -1;
+        if(number.matches(""))
+            numberInt = goods.size();
+        else if(number.matches("-?\\d+"))
+            numberInt = Integer.parseInt(number);
+        else
+            return new Result(false, "Invalid number format!");
+
+        if(numberInt > goods.size())
+            return new Result(false, "Your don't have enough number of this good!");
+
+        int totalPrice = 0;
+        for (int i = 0; i < numberInt; i++) {
+            totalPrice += goods.getLast().getSellPrice();
+            goods.removeLast();
+        }
+
+        int finalPrice = ToolFunctions.useTrashCan(App.getCurrentGame().getCurrentPlayer().getTrashCan(), totalPrice);
+        App.getCurrentGame().getCurrentPlayer().getWallet().increaseBalance(finalPrice);
+        return new Result(true, "Your earned " + finalPrice + " coins from putting your good into trash can!");
     }
 
     public Result inventoryShow() {
         StringBuilder inventoryList = new StringBuilder();
-        for (ArrayList<Good> good : App.getCurrentGame().getCurrentPlayingPlayer().getInventory().getList()){
+        for (ArrayList<Good> good : App.getCurrentGame().getCurrentPlayer().getInventory().getList()){
             if(!good.isEmpty()){
                 inventoryList.append(good.getFirst().getName()).append(" ").append(good.size()).append("\n");
             }
@@ -235,77 +383,184 @@ public class GameMenuController extends Controller {
     //TODO: Arani
     // Tools
     public Result toolsEquipment(String toolName) {
+        boolean flag = false;
+        for (ArrayList<Good> goods : App.getCurrentGame().getCurrentPlayer().getInventory().getList()) {
+            if(!goods.isEmpty() && goods.getFirst().getName().equals(toolName) && goods.size() == 1) {
+                App.getCurrentGame().getCurrentPlayer().setInHandGood((Tool) goods.getFirst());
+                flag = true;
+                break;
+            }
+        }
+        if(!flag)
+            return new Result(false, "You don't have " + toolName + "to use!");
 
-        return new Result(true, "");
+        return new Result(true, "Now you can use " + toolName);
     }
 
     public Result toolsShowCurrent() {
-        //TODO
-        return new Result(true, "");
+        if(App.getCurrentGame().getCurrentPlayer().getInHandGood() instanceof Tool) {
+            return new Result(true, "Your current tool: " + App.getCurrentGame().getCurrentPlayer().getInHandGood().getName());
+        }
+        else {
+            return new Result(true, "You don't have tool in your hand!");
+        }
     }
 
     public Result toolsShowAvailable() {
-        //TODO
-        return new Result(true, "");
+        StringBuilder toolsList = new StringBuilder();
+        toolsList.append("List of available tools:\n");
+        for (ArrayList<Good> goods : App.getCurrentGame().getCurrentPlayer().getInventory().getList()) {
+            if(!goods.isEmpty() && goods.getFirst() instanceof Tool) {
+                toolsList.append("\t").append(goods.getFirst().getName()).append("\n");
+            }
+        }
+
+        return new Result(true, toolsList.toString());
     }
 
     public Result toolsUpgrade(String toolName) {
-        //TODO
-        return new Result(true, "");
+        Game game = App.getCurrentGame();
+        if(!game.getMap().getBlackSmith().isInsideBuilding(game.getCurrentPlayer().getCordinate()))
+            return new Result(false, "You are not inside the BlackSmith Shop!");
+        if(game.getCurrentPlayer().getInHandGood() instanceof Tool) {
+            Blacksmith blacksmith = (Blacksmith) game.getMap().getBlackSmith();
+            if(((ToolType) game.getCurrentPlayer().getInHandGood().getType()).getLevel().getLevelNumber() == 4)
+                return new Result(true, "Your tool is already in the highest level!");
+
+            if(blacksmith.upgradeTool((Tool) game.getCurrentPlayer().getInHandGood())) {
+                return new Result(false, "Your tool has successfully upgraded!");
+            }
+            else
+                return new Result(false, "You don't have enough money & ingredients to upgrade"
+                        + game.getCurrentPlayer().getInHandGood().getName() + "!");
+        }
+        else
+            return new Result(false, "You don't have tool in your hand!");
     }
 
     public Result toolsUse(String direction) {
-        //TODO
-        return new Result(true, "");
+        if(App.getCurrentGame().getCurrentPlayer().getInHandGood() instanceof Tool) {
+            Tool tool = (Tool) App.getCurrentGame().getCurrentPlayer().getInHandGood();
+            Coordinate coordinate = Coordinate.getDirection(direction);
+            if(coordinate == null)
+                return new Result(false, "Direction not recognized");
+
+            if(App.getCurrentGame().getCurrentPlayer().getEnergy().getDayEnergyLeft() < tool.getType().getEnergy())
+                return new Result(false, "You don't have enough energy to use " + tool.getName() + "!");
+            if(App.getCurrentGame().getMap().findTile(coordinate) == null)
+                return new Result(false, "Tile not found");
+
+            App.getCurrentGame().getCurrentPlayer().getEnergy().decreaseDayEnergyLeft(tool.getType().getEnergy());
+
+            return ToolFunctions.tooluse(tool, coordinate);
+        }
+        else
+            return new Result(false, "You don't have tool in your hand!");
     }
 
     //TODO: Arani
     // Craft Info
     public Result craftInfo(String craftName) {
-        //TODO
-        return new Result(true, "");
+        GoodType craft = findCraft(craftName);
+        if(craft == null)
+            return new Result(false, "Craft not found");
+
+        return new Result(true, "Craft Info:\n" + craft.toString());
     }
 
 
     //TODO: Arani
     // Planting
     public Result plantSeed(String seed, String direction) {
-        //TODO
-        return new Result(true, "");
+        Coordinate coordinate = Coordinate.getDirection(direction);
+        Tile tile = App.getCurrentGame().getCurrentPlayer().getFarm().checkInFarm(coordinate, App.getCurrentGame().getCurrentPlayer());
+        if(tile == null)
+            return new Result(false, "You don't have access to this tile!");
+
+        if(tile.getTileType() != TileType.PLOWED_FARM)
+            return new Result(false, "Selected Tile is not plowed for planting!");
+
+        ArrayList<Good> seeds = App.getCurrentGame().getCurrentPlayer().getInventory().isInInventory(seed);
+        if(seeds == null)
+            return new Result(false, "You don't have " + seed + " in your inventory!");
+        for(Good good : tile.getGoods()) {
+            if(good instanceof FarmingTreeSapling || good instanceof FarmingTree ||
+            good instanceof ForagingSeed || good instanceof ForagingTree || good instanceof ForagingMineral)
+                return new Result(true, "A seed already planted in this tile!");
+        }
+
+        tile.getGoods().add(seeds.getLast());
+        seeds.removeLast();
+
+        return new Result(true, "A plant seed has been planted on tile " + coordinate + "!");
     }
 
-    public Result showPlant(String x , String y) {
+    public Result showPlant(String x, String y) {
         //TODO
-        return new Result(true, "");
+        if(!x.matches("-?\\d+") || !y.matches("-?\\d+"))
+            return new Result(false, "Invalid location format!");
+
+        Coordinate coordinate = new Coordinate(Integer.parseInt(x), Integer.parseInt(y));
+        Tile tile = App.getCurrentGame().getCurrentPlayer().getFarm().checkInFarm(coordinate,
+                App.getCurrentGame().getCurrentPlayer());
+
+        if(tile == null)
+            return new Result(false, "You don't have access to this tile!");
+
+        Good plant = null;
+        for (Good good : tile.getGoods()) {
+            if(good instanceof FarmingTreeSapling || good instanceof FarmingTree ||
+                    good instanceof ForagingSeed || good instanceof ForagingTree) {
+                plant = good;
+                break;
+            }
+        }
+        if(plant == null)
+            return new Result(false, "There is no plant in this location!");
+
+        return new Result(true, "Plant Info:\n" + plant.toString());
     }
 
-    public Result fertilize(String fertilizer, String direction) {
-        //TODO
-        return new Result(true, "");
+    public Result fertilize(String fertilizerName, String direction) {
+        Coordinate coordinate = Coordinate.getDirection(direction);
+        Tile tile = App.getCurrentGame().getCurrentPlayer().getFarm().checkInFarm(coordinate,
+                App.getCurrentGame().getCurrentPlayer());
+
+        if(tile == null)
+            return new Result(false, "You don't have access to this tile!");
+
+        ArrayList<Good> fertilizer = App.getCurrentGame().getCurrentPlayer().getInventory().isInInventory(fertilizerName);
+        if(fertilizer == null)
+            return new Result(false, "You don't have " + fertilizerName + " in your inventory!");
+
+        tile.getGoods().add(fertilizer.getLast());
+        fertilizer.removeLast();
+
+        return new Result(true, "You have fertilized tile in location " + coordinate + " with " + fertilizer + "!");
     }
 
     public Result howMuchWater() {
-        //TODO
-        return new Result(true, "");
+        Tool tool = (Tool) App.getCurrentGame().getCurrentPlayer().getInventory().isInInventory(ToolType.WATERING_CAN.getName()).getFirst();
+        return new Result(true, "Your watering can have capacity:" + tool.capacity);
     }
 
 
     //TODO: Nader
     // crafting methods
     public Result showCraftingRecipes() {
-        for (CraftingRecipe craftingRecipe : App.getCurrentGame().getCurrentPlayingPlayer().getCraftingRecipes()) {
+        for (CraftingRecipe craftingRecipe : App.getCurrentGame().getCurrentPlayer().getCraftingRecipes()) {
             System.out.println(craftingRecipe.getName());
-            System.out.println(craftingRecipe.getType().getIngredients());
+            System.out.println(((CraftingRecipeType) craftingRecipe.getType()).getIngredients());
             System.out.println("-------------------------------------------");
         }
         return new Result(true, "");
     }
 
     public Result craftingCraft(String itemName) {
-        for (CraftingRecipe craftingRecipe : App.getCurrentGame().getCurrentPlayingPlayer().getCraftingRecipes()) {
+        for (CraftingRecipe craftingRecipe : App.getCurrentGame().getCurrentPlayer().getCraftingRecipes()) {
             if (craftingRecipe.getName().equals(itemName)) {
                 CraftingFunctions craftingFunctions = new CraftingFunctions();
-                craftingFunctions.checkCraftingFunctions(craftingRecipe.getType());
+                craftingFunctions.checkCraftingFunctions((CraftingRecipeType) craftingRecipe.getType());
                 return new Result(true, "");
             }
         }
@@ -318,7 +573,7 @@ public class GameMenuController extends Controller {
         boolean found = false;
         int newX = 0;
         int newY = 0;
-        for (ArrayList<Good> goodArrayList : App.getCurrentGame().getCurrentPlayingPlayer().getInventory().getList()) {
+        for (ArrayList<Good> goodArrayList : App.getCurrentGame().getCurrentPlayer().getInventory().getList()) {
             Iterator<Good> iterator = goodArrayList.iterator();
             while (iterator.hasNext()) {
                 Good good = iterator.next();
@@ -335,37 +590,13 @@ public class GameMenuController extends Controller {
             return new Result(false, "Item " + itemName + " not found");
         }
 
-        switch (direction) {
-            case "up":
-                newY = App.getCurrentGame().getCurrentPlayingPlayer().getCordinate().getY() + 1;
-                break;
-            case "down":
-                newY = App.getCurrentGame().getCurrentPlayingPlayer().getCordinate().getY() - 1;
-                break;
-            case "left":
-                newX = App.getCurrentGame().getCurrentPlayingPlayer().getCordinate().getX() - 1;
-                break;
-            case "right":
-                newX = App.getCurrentGame().getCurrentPlayingPlayer().getCordinate().getX() + 1;
-                break;
-            case "up-right":
-                newX = App.getCurrentGame().getCurrentPlayingPlayer().getCordinate().getX() + 1;
-                newY = App.getCurrentGame().getCurrentPlayingPlayer().getCordinate().getY() + 1;
-                break;
-            case "up-left":
-                newX = App.getCurrentGame().getCurrentPlayingPlayer().getCordinate().getX() - 1;
-                newY = App.getCurrentGame().getCurrentPlayingPlayer().getCordinate().getY() + 1;
-                break;
-            case "down-right":
-                newX = App.getCurrentGame().getCurrentPlayingPlayer().getCordinate().getX() + 1;
-                newY = App.getCurrentGame().getCurrentPlayingPlayer().getCordinate().getY() - 1;
-                break;
-            case "down-left":
-                newX = App.getCurrentGame().getCurrentPlayingPlayer().getCordinate().getX() - 1;
-                newY = App.getCurrentGame().getCurrentPlayingPlayer().getCordinate().getY() - 1;
-                break;
-            default:
+        Coordinate coordinate = Coordinate.getDirection(direction);
+        switch (coordinate) {
+            case null:
                 return new Result(false, "Direction not recognized");
+            default:
+                newX = coordinate.getX();
+                newY = coordinate.getY();
         }
 
         for (Tile tile : App.getCurrentGame().getMap().getTiles()) {
@@ -374,22 +605,35 @@ public class GameMenuController extends Controller {
                 return new Result(true, "Item has been dropped!");
             }
         }
-        return new Result(true, "");
+        return new Result(true, "Tile not found to drop item!");
 
     }
 
 
     public Result cheatAddItem(String itemName, String count) {
-        //TODO
-        return new Result(true, "");
+        GoodType goodType = Good.newGoodType(itemName);
+        if (goodType == null)
+            return new Result(false, "An item with name '" + itemName + "' not found!");
+
+        if(!count.matches("-?\\d+"))
+            return new Result(false, "Invalid number format!");
+
+        Player player = App.getCurrentGame().getCurrentPlayer();
+        if(player.getInventory().isInInventory(goodType) == null && player.getInventory().isFull())
+            return new Result(false, "Your inventory is full!");
+
+        ArrayList<Good> newGoods = Good.newGoods(goodType, Integer.parseInt(count));
+        player.getInventory().addGood(newGoods);
+
+        return new Result(true, "You have added (cheated) " + count + " number of " + itemName + " to your inventory!");
     }
 
 
     //TODO: Nader
     // cooking methods
     public Result cookingRefrigerator(String status, String itemName) {
-        Fridge fridge = App.getCurrentGame().getCurrentPlayingPlayer().getFridge();
-        Inventory inventory = App.getCurrentGame().getCurrentPlayingPlayer().getInventory();
+        Fridge fridge = App.getCurrentGame().getCurrentPlayer().getFridge();
+        Inventory inventory = App.getCurrentGame().getCurrentPlayer().getInventory();
         Food item = null;
         boolean found = false;
 
@@ -413,7 +657,7 @@ public class GameMenuController extends Controller {
                 return new Result(false, "Item is not available in the fridge");
             }
 
-            if (App.getCurrentGame().getCurrentPlayingPlayer().getInventory().addGood(item)) {
+            if (App.getCurrentGame().getCurrentPlayer().getInventory().addGood(new ArrayList<>(Arrays.asList(item)))) {
                 return new Result(true, item.getName() + " added to the inventory");
             }
             return new Result(false, "Inventory is full");
@@ -437,7 +681,7 @@ public class GameMenuController extends Controller {
                 return new Result(false, "Item is not available in the Inventory");
             }
 
-            if (App.getCurrentGame().getCurrentPlayingPlayer().getFridge().addItemToFridge(item)) {
+            if (App.getCurrentGame().getCurrentPlayer().getFridge().addItemToFridge(item)) {
                 return new Result(true, item.getName() + " added to the fridge");
             }
             return new Result(false, "Fridge is full");
@@ -448,7 +692,7 @@ public class GameMenuController extends Controller {
     }
 
     public Result showCookingRecipes() {
-        for (CookingRecipe cookingRecipe : App.getCurrentGame().getCurrentPlayingPlayer().getCookingRecipes()) {
+        for (CookingRecipe cookingRecipe : App.getCurrentGame().getCurrentPlayer().getCookingRecipes()) {
             System.out.println(cookingRecipe.getName());
         }
         return new Result(true, "");
@@ -469,7 +713,7 @@ public class GameMenuController extends Controller {
             return new Result(false, "This recipe is invalid");
         }
 
-        for (CookingRecipe cookingRecipe : App.getCurrentGame().getCurrentPlayingPlayer().getCookingRecipes()) {
+        for (CookingRecipe cookingRecipe : App.getCurrentGame().getCurrentPlayer().getCookingRecipes()) {
             if (cookingRecipe.getName().equals(recipeName)) {
                 recipe = cookingRecipe;
                 found = true;
@@ -480,19 +724,19 @@ public class GameMenuController extends Controller {
             return new Result(false, "You don't have this cooking recipe");
         }
 
-        for (HashMap<FoodType, Integer> ingredient : recipe.getType().getIngredients()) {
+        for (Pair<GoodType, Integer> ingredient : recipe.getType().getIngredients()) {
 
-            FoodType ingredientType = ingredient.keySet().iterator().next();
-            int requiredAmount = ingredient.get(ingredientType);
+            FoodType ingredientType = (FoodType) ingredient.first();
+            int requiredAmount = ingredient.second();
             if (!checkCanCook(ingredientType, requiredAmount)) {
                 return new Result(false, "Not enough " + ingredientType.getName() +
                         " (needed: " + requiredAmount + ")");
             }
         }
 
-        Food food = new Food(recipe.getType().getFoodType());
+        Food food = new Food((FoodType) ((CookingRecipeType) recipe.getType()).getGoodType());
 
-        for (ArrayList<Good> goods : App.getCurrentGame().getCurrentPlayingPlayer().getInventory().getList()) {
+        for (ArrayList<Good> goods : App.getCurrentGame().getCurrentPlayer().getInventory().getList()) {
             if (goods.getFirst().getName().equalsIgnoreCase(recipeName)) {
                 goods.add(food);
                 return new Result(true, "You put " + food.getName() + " into the inventory");
@@ -508,12 +752,12 @@ public class GameMenuController extends Controller {
     }
 
     public boolean checkCanCook(FoodType foodType, int requiredAmount) {
-        for (ArrayList<Good> good : App.getCurrentGame().getCurrentPlayingPlayer().getInventory().getList()) {
+        for (ArrayList<Good> good : App.getCurrentGame().getCurrentPlayer().getInventory().getList()) {
             if (good.getFirst().getName().equalsIgnoreCase(foodType.getName())) {
                 return true;
             }
         }
-        for (ArrayList<Food> foods : App.getCurrentGame().getCurrentPlayingPlayer().getFridge().getInFridgeItems()) {
+        for (ArrayList<Food> foods : App.getCurrentGame().getCurrentPlayer().getFridge().getInFridgeItems()) {
             if (foods.getFirst().getName().equalsIgnoreCase(foodType.getName())) {
                 return true;
             }
@@ -524,7 +768,7 @@ public class GameMenuController extends Controller {
 
     public Result eat(String foodName) {
         Good food = null;
-        for (ArrayList<Good> goodArrayList : App.getCurrentGame().getCurrentPlayingPlayer().getInventory().getList()) {
+        for (ArrayList<Good> goodArrayList : App.getCurrentGame().getCurrentPlayer().getInventory().getList()) {
             Iterator<Good> iterator = goodArrayList.iterator();
             while (iterator.hasNext()) {
                 food = iterator.next();
@@ -539,7 +783,7 @@ public class GameMenuController extends Controller {
         if (food == null) {
             return new Result(false, "This item is not eatable!");
         }
-        App.getCurrentGame().getCurrentPlayingPlayer().eat((Food) food);
+        App.getCurrentGame().getCurrentPlayer().eat((Food) food);
         return new Result(true, "Khosmaz, Yum Yum!");
     }
 
@@ -644,58 +888,361 @@ public class GameMenuController extends Controller {
     //TODO: Arani
     // Friendships methods
     public Result friendships() {
-        //TODO
-        return new Result(true, "");
+        StringBuilder list = new StringBuilder();
+        list.append("FriendShips:\n");
+        for (Player player : App.getCurrentGame().getPlayers()) {
+            if(App.getCurrentGame().getCurrentPlayer().getFriendShips().get(player) == null)
+                continue;
+
+            list.append("\t").append(player.getUser().getUsername()).append(": \n");
+            list.append("\t\tLevel: ").append(App.getCurrentGame().getCurrentPlayer().getFriendShips().get(player).first()).append("\n");
+            list.append("\t\tValue: ").append(App.getCurrentGame().getCurrentPlayer().getFriendShips().get(player).second()).append("\n");
+        }
+        return new Result(true, list.toString());
     }
 
     public Result talk(String username, String message) {
-        //TODO
-        return new Result(true, "");
+        Player player = App.getCurrentGame().findPlayer(username);
+        if(player == null) {
+            return new Result(false, "Player not found!");
+        }
+
+        if(App.getCurrentGame().getCurrentPlayer().getCordinate().distance(player.getCordinate()) > 1)
+            return new Result(false, "You should be neighbor to " + username + " for talking!");
+
+        player.getTalkHistory().add(new Pair<>(App.getCurrentGame().getCurrentPlayer(),
+                dateTime().message() + ": " + message));
+        App.getCurrentGame().getCurrentPlayer().getTalkHistory().add(new Pair<>(App.getCurrentGame().getCurrentPlayer(),
+                dateTime().message() + ": " + message));
+
+        if(!App.getCurrentGame().getCurrentPlayer().getIsInteracted().get(player)) {
+
+
+            // If they are couple
+            if(App.getCurrentGame().getCurrentPlayer().getMarried() == player) {
+                App.getCurrentGame().getCurrentPlayer().getEnergy().increaseDayEnergyLeft(50);
+                player.getEnergy().increaseDayEnergyLeft(50);
+
+                System.out.println("You and your partner got 50 extra energy!");
+            }
+            else {
+                player.getFriendShips().computeIfPresent(App.getCurrentGame().getCurrentPlayer(),
+                        (k, pair) -> new Pair<>(pair.first(), pair.second() + 20));
+                App.getCurrentGame().getCurrentPlayer().getFriendShips().computeIfPresent(player,
+                        (k, pair) -> new Pair<>(pair.first(), pair.second() + 20));
+
+                System.out.println("Your friendship value with " + username + " is increased to " +
+                        App.getCurrentGame().getCurrentPlayer().getFriendShips().get(player).second());
+            }
+
+            App.getCurrentGame().getCurrentPlayer().getIsInteracted().put(player, true);
+            player.getIsInteracted().put(App.getCurrentGame().getCurrentPlayer(), true);
+        }
+
+        return new Result(true, "You talked with " + username + "!");
     }
 
     public Result talkHistory(String username) {
-        //TODO
-        return new Result(true, "");
+        StringBuilder list = new StringBuilder();
+        list.append("Talk History:\n");
+        for (Pair<Player, String> talk : App.getCurrentGame().getCurrentPlayer().getTalkHistory()) {
+            list.append("\t<").append(talk.first().getUser().getUsername()).append("> ").append(talk.second()).append("\n");
+            list.append("\n");
+        }
+
+        return new Result(true, list.toString());
     }
 
     public Result gift(String username, String item, String amount) {
-        //TODO
-        return new Result(true, "");
+        Player player = App.getCurrentGame().findPlayer(username);
+        if(player == null) {
+            return new Result(false, "Player not found!");
+        }
+
+        if(App.getCurrentGame().getCurrentPlayer().getCordinate().distance(player.getCordinate()) > 1)
+            return new Result(false, "You should be neighbor to " + username + " for talking!");
+
+        if(App.getCurrentGame().getCurrentPlayer().getFriendShips().get(player).first() < 1)
+            return new Result(false, "Your friendship level with " + username + " should be more than 0");
+
+        ArrayList<Good> goods = App.getCurrentGame().getCurrentPlayer().getInventory().isInInventory(item);
+        if(goods == null)
+            return new Result(false, "Your don't have " + item + " in your inventory!");
+        if(goods.size() < Integer.parseInt(amount))
+            return new Result(false, "Your don't have enough number of " + item + " in your inventory!");
+
+        int number = Integer.parseInt(amount);
+        ArrayList<Good> giftGoods = new ArrayList<>();
+        for (int i = 0; i < number; i++) {
+            giftGoods.add(goods.getLast());
+            goods.removeLast();
+        }
+
+        Gift gift = new Gift(giftGoods);
+        player.getGiftList().add(new Pair<>(player, gift));
+        player.getNews().add("A new gift has been added to your gift list from " + username + "!");
+
+        return new Result(true, "Your gift has been sent to " + username + "!");
     }
 
     public Result giftList() {
-        //TODO
-        return new Result(true, "");
+        StringBuilder list = new StringBuilder();
+        list.append("Gifts List:\n");
+        int ptr = 1;
+        for (Pair<Player, Gift> playerGiftPair : App.getCurrentGame().getCurrentPlayer().getGiftList()) {
+            list.append("\t").append(ptr).append(". From <").append(playerGiftPair.first().getUser().getUsername()).append("> Good Name: ").
+                    append(playerGiftPair.second().getList().getFirst().getName()).append(", Amount : ").
+                    append(playerGiftPair.second().getList().size()).append("\n");
+            ptr++;
+        }
+
+        return new Result(true, list.toString());
     }
 
-    public Result giftRate(String giftNumber, String rate) {
-        //TODO
-        return new Result(true, "");
+    public Result giftRate(String giftNum, String rate) {
+        int giftRate = Integer.parseInt(rate);
+        int giftNumber = Integer.parseInt(giftNum);
+
+        if(giftRate < 1 || giftRate > 5)
+            return new Result(false, "Your gift rate should be an integer from 1 to 5!");
+        if(giftNumber <= 0 || giftNumber > App.getCurrentGame().getCurrentPlayer().getGiftList().size())
+            return new Result(false, "There is no gift with that number in your gift list!");
+
+        giftNumber--;
+        Pair<Player, Gift> gift = App.getCurrentGame().getCurrentPlayer().getGiftList().get(giftNumber);
+        App.getCurrentGame().getCurrentPlayer().getGiftList().remove(gift);
+        App.getCurrentGame().getCurrentPlayer().getInventory().addGood(gift.second().getList());
+        App.getCurrentGame().getCurrentPlayer().getGiftHistory().add(new Pair<>(gift.first(),
+                "A gift from " + gift.first().getUser().getUsername()
+                        + " with " + gift.second().getList().size() + " amount of " + gift.second().getList().getFirst().getName() +
+                        " have been given to you! Your rate : " + giftRate + "."));
+
+        gift.first().getGiftHistory().add(new Pair<>(App.getCurrentGame().getCurrentPlayer(),
+                "A gift with " + gift.second().getList().size() +
+                        " amount of " + gift.second().getList().getFirst().getName() +
+                        " have been given to " + App.getCurrentGame().getCurrentPlayer().getUser().getUsername() + " from you! " +
+                        App.getCurrentGame().getCurrentPlayer().getUser().getUsername() + "'s rate : " + giftRate + "."));
+
+        if(!App.getCurrentGame().getCurrentPlayer().getIsInteracted().get(gift.first())) {
+            if(App.getCurrentGame().getCurrentPlayer().getMarried() == gift.first()) {
+                App.getCurrentGame().getCurrentPlayer().getEnergy().increaseDayEnergyLeft(50);
+                gift.first().getEnergy().increaseDayEnergyLeft(50);
+
+                System.out.println("You and your partner got 50 extra energy!");
+            }
+            else {
+                int value = (giftRate - 3) * 30 + 15;
+                App.getCurrentGame().getCurrentPlayer().getFriendShips().computeIfPresent(gift.first(),
+                        (k, pair) -> new Pair<>(pair.first(), pair.second() + value));
+                gift.first().getFriendShips().computeIfPresent(App.getCurrentGame().getCurrentPlayer(),
+                        (k, pair) -> new Pair<>(pair.first(), pair.second() + value));
+
+                System.out.println("Your friendship value with " + gift.first().getUser().getUsername() + " is increased to " +
+                        App.getCurrentGame().getCurrentPlayer().getFriendShips().get(gift.first()).second());
+            }
+
+            App.getCurrentGame().getCurrentPlayer().getIsInteracted().put(gift.first(), true);
+            gift.first().getIsInteracted().put(App.getCurrentGame().getCurrentPlayer(), true);
+
+        }
+
+
+        return new Result(true, "Your have rated gift with number " + giftNum + " with rate " + rate + "!");
     }
 
     public Result giftHistory(String username) {
-        //TODO
-        return new Result(true, "");
+        StringBuilder list = new StringBuilder();
+        list.append("Gifts History:\n");
+        int ptr = 1;
+        for (Pair<Player, String> giftHistory : App.getCurrentGame().getCurrentPlayer().getGiftHistory()) {
+            if(giftHistory.first().getUser().getUsername().equals(username)) {
+                list.append("\t").append(ptr++).append(". ").append(giftHistory.second()).append("\n");
+            }
+        }
+
+        return new Result(true, list.toString());
     }
 
     public Result hug(String username) {
-        //TODO
-        return new Result(true, "");
+        Player player = App.getCurrentGame().findPlayer(username);
+        if(player == null) {
+            return new Result(false, "Player not found!");
+        }
+
+        if(App.getCurrentGame().getCurrentPlayer().getCordinate().distance(player.getCordinate()) > 1)
+            return new Result(false, "You should be neighbor to " + username + " to hug!");
+
+
+        if(!App.getCurrentGame().getCurrentPlayer().getIsInteracted().get(player)) {
+            if(App.getCurrentGame().getCurrentPlayer().getMarried() == player) {
+                App.getCurrentGame().getCurrentPlayer().getEnergy().increaseDayEnergyLeft(50);
+                player.getEnergy().increaseDayEnergyLeft(50);
+
+                System.out.println("You and your partner got 50 extra energy!");
+            }
+            else {
+                App.getCurrentGame().getCurrentPlayer().getFriendShips().computeIfPresent(player,
+                        (k, pair) -> new Pair<>(pair.first(), pair.second() + 60));
+                player.getFriendShips().computeIfPresent(App.getCurrentGame().getCurrentPlayer(),
+                        (k, pair) -> new Pair<>(pair.first(), pair.second() + 60));
+
+                System.out.println("Your friendship value with " + username + " is increased to " +
+                        App.getCurrentGame().getCurrentPlayer().getFriendShips().get(player).second());
+            }
+
+            App.getCurrentGame().getCurrentPlayer().getIsInteracted().put(player, true);
+            player.getIsInteracted().put(App.getCurrentGame().getCurrentPlayer(), true);
+
+        }
+
+        return new Result(true, "You hugged " + username + "!");
     }
 
     public Result flower(String username) {
-        //TODO
-        return new Result(true, "");
+        Player player = App.getCurrentGame().findPlayer(username);
+        if(player == null) {
+            return new Result(false, "Player not found!");
+        }
+
+        if(App.getCurrentGame().getCurrentPlayer().getCordinate().distance(player.getCordinate()) > 1)
+            return new Result(false, "You should be neighbor to " + username + " to give flower!");
+
+        if(App.getCurrentGame().getCurrentPlayer().getFriendShips().get(player).first() != 2 ||
+        player.getFriendShips().get(App.getCurrentGame().getCurrentPlayer()).first() != 2)
+            return new Result(false, "You and " + username + " should have friendship level of 2!");
+
+        boolean flag = false;
+        ArrayList<Good> goods = App.getCurrentGame().getCurrentPlayer().getInventory().isInInventory(FarmingCropType.SUNFLOWER);
+        if(goods != null) {
+            Good good = goods.getLast();
+            goods.removeLast();
+            player.getInventory().addGood(new ArrayList<>(Arrays.asList(good)));
+            flag = true;
+        }
+
+        goods = App.getCurrentGame().getCurrentPlayer().getInventory().isInInventory(FarmingCropType.CAULIFLOWER);
+        if(!flag && goods != null) {
+            Good good = goods.getLast();
+            goods.removeLast();
+            player.getInventory().addGood(new ArrayList<>(Arrays.asList(good)));
+            flag = true;
+        }
+
+        if(!flag)
+            return new Result(false, "Your don't have any flower in your inventory to give to someone!");
+        else if(!App.getCurrentGame().getCurrentPlayer().getIsInteracted().get(player)) {
+            if(App.getCurrentGame().getCurrentPlayer().getMarried() == player) {
+                App.getCurrentGame().getCurrentPlayer().getEnergy().increaseDayEnergyLeft(50);
+                player.getEnergy().increaseDayEnergyLeft(50);
+
+                System.out.println("You and your partner got 50 extra energy!");
+            }
+            else {
+                App.getCurrentGame().getCurrentPlayer().getFriendShips().computeIfPresent(player,
+                        (k, pair) -> new Pair<>(pair.first() + 1, pair.second()));
+                player.getFriendShips().computeIfPresent(App.getCurrentGame().getCurrentPlayer(),
+                        (k, pair) -> new Pair<>(pair.first() + 1, pair.second()));
+
+                System.out.println("Your friendship level with " + username + " has been increased to 3!");
+
+            }
+
+            App.getCurrentGame().getCurrentPlayer().getIsInteracted().put(player, true);
+            player.getIsInteracted().put(App.getCurrentGame().getCurrentPlayer(), true);
+        }
+
+        return new Result(true, "Your have given a flower to " + username + "!");
     }
 
     public Result askMarriage(String username, String ring) {
-        //TODO
-        return new Result(true, "");
+        Player player = App.getCurrentGame().findPlayer(username);
+        Player mainPlayer = App.getCurrentGame().getCurrentPlayer();
+
+        //Errors
+        if(player == null)
+            return new Result(false, "Player not found!");
+        if(mainPlayer.getUser().getGender() == Gender.FEMALE)
+            return new Result(false, "Your gender should be male to ask marriage!");
+        if(mainPlayer.getFriendShips().get(player).first() != 3 ||
+        player.getFriendShips().get(mainPlayer).first() != 3)
+            return new Result(false, "You and " + username + " should have friendship level of 3!");
+        if(mainPlayer.getCordinate().distance(player.getCordinate()) > 1)
+            return new Result(false, "You should be neighbor to " + username + " to ask marriage!");
+        if(mainPlayer.getUser().getGender() == player.getUser().getGender())
+            return new Result(false, "Your gender should be opposite to " + username + " to ask marriage!");
+        if(player.getMarriageList().get(mainPlayer) != null)
+            return new Result(false, "Your marriage is already in progress!");
+        if(player.getMarried() != null)
+            return new Result(false, username + " is already married with " +
+                    player.getMarried().getUser().getUsername() + "!");
+
+        ArrayList<Good> goods = App.getCurrentGame().getCurrentPlayer().getInventory().isInInventory(ProductType.WEDDING_RING);
+        if(goods == null)
+            return new Result(false, "Your should have wedding ring in your inventory to ask marriage!");
+
+        player.getNews().add(mainPlayer.getUser().getUsername() + " asks you to marry him with " + ring + "!");
+        player.getMarriageList().put(mainPlayer, goods.getLast());
+        goods.removeLast();
+
+        return new Result(true, "Your have asked marriage from " + username + " with " + ring + "!");
     }
 
     public Result respond(String status, String username) {
-        //TODO
-        return new Result(true, "");
+        Player player = App.getCurrentGame().findPlayer(username);
+        Player mainPlayer = App.getCurrentGame().getCurrentPlayer();
+        if(player == null)
+            return new Result(false, "Player not found!");
+        if(player.getUser().getGender() == Gender.MALE)
+            return new Result(false, "Your gender should be female to respond!");
+        if(mainPlayer.getMarriageList().get(player) == null)
+            return new Result(false, username + " has not been asked you to marry him!");
+
+        if(status.matches("\\s*-accept\\s*")) {
+            mainPlayer.getInventory().addGood(new ArrayList<>(Arrays.asList(mainPlayer.getMarriageList().get(player))));
+
+            // Friendship level increased to 4
+            mainPlayer.getFriendShips().computeIfPresent(player,
+                    (k, pair) -> new Pair<>(4, pair.second()));
+            player.getFriendShips().computeIfPresent(mainPlayer,
+                    (k, pair) -> new Pair<>(4, pair.second()));
+
+            // The Wallets are shared!
+            mainPlayer.getWallet().increaseBalance(player.getWallet().getBalance());
+            player.setWallet(mainPlayer.getWallet());
+
+            // Now they are married
+            mainPlayer.setMarried(player);
+            player.setMarried(mainPlayer);
+
+            player.getNews().add(mainPlayer.getUser().getUsername() + " has accepted your marriage! Now you can live with her!");
+            mainPlayer.getMarriageList().remove(player);
+
+            for (Player gamePlayer : App.getCurrentGame().getPlayers()) {
+                if(mainPlayer.getMarriageList().get(gamePlayer) != null) {
+                    gamePlayer.getInventory().addGood(new ArrayList<>(Arrays.asList(mainPlayer.getMarriageList().get(gamePlayer))));
+                    gamePlayer.getNews().add(mainPlayer.getUser().getUsername() + " has rejected your marriage and married with " + player.getUser().getUsername() + "!");
+                    //TODO
+                }
+            }
+            mainPlayer.getMarriageList().clear();
+            return new Result(true, "Your have accepted your marriage from " + username + "! Now you can live with him!");
+        }
+        else if(status.matches("\\s*-reject\\s*")) {
+            mainPlayer.getFriendShips().computeIfPresent(player,
+                    (k, pair) -> new Pair<>(0, pair.second()));
+            player.getFriendShips().computeIfPresent(mainPlayer,
+                    (k, pair) -> new Pair<>(0, pair.second()));
+
+
+            player.getInventory().addGood(new ArrayList<>(Arrays.asList(mainPlayer.getMarriageList().get(player))));
+            player.getNews().add(mainPlayer.getUser().getUsername() + " has rejected your marriage!");
+            mainPlayer.getFriendShips().remove(player);
+
+            //TODO : کم کردن انرژی پسر در هفت روز بعد
+            return new Result(true, "You have rejected your marriage from " + username + "!");
+        }
+        else
+            return new Result(false, "Invalid respond to marriage ask!");
     }
 
 
@@ -736,27 +1283,99 @@ public class GameMenuController extends Controller {
     //TODO: Nader
     // NPC methods
     public Result meetNPC(String npcName) {
-        //TODO
+        for (NPC npc : App.getCurrentGame().getNPCs()) {
+            if (npc.getType().getName().equals(npcName)) {
+                if (Math.abs(npc.getCordinate().getX() -
+                        App.getCurrentGame().getCurrentPlayer().getCordinate().getX()) == 1 &&
+                        Math.abs(npc.getCordinate().getY() -
+                                App.getCurrentGame().getCurrentPlayer().getCordinate().getY()) == 1) {
+                    npc.getFriendship();
+                    npc.npcDialogs();
+                    return new Result(true, "");
+                } else {
+                    return new Result(true, "Too far away. Approach the NPC to speak.");
+                }
+            }
+        }
         return new Result(true, "");
     }
 
     public Result giftNPC(String npcName, String itemName) {
-        //TODO
-        return new Result(true, "");
+        Good good = null;
+        boolean found = false;
+        for (ArrayList<Good> goods : App.getCurrentGame().getCurrentPlayer().getInventory().getList()) {
+            if (!goods.isEmpty() && goods.getFirst().getName().equals(itemName)) {
+                good = goods.get(goods.size() - 1);
+                found = true;
+                goods.remove(good);
+                break;
+            }
+        }
+        if (!found) {
+            return new Result(false, "You don't have this item in your inventory.");
+        }
+        for (NPC npc : App.getCurrentGame().getNPCs()) {
+            if (npc.getType().getName().equals(npcName)) {
+                npc.getGift(good);
+                return new Result(true, "You sent a gift to " + npcName);
+
+            }
+        }
+        return new Result(false, "NPC not found.");
     }
 
     public Result friendshipNPCList() {
-        //TODO
-        return new Result(true, "");
+
+        for (NPC npc : App.getCurrentGame().getNPCs()) {
+            System.out.println("------------------------------");
+            System.out.println("NPC Name: " + npc.getType().getName());
+            System.out.println("Friendship Level: " + npc.getFriendship().getFriendshipLevel());
+            System.out.println("Friendship points: " + npc.getFriendship().getFriendshipPoints());
+        }
+        return new Result(true, "------------------------------");
     }
 
     public Result questsList() {
-        //TODO
-        return new Result(true, "");
+
+        for (NPC npc : App.getCurrentGame().getNPCs()) {
+            if (npc.getFriendship().getAvailableQuests().contains(1)) {
+                System.out.print(npc.getType().getRequests().get(0).first() + " ");
+                System.out.println(npc.getType().getRequests().get(0).second());
+            }
+            if (npc.getFriendship().getAvailableQuests().contains(2)) {
+                System.out.print(npc.getType().getRequests().get(1).first() + " ");
+                System.out.println(npc.getType().getRequests().get(1).second());
+            }
+            if (npc.getFriendship().getAvailableQuests().contains(3)) {
+                System.out.print(npc.getType().getRequests().get(2).first() + " ");
+                System.out.println(npc.getType().getRequests().get(2).second());
+            }
+
+        }
+
+        return new Result(true, "------------------------------");
     }
 
     public Result questsFinish(String index) {
-        //TODO
+
+        int indexInt = Integer.parseInt(index);
+        NPC targetNPC = null;
+        boolean found = false;
+        for (NPC npc : App.getCurrentGame().getNPCs()) {
+            if (Math.abs(npc.getCordinate().getX() -
+                    App.getCurrentGame().getCurrentPlayer().getCordinate().getX()) == 1 &&
+                    Math.abs(npc.getCordinate().getY() -
+                            App.getCurrentGame().getCurrentPlayer().getCordinate().getY()) == 1) {
+                targetNPC = npc;
+                found = true;
+                break;
+            }
+        }
+        if (!found) {
+            return new Result(true, "Too far away. Approach the NPC to speak.");
+        }
+        targetNPC.finishQuest(indexInt);
+        //  no next line
         return new Result(true, "");
     }
 

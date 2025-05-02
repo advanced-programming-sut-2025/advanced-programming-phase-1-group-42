@@ -1,13 +1,12 @@
 package org.example.controllers;
 
-import org.example.Main;
 import org.example.models.App;
 import org.example.models.Result;
 import org.example.models.enums.LoginRegisterCommands;
 import org.example.models.enums.Menu;
+import org.example.models.interactions.Gender;
 import org.example.models.interactions.User;
 
-import java.util.HashSet;
 import java.util.Random;
 import java.util.Scanner;
 import java.util.regex.Matcher;
@@ -120,7 +119,7 @@ public class LoginRegisterMenuController extends Controller {
         }
 
         String answer = matcher.group("answer").trim();
-        App.getUsers().add(new User(username, password, nickname, email, gender, num, answer));
+        App.getUsers().add(new User(username, password, nickname, email, Gender.findGender(gender), num, answer));
         return new Result(true, "Your account has been successfully registered!");
     }
 

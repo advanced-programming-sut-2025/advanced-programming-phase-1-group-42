@@ -1,13 +1,16 @@
 package org.example.models.goods.recipes;
 
-public class CraftingRecipe extends Recipe {
-    CraftingRecipeType type;
+import org.example.models.goods.GoodLevel;
+import org.example.models.goods.GoodType;
 
-    CraftingRecipe(CraftingRecipeType type) {
+public class CraftingRecipe extends Recipe {
+    private CraftingRecipeType type;
+
+    public CraftingRecipe(CraftingRecipeType type) {
         this.type = type;
     }
 
-    public CraftingRecipeType getType() {
+    public GoodType getType() {
         return type;
     }
 

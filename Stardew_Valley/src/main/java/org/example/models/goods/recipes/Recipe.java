@@ -4,5 +4,4 @@ import org.example.models.goods.Good;
 
 public abstract class Recipe extends Good {
 
-    public abstract String getName();
 }

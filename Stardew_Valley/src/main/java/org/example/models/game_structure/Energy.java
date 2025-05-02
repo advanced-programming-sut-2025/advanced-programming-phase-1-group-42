@@ -18,8 +18,24 @@ public class Energy {
     public void setTurnValueLeft(int turnValueLeft) {
         this.turnValueLeft = turnValueLeft;
     }
-    public void setDayEnergyLeft(int value) {
+
+    public int getTurnValueLeft() {
+        return turnValueLeft;
+    }
+
+    public void decreaseTurnEnergyLeft(int value) {
+        this.turnValueLeft -= value;
+    }
+
+    public void setAwake(boolean awake) {
+        isAwake = awake;
+    }
+
+    public void increaseDayEnergyLeft(int value) {
         this.dayEnergyLeft += value;
+    }
+    public void decreaseDayEnergyLeft(int value) {
+        this.dayEnergyLeft -= value;
     }
 
     public int getDayEnergyLeft() {

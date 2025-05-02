@@ -1,17 +1,15 @@
 package org.example.models.goods.recipes;
 
+import org.example.models.goods.GoodType;
 import org.example.models.goods.craftings.CraftingType;
 
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
-
-public enum CraftingRecipeType {
+public enum CraftingRecipeType implements GoodType {
 
     CHERRY_BOMB(CraftingType.CHERRY_BOMB, "4 copper ore + 1 coal"),
     BOMB(CraftingType.BOMB , "4 iron ore + 1 coal"),
     MEGA_BOMB(CraftingType.MEGA_BOMB,"4 gold ore + 1 coal"),
     SPRINKLER(CraftingType.SPRINKLER,"1 copper bar + 1 iron bar"),
-    QUALITY_SPRINKLER(CraftingType.QUALITY_SPRINKLER,"1 Iron bar + 1 Gold bar"),
+    QUALITY_SPRINKLER(CraftingType.QUALITY_SPRINKLER,"1 Iron bar + 1 GOLD bar"),
     IRIDIUM_SPRINKLER(CraftingType.IRIDIUM_SPRINKLER,"1 gold bar + 1 iridium bar"),
     CHARCOAL_KILN(CraftingType.CHARCOAL_KILN,"20 wood + 2 Copper bar"),
     FURNACE(CraftingType.FURNACE,"20 Copper ore + 25 Stone"),
@@ -35,9 +33,22 @@ public enum CraftingRecipeType {
         this.craftingType = craftingType;
         this.ingredients = ingredients;
     }
+
+    @Override
+    public int getSellPrice() {
+        return 0;
+    }
+
+    @Override
+    public int getEnergy() {
+        return 0;
+    }
+
     public String getName() {
         return craftingType.getName();
     }
+
+
 
     public String getIngredients() {
         return ingredients;

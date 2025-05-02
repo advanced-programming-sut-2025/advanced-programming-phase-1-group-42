@@ -7,12 +7,12 @@ public class Artisan extends Good {
     ArtisanType artisanType;
     @Override
     public String getName() {
-        return "";
+        return artisanType.getName();
     }
 
     @Override
     public int getPrice() {
-        return ;
+        return artisanType.getSellPrice() ;
     }
 
     public ArtisanType getArtisanType() {
@@ -20,7 +20,7 @@ public class Artisan extends Good {
     }
 
     public int getEnergy() {
-        return energy;
+        return artisanType.getEnergy();
     }
 
 }

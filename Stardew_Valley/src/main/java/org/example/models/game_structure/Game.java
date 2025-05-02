@@ -1,13 +1,10 @@
 package org.example.models.game_structure;
 
-import org.example.models.App;
-import org.example.models.enums.WeatherType;
 import org.example.models.game_structure.weathers.Weather;
+import org.example.models.interactions.NPCs.NPC;
 import org.example.models.interactions.Player;
 
 import java.util.ArrayList;
-
-import org.example.models.interactions.User;
 
 public class Game {
 
@@ -16,38 +13,38 @@ public class Game {
     private Tomorrow tomorrow;
     private final ArrayList<Player> players = new ArrayList<>();
     private Player currentPlayer;
-    private User gameAdmin;
-    private Map CurrentMap = null;
+    private Player gameAdmin;
+    private Map map = null;
     private Player currentPlayingPlayer;
+    private final ArrayList<NPC> NPCs = new ArrayList<>();
     private int counter = 0;
 
-
-    public Game(User gameAdmin) {
-        this.gameAdmin = gameAdmin;
+    public void setPlayers(ArrayList<Player> players) {
+        this.players.addAll(players);
     }
 
-    public void setCurrentMap(Map map) {
-        CurrentMap = map;
+    public ArrayList<Player> getPlayers() {
+        return players;
     }
 
-    public Map getCurrentMap() {
-        return CurrentMap;
+    public void setMap(Map map) {
+        this.map = map;
     }
 
-    public User getGameAdmin() {
+    public Player getGameAdmin() {
         return gameAdmin;
     }
 
-    public void setGameAdmin(User gameAdmin) {
+    public void setGameAdmin(Player gameAdmin) {
         this.gameAdmin = gameAdmin;
     }
 
-    public Player getCurrentPlayingPlayer() {
-        return currentPlayingPlayer;
+    public Player getCurrentPlayer() {
+        return currentPlayer;
     }
 
-    public void setCurrentPlayingPlayer(Player currentPlayingPlayer) {
-        this.currentPlayingPlayer = currentPlayingPlayer;
+    public void setCurrentPlayer(Player currentPlayer) {
+        this.currentPlayer = currentPlayer;
     }
 
     public void nextPlayer() {
@@ -56,11 +53,11 @@ public class Game {
             counter = 0;
             this.dateTime.timeFlow();
         }
-        currentPlayingPlayer = players.get(counter);
+        currentPlayer = players.get(counter);
     }
 
     public Map getMap() {
-        return this.getCurrentMap();
+        return map;
     }
 
     public DateTime getDateTime() {
@@ -80,12 +77,26 @@ public class Game {
     }
 
     public void gameFlow(){
-
         // Weather setups for next day
         this.weather = tomorrow.getWeather();
         tomorrow.setWeather(weather);
 
         // Check weather
-
     }
+
+    public Player findPlayer(String playerName) {
+        for (Player player : players) {
+            if(player.getUser().getUsername().equals(playerName))
+                return player;
+        }
+        return null;
+    }
+
+    public  ArrayList<NPC> getNPCs() {
+        return NPCs;
+    }
+
+
+
+
 }

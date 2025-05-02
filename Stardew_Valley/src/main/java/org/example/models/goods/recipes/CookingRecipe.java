@@ -6,9 +6,9 @@ import org.example.models.goods.foods.Food;
 import java.util.ArrayList;
 
 public class CookingRecipe extends Recipe {
-    CookingRecipeType type;
+    private CookingRecipeType type;
 
-    CookingRecipe(CookingRecipeType type) {
+    public CookingRecipe(CookingRecipeType type) {
         this.type = type;
     }
 
@@ -18,7 +18,7 @@ public class CookingRecipe extends Recipe {
 
     @Override
     public String getName(){
-        return type.getFoodType().getName();
+        return type.getName() ;
     }
 
     @Override

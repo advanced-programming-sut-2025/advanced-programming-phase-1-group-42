@@ -19,9 +19,6 @@ public class Controller {
             }
         }
 
-        Artisan artisan = new Artisan();
-        artisan.setArtisanType(ArtisanType.Dried_Mashrooms);
-//        artisan.getArtisanType().getSellPrice(new )
         return null;
     }
 
