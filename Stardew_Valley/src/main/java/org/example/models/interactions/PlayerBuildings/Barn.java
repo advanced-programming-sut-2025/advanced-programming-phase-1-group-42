@@ -1,6 +1,6 @@
 package org.example.models.interactions.PlayerBuildings;
 
-import org.example.models.game_structure.Cordinate;
+import org.example.models.game_structure.Coordinate;
 import org.example.models.goods.Good;
 import org.example.models.interactions.Animals.Animal;
 
@@ -9,7 +9,7 @@ import java.util.ArrayList;
 public class Barn extends FarmBuilding {
     BarnType barnType;
 
-    public Barn(Cordinate cordinate , BarnType barnType) {
+    public Barn(Coordinate cordinate , BarnType barnType) {
         centerCordinate = cordinate;
     }
 

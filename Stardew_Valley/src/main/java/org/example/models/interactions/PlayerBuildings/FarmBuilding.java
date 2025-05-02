@@ -1,6 +1,6 @@
 package org.example.models.interactions.PlayerBuildings;
 
-import org.example.models.game_structure.Cordinate;
+import org.example.models.game_structure.Coordinate;
 import org.example.models.goods.Good;
 import org.example.models.interactions.Animals.Animal;
 
