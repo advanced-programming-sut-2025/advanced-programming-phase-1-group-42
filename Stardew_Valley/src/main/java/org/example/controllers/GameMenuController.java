@@ -274,7 +274,7 @@ public class GameMenuController extends Controller {
         return new Result(true, "");
     }
 
-    public Result showPlant(String direction) {
+    public Result showPlant(String x , String y) {
         //TODO
         return new Result(true, "");
     }
@@ -604,7 +604,7 @@ public class GameMenuController extends Controller {
 
     //TODO: Nader
     // artisan methods
-    public Result artisanUse(String artisanName) {
+    public Result artisanUse(String artisanName , String item1_name) {
         //TODO
         return new Result(true, "");
     }
