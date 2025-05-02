@@ -1,5 +1,6 @@
 package org.example.models.game_structure;
 
+import jdk.jfr.Recording;
 import org.example.models.interactions.game_buildings.GameBuilding;
 
 import java.util.ArrayList;
@@ -7,8 +8,13 @@ import java.util.ArrayList;
 public class Map {
     private final ArrayList<Tile> tiles = new ArrayList<>();
     private final ArrayList<Farm> farms = new ArrayList<>();
-    private final ArrayList<ShopType> gameBuildings = new ArrayList<>();
+    private final ArrayList<GameBuilding> gameBuildings = new ArrayList<>();
+    private final Coordinate startingCoordinate, endingCoordinate;
 
+    public Map() {
+        this.startingCoordinate = new Coordinate(0, 0);
+        this.endingCoordinate = new Coordinate(150, 160);
+    }
 
     // A function to print map
     public String printMap() {
@@ -26,7 +32,7 @@ public class Map {
         this.farms.addAll(farms);
     }
 
-    public boolean dfsCheck(Cordinate start, Cordinate end) {
+    public boolean dfsCheck(Coordinate start, Coordinate end) {
         //TODO
     }
 
@@ -62,11 +68,27 @@ public class Map {
         return tiles;
     }
 
-    public Tile findTile(Cordinate cordinate) {
+    public Tile findTile(Coordinate coordinate) {
         for (Tile tile : this.tiles) {
-            if(tile.getCordinate().equals(cordinate))
+            if(tile.getCordinate().equals(coordinate))
                 return tile;
         }
         return null;
+    }
+
+    public Farm findFarm(Coordinate coordinate) {
+        for (Farm farm : this.farms) {
+            if(farm.findTile(coordinate) != null)
+                return farm;
+        }
+        return null;
+    }
+
+    public Coordinate getStartingCoordinate() {
+        return startingCoordinate;
+    }
+
+    public Coordinate getEndingCoordinate() {
+        return endingCoordinate;
     }
 }

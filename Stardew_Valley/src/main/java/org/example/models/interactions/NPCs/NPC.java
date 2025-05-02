@@ -2,20 +2,17 @@ package org.example.models.interactions.NPCs;
 
 import org.example.models.App;
 import org.example.models.enums.Season;
-import org.example.models.enums.WeatherType;
-import org.example.models.game_structure.Cordinate;
-import org.example.models.game_structure.weathers.Weather;
+import org.example.models.game_structure.Coordinate;
 import org.example.models.goods.Good;
-import org.example.models.goods.GoodType;
+
 import java.util.Random;
 import java.util.ArrayList;
-import java.util.Map;
 
 
 public class NPC {
     private final NPCTypes type;
     private final ArrayList<NPCFriendship> friendships = new ArrayList<>();
-    Cordinate cordinate;
+    Coordinate coordinate;
 
     public NPC(NPCTypes type) {
         this.type = type;
@@ -31,12 +28,12 @@ public class NPC {
 
     public boolean isBirthdayToday() {
 
-        return App.getCurrentGame().getDateTime().getSeasonOfYear().equals(type.getBirthday().getFirst())
-                && App.getCurrentGame().getDateTime().getDayOfSeason()==type.getBirthday().getSecond();
+        return App.getCurrentGame().getDateTime().getSeasonOfYear().equals(type.getBirthday().first())
+                && App.getCurrentGame().getDateTime().getDayOfSeason()==type.getBirthday().second();
     }
 
-    public Cordinate getCordinate() {
-        return cordinate;
+    public Coordinate getCordinate() {
+        return coordinate;
     }
 
 

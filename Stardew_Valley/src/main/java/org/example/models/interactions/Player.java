@@ -10,15 +10,18 @@ import org.example.models.goods.recipes.CraftingRecipe;
 import org.example.models.goods.tools.Tool;
 import org.example.models.goods.tools.ToolType;
 import org.example.models.interactions.PlayerBuildings.FarmBuilding;
+import org.example.models.interactions.PlayerBuildings.FarmBuilding;
 
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.HashSet;
 
 public class Player {
-    private Cordinate cordinate;
+    private Coordinate coordinate;
     private Inventory inventory;
     private Good inHandGood;
-    private ArrayList<CookingRecipe> cookingRecipes;
-    private ArrayList<CraftingRecipe> craftingRecipes;
+    private final ArrayList<CookingRecipe> cookingRecipes = new ArrayList<>();
+    private final ArrayList<CraftingRecipe> craftingRecipes = new ArrayList<>();
     private User user;
     private int points;
     private Wallet wallet;
@@ -27,6 +30,16 @@ public class Player {
     private Tool trashCan;
     private Skill skill;
     private Buff buff = null;
+    // level-value
+    private final HashMap<Player, Pair<Integer, Integer>> friendShips = new HashMap<>();
+    private final HashMap<Player, Boolean> isInteracted = new HashMap<>();
+    private final ArrayList<Pair<Player, String>> talkHistory = new ArrayList<>();
+    private final ArrayList<Trade> tradeList = new ArrayList<>();
+    private final ArrayList<Trade> tradeHistory = new ArrayList<>();
+    private final ArrayList<Pair<Player, Gift>> giftList = new ArrayList<>();
+    private final ArrayList<Pair<Player, String>> giftHistory = new ArrayList<>();
+    private final ArrayList<String> news = new ArrayList<>();
+    private final ArrayList<Quest> questList = new ArrayList<>();
     private Pair<Player, Integer> friendShipLevel;
     private Pair<Player, Integer> friendShipScore;
     private Pair<Player, ArrayList<String>> talkHistory;
@@ -36,12 +49,6 @@ public class Player {
     private ArrayList<Gift> giftHistory;
     private ArrayList<Quest> questList;
     private Fridge fridge;
-
-
-    // Funciton for walk
-    public void walk() {
-        //TODO
-    }
 
     public void setFarm(Farm farm) {
         this.farm = farm;
@@ -57,7 +64,15 @@ public class Player {
 
     public Player(User user) {
         this.user = user;
+
         this.trashCan = new Tool(ToolType.TRASH_CAN);
+
+        for (Player player : App.getCurrentGame().getPlayers()) {
+            if(player != this) {
+                friendShips.put(player, new Pair<>(0, 0));
+                isInteracted.put(player, false);
+            }
+        }
     }
 
     // Function for eat
@@ -94,8 +109,8 @@ public class Player {
         return cookingRecipes;
     }
 
-    public Cordinate getCordinate() {
-        return cordinate;
+    public Coordinate getCordinate() {
+        return coordinate;
     }
 
     public void setBuff(Buff buff) {
@@ -116,6 +131,34 @@ public class Player {
 
     public Wallet getWallet() {
         return wallet;
+    }
+
+    public HashMap<Player, Pair<Integer, Integer>> getFriendShips() {
+        return friendShips;
+    }
+
+    public HashMap<Player, Boolean> getIsInteracted() {
+        return isInteracted;
+    }
+
+    public void setCoordinate(Coordinate coordinate) {
+        this.coordinate = coordinate;
+    }
+
+    public ArrayList<Pair<Player, String>> getTalkHistory() {
+        return talkHistory;
+    }
+
+    public ArrayList<Pair<Player, Gift>> getGiftList() {
+        return giftList;
+    }
+
+    public ArrayList<Pair<Player, String>> getGiftHistory() {
+        return giftHistory;
+    }
+
+    public ArrayList<String> getNews() {
+        return news;
     }
 
     public ArrayList<FarmBuilding> getFarmBuildings() {

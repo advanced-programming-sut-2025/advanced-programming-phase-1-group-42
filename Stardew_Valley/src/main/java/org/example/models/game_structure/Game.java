@@ -14,7 +14,7 @@ public class Game {
     private final ArrayList<Player> players = new ArrayList<>();
     private Player currentPlayer;
     private Player gameAdmin;
-    private Map CurrentMap = null;
+    private Map map = null;
     private Player currentPlayingPlayer;
     private final ArrayList<NPC> NPCs = new ArrayList<>();
     private int counter = 0;
@@ -27,12 +27,8 @@ public class Game {
         return players;
     }
 
-    public void setCurrentMap(Map map) {
-        CurrentMap = map;
-    }
-
-    public Map getCurrentMap() {
-        return CurrentMap;
+    public void setMap(Map map) {
+        this.map = map;
     }
 
     public Player getGameAdmin() {
@@ -61,7 +57,7 @@ public class Game {
     }
 
     public Map getMap() {
-        return this.getCurrentMap();
+        return map;
     }
 
     public DateTime getDateTime() {
@@ -86,6 +82,14 @@ public class Game {
         tomorrow.setWeather(weather);
 
         // Check weather
+    }
+
+    public Player findPlayer(String playerName) {
+        for (Player player : players) {
+            if(player.getUser().getUsername().equals(playerName))
+                return player;
+        }
+        return null;
     }
 
     public  ArrayList<NPC> getNPCs() {

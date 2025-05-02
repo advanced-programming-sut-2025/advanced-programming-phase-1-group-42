@@ -2,16 +2,29 @@ package org.example.models.game_structure;
 
 import org.example.models.App;
 
-public class Cordinate{
+import java.util.ArrayList;
+import java.util.Arrays;
+
+public class Coordinate {
     private int x;
     private int y;
+    public final static ArrayList<Coordinate> coordinates = new ArrayList<>(Arrays.asList(
+            new Coordinate(0, -1),   // Up
+            new Coordinate(1, -1),   // Up-Right
+            new Coordinate(1, 0),    // Right
+            new Coordinate(1, 1),    // Down-Right
+            new Coordinate(0, 1),    // Down
+            new Coordinate(-1, 1),   // Down-Left
+            new Coordinate(-1, 0),   // Left
+            new Coordinate(-1, -1)   // Up-Left
+    ));
 
-    public Cordinate(int x, int y) {
+    public Coordinate(int x, int y) {
         this.x = x;
         this.y = y;
     }
 
-    public static Cordinate getDirection(String direction) {
+    public static Coordinate getDirection(String direction) {
         int newX = App.getCurrentGame().getCurrentPlayer().getCordinate().getX();
         int newY = App.getCurrentGame().getCurrentPlayer().getCordinate().getY();
         switch (direction) {
@@ -46,7 +59,7 @@ public class Cordinate{
             default:
                 return null;
         }
-        return new Cordinate(newX, newY);
+        return new Coordinate(newX, newY);
     }
 
     public int getX() {
@@ -59,9 +72,9 @@ public class Cordinate{
 
     @Override
     public boolean equals(Object obj) {
-        if(obj instanceof Cordinate) {
-            Cordinate cordinate = (Cordinate)obj;
-            if(cordinate.getX() == x && cordinate.getY() == y)
+        if(obj instanceof Coordinate) {
+            Coordinate coordinate = (Coordinate)obj;
+            if(coordinate.getX() == x && coordinate.getY() == y)
                 return true;
             return false;
         }
@@ -71,6 +84,10 @@ public class Cordinate{
 
     @Override
     public String toString() {
-        return "x:" + x + " y:" + y;
+        return "{x:" + x + " y:" + y + "}";
+    }
+
+    public int distance(Coordinate coordinate) {
+        return Math.abs(x - coordinate.getX()) + Math.abs(y - coordinate.getY());
     }
 }
