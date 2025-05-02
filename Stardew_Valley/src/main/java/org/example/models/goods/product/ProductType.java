@@ -22,6 +22,11 @@ public enum ProductType implements GoodType {
 
     FIBER(),
 
-    OIL();
+    OIL(),
+
+
+    //Pierre's general store
+    WEDDING_RING();
+
 
 }

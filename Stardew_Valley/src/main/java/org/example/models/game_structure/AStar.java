@@ -102,7 +102,9 @@ public class AStar {
             return false;
 
         Farm farm = map.findFarm(new Coordinate(x, y));
-        if(farm != null && App.getCurrentGame().getCurrentPlayer().getFarm() != farm)
+        if(farm != null &&
+                !(App.getCurrentGame().getCurrentPlayer().getFarm() == farm ||
+                        (App.getCurrentGame().getCurrentPlayer().getMarried() != null && App.getCurrentGame().getCurrentPlayer().getMarried().getFarm() == farm)))
             return false;
 
         if(tile.getTileType() == TileType.WATER || tile.getTileType() == TileType.STONE_WALL ||

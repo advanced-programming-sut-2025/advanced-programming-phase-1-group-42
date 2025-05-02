@@ -28,15 +28,23 @@ public class Player {
     private Tool trashCan;
     private Skill skill;
     private Buff buff = null;
+
     // level-value
     private final HashMap<Player, Pair<Integer, Integer>> friendShips = new HashMap<>();
     private final HashMap<Player, Boolean> isInteracted = new HashMap<>();
     private final ArrayList<Pair<Player, String>> talkHistory = new ArrayList<>();
+
     private final ArrayList<Trade> tradeList = new ArrayList<>();
     private final ArrayList<Trade> tradeHistory = new ArrayList<>();
+
     private final ArrayList<Pair<Player, Gift>> giftList = new ArrayList<>();
     private final ArrayList<Pair<Player, String>> giftHistory = new ArrayList<>();
+
     private final ArrayList<String> news = new ArrayList<>();
+
+    private final HashMap<Player, Good> marriageList = new HashMap<>();
+    private Player married = null;
+
     private final ArrayList<Quest> questList = new ArrayList<>();
     private Fridge fridge;
 
@@ -149,5 +157,21 @@ public class Player {
 
     public ArrayList<String> getNews() {
         return news;
+    }
+
+    public HashMap<Player, Good> getMarriageList() {
+        return marriageList;
+    }
+
+    public Player getMarried() {
+        return married;
+    }
+
+    public void setMarried(Player married) {
+        this.married = married;
+    }
+
+    public void setWallet(Wallet wallet) {
+        this.wallet = wallet;
     }
 }

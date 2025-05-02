@@ -2,8 +2,6 @@ package org.example.models.interactions;
 
 import org.example.models.game_structure.Game;
 
-import java.util.ArrayList;
-
 public class User {
     private Game game;
     private int earnedPoints;
@@ -11,14 +9,14 @@ public class User {
     private String password;
     private String nickname;
     private String email;
-    private String gender;
+    private Gender gender;
     private int questionNumber;
     private String answer;
     private Boolean isPlaying;
     private int maxPoints;
     private int gamePlay;
 
-    public User(String username, String password, String nickname, String email, String gender, int questionNumber, String answer) {
+    public User(String username, String password, String nickname, String email, Gender gender, int questionNumber, String answer) {
         this.username = username;
         this.password = password;
         this.nickname = nickname;
@@ -37,7 +35,7 @@ public class User {
         this.username = username;
     }
 
-    public void changeGender(String gender) {
+    public void changeGender(Gender gender) {
         this.gender = gender;
     }
 
@@ -69,7 +67,7 @@ public class User {
         return email;
     }
 
-    public String getGender() {
+    public Gender getGender() {
         return gender;
     }
 
