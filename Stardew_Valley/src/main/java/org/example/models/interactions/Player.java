@@ -15,6 +15,7 @@ import java.util.HashMap;
 import java.util.HashSet;
 
 public class Player {
+
     private Coordinate coordinate;
     private Inventory inventory;
     private Good inHandGood;
@@ -34,11 +35,16 @@ public class Player {
     private final HashMap<Player, Boolean> isInteracted = new HashMap<>();
     private final ArrayList<Pair<Player, String>> talkHistory = new ArrayList<>();
 
-    private final ArrayList<Trade> tradeList = new ArrayList<>();
-    private final ArrayList<Trade> tradeHistory = new ArrayList<>();
+
 
     private final ArrayList<Pair<Player, Gift>> giftList = new ArrayList<>();
     private final ArrayList<Pair<Player, String>> giftHistory = new ArrayList<>();
+
+
+    private ArrayList<Pair<Player, Trade>> tradeList = new ArrayList<>();
+    private ArrayList<Pair<Player, Trade>> receivedTrades = new ArrayList<>();
+    private ArrayList<Pair<Player, Trade>> sentTrades = new ArrayList<>();
+    private ArrayList<Pair<Player, String>> tradeHistory = new ArrayList<>();
 
     private final ArrayList<String> news = new ArrayList<>();
 
@@ -147,13 +153,19 @@ public class Player {
         return talkHistory;
     }
 
+
     public ArrayList<Pair<Player, Gift>> getGiftList() {
         return giftList;
     }
-
     public ArrayList<Pair<Player, String>> getGiftHistory() {
         return giftHistory;
     }
+
+    public ArrayList<Pair<Player, Trade>> getTradeList() { return tradeList;}
+    public ArrayList<Pair<Player, String>> getTradeHistory() {
+        return tradeHistory;
+    }
+
 
     public ArrayList<String> getNews() {
         return news;
@@ -178,4 +190,5 @@ public class Player {
     public Tool getTrashCan() {
         return trashCan;
     }
+
 }

@@ -4,6 +4,7 @@ import org.example.controllers.GameMenuController;
 import org.example.controllers.ProfileMenuController;
 import org.example.models.enums.GameMenuCommands;
 import org.example.models.enums.LoginRegisterCommands;
+import org.example.models.enums.TradeMenuCommands;
 
 import java.util.Scanner;
 import java.util.regex.Matcher;
@@ -187,6 +188,11 @@ public class GameMenu implements AppMenu {
             System.out.print(controller.cheatAddDollars(matcher.group("count")));
         }
 
+        // Trading
+        else if ((matcher = GameMenuCommands.START_TRADE.matcher(input)) != null) {
+            System.out.print(controller.startTrade());
+        }
+
         // Friendships
         else if ((matcher = GameMenuCommands.FRIENDSHIPS.matcher(input)) != null) {
             System.out.println(controller.friendships());
@@ -212,23 +218,7 @@ public class GameMenu implements AppMenu {
             System.out.print(controller.respond(matcher.group("status") , matcher.group("username")));
         }
 
-        //Trading
-        else if ((matcher = GameMenuCommands.START_TRADE.matcher(input)) != null) {
-            System.out.print(controller.startTrade());
-        } else if ((matcher = GameMenuCommands.TRADE_WITH_MONEY.matcher(input)) != null) {
-            System.out.println(controller.tradeWithMoney(matcher.group("receiver"), matcher.group("trade_type")
-                    , matcher.group("item"), matcher.group("amount"), matcher.group("price")));
-        } else if ((matcher = GameMenuCommands.TRADE_WITH_GOODS.matcher(input)) != null) {
-            System.out.print(controller.tradeWithGoods(matcher.group("receiver"), matcher.group("trade_type")
-                    , matcher.group("item"), matcher.group("amount"),matcher.group("target_item")
-                    ,matcher.group("target_imount")));
-        } else if ((matcher = GameMenuCommands.TRADE_LIST.matcher(input)) != null) {
-            System.out.print(controller.tradeList());
-        } else if ((matcher = GameMenuCommands.TRADE_RESPONSE.matcher(input)) != null) {
-            System.out.println(controller.tradeResponse(matcher.group("receiver"), matcher.group("trade_id")));
-        } else if ((matcher = GameMenuCommands.TRADE_HISTORY.matcher(input)) != null) {
-            System.out.print(controller.tradeHistory());
-        }
+
 
         // NPC
         else if ((matcher = GameMenuCommands.MEET_NPC.matcher(input)) != null) {
