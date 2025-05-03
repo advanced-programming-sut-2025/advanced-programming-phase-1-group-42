@@ -35,6 +35,7 @@ import org.example.models.goods.tools.ToolType;
 import org.example.models.interactions.Player;
 import org.example.models.interactions.User;
 import org.example.models.interactions.game_buildings.Blacksmith;
+import org.example.models.interactions.game_buildings.GameBuilding;
 
 
 import java.util.ArrayList;
@@ -277,6 +278,16 @@ public class GameMenuController extends Controller {
             return new Result(false, "Invalid Coordinate input!");
 
         Coordinate goal = new Coordinate(Integer.parseInt(x), Integer.parseInt(y));
+        Tile tile = App.getCurrentGame().getMap().findTile(goal);
+        if(tile == null)
+            return new Result(false, "Goal tile not found!");
+
+        if(tile.getTileType() == TileType.GAME_BUILDING &&
+                !App.getCurrentGame().getMap().findGameBuilding(goal).isInWorkingHours(App.getCurrentGame().getDateTime().getTime())) {
+            return new Result(false, App.getCurrentGame().getMap().findGameBuilding(goal).getName() + " hours have ended for today!");
+        }
+
+
         ArrayList<Pair<Integer, Coordinate>> path = AStar.findPath(App.getCurrentGame().getMap(),
                 App.getCurrentGame().getCurrentPlayer().getCordinate(), goal);
 
@@ -862,18 +873,42 @@ public class GameMenuController extends Controller {
     //TODO: Nader
     // buy & sell methods
     public Result showAllProducts() {
-        //TODO
-        return new Result(true, "");
+        Coordinate coordinate = App.getCurrentGame().getCurrentPlayer().getCordinate();
+        Tile tile = App.getCurrentGame().getMap().findTile(coordinate);
+        if(tile.getTileType() != TileType.GAME_BUILDING)
+            return new Result(false, "You should be in a game building to show all products!");
+        if(!App.getCurrentGame().getMap().findGameBuilding(coordinate).isInWorkingHours(App.getCurrentGame().getDateTime().getTime())) {
+            return new Result(false, App.getCurrentGame().getMap().findGameBuilding(coordinate).getName() + " hours have ended for today!");
+        }
+
+        GameBuilding building = App.getCurrentGame().getMap().findGameBuilding(coordinate);
+        return new Result(true, building.showAllProducts());
     }
 
     public Result showAllAvailableProducts() {
-        //TODO
-        return new Result(true, "");
+        Coordinate coordinate = App.getCurrentGame().getCurrentPlayer().getCordinate();
+        Tile tile = App.getCurrentGame().getMap().findTile(App.getCurrentGame().getCurrentPlayer().getCordinate());
+        if(tile.getTileType() != TileType.GAME_BUILDING)
+            return new Result(false, "You should be in a game building to show all available products!");
+        if(!App.getCurrentGame().getMap().findGameBuilding(coordinate).isInWorkingHours(App.getCurrentGame().getDateTime().getTime())) {
+            return new Result(false, App.getCurrentGame().getMap().findGameBuilding(coordinate).getName() + " hours have ended for today!");
+        }
+
+        GameBuilding building = App.getCurrentGame().getMap().findGameBuilding(coordinate);
+        return new Result(true, building.showProducts());
     }
 
     public Result purchase(String productName, String count) {
-        //TODO
-        return new Result(true, "");
+        Coordinate coordinate = App.getCurrentGame().getCurrentPlayer().getCordinate();
+        Tile tile = App.getCurrentGame().getMap().findTile(App.getCurrentGame().getCurrentPlayer().getCordinate());
+        if(tile.getTileType() != TileType.GAME_BUILDING)
+            return new Result(false, "You should be in a game building to purchase a product!");
+        if(!App.getCurrentGame().getMap().findGameBuilding(coordinate).isInWorkingHours(App.getCurrentGame().getDateTime().getTime())) {
+            return new Result(false, App.getCurrentGame().getMap().findGameBuilding(coordinate).getName() + " hours have ended for today!");
+        }
+
+        GameBuilding building = App.getCurrentGame().getMap().findGameBuilding(coordinate);
+        return building.purchase(productName, count);
     }
 
     public Result cheatAddDollars(String count) {
