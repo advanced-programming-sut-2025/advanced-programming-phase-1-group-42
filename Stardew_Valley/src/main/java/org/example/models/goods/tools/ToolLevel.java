@@ -2,17 +2,23 @@ package org.example.models.goods.tools;
 
 import org.example.models.goods.*;
 
+import java.util.ArrayList;
+import java.util.Arrays;
+
 public enum ToolLevel {
-    ORDINARY(0),
-    COPPER(1),
-    IRON(2),
-    GOLD(3),
-    IRIDIUM(4);
+    ORDINARY(0, "Ordinary"),
+    COPPER(1, "Copper"),
+    IRON(2, "Iron"),
+    GOLD(3, "Gold"),
+    IRIDIUM(4, "Iridium");
 
     private int levelNumber;
+    private String name;
+    public final static ArrayList<ToolLevel> toolLevels = new ArrayList<>(Arrays.asList(values()));
 
-    ToolLevel(int levelNumber) {
+    ToolLevel(int levelNumber, String name) {
         this.levelNumber = levelNumber;
+        this.name = name;
     }
 
     public int getLevelNumber() {
@@ -35,5 +41,9 @@ public enum ToolLevel {
                 return IRIDIUM;
         }
         return null;
+    }
+
+    public String getName() {
+        return name;
     }
 }
