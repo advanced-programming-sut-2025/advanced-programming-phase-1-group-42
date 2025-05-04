@@ -9,7 +9,7 @@ import org.example.models.goods.recipes.CookingRecipe;
 import org.example.models.goods.recipes.CraftingRecipe;
 import org.example.models.goods.tools.Tool;
 import org.example.models.goods.tools.ToolType;
-
+import java.util.*;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -41,10 +41,9 @@ public class Player {
     private final ArrayList<Pair<Player, String>> giftHistory = new ArrayList<>();
 
 
-    private ArrayList<Pair<Player, Trade>> tradeList = new ArrayList<>();
-    private ArrayList<Pair<Player, Trade>> receivedTrades = new ArrayList<>();
-    private ArrayList<Pair<Player, Trade>> sentTrades = new ArrayList<>();
-    private ArrayList<Pair<Player, String>> tradeHistory = new ArrayList<>();
+    private final List<Trade> sentTrades = new ArrayList<>();
+    private final List<Trade> receivedTrades = new ArrayList<>();
+
 
     private final ArrayList<String> news = new ArrayList<>();
 
@@ -161,9 +160,22 @@ public class Player {
         return giftHistory;
     }
 
-    public ArrayList<Pair<Player, Trade>> getTradeList() { return tradeList;}
-    public ArrayList<Pair<Player, String>> getTradeHistory() {
-        return tradeHistory;
+    public void addSentTrade(Trade trade) {
+        sentTrades.add(trade);
+    }
+
+    public void addReceivedTrade(Trade trade) {
+        receivedTrades.add(trade);
+    }
+
+    public List<Trade> getReceivedTrades() {
+        return receivedTrades;
+    }
+
+    public List<Trade> getTradeHistory() {
+        List<Trade> all = new ArrayList<>(sentTrades);
+        all.addAll(receivedTrades);
+        return all;
     }
 
 
