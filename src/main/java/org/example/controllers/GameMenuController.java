@@ -876,8 +876,12 @@ public class GameMenuController extends Controller {
     }
 
     public Result cheatAddDollars(String count) {
-        //TODO
-        return new Result(true, "");
+        if(!count.matches("-?\\d+"))
+            return new Result(false, "Invalid count format");
+
+        App.getCurrentGame().getCurrentPlayer().getWallet().increaseBalance(Integer.parseInt(count));
+
+        return new Result(true, "Your balance is increased by " + count + "!");
     }
 
     public Result sell(String productName, String count) {
