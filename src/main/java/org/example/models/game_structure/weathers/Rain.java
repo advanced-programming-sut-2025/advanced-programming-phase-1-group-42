@@ -4,8 +4,8 @@ public class Rain extends Weather {
     double weatherEffectingEnergy = 1.5;
 
 
-    public void cheatThunder() {
-        // TODO
+    public void cheatThunder(int x, int y) {
+
     }
      public void thunder() {
 

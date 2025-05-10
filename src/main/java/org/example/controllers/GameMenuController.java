@@ -8,6 +8,7 @@ import org.example.models.builders.*;
 import org.example.models.builders.concrete_builders.WholeGameBuilder;
 import org.example.models.builders.concrete_builders.WholeMapBuilder;
 import org.example.models.enums.GameMenuCommands;
+import org.example.models.enums.Menu;
 import org.example.models.enums.TileType;
 import org.example.models.enums.WeatherType;
 import org.example.models.game_structure.Game;
@@ -218,7 +219,7 @@ public class GameMenuController extends Controller {
     public Result cheatThunder(String x, String y) {
         int xInt = Integer.parseInt(x);
         int yInt = Integer.parseInt(y);
-        App.getCurrentGame().getWeather().Thunder(xInt , yInt, /*TODO*/);
+        App.getCurrentGame().getWeather().Thunder(xInt , yInt);
         return new Result(true, "");
     }
 
@@ -496,7 +497,7 @@ public class GameMenuController extends Controller {
             return new Result(false, "You don't have " + seed + " in your inventory!");
         for(Good good : tile.getGoods()) {
             if(good instanceof FarmingTreeSapling || good instanceof FarmingTree ||
-            good instanceof ForagingSeed || good instanceof ForagingTree || good instanceof ForagingMineral)
+                    good instanceof ForagingSeed || good instanceof ForagingTree || good instanceof ForagingMineral)
                 return new Result(true, "A seed already planted in this tile!");
         }
 
@@ -859,7 +860,7 @@ public class GameMenuController extends Controller {
 
     //TODO: Nader
     // artisan methods
-    public Result artisanUse(String artisanName) {
+    public Result artisanUse(String artisanName , String item1_name) {
         //TODO
         return new Result(true, "");
     }
@@ -1015,7 +1016,7 @@ public class GameMenuController extends Controller {
 
         Gift gift = new Gift(giftGoods);
         player.getGiftList().add(new Pair<>(player, gift));
-        player.getNews().add("A new gift has been added to your gift list from " + username + "!");
+        player.getNews().add("A new gift has been added to your gift list from " + App.getCurrentGame().getCurrentPlayer().getUser().getUsername() + "!");
 
         return new Result(true, "Your gift has been sent to " + username + "!");
     }
@@ -1143,7 +1144,7 @@ public class GameMenuController extends Controller {
             return new Result(false, "You should be neighbor to " + username + " to give flower!");
 
         if(App.getCurrentGame().getCurrentPlayer().getFriendShips().get(player).first() != 2 ||
-        player.getFriendShips().get(App.getCurrentGame().getCurrentPlayer()).first() != 2)
+                player.getFriendShips().get(App.getCurrentGame().getCurrentPlayer()).first() != 2)
             return new Result(false, "You and " + username + " should have friendship level of 2!");
 
         boolean flag = false;
@@ -1199,7 +1200,7 @@ public class GameMenuController extends Controller {
         if(mainPlayer.getUser().getGender() == Gender.FEMALE)
             return new Result(false, "Your gender should be male to ask marriage!");
         if(mainPlayer.getFriendShips().get(player).first() != 3 ||
-        player.getFriendShips().get(mainPlayer).first() != 3)
+                player.getFriendShips().get(mainPlayer).first() != 3)
             return new Result(false, "You and " + username + " should have friendship level of 3!");
         if(mainPlayer.getCordinate().distance(player.getCordinate()) > 1)
             return new Result(false, "You should be neighbor to " + username + " to ask marriage!");
@@ -1280,40 +1281,12 @@ public class GameMenuController extends Controller {
             return new Result(false, "Invalid respond to marriage ask!");
     }
 
-
-    //TODO: Parsa
-    // Trading methods
+    // Trading
     public Result startTrade() {
-        //TODO
-        return new Result(true, "");
+        App.setCurrentMenu(Menu.TradeMenu);
+        return new Result(true, "You are now in trade menu!");
     }
 
-    public Result tradeWithMoney(String receiver, String tradeType, String Item,
-                                 String amount, String Price) {
-        //TODO
-        return new Result(true, "");
-    }
-
-    public Result tradeWithGoods(String receiver, String tradeType, String Item,
-                                 String amount, String targetItem, String targetAmount) {
-        //TODO
-        return new Result(true, "");
-    }
-
-    public Result tradeList() {
-        //TODO
-        return new Result(true, "");
-    }
-
-    public Result tradeResponse(String response, String tradeID) {
-        //TODO
-        return new Result(true, "");
-    }
-
-    public Result tradeHistory() {
-        //TODO
-        return new Result(true, "");
-    }
 
     //TODO: Nader
     // NPC methods
