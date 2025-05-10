@@ -1,10 +1,19 @@
 package org.example.models.goods.artisans;
 
-import org.example.models.goods.Good;
+import org.example.models.Pair;
+import org.example.models.goods.GoodType;
+import org.example.models.goods.foods.Food;
+import org.example.models.goods.foods.FoodType;
 
-public class Artisan extends Good {
+public class Artisan extends Food {
 
-    ArtisanType artisanType;
+    private Pair<GoodType, Integer> ingredients;
+    private ArtisanType artisanType;
+
+    public Artisan(FoodType foodType) {
+        super(foodType);
+    }
+
     @Override
     public String getName() {
         return artisanType.getName();
@@ -15,12 +24,14 @@ public class Artisan extends Good {
         return artisanType.getSellPrice() ;
     }
 
-    public ArtisanType getArtisanType() {
+    public ArtisanType getType() {
         return artisanType;
     }
 
-    public int getEnergy() {
-        return artisanType.getEnergy();
+
+    public int getSellPrice() {
+        return this.artisanType.getSellPrice(ingredients);
     }
+
 
 }

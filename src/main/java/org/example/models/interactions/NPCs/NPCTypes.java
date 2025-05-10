@@ -55,7 +55,7 @@ public enum NPCTypes {
             new Pair<>(Season.SPRING,2)),
 
     HARVEY("Harvey",
-            new ArrayList<>(List.of(ArtisanType.Coffee, ArtisanType.Wine)),
+            new ArrayList<>(List.of(ArtisanType.Coffee, ArtisanType.WINE)),
             new ArrayList<>(List.of(
                     "I just wanted to let you know that today is my birthday.",
                     "What a nice day to celebrate!",
@@ -79,7 +79,7 @@ public enum NPCTypes {
     ),
 
     LEAH("Leah",
-            new ArrayList<>(List.of(ArtisanType.Wine)),
+            new ArrayList<>(List.of(ArtisanType.WINE)),
             new ArrayList<>(List.of(
                     "Woo-hoo! It’s my birthday today!! Send me a little something, pretty please!",
                     "What a wonderful day!",
