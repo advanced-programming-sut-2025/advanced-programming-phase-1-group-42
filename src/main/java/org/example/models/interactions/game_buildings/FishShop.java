@@ -1,11 +1,14 @@
 package org.example.models.interactions.game_buildings;
 
+import org.example.models.App;
 import org.example.models.Pair;
 import org.example.models.Result;
+import org.example.models.goods.Good;
 import org.example.models.goods.GoodType;
 import org.example.models.goods.craftings.CraftingType;
 import org.example.models.goods.fishs.FishType;
 import org.example.models.goods.products.ProductType;
+import org.example.models.goods.recipes.CraftingRecipeType;
 import org.example.models.goods.tools.ToolType;
 import org.example.models.interactions.NPCs.NPC;
 import org.example.models.interactions.NPCs.NPCTypes;
@@ -24,7 +27,7 @@ public class FishShop extends GameBuilding {
                 new Pair<>(9, 17));
 
         this.products = new ArrayList<>(Arrays.asList(
-                new Pair<>(CraftingType.FISH_SMOKER, 1),
+                new Pair<>(CraftingRecipeType.FISH_SMOKER, 1),
                 new Pair<>(ProductType.TROUT_SOUP, 1),
                 new Pair<>(ToolType.BAMBOO_FISHING_POLE, 1),
                 new Pair<>(ToolType.TRAINING_FISHING_POLE, 1),
@@ -55,11 +58,36 @@ public class FishShop extends GameBuilding {
 
     @Override
     public String showProducts() {
-        return "";
+        StringBuilder list = new StringBuilder();
+        list.append("Fish Shop Available Products:\n");
+        listAvailablePartStock(list, products);
+
+        return list.toString();
     }
 
     @Override
     public Result purchase(String productName, String count) {
-        return null;
+        Pair<GoodType, Integer> productPair = null;
+        for(Pair<GoodType, Integer> pair : products) {
+            if(pair.first().getName().equals(productName)) {
+                productPair = pair;
+                break;
+            }
+        }
+
+        if(productPair == null)
+            return new Result(false, "There is no Good of this type in FishShop Shop!");
+
+
+        if(productPair.first() == CraftingRecipeType.FISH_SMOKER ||
+            productPair.first() == ProductType.TROUT_SOUP) {
+                return purchaseProduct(productName, count, productPair);
+        }
+        else {
+            if(App.getCurrentGame().getCurrentPlayer().getInventory().isInInventory(productPair.first()) != null)
+                return new Result(false, "You have this Pole in your inventory!");
+
+            return purchaseProduct(productName, count, productPair);
+        }
     }
 }
