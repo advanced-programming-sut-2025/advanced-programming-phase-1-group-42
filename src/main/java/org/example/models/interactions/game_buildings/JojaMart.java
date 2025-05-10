@@ -140,11 +140,11 @@ public class JojaMart extends GameBuilding {
         }
 
         if(productPair == null)
-            return new Result(false, "There is no Good of this type in Joja Shop!");
+            return new Result(false, "There is no Good of this type in JojaMart Shop!");
         if(partNumber != 0 &&
                 partNumber != App.getCurrentGame().getDateTime().getSeasonOfYear().getValue())
             return new Result(false, "This product is not available in season " +
-                    App.getCurrentGame().getDateTime().getSeasonOfYear().getName() + " in JojaMart");
+                    App.getCurrentGame().getDateTime().getSeasonOfYear().getName() + " in JojaMart Shop!");
 
         return purchaseProduct(productName, count, productPair);
     }
