@@ -39,7 +39,7 @@ public enum CraftingType implements GoodType {
 
     DEHYDRATOR("Dehydrator",0),
 
-    FISH_SMOKER("Fish_Smoker",0),
+    FISH_SMOKER("Fish_Smoker",10000),
 
     MYSTIC_TREE_SEED("Mystic_Tree_Seed",100);
 

@@ -65,6 +65,18 @@ public abstract class GameBuilding extends Building {
         list.append("\n");
     }
 
+
+    protected static void listAvailablePartStock(StringBuilder list, ArrayList<Pair<GoodType, Integer>> products) {
+        for (Pair<GoodType, Integer> product : products) {
+            list.append("\t>> Name : ").append(product.first().getName()).append(", Stock: ");
+            if(product.second() == Integer.MAX_VALUE)
+                list.append("Unlimited\n");
+            else if(product.second() > 0)
+                list.append(product.second()).append("\n");
+        }
+        list.append("\n");
+    }
+
     protected static Result purchaseProduct(String productName, String count, Pair<GoodType, Integer> productPair) {
         if(!count.matches("-?\\d+") && !count.isEmpty())
             return new Result(false, "Invalid Quantity format!");

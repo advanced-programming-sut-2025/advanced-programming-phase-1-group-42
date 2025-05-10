@@ -1,4 +1,65 @@
 package org.example.models.interactions.game_buildings;
 
+import org.example.models.Pair;
+import org.example.models.Result;
+import org.example.models.goods.GoodType;
+import org.example.models.goods.craftings.CraftingType;
+import org.example.models.goods.fishs.FishType;
+import org.example.models.goods.products.ProductType;
+import org.example.models.goods.tools.ToolType;
+import org.example.models.interactions.NPCs.NPC;
+import org.example.models.interactions.NPCs.NPCTypes;
+
+import java.util.ArrayList;
+import java.util.Arrays;
+
 public class FishShop extends GameBuilding {
+    private final ArrayList<Pair<GoodType, Integer>> products;
+    private final ArrayList<Integer> requiredLevel;
+
+    public FishShop() {
+        super(null,
+                "FishShop",
+                new NPC(NPCTypes.WILLY),
+                new Pair<>(9, 17));
+
+        this.products = new ArrayList<>(Arrays.asList(
+                new Pair<>(CraftingType.FISH_SMOKER, 1),
+                new Pair<>(ProductType.TROUT_SOUP, 1),
+                new Pair<>(ToolType.BAMBOO_FISHING_POLE, 1),
+                new Pair<>(ToolType.TRAINING_FISHING_POLE, 1),
+                new Pair<>(ToolType.FIBERGLASS_FISHING_POLE, 1),
+                new Pair<>(ToolType.IRIDIUM_FISHING_POLE, 1)
+        ));
+
+        this.requiredLevel = new ArrayList<>(Arrays.asList(
+                Integer.MAX_VALUE,
+                Integer.MAX_VALUE,
+                Integer.MAX_VALUE,
+                Integer.MAX_VALUE,
+                2,
+                4
+        ));
+
+
+    }
+
+    @Override
+    public String showAllProducts() {
+        StringBuilder list = new StringBuilder();
+        list.append("Fish Shop All Products:\n");
+        listPartStock(list, products);
+
+        return list.toString();
+    }
+
+    @Override
+    public String showProducts() {
+        return "";
+    }
+
+    @Override
+    public Result purchase(String productName, String count) {
+        return null;
+    }
 }

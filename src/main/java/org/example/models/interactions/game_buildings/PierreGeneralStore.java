@@ -132,17 +132,17 @@ public class PierreGeneralStore extends GameBuilding {
         StringBuilder list = new StringBuilder();
         list.append("Pierre's General Store Available Products:\n");
         list.append(stockParts.get(0)).append(" Stock:\n");
-        listPartStock(list, products.get(0));
+        listAvailablePartStock(list, products.get(0));
 
         list.append(stockParts.get(
                 App.getCurrentGame().getDateTime().getSeasonOfYear().getValue()
         )).append(" Stock:\n");
-        listPartStock(list, products.get(
+        listAvailablePartStock(list, products.get(
                 App.getCurrentGame().getDateTime().getSeasonOfYear().getValue()
         ));
 
         list.append(stockParts.get(5));
-        listPartStock(list, products.get(5));
+        listAvailablePartStock(list, products.get(5));
 
         return list.toString();
     }

@@ -80,7 +80,7 @@ public class Blacksmith extends GameBuilding {
     public String showAllProducts() {
         StringBuilder list = new StringBuilder();
         list.append("Blacksmith All Products:\n");
-        JojaMart.listPartStock(list, stock);
+        listPartStock(list, stock);
         list.append("Blacksmith Tools Upgrade :\n");
         for (int i = 0; i < 4; i++) {
             list.append("\t>> ").append(ToolLevel.toolLevels.get(i + 1).getName()).append(" Tool, Cost : ").append(upgradeToolCost.get(i))
@@ -106,13 +106,8 @@ public class Blacksmith extends GameBuilding {
     public String showProducts() {
         StringBuilder list = new StringBuilder();
         list.append("Blacksmith Available Products:\n");
-        for (Pair<GoodType, Integer> goodTypeIntegerPair : stock) {
-            list.append("\t>> Name : ").append(goodTypeIntegerPair.first().getName()).append(", Stock: ");
-            if(goodTypeIntegerPair.second() == Integer.MAX_VALUE)
-                list.append("Unlimited\n");
-            else if(goodTypeIntegerPair.second() > 0)
-                list.append(goodTypeIntegerPair.second()).append("\n");
-        }
+        listAvailablePartStock(list, stock);
+
         return list.toString();
     }
 

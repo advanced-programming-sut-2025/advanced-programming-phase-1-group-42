@@ -113,12 +113,12 @@ public class JojaMart extends GameBuilding {
         StringBuilder list = new StringBuilder();
         list.append("JojaMart Available Products:\n");
         list.append(stockParts.get(0)).append(" Stock:\n");
-        listPartStock(list, products.get(0));
+        listAvailablePartStock(list, products.get(0));
 
         list.append(stockParts.get(
                 App.getCurrentGame().getDateTime().getSeasonOfYear().getValue()
         )).append(" Stock:\n");
-        listPartStock(list, products.get(
+        listAvailablePartStock(list, products.get(
                 App.getCurrentGame().getDateTime().getSeasonOfYear().getValue()
         ));
 
