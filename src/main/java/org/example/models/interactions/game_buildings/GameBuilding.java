@@ -84,6 +84,7 @@ public abstract class GameBuilding extends Building {
         App.getCurrentGame().getCurrentPlayer().getWallet().decreaseBalance(totalPrice);
         App.getCurrentGame().getCurrentPlayer().getInventory().addGood(Good.newGoods(productPair.first(), quantity));
 
+
         if(productPair.second() != Integer.MAX_VALUE)
             productPair.setSecond(productPair.second() - quantity);
 

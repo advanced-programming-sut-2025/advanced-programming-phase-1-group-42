@@ -50,7 +50,12 @@ public enum ProductType implements GoodType {
     // BackPacks
 
     //Fish Shop
-    TROUT_SOUP("Trout_Soup", -1, 250);
+    TROUT_SOUP("Trout_Soup", -1, 250),
+
+    // BackPack
+    LARGE_PACK("Large_Pack", -1, 2000),
+
+    DELUXE_PACK("Deluxe_Pack", -1, 10000);
 
     ProductType(String name, int energy, int price) {
         this.name = name;

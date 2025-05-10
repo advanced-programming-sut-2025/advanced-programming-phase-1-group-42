@@ -23,7 +23,7 @@ public enum ArtisanType implements GoodType {
             new ArrayList<>(), -1, 600),
     Beer("Beer", "Drink in moderation.", 50, -1, 1, 0,
             new ArrayList<>(), -1, 200),
-    Vinegar("Vinegar", "An aged fermented liquid used in many cooking recipes.", 13,
+    VINEGAR("Vinegar", "An aged fermented liquid used in many cooking recipes.", 13,
             -1,0, 10, new ArrayList<>(), -1,100),
     Coffee("Coffee", "It smells delicious. This is sure to give you a boost.", 75,
             -1,0, 2, new ArrayList<>(), -1, 150),
