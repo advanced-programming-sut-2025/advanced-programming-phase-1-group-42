@@ -9,6 +9,5 @@ public class Main {
         App.startGame();
         (new AppView()).run();
 
-
     }
 }

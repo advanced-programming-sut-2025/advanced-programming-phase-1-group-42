@@ -91,4 +91,12 @@ public class Map {
     public Coordinate getEndingCoordinate() {
         return endingCoordinate;
     }
+
+    public GameBuilding findGameBuilding(Coordinate coordinate) {
+        for (GameBuilding gameBuilding : this.gameBuildings) {
+            if(gameBuilding.isInBuilding(coordinate))
+                return gameBuilding;
+        }
+        return null;
+    }
 }
