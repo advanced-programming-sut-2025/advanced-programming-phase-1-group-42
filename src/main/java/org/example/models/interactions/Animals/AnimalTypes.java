@@ -9,6 +9,7 @@ public enum AnimalTypes {
     GOAT("Goat",4000),
     SHEEP("Sheep",8000),
     PIG("Pig", 16000);
+
     private String name;
     private int price;
 

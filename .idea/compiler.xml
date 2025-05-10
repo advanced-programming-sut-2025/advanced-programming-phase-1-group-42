@@ -10,5 +10,6 @@
         <module name="AP" />
       </profile>
     </annotationProcessing>
+    <bytecodeTargetLevel target="23" />
   </component>
 </project>

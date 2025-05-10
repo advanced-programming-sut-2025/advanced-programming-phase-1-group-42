@@ -124,7 +124,50 @@ public enum NPCTypes {
             new ArrayList<>(List.of()),
             "Home",
             new Pair<>(Season.WINTER,27)
-    );
+    ),
+
+    CLINT("Clint",
+            null,
+            null,
+            null,
+            "Blacksmith",
+            null),
+
+    MORRIS("Morris",
+            null,
+            null,
+            null,
+            "JojaMart",
+            null),
+
+    PIERRE("Pierre",
+            null,
+            null,
+            null,
+            "Pierre_General_Store",
+            null),
+
+    WILLY("Willy",
+            null,
+            null,
+            null,
+            "Fish_Shop",
+            null),
+
+    MARNIE("Marnie",
+            null,
+            null,
+            null,
+            "Marnie_Ranch",
+            null),
+
+    GUS("Gus",
+            null,
+            null,
+            null,
+            "The_Stardrop_Saloon",
+            null);
+
 
 
     private final String name;
