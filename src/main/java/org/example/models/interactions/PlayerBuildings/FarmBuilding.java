@@ -6,10 +6,40 @@ import org.example.models.interactions.Animals.Animal;
 
 import java.util.ArrayList;
 
-abstract public class FarmBuilding extends PlayerBuilding {
-    abstract public boolean addAnimal(Animal animal);
-    abstract public ArrayList<Animal> getAnimals();
-    abstract public String getName();
+public class FarmBuilding extends PlayerBuilding {
+    FarmBuildingTypes type;
+    Coordinate centerCoordinate;
+
+    public FarmBuilding(Coordinate coordinate , FarmBuildingTypes type) {
+        centerCoordinate = coordinate;
+    }
+
+    ArrayList<Animal> animals = new ArrayList<>();
+    public FarmBuilding(FarmBuildingTypes type , Coordinate centerCoordinate) {
+        this.type = type;
+        this.centerCoordinate = centerCoordinate;
+    }
+
+    public boolean addAnimal(Animal animal) {
+        if (animals.size() < type.getCapacity()) {
+            animals.add(animal);
+            return true;
+        }
+        return false;
+    }
+
+
+    public ArrayList<Animal> getAnimals() {
+        return animals;
+    }
+
+    public String getName() {
+        return type.getName();
+    }
+
+    public FarmBuildingTypes getType() {
+        return type;
+    }
 
 
 }

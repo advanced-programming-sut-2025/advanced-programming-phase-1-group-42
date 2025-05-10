@@ -1,15 +1,17 @@
 package org.example.models.interactions.Animals;
 
 import org.example.models.App;
+import org.example.models.game_structure.Coordinate;
 import org.example.models.goods.Good;
 import org.example.models.goods.tools.ToolType;
+import org.example.models.interactions.PlayerBuildings.FarmBuilding;
 
 import java.util.ArrayList;
 
 public class Animal {
 
     private AnimalTypes animalType;
-    private final String name = null;
+    private final String name;
     private int productCounter = 0;
     private ArrayList<AnimalProduct> products = new ArrayList<>();
     private int friendShip = 0;
@@ -18,13 +20,24 @@ public class Animal {
     private AnimalTypes type = null;
     private boolean isOutside = false;
     private boolean wentOutside = false;
+    private Coordinate coordinate = null;
+    private FarmBuilding locatedPLace = null;
 
-    public Animal(AnimalTypes animalType) {
+    public Animal(AnimalTypes animalType,String name) {
         this.animalType = animalType;
+        this.name = name;
     }
 
     public String getName() {
-        return animalType.getName();
+        return name;
+    }
+
+    public void setCoordinate(Coordinate coordinate) {
+        this.coordinate = coordinate;
+    }
+
+    public Coordinate getCoordinate() {
+        return coordinate;
     }
 
     public ArrayList<AnimalProduct> getProducts() {
@@ -72,7 +85,7 @@ public class Animal {
         this.isFed = isFed;
     }
 
-    public void shepherdAnimal() {
+    public void shepherdAnimal(Coordinate coordinate) {
         if (App.getCurrentGame().getWeather().getName().equals("Snow")) {
             System.out.println("It's Snowing. You can't feed animals outside");
         } else if (App.getCurrentGame().getWeather().getName().equals("Rain")) {
@@ -87,6 +100,7 @@ public class Animal {
                 wentOutside = true;
                 isFed = true;
                 friendShip += 8; //going outside == feed outside??
+                this.coordinate = coordinate;
             }
         }
     }
@@ -146,6 +160,21 @@ public class Animal {
     }
     public boolean getWentOutside() {
         return wentOutside;
+    }
+
+    public void showProducts() {
+        for (AnimalProduct product : products) {
+            System.out.println(product.getName() + " " + product.getQuality() + " " + product.getSellPrice());
+        }
+        System.out.println("------------------------------------");
+    }
+
+    public void setLocatedPLace(FarmBuilding locatedPLace) {
+        locatedPLace = locatedPLace;
+    }
+
+    public FarmBuilding getLocatedPLace() {
+        return locatedPLace;
     }
 
 

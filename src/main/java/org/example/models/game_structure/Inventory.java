@@ -52,6 +52,23 @@ public class Inventory {
         return null;
     }
 
+    public boolean addGoodByObject(Good good) {
+        for (ArrayList<Good> goods : list) {
+            if (!goods.isEmpty() && goods.get(0).getName().equals(good.getName())) {
+                goods.add(good);
+                return true;
+            }
+        }
+
+        for(ArrayList<Good> goods : list) {
+            if(goods.isEmpty()) {
+                goods.add(good);
+                return true;
+            }
+        }
+        return false;
+    }
+
     public ArrayList<Good> isInInventory(GoodType goodType) {
         for (int i = 0; i < size; i++) {
             if(!list.get(i).isEmpty() && list.get(i).getFirst().getType() == goodType) {

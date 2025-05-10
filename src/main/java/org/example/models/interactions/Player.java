@@ -9,6 +9,8 @@ import org.example.models.goods.recipes.CookingRecipe;
 import org.example.models.goods.recipes.CraftingRecipe;
 import org.example.models.goods.tools.Tool;
 import org.example.models.goods.tools.ToolType;
+import org.example.models.interactions.Animals.Animal;
+import org.example.models.interactions.PlayerBuildings.FarmBuilding;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -66,7 +68,7 @@ public class Player {
         this.trashCan = new Tool(ToolType.TRASH_CAN);
 
         for (Player player : App.getCurrentGame().getPlayers()) {
-            if(player != this) {
+            if (player != this) {
                 friendShips.put(player, new Pair<>(0, 0));
                 isInteracted.put(player, false);
             }
@@ -107,7 +109,7 @@ public class Player {
         return cookingRecipes;
     }
 
-    public Coordinate getCordinate() {
+    public Coordinate getCoordinate() {
         return coordinate;
     }
 
@@ -124,7 +126,7 @@ public class Player {
     }
 
     public Fridge getFridge() {
-       return fridge;
+        return fridge;
     }
 
     public Wallet getWallet() {
@@ -177,5 +179,17 @@ public class Player {
 
     public Tool getTrashCan() {
         return trashCan;
+    }
+
+    public void showAnimals(){
+        for (FarmBuilding farmBuilding : farm.getFarmBuildings()) {
+            for (Animal animal : farmBuilding.getAnimals()) {
+                System.out.println(animal.getName());
+                System.out.println("FriendShips: " + animal.getFriendship());
+                System.out.println("Petted: " + animal.isPetted());
+                System.out.println("Fed" + animal.isFed());
+            }
+            System.out.println("------------------------------");
+        }
     }
 }

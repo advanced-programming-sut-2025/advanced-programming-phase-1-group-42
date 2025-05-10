@@ -10,7 +10,7 @@ public abstract class Weather {
     public void Thunder(int x , int y, Tile tile) {
         // TODO: method to turn Tree into Coal
         for (Good good : tile.getGoods()) {
-            if()
+//            if()
         }
 
     }
