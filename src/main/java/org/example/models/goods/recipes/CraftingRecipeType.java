@@ -26,6 +26,8 @@ public enum CraftingRecipeType implements GoodType {
     FISH_SMOKER(CraftingType.FISH_SMOKER,"50 wood + 3 iron bar + 10 coal"),
     MYSTIC_TREE_SEED(CraftingType.MYSTIC_TREE_SEED,"5 acorn + 5 maple see + 5 pine cone + 5 mahogany seed");
 
+
+
     private final CraftingType craftingType;
     private final String ingredients;
 

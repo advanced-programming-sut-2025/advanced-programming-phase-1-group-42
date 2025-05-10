@@ -195,6 +195,8 @@ public class PierreGeneralStore extends GameBuilding {
             if(productPair.second() != Integer.MAX_VALUE)
                 productPair.setSecond(productPair.second() - quantity);
 
+            return new Result(true, "Your inventory has been updated to " + productPair.first().getName());
+
         }
         else {
             return purchaseProduct(productName, count, productPair);
