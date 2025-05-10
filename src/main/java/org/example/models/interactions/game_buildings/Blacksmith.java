@@ -30,7 +30,8 @@ public class Blacksmith extends GameBuilding {
     public Blacksmith() {
         super(null,
                 "Blacksmith",
-                new NPC(NPCTypes.CLINT));
+                new NPC(NPCTypes.CLINT),
+                new Pair<>(9, 16));
 
         upgradeToolCost.addAll(Arrays.asList(2000, 5000, 10000, 25000));
         upgradeTrashCanCost.addAll(Arrays.asList(1000, 2500, 5000, 12500));
@@ -79,15 +80,7 @@ public class Blacksmith extends GameBuilding {
     public String showAllProducts() {
         StringBuilder list = new StringBuilder();
         list.append("Blacksmith All Products:\n");
-        for (Pair<GoodType, Integer> goodTypeIntegerPair : stock) {
-            list.append("\t>> Name : ").append(goodTypeIntegerPair.first().getName()).append(", Stock: ");
-            if(goodTypeIntegerPair.second() == Integer.MAX_VALUE)
-                list.append("Unlimited\n");
-            else
-                list.append(goodTypeIntegerPair.second()).append("\n");
-        }
-
-        list.append("\n");
+        JojaMart.listPartStock(list, stock);
         list.append("Blacksmith Tools Upgrade :\n");
         for (int i = 0; i < 4; i++) {
             list.append("\t>> ").append(ToolLevel.toolLevels.get(i + 1).getName()).append(" Tool, Cost : ").append(upgradeToolCost.get(i))
@@ -135,25 +128,8 @@ public class Blacksmith extends GameBuilding {
 
         if(productPair == null)
             return new Result(false, "There is no Good of this type in Blacksmith Shop!");
-        if(!count.matches("-?\\d+") && !count.isEmpty())
-            return new Result(false, "Invalid Quantity format!");
-
-        int quantity = (count.isEmpty()) ? 1 : Integer.parseInt(count);
-        if(productPair.second() < quantity)
-            return new Result(false, productName + "'s stock is less than the quantity you want!");
-
-        if(quantity * productPair.first().getSellPrice() > App.getCurrentGame().getCurrentPlayer().getWallet().getBalance()) {
-            return new Result(false, "You have enough money in your wallet to purchase this product(s)!");
-        }
-        if(App.getCurrentGame().getCurrentPlayer().getInventory().isInInventory(productName) == null &&
-        App.getCurrentGame().getCurrentPlayer().getInventory().isFull())
-            return new Result(false, "Your inventory is full to purchase this product(s)!");
-
-        int totalPrice = quantity * productPair.first().getSellPrice();
-        App.getCurrentGame().getCurrentPlayer().getWallet().decreaseBalance(totalPrice);
-        App.getCurrentGame().getCurrentPlayer().getInventory().addGood(Good.newGoods(productPair.first(), quantity));
-
-        productPair.setSecond(productPair.second() - quantity);
-        return new Result(true, productName + " " + quantity + "x stock purchased!");
+        return purchaseProduct(productName, count, productPair);
     }
+
+
 }

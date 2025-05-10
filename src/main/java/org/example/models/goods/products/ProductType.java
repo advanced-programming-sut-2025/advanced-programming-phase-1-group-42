@@ -15,6 +15,9 @@ public enum ProductType implements GoodType {
 
     GOLD_ORE("Gold_Ore", -1, 400),
 
+    //JojaMart
+    JOJA_MART("Joja_Mart", 13, 75),
+
     //Carpenter's Shop
     WOOD("Wood", -1, 10),
 
