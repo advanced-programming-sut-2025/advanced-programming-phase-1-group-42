@@ -108,7 +108,7 @@ public class Player {
     }
 
     public Coordinate getCordinate() {
-        return coordinate;
+        return new Coordinate(coordinate.getX(), coordinate.getY());
     }
 
     public void setBuff(Buff buff) {

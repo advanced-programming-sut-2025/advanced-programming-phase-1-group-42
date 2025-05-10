@@ -916,8 +916,42 @@ public class GameMenuController extends Controller {
     }
 
     public Result sell(String productName, String count) {
-        //TODO
-        return new Result(true, "");
+        ArrayList<Good> goods = App.getCurrentGame().getCurrentPlayer().getInventory().isInInventory(productName);
+        if(goods == null)
+            return new Result(false, "You don't have this good in your inventory!");
+
+        if(!count.matches("-?\\d+") && !count.isEmpty())
+            return new Result(false, "Invalid Quantity format!");
+
+        int quantity = (count.isEmpty()) ? goods.size() : Integer.parseInt(count);
+        if(quantity > goods.size())
+            return new Result(false, "You don't have enough number of this good in your inventory!");
+
+        boolean flag = false;
+        for (int i = 0; i < 8; i++) {
+            Coordinate coordinate = new Coordinate(
+                    App.getCurrentGame().getCurrentPlayer().getCordinate().getX() + Coordinate.coordinates.get(i).getX(),
+                    App.getCurrentGame().getCurrentPlayer().getCordinate().getY() + Coordinate.coordinates.get(i).getY());
+
+            Tile tile = App.getCurrentGame().getMap().findTile(coordinate);
+            if(tile != null && tile.findGood("ShippingBin") != null) {
+                ArrayList<Good> newGoods = new ArrayList<>(goods);
+                for (int j = 0; j < quantity; j++) {
+                    newGoods.add(goods.getLast());
+                    goods.removeLast();
+                }
+
+                ShippingBin shippingBin = (ShippingBin) tile.findGood("ShippingBin");
+                shippingBin.addGood(newGoods, App.getCurrentGame().getCurrentPlayer());
+                flag = true;
+                break;
+            }
+        }
+
+        if(flag)
+            return new Result(true, quantity + " number of " + productName + " has been added to ShippingBin!");
+        else
+            return new Result(false, "No ShippingBin found around you!");
     }
 
     //TODO: Arani
