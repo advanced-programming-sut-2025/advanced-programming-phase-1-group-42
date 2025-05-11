@@ -37,4 +37,6 @@ public abstract class Weather {
         return fishChance;
     }
     public abstract String getName();
+
+
 }

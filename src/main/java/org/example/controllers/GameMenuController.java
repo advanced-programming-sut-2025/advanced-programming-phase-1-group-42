@@ -229,7 +229,7 @@ public class GameMenuController extends Controller {
     public Result cheatThunder(String x, String y) {
         int xInt = Integer.parseInt(x);
         int yInt = Integer.parseInt(y);
-        App.getCurrentGame().getWeather().Thunder(xInt, yInt, /*TODO*/);
+        App.getCurrentGame().getWeather().thunder(xInt, yInt);
         return new Result(true, "");
     }
 
@@ -1002,7 +1002,7 @@ public class GameMenuController extends Controller {
             return new Result(true, "You don't have this fishing pole");
         }
         for (Coordinate coordinate : Coordinate.coordinates) {
-            Coordinate c = Coordinate.checkAround(App.getCurrentGame().getCurrentPlayer().getCordinate() , coordinate);
+            Coordinate c = Coordinate.checkAround(App.getCurrentGame().getCurrentPlayer().getCoordinate() , coordinate);
             Tile tile = App.getCurrentGame().getMap().findTile(c);
             if(tile.getTileType() == TileType.WATER){
                 Weather weather = App.getCurrentGame().getWeather();
@@ -1031,7 +1031,8 @@ public class GameMenuController extends Controller {
                 }
 
                 double rarityChance = Math.random();
-                double fishRarity = Math.max(((rarityChance*(2 + skill.getFishingLevel())*poleRarityChange)/ (7 - weather.getFishChance())) , 5);
+                double fishRarity = Math.max(((rarityChance*(2 + skill.getFishingLevel())*poleRarityChange)/ (7 - weather.getFishChance())) , 4);
+
 
                 ToolFunctions.fish(fishingPoleGood ,numberOfFishes ,fishRarity);
 

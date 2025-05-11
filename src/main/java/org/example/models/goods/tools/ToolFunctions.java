@@ -192,7 +192,8 @@ public class ToolFunctions {
     public static Result fish(ToolType fishingPole, double numberOfFishes, double rarityChance) {
 
         int numberOfFishesInt = (int)Math.floor(numberOfFishes);
-        int rarityChanceInt = (int)Math.floor(rarityChance);
+        int fishQuality = (int) Math.floor(rarityChance);
+
 
         Skill skill = App.getCurrentGame().getCurrentPlayer().getSkill();
         if(App.getCurrentGame().getCurrentPlayer().getInventory().isFull()){
@@ -310,6 +311,13 @@ public class ToolFunctions {
                     }
                     break;
             }
+
+        switch (fishQuality) {
+            case 0:
+
+
+
+        }
         App.getCurrentGame().getCurrentPlayer().getInventory().addGood(good);
 
         return new Result(true,"You've got " + good.lastIndexOf(good.getFirst()) + " " + good.getFirst().getName() + " !!!");
