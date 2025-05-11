@@ -10,6 +10,9 @@ import org.example.models.goods.recipes.CraftingRecipe;
 import org.example.models.goods.tools.Tool;
 import org.example.models.goods.tools.ToolType;
 import java.util.*;
+import org.example.models.interactions.Animals.Animal;
+import org.example.models.interactions.PlayerBuildings.FarmBuilding;
+
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -35,7 +38,8 @@ public class Player {
     private final HashMap<Player, Boolean> isInteracted = new HashMap<>();
     private final ArrayList<Pair<Player, String>> talkHistory = new ArrayList<>();
 
-
+    private final ArrayList<Trade> tradeList = new ArrayList<>();
+    private final ArrayList<Trade> tradeHistory = new ArrayList<>();
 
     private final ArrayList<Pair<Player, Gift>> giftList = new ArrayList<>();
     private final ArrayList<Pair<Player, String>> giftHistory = new ArrayList<>();
@@ -71,7 +75,7 @@ public class Player {
         this.trashCan = new Tool(ToolType.TRASH_CAN);
 
         for (Player player : App.getCurrentGame().getPlayers()) {
-            if(player != this) {
+            if (player != this) {
                 friendShips.put(player, new Pair<>(0, 0));
                 isInteracted.put(player, false);
             }
@@ -112,7 +116,7 @@ public class Player {
         return cookingRecipes;
     }
 
-    public Coordinate getCordinate() {
+    public Coordinate getCoordinate() {
         return coordinate;
     }
 
@@ -151,7 +155,6 @@ public class Player {
     public ArrayList<Pair<Player, String>> getTalkHistory() {
         return talkHistory;
     }
-
 
     public ArrayList<Pair<Player, Gift>> getGiftList() {
         return giftList;
@@ -201,6 +204,18 @@ public class Player {
 
     public Tool getTrashCan() {
         return trashCan;
+    }
+
+    public void showAnimals(){
+        for (FarmBuilding farmBuilding : farm.getFarmBuildings()) {
+            for (Animal animal : farmBuilding.getAnimals()) {
+                System.out.println(animal.getName());
+                System.out.println("FriendShips: " + animal.getFriendship());
+                System.out.println("Petted: " + animal.isPetted());
+                System.out.println("Fed" + animal.isFed());
+            }
+            System.out.println("------------------------------");
+        }
     }
 
 }

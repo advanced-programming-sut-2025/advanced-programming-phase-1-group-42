@@ -2,11 +2,14 @@ package org.example.models.game_structure;
 
 import org.example.models.interactions.GreenHouse;
 import org.example.models.interactions.Player;
+import org.example.models.interactions.PlayerBuildings.FarmBuilding;
+import org.example.models.interactions.PlayerBuildings.FarmBuildingTypes;
 
 import java.util.ArrayList;
 
 public class Farm {
     private final ArrayList<Tile> tiles = new ArrayList<>();
+    private final ArrayList<FarmBuilding> farmBuildings = new ArrayList<>();
     private GreenHouse greenHouse;
     private ArrayList<Tile> lakes;
     private ArrayList<Tile> quarry;
@@ -57,5 +60,9 @@ public class Farm {
             }
         }
         return null;
+    }
+
+    public ArrayList<FarmBuilding> getFarmBuildings() {
+        return farmBuildings;
     }
 }

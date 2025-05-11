@@ -22,6 +22,11 @@ public enum ProductType implements GoodType {
 
     GRASS("Grass", -1, -1),
 
+    //Marnie's Ranch
+    HAY("Hay", -1, 50),
+    MILK_PAIL("Milk_Pail", -1, 1000),
+    SHEARS("Shears", -1, 1000),
+
     //Pierre's general store
     // All year
     WEDDING_RING("Wedding_Ring", -1, 10000),

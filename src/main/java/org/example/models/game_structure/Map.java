@@ -2,6 +2,9 @@ package org.example.models.game_structure;
 
 import jdk.jfr.Recording;
 import org.example.models.enums.TileType;
+import org.example.models.interactions.Animals.Animal;
+import org.example.models.interactions.Player;
+import org.example.models.enums.TileType;
 import org.example.models.interactions.game_buildings.GameBuilding;
 
 import java.util.ArrayList;
@@ -10,6 +13,7 @@ public class Map {
     private final ArrayList<Tile> tiles = new ArrayList<>();
     private final ArrayList<Farm> farms = new ArrayList<>();
     private final ArrayList<GameBuilding> gameBuildings = new ArrayList<>();
+    private final ArrayList<Animal> animals = new ArrayList<>();
     private final Coordinate startingCoordinate, endingCoordinate;
 
     public Map() {
@@ -100,6 +104,23 @@ public class Map {
         return null;
     }
 
+    public TileType findTileType(Coordinate coordinate) {
+        for (Tile tile : this.tiles) {
+            if (tile.getCordinate().equals(coordinate)) {
+                return tile.getTileType();
+            }
+        }
+        return null;
+    }
+
+    public Tile findTileByXY(int x, int y) {
+        for (Tile tile : this.tiles) {
+            if (tile.getCordinate().equals(new Coordinate(x, y))) {
+                return tile;
+            }
+        }
+        return null;
+    }
     public Farm findFarm(Coordinate coordinate) {
         for (Farm farm : this.farms) {
             if(farm.findTile(coordinate) != null)
@@ -120,6 +141,19 @@ public class Map {
         for (GameBuilding gameBuilding : this.gameBuildings) {
             if(gameBuilding.isInBuilding(coordinate))
                 return gameBuilding;
+        }
+        return null;
+    }
+
+    public ArrayList<Animal> allAnimals() {
+        return this.animals;
+    }
+
+    public Animal findAnimalByName(String name) {
+        for (Animal animal : this.animals) {
+            if (animal.getName().equals(name)) {
+                return animal;
+            }
         }
         return null;
     }

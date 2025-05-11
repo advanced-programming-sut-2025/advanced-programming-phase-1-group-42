@@ -5,6 +5,6 @@ import org.example.models.game_structure.Cordinate;
 import org.example.models.interactions.Building;
 
 public class PlayerBuilding extends Building {
-    protected Coordinate centerCordinate;
+    protected Coordinate centerCoordinate;
 
 }

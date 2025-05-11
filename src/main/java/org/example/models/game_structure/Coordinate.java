@@ -26,8 +26,8 @@ public class Coordinate {
 
 
     public static Coordinate getDirection(String direction) {
-        int newX = App.getCurrentGame().getCurrentPlayer().getCordinate().getX();
-        int newY = App.getCurrentGame().getCurrentPlayer().getCordinate().getY();
+        int newX = App.getCurrentGame().getCurrentPlayer().getCoordinate().getX();
+        int newY = App.getCurrentGame().getCurrentPlayer().getCoordinate().getY();
         switch (direction) {
             case "up":
                 newY -= 1;
@@ -100,5 +100,6 @@ public class Coordinate {
         Coordinate newCoordinate = new Coordinate(x, y);
         return newCoordinate;
     }
+
 
 }
