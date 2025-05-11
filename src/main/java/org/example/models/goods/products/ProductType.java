@@ -15,6 +15,9 @@ public enum ProductType implements GoodType {
 
     GOLD_ORE("Gold_Ore", -1, 400),
 
+    //JojaMart
+    JOJA_MART("Joja_Mart", 13, 75),
+
     //Carpenter's Shop
     WOOD("Wood", -1, 10),
 
@@ -52,7 +55,14 @@ public enum ProductType implements GoodType {
     // BackPacks
 
     //Fish Shop
-    TROUT_SOUP("Trout_Soup", -1, 250);
+    TROUT_SOUP("Trout_Soup", -1, 250),
+
+    // BackPack
+    LARGE_PACK("Large_Pack", -1, 2000),
+
+    DELUXE_PACK("Deluxe_Pack", -1, 10000),
+
+    HARD_WOOD("Hard Wood",-1,0);
 
     ProductType(String name, int energy, int price) {
         this.name = name;

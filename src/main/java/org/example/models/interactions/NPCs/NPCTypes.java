@@ -3,8 +3,13 @@ package org.example.models.interactions.NPCs;
 import org.example.models.Pair;
 import org.example.models.enums.Season;
 import org.example.models.goods.GoodType;
+import org.example.models.goods.artisans.ArtisanType;
+import org.example.models.goods.farmings.FarmingCropType;
+import org.example.models.goods.fishs.FishType;
 import org.example.models.goods.foods.FoodType;
 import org.example.models.goods.foods.artisans.ArtisanType;
+import org.example.models.goods.foragings.ForagingMineralType;
+import org.example.models.goods.products.ProductType;
 
 import java.util.*;
 
@@ -28,7 +33,11 @@ public enum NPCTypes {
                     "Pizza is definitely the best food ever. Don’t you think?",
                     "Pumpkin pie reminds me of fall—a cozy treat for chilly days."
             )),
-            new ArrayList<>(List.of()),
+            new ArrayList<>(List.of(
+                    new Pair<>(ForagingMineralType.IRON , 50),
+                    new Pair<>(FoodType.PUMPKIN_PIE,1),
+                    new Pair<>(ProductType.STONE,150)
+            )),
             "Home",
             new Pair<>(Season.FALL,12)),
     ABIGAIL("Abigail",
@@ -50,12 +59,16 @@ public enum NPCTypes {
                     "Coffee is the only thing keeping me sane through these hectic mornings.",
                     "Pumpkin pie tastes amazing—it’s the highlight of fall for me."
             )),
-            new ArrayList<>(List.of()),
+            new ArrayList<>(List.of(
+                    new Pair<>(ProductType.GOLD_ORE,1),
+                    new Pair<>(FarmingCropType.PUMPKIN,1),
+                    new Pair<>(FarmingCropType.WHEAT,50)
+            )),
             "Home",
             new Pair<>(Season.SPRING,2)),
 
     HARVEY("Harvey",
-            new ArrayList<>(List.of(ArtisanType.Coffee, ArtisanType.Wine)),
+            new ArrayList<>(List.of(ArtisanType.Coffee, ArtisanType.WINE)),
             new ArrayList<>(List.of(
                     "I just wanted to let you know that today is my birthday.",
                     "What a nice day to celebrate!",
@@ -73,13 +86,18 @@ public enum NPCTypes {
                     "Coffee always gives me the energy I need to take care of my patients.",
                     "A glass of good wine is perfect for unwinding after a long day."
             )),
-            new ArrayList<>(List.of()),
+            new ArrayList<>(List.of(
+                    new Pair<>(FarmingCropType.ANY,12),
+                    new Pair<>(FishType.SALMON,1),
+                    new Pair<>(ArtisanType.WINE)
+
+            )),
             "Home",
             new Pair<>(Season.SUMMER,21)
     ),
 
     LEAH("Leah",
-            new ArrayList<>(List.of(ArtisanType.Wine)),
+            new ArrayList<>(List.of(ArtisanType.WINE)),
             new ArrayList<>(List.of(
                     "Woo-hoo! It’s my birthday today!! Send me a little something, pretty please!",
                     "What a wonderful day!",
@@ -97,7 +115,11 @@ public enum NPCTypes {
                     "A good glass of wine enhances the creative process—it’s my little tradition.",
                     "I can't live without my art—it’s the center of everything I do!"
             )),
-            new ArrayList<>(List.of()),
+            new ArrayList<>(List.of(
+                    new Pair<>(ProductType.HARD_WOOD,10),
+                    new Pair<>(FishType.SALMON,1),
+                    new Pair<>(ProductType.WOOD,200)
+            )),
             "Home",
             new Pair<>(Season.FALL,19)
     ),
@@ -121,7 +143,11 @@ public enum NPCTypes {
                     "Spaghetti is my go-to comfort food—it’s hearty and satisfying.",
                     "Crafting new furniture or tools is my ultimate passion."
             )),
-            new ArrayList<>(List.of()),
+            new ArrayList<>(List.of(
+                    new Pair<>(ProductType.WOOD,80),
+                    new Pair<>(ProductType.IRON_ORE,10),
+                    new Pair<>(ProductType.WOOD,1000)
+            )),
             "Home",
             new Pair<>(Season.WINTER,27)
     ),

@@ -98,7 +98,6 @@ public enum FoodType implements GoodType {
 
     RICE("Rice", -1, -1, null);
 
-
     private final String name;
     private final int energy;
     private final int sellPrice;

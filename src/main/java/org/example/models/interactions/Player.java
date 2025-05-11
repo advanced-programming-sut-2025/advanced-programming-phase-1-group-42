@@ -9,16 +9,13 @@ import org.example.models.goods.recipes.CookingRecipe;
 import org.example.models.goods.recipes.CraftingRecipe;
 import org.example.models.goods.tools.Tool;
 import org.example.models.goods.tools.ToolType;
-import java.util.*;
 import org.example.models.interactions.Animals.Animal;
 import org.example.models.interactions.PlayerBuildings.FarmBuilding;
 
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.HashSet;
 
 public class Player {
-
     private Coordinate coordinate;
     private Inventory inventory;
     private Good inHandGood;
@@ -43,11 +40,6 @@ public class Player {
 
     private final ArrayList<Pair<Player, Gift>> giftList = new ArrayList<>();
     private final ArrayList<Pair<Player, String>> giftHistory = new ArrayList<>();
-
-
-    private final List<Trade> sentTrades = new ArrayList<>();
-    private final List<Trade> receivedTrades = new ArrayList<>();
-
 
     private final ArrayList<String> news = new ArrayList<>();
 
@@ -75,7 +67,7 @@ public class Player {
         this.trashCan = new Tool(ToolType.TRASH_CAN);
 
         for (Player player : App.getCurrentGame().getPlayers()) {
-            if (player != this) {
+            if(player != this) {
                 friendShips.put(player, new Pair<>(0, 0));
                 isInteracted.put(player, false);
             }
@@ -117,7 +109,7 @@ public class Player {
     }
 
     public Coordinate getCoordinate() {
-        return coordinate;
+        return new Coordinate(coordinate.getX(), coordinate.getY());
     }
 
     public void setBuff(Buff buff) {
@@ -133,7 +125,7 @@ public class Player {
     }
 
     public Fridge getFridge() {
-        return fridge;
+       return fridge;
     }
 
     public Wallet getWallet() {
@@ -159,28 +151,10 @@ public class Player {
     public ArrayList<Pair<Player, Gift>> getGiftList() {
         return giftList;
     }
+
     public ArrayList<Pair<Player, String>> getGiftHistory() {
         return giftHistory;
     }
-
-    public void addSentTrade(Trade trade) {
-        sentTrades.add(trade);
-    }
-
-    public void addReceivedTrade(Trade trade) {
-        receivedTrades.add(trade);
-    }
-
-    public List<Trade> getReceivedTrades() {
-        return receivedTrades;
-    }
-
-    public List<Trade> getTradeHistory() {
-        List<Trade> all = new ArrayList<>(sentTrades);
-        all.addAll(receivedTrades);
-        return all;
-    }
-
 
     public ArrayList<String> getNews() {
         return news;
@@ -217,5 +191,4 @@ public class Player {
             System.out.println("------------------------------");
         }
     }
-
 }

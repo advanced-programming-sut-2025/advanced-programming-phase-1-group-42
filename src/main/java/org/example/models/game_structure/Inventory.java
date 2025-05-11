@@ -24,6 +24,12 @@ public class Inventory {
         this.size = size;
     }
 
+    public Inventory() {
+        list = new ArrayList<>();
+        for (int i = 0; i < 12; i++)
+            list.add(new ArrayList<>());
+    }
+
     public static boolean decreaseGoods(ArrayList<Good> goods, int number) {
         if(goods.size() < number)
             return false;
@@ -182,6 +188,15 @@ public class Inventory {
                 goods.removeIf(g -> g.getType() == type);
             }
         }
+    }
+
+    public void increaseCapacity() {
+        if(list.size() == 36)
+            return;
+
+        for (int i = 0; i < 12; i++)
+            list.add(new ArrayList<>());
+        size += 12;
     }
 
 }
