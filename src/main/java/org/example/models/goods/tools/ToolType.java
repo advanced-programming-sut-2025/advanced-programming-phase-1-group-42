@@ -65,7 +65,18 @@ public enum ToolType implements GoodType {
         this.level = level;
     }
 
-
+    public static ToolType getTool(String toolName) {
+        if(toolName.equals("Training_Fishing_Pole")){
+            return ToolType.TRAINING_FISHING_POLE;
+        } else if(toolName.equals("Bamboo_Fishing_Pole")){
+            return ToolType.BAMBOO_FISHING_POLE;
+        } else if(toolName.equals("Fiberglass_Fishing_Pole")){
+            return ToolType.FIBERGLASS_FISHING_POLE;
+        } else if(toolName.equals("Iridium_Fishing_Pole")){
+            return ToolType.IRIDIUM_FISHING_POLE;
+        }
+        return null;
+    }
 
 
 }

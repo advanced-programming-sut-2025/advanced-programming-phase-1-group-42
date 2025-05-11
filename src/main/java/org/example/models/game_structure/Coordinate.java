@@ -24,9 +24,10 @@ public class Coordinate {
         this.y = y;
     }
 
+
     public static Coordinate getDirection(String direction) {
-        int newX = App.getCurrentGame().getCurrentPlayer().getCordinate().getX();
-        int newY = App.getCurrentGame().getCurrentPlayer().getCordinate().getY();
+        int newX = App.getCurrentGame().getCurrentPlayer().getCoordinate().getX();
+        int newY = App.getCurrentGame().getCurrentPlayer().getCoordinate().getY();
         switch (direction) {
             case "up":
                 newY -= 1;
@@ -70,6 +71,8 @@ public class Coordinate {
         return y;
     }
 
+
+
     @Override
     public boolean equals(Object obj) {
         if(obj instanceof Coordinate) {
@@ -90,4 +93,13 @@ public class Coordinate {
     public int distance(Coordinate coordinate) {
         return Math.abs(x - coordinate.getX()) + Math.abs(y - coordinate.getY());
     }
+
+    public static Coordinate checkAround(Coordinate coordinate, Coordinate around) {
+        int x = coordinate.getX() + around.getX();
+        int y = coordinate.getY() + around.getY();
+        Coordinate newCoordinate = new Coordinate(x, y);
+        return newCoordinate;
+    }
+
+
 }

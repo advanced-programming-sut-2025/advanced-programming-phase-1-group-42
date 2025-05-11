@@ -1,15 +1,23 @@
 package org.example.models.game_structure.weathers;
 
 public class Sunny extends Weather {
-    double weatherEffectingEnergy = 1;
+    double weatherEffectingEnergy;
+    double fishChance ;
 
-    public void CheatThunder() {
-        // TODO
 
+    public Sunny(double weatherEffectingEnergy, double fishChance) {
+        this.weatherEffectingEnergy = weatherEffectingEnergy;
+        this.fishChance = fishChance;
     }
 
     public String getName() {
         return "Sunny";
+    }
+    public double getWeatherEffectingEnergy() {
+        return weatherEffectingEnergy;
+    }
+    public double getFishChance() {
+        return fishChance;
     }
 
     public String getCurrentWeather() { return "Sunny"; }

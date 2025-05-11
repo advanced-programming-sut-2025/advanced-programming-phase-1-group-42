@@ -4,9 +4,7 @@ import org.example.models.goods.GoodType;
 
 import java.util.ArrayList;
 
-public enum PlayerBuildingType {
+public interface PlayerBuildingType {
+    public String getName();
 
-
-    private String description;
-    private ArrayList<GoodType> goodTypes;
 }

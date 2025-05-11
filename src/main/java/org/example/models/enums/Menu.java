@@ -8,6 +8,7 @@ public enum Menu {
     LoginRegisterMenu(new LoginRegisterMenu()),
     MainMenu(new MainMenu()),
     GameMenu(new GameMenu()),
+    TradeMenu(new TradeMenu()),
     ProfileMenu(new ProfileMenu()),
     ExitMenu(new ExitMenu());
 

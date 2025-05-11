@@ -43,6 +43,6 @@ public class Energy {
     }
 
     public void energyUnlimited() {
-        //TODO
+
     }
 }
