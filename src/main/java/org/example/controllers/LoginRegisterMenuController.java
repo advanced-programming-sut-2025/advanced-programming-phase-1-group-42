@@ -1,9 +1,17 @@
 package org.example.controllers;
 
+import com.mongodb.MongoClientSettings;
+import com.mongodb.client.MongoClient;
+import com.mongodb.client.MongoClients;
+import com.mongodb.client.MongoCollection;
+import com.mongodb.client.MongoDatabase;
+import org.bson.codecs.configuration.CodecRegistry;
+import org.bson.codecs.pojo.PojoCodecProvider;
 import org.example.models.App;
 import org.example.models.Result;
 import org.example.models.enums.LoginRegisterCommands;
 import org.example.models.enums.Menu;
+import org.example.models.goods.products.Product;
 import org.example.models.interactions.Gender;
 import org.example.models.interactions.User;
 
@@ -12,8 +20,13 @@ import java.util.Scanner;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import static org.bson.codecs.configuration.CodecRegistries.fromProviders;
+import static org.bson.codecs.configuration.CodecRegistries.fromRegistries;
+
 public class LoginRegisterMenuController extends Controller {
     //TODO: Arani
+
+
 
 
 

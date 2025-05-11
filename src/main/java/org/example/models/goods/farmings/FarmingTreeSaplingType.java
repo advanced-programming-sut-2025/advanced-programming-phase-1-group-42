@@ -64,5 +64,13 @@ public enum FarmingTreeSaplingType implements GoodType {
         return name;
     }
 
+    public ArrayList<Integer> getStages() {
+        return stages;
+    }
+
+    public FarmingTreeType getFarmingTreeType() {
+        return farmingTreeType;
+    }
+
 
 }

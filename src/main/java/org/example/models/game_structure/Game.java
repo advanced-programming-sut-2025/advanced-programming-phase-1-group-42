@@ -1,10 +1,20 @@
 package org.example.models.game_structure;
 
 import org.example.models.game_structure.weathers.Weather;
+import org.example.models.goods.Good;
+import org.example.models.goods.farmings.FarmingCropType;
+import org.example.models.goods.farmings.FarmingTreeSapling;
+import org.example.models.goods.foragings.ForagingCrop;
+import org.example.models.goods.foragings.ForagingMixedSeed;
+import org.example.models.goods.foragings.ForagingSeed;
+import org.example.models.goods.foragings.ForagingSeedType;
+import org.example.models.interactions.Animals.Animal;
 import org.example.models.interactions.NPCs.NPC;
 import org.example.models.interactions.Player;
+import org.example.models.interactions.PlayerBuildings.FarmBuilding;
 
 import java.util.ArrayList;
+import java.util.Iterator;
 
 public class Game {
 
@@ -80,6 +90,69 @@ public class Game {
         // Weather setups for next day
         this.weather = tomorrow.getWeather();
         tomorrow.setWeather(weather);
+
+
+        //for animals
+        for (Player player : players) {
+            for (FarmBuilding building: player.getFarm().getFarmBuildings()){
+                for (Animal animal: building.getAnimals()){
+                    animal.animalDayResult();
+                }
+            }
+        }
+
+        //for foraging seed
+        for (Tile tile : map.getTiles()) {
+            Iterator<Good> iterator = tile.getGoods().iterator();
+            while (iterator.hasNext()) {
+                Good good = iterator.next();
+                if (good instanceof ForagingSeed) {
+                    ForagingSeed seed = (ForagingSeed) good;
+                    seed.dailyChange();
+                    if (seed.isCrop()) {
+                        iterator.remove();
+                        tile.getGoods().add(Good.newGood(seed.getCropType()));
+                    }
+                }
+            }
+        }
+
+        //for farming tree sapling
+        for (Tile tile : map.getTiles()) {
+            Iterator<Good> iterator = tile.getGoods().iterator();
+            while (iterator.hasNext()) {
+                Good good = iterator.next();
+                if (good instanceof FarmingTreeSapling) {
+                    FarmingTreeSapling sapling = (FarmingTreeSapling) good;
+                    sapling.dailyChange();
+                    if (sapling.isTree()) {
+                        iterator.remove();
+                        tile.getGoods().add(Good.newGood(sapling.getTreeType()));
+                    }
+                }
+            }
+        }
+
+
+        //for mixed seed
+
+        for (Tile tile : map.getTiles()) {
+            Iterator<Good> iterator = tile.getGoods().iterator();
+            while (iterator.hasNext()) {
+                Good good = iterator.next();
+                if (good instanceof ForagingMixedSeed) {
+                    ForagingMixedSeed seed = (ForagingMixedSeed) good;
+                    seed.dailyChange();
+                    if (seed.isCrop()) {
+                        iterator.remove();
+                        tile.getGoods().add(Good.newGood(seed.getCropType()));
+                    }
+                }
+            }
+        }
+
+
+
 
         // Check weather
     }
