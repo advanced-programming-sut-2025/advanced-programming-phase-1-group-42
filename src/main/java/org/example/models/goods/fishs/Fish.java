@@ -9,8 +9,9 @@ public class Fish extends Good {
     private FishType type;
     private GoodLevel level;
 
-    public Fish(FishType type) {
+    public Fish(FishType type , GoodLevel level) {
         this.type = type;
+        this.level = level;
     }
 
     @Override
