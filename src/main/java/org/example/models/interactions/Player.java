@@ -129,7 +129,7 @@ public class Player {
     }
 
     public Fridge getFridge() {
-       return fridge;
+        return fridge;
     }
 
     public Wallet getWallet() {

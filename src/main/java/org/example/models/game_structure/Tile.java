@@ -16,6 +16,13 @@ public class Tile {
         return goods;
     }
 
+    public void deleteGood(Good good) {
+        goods.remove(good);
+    }
+    public void addGood(Good good) {
+        goods.add(good);
+    }
+
     public void removeGoodFromTile(Good good) {
         goods.remove(good);
     }

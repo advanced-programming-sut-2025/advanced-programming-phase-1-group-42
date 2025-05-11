@@ -3,6 +3,8 @@ package org.example.models.game_structure.weathers;
 import java.util.ArrayList;
 import java.util.*;
 
+import org.example.models.App;
+
 public class Storm extends Weather {
     double weatherEffectingEnergy = 1.5;
     double fishChance = 0.5;

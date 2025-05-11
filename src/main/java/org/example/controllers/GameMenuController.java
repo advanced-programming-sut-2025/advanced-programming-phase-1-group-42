@@ -220,7 +220,7 @@ public class GameMenuController extends Controller {
     public Result cheatThunder(String x, String y) {
         int xInt = Integer.parseInt(x);
         int yInt = Integer.parseInt(y);
-        App.getCurrentGame().getWeather().Thunder(xInt , yInt, /*TODO*/);
+        App.getCurrentGame().getWeather().Thunder(xInt , yInt);
         return new Result(true, "");
     }
 
@@ -508,7 +508,7 @@ public class GameMenuController extends Controller {
             return new Result(false, "You don't have " + seed + " in your inventory!");
         for(Good good : tile.getGoods()) {
             if(good instanceof FarmingTreeSapling || good instanceof FarmingTree ||
-            good instanceof ForagingSeed || good instanceof ForagingTree || good instanceof ForagingMineral)
+                    good instanceof ForagingSeed || good instanceof ForagingTree || good instanceof ForagingMineral)
                 return new Result(true, "A seed already planted in this tile!");
         }
 
@@ -1194,7 +1194,7 @@ public class GameMenuController extends Controller {
             return new Result(false, "You should be neighbor to " + username + " to give flower!");
 
         if(App.getCurrentGame().getCurrentPlayer().getFriendShips().get(player).first() != 2 ||
-        player.getFriendShips().get(App.getCurrentGame().getCurrentPlayer()).first() != 2)
+                player.getFriendShips().get(App.getCurrentGame().getCurrentPlayer()).first() != 2)
             return new Result(false, "You and " + username + " should have friendship level of 2!");
 
         boolean flag = false;
@@ -1250,7 +1250,7 @@ public class GameMenuController extends Controller {
         if(mainPlayer.getUser().getGender() == Gender.FEMALE)
             return new Result(false, "Your gender should be male to ask marriage!");
         if(mainPlayer.getFriendShips().get(player).first() != 3 ||
-        player.getFriendShips().get(mainPlayer).first() != 3)
+                player.getFriendShips().get(mainPlayer).first() != 3)
             return new Result(false, "You and " + username + " should have friendship level of 3!");
         if(mainPlayer.getCordinate().distance(player.getCordinate()) > 1)
             return new Result(false, "You should be neighbor to " + username + " to ask marriage!");
