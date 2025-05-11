@@ -5,6 +5,7 @@ import org.example.models.goods.GoodType;
 
 public class Fish extends Good {
     private FishType type;
+    private int level;
 
     public Fish(FishType type) {
         this.type = type;

@@ -1,6 +1,7 @@
 package org.example.models.game_structure;
 
 import jdk.jfr.Recording;
+import org.example.models.enums.TileType;
 import org.example.models.interactions.game_buildings.GameBuilding;
 
 import java.util.ArrayList;
@@ -17,8 +18,30 @@ public class Map {
     }
 
     // A function to print map
-    public String printMap() {
-        //TODO
+    public String printMap(int x , int y, int size) {
+        for(int i = 0 ; i < size; i++){
+            for(int j = 0 ; j < size; j++){
+                Coordinate coordinate = new Coordinate(x + i,y + j);
+                Tile tile = findTile(coordinate);
+                if(tile == null){
+                    System.out.print(" ");
+                }else if(tile.getTileType() == TileType.FARM){
+                    System.out.print("F");
+                }else if(tile.getTileType() == TileType.WATER){
+                    System.out.print("W");
+                }else if(tile.getTileType() == TileType.GREEN_HOUSE) {
+                    System.out.print("G");
+                }else if(tile.getTileType() == TileType.PLAYER_BUILDING){
+                    System.out.print("B");
+                }else if(tile.getTileType() == TileType.ROAD){
+                    System.out.print("R");
+                }else if(tile.getTileType() == TileType.QUARRY) {
+                    System.out.print("Q");
+                }else if(tile.getTileType() == TileType.PLAIN) {
+                    System.out.print("P");
+                }
+            }
+        }
         return "";
     }
 
@@ -34,6 +57,7 @@ public class Map {
 
     public boolean dfsCheck(Coordinate start, Coordinate end) {
         //TODO
+        return false;
     }
 
     public GameBuilding getBlackSmith() {

@@ -8,12 +8,14 @@ import org.example.models.builders.*;
 import org.example.models.builders.concrete_builders.WholeGameBuilder;
 import org.example.models.builders.concrete_builders.WholeMapBuilder;
 import org.example.models.enums.GameMenuCommands;
+import org.example.models.enums.Menu;
 import org.example.models.enums.TileType;
 import org.example.models.enums.WeatherType;
 import org.example.models.game_structure.Game;
 import org.example.models.game_structure.Tile;
 
 import org.example.models.game_structure.*;
+import org.example.models.game_structure.weathers.Weather;
 import org.example.models.goods.Good;
 import org.example.models.goods.GoodType;
 import org.example.models.goods.farmings.FarmingCropType;
@@ -324,13 +326,23 @@ public class GameMenuController extends Controller {
     }
 
     public Result printMap(String x, String y, String size) {
-        //TODO
+        int IntX = Integer.parseInt(x);
+        int IntY = Integer.parseInt(y);
+        int IntSize = Integer.parseInt(size);
+        App.getCurrentGame().getMap().printMap(IntX,IntY,IntSize);
         return new Result(true, "");
     }
 
     public Result helpReadingMap() {
-        //TODO
-        return new Result(true, "");
+
+        return new Result(true, " " + " -> " + "Tile don't exist\n"+
+                                                "F" + " -> " + "Farm\n"+
+                                                "W" + " -> " + "Water\n"+
+                                                "G" + " -> " + "Green House\n"+
+                                                "B" + " -> " + "Building\n"+
+                                                "R" + " -> " + "Road\n"+
+                                                "Q" + " -> " + "Quarry\n"+
+                                                "P" + " -> " + "Plain\n");
     }
 
     //TODO: Parsa
@@ -852,14 +864,53 @@ public class GameMenuController extends Controller {
     }
 
     public Result fishing(String fishingPole) {
-        //TODO
-        return new Result(true, "");
+        if(App.getCurrentGame().getCurrentPlayer().getInventory().isInInventory(fishingPole) == null) {
+            return new Result(true, "You don't have this fishing pole");
+        }
+        for (Coordinate coordinate : Coordinate.coordinates) {
+            Coordinate c = Coordinate.checkAround(App.getCurrentGame().getCurrentPlayer().getCordinate() , coordinate);
+            Tile tile = App.getCurrentGame().getMap().findTile(c);
+            if(tile.getTileType() == TileType.WATER){
+                Weather weather = App.getCurrentGame().getWeather();
+                Skill skill = App.getCurrentGame().getCurrentPlayer().getSkill();
+                double chance = Math.random();
+
+                double numberOfFishes = Math.max(weather.getFishChance()*chance*(2 + skill.getFishingLevel()), 6);
+
+                ToolType fishingPoleGood = ToolType.getTool(fishingPole);
+                double poleRarityChange = 0;
+                switch (fishingPoleGood) {
+                    case ToolType.IRIDIUM_FISHING_POLE:
+                        poleRarityChange = 1.2;
+                        break;
+                    case ToolType.TRAINING_FISHING_POLE:
+                        poleRarityChange = 0.1;
+                        break;
+                    case ToolType.BAMBOO_FISHING_POLE:
+                        poleRarityChange = 0.5;
+                        break;
+                    case ToolType.FIBERGLASS_FISHING_POLE:
+                        poleRarityChange = 0.9;
+                        break;
+                    default:
+                        break;
+                }
+
+                double rarityChance = Math.random();
+                double fishRarity = Math.max(((rarityChance*(2 + skill.getFishingLevel())*poleRarityChange)/ (7 - weather.getFishChance())) , 5);
+
+                ToolFunctions.fish(fishingPoleGood ,numberOfFishes ,fishRarity);
+
+                return new Result(true, "You've Caught a Fish");
+            }
+        }
+        return new Result(true, "You are not close to water source");
     }
 
 
     //TODO: Nader
     // artisan methods
-    public Result artisanUse(String artisanName) {
+    public Result artisanUse(String artisanName , String item1_name) {
         //TODO
         return new Result(true, "");
     }
@@ -1015,7 +1066,7 @@ public class GameMenuController extends Controller {
 
         Gift gift = new Gift(giftGoods);
         player.getGiftList().add(new Pair<>(player, gift));
-        player.getNews().add("A new gift has been added to your gift list from " + username + "!");
+        player.getNews().add("A new gift has been added to your gift list from " + App.getCurrentGame().getCurrentPlayer().getUser().getUsername() + "!");
 
         return new Result(true, "Your gift has been sent to " + username + "!");
     }
@@ -1280,40 +1331,12 @@ public class GameMenuController extends Controller {
             return new Result(false, "Invalid respond to marriage ask!");
     }
 
-
-    //TODO: Parsa
-    // Trading methods
+    // Trading
     public Result startTrade() {
-        //TODO
-        return new Result(true, "");
+        App.setCurrentMenu(Menu.TradeMenu);
+        return new Result(true, "You are now in trade menu!");
     }
 
-    public Result tradeWithMoney(String receiver, String tradeType, String Item,
-                                 String amount, String Price) {
-        //TODO
-        return new Result(true, "");
-    }
-
-    public Result tradeWithGoods(String receiver, String tradeType, String Item,
-                                 String amount, String targetItem, String targetAmount) {
-        //TODO
-        return new Result(true, "");
-    }
-
-    public Result tradeList() {
-        //TODO
-        return new Result(true, "");
-    }
-
-    public Result tradeResponse(String response, String tradeID) {
-        //TODO
-        return new Result(true, "");
-    }
-
-    public Result tradeHistory() {
-        //TODO
-        return new Result(true, "");
-    }
 
     //TODO: Nader
     // NPC methods

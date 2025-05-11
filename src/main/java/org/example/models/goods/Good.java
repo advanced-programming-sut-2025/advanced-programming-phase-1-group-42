@@ -26,8 +26,10 @@ public abstract class Good {
     public abstract String getName();
     public abstract int getSellPrice();
     public abstract GoodType getType();
+
     protected int price;
     protected String name;
+
 
     public static Good newGood(GoodType type) {
         if(type instanceof CraftingType)

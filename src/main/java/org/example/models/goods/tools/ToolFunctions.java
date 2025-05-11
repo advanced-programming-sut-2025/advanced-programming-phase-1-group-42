@@ -6,6 +6,7 @@ import org.example.models.Result;
 import org.example.models.enums.Season;
 import org.example.models.enums.TileType;
 import org.example.models.game_structure.Coordinate;
+import org.example.models.game_structure.Skill;
 import org.example.models.game_structure.Tile;
 import org.example.models.goods.Good;
 import org.example.models.goods.GoodType;
@@ -83,25 +84,6 @@ public class ToolFunctions {
         }
     }
 
-    public static Result fishingPoleUse(Tool tool, Coordinate coordinate) {
-        switch ((ToolType) tool.getType()) {
-            case ToolType.TRAINING_FISHING_POLE -> {
-                return useTrainingFishingPole(tool, coordinate);
-            }
-            case ToolType.BAMBOO_FISHING_POLE -> {
-                return useBambooFishingPole(tool, coordinate);
-            }
-            case ToolType.FIBERGLASS_FISHING_POLE -> {
-                return useFiberglassFishingPole(tool, coordinate);
-            }
-            case ToolType.IRIDIUM_FISHING_POLE -> {
-                return useIridiumFishingPole(tool, coordinate);
-            }
-            default -> {
-                return new Result(false, "ToolType is Invalid!");
-            }
-        }
-    }
 
 
     private static Result useHoe(Tool tool, Coordinate coordinate) {
@@ -207,43 +189,132 @@ public class ToolFunctions {
         return new Result(true, ((ToolType) tool.getType()).getName() + " used");
     }
 
-    private static Result useTrainingFishingPole(Tool tool, Coordinate coordinate) {
-        Tile tile = App.getCurrentGame().getMap().findTile(coordinate);
-        if(tile == null)
-            return new Result(false, "Tile not found!");
-        if(tile.getTileType() != TileType.WATER)
-            return new Result(false, "You should use " + ((ToolType) tool.getType()).getName() + " in Water Tiles!");
+    public static Result fish(ToolType fishingPole, double numberOfFishes, double rarityChance) {
 
-        Good good = null;
-        switch (App.getCurrentGame().getDateTime().getSeasonOfYear()) {
-            case Season.SPRING ->
-                    good = tile.findGood(FishType.HERRING);
-            case Season.SUMMER ->
-                    good = tile.findGood(FishType.SUNFISH);
-            case Season.FALL ->
-                    good = tile.findGood(FishType.SARDINE);
-            case Season.WINTER ->
-                    good = tile.findGood(FishType.PERCH);
+        int numberOfFishesInt = (int)Math.floor(numberOfFishes);
+        int rarityChanceInt = (int)Math.floor(rarityChance);
+
+        Skill skill = App.getCurrentGame().getCurrentPlayer().getSkill();
+        if(App.getCurrentGame().getCurrentPlayer().getInventory().isFull()){
+            return new Result(true, "Your inventory is full!");
         }
+        Season season = App.getCurrentGame().getDateTime().getSeasonOfYear();
+        ArrayList<Good> good = null;
+
+        int chance = (int) Math.floor(Math.random()*5);
 
 
-        return null;
+            switch (season) {
+                case SPRING:
+                    switch (chance){
+                        case 0:
+                        good = Good.newGoods(FishType.HERRING,numberOfFishesInt);
+                        break;
+                        case 1:
+                        good = Good.newGoods(FishType.FLOUNDER,numberOfFishesInt);
+                        break;
+                        case 2:
+                        good = Good.newGoods(FishType.LIONFISH,numberOfFishesInt);
+                        break;
+                        case 3:
+                        good = Good.newGoods(FishType.GHOSTFISH,numberOfFishesInt);
+                        break;
+                        case 4:
+                        if(skill.getFishingLevel() == 5) {
+                            good = Good.newGoods(FishType.LEGEND,numberOfFishesInt);
+                        } else{
+                            good = Good.newGoods(FishType.HERRING,numberOfFishesInt);
+                        }
+                        break;
+                        default:
+                            good = Good.newGoods(FishType.FLOUNDER,numberOfFishesInt);
+                            break;
+                    }
+                    break;
+                case SUMMER:
+                    switch (chance){
+                        case 0:
+                            good = Good.newGoods(FishType.SUNFISH,numberOfFishesInt);
+                            break;
+                        case 1:
+                            good = Good.newGoods(FishType.DORADO,numberOfFishesInt);
+                            break;
+                        case 2:
+                            good = Good.newGoods(FishType.TILAPIA,numberOfFishesInt);
+                            break;
+                        case 3:
+                            good = Good.newGoods(FishType.RAINBOW_TROUT,numberOfFishesInt);
+                            break;
+                        case 4:
+                            if(skill.getFishingLevel() == 5) {
+                                good = Good.newGoods(FishType.CRIMSONFISH,numberOfFishesInt);
+                            } else{
+                                good = Good.newGoods(FishType.DORADO,numberOfFishesInt);
+                            }
+                            break;
+                        default:
+                            good = Good.newGoods(FishType.DORADO,numberOfFishesInt);
+                            break;
+                    }
+                    break;
+                case FALL:
+                    switch (chance){
+                        case 0:
+                            good = Good.newGoods(FishType.SARDINE,numberOfFishesInt);
+                            break;
+                        case 1:
+                            good = Good.newGoods(FishType.SALMON,numberOfFishesInt);
+                            break;
+                        case 2:
+                            good = Good.newGoods(FishType.SHAD,numberOfFishesInt);
+                            break;
+                        case 3:
+                            good = Good.newGoods(FishType.BLUE_DISCUS,numberOfFishesInt);
+                            break;
+                        case 4:
+                            if(skill.getFishingLevel() == 5) {
+                                good = Good.newGoods(FishType.ANGLER,numberOfFishesInt);
+                            } else{
+                                good = Good.newGoods(FishType.BLUE_DISCUS,numberOfFishesInt);
+                            }
+                            break;
+                        default:
+                            good = Good.newGoods(FishType.BLUE_DISCUS,numberOfFishesInt);
+                            break;
+                    }
+                    break;
+                case WINTER:
+                    switch (chance){
+                        case 0:
+                            good = Good.newGoods(FishType.PERCH , numberOfFishesInt);
+                            break;
+                        case 1:
+                            good = Good.newGoods(FishType.SQUID ,numberOfFishesInt);
+                            break;
+                        case 2:
+                            good = Good.newGoods(FishType.MIDNIGHT_CARP,numberOfFishesInt);
+                            break;
+                        case 3:
+                            good = Good.newGoods(FishType.TUNA,numberOfFishesInt);
+                            break;
+                        case 4:
+                            if(skill.getFishingLevel() == 5) {
+                                good = Good.newGoods(FishType.GLACIERFISH,numberOfFishesInt);
+                            } else{
+                                good = Good.newGoods(FishType.TUNA,numberOfFishesInt);
+                            }
+                            break;
+                        default:
+                            good = Good.newGoods(FishType.TUNA,numberOfFishesInt);
+                            break;
+                    }
+                    break;
+            }
+        App.getCurrentGame().getCurrentPlayer().getInventory().addGood(good);
+
+        return new Result(true,"You've got " + good.lastIndexOf(good.getFirst()) + " " + good.getFirst().getName() + " !!!");
     }
 
-    private static Result useBambooFishingPole(Tool tool, Coordinate coordinate) {
-        //TODO
-        return null;
-    }
-
-    private static Result useFiberglassFishingPole(Tool tool, Coordinate coordinate) {
-        //TODO
-        return null;
-    }
-
-    private static Result useIridiumFishingPole(Tool tool, Coordinate coordinate) {
-        //TODO
-        return null;
-    }
 
     private static Result useScythe(Tool tool, Coordinate coordinate) {
         Tile tile = App.getCurrentGame().getCurrentPlayer().getFarm().checkInFarm(coordinate, App.getCurrentGame().getCurrentPlayer());

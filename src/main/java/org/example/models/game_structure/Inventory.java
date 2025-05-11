@@ -70,6 +70,8 @@ public class Inventory {
         return false;
     }
 
+
+
     public boolean addGood(ArrayList<Good> addingGood) {
         for (ArrayList<Good> goods : list) {
             if (!goods.isEmpty() && goods.getFirst().getName().equals(addingGood.getFirst().getName())) {

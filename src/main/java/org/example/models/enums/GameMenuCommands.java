@@ -10,7 +10,7 @@ public enum GameMenuCommands implements Command {
 
     //TODO: Nader
     // Game Commands
-    NEW_GAME("\\s*game\\s*new\\s*-u\\s+(?<username_1>\\S+)\\s*(?<username_2>\\S+)?\\s*(?<username_3>\\S+)?\\s*"),
+    NEW_GAME("\\s*game\\s*new\\s-u\\s(?<username_1>\\S+)\\s(?<username_2>\\S+)\\s(?<username_3>\\S+)\\s*"),
     GAME_MAP("\\s*game\\s*map\\s(?<map_number>\\S+)\\s*"),
     LOAD_GAME("\\s*load\\s*game\\s*"),
     EXIT_GAME("\\s*exit\\s*game\\s*"),
@@ -81,26 +81,26 @@ public enum GameMenuCommands implements Command {
 
     //TODO: Nader
     // Cooking Commands
+
+//????????????????????????????????????????????????//
     COOKING_REFRIGERATOR(""),
     SHOW_COOKING_RECIPES("\\s*cooking\\s*show\\s*recipes\\s*"),
     COOKING_PREPARE("\\s*cooking\\s*prepare\\s(?<recipe_name>\\S+)\\s*"),
-
-
     EAT("\\s*eat\\s(?<food_name>\\S+)\\s*"),
 
     //TODO: Parsa
     // Animals & Fishing
     BUILD_BUILDING("\\s*build\\s-a\\s(?<building_name>\\S+)\\s-l\\s(?<x>\\S+)\\s(?<y>\\S+)\\s*"),
-    BUY_ANIMAL("\\s*build\\s-a\\s(?<building_name>\\S+)\\s-n\\s(?<number>\\S+)\\s*"),
+    BUY_ANIMAL("\\s*build\\s-a\\s(?<animal_name>\\S+)\\s-n\\s(?<number>\\S+)\\s*"),
     PET_ANIMAL("\\s*pet\\s-n\\s(?<petName>\\S+)\\s*"),
     ANIMAL_LIST("\\s*animal\\s*"),
-    CHEAT_SET_ANIMAL_FRIENDSHIP("\\s*cheat\\s*set\\s*friendship\\s-n\\s(?<animal name>\\S+)\\s-c\\s(?<amount>\\S+)\\s*"),
+    CHEAT_SET_ANIMAL_FRIENDSHIP("\\s*cheat\\s*set\\s*friendship\\s-n\\s(?<animal_name>\\S+)\\s-c\\s(?<amount>\\S+)\\s*"),
     SHEPHERD_ANIMAL("\\s*shepherd\\s*animals\\s-n\\s(?<animal_name>\\S+)\\s-l\\s(?<x>\\S+)\\s*\\s(?<y>\\S+)\\s*"),
     FEED_HAY("\\s*feed\\s*hay\\s-n\\s(?<anima_name>\\S+)\\s*"),
     ANIMAL_PRODUCTION_LIST("\\s*produces\\s*"),
     COLLECT_PRODUCT("\\s*collect\\s*produce\\s-n\\s(?<name>\\S+)\\s*"),
     SELL_ANIMAL("\\s*sell\\s*animal\\s+-n\\s(?<name>\\S+)\\s*"),
-    FISHING("\\s*fishing\\s+-p\\s(?<fishing pole>\\S+)\\s*"),
+    FISHING("\\s*fishing\\s+-p\\s(?<fishing_pole>\\S+)\\s*"),
 
     //TODO: Nader
     // Artisan Commands
@@ -123,23 +123,18 @@ public enum GameMenuCommands implements Command {
     TALK_HISTORY("\\s*talk\\s*history\\s+-u\\s(?<username>\\S+)\\s*"),
     GIFT("\\s*gift\\s+-u\\s(?<username>\\S+)\\s+-i\\s(?<item>\\S+)\\s+-a\\s(?<amount>\\S+)\\s*"),
     GIFT_LIST("\\s*gift\\s*list\\s*"),
-    GIFT_RATE("\\s*gift\\s*rate\\s+-i\\s(?<gift-number>\\S+)\\s+-r\\s(?<rate>\\S+)\\s*"),
+    GIFT_RATE("\\s*gift\\s*rate\\s+-i\\s(?<gift_number>\\S+)\\s+-r\\s(?<rate>\\S+)\\s*"),
     GIFT_HISTORY("\\s*gift\\s*history\\s+-u\\s(?<username>\\S+)\\s*"),
     HUG("\\s*hug\\s+-u\\s(?<username>\\S+)\\s*"),
     FLOWER("\\s*flower\\s+-u\\s(?<username>\\S+)\\s*"),
     ASK_MARRIAGE("\\s*ask\\s*marriage\\s+-u\\s(?<username>\\S+)\\s+-r\\s(?<ring>\\S+)\\s*"),
+
+    //??????????????????????????????????????????????????????????????//
     RESPOND(""),
 
 
-    //TODO: Parsa
-    //Trading
+    // Trading
     START_TRADE("\\s*start\\s*trade\\s*"),
-    TRADE_WITH_MONEY(""),
-    TRADE_WITH_GOODS(""),
-    TRADE_LIST("\\s*trade\\s*list\\s*"),
-    TRADE_RESPONSE(""),
-    TRADE_HISTORY("\\s*trade\\s*history\\s*"),
-
 
     //TODO: Nader
     // NPC
