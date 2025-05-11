@@ -3,16 +3,16 @@ package org.example.models.game_structure.weathers;
 public class Rain extends Weather {
     double weatherEffectingEnergy;
     double fishChance ;
+
+    public Rain(double effectingEnergy, double fishChance) {
+        this.weatherEffectingEnergy = effectingEnergy;
+        this.fishChance = fishChance;
+    }
     public double getWeatherEffectingEnergy() {
         return weatherEffectingEnergy;
     }
     public double getFishChance() {
         return fishChance;
-    }
-
-    public Rain(double effectingEnergy, double fishChance) {
-        this.weatherEffectingEnergy = effectingEnergy;
-        this.fishChance = fishChance;
     }
 
 

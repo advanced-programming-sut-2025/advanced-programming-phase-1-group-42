@@ -6,8 +6,8 @@ import java.util.*;
 import org.example.models.App;
 
 public class Storm extends Weather {
-    double weatherEffectingEnergy = 1.5;
-    double fishChance = 0.5;
+    double weatherEffectingEnergy ;
+    double fishChance ;
 
     public double getWeatherEffectingEnergy() {
         return weatherEffectingEnergy;
