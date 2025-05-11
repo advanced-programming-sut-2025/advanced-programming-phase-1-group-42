@@ -1468,33 +1468,6 @@ public class GameMenuController extends Controller {
         return new Result(true, "");
     }
 
-    public Result tradeWithMoney(String receiver, String tradeType, String Item,
-                                 String amount, String Price) {
-        //TODO
-        return new Result(true, "");
-    }
-
-    public Result tradeWithGoods(String receiver, String tradeType, String Item,
-                                 String amount, String targetItem, String targetAmount) {
-        //TODO
-        return new Result(true, "");
-    }
-
-    public Result tradeList() {
-        //TODO
-        return new Result(true, "");
-    }
-
-    public Result tradeResponse(String response, String tradeID) {
-        //TODO
-        return new Result(true, "");
-    }
-
-    public Result tradeHistory() {
-        //TODO
-        return new Result(true, "");
-    }
-
     //TODO: Nader
     // NPC methods
     public Result meetNPC(String npcName) {

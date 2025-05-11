@@ -1,5 +1,0 @@
-package org.example.models.game_structure;
-
-public enum TradeType {
-    OFFER, REQUEST
-}
