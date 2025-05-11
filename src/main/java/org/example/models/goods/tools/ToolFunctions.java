@@ -19,7 +19,7 @@ import org.example.models.goods.farmings.FarmingTreeType;
 import org.example.models.goods.fishs.Fish;
 import org.example.models.goods.fishs.FishType;
 import org.example.models.goods.foods.Food;
-import org.example.models.goods.foods.artisans.Artisan;
+
 import org.example.models.goods.foragings.*;
 import org.example.models.goods.products.ProductType;
 
@@ -221,120 +221,133 @@ public class ToolFunctions {
 
         int chance = (int) Math.floor(Math.random()*5);
 
-
+        if(fishingPole.equals(ToolType.TRAINING_FISHING_POLE)){
             switch (season) {
                 case SPRING:
-                    switch (chance){
+                    good = Good.newFishs(FishType.HERRING,numberOfFishesInt , fishLevel);
+                    break;
+
+                case SUMMER:
+                    good = Good.newFishs(FishType.SUNFISH,numberOfFishesInt, fishLevel);
+                    break;
+                case FALL:
+                    good = Good.newFishs(FishType.SARDINE,numberOfFishesInt, fishLevel);
+                    break;
+                case WINTER:
+                    good = Good.newFishs(FishType.PERCH , numberOfFishesInt, fishLevel);
+                    break;
+                default:
+                    break;
+            }
+        }
+        else {
+            switch (season) {
+                case SPRING:
+                    switch (chance) {
                         case 0:
-                        good = Good.newFishs(FishType.HERRING,numberOfFishesInt , fishLevel);
-                        break;
+                            good = Good.newFishs(FishType.HERRING, numberOfFishesInt, fishLevel);
+                            break;
                         case 1:
-                        good = Good.newFishs(FishType.FLOUNDER,numberOfFishesInt , fishLevel);
-                        break;
+                            good = Good.newFishs(FishType.FLOUNDER, numberOfFishesInt, fishLevel);
+                            break;
                         case 2:
-                        good = Good.newFishs(FishType.LIONFISH,numberOfFishesInt, fishLevel);
-                        break;
+                            good = Good.newFishs(FishType.LIONFISH, numberOfFishesInt, fishLevel);
+                            break;
                         case 3:
-                        good = Good.newFishs(FishType.GHOSTFISH,numberOfFishesInt, fishLevel);
-                        break;
+                            good = Good.newFishs(FishType.GHOSTFISH, numberOfFishesInt, fishLevel);
+                            break;
                         case 4:
-                        if(skill.getFishingLevel() == 5) {
-                            good = Good.newFishs(FishType.LEGEND,numberOfFishesInt, fishLevel);
-                        } else{
-                            good = Good.newFishs(FishType.HERRING,numberOfFishesInt, fishLevel);
-                        }
-                        break;
+                            if (skill.getFishingLevel() == 5) {
+                                good = Good.newFishs(FishType.LEGEND, numberOfFishesInt, fishLevel);
+                            } else {
+                                good = Good.newFishs(FishType.HERRING, numberOfFishesInt, fishLevel);
+                            }
+                            break;
                         default:
-                            good = Good.newFishs(FishType.FLOUNDER,numberOfFishesInt, fishLevel);
+                            good = Good.newFishs(FishType.FLOUNDER, numberOfFishesInt, fishLevel);
                             break;
                     }
                     break;
                 case SUMMER:
-                    switch (chance){
+                    switch (chance) {
                         case 0:
-                            good = Good.newFishs(FishType.SUNFISH,numberOfFishesInt, fishLevel);
+                            good = Good.newFishs(FishType.SUNFISH, numberOfFishesInt, fishLevel);
                             break;
                         case 1:
-                            good = Good.newFishs(FishType.DORADO,numberOfFishesInt, fishLevel);
+                            good = Good.newFishs(FishType.DORADO, numberOfFishesInt, fishLevel);
                             break;
                         case 2:
-                            good = Good.newFishs(FishType.TILAPIA,numberOfFishesInt, fishLevel);
+                            good = Good.newFishs(FishType.TILAPIA, numberOfFishesInt, fishLevel);
                             break;
                         case 3:
-                            good = Good.newFishs(FishType.RAINBOW_TROUT,numberOfFishesInt, fishLevel);
+                            good = Good.newFishs(FishType.RAINBOW_TROUT, numberOfFishesInt, fishLevel);
                             break;
                         case 4:
-                            if(skill.getFishingLevel() == 5) {
-                                good = Good.newFishs(FishType.CRIMSONFISH,numberOfFishesInt, fishLevel);
-                            } else{
-                                good = Good.newFishs(FishType.DORADO,numberOfFishesInt, fishLevel);
+                            if (skill.getFishingLevel() == 5) {
+                                good = Good.newFishs(FishType.CRIMSONFISH, numberOfFishesInt, fishLevel);
+                            } else {
+                                good = Good.newFishs(FishType.DORADO, numberOfFishesInt, fishLevel);
                             }
                             break;
                         default:
-                            good = Good.newFishs(FishType.DORADO,numberOfFishesInt, fishLevel);
+                            good = Good.newFishs(FishType.DORADO, numberOfFishesInt, fishLevel);
                             break;
                     }
                     break;
                 case FALL:
-                    switch (chance){
+                    switch (chance) {
                         case 0:
-                            good = Good.newFishs(FishType.SARDINE,numberOfFishesInt, fishLevel);
+                            good = Good.newFishs(FishType.SARDINE, numberOfFishesInt, fishLevel);
                             break;
                         case 1:
-                            good = Good.newFishs(FishType.SALMON,numberOfFishesInt, fishLevel);
+                            good = Good.newFishs(FishType.SALMON, numberOfFishesInt, fishLevel);
                             break;
                         case 2:
-                            good = Good.newFishs(FishType.SHAD,numberOfFishesInt, fishLevel);
+                            good = Good.newFishs(FishType.SHAD, numberOfFishesInt, fishLevel);
                             break;
                         case 3:
-                            good = Good.newFishs(FishType.BLUE_DISCUS,numberOfFishesInt, fishLevel);
+                            good = Good.newFishs(FishType.BLUE_DISCUS, numberOfFishesInt, fishLevel);
                             break;
                         case 4:
-                            if(skill.getFishingLevel() == 5) {
-                                good = Good.newFishs(FishType.ANGLER,numberOfFishesInt, fishLevel);
-                            } else{
-                                good = Good.newFishs(FishType.BLUE_DISCUS,numberOfFishesInt, fishLevel);
+                            if (skill.getFishingLevel() == 5) {
+                                good = Good.newFishs(FishType.ANGLER, numberOfFishesInt, fishLevel);
+                            } else {
+                                good = Good.newFishs(FishType.BLUE_DISCUS, numberOfFishesInt, fishLevel);
                             }
                             break;
                         default:
-                            good = Good.newFishs(FishType.BLUE_DISCUS,numberOfFishesInt, fishLevel);
+                            good = Good.newFishs(FishType.BLUE_DISCUS, numberOfFishesInt, fishLevel);
                             break;
                     }
                     break;
                 case WINTER:
-                    switch (chance){
+                    switch (chance) {
                         case 0:
-                            good = Good.newFishs(FishType.PERCH , numberOfFishesInt, fishLevel);
+                            good = Good.newFishs(FishType.PERCH, numberOfFishesInt, fishLevel);
                             break;
                         case 1:
-                            good = Good.newFishs(FishType.SQUID ,numberOfFishesInt, fishLevel);
+                            good = Good.newFishs(FishType.SQUID, numberOfFishesInt, fishLevel);
                             break;
                         case 2:
-                            good = Good.newFishs(FishType.MIDNIGHT_CARP,numberOfFishesInt, fishLevel);
+                            good = Good.newFishs(FishType.MIDNIGHT_CARP, numberOfFishesInt, fishLevel);
                             break;
                         case 3:
-                            good = Good.newFishs(FishType.TUNA,numberOfFishesInt, fishLevel);
+                            good = Good.newFishs(FishType.TUNA, numberOfFishesInt, fishLevel);
                             break;
                         case 4:
-                            if(skill.getFishingLevel() == 5) {
-                                good = Good.newFishs(FishType.GLACIERFISH,numberOfFishesInt, fishLevel);
-                            } else{
-                                good = Good.newFishs(FishType.TUNA,numberOfFishesInt, fishLevel);
+                            if (skill.getFishingLevel() == 5) {
+                                good = Good.newFishs(FishType.GLACIERFISH, numberOfFishesInt, fishLevel);
+                            } else {
+                                good = Good.newFishs(FishType.TUNA, numberOfFishesInt, fishLevel);
                             }
                             break;
                         default:
-                            good = Good.newFishs(FishType.TUNA,numberOfFishesInt, fishLevel);
+                            good = Good.newFishs(FishType.TUNA, numberOfFishesInt, fishLevel);
                             break;
                     }
                 default:
                     break;
             }
-
-        switch (fishQuality) {
-            case 0:
-
-
-
         }
         App.getCurrentGame().getCurrentPlayer().getInventory().addGood(good);
 

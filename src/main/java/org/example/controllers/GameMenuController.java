@@ -360,7 +360,7 @@ public class GameMenuController extends Controller {
     }
 
     public Result cheatEnergySet(String value) {
-        //TODO
+
         int valueInt = Integer.parseInt(value);
         App.getCurrentGame().getCurrentPlayer().getEnergy().increaseDayEnergyLeft(valueInt);
         return new Result(true, "");
@@ -369,6 +369,8 @@ public class GameMenuController extends Controller {
     public Result cheatEnergyUnlimited() {
         App.getCurrentGame().getCurrentPlayer().getEnergy().setMaxDayEnergy(Integer.MAX_VALUE);
         App.getCurrentGame().getCurrentPlayer().getEnergy().setMaxTurnEnergy(Integer.MAX_VALUE);
+        App.getCurrentGame().getCurrentPlayer().getEnergy().increaseTurnEnergyLeft(Integer.MAX_VALUE);
+        App.getCurrentGame().getCurrentPlayer().getEnergy().increaseDayEnergyLeft(Integer.MAX_VALUE);
         return new Result(true, "");
     }
 
@@ -477,6 +479,7 @@ public class GameMenuController extends Controller {
                 return new Result(false, "Tile not found");
 
             App.getCurrentGame().getCurrentPlayer().getEnergy().decreaseDayEnergyLeft(tool.getType().getEnergy());
+            App.getCurrentGame().getCurrentPlayer().getEnergy().decreaseTurnEnergyLeft(tool.getType().getEnergy());
 
             return ToolFunctions.tooluse(tool, coordinate);
         } else
@@ -996,6 +999,7 @@ public class GameMenuController extends Controller {
     }
 
     public Result fishing(String fishingPole) {
+        ToolType fishingPoleGood = ToolType.getTool(fishingPole);
         if(App.getCurrentGame().getCurrentPlayer().getInventory().isInInventory(fishingPole) == null) {
             return new Result(true, "You don't have this fishing pole");
         }
@@ -1009,7 +1013,7 @@ public class GameMenuController extends Controller {
 
                 double numberOfFishes = Math.max(weather.getFishChance()*chance*(2 + skill.getFishingLevel()), 6);
 
-                ToolType fishingPoleGood = ToolType.getTool(fishingPole);
+
                 double poleRarityChange = 0;
                 switch (fishingPoleGood) {
                     case ToolType.IRIDIUM_FISHING_POLE:

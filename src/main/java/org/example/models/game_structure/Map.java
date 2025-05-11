@@ -117,11 +117,7 @@ public class Map {
         return "";
     }
 
-    // function to help reading the map (Maybe RGB)
-    public String helpReadingMap() {
-        //TODO
-        return "";
-    }
+
 
     public void setFarms(ArrayList<Farm> farms) {
         this.farms.addAll(farms);

@@ -1,8 +1,10 @@
 package org.example.models.game_structure;
 
+import org.example.models.App;
 import org.example.models.enums.TileType;
 import org.example.models.goods.Good;
 import org.example.models.goods.GoodType;
+import org.example.models.goods.craftings.CraftingType;
 
 import java.util.ArrayList;
 
@@ -70,5 +72,20 @@ public class Tile {
 
     public void setWatered(boolean watered) {
         isWatered = watered;
+    }
+
+
+    public boolean checkAroundForScarCrow(){
+        for(int i = -1 ; i < 1 ; i++) {
+            for(int j = -1 ; j < 1 ; j++) {
+                for (Good good : App.getCurrentGame().getMap()
+                        .findTileByXY(this.coordinate.getX() + i, this.coordinate.getY() + j).getGoods()) {
+                    if (good.equals(CraftingType.SCARECROW)) {
+                        return true;
+                    }
+                }
+            }
+        }
+        return false;
     }
 }

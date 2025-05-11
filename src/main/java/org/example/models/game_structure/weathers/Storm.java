@@ -4,6 +4,8 @@ import java.util.ArrayList;
 import java.util.*;
 
 import org.example.models.App;
+import org.example.models.enums.TileType;
+import org.example.models.game_structure.Tile;
 
 public class Storm extends Weather {
     double weatherEffectingEnergy ;
@@ -20,7 +22,19 @@ public class Storm extends Weather {
         this.weatherEffectingEnergy = weatherEffectingEnergy;
         this.fishChance = fishChance;
     }
-    public void thunder() {
+
+    public void waterAllTiles() {
+        for(int i = 0 ; i < 140 ; i++){
+            for(int j = 0 ; j < 160 ; j++){
+                Tile tile = App.getCurrentGame().getMap().findTileByXY(i , j);
+                if(tile.getTileType().equals(TileType.FARM)){
+                    tile.setWatered(true);
+                }
+            }
+        }
+    }
+
+    public void randomThunder() {
         int[][] x = new int[3][4];
         int[][] y = new int[3][4];
 
