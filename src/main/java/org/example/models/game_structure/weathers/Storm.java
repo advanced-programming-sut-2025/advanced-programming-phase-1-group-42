@@ -44,7 +44,7 @@ public class Storm extends Weather {
 
         for (int i = 0; i < 3; i++) {
             for (int j = 0; j < 4; j++) {
-                Weather.thunder(x[i][j] , y[i][j]);
+                App.getCurrentGame().getWeather().thunder(x[i][j] , y[i][j]);
             }
         }
     }

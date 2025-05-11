@@ -13,7 +13,7 @@ public abstract class Weather {
     double weatherEffectingEnergy;
     double fishChance;
 
-    public static void thunder(int x, int y) {
+    public void thunder(int x, int y) {
         Coordinate coordinate = new Coordinate(x, y);
         Tile tile = App.getCurrentGame().getMap().findTile(coordinate);
         // TODO: method to turn Tree into Coal

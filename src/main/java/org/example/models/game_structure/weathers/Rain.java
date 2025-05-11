@@ -1,5 +1,7 @@
 package org.example.models.game_structure.weathers;
 
+import org.example.models.App;
+
 public class Rain extends Weather {
     double weatherEffectingEnergy;
     double fishChance ;
@@ -40,7 +42,7 @@ public class Rain extends Weather {
 
         for (int i = 0; i < 3; i++) {
             for (int j = 0; j < 4; j++) {
-                Weather.thunder(x[i][j] , y[i][j]);
+                App.getCurrentGame().getWeather().thunder(x[i][j] , y[i][j]);
             }
         }
     }

@@ -43,7 +43,7 @@ public abstract class Good {
             return new FarmingCrop((FarmingCropType) type);
 
         if(type instanceof FishType)
-            return new Fish((FishType) type);
+            return new Fish((FishType) type , GoodLevel.ORDINARY);
 
         if(type instanceof FoodType)
             return new Food((FoodType) type);
@@ -79,6 +79,18 @@ public abstract class Good {
         ArrayList<Good> goods = new ArrayList<>();
         for(int i = 0; i < number; i++)
             goods.add(newGood(type));
+        return goods;
+    }
+
+    public static Good newFish(GoodType type , GoodLevel fishQuality) {
+        if(type instanceof FishType)
+            return new Fish((FishType) type , fishQuality);
+        return null;
+    }
+    public static ArrayList<Good> newFishs(GoodType type, int number, GoodLevel fishQuality) {
+        ArrayList<Good> goods = new ArrayList<>();
+        for(int i = 0; i < number; i++)
+            goods.add(newFish(type , fishQuality));
         return goods;
     }
 

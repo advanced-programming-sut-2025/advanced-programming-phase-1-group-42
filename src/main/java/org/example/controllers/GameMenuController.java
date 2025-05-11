@@ -1126,8 +1126,8 @@ public class GameMenuController extends Controller {
         boolean flag = false;
         for (int i = 0; i < 8; i++) {
             Coordinate coordinate = new Coordinate(
-                    App.getCurrentGame().getCurrentPlayer().getCordinate().getX() + Coordinate.coordinates.get(i).getX(),
-                    App.getCurrentGame().getCurrentPlayer().getCordinate().getY() + Coordinate.coordinates.get(i).getY());
+                    App.getCurrentGame().getCurrentPlayer().getCoordinate().getX() + Coordinate.coordinates.get(i).getX(),
+                    App.getCurrentGame().getCurrentPlayer().getCoordinate().getY() + Coordinate.coordinates.get(i).getY());
 
             Tile tile = App.getCurrentGame().getMap().findTile(coordinate);
             if(tile != null && tile.findGood("ShippingBin") != null) {
