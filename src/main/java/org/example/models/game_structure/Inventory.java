@@ -118,7 +118,7 @@ public class Inventory {
                 for (Good g : goods) {
                     if (g.getType() == good.getType()) {
                         for (int i = 0; i < count; i++) {
-                            goods.add(good);
+                            goods.add(Good.newGood(good.getType()));
                         }
                     }
                     return true;
@@ -129,7 +129,7 @@ public class Inventory {
         for (ArrayList<Good> goods : list) {
             if (goods.isEmpty()) {
                 for (int i = 0; i < count; i++) {
-                    goods.add(good);
+                    goods.add(Good.newGood(good.getType()));
                 }
                 return true;
             }
