@@ -14,7 +14,7 @@ import java.util.regex.Pattern;
 
 public class LoginRegisterMenuController extends Controller {
     //TODO: Arani
-
+    
 
 
     public Result exit() {

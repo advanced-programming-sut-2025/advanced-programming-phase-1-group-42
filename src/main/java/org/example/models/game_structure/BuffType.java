@@ -5,7 +5,8 @@ public enum BuffType {
     FARMING_BUFF,
     FORAGING_BUFF,
     FISHING_BUFF,
-    MINING_BUFF,;
+    MINING_BUFF,
+    REJECT_BUFF;
 
 
 
