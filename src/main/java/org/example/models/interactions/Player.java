@@ -9,10 +9,11 @@ import org.example.models.goods.recipes.CookingRecipe;
 import org.example.models.goods.recipes.CraftingRecipe;
 import org.example.models.goods.tools.Tool;
 import org.example.models.goods.tools.ToolType;
+import org.example.models.interactions.Animals.Animal;
+import org.example.models.interactions.PlayerBuildings.FarmBuilding;
 
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.HashSet;
 
 public class Player {
     private Coordinate coordinate;
@@ -107,7 +108,7 @@ public class Player {
         return cookingRecipes;
     }
 
-    public Coordinate getCordinate() {
+    public Coordinate getCoordinate() {
         return new Coordinate(coordinate.getX(), coordinate.getY());
     }
 
@@ -177,5 +178,17 @@ public class Player {
 
     public Tool getTrashCan() {
         return trashCan;
+    }
+
+    public void showAnimals(){
+        for (FarmBuilding farmBuilding : farm.getFarmBuildings()) {
+            for (Animal animal : farmBuilding.getAnimals()) {
+                System.out.println(animal.getName());
+                System.out.println("FriendShips: " + animal.getFriendship());
+                System.out.println("Petted: " + animal.isPetted());
+                System.out.println("Fed" + animal.isFed());
+            }
+            System.out.println("------------------------------");
+        }
     }
 }

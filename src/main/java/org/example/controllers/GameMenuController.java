@@ -11,7 +11,6 @@ import org.example.models.enums.GameMenuCommands;
 import org.example.models.enums.TileType;
 import org.example.models.enums.WeatherType;
 import org.example.models.game_structure.Game;
-import org.example.models.game_structure.Map;
 import org.example.models.game_structure.Tile;
 
 import org.example.models.game_structure.*;
@@ -24,7 +23,6 @@ import org.example.models.goods.farmings.FarmingTreeSapling;
 import org.example.models.goods.foods.Food;
 import org.example.models.goods.foods.FoodType;
 import org.example.models.goods.foragings.*;
-import org.example.models.goods.products.Product;
 import org.example.models.goods.products.ProductType;
 import org.example.models.goods.recipes.*;
 import org.example.models.goods.recipes.CraftingFunctions;
@@ -1117,8 +1115,8 @@ public class GameMenuController extends Controller {
         boolean flag = false;
         for (int i = 0; i < 8; i++) {
             Coordinate coordinate = new Coordinate(
-                    App.getCurrentGame().getCurrentPlayer().getCordinate().getX() + Coordinate.coordinates.get(i).getX(),
-                    App.getCurrentGame().getCurrentPlayer().getCordinate().getY() + Coordinate.coordinates.get(i).getY());
+                    App.getCurrentGame().getCurrentPlayer().getCoordinate().getX() + Coordinate.coordinates.get(i).getX(),
+                    App.getCurrentGame().getCurrentPlayer().getCoordinate().getY() + Coordinate.coordinates.get(i).getY());
 
             Tile tile = App.getCurrentGame().getMap().findTile(coordinate);
             if(tile != null && tile.findGood("ShippingBin") != null) {

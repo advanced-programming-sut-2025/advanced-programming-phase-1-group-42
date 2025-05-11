@@ -70,7 +70,9 @@ public enum FarmingCropType implements GoodType {
 
     MAPLE_SYRUP("Maple_Syrup", ForagingTreeType.MAPLE_SEEDS, false, -1, 200),
 
-    PINE_TAR("Pine_Tar", ForagingTreeType.PINE_CONES, false, -1, 100);
+    PINE_TAR("Pine_Tar", ForagingTreeType.PINE_CONES, false, -1, 100),
+
+    ANY(null,null,false,-1,-1);
 
 
     private String name;
