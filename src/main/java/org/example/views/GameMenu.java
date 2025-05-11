@@ -30,6 +30,8 @@ public class GameMenu implements AppMenu {
             System.out.print(controller.exitGame());
         } else if ((matcher = GameMenuCommands.NEXT_TURN.matcher(input)) != null) {
             System.out.print(controller.nextTurn());
+        } else if(GameMenuCommands.FORCE_TERMINATE.matcher(input) != null) {
+            System.out.println(controller.forceTerminate(scanner));
         }
 
         //  Date & Time Commands

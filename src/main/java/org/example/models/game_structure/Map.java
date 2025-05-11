@@ -225,4 +225,8 @@ public class Map {
         }
         return null;
     }
+
+    public void setTiles(ArrayList<Tile> tiles) {
+        this.tiles.addAll(tiles);
+    }
 }

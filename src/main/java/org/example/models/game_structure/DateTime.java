@@ -7,7 +7,7 @@ public class DateTime {
     private int time = 9;
     private int dayOfWeek = 1;
     private int seasonOfYear = 1;
-    private Season season;
+    private Season season = Season.SPRING;
     private int year = 1;
     private int dayOfSeason = 1;
 

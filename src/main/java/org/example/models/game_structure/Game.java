@@ -15,7 +15,6 @@ public class Game {
     private Player currentPlayer;
     private Player gameAdmin;
     private Map map = null;
-    private Player currentPlayingPlayer;
     private final ArrayList<NPC> NPCs = new ArrayList<>();
     private int counter = 0;
 
@@ -92,11 +91,23 @@ public class Game {
         return null;
     }
 
-    public  ArrayList<NPC> getNPCs() {
+    public ArrayList<NPC> getNPCs() {
         return NPCs;
     }
 
+    public void setDateTime(DateTime dateTime) {
+        this.dateTime = dateTime;
+    }
 
+    public void setWeather(Weather weather) {
+        this.weather = weather;
+    }
 
+    public void setTomorrow(Tomorrow tomorrow) {
+        this.tomorrow = tomorrow;
+    }
 
+    public void setNPCs(ArrayList<NPC> npcs) {
+        this.NPCs.addAll(npcs);
+    }
 }

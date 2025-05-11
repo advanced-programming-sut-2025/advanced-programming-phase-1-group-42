@@ -1,6 +1,7 @@
 package org.example.models.interactions.game_buildings;
 
 import org.example.models.App;
+import org.example.models.Pair;
 import org.example.models.Result;
 import org.example.models.game_structure.Coordinate;
 import org.example.models.game_structure.Game;
@@ -9,6 +10,7 @@ import org.example.models.goods.Good;
 import org.example.models.goods.products.Product;
 import org.example.models.goods.products.ProductType;
 import org.example.models.interactions.NPCs.NPC;
+import org.example.models.interactions.NPCs.NPCTypes;
 import org.example.models.interactions.PlayerBuildings.FarmBuilding;
 import org.example.models.interactions.PlayerBuildings.FarmBuildingTypes;
 
@@ -22,9 +24,17 @@ public class CarpenterShop extends GameBuilding {
                     FarmBuildingTypes.COOP, FarmBuildingTypes.BIG_COOP, FarmBuildingTypes.DELUXE_COOP)
     );
 
+    public static ArrayList<Tile> getExpectedTiles(ArrayList<Tile> tiles) {
+        return getTiles(tiles, 5, 85);
+    }
 
-    public CarpenterShop(ArrayList<Tile> tiles, String name, NPC shopkeeper) {
-        super(tiles, name, shopkeeper);
+    public CarpenterShop(ArrayList<Tile> tiles) {
+        super(tiles,
+                "CarpenterShop",
+                new NPC(NPCTypes.ROBIN),
+                new Pair<>(9, 20),
+                new Coordinate(5, 85),
+                new Coordinate(25, 105));
     }
 
     @Override
@@ -77,7 +87,7 @@ public class CarpenterShop extends GameBuilding {
         return products;
     }
 
-    public FarmBuilding buildingFarmBuilding(FarmBuildingTypes farmBuildingType, Coordinate coordinate) {
-        return new FarmBuilding(farmBuildingType, coordinate);
+    public FarmBuilding buildingFarmBuilding(FarmBuildingTypes farmBuildingType, Coordinate startCoordinate) {
+        return new FarmBuilding(farmBuildingType, startCoordinate);
     }
 }
