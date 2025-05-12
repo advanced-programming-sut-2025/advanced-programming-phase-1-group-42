@@ -2,18 +2,18 @@ package org.example.models.game_structure;
 
 import org.example.models.App;
 import org.example.models.enums.TileType;
-import org.example.models.enums.WeatherType;
 import org.example.models.game_structure.weathers.Rain;
 import org.example.models.game_structure.weathers.Storm;
 import org.example.models.game_structure.weathers.Weather;
 import org.example.models.goods.Good;
 import org.example.models.goods.farmings.FarmingCrop;
+import org.example.models.goods.farmings.FarmingTree;
+import org.example.models.goods.foods.Food;
 import org.example.models.interactions.NPCs.NPC;
 import org.example.models.interactions.Player;
 
 import java.util.ArrayList;
 import java.util.Iterator;
-import java.util.List;
 
 public class Game {
 
@@ -62,7 +62,9 @@ public class Game {
             counter = 0;
             this.dateTime.timeFlow();
         }
-        currentPlayer = players.get(counter);
+        if(players.get(counter).getEnergy().isAwake()) {
+            currentPlayer = players.get(counter);
+        } else { nextPlayer();}
     }
 
     public Map getMap() {
@@ -99,7 +101,15 @@ public class Game {
         for(Player player : App.getCurrentGame().getPlayers()){
             player.getEnergy().setTurnValueLeft(50);
             player.getEnergy().setDayEnergyLeft(100);
+            player.getEnergy().setAwake(true);
         }
+
+        crowAttack();
+        App.getCurrentGame().getMap().generateRandomForagingCrops();
+        App.getCurrentGame().getMap().generateRandomForagingSeed();
+        App.getCurrentGame().getMap().generateRandomMinerals();
+
+
 
     }
 
@@ -127,10 +137,12 @@ public class Game {
                     }
                 }
             }
+
             int numberOfCrows =(int)Math.floor((double) cropCounter / 16);
             int crowCounter = 0;
+
             while(numberOfCrows != crowCounter){
-                int randomAttack = (int)(Math.random() * 4);
+                int randomAttack = (int)Math.floor((Math.random() * 4));
                 int x =(int)Math.floor(Math.random()*(player.getFarm().getTiles().size()));
                 Tile randomTile = player.getFarm().getTiles().get(x);
                 for (Good good : randomTile.getGoods()) {
@@ -138,7 +150,7 @@ public class Game {
                         crowCounter++;
                     }
                 }
-                if(randomAttack == 0){
+                if(randomAttack == 2){
                     if(!(randomTile.checkAroundForScarCrow())) {
                         Iterator<Good> iterator = randomTile.getGoods().iterator();
                         while (iterator.hasNext()) {
@@ -148,21 +160,22 @@ public class Game {
                             }
                         }
                     }
-                }
-            }
-
-            for(Tile tile :player.getFarm().getTiles()){
-                if(!(tile.getTileType().equals(TileType.GREEN_HOUSE))){
-                    for (Good good : tile.getGoods()) {
-                        if (good instanceof FarmingCrop) {
-                            cropCounter++;
+                } else if( randomAttack == 3){
+                    if(!(randomTile.checkAroundForScarCrow())) {
+                        for(Good good : randomTile.getGoods()) {
+                            if (good instanceof FarmingTree) {
+                                Iterator<Good> iterator = randomTile.getGoods().iterator();
+                                while (iterator.hasNext()) {
+                                    Good good2 = iterator.next();
+                                    if (good2 instanceof Food) {
+                                        iterator.remove();
+                                    }
+                                }
+                            }
                         }
                     }
                 }
             }
-
         }
     }
-
-
 }

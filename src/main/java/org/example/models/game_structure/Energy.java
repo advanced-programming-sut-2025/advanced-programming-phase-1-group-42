@@ -30,13 +30,18 @@ public class Energy {
     public void decreaseTurnEnergyLeft(int value) {
         this.turnValueLeft -= (int) (App.getCurrentGame().getWeather().getWeatherEffectingEnergy() * value);
         if(this.turnValueLeft <= 0){
-            this.turnValueLeft = maxTurnEnergy;
+            if(this.dayEnergyLeft <= 0){
+                this.isAwake = false;
+            }
             App.getCurrentGame().nextPlayer();
         }
     }
 
     public void setAwake(boolean awake) {
         isAwake = awake;
+    }
+    public boolean isAwake() {
+        return isAwake;
     }
 
     public void increaseDayEnergyLeft(int value) {

@@ -31,10 +31,4 @@ public class Food extends Good {
         return type;
     }
 
-    @Override
-    public GoodType getType() {
-        return foodType;
-    }
-
-
 }
