@@ -58,5 +58,9 @@ public class DateTime {
         return (date / (28 * 4)) + 1;
     }
 
+    public int getDays() {
+        return date;
+    }
+
 
 }
