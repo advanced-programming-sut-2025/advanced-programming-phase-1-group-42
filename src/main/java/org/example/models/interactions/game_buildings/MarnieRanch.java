@@ -1,7 +1,9 @@
 package org.example.models.interactions.game_buildings;
 
 import org.example.models.App;
+import org.example.models.Pair;
 import org.example.models.Result;
+import org.example.models.game_structure.Coordinate;
 import org.example.models.game_structure.Tile;
 import org.example.models.goods.Good;
 import org.example.models.goods.products.Product;
@@ -9,6 +11,7 @@ import org.example.models.goods.products.ProductType;
 import org.example.models.interactions.Animals.Animal;
 import org.example.models.interactions.Animals.AnimalTypes;
 import org.example.models.interactions.NPCs.NPC;
+import org.example.models.interactions.NPCs.NPCTypes;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -26,8 +29,17 @@ public class MarnieRanch extends GameBuilding {
                     AnimalTypes.PIG)
     );
 
-    public MarnieRanch(ArrayList<Tile> tiles, String name, NPC shopkeeper) {
-        super(tiles, name, shopkeeper);
+    public static ArrayList<Tile> getExpectedTiles(ArrayList<Tile> tiles) {
+        return getTiles(tiles, 45, 85);
+    }
+
+    public MarnieRanch(ArrayList<Tile> tiles) {
+        super(tiles,
+                "MarineRanch",
+                new NPC(NPCTypes.MARNIE),
+                new Pair<>(9, 16),
+                new Coordinate(45, 85),
+                new Coordinate(65, 105));
     }
 
 

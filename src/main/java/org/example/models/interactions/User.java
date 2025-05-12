@@ -2,6 +2,8 @@ package org.example.models.interactions;
 
 import org.example.models.game_structure.Game;
 
+import static sun.swing.MenuItemLayoutHelper.max;
+
 public class User {
     private Game game;
     private int earnedPoints;
@@ -29,26 +31,6 @@ public class User {
         this.isPlaying = false;
         this.maxPoints = 0;
         this.gamePlay = 0;
-    }
-
-    public void changeUsername(String username) {
-        this.username = username;
-    }
-
-    public void changeGender(Gender gender) {
-        this.gender = gender;
-    }
-
-    public void changeEmail(String email) {
-        this.email = email;
-    }
-
-    public void changePassword(String password) {
-        this.password = password;
-    }
-
-    public void changeNickname(String nickname) {
-        this.nickname = nickname;
     }
 
     public String getUsername() {
@@ -155,5 +137,19 @@ public class User {
         return info;
     }
 
+    public void setGame(Game game) {
+        this.game = game;
+    }
 
+    public void increaseEarnedPoints(int points) {
+        this.earnedPoints += points;
+    }
+
+    public void increaseGamePlay(int time) {
+        this.gamePlay += time;
+    }
+
+    public void maxMaxPoints(int points) {
+        this.maxPoints = max(this.maxPoints, points);
+    }
 }

@@ -1,5 +1,11 @@
 package org.example.models.game_structure.weathers;
 
+import org.example.models.App;
+import org.example.models.enums.TileType;
+import org.example.models.game_structure.Coordinate;
+import org.example.models.game_structure.Farm;
+import org.example.models.game_structure.Tile;
+
 public class Rain extends Weather {
     double weatherEffectingEnergy;
     double fishChance ;
@@ -16,34 +22,17 @@ public class Rain extends Weather {
     }
 
 
-    public void thunder() {
-        int[][] x = new int[3][4];
-        int[][] y = new int[3][4];
-
-        for (int i = 0; i < 5; i++) {
-            for (int j = 0; j < 3; j++) {
-                if(i == 0) {
-                    x[i][j] = (int) (Math.random() * 70);
-                    y[i][j] = (int) (Math.random() * 50);
-                } else if (i == 1) {
-                    x[i][j] = (int) (Math.random() * 70) + 70;
-                    y[i][j] = (int) (Math.random() * 50);
-                } else if (i == 2) {
-                    x[i][j] = (int) (Math.random() * 70);
-                    y[i][j] = (int) (Math.random() * 50) + 110;
-                } else if (i == 3) {
-                    x[i][j] = (int) (Math.random() * 70) + 70;
-                    y[i][j] = (int) (Math.random() * 50) + 110;
+    public void waterAllTiles() {
+        for(int i = 0 ; i < 140 ; i++){
+            for(int j = 0 ; j < 160 ; j++){
+                Tile tile = App.getCurrentGame().getMap().findTileByXY(i , j);
+                if(tile.getTileType().equals(TileType.FARM)){
+                    tile.setWatered(true);
                 }
             }
         }
-
-        for (int i = 0; i < 3; i++) {
-            for (int j = 0; j < 4; j++) {
-                Weather.thunder(x[i][j] , y[i][j]);
-            }
-        }
     }
+
     public String getName(){
         return "Rain";
     }

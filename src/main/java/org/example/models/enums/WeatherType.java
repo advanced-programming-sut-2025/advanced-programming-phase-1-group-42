@@ -16,5 +16,6 @@ public enum WeatherType {
     public Weather getWeather(){
         return weather;
     }
+
 }
 
