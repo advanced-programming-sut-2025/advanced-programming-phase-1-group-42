@@ -4,6 +4,7 @@ import org.example.models.Pair;
 import org.example.models.goods.GoodType;
 import org.example.models.goods.farmings.FarmingCropType;
 import org.example.models.goods.foods.FoodType;
+import org.example.models.goods.foragings.ForagingCropType;
 import org.example.models.goods.foragings.ForagingSeedType;
 import org.example.models.goods.recipes.CraftingRecipeType;
 import org.example.models.interactions.Animals.AnimalProductsType;
@@ -69,26 +70,133 @@ public enum ArtisanType implements GoodType {
     ), CraftingRecipeType.CASK),
 
     COFFEE("Coffee", "It smells delicious. This is sure to give you a boost.", new Pair<>(0.0, 75), 2, new ArrayList<>(
-            Arrays.asList(new Quadruple<>(FarmingCropType.COFFEE_BEAN, 5, 5.0, 150.0))
+            Arrays.asList(new Quadruple<>(FarmingCropType.COFFEE_BEAN, 5, 0.0, 150.0))
     ), CraftingRecipeType.KEG),
 
     JUICE("Juice", "A sweet, nutritious beverage.", new Pair<>(2.0, 0), 4 * 24, new ArrayList<>(
-            Arrays.asList()
-    ), CraftingRecipeType.KEG),
+            Arrays.asList(new Quadruple<>(FarmingCropType.ARTICHOKE, 1, 2.25, 0.0),
+                    new Quadruple<>(FarmingCropType.BEET, 1, 2.25, 0.0),
+                    new Quadruple<>(FarmingCropType.BLUEBERRY, 1, 2.25, 0.0), // Technically a fruit, but included if needed
+                    new Quadruple<>(FarmingCropType.BOK_CHOY, 1, 2.25, 0.0),
+                    new Quadruple<>(FarmingCropType.RED_CABBAGE, 1, 2.25, 0.0),
+                    new Quadruple<>(FarmingCropType.CARROT, 1, 2.25, 0.0),
+                    new Quadruple<>(FarmingCropType.CAULIFLOWER, 1, 2.25, 0.0),
+                    new Quadruple<>(FarmingCropType.CORN, 1, 2.25, 0.0),
+                    new Quadruple<>(FarmingCropType.EGGPLANT, 1, 2.25, 0.0),
+                    new Quadruple<>(FarmingCropType.GARLIC, 1, 2.25, 0.0),
+                    new Quadruple<>(FarmingCropType.GREEN_BEAN, 1, 2.25, 0.0),
+                    new Quadruple<>(FarmingCropType.HOPS, 1, 2.25, 0.0), // Technically a flower, but brewed like a vegetable
+                    new Quadruple<>(FarmingCropType.KALE, 1, 2.25, 0.0),
+                    new Quadruple<>(FarmingCropType.MELON, 1, 2.25, 0.0), // Technically a fruit
+                    new Quadruple<>(FarmingCropType.PARSNIP, 1, 2.25, 0.0),
+                    new Quadruple<>(FarmingCropType.HOT_PEPPER, 1, 2.25, 0.0), // Technically a fruit
+                    new Quadruple<>(FarmingCropType.POTATO, 1, 2.25, 0.0),
+                    new Quadruple<>(FarmingCropType.PUMPKIN, 1, 2.25, 0.0),
+                    new Quadruple<>(FarmingCropType.RADISH, 1, 2.25, 0.0),
+                    new Quadruple<>(FarmingCropType.RED_CABBAGE, 1, 2.25, 0.0),
+                    new Quadruple<>(FarmingCropType.RHUBARB, 1, 2.25, 0.0), // Technically a vegetable, despite being used like a fruit
+                    new Quadruple<>(FarmingCropType.STARFRUIT, 1, 2.25, 0.0), // Technically a fruit
+                    new Quadruple<>(FarmingCropType.SUMMER_SPANGLE, 1, 2.25, 0.0), // Flower, not a vegetable
+                    new Quadruple<>(FarmingCropType.SWEET_GEM_BERRY, 1, 2.25, 0.0), // Technically a fruit
+                    new Quadruple<>(FarmingCropType.TOMATO, 1, 2.25, 0.0), // Technically a fruit
+                    new Quadruple<>(FarmingCropType.WHEAT, 1, 2.25, 0.0), // Grain, not a vegetable
+                    new Quadruple<>(FarmingCropType.YAM, 1, 2.25, 0.0))),
+            CraftingRecipeType.KEG),
 
     MEAD("Mead", "A fermented beverage made from honey. Drink in moderation.", new Pair<>(0.0, 100), 10, new ArrayList<>(
-            Arrays.asList(new Quadruple<>(GoodType.HONEY, 1, 1.0, 300.0)))
+            Arrays.asList(new Quadruple<>(ArtisanType.HONEY, 1, 0.0, 300.0)))
             , CraftingRecipeType.KEG),
 
     PALE_ALE("Pale Ale", "Drink in moderation.", new Pair<>(0.0, 50), 3 * 24, new ArrayList<>(
-            Arrays.asList(new Quadruple<>(GoodType.HOPS, 1, 1.0, 300.0))
+            Arrays.asList(new Quadruple<>(FarmingCropType.HOPS, 1, 0.0, 300.0))
     ), CraftingRecipeType.KEG),
 
-    WINE("Wine", "Drink in moderation.", new Pair<>(1.75, 0), 7 * 24, new ArrayList<>(), CraftingRecipeType.KEG),
+    WINE("Wine", "Drink in moderation.", new Pair<>(1.75, 0), 7 * 24,
+            new ArrayList<>(// Tree Fruits (Year-round after maturity)
+                    new Quadruple<>(FoodType.APRICOT, 1, 3.0, 0.0),
+                    new Quadruple<>(FoodType.CHERRY, 1, 3.0, 0.0),
+                    new Quadruple<>(FoodType.ORANGE, 1, 3.0, 0.0),
+                    new Quadruple<>(FoodType.PEACH, 1, 3.0, 0.0),
+                    new Quadruple<>(FoodType.APPLE, 1, 3.0, 0.0),
+                    new Quadruple<>(FoodType.POMEGRANATE, 1, 3.0, 0.0),
 
-    PICKLES("Pickles", "A jar of your home-made pickles.", new Pair<>(1.75, 0), 6, new ArrayList<>(), CraftingRecipeType.PRESERVES_JAR),
+// Seasonal Fruits (Grown from seeds)
+                    new Quadruple<>(FarmingCropType.STRAWBERRY, 1, 3.0, 0.0), // Spring
+                    new Quadruple<>(FarmingCropType.BLUEBERRY, 1, 3.0, 0.0),  // Summer
+                    new Quadruple<>(FarmingCropType.MELON, 1, 3.0, 0.0),      // Summer
+                    new Quadruple<>(FarmingCropType.RED_CABBAGE, 1, 3.0, 0.0),// Summer (technically a veg, but used in kegs)
+                    new Quadruple<>(FarmingCropType.CRANBERRY, 1, 3.0, 0.0),  // Fall
+                    new Quadruple<>(FarmingCropType.GRAPE, 1, 3.0, 0.0),      // Summer/Fall (trellis)
+                    new Quadruple<>(FarmingCropType.HOPS, 1, 3.0, 0.0),       // Summer (trellis, used for Pale Ale)
 
-    JELLY("Jelly", "Gooey.", new Pair<>(2.0, 0), 3 * 24, new ArrayList<>(), CraftingRecipeType.PRESERVES_JAR),
+// Special Fruits (Foraging/Other)
+                    new Quadruple<>(ForagingCropType.BLACKBERRY, 1, 3.0, 0.0), // Foraged (Fall)
+                    new Quadruple<>(ForagingCropType.SALMONBERRY, 1, 3.0, 0.0),// Foraged (Spring)
+                    new Quadruple<>(ForagingCropType.SPICE_BERRY, 1, 3.0, 0.0), // Foraged (Summer)
+                    new Quadruple<>(ForagingCropType.WILD_HORSERADISH, 1, 3.0, 0.0), // Foraged (Spring, technically veg)
+
+// Giant Crops (If included)
+                    new Quadruple<>(FarmingCropType.GIANT_MELON, 1, 3.0, 0.0),
+                    new Quadruple<>(FarmingCropType.GIANT_PUMPKIN, 1, 3.0, 0.0),
+                    new Quadruple<>(FarmingCropType.GIANT_CAULIFLOWER, 1, 3.0, 0.0)), CraftingRecipeType.KEG),
+
+    PICKLES("Pickles", "A jar of your home-made pickles.", new Pair<>(1.75, 0), 6,
+            new ArrayList<>(Arrays.asList(new Quadruple<>(FarmingCropType.ARTICHOKE, 1, 2.25, 0.0),
+                    new Quadruple<>(FarmingCropType.BEET, 1, 2.25, 0.0),
+                    new Quadruple<>(FarmingCropType.BLUEBERRY, 1, 2.25, 0.0), // Technically a fruit, but included if needed
+                    new Quadruple<>(FarmingCropType.BOK_CHOY, 1, 2.25, 0.0),
+                    new Quadruple<>(FarmingCropType.RED_CABBAGE, 1, 2.25, 0.0),
+                    new Quadruple<>(FarmingCropType.CARROT, 1, 2.25, 0.0),
+                    new Quadruple<>(FarmingCropType.CAULIFLOWER, 1, 2.25, 0.0),
+                    new Quadruple<>(FarmingCropType.CORN, 1, 2.25, 0.0),
+                    new Quadruple<>(FarmingCropType.EGGPLANT, 1, 2.25, 0.0),
+                    new Quadruple<>(FarmingCropType.GARLIC, 1, 2.25, 0.0),
+                    new Quadruple<>(FarmingCropType.GREEN_BEAN, 1, 2.25, 0.0),
+                    new Quadruple<>(FarmingCropType.HOPS, 1, 2.25, 0.0), // Technically a flower, but brewed like a vegetable
+                    new Quadruple<>(FarmingCropType.KALE, 1, 2.25, 0.0),
+                    new Quadruple<>(FarmingCropType.MELON, 1, 2.25, 0.0), // Technically a fruit
+                    new Quadruple<>(FarmingCropType.PARSNIP, 1, 2.25, 0.0),
+                    new Quadruple<>(FarmingCropType.HOT_PEPPER, 1, 2.25, 0.0), // Technically a fruit
+                    new Quadruple<>(FarmingCropType.POTATO, 1, 2.25, 0.0),
+                    new Quadruple<>(FarmingCropType.PUMPKIN, 1, 2.25, 0.0),
+                    new Quadruple<>(FarmingCropType.RADISH, 1, 2.25, 0.0),
+                    new Quadruple<>(FarmingCropType.RED_CABBAGE, 1, 2.25, 0.0),
+                    new Quadruple<>(FarmingCropType.RHUBARB, 1, 2.25, 0.0), // Technically a vegetable, despite being used like a fruit
+                    new Quadruple<>(FarmingCropType.STARFRUIT, 1, 2.25, 0.0), // Technically a fruit
+                    new Quadruple<>(FarmingCropType.SUMMER_SPANGLE, 1, 2.25, 0.0), // Flower, not a vegetable
+                    new Quadruple<>(FarmingCropType.SWEET_GEM_BERRY, 1, 2.25, 0.0), // Technically a fruit
+                    new Quadruple<>(FarmingCropType.TOMATO, 1, 2.25, 0.0), // Technically a fruit
+                    new Quadruple<>(FarmingCropType.WHEAT, 1, 2.25, 0.0), // Grain, not a vegetable
+                    new Quadruple<>(FarmingCropType.YAM, 1, 2.25, 0.0))
+            ), CraftingRecipeType.PRESERVES_JAR),
+
+    JELLY("Jelly", "Gooey.", new Pair<>(2.0, 0), 3 * 24,
+            new ArrayList<>(                    new Quadruple<>(FoodType.APRICOT, 1, 3.0, 0.0),
+                    new Quadruple<>(FoodType.CHERRY, 1, 3.0, 0.0),
+                    new Quadruple<>(FoodType.ORANGE, 1, 3.0, 0.0),
+                    new Quadruple<>(FoodType.PEACH, 1, 3.0, 0.0),
+                    new Quadruple<>(FoodType.APPLE, 1, 3.0, 0.0),
+                    new Quadruple<>(FoodType.POMEGRANATE, 1, 3.0, 0.0),
+
+// Seasonal Fruits (Grown from seeds)
+                    new Quadruple<>(FarmingCropType.STRAWBERRY, 1, 3.0, 0.0), // Spring
+                    new Quadruple<>(FarmingCropType.BLUEBERRY, 1, 3.0, 0.0),  // Summer
+                    new Quadruple<>(FarmingCropType.MELON, 1, 3.0, 0.0),      // Summer
+                    new Quadruple<>(FarmingCropType.RED_CABBAGE, 1, 3.0, 0.0),// Summer (technically a veg, but used in kegs)
+                    new Quadruple<>(FarmingCropType.CRANBERRY, 1, 3.0, 0.0),  // Fall
+                    new Quadruple<>(FarmingCropType.GRAPE, 1, 3.0, 0.0),      // Summer/Fall (trellis)
+                    new Quadruple<>(FarmingCropType.HOPS, 1, 3.0, 0.0),       // Summer (trellis, used for Pale Ale)
+
+// Special Fruits (Foraging/Other)
+                    new Quadruple<>(ForagingCropType.BLACKBERRY, 1, 3.0, 0.0), // Foraged (Fall)
+                    new Quadruple<>(ForagingCropType.SALMONBERRY, 1, 3.0, 0.0),// Foraged (Spring)
+                    new Quadruple<>(ForagingCropType.SPICE_BERRY, 1, 3.0, 0.0), // Foraged (Summer)
+                    new Quadruple<>(ForagingCropType.WILD_HORSERADISH, 1, 3.0, 0.0), // Foraged (Spring, technically veg)
+
+// Giant Crops (If included)
+                    new Quadruple<>(FarmingCropType.GIANT_MELON, 1, 3.0, 0.0),
+                    new Quadruple<>(FarmingCropType.GIANT_PUMPKIN, 1, 3.0, 0.0),
+                    new Quadruple<>(FarmingCropType.GIANT_CAULIFLOWER, 1, 3.0, 0.0)), CraftingRecipeType.PRESERVES_JAR),
 
     DRIED_MUSHROOMS("Dried Mushrooms", "A package of gourmet mushrooms.", new Pair<>(0.0, 50), 24, new ArrayList<>(
             Arrays.asList(new Quadruple<>(null, 1, 5.0, 7.5))

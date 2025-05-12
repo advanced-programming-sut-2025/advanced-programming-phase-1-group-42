@@ -1,13 +1,8 @@
 package org.example.models.goods.farmings;
 
-import org.example.models.enums.Season;
-import org.example.models.goods.Good;
 import org.example.models.goods.GoodType;
 import org.example.models.goods.foragings.ForagingSeedType;
 import org.example.models.goods.foragings.ForagingTreeType;
-
-import java.util.ArrayList;
-import java.util.Arrays;
 
 public enum FarmingCropType implements GoodType {
 
@@ -15,7 +10,7 @@ public enum FarmingCropType implements GoodType {
     BLUE_JAZZ("Blue_Jazz", ForagingSeedType.JAZZ_SEEDS, true, 45, 50),
     CARROT("Carrot", ForagingSeedType.CARROT_SEEDS, true, 75, 35),
     CAULIFLOWER("Cauliflower", ForagingSeedType.CAULIFLOWER_SEEDS, true, 75, 175),
-    COFFEE_BEAN("Coffee_Bean", ForagingSeedType.COFFEE_BEAN, false, 0, 15),
+    COFFEE_BEAN("Coffee_Bean", ForagingSeedType.COFFEE_BEAN_SEEDS, false, 0, 15),
     GARLIC("Garlic", ForagingSeedType.GARLIC_SEEDS, true, 20, 60),
     GREEN_BEAN("Green_Bean", ForagingSeedType.BEAN_STARTER, true, 25, 40),
     KALE("Kale", ForagingSeedType.KALE_SEEDS, true, 50, 110),
@@ -48,7 +43,7 @@ public enum FarmingCropType implements GoodType {
     BEET("Beet", ForagingSeedType.BEET_SEEDS, true, 30, 100),
     BOK_CHOY("Bok_Choy", ForagingSeedType.BOK_CHOY_SEEDS, true, 25, 80),
     BROCCOLI("Broccoli", ForagingSeedType.BROCCOLI_SEEDS, true, 63, 70),
-    CRANBERRIES("Cranberries", ForagingSeedType.CRANBERRY_SEEDS, true, 38, 75),
+    CRANBERRY("Cranberries", ForagingSeedType.CRANBERRY_SEEDS, true, 38, 75),
     EGGPLANT("Eggplant", ForagingSeedType.EGGPLANT_SEEDS, true, 20, 60),
     FAIRY_ROSE("Fairy_Rose", ForagingSeedType.FAIRY_SEEDS, true, 45, 290),
     GRAPE("Grape", ForagingSeedType.GRAPE_STARTER, true, 38, 80),
@@ -103,7 +98,7 @@ public enum FarmingCropType implements GoodType {
 
     @Override
     public int getSellPrice() {
-            return 0;
+            return baseSellPrice;
     }
 
     public int getEnergy() {

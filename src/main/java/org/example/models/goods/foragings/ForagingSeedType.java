@@ -79,7 +79,7 @@ public enum ForagingSeedType implements GoodType {
             true, -1, 50, 75, new ArrayList<>(Arrays.asList(Season.FALL)), false),
     BROCCOLI_SEEDS("Broccoli_Seeds", FarmingCropType.BROCCOLI, new ArrayList<>(Arrays.asList(2, 2, 2, 2, 0)), 8,
             false, 4, 15, -1, new ArrayList<>(Arrays.asList(Season.FALL)), false),
-    CRANBERRY_SEEDS("Cranberry_Seeds", FarmingCropType.CRANBERRIES, new ArrayList<>(Arrays.asList(1, 2, 1, 1, 2)), 7,
+    CRANBERRY_SEEDS("Cranberry_Seeds", FarmingCropType.CRANBERRY, new ArrayList<>(Arrays.asList(1, 2, 1, 1, 2)), 7,
             false, 5, 300, -1, new ArrayList<>(Arrays.asList(Season.FALL)), false),
     EGGPLANT_SEEDS("Eggplant_Seeds", FarmingCropType.EGGPLANT, new ArrayList<>(Arrays.asList(1, 1, 1, 1, 0)), 5,
             false, 5, 25, -1, new ArrayList<>(Arrays.asList(Season.FALL)), false),
