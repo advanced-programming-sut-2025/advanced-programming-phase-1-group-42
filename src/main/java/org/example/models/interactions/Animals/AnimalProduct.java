@@ -1,15 +1,16 @@
 package org.example.models.interactions.Animals;
 
 import org.example.models.goods.Good;
+import org.example.models.goods.GoodLevel;
 import org.example.models.goods.GoodType;
 
 public class AnimalProduct extends Good {
     private AnimalProductsType animalProductType;
-    private AnimalProductQuality animalProductQuality;
+    private GoodLevel goodLevel;
 
-    public AnimalProduct(AnimalProductsType animalProductType , AnimalProductQuality animalProductQuality) {
+    public AnimalProduct(AnimalProductsType animalProductType , GoodLevel animalProductQuality) {
         this.animalProductType = animalProductType;
-        this.animalProductQuality = animalProductQuality;
+        this.goodLevel = animalProductQuality;
     }
 
     @Override
@@ -19,7 +20,7 @@ public class AnimalProduct extends Good {
 
     @Override
     public int getSellPrice() {
-        return (int) (animalProductType.getSellPrice()*animalProductQuality.getRatio());
+        return (int) (animalProductType.getSellPrice()*goodLevel.getRatio());
     }
 
     @Override
@@ -28,6 +29,6 @@ public class AnimalProduct extends Good {
     }
 
     public String getQuality() {
-        return animalProductQuality.name();
+        return goodLevel.name();
     }
 }
