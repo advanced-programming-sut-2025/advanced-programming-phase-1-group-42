@@ -235,6 +235,9 @@ public class GameMenuController extends Controller {
         for (Player player : App.getCurrentGame().getPlayers()) {
             player.getUser().setPlaying(false);
             player.getUser().setGame(null);
+            player.getUser().increaseEarnedPoints(player.getPoints());
+            player.getUser().maxMaxPoints(player.getPoints());
+            player.getUser().increaseGamePlay(App.getCurrentGame().getDateTime().getTime());
         }
         App.setCurrentGame(null);
 

@@ -2,6 +2,8 @@ package org.example.models.interactions;
 
 import org.example.models.game_structure.Game;
 
+import static sun.swing.MenuItemLayoutHelper.max;
+
 public class User {
     private Game game;
     private int earnedPoints;
@@ -101,5 +103,17 @@ public class User {
 
     public void setGame(Game game) {
         this.game = game;
+    }
+
+    public void increaseEarnedPoints(int points) {
+        this.earnedPoints += points;
+    }
+
+    public void increaseGamePlay(int time) {
+        this.gamePlay += time;
+    }
+
+    public void maxMaxPoints(int points) {
+        this.maxPoints = max(this.maxPoints, points);
     }
 }

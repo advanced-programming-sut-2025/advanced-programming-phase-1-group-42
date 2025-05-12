@@ -199,4 +199,8 @@ public class Player {
             System.out.println("------------------------------");
         }
     }
+
+    public int getPoints() {
+        return points;
+    }
 }
