@@ -166,7 +166,6 @@ public class GameMenuController extends Controller {
         director.createNewGame(wholeGameBuilder, players, adminPlayer);
         Game game = wholeGameBuilder.getGame();
 
-        App.setCurrentGame(game);
         for (Player player : players) {
             player.getUser().setGame(game);
             player.getUser().setPlaying(true);
@@ -182,17 +181,17 @@ public class GameMenuController extends Controller {
         director.createNewMap(wholeMapBuilder, farms, tiles);
         game.setMap(wholeMapBuilder.getMap());
 
-
+        App.setCurrentGame(game);
+        App.getGames().add(game);
         return new Result(true, "New game has successfully created & loaded!");
     }
 
     public Result loadGame() {
-        Game game = DBInteractor.loadGameFromDB(App.getCurrentUser().getUsername());
+        Game game = App.findGame(App.getCurrentUser());
         if(game == null)
             return new Result(false, "You have no game to load!");
 
         App.setCurrentGame(game);
-
         for (Player player : game.getPlayers()) {
             if (player.getUser().getUsername().equals(App.getCurrentUser().getUsername()))
                 App.getCurrentGame().setGameAdmin(player);
@@ -206,7 +205,6 @@ public class GameMenuController extends Controller {
         if (App.getCurrentGame().getGameAdmin() != App.getCurrentGame().getCurrentPlayer()) {
             return new Result(false, "Just game admin can exit the game!");
         } else {
-            DBInteractor.saveGameToDB(App.getCurrentGame());
             App.setCurrentGame(null);
             return new Result(true, "You have successfully exited the game!");
         }
@@ -231,7 +229,6 @@ public class GameMenuController extends Controller {
                 return new Result(false, "All players do not agree to terminate the game!");
         }
 
-        DBInteractor.removeGameFromDB(App.getCurrentGame());
         for (Player player : App.getCurrentGame().getPlayers()) {
             player.getUser().setPlaying(false);
             player.getUser().setGame(null);
@@ -239,8 +236,9 @@ public class GameMenuController extends Controller {
             player.getUser().maxMaxPoints(player.getPoints());
             player.getUser().increaseGamePlay(App.getCurrentGame().getDateTime().getDays());
         }
-        App.setCurrentGame(null);
 
+        App.getGames().remove(App.getCurrentGame());
+        App.setCurrentGame(null);
         return new Result(true, "Game terminated successfully!");
 
     }

@@ -9,6 +9,7 @@ import org.example.models.game_structure.Farm;
 import org.example.models.game_structure.Game;
 import org.example.models.game_structure.Map;
 import org.example.models.interactions.NPCs.NPC;
+import org.example.models.interactions.Player;
 import org.example.models.interactions.User;
 
 public class App {
@@ -25,6 +26,8 @@ public class App {
             "What city were you born in?",
             "What is your favorite movie of all time?"
     ));
+
+    private final static ArrayList<Game> games = new ArrayList<>();
 
     public static ArrayList<User> getUsers() {
         return users;
@@ -61,5 +64,20 @@ public class App {
 
     public static void startGame() {
 
+    }
+
+    public static ArrayList<Game> getGames() {
+        return games;
+    }
+
+    public static Game findGame(User user) {
+        for (Game game : games) {
+            for (Player player : game.getPlayers()) {
+                if(player.getUser().getUsername().equals(user.getUsername())) {
+                    return game;
+                }
+            }
+        }
+        return null;
     }
 }

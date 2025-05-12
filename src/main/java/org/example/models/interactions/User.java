@@ -137,10 +137,6 @@ public class User {
         return info;
     }
 
-    public void setGame(Game game) {
-        this.game = game;
-    }
-
     public void increaseEarnedPoints(int points) {
         this.earnedPoints += points;
     }
