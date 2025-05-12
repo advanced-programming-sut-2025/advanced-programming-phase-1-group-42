@@ -28,30 +28,30 @@ public enum ArtisanType implements GoodType {
 
     GOAT_CHEESE("Goat Cheese", "Soft cheese made from goat's milk.", new Pair<>(0.0, 100), 3, new ArrayList<>(
                                     Arrays.asList(
-                                            new Pair<>(GoodType.GOAT_MILK, new Pair<>(1.0, 400.0)),
-                                            new Pair<>(GoodType.LARGE_GOAT_MILK, new Pair<>(1.0, 600.0))
+                                            new Pair<>(AnimalProductsType.GOAT_MILK, new Pair<>(1.0, 400.0)),
+                                            new Pair<>(AnimalProductsType.LARGE_GOAT_MILK, new Pair<>(1.0, 600.0))
                                     ), CraftingRecipeType.CHEESE_PRESS),
 
     MAYONNAISE("Mayonnaise", "It looks spreadable.", new Pair<>(0.0, 50), 3, new ArrayList<>(
                                             Arrays.asList(
-                                                    new Pair<>(GoodType.EGG, new Pair<>(1.0, 190.0)),
+                                                    new Pair<>(FoodType.EGG, new Pair<>(1.0, 190.0)),
                                                     new Pair<>(GoodType.LARGE_EGG, new Pair<>(1.0, 237.0))
                                             ), CraftingRecipeType.MAYONNAISE_MACHINE),
 
     DUCK_MAYONNAISE("Duck Mayonnaise", "It's a rich, yellow mayonnaise.", new Pair<>(0.0, 75), 3, new ArrayList<>(
-                                                    Arrays.asList(new Pair<>(GoodType.DUCK_EGG, new Pair<>(1.0, 375.0)))
+                                                    Arrays.asList(new Pair<>(AnimalProductsType.DUCK_EGG, new Pair<>(1.0, 375.0)))
                                                     , CraftingRecipeType.MAYONNAISE_MACHINE),
 
     DINOSAUR_MAYONNAISE("Dinosaur Mayonnaise", "It's thick and creamy, with a vivid green hue. It smells like grass and leather.", new Pair<>(0.0, 125), 3, new ArrayList<>(
-                                                            Arrays.asList(new Pair<>(GoodType.DINOSAUR_EGG, new Pair<>(1.0, 800.0)))
+                                                            Arrays.asList(new Pair<>(AnimalProductsType.DINOSAUR_EGG, new Pair<>(1.0, 800.0)))
                                                             , CraftingRecipeType.MAYONNAISE_MACHINE),
 
     TRUFFLE_OIL("Truffle Oil", "A gourmet cooking ingredient.", new Pair<>(0.0, 38), 6, new ArrayList<>(
-                                                                    Arrays.asList(new Pair<>(GoodType.TRUFFLE, new Pair<>(1.0, 1065.0)))
+                                                                    Arrays.asList(new Pair<>(AnimalProductsType.TRUFFLE, new Pair<>(1.0, 1065.0)))
                                                                     , CraftingRecipeType.OIL_MAKER),
 
     BEER("Beer", "Drink in moderation.", new Pair<>(0.0, 50), 24, new ArrayList<>(
-                                                                    Arrays.asList(new Pair<>(GoodType.WHEAT, new Pair<>(1.0, 200.0)))
+                                                                    Arrays.asList(new Pair<>(AnimalProductsTyper.WHEAT, new Pair<>(1.0, 200.0)))
                                                             ), CraftingRecipeType.KEG),
     VINEGAR("Vinegar", "An aged fermented liquid used in many cooking recipes.", new Pair<>(0.0, 13), 10, new ArrayList<>(
                                                                     Arrays.asList(new Pair<>(GoodType.RICE, new Pair<>(1.0, 100.0)))

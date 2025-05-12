@@ -3,21 +3,19 @@ package org.example.models.interactions.PlayerBuildings;
 import org.example.models.game_structure.Coordinate;
 import org.example.models.goods.Good;
 import org.example.models.interactions.Animals.Animal;
+import org.example.models.interactions.Building;
 
 import java.util.ArrayList;
 
-public class FarmBuilding extends PlayerBuilding {
+public class FarmBuilding extends Building {
     FarmBuildingTypes type;
-    Coordinate centerCoordinate;
-
-    public FarmBuilding(Coordinate coordinate , FarmBuildingTypes type) {
-        centerCoordinate = coordinate;
-    }
 
     ArrayList<Animal> animals = new ArrayList<>();
-    public FarmBuilding(FarmBuildingTypes type , Coordinate centerCoordinate) {
+    public FarmBuilding(FarmBuildingTypes type , Coordinate startCoordinate) {
+        super(startCoordinate, new Coordinate(startCoordinate.getX() + type.getSize().first(),
+                startCoordinate.getY() + type.getSize().second()));
+
         this.type = type;
-        this.centerCoordinate = centerCoordinate;
     }
 
     public boolean addAnimal(Animal animal) {

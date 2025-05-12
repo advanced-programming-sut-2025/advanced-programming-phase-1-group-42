@@ -8,15 +8,16 @@ import java.util.regex.Pattern;
 public enum GameMenuCommands implements Command {
 
 
-    //TODO: Nader
+    //Nader
     // Game Commands
     NEW_GAME("\\s*game\\s*new\\s-u\\s(?<username_1>\\S+)\\s(?<username_2>\\S+)\\s(?<username_3>\\S+)\\s*"),
-    GAME_MAP("\\s*game\\s*map\\s(?<map_number>\\S+)\\s*"),
+    GAME_MAP("\\s*game\\s*map\\s(?<farm_number>\\S+)\\s*"),
     LOAD_GAME("\\s*load\\s*game\\s*"),
     EXIT_GAME("\\s*exit\\s*game\\s*"),
     NEXT_TURN("\\s*next\\s*turn\\s*"),
+    FORCE_TERMINATE("\\s*force\\s*terminate\\s*"),
 
-    //TODO: Nader
+    // Nader
     //  Date & Time Commands
     TIME("\\s*time\\s*"),
     DATE("\\s*date\\s*"),
@@ -24,10 +25,10 @@ public enum GameMenuCommands implements Command {
     DAY_OF_THE_WEEK("\\s*day\\s*of\\s*the\\s*week\\s*"),
     SEASON("\\s*season\\s*"),
     // --> cheat codes
-    CHEAT_ADVANCE_TIME("\\s*cheat\\s*advance\\s*time\\s(?<X>\\S+)\\sh\\s*"),
-    CHEAT_ADVANCE_DATE("\\s*cheat\\s*advance\\s*date\\s(?<X>\\S+)\\sd\\s*"),
+    CHEAT_ADVANCE_TIME("\\s*cheat\\s*advance\\s*time\\s(?<X>\\S+)h\\s*"),
+    CHEAT_ADVANCE_DATE("\\s*cheat\\s*advance\\s*date\\s(?<X>\\S+)d\\s*"),
 
-    //TODO: Parsa
+    // Parsa
     //Weather
     CHEAT_THUNDER("\\s*cheat\\s+thunder\\s(?<x>\\S+)\\s(?<y>\\S+)\\s*"),
     WEATHER("\\s*weather\\s*"),
@@ -35,13 +36,13 @@ public enum GameMenuCommands implements Command {
     CHEAT_WEATHER_SET("\\s*cheat\\s+weather\\s+set\\s(?<weather>\\S+)\\s*"),
     GREEN_HOUSE_BUILD("\\s*green\\s+house\\s+build\\s*"),
 
-    //TODO: Parsa
+    // Parsa
     //Map
     WALK("\\s*walk\\s-l\\s(?<x>\\S)\\s(?<y>\\S)\\s*"),
     PRINT_MAP("\\s*print\\s*map\\s-l\\s(?<x>\\S+)\\s(?<y>\\S+)\\s*\\s-s\\s(?<size>\\S+)\\s*"),
     HELP_READING_MAP("\\s*help\\s*reading\\s*map\\s*"),
 
-    //TODO: Parsa
+    // Parsa
     //inventory & Energy
     ENERGY_SHOW("\\s*show\\s+energy\\s*"),
     CHEAT_ENERGY_SET("\\s*cheat\\s*energy\\s*set\\s(?<value>\\S+)\\s*"),
@@ -49,7 +50,7 @@ public enum GameMenuCommands implements Command {
     INVENTORY_TRASH_ITEM("\\s*inventory\\s+trash\\s-i\\s(?<item>\\S+)\\s-n\\s(?<number>\\S+)\\s*"),
     INVENTORY_SHOW("\\s*inventory\\s+show\\s*"),
 
-    //TODO: Arani
+    // Arani
     // Tools
     TOOLS_EQUIPMENT("\\s*tools\\s*equip\\s(?<tool_name>\\S+)\\s*"),
     TOOLS_SHOW_CURRENT("\\s*tools\\s*show\\s*current\\s*"),
@@ -58,12 +59,12 @@ public enum GameMenuCommands implements Command {
     TOOLS_USE("\\s*tools\\s*use\\s-d\\s(?<direction>\\S+)\\s*"),
 
 
-    //TODO: Arani
+    // Arani
     // Craft Info
     CRAFT_INFO("\\s*craftinfo\\s+-n\\s+(?<craftName>\\S+)\\s*"),
 
 
-    //TODO: Arani
+    // Arani
     // Planting
     PLANT_SEED("\\s*plant\\s-s\\s(?<seed>\\S+)\\s*\\s-d\\s(?<direction>\\S+)\\s*"),
     SHOW_PLANT("\\s*showplant\\s-l\\s(?<x>\\S+)\\s*\\s(?<y>\\S+)\\s*"),
@@ -71,7 +72,7 @@ public enum GameMenuCommands implements Command {
     HOW_MUCH_WATER("\\s*howmuch\\s*water\\s*"),
 
 
-    //TODO: Nader
+    // Nader
     // Crafting Commands
     SHOW_CRAFTING_RECIPES("\\s*crafting\\s*show\\s*recipes\\s*"),
     CRAFTING_CRAFT("\\s*crafting\\s*craft\\s(?<item_name>\\S+)\\s*"),
@@ -79,7 +80,7 @@ public enum GameMenuCommands implements Command {
     // --> cheat codes
     CHEAT_ADD_ITEM("\\s*cheat\\s*add\\s*item\\s+-n\\s(?<item_name>\\S)\\s+-c\\s(?<count>\\S)\\s*"),
 
-    //TODO: Nader
+    // Nader
     // Cooking Commands
 
     //????????????????????????????????????????????????//
@@ -88,7 +89,7 @@ public enum GameMenuCommands implements Command {
     COOKING_PREPARE("\\s*cooking\\s*prepare\\s(?<recipe_name>\\S+)\\s*"),
     EAT("\\s*eat\\s(?<food_name>\\S+)\\s*"),
 
-    //TODO: Parsa
+    // Parsa
     // Animals & Fishing
     BUILD_BUILDING("\\s*build\\s-a\\s(?<building_name>\\S+)\\s-l\\s(?<x>\\S+)\\s(?<y>\\S+)\\s*"),
     BUY_ANIMAL("\\s*build\\s-a\\s(?<animal_name>\\S+)\\s-n\\s(?<number>\\S+)\\s*"),
@@ -102,12 +103,12 @@ public enum GameMenuCommands implements Command {
     SELL_ANIMAL("\\s*sell\\s*animal\\s+-n\\s(?<name>\\S+)\\s*"),
     FISHING("\\s*fishing\\s+-p\\s(?<fishing_pole>\\S+)\\s*"),
 
-    //TODO: Nader
+    // Nader
     // Artisan Commands
     ARTISAN_USE("\\s*artisan\\s*use\\s(?<artisan_name>\\S+)\\s(?<item1_name>\\S+)\\s*"),
     ARTISAN_GET("\\s*artisan\\s*get\\s(?<artisan_name>\\S+)\\s*"),
 
-    //TODO: Nader
+    // Nader
     // Sell & Buy Commands
     SHOW_ALL_PRODUCTS("\\s*show\\s*all\\s*products\\s*"),
     SHOW_ALL_AVAILABLE_PRODUCTS("\\s*show\\s*all\\s*available\\s*products\\s*"),
@@ -116,7 +117,7 @@ public enum GameMenuCommands implements Command {
     // --> cheat codes
     CHEAT_ADD_DOLLARS("\\s*cheat\\s*add\\s(?<count>\\S+)\\s*dollars\\s*"),
 
-    //TODO: Arani
+    // Arani
     // Friendships
     FRIENDSHIPS("\\s*friendships\\s*"),
     TALK("\\s*talk\\s+-u\\s(?<username>\\S+)\\s+-m\\s(?<message>\\S+)\\s*"),
@@ -133,7 +134,7 @@ public enum GameMenuCommands implements Command {
     RESPOND(""),
 
 
-    //TODO: Parsa
+    // Parsa
     //Trading
     START_TRADE("\\s*start\\s*trade\\s*"),
 

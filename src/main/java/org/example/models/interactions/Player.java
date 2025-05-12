@@ -51,6 +51,9 @@ public class Player {
 
     public void setFarm(Farm farm) {
         this.farm = farm;
+        this.coordinate = new Coordinate(farm.getFarmBuildings().get(0).getStartCordinate().getX() + 10,
+                farm.getFarmBuildings().get(0).getStartCordinate().getY() + 10);
+
     }
 
     public Farm getFarm() {
@@ -63,8 +66,13 @@ public class Player {
 
     public Player(User user) {
         this.user = user;
-
+        this.wallet =  new Wallet(0);
+        this.points = 0;
+        this.energy = new Energy();
         this.trashCan = new Tool(ToolType.TRASH_CAN);
+        this.inventory = new Inventory();
+        this.skill = new Skill();
+        this.inHandGood = null;
 
         for (Player player : App.getCurrentGame().getPlayers()) {
             if(player != this) {
@@ -190,5 +198,9 @@ public class Player {
             }
             System.out.println("------------------------------");
         }
+    }
+
+    public int getPoints() {
+        return points;
     }
 }

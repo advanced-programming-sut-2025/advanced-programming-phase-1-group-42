@@ -3,6 +3,7 @@ package org.example.models.interactions.game_buildings;
 import org.example.models.App;
 import org.example.models.Pair;
 import org.example.models.Result;
+import org.example.models.enums.TileType;
 import org.example.models.game_structure.Coordinate;
 import org.example.models.game_structure.Tile;
 import org.example.models.goods.Good;
@@ -31,7 +32,9 @@ public abstract class GameBuilding extends Building {
         return true;
     }
 
-    public GameBuilding(ArrayList<Tile> tiles, String name, NPC shopkeeper, Pair<Integer, Integer> hours) {
+    public GameBuilding(ArrayList<Tile> tiles, String name, NPC shopkeeper, Pair<Integer, Integer> hours,
+                        Coordinate startCoordinate, Coordinate endCoordinate) {
+        super(startCoordinate, endCoordinate);
         this.tiles = tiles;
         this.name = name;
         this.shopkeeper = shopkeeper;
@@ -101,5 +104,16 @@ public abstract class GameBuilding extends Building {
             productPair.setSecond(productPair.second() - quantity);
 
         return new Result(true, productName + " " + quantity + "x stock purchased!");
+    }
+
+    protected static ArrayList<Tile> getTiles(ArrayList<Tile> tiles, int i2, int i3) {
+        ArrayList<Tile> upgradeTiles = new ArrayList<>();
+        for (int i = i2; i - i2 < 20; i++) {
+            for (int j = i3; j - i3 < 20; j++) {
+                upgradeTiles.add(tiles.get(i + (j * 150)));
+                upgradeTiles.getLast().setTileType(TileType.GAME_BUILDING);
+            }
+        }
+        return upgradeTiles;
     }
 }

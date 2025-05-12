@@ -2,10 +2,13 @@ package org.example.views;
 
 import org.example.controllers.GameMenuController;
 import org.example.controllers.ProfileMenuController;
+import org.example.models.App;
 import org.example.models.enums.GameMenuCommands;
 import org.example.models.enums.LoginRegisterCommands;
 import org.example.models.enums.TradeMenuCommands;
 
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Scanner;
 import java.util.regex.Matcher;
 
@@ -21,15 +24,24 @@ public class GameMenu implements AppMenu {
 
         //game setting methods
         if ((matcher = GameMenuCommands.NEW_GAME.matcher(input)) != null) {
-            System.out.print(controller.newGame(matcher.group("username_1"), matcher.group("username_2"), matcher.group("username_3")));
-        } else if ((matcher = GameMenuCommands.GAME_MAP.matcher(input)) != null) {
-            System.out.println(controller.farmGame(matcher.group("map_number")));
+            System.out.print(controller.newGame(new ArrayList<>(Arrays.asList(matcher.group("username_1"), matcher.group("username_2"), matcher.group("username_3"))), scanner));
+//        } else if ((matcher = GameMenuCommands.GAME_MAP.matcher(input)) != null) {
+//            System.out.println(controller.farmGame(matcher.group("farm_number"), scanner));
         } else if ((matcher = GameMenuCommands.LOAD_GAME.matcher(input)) != null) {
             System.out.println(controller.loadGame());
-        } else if ((matcher = GameMenuCommands.EXIT_GAME.matcher(input)) != null) {
+        }
+
+        if(App.getCurrentGame() == null) {
+            System.out.println("You should run a game first to use this commands!");
+            return;
+        }
+
+        if ((matcher = GameMenuCommands.EXIT_GAME.matcher(input)) != null) {
             System.out.print(controller.exitGame());
         } else if ((matcher = GameMenuCommands.NEXT_TURN.matcher(input)) != null) {
             System.out.print(controller.nextTurn());
+        } else if(GameMenuCommands.FORCE_TERMINATE.matcher(input) != null) {
+            System.out.println(controller.forceTerminate(scanner));
         }
 
         //  Date & Time Commands
@@ -66,7 +78,7 @@ public class GameMenu implements AppMenu {
         }
         //Map & Walk
         else if ((matcher = GameMenuCommands.WALK.matcher(input)) != null) {
-            System.out.print(controller.walk(matcher.group("x"), matcher.group("y")));
+            System.out.print(controller.walk(matcher.group("x"), matcher.group("y"), scanner));
         } else if ((matcher = GameMenuCommands.PRINT_MAP.matcher(input)) != null) {
             System.out.println(controller.printMap(matcher.group("x"), matcher.group("y"), matcher.group("size")));
         } else if ((matcher = GameMenuCommands.HELP_READING_MAP.matcher(input)) != null) {

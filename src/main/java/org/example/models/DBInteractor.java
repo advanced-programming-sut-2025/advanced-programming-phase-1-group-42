@@ -6,7 +6,7 @@ import org.example.models.game_structure.Game;
 public class DBInteractor {
     public static Farm getFarmFromDB(int farmNumber) {
         //TODO: need to be implemented
-        return new Farm();
+        return new Farm(1, 1, null);
     }
 
     public static Game loadGameFromDB(String username) {

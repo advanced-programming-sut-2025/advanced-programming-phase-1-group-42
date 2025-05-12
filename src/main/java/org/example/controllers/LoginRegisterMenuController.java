@@ -8,14 +8,14 @@ import org.example.models.goods.products.Product;
 import org.example.models.interactions.Gender;
 import org.example.models.interactions.User;
 
+import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
 import java.util.Random;
 import java.util.Scanner;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 public class LoginRegisterMenuController extends Controller {
-    //TODO: Arani
-    
 
 
 
@@ -122,7 +122,7 @@ public class LoginRegisterMenuController extends Controller {
         }
 
         String answer = matcher.group("answer").trim();
-        App.getUsers().add(new User(username, password, nickname, email, Gender.findGender(gender), num, answer));
+        App.getUsers().add(new User(username, getSHA256(password), nickname, email, Gender.findGender(gender), num, answer));
         return new Result(true, "Your account has been successfully registered!");
     }
 
@@ -132,7 +132,7 @@ public class LoginRegisterMenuController extends Controller {
             return new Result(false, "User not found!");
         }
 
-        if(!user.getPassword().equals(password)) {
+        if(!user.getPassword().equals(getSHA256(password))) {
             return new Result(false, "Wrong password!");
         }
 

@@ -6,6 +6,8 @@ import org.example.models.goods.foods.artisans.Artisan;
 import org.example.models.goods.foods.artisans.ArtisanType;
 import org.example.models.interactions.User;
 
+import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
 import java.util.HashSet;
 import java.util.Random;
 import java.util.regex.Matcher;
@@ -93,5 +95,23 @@ public class Controller {
         rPassword.setCharAt(rIndexes[2], (char) ('A' + random.nextInt(26)));
         rPassword.setCharAt(rIndexes[3], "?><,\"\\';:/|][}{+=)(*&^%$#!".charAt(random.nextInt(26)));
         return rPassword.toString();
+    }
+
+    protected String getSHA256(String password) {
+        try {
+            MessageDigest md = MessageDigest.getInstance("SHA-256");
+
+            byte[] hashBytes = md.digest(password.getBytes());
+
+            StringBuilder hexString = new StringBuilder();
+            for (byte b : hashBytes) {
+                hexString.append(String.format("%02x", b));
+            }
+
+            return hexString.toString();
+
+        } catch (NoSuchAlgorithmException e) {
+            throw new RuntimeException("SHA-256 algorithm not found", e);
+        }
     }
 }

@@ -2,6 +2,7 @@ package org.example.models.interactions.NPCs;
 
 import org.example.models.Pair;
 import org.example.models.enums.Season;
+import org.example.models.game_structure.Coordinate;
 import org.example.models.goods.GoodType;
 import org.example.models.goods.artisans.ArtisanType;
 import org.example.models.goods.farmings.FarmingCropType;
@@ -39,7 +40,8 @@ public enum NPCTypes {
                     new Pair<>(ProductType.STONE,150)
             )),
             "Home",
-            new Pair<>(Season.FALL,12)),
+            new Pair<>(Season.FALL,12),
+            new Coordinate(10, 80)),
     ABIGAIL("Abigail",
             new ArrayList<>(List.of(ArtisanType.Coffee, FoodType.PUMPKIN_PIE)),
             new ArrayList<>(List.of(
@@ -65,7 +67,8 @@ public enum NPCTypes {
                     new Pair<>(FarmingCropType.WHEAT,50)
             )),
             "Home",
-            new Pair<>(Season.SPRING,2)),
+            new Pair<>(Season.SPRING,2),
+            110, 100),
 
     HARVEY("Harvey",
             new ArrayList<>(List.of(ArtisanType.Coffee, ArtisanType.WINE)),
@@ -93,7 +96,8 @@ public enum NPCTypes {
 
             )),
             "Home",
-            new Pair<>(Season.SUMMER,21)
+            new Pair<>(Season.SUMMER,21),
+            new Coordinate(40, 80)
     ),
 
     LEAH("Leah",
@@ -121,7 +125,8 @@ public enum NPCTypes {
                     new Pair<>(ProductType.WOOD,200)
             )),
             "Home",
-            new Pair<>(Season.FALL,19)
+            new Pair<>(Season.FALL,19),
+            new Coordinate(120, 80)
     ),
 
     ROBIN("Robin",
@@ -149,7 +154,8 @@ public enum NPCTypes {
                     new Pair<>(ProductType.WOOD,1000)
             )),
             "Home",
-            new Pair<>(Season.WINTER,27)
+            new Pair<>(Season.WINTER,27),
+            new Coordinate(80, 80)
     ),
 
     CLINT("Clint",
@@ -157,42 +163,48 @@ public enum NPCTypes {
             null,
             null,
             "Blacksmith",
-            null),
+            null,
+            new Coordinate(15, 65)),
 
     MORRIS("Morris",
             null,
             null,
             null,
             "JojaMart",
-            null),
+            null,
+            new Coordinate(55, 65)),
 
     PIERRE("Pierre",
             null,
             null,
             null,
             "Pierre_General_Store",
-            null),
+            null,
+            new Coordinate(85, 65)),
 
     WILLY("Willy",
             null,
             null,
             null,
             "Fish_Shop",
-            null),
+            null,
+            new Coordinate(125, 65)),
 
     MARNIE("Marnie",
             null,
             null,
             null,
             "Marnie_Ranch",
-            null),
+            null,
+            new Coordinate(55, 95)),
 
     GUS("Gus",
             null,
             null,
             null,
             "The_Stardrop_Saloon",
-            null);
+            null,
+            new Coordinate(85, 95));
 
 
 
@@ -202,19 +214,22 @@ public enum NPCTypes {
     private final ArrayList<Pair<GoodType, Integer>> requests;
     private final String place;
     private Pair<Season, Integer> birthday;
+    private final Coordinate coordinate;
 
     NPCTypes(String name,
              ArrayList<GoodType> favorites,
              ArrayList<String> dialogs,
              ArrayList<Pair<GoodType, Integer>>requests,
              String place,
-             Pair<Season, Integer> birthday) {
+             Pair<Season, Integer> birthday,
+             Coordinate coordinate) {
         this.name = name;
         this.favorites = favorites;
         this.dialogs = dialogs;
         this.requests = requests;
         this.place = place;
         this.birthday = birthday;
+        this.coordinate = coordinate;
     }
 
     public String getName() {

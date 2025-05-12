@@ -12,6 +12,10 @@ public class Tile {
     private ArrayList<Good> goods;
     private boolean isWatered = false;
 
+    public Tile(Coordinate coordinate) {
+        this.coordinate = coordinate;
+    }
+
     public ArrayList<Good> getGoods() {
         return goods;
     }
