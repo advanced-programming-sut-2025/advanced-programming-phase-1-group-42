@@ -14,10 +14,11 @@ import org.example.models.interactions.PlayerBuildings.FarmBuilding;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 
 public class Player {
-    private Coordinate coordinate;
-    private Inventory inventory;
+    private Coordinate coordinate ;
+    private Inventory inventory ;
     private Good inHandGood;
     private final ArrayList<CookingRecipe> cookingRecipes = new ArrayList<>();
     private final ArrayList<CraftingRecipe> craftingRecipes = new ArrayList<>();
@@ -35,11 +36,11 @@ public class Player {
     private final HashMap<Player, Boolean> isInteracted = new HashMap<>();
     private final ArrayList<Pair<Player, String>> talkHistory = new ArrayList<>();
 
-    private final ArrayList<Trade> tradeList = new ArrayList<>();
-    private final ArrayList<Trade> tradeHistory = new ArrayList<>();
-
     private final ArrayList<Pair<Player, Gift>> giftList = new ArrayList<>();
     private final ArrayList<Pair<Player, String>> giftHistory = new ArrayList<>();
+
+    private final List<Trade> sentTrades = new ArrayList<>();
+    private final List<Trade> receivedTrades = new ArrayList<>();
 
     private final ArrayList<String> news = new ArrayList<>();
 
@@ -123,7 +124,6 @@ public class Player {
     public void setBuff(Buff buff) {
         this.buff = buff;
     }
-
     public Buff getBuff() {
         return buff;
     }
@@ -199,6 +199,25 @@ public class Player {
             System.out.println("------------------------------");
         }
     }
+
+    public void addSentTrade(Trade trade) {
+        sentTrades.add(trade);
+    }
+
+    public void addReceivedTrade(Trade trade) {
+        receivedTrades.add(trade);
+    }
+
+    public List<Trade> getReceivedTrades() {
+        return receivedTrades;
+    }
+
+    public List<Trade> getTradeHistory() {
+        List<Trade> all = new ArrayList<>(sentTrades);
+        all.addAll(receivedTrades);
+        return all;
+    }
+
 
     public int getPoints() {
         return points;

@@ -1,22 +1,20 @@
 package org.example.models.game_structure;
 
-import jdk.jfr.Recording;
-import org.example.models.Pair;
+import org.example.models.App;
 import org.example.models.enums.TileType;
 import org.example.models.goods.Good;
 import org.example.models.goods.farmings.FarmingTree;
 import org.example.models.goods.farmings.FarmingTreeSapling;
+import org.example.models.goods.foragings.ForagingCropType;
 import org.example.models.goods.foragings.ForagingMineralType;
+import org.example.models.goods.foragings.ForagingSeedType;
 import org.example.models.goods.foragings.ForagingTree;
 import org.example.models.interactions.Animals.Animal;
-import org.example.models.interactions.Player;
-import org.example.models.enums.TileType;
 import org.example.models.interactions.game_buildings.GameBuilding;
 
+import java.lang.reflect.Array;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.HashMap;
-import java.util.List;
 
 public class Map {
     private final ArrayList<Tile> tiles = new ArrayList<>();
@@ -24,6 +22,7 @@ public class Map {
     private final ArrayList<GameBuilding> gameBuildings = new ArrayList<>();
     private final ArrayList<Animal> animals = new ArrayList<>();
     private final Coordinate startingCoordinate, endingCoordinate;
+    private final ArrayList<ShippingBin> shippingBins = new ArrayList<>();
 
     static final HashMap<String, String> colorMap = new HashMap<String, String>() {{
         put("Reset", "\u001B[0m");
@@ -117,11 +116,7 @@ public class Map {
         return "";
     }
 
-    // function to help reading the map (Maybe RGB)
-    public String helpReadingMap() {
-        //TODO
-        return "";
-    }
+
 
     public void setFarms(ArrayList<Farm> farms) {
         this.farms.addAll(farms);
@@ -224,6 +219,298 @@ public class Map {
             }
         }
         return null;
+    }
+
+    public void generateRandomForagingCrops(){
+        for (int i = 0 ; i < 140 ; i++){
+            for(int j = 0 ; j < 160 ; j++){
+                int random = (int)Math.floor((Math.random()*100));
+                Coordinate coordinate = new Coordinate(i , j);
+                Tile tile = findTile(coordinate);
+                if(tile != null){
+                    if(tile.getTileType().equals(TileType.FARM) || tile.getTileType().equals(TileType.PLAIN)  ){
+                        if(random == 50){
+                            int randomForaging = (int)Math.floor((Math.random()*9));
+
+                            switch (App.getCurrentGame().getDateTime().getSeasonOfYear().getName()){
+                                case "Spring":
+                                    switch(randomForaging) {
+                                        case 1:
+                                            tile.addGood(Good.newGood(ForagingCropType.DAFFODIL));
+                                            break;
+                                        case 2:
+                                            tile.addGood(Good.newGood(ForagingCropType.DANDELION));
+                                            break;
+                                        case 3:
+                                            tile.addGood(Good.newGood(ForagingCropType.LEEK));
+                                            break;
+                                        case 4:
+                                            tile.addGood(Good.newGood(ForagingCropType.MOREL));
+                                            break;
+                                        case 5:
+                                            tile.addGood(Good.newGood(ForagingCropType.SALMONBERRY));
+                                            break;
+                                        case 6:
+                                            tile.addGood(Good.newGood(ForagingCropType.SPRING_ONION));
+                                            break;
+                                        case 7:
+                                            tile.addGood(Good.newGood(ForagingCropType.SPRING_ONION));
+                                            break;
+                                        case 8:
+                                            tile.addGood(Good.newGood(ForagingCropType.WILD_HORSERADISH));
+                                            break;
+                                        default:
+                                            break;
+                                    }
+                                case "Summer":
+                                    switch(randomForaging) {
+                                        case 1:
+                                            tile.addGood(Good.newGood(ForagingCropType.SWEET_PEA));
+                                            break;
+                                        case 2:
+                                            tile.addGood(Good.newGood(ForagingCropType.SPICE_BERRY));
+                                            break;
+                                        case 3:
+                                            tile.addGood(Good.newGood(ForagingCropType.RED_MUSHROOM));
+                                            break;
+                                        case 4:
+                                            tile.addGood(Good.newGood(ForagingCropType.GRAPE));
+                                            break;
+                                        case 5:
+                                            tile.addGood(Good.newGood(ForagingCropType.FIDDLEHEAD_FERN));
+                                            break;
+                                        default:
+                                            break;
+                                    }
+                                case "Fall":
+                                    switch(randomForaging) {
+                                        case 1:
+                                            tile.addGood(Good.newGood(ForagingCropType.BLACKBERRY));
+                                            break;
+                                        case 2:
+                                            tile.addGood(Good.newGood(ForagingCropType.CHANTERELLE));
+                                            break;
+                                        case 3:
+                                            tile.addGood(Good.newGood(ForagingCropType.HAZELNUT));
+                                            break;
+                                        case 4:
+                                            tile.addGood(Good.newGood(ForagingCropType.PURPLE_MUSHROOM));
+                                            break;
+                                        case 5:
+                                            tile.addGood(Good.newGood(ForagingCropType.WILD_PLUM));
+                                            break;
+                                        default:
+                                            break;
+                                    }
+                                case "Winter":
+                                    switch(randomForaging) {
+                                        case 1:
+                                            tile.addGood(Good.newGood(ForagingCropType.CROCUS));
+                                            break;
+                                        case 2:
+                                            tile.addGood(Good.newGood(ForagingCropType.CRYSTAL_FRUIT));
+                                            break;
+                                        case 3:
+                                            tile.addGood(Good.newGood(ForagingCropType.HOLLY));
+                                            break;
+                                        case 4:
+                                            tile.addGood(Good.newGood(ForagingCropType.SNOW_YAM));
+                                            break;
+                                        case 5:
+                                            tile.addGood(Good.newGood(ForagingCropType.WINTER_ROOT));
+                                            break;
+                                        default:
+                                            break;
+                                    }
+                                default:
+                                    break;
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
+    public void generateRandomForagingSeed() {
+        for (int i = 0; i < 140; i++) {
+            for (int j = 0; j < 160; j++) {
+                int random = (int) Math.floor((Math.random() * 100));
+                Coordinate coordinate = new Coordinate(i, j);
+                Tile tile = findTile(coordinate);
+
+                if (tile != null && tile.getTileType().equals(TileType.PLOWED_FARM)) {
+                    if (random == 50) {
+                        int randomForaging = (int) Math.floor((Math.random() * 9));
+                        String season = App.getCurrentGame().getDateTime().getSeasonOfYear().getName();
+
+                        switch (season) {
+                            case "Spring":
+                                switch (randomForaging) {
+                                    case 1:
+                                        tile.addGood(Good.newGood(ForagingSeedType.JAZZ_SEEDS));
+                                        break;
+                                    case 2:
+                                        tile.addGood(Good.newGood(ForagingSeedType.CARROT_SEEDS));
+                                        break;
+                                    case 3:
+                                        tile.addGood(Good.newGood(ForagingSeedType.CAULIFLOWER_SEEDS));
+                                        break;
+                                    case 4:
+                                        tile.addGood(Good.newGood(ForagingSeedType.GARLIC_SEEDS));
+                                        break;
+                                    case 5:
+                                        tile.addGood(Good.newGood(ForagingSeedType.KALE_SEEDS));
+                                        break;
+                                    case 6:
+                                        tile.addGood(Good.newGood(ForagingSeedType.PARSNIP_SEEDS));
+                                        break;
+                                    case 7:
+                                        tile.addGood(Good.newGood(ForagingSeedType.POTATO_SEEDS));
+                                        break;
+                                    case 8:
+                                        tile.addGood(Good.newGood(ForagingSeedType.RHUBARB_SEEDS));
+                                        break;
+                                    default:
+                                        break;
+                                }
+                                break;
+                            case "Summer":
+                                switch (randomForaging) {
+                                    case 1:
+                                        tile.addGood(Good.newGood(ForagingSeedType.BLUEBERRY_SEEDS));
+                                        break;
+                                    case 2:
+                                        tile.addGood(Good.newGood(ForagingSeedType.CORN_SEEDS));
+                                        break;
+                                    case 3:
+                                        tile.addGood(Good.newGood(ForagingSeedType.MELON_SEEDS));
+                                        break;
+                                    case 4:
+                                        tile.addGood(Good.newGood(ForagingSeedType.PEPPER_SEEDS));
+                                        break;
+                                    case 5:
+                                        tile.addGood(Good.newGood(ForagingSeedType.TOMATO_SEEDS));
+                                        break;
+                                    case 6:
+                                        tile.addGood(Good.newGood(ForagingSeedType.SUNFLOWER_SEEDS));
+                                        break;
+                                    case 7:
+                                        tile.addGood(Good.newGood(ForagingSeedType.RADISH_SEEDS));
+                                        break;
+                                    default:
+                                        break;
+                                }
+                                break;
+                            case "Fall":
+                                switch (randomForaging) {
+                                    case 1:
+                                        tile.addGood(Good.newGood(ForagingSeedType.PUMPKIN_SEEDS));
+                                        break;
+                                    case 2:
+                                        tile.addGood(Good.newGood(ForagingSeedType.YAM_SEEDS));
+                                        break;
+                                    case 3:
+                                        tile.addGood(Good.newGood(ForagingSeedType.CRANBERRY_SEEDS));
+                                        break;
+                                    case 4:
+                                        tile.addGood(Good.newGood(ForagingSeedType.EGGPLANT_SEEDS));
+                                        break;
+                                    case 5:
+                                        tile.addGood(Good.newGood(ForagingSeedType.GRAPE_STARTER));
+                                        break;
+                                    case 6:
+                                        tile.addGood(Good.newGood(ForagingSeedType.ARTICHOKE_SEEDS));
+                                        break;
+                                    default:
+                                        break;
+                                }
+                                break;
+                            case "Winter":
+                                switch (randomForaging) {
+                                    case 1:
+                                        tile.addGood(Good.newGood(ForagingSeedType.POWDERMELON_SEEDS));
+                                        break;
+                                    default:
+                                        break;
+                                }
+                                break;
+                            default:
+                                break;
+                        }
+                    }
+                }
+            }
+        }
+    }
+    public void generateRandomMinerals(){
+        for (int i = 0; i < 140; i++) {
+            for (int j = 0; j < 160; j++) {
+                int random = (int) Math.floor((Math.random() * 100));
+                Coordinate coordinate = new Coordinate(i, j);
+                Tile tile = findTile(coordinate);
+
+                if (tile != null && tile.getTileType().equals(TileType.QUARRY)) {
+                    if (random == 50) {
+                        int randomMineral = (int) Math.floor((Math.random() * 17)); // 0 to 16 (17 minerals)
+                        switch (randomMineral) {
+                            case 0:
+                                tile.addGood(Good.newGood(ForagingMineralType.QUARTZ));
+                                break;
+                            case 1:
+                                tile.addGood(Good.newGood(ForagingMineralType.EARTH_CRYSTAL));
+                                break;
+                            case 2:
+                                tile.addGood(Good.newGood(ForagingMineralType.FROZEN_TEAR));
+                                break;
+                            case 3:
+                                tile.addGood(Good.newGood(ForagingMineralType.FIRE_QUARTZ));
+                                break;
+                            case 4:
+                                tile.addGood(Good.newGood(ForagingMineralType.EMERALD));
+                                break;
+                            case 5:
+                                tile.addGood(Good.newGood(ForagingMineralType.AQUAMARINE));
+                                break;
+                            case 6:
+                                tile.addGood(Good.newGood(ForagingMineralType.RUBY));
+                                break;
+                            case 7:
+                                tile.addGood(Good.newGood(ForagingMineralType.AMETHYST));
+                                break;
+                            case 8:
+                                tile.addGood(Good.newGood(ForagingMineralType.TOPAZ));
+                                break;
+                            case 9:
+                                tile.addGood(Good.newGood(ForagingMineralType.JADE));
+                                break;
+                            case 10:
+                                tile.addGood(Good.newGood(ForagingMineralType.DIAMOND));
+                                break;
+                            case 11:
+                                tile.addGood(Good.newGood(ForagingMineralType.PRISMATIC_SHARD));
+                                break;
+                            case 12:
+                                tile.addGood(Good.newGood(ForagingMineralType.COPPER));
+                                break;
+                            case 13:
+                                tile.addGood(Good.newGood(ForagingMineralType.IRON));
+                                break;
+                            case 14:
+                                tile.addGood(Good.newGood(ForagingMineralType.GOLD));
+                                break;
+                            case 15:
+                                tile.addGood(Good.newGood(ForagingMineralType.IRIDIUM));
+                                break;
+                            case 16:
+                                tile.addGood(Good.newGood(ForagingMineralType.COAL));
+                                break;
+                            default:
+                                break;
+                        }
+                    }
+                }
+            }
+        }
     }
 
     public void setTiles(ArrayList<Tile> tiles) {

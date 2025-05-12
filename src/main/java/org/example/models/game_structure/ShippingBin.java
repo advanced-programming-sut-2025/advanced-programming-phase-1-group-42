@@ -33,6 +33,19 @@ public class ShippingBin extends Good{
         list.get(player).add(new ArrayList<>(addingGood));
     }
 
+    public void emptyShippingBin() {
+        for(Player player : list.keySet()) {
+            int totalSellPrice = 0;
+            for (ArrayList<ArrayList<Good>> goodsLists : list.values()) {
+                for (ArrayList<Good> goods : goodsLists) {
+                    totalSellPrice += (goods.getFirst().getSellPrice()) * goods.size();
+                    goods.clear(); // Clears each individual Good list one by one
+                }
+            }
+            player.getWallet().increaseBalance(totalSellPrice);
+        }
+    }
+
     @Override
     public String getName() {
         return "ShippingBin";

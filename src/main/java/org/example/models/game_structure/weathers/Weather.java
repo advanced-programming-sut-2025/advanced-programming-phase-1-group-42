@@ -13,29 +13,30 @@ public abstract class Weather {
     double weatherEffectingEnergy;
     double fishChance;
 
+
     public void thunder(int x, int y) {
         Coordinate coordinate = new Coordinate(x, y);
-        Tile tile = App.getCurrentGame().getMap().findTile(coordinate);
-        // TODO: method to turn Tree into Coal
-        for (Good good : tile.getGoods()) {
-            if(good instanceof ForagingTree){
-                tile.removeGoodFromTile(good);
-                tile.addGoodToTile(Good.newGood(ForagingMineralType.COAL));
-            } else if(good instanceof FarmingTree){
-                tile.removeGoodFromTile(good);
-                tile.addGoodToTile(Good.newGood(ForagingMineralType.COAL));
-            } else if(good instanceof FarmingTreeSapling){
-                tile.removeGoodFromTile(good);
-                tile.addGoodToTile(Good.newGood(ForagingMineralType.COAL));
+        if(App.getCurrentGame().getCurrentPlayer().getCoordinate().equals(coordinate)){
+            System.out.println("You've Been Struck by Thunder!");
+        }else {
+            Tile tile = App.getCurrentGame().getMap().findTile(coordinate);
+            for (Good good : tile.getGoods()) {
+                if (good instanceof ForagingTree) {
+                    tile.removeGoodFromTile(good);
+                    tile.addGoodToTile(Good.newGood(ForagingMineralType.COAL));
+                } else if (good instanceof FarmingTree) {
+                    tile.removeGoodFromTile(good);
+                    tile.addGoodToTile(Good.newGood(ForagingMineralType.COAL));
+                } else if (good instanceof FarmingTreeSapling) {
+                    tile.removeGoodFromTile(good);
+                    tile.addGoodToTile(Good.newGood(ForagingMineralType.COAL));
+                }
             }
         }
     }
-    public double getWeatherEffectingEnergy() {
-        return weatherEffectingEnergy;
-    }
-    public double getFishChance() {
-        return fishChance;
-    }
+    public abstract double getWeatherEffectingEnergy();
+    public abstract double getFishChance();
+
     public abstract String getName();
 
 
