@@ -9,7 +9,7 @@ public class Fish extends Good {
     private FishType type;
     private GoodLevel level;
 
-    public Fish(FishType type , GoodLevel level) {
+    public Fish(FishType type, GoodLevel level) {
         this.type = type;
         this.level = level;
     }
@@ -21,7 +21,7 @@ public class Fish extends Good {
 
     @Override
     public int getSellPrice() {
-        return type.getSellPrice();
+        return (int) (type.getSellPrice() * level.getRatio());
     }
 
     @Override

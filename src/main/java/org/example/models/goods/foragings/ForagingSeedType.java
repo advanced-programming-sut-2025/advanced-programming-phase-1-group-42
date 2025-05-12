@@ -154,6 +154,23 @@ public enum ForagingSeedType implements GoodType {
         return farmingCropType;
     }
 
+    public int getTotalHarvestTime() {
+        return totalHarvestTime;
+    }
+    public boolean isOneTime() {
+        return oneTime;
+    }
+    public int getRegrowthTime() {
+        return regrowthTime;
+    }
+    public int getSeasonPrice() {
+        return seasonPrice;
+    }
+    public int getOtherSeasonPrice() {
+        return otherSeasonPrice;
+    }
+
+
 
     @Override
     public String toString() {

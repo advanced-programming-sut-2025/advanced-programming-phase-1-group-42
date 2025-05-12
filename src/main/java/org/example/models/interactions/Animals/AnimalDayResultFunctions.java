@@ -1,6 +1,8 @@
 package org.example.models.interactions.Animals;
 
 import org.example.models.goods.Good;
+import org.example.models.goods.GoodLevel;
+import org.example.models.goods.GoodType;
 
 import java.util.ArrayList;
 import java.util.Random;
@@ -20,16 +22,16 @@ public class AnimalDayResultFunctions {
 
             double randomNumberQuality = Math.random() * 1.0;
             double quality = (animal.getFriendship() / 1000) * (0.5 + 0.5 * randomNumberQuality);
-            AnimalProductQuality animalProductQuality = null;
+            GoodLevel animalProductQuality = null;
 
             if (quality <= 0.5) {
-                animalProductQuality = AnimalProductQuality.NORMAL;
+                animalProductQuality = GoodLevel.ORDINARY;
             } else if (quality > 0.5 && quality <= 0.7) {
-                animalProductQuality = AnimalProductQuality.SILVER;
+                animalProductQuality = GoodLevel.STEEL;
             } else if (quality > 0.7 && quality <= 0.9) {
-                animalProductQuality = AnimalProductQuality.GOLD;
+                animalProductQuality = GoodLevel.GOLD;
             } else if (quality >= 0.9) {
-                animalProductQuality = AnimalProductQuality.IRIDIUM;
+                animalProductQuality = GoodLevel.IRIDIUM;
             }
 
             if (whichProduct == 0) {
@@ -64,16 +66,16 @@ public class AnimalDayResultFunctions {
 
             double randomNumberQuality = Math.random() * 1.0;
             double quality = (animal.getFriendship() / 1000) * (0.5 + 0.5 * randomNumberQuality);
-            AnimalProductQuality animalProductQuality = null;
+            GoodLevel animalProductQuality = null;
 
             if (quality <= 0.5) {
-                animalProductQuality = AnimalProductQuality.NORMAL;
+                animalProductQuality = GoodLevel.ORDINARY;
             } else if (quality > 0.5 && quality <= 0.7) {
-                animalProductQuality = AnimalProductQuality.SILVER;
+                animalProductQuality = GoodLevel.STEEL;
             } else if (quality > 0.7 && quality <= 0.9) {
-                animalProductQuality = AnimalProductQuality.GOLD;
+                animalProductQuality = GoodLevel.GOLD;
             } else if (quality >= 0.9) {
-                animalProductQuality = AnimalProductQuality.IRIDIUM;
+                animalProductQuality = GoodLevel.IRIDIUM;
             }
 
             if (whichProduct == 0) {
@@ -108,16 +110,16 @@ public class AnimalDayResultFunctions {
 
             double randomNumberQuality = Math.random() * 1.0;
             double quality = (animal.getFriendship() / 1000) * (0.5 + 0.5 * randomNumberQuality);
-            AnimalProductQuality animalProductQuality = null;
+            GoodLevel animalProductQuality = null;
 
             if (quality <= 0.5) {
-                animalProductQuality = AnimalProductQuality.NORMAL;
+                animalProductQuality = GoodLevel.ORDINARY;
             } else if (quality > 0.5 && quality <= 0.7) {
-                animalProductQuality = AnimalProductQuality.SILVER;
+                animalProductQuality = GoodLevel.STEEL;
             } else if (quality > 0.7 && quality <= 0.9) {
-                animalProductQuality = AnimalProductQuality.GOLD;
+                animalProductQuality = GoodLevel.GOLD;
             } else if (quality >= 0.9) {
-                animalProductQuality = AnimalProductQuality.IRIDIUM;
+                animalProductQuality = GoodLevel.IRIDIUM;
             }
 
             if (whichProduct == 0) {
@@ -150,16 +152,16 @@ public class AnimalDayResultFunctions {
             // choose product
             double randomNumberQuality = Math.random() * 1.0;
             double quality = (animal.getFriendship() / 1000) * (0.5 + 0.5 * randomNumberQuality);
-            AnimalProductQuality animalProductQuality = null;
+            GoodLevel animalProductQuality = null;
 
             if (quality <= 0.5) {
-                animalProductQuality = AnimalProductQuality.NORMAL;
+                animalProductQuality = GoodLevel.ORDINARY;
             } else if (quality > 0.5 && quality <= 0.7) {
-                animalProductQuality = AnimalProductQuality.SILVER;
+                animalProductQuality = GoodLevel.STEEL;
             } else if (quality > 0.7 && quality <= 0.9) {
-                animalProductQuality = AnimalProductQuality.GOLD;
+                animalProductQuality = GoodLevel.GOLD;
             } else if (quality >= 0.9) {
-                animalProductQuality = AnimalProductQuality.IRIDIUM;
+                animalProductQuality = GoodLevel.IRIDIUM;
             }
 
             products.add(new AnimalProduct(AnimalProductsType.DINOSAUR_EGG, animalProductQuality));
@@ -190,16 +192,16 @@ public class AnimalDayResultFunctions {
 
             double randomNumberQuality = Math.random() * 1.0;
             double quality = (animal.getFriendship() / 1000) * (0.5 + 0.5 * randomNumberQuality);
-            AnimalProductQuality animalProductQuality = null;
+            GoodLevel animalProductQuality = null;
 
             if (quality <= 0.5) {
-                animalProductQuality = AnimalProductQuality.NORMAL;
+                animalProductQuality = GoodLevel.ORDINARY;
             } else if (quality > 0.5 && quality <= 0.7) {
-                animalProductQuality = AnimalProductQuality.SILVER;
+                animalProductQuality = GoodLevel.STEEL;
             } else if (quality > 0.7 && quality <= 0.9) {
-                animalProductQuality = AnimalProductQuality.GOLD;
+                animalProductQuality = GoodLevel.GOLD;
             } else if (quality >= 0.9) {
-                animalProductQuality = AnimalProductQuality.IRIDIUM;
+                animalProductQuality = GoodLevel.IRIDIUM;
             }
 
             if (whichProduct == 0) {
@@ -235,16 +237,16 @@ public class AnimalDayResultFunctions {
 
             double randomNumberQuality = Math.random() * 1.0;
             double quality = (animal.getFriendship() / 1000) * (0.5 + 0.5 * randomNumberQuality);
-            AnimalProductQuality animalProductQuality = null;
+            GoodLevel animalProductQuality = null;
 
             if (quality <= 0.5) {
-                animalProductQuality = AnimalProductQuality.NORMAL;
+                animalProductQuality = GoodLevel.ORDINARY;
             } else if (quality > 0.5 && quality <= 0.7) {
-                animalProductQuality = AnimalProductQuality.SILVER;
+                animalProductQuality = GoodLevel.STEEL;
             } else if (quality > 0.7 && quality <= 0.9) {
-                animalProductQuality = AnimalProductQuality.GOLD;
+                animalProductQuality = GoodLevel.GOLD;
             } else if (quality >= 0.9) {
-                animalProductQuality = AnimalProductQuality.IRIDIUM;
+                animalProductQuality = GoodLevel.IRIDIUM;
             }
 
             if (whichProduct == 0) {
@@ -277,16 +279,16 @@ public class AnimalDayResultFunctions {
 
             double randomNumberQuality = Math.random() * 1.0;
             double quality = (animal.getFriendship() / 1000) * (0.5 + 0.5 * randomNumberQuality);
-            AnimalProductQuality animalProductQuality = null;
+            GoodLevel animalProductQuality = null;
 
             if (quality <= 0.5) {
-                animalProductQuality = AnimalProductQuality.NORMAL;
+                animalProductQuality = GoodLevel.ORDINARY;
             } else if (quality > 0.5 && quality <= 0.7) {
-                animalProductQuality = AnimalProductQuality.SILVER;
+                animalProductQuality = GoodLevel.STEEL;
             } else if (quality > 0.7 && quality <= 0.9) {
-                animalProductQuality = AnimalProductQuality.GOLD;
+                animalProductQuality = GoodLevel.GOLD;
             } else if (quality >= 0.9) {
-                animalProductQuality = AnimalProductQuality.IRIDIUM;
+                animalProductQuality = GoodLevel.IRIDIUM;
             }
             products.add(new AnimalProduct(AnimalProductsType.SHEEP_WOOL, animalProductQuality));
 
@@ -315,16 +317,16 @@ public class AnimalDayResultFunctions {
             // choose product
             double randomNumberQuality = Math.random() * 1.0;
             double quality = (animal.getFriendship() / 1000) * (0.5 + 0.5 * randomNumberQuality);
-            AnimalProductQuality animalProductQuality = null;
+            GoodLevel animalProductQuality = null;
 
             if (quality <= 0.5) {
-                animalProductQuality = AnimalProductQuality.NORMAL;
+                animalProductQuality = GoodLevel.ORDINARY;
             } else if (quality > 0.5 && quality <= 0.7) {
-                animalProductQuality = AnimalProductQuality.SILVER;
+                animalProductQuality = GoodLevel.STEEL;
             } else if (quality > 0.7 && quality <= 0.9) {
-                animalProductQuality = AnimalProductQuality.GOLD;
+                animalProductQuality = GoodLevel.GOLD;
             } else if (quality >= 0.9) {
-                animalProductQuality = AnimalProductQuality.IRIDIUM;
+                animalProductQuality = GoodLevel.IRIDIUM;
             }
             products.add(new AnimalProduct(AnimalProductsType.TRUFFLE, animalProductQuality));
 
