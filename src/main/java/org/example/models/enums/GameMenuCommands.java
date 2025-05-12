@@ -25,8 +25,8 @@ public enum GameMenuCommands implements Command {
     DAY_OF_THE_WEEK("\\s*day\\s*of\\s*the\\s*week\\s*"),
     SEASON("\\s*season\\s*"),
     // --> cheat codes
-    CHEAT_ADVANCE_TIME("\\s*cheat\\s*advance\\s*time\\s(?<X>\\S+)\\sh\\s*"),
-    CHEAT_ADVANCE_DATE("\\s*cheat\\s*advance\\s*date\\s(?<X>\\S+)\\sd\\s*"),
+    CHEAT_ADVANCE_TIME("\\s*cheat\\s*advance\\s*time\\s(?<X>\\S+)h\\s*"),
+    CHEAT_ADVANCE_DATE("\\s*cheat\\s*advance\\s*date\\s(?<X>\\S+)d\\s*"),
 
     // Parsa
     //Weather
