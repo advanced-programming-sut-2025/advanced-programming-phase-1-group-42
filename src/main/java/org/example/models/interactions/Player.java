@@ -116,7 +116,6 @@ public class Player {
     public void setBuff(Buff buff) {
         this.buff = buff;
     }
-
     public Buff getBuff() {
         return buff;
     }

@@ -12,6 +12,7 @@ import org.example.models.goods.foragings.ForagingTree;
 import org.example.models.interactions.Animals.Animal;
 import org.example.models.interactions.game_buildings.GameBuilding;
 
+import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.HashMap;
 
@@ -21,6 +22,7 @@ public class Map {
     private final ArrayList<GameBuilding> gameBuildings = new ArrayList<>();
     private final ArrayList<Animal> animals = new ArrayList<>();
     private final Coordinate startingCoordinate, endingCoordinate;
+    private final ArrayList<ShippingBin> shippingBins = new ArrayList<>();
 
     static final HashMap<String, String> colorMap = new HashMap<String, String>() {{
         put("Reset", "\u001B[0m");

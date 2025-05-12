@@ -97,6 +97,7 @@ public class Game {
     }
 
     public void gameFlow(){
+
         // Weather setups for next day
         this.weather = tomorrow.getWeather();
         tomorrow.setWeather(weather);
@@ -118,7 +119,9 @@ public class Game {
         App.getCurrentGame().getMap().generateRandomForagingSeed();
         App.getCurrentGame().getMap().generateRandomMinerals();
 
+        emptyShippingBin();
 
+        
 
 
         //for animals

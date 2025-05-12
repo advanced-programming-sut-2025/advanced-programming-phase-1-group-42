@@ -2,6 +2,11 @@ package org.example.models.game_structure;
 
 import org.example.models.App;
 import org.example.models.enums.Season;
+import org.example.models.enums.TileType;
+import org.example.models.goods.Good;
+import org.example.models.goods.farmings.FarmingCrop;
+
+import java.util.Iterator;
 
 public class DateTime {
     private int time = 9;
@@ -24,7 +29,7 @@ public class DateTime {
             dayOfSeason++;
             if (dayOfSeason >= 28) {
                 seasonOfYear++;
-
+                seasonChange();
                 dayOfSeason = 1;
             }
             if (seasonOfYear >= 4) {
@@ -74,5 +79,23 @@ public class DateTime {
         return year;
     }
 
+    public Season getSeason() {
+        return season;
+    }
 
+    public void seasonChange() {
+        for (int i = 0 ; i < 140 ; i++) {
+            for (int j = 0; j < 160; j++) {
+                Coordinate coordinate = new Coordinate(i, j);
+                Tile tile = App.getCurrentGame().getMap().findTile(coordinate);
+                Iterator<Good> iterator = tile.getGoods().iterator();
+                while (iterator.hasNext()) {
+                    Good good = iterator.next();
+                    if (good instanceof FarmingCrop) {
+                        iterator.remove();
+                    }
+                }
+            }
+        }
+    }
 }
