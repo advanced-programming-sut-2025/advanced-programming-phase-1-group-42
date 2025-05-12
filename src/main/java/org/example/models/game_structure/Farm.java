@@ -51,29 +51,37 @@ public class Farm {
         }
 
         farmBuildings.add(getHome(playerNumber));
-        iniGreenHouse();
+        iniGreenHouse(playerNumber);
         lakes = getLakes(playerNumber, tiles);
         quarry = getQuarry(playerNumber, tiles);
-
-
     }
 
-    private void iniGreenHouse() {
-        greenHouse = null;
+    private void iniGreenHouse(int playerNumber) {
+        ArrayList<Tile> greenHouseTile = new ArrayList<>();
+        Coordinate startCoordinate = null;
+        Coordinate endCoordinate = null;
+
         if(farmNumber == 0) {
             for (int i = 32; i - 32 < 6; i++) {
                 for (int j = 5; j - 5 < 5; j++) {
                     this.tiles.get(i + (j * 150)).setTileType(TileType.GREEN_HOUSE);
+                    greenHouseTile.add(this.tiles.get(i + (j * 150)));
                 }
             }
+            startCoordinate = new Coordinate((playerNumber % 2) * 70 + 32, (playerNumber / 2) * 110 + 5);
+            endCoordinate = new Coordinate((playerNumber % 2) * 70 + 38, (playerNumber / 2) * 110 + 10);
         }
         else {
             for (int i = 59; i - 59 < 6; i++) {
                 for (int j = 5; j - 5 < 5; j++) {
                     this.tiles.get(i + (j * 150)).setTileType(TileType.GREEN_HOUSE);
+                    greenHouseTile.add(this.tiles.get(i + (j * 150)));
                 }
             }
+            startCoordinate = new Coordinate((playerNumber % 2) * 70 + 59, (playerNumber / 2) * 110 + 5);
+            endCoordinate = new Coordinate((playerNumber % 2) * 70 + 65, (playerNumber / 2) * 110 + 10);
         }
+        this.greenHouse = new GreenHouse(startCoordinate, endCoordinate, greenHouseTile);
     }
 
     private FarmBuilding getHome(int playerNumber) {
@@ -94,8 +102,7 @@ public class Farm {
                 }
             }
         }
-        FarmBuilding home = new FarmBuilding(FarmBuildingTypes.HOME, startCoordinate);
-        return home;
+        return new FarmBuilding(FarmBuildingTypes.HOME, startCoordinate);
     }
 
     private ArrayList<Tile> getLakes(int playerNumber, ArrayList<Tile> tiles) {
