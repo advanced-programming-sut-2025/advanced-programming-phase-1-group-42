@@ -6,6 +6,8 @@ import org.example.models.enums.GameMenuCommands;
 import org.example.models.enums.LoginRegisterCommands;
 import org.example.models.enums.TradeMenuCommands;
 
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Scanner;
 import java.util.regex.Matcher;
 
@@ -21,9 +23,9 @@ public class GameMenu implements AppMenu {
 
         //game setting methods
         if ((matcher = GameMenuCommands.NEW_GAME.matcher(input)) != null) {
-            System.out.print(controller.newGame(matcher.group("username_1"), matcher.group("username_2"), matcher.group("username_3")));
-        } else if ((matcher = GameMenuCommands.GAME_MAP.matcher(input)) != null) {
-            System.out.println(controller.farmGame(matcher.group("map_number")));
+            System.out.print(controller.newGame(new ArrayList<>(Arrays.asList(matcher.group("username_1"), matcher.group("username_2"), matcher.group("username_3"))), scanner));
+//        } else if ((matcher = GameMenuCommands.GAME_MAP.matcher(input)) != null) {
+//            System.out.println(controller.farmGame(matcher.group("farm_number"), scanner));
         } else if ((matcher = GameMenuCommands.LOAD_GAME.matcher(input)) != null) {
             System.out.println(controller.loadGame());
         } else if ((matcher = GameMenuCommands.EXIT_GAME.matcher(input)) != null) {

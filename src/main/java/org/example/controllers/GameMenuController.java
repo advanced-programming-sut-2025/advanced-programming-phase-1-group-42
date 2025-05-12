@@ -103,22 +103,34 @@ public class GameMenuController extends Controller {
 
     private ArrayList<Tile> createTiles() {
         ArrayList<Tile> tiles = new ArrayList<>();
+
         for (int i = 0; i < 140; i++) {
             for (int j = 0; j < 160; j++) {
                 Tile tile = new Tile(new Coordinate(i, j));
+                //Plain
                 tile.setTileType(TileType.PLAIN);
-                if(j > 80 && j < 110 && i > 110 && i < 140)
+                if(j >= 80 && j < 110 && i >= 110 && i < 140)
                     tile.setTileType(TileType.BEACH);
+
+                //Sea
+                if(i >= 140 && i < 150 && j >= 0 && j < 160)
+                    tile.setTileType(TileType.WATER);
+
+                //Square
+                if(j >= 77 && j < 83 && ((i >= 30 && i < 35) || (i >= 105 && i < 110)))
+                    tile.setTileType(TileType.SQUARE);
+
+                // Road
+                //TODO
+
+
                 tiles.add(tile);
+
             }
         }
-        for (int i = 140; i < 150; i++) {
-            for (int j = 0; j < 160; j++) {
-                Tile tile = new Tile(new Coordinate(i, j));
-                tile.setTileType(TileType.WATER);
-                tiles.add(tile);
-            }
-        }
+
+
+
         return tiles;
     }
 

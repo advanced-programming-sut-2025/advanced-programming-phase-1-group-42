@@ -27,6 +27,26 @@ public class Farm {
                 this.tiles.getLast().setTileType(TileType.FARM);
                 if(flag || j == 0 || (j + 1 == (playerNumber / 2) * 110 + 50))
                     this.tiles.getLast().setTileType(TileType.STONE_WALL);
+
+                switch (playerNumber) {
+                    case 0:
+                        if(j == 50 && i >= 30 && i < 35)
+                            this.tiles.getLast().setTileType(TileType.PLAIN);
+                        break;
+                    case 1:
+                        if(j == 50 && i >= 105 && i < 110)
+                            this.tiles.getLast().setTileType(TileType.PLAIN);
+                        break;
+                    case 2:
+                        if(j == 110 && i >= 30 && i < 35)
+                            this.tiles.getLast().setTileType(TileType.PLAIN);
+                        break;
+
+                    case 3:
+                        if(j == 110 && i >= 105 && i < 110)
+                            this.tiles.getLast().setTileType(TileType.PLAIN);
+                        break;
+                }
             }
         }
 
