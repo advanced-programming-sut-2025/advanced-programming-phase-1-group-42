@@ -22,17 +22,18 @@ public class Energy {
     }
     public void setDayEnergyLeft(int dayEnergyLeft) { this.dayEnergyLeft = dayEnergyLeft; }
 
-    
     public int getTurnValueLeft() {
         return turnValueLeft;
     }
 
     public void decreaseTurnEnergyLeft(int value) {
+
+        this.dayEnergyLeft -= (int) (App.getCurrentGame().getWeather().getWeatherEffectingEnergy() * value);
         this.turnValueLeft -= (int) (App.getCurrentGame().getWeather().getWeatherEffectingEnergy() * value);
+        if(this.dayEnergyLeft <= 0){
+            this.isAwake = false;
+        }
         if(this.turnValueLeft <= 0){
-            if(this.dayEnergyLeft <= 0){
-                this.isAwake = false;
-            }
             App.getCurrentGame().nextPlayer();
         }
     }
@@ -44,15 +45,11 @@ public class Energy {
         return isAwake;
     }
 
-    public void increaseDayEnergyLeft(int value) {
-        this.dayEnergyLeft += value;
-    }
     public void increaseTurnEnergyLeft(int value) {
+        this.dayEnergyLeft += value;
         this.turnValueLeft += value;
     }
-    public void decreaseDayEnergyLeft(int value) {
-        this.dayEnergyLeft -= (int) (App.getCurrentGame().getWeather().getWeatherEffectingEnergy() * value);
-    }
+
 
     public int getDayEnergyLeft() {
         return dayEnergyLeft;

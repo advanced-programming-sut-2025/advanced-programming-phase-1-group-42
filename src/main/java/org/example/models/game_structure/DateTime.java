@@ -16,10 +16,19 @@ public class DateTime {
     // A Function to change game base of the cycle of players and moves the game forward
     public void timeFlow() {
         time++;
+
         if (time >= 22) {
             App.getCurrentGame().gameFlow();
             time = 9;
             date++;
+        }
+
+        if(App.getCurrentGame().getCurrentPlayer().getBuff() != null){
+            App.getCurrentGame().getCurrentPlayer().getBuff().setRemainEffectTime();
+            if(App.getCurrentGame().getCurrentPlayer().getBuff().getRemainEffectTime() == 0){
+                App.getCurrentGame().getCurrentPlayer().setBuff(null);
+                App.getCurrentGame().getCurrentPlayer().getEnergy().setMaxDayEnergy(200);
+            }
         }
     }
 
@@ -71,19 +80,25 @@ public class DateTime {
         return season;
     }
 
-    public void seasonChange() {
+    public void farmingSeasonChange() {
         for (int i = 0 ; i < 140 ; i++) {
             for (int j = 0; j < 160; j++) {
                 Coordinate coordinate = new Coordinate(i, j);
                 Tile tile = App.getCurrentGame().getMap().findTile(coordinate);
-                Iterator<Good> iterator = tile.getGoods().iterator();
-                while (iterator.hasNext()) {
-                    Good good = iterator.next();
-                    if (good instanceof FarmingCrop) {
-                        iterator.remove();
+                if(!tile.getTileType().equals(TileType.GREEN_HOUSE)) {
+                    Iterator<Good> iterator = tile.getGoods().iterator();
+                    while (iterator.hasNext()) {
+                        Good good = iterator.next();
+                        if (good instanceof FarmingCrop) {
+                            iterator.remove();
+                        }
                     }
                 }
             }
         }
+    }
+
+    public void setTime(int time) {
+        this.time = time;
     }
 }

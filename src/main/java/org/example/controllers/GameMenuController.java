@@ -46,7 +46,6 @@ import org.example.models.interactions.game_buildings.GameBuilding;
 import org.example.models.interactions.game_buildings.MarnieRanch;
 
 
-import java.awt.image.AreaAveragingScaleFilter;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.*;
@@ -109,15 +108,15 @@ public class GameMenuController extends Controller {
                 Tile tile = new Tile(new Coordinate(i, j));
                 //Plain
                 tile.setTileType(TileType.PLAIN);
-                if(j >= 80 && j < 110 && i >= 110 && i < 140)
+                if (j >= 80 && j < 110 && i >= 110 && i < 140)
                     tile.setTileType(TileType.BEACH);
 
                 //Sea
-                if(i >= 140 && i < 150 && j >= 0 && j < 160)
+                if (i >= 140 && i < 150 && j >= 0 && j < 160)
                     tile.setTileType(TileType.WATER);
 
                 //Square
-                if(j >= 77 && j < 83 && ((i >= 30 && i < 35) || (i >= 105 && i < 110)))
+                if (j >= 77 && j < 83 && ((i >= 30 && i < 35) || (i >= 105 && i < 110)))
                     tile.setTileType(TileType.SQUARE);
 
                 // Road
@@ -130,14 +129,13 @@ public class GameMenuController extends Controller {
         }
 
 
-
         return tiles;
     }
 
     // Nader
     //game setting methods
     public Result newGame(ArrayList<String> usernames, Scanner scanner) {
-        if(usernames.isEmpty() || usernames.size() > 3)
+        if (usernames.isEmpty() || usernames.size() > 3)
             return new Result(false, "You have to add 1 to 3 Users to play with you in new game!");
 
         ArrayList<Player> players = new ArrayList<>();
@@ -153,11 +151,11 @@ public class GameMenuController extends Controller {
                     return new Result(false, username + " is already playing in other game!");
                 Player player = new Player(user);
                 players.add(player);
-                if(user.getUsername().equals(App.getCurrentUser().getUsername()))
+                if (user.getUsername().equals(App.getCurrentUser().getUsername()))
                     adminPlayer = player;
                 found = true;
             }
-            if(!found)
+            if (!found)
                 return new Result(false, "No player with username " + username + " found!");
         }
 
@@ -188,7 +186,7 @@ public class GameMenuController extends Controller {
 
     public Result loadGame() {
         Game game = DBInteractor.loadGameFromDB(App.getCurrentUser().getUsername());
-        if(game == null)
+        if (game == null)
             return new Result(false, "You have no game to load!");
 
         App.setCurrentGame(game);
@@ -283,13 +281,21 @@ public class GameMenuController extends Controller {
     }
 
     public Result cheatAdvanceTime(String hour) {
-        //TODO
-        return new Result(true, "");
+        int dateInt = Integer.parseInt(hour);
+        for (int i = 0; i < dateInt; i++) {
+            App.getCurrentGame().getDateTime().timeFlow();
+        }
+
+        return new Result(true, "Your time is increased by " + hour);
     }
 
     public Result cheatAdvanceDate(String date) {
-        //TODO
-        return new Result(true, "");
+        int dateInt = Integer.parseInt(date);
+        for (int i = 0; i < dateInt; i++) {
+            App.getCurrentGame().gameFlow();
+        }
+        App.getCurrentGame().getDateTime().setTime(9);
+        return new Result(true, "Your date is increased by " + date);
     }
 
 
@@ -391,13 +397,14 @@ public class GameMenuController extends Controller {
 
         if (energyConsumed > playerEnergy) {
             App.getCurrentGame().getCurrentPlayer().setCoordinate(coordinate);
-            App.getCurrentGame().getCurrentPlayer().getEnergy().decreaseDayEnergyLeft(playerEnergy);
+            // So the player Faints
+            App.getCurrentGame().getCurrentPlayer().getEnergy().decreaseTurnEnergyLeft(playerEnergy);
             App.getCurrentGame().getCurrentPlayer().getEnergy().setAwake(false);
             return new Result(true, "Your energy was enough to walk to " + goal +
                     " location! Now your are fainted & your daily energy is 0!");
         } else {
             App.getCurrentGame().getCurrentPlayer().setCoordinate(goal);
-            App.getCurrentGame().getCurrentPlayer().getEnergy().decreaseDayEnergyLeft(energyConsumed);
+            App.getCurrentGame().getCurrentPlayer().getEnergy().decreaseTurnEnergyLeft(energyConsumed);
             return new Result(true, "Your are now in " + goal + " location!");
         }
     }
@@ -406,20 +413,20 @@ public class GameMenuController extends Controller {
         int IntX = Integer.parseInt(x);
         int IntY = Integer.parseInt(y);
         int IntSize = Integer.parseInt(size);
-        App.getCurrentGame().getMap().printMap(IntX,IntY,IntSize);
+        App.getCurrentGame().getMap().printMap(IntX, IntY, IntSize);
         return new Result(true, "");
     }
 
     public Result helpReadingMap() {
 
-        return new Result(true, " " + " -> " + "Tile don't exist\n"+
-                                                "F" + " -> " + "Farm\n"+
-                                                "W" + " -> " + "Water\n"+
-                                                "G" + " -> " + "Green House\n"+
-                                                "B" + " -> " + "Building\n"+
-                                                "R" + " -> " + "Road\n"+
-                                                "Q" + " -> " + "Quarry\n"+
-                                                "P" + " -> " + "Plain\n");
+        return new Result(true, " " + " -> " + "Tile don't exist\n" +
+                "F" + " -> " + "Farm\n" +
+                "W" + " -> " + "Water\n" +
+                "G" + " -> " + "Green House\n" +
+                "B" + " -> " + "Building\n" +
+                "R" + " -> " + "Road\n" +
+                "Q" + " -> " + "Quarry\n" +
+                "P" + " -> " + "Plain\n");
     }
 
     // Parsa
@@ -433,15 +440,15 @@ public class GameMenuController extends Controller {
     public Result cheatEnergySet(String value) {
 
         int valueInt = Integer.parseInt(value);
-        App.getCurrentGame().getCurrentPlayer().getEnergy().increaseDayEnergyLeft(valueInt);
+        App.getCurrentGame().getCurrentPlayer().getEnergy().increaseTurnEnergyLeft(valueInt);
         return new Result(true, "");
     }
 
     public Result cheatEnergyUnlimited() {
         App.getCurrentGame().getCurrentPlayer().getEnergy().setMaxDayEnergy(Integer.MAX_VALUE);
         App.getCurrentGame().getCurrentPlayer().getEnergy().setMaxTurnEnergy(Integer.MAX_VALUE);
+        //App.getCurrentGame().getCurrentPlayer().getEnergy().increaseTurnEnergyLeft(Integer.MAX_VALUE);
         App.getCurrentGame().getCurrentPlayer().getEnergy().increaseTurnEnergyLeft(Integer.MAX_VALUE);
-        App.getCurrentGame().getCurrentPlayer().getEnergy().increaseDayEnergyLeft(Integer.MAX_VALUE);
         return new Result(true, "");
     }
 
@@ -549,7 +556,6 @@ public class GameMenuController extends Controller {
             if (App.getCurrentGame().getMap().findTile(coordinate) == null)
                 return new Result(false, "Tile not found");
 
-            App.getCurrentGame().getCurrentPlayer().getEnergy().decreaseDayEnergyLeft(tool.getType().getEnergy());
             App.getCurrentGame().getCurrentPlayer().getEnergy().decreaseTurnEnergyLeft(tool.getType().getEnergy());
 
             return ToolFunctions.tooluse(tool, coordinate);
@@ -593,7 +599,7 @@ public class GameMenuController extends Controller {
         //mixed seed
         try {
             Good good = seeds.getLast();
-            if (good instanceof ForagingMixedSeed){
+            if (good instanceof ForagingMixedSeed) {
                 ForagingMixedSeedType type = (ForagingMixedSeedType) good.getType();
                 int random = (int) (Math.random() * type.getPossibleCrops().size());
                 ForagingSeedType crop = (ForagingSeedType) type.getPossibleCrops().get(random);
@@ -1086,18 +1092,18 @@ public class GameMenuController extends Controller {
 
     public Result fishing(String fishingPole) {
         ToolType fishingPoleGood = ToolType.getTool(fishingPole);
-        if(App.getCurrentGame().getCurrentPlayer().getInventory().isInInventory(fishingPole) == null) {
+        if (App.getCurrentGame().getCurrentPlayer().getInventory().isInInventory(fishingPole) == null) {
             return new Result(true, "You don't have this fishing pole");
         }
         for (Coordinate coordinate : Coordinate.coordinates) {
-            Coordinate c = Coordinate.checkAround(App.getCurrentGame().getCurrentPlayer().getCoordinate() , coordinate);
+            Coordinate c = Coordinate.checkAround(App.getCurrentGame().getCurrentPlayer().getCoordinate(), coordinate);
             Tile tile = App.getCurrentGame().getMap().findTile(c);
-            if(tile.getTileType() == TileType.WATER){
+            if (tile.getTileType() == TileType.WATER) {
                 Weather weather = App.getCurrentGame().getWeather();
                 Skill skill = App.getCurrentGame().getCurrentPlayer().getSkill();
                 double chance = Math.random();
 
-                double numberOfFishes = Math.max(weather.getFishChance()*chance*(2 + skill.getFishingLevel()), 6);
+                double numberOfFishes = Math.max(weather.getFishChance() * chance * (2 + skill.getFishingLevel()), 6);
 
 
                 double poleRarityChange = 0;
@@ -1119,10 +1125,10 @@ public class GameMenuController extends Controller {
                 }
 
                 double rarityChance = Math.random();
-                double fishRarity = Math.max(((rarityChance*(2 + skill.getFishingLevel())*poleRarityChange)/ (7 - weather.getFishChance())) , 4);
+                double fishRarity = Math.max(((rarityChance * (2 + skill.getFishingLevel()) * poleRarityChange) / (7 - weather.getFishChance())), 4);
 
 
-                ToolFunctions.fish(fishingPoleGood ,numberOfFishes ,fishRarity);
+                ToolFunctions.fish(fishingPoleGood, numberOfFishes, fishRarity);
 
                 return new Result(true, "You've Caught a Fish");
             }
@@ -1192,14 +1198,14 @@ public class GameMenuController extends Controller {
 
     public Result sell(String productName, String count) {
         ArrayList<Good> goods = App.getCurrentGame().getCurrentPlayer().getInventory().isInInventory(productName);
-        if(goods == null)
+        if (goods == null)
             return new Result(false, "You don't have this good in your inventory!");
 
-        if(!count.matches("-?\\d+") && !count.isEmpty())
+        if (!count.matches("-?\\d+") && !count.isEmpty())
             return new Result(false, "Invalid Quantity format!");
 
         int quantity = (count.isEmpty()) ? goods.size() : Integer.parseInt(count);
-        if(quantity > goods.size())
+        if (quantity > goods.size())
             return new Result(false, "You don't have enough number of this good in your inventory!");
 
         boolean flag = false;
@@ -1209,7 +1215,7 @@ public class GameMenuController extends Controller {
                     App.getCurrentGame().getCurrentPlayer().getCoordinate().getY() + Coordinate.coordinates.get(i).getY());
 
             Tile tile = App.getCurrentGame().getMap().findTile(coordinate);
-            if(tile != null && tile.findGood("ShippingBin") != null) {
+            if (tile != null && tile.findGood("ShippingBin") != null) {
                 ArrayList<Good> newGoods = new ArrayList<>(goods);
                 for (int j = 0; j < quantity; j++) {
                     newGoods.add(goods.getLast());
@@ -1223,7 +1229,7 @@ public class GameMenuController extends Controller {
             }
         }
 
-        if(flag)
+        if (flag)
             return new Result(true, quantity + " number of " + productName + " has been added to ShippingBin!");
         else
             return new Result(false, "No ShippingBin found around you!");
@@ -1264,8 +1270,8 @@ public class GameMenuController extends Controller {
 
             // If they are couple
             if (App.getCurrentGame().getCurrentPlayer().getMarried() == player) {
-                App.getCurrentGame().getCurrentPlayer().getEnergy().increaseDayEnergyLeft(50);
-                player.getEnergy().increaseDayEnergyLeft(50);
+                App.getCurrentGame().getCurrentPlayer().getEnergy().increaseTurnEnergyLeft(50);
+                player.getEnergy().increaseTurnEnergyLeft(50);
 
                 System.out.println("You and your partner got 50 extra energy!");
             } else {
@@ -1368,8 +1374,8 @@ public class GameMenuController extends Controller {
 
         if (!App.getCurrentGame().getCurrentPlayer().getIsInteracted().get(gift.first())) {
             if (App.getCurrentGame().getCurrentPlayer().getMarried() == gift.first()) {
-                App.getCurrentGame().getCurrentPlayer().getEnergy().increaseDayEnergyLeft(50);
-                gift.first().getEnergy().increaseDayEnergyLeft(50);
+                App.getCurrentGame().getCurrentPlayer().getEnergy().increaseTurnEnergyLeft(50);
+                gift.first().getEnergy().increaseTurnEnergyLeft(50);
 
                 System.out.println("You and your partner got 50 extra energy!");
             } else {
@@ -1417,8 +1423,8 @@ public class GameMenuController extends Controller {
 
         if (!App.getCurrentGame().getCurrentPlayer().getIsInteracted().get(player)) {
             if (App.getCurrentGame().getCurrentPlayer().getMarried() == player) {
-                App.getCurrentGame().getCurrentPlayer().getEnergy().increaseDayEnergyLeft(50);
-                player.getEnergy().increaseDayEnergyLeft(50);
+                App.getCurrentGame().getCurrentPlayer().getEnergy().increaseTurnEnergyLeft(50);
+                player.getEnergy().increaseTurnEnergyLeft(50);
 
                 System.out.println("You and your partner got 50 extra energy!");
             } else {
@@ -1473,8 +1479,8 @@ public class GameMenuController extends Controller {
             return new Result(false, "Your don't have any flower in your inventory to give to someone!");
         else if (!App.getCurrentGame().getCurrentPlayer().getIsInteracted().get(player)) {
             if (App.getCurrentGame().getCurrentPlayer().getMarried() == player) {
-                App.getCurrentGame().getCurrentPlayer().getEnergy().increaseDayEnergyLeft(50);
-                player.getEnergy().increaseDayEnergyLeft(50);
+                App.getCurrentGame().getCurrentPlayer().getEnergy().increaseTurnEnergyLeft(50);
+                player.getEnergy().increaseTurnEnergyLeft(50);
 
                 System.out.println("You and your partner got 50 extra energy!");
             } else {
@@ -1561,7 +1567,7 @@ public class GameMenuController extends Controller {
                 if (mainPlayer.getMarriageList().get(gamePlayer) != null) {
                     gamePlayer.getInventory().addGood(new ArrayList<>(Arrays.asList(mainPlayer.getMarriageList().get(gamePlayer))));
                     gamePlayer.getNews().add(mainPlayer.getUser().getUsername() + " has rejected your marriage and married with " + player.getUser().getUsername() + "!");
-                    gamePlayer.setBuff(new Buff(BuffType.REJECT_BUFF, 7, 100));
+                    gamePlayer.setRejectionBuff(new Buff(BuffType.REJECT_BUFF, 7, 100));
                 }
             }
             mainPlayer.getMarriageList().clear();
@@ -1572,7 +1578,7 @@ public class GameMenuController extends Controller {
             player.getFriendShips().computeIfPresent(mainPlayer,
                     (k, pair) -> new Pair<>(0, pair.second()));
 
-            player.setBuff(new Buff(BuffType.REJECT_BUFF, 7, 100));
+            player.setRejectionBuff(new Buff(BuffType.REJECT_BUFF, 7, 100));
             player.getInventory().addGood(new ArrayList<>(Arrays.asList(mainPlayer.getMarriageList().get(player))));
             player.getNews().add(mainPlayer.getUser().getUsername() + " has rejected your marriage!");
             mainPlayer.getFriendShips().remove(player);

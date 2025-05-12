@@ -5,6 +5,7 @@ import org.example.models.Pair;
 import org.example.models.Result;
 import org.example.models.enums.Season;
 import org.example.models.enums.TileType;
+import org.example.models.game_structure.BuffType;
 import org.example.models.game_structure.Coordinate;
 import org.example.models.game_structure.Skill;
 import org.example.models.game_structure.Tile;
@@ -55,15 +56,27 @@ public class ToolFunctions {
     public static Result tooluse(Tool tool, Coordinate coordinate) {
         switch ((ToolType) tool.getType()){
             case ToolType.HOE -> {
+                if(App.getCurrentGame().getCurrentPlayer().getBuff().getType().equals(BuffType.FARMING_BUFF)){
+                    App.getCurrentGame().getCurrentPlayer().getEnergy().increaseTurnEnergyLeft(1);
+                }
                 return useHoe(tool, coordinate);
             }
             case ToolType.PICKAXE -> {
+                if(App.getCurrentGame().getCurrentPlayer().getBuff().getType().equals(BuffType.MINING_BUFF)){
+                    App.getCurrentGame().getCurrentPlayer().getEnergy().increaseTurnEnergyLeft(1);
+                }
                 return usePickaxe(tool, coordinate);
             }
             case ToolType.AXE -> {
+                if(App.getCurrentGame().getCurrentPlayer().getBuff().getType().equals(BuffType.FORAGING_BUFF)){
+                    App.getCurrentGame().getCurrentPlayer().getEnergy().increaseTurnEnergyLeft(1);
+                }
                 return useAxe(tool, coordinate);
             }
             case ToolType.WATERING_CAN -> {
+                if(App.getCurrentGame().getCurrentPlayer().getBuff().getType().equals(BuffType.FARMING_BUFF)){
+                    App.getCurrentGame().getCurrentPlayer().getEnergy().increaseTurnEnergyLeft(1);
+                }
                 return useWateringCan(tool, coordinate);
             }
             case ToolType.SCYTHE -> {
@@ -191,6 +204,10 @@ public class ToolFunctions {
     }
 
     public static Result fish(ToolType fishingPole, double numberOfFishes, double rarityChance) {
+
+        if(App.getCurrentGame().getCurrentPlayer().getBuff().getType().equals(BuffType.FISHING_BUFF)){
+            App.getCurrentGame().getCurrentPlayer().getEnergy().increaseTurnEnergyLeft(1);
+        }
 
         int numberOfFishesInt = (int)Math.floor(numberOfFishes);
         int fishQuality = (int) Math.floor(rarityChance);

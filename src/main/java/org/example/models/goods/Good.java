@@ -47,6 +47,7 @@ public abstract class Good {
 
         if(type instanceof FoodType)
             return new Food((FoodType) type);
+
         if(type instanceof ArtisanType)
             return new Artisan((ArtisanType) type);
 
