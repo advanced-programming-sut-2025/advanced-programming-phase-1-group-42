@@ -9,7 +9,7 @@ public class DBInteractor {
         return new Farm();
     }
 
-    public static Game loadGameToDB(String username) {
+    public static Game loadGameFromDB(String username) {
         //TODO: need to be implemented
         return new Game();
     }

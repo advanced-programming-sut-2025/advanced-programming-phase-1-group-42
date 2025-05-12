@@ -31,26 +31,6 @@ public class User {
         this.gamePlay = 0;
     }
 
-    public void changeUsername(String username) {
-        this.username = username;
-    }
-
-    public void changeGender(Gender gender) {
-        this.gender = gender;
-    }
-
-    public void changeEmail(String email) {
-        this.email = email;
-    }
-
-    public void changePassword(String password) {
-        this.password = password;
-    }
-
-    public void changeNickname(String nickname) {
-        this.nickname = nickname;
-    }
-
     public String getUsername() {
         return username;
     }
@@ -119,5 +99,7 @@ public class User {
         return info;
     }
 
-
+    public void setGame(Game game) {
+        this.game = game;
+    }
 }

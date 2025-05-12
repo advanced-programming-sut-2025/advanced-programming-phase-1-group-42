@@ -4,6 +4,7 @@ import org.example.models.App;
 import org.example.models.Result;
 import org.example.models.enums.LoginRegisterCommands;
 import org.example.models.enums.Menu;
+import org.example.models.goods.products.Product;
 import org.example.models.interactions.Gender;
 import org.example.models.interactions.User;
 
@@ -14,6 +15,8 @@ import java.util.regex.Pattern;
 
 public class LoginRegisterMenuController extends Controller {
     //TODO: Arani
+    
+
 
 
 

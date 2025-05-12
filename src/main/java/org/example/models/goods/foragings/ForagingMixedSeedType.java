@@ -9,19 +9,21 @@ import java.util.Arrays;
 
 public enum ForagingMixedSeedType implements GoodType {
     SPRING_SEED("Spring_Mixed_Seed", Season.SPRING,
-            new ArrayList<>(Arrays.asList(FarmingCropType.CAULIFLOWER, FarmingCropType.PARSNIP,
-                    FarmingCropType.POTATO, FarmingCropType.BLUE_JAZZ, FarmingCropType.TULIP))),
+            new ArrayList<>(Arrays.asList(ForagingSeedType.CAULIFLOWER_SEEDS,ForagingSeedType.PARSNIP_SEEDS,
+                    ForagingSeedType.POTATO_SEEDS, ForagingSeedType.JAZZ_SEEDS, ForagingSeedType.TULIP_BULB))),
 
     SUMMER_SEED("Summer_Mixed_Seed", Season.SUMMER,
-            new ArrayList<>(Arrays.asList(FarmingCropType.CORN, FarmingCropType.HOT_PEPPER, FarmingCropType.RADISH,
-                    FarmingCropType.WHEAT, FarmingCropType.POPPY, FarmingCropType.SUNFLOWER, FarmingCropType.SUMMER_SPANGLE))),
+            new ArrayList<>(Arrays.asList(ForagingSeedType.CORN_SEEDS, ForagingSeedType.PEPPER_SEEDS,
+                    ForagingSeedType.RADISH_SEEDS, ForagingSeedType.WHEAT_SEEDS, ForagingSeedType.POPPY_SEEDS,
+                    ForagingSeedType.SUNFLOWER_SEEDS, ForagingSeedType.SPANGLE_SEEDS))),
 
     FALL_SEED("Fall_Mixed_Seed", Season.FALL,
-            new ArrayList<>(Arrays.asList(FarmingCropType.ARTICHOKE, FarmingCropType.CORN, FarmingCropType.EGGPLANT,
-                    FarmingCropType.PUMPKIN, FarmingCropType.SUNFLOWER, FarmingCropType.FAIRY_ROSE))),
+            new ArrayList<>(Arrays.asList(ForagingSeedType.ARTICHOKE_SEEDS, ForagingSeedType.CORN_SEEDS,
+                    ForagingSeedType.EGGPLANT_SEEDS, ForagingSeedType.PUMPKIN_SEEDS, ForagingSeedType.SUNFLOWER_SEEDS,
+                    ForagingSeedType.FAIRY_SEEDS))),
 
     WINTER_SEED("Winter_Mixed_Seed", Season.WINTER,
-            new ArrayList<>(Arrays.asList(FarmingCropType.POWDERMELON)));
+            new ArrayList<>(Arrays.asList(ForagingSeedType.POWDERMELON_SEEDS)));
 
     private String name;
     private Season season;
@@ -33,6 +35,9 @@ public enum ForagingMixedSeedType implements GoodType {
         this.possibleCrops = possibleCrops;
     }
 
+    public ArrayList<GoodType> getPossibleCrops() {
+        return possibleCrops;
+    }
 
     @Override
     public int getSellPrice() {
