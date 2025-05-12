@@ -1,11 +1,14 @@
 package org.example.models.game_structure;
 
 import org.example.models.App;
+import org.example.models.Pair;
 import org.example.models.enums.Season;
 import org.example.models.enums.TileType;
 import org.example.models.goods.Good;
 import org.example.models.goods.farmings.FarmingCrop;
+import org.example.models.interactions.Player;
 
+import java.util.HashMap;
 import java.util.Iterator;
 
 public class DateTime {
@@ -21,6 +24,15 @@ public class DateTime {
             time = 9;
             date++;
         }
+        for (Player player : App.getCurrentGame().getPlayers()) {
+            HashMap<Player, Pair<Integer, Integer>> friendships = player.getFriendShips();
+            for (Pair<Integer, Integer> friendshipData : friendships.values()) {
+                if (friendshipData.second() > (friendshipData.first() + 1) * 100) {
+                    friendshipData.setFirst(friendshipData.first() + 1);
+                }
+            }
+        }
+
     }
 
     public int getDayOfSeason() {
@@ -72,7 +84,7 @@ public class DateTime {
     }
 
     public void seasonChange() {
-        for (int i = 0 ; i < 140 ; i++) {
+        for (int i = 0; i < 140; i++) {
             for (int j = 0; j < 160; j++) {
                 Coordinate coordinate = new Coordinate(i, j);
                 Tile tile = App.getCurrentGame().getMap().findTile(coordinate);
