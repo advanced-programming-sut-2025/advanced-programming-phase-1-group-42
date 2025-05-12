@@ -86,10 +86,6 @@ public enum FoodType implements GoodType {
     COFFEE("Coffee", 0, 150, null),
 
     // Base Types
-    EGG("Egg", -1, -1, null),
-
-    MILK("Milk", -1, -1, null),
-
     WHEAT_FLOUR("Wheat_Flour", -1, -1, null),
 
     SUGAR("Sugar", -1, -1, null),

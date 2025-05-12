@@ -8,29 +8,30 @@ import org.example.models.interactions.Animals.AnimalProductsType;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Objects;
 
 public enum ArtisanType implements GoodType {
 
-    HONEY("Honey", "It's a sweet syrup produced by bees.", new Pair<>(0, 75), 4 * 24, new ArrayList<>(
-            Arrays.asList(new Pair<>(null, new Pair<>(0, 350)),
+    HONEY("Honey", "It's a sweet syrup produced by bees.", new Pair<>(0.0, 75), 4 * 24, new ArrayList<>(
+            Arrays.asList(new Pair<>(null, new Pair<>(0.0, 350.0)))),
             CraftingRecipeType.BEE_HOUSE),
 
-    CLOTH("Cloth", "A bolt of fine wool cloth.", new Pair<>(-1, -1), 4, new ArrayList<>(
-                    Arrays.asList(new Pair<>(AnimalProductsType.RABBIT_WOOL, new Pair<>(0, 470)),
-                            new Pair<>(AnimalProductsType.SHEEP_WOOL, new Pair<>(0, 470)))
-            ), CraftingRecipeType.LOOM),
+    CLOTH("Cloth", "A bolt of fine wool cloth.", new Pair<>(-1.0, -1), 4, new ArrayList<>(
+                    Arrays.asList(new Pair<>(AnimalProductsType.RABBIT_WOOL, new Pair<>(0.0, 470.0)),
+                            new Pair<>(AnimalProductsType.SHEEP_WOOL, new Pair<>(0.0, 470.0))))
+            , CraftingRecipeType.LOOM),
 
     CHEESE("Cheese", "It's your basic cheese.", new Pair<>(0.0, 100), 3, new ArrayList<>(
                             Arrays.asList(
-                                    new Pair<>(FoodType.MILK, new Pair<>(1.0, 230.0)),
-                                    new Pair<>(AnimalProductsType.LARGE_MILK, new Pair<>(1.0, 345.0))
-                            ), CraftingRecipeType.CHEESE_PRESS),
+                                    new Pair<>(AnimalProductsType.COW_MILK, new Pair<>(1.0, 230.0)),
+                                    new Pair<>(AnimalProductsType.BIG_COW_MILK, new Pair<>(1.0, 345.0))
+                            )), CraftingRecipeType.CHEESE_PRESS),
 
     GOAT_CHEESE("Goat Cheese", "Soft cheese made from goat's milk.", new Pair<>(0.0, 100), 3, new ArrayList<>(
                                     Arrays.asList(
                                             new Pair<>(AnimalProductsType.GOAT_MILK, new Pair<>(1.0, 400.0)),
-                                            new Pair<>(AnimalProductsType.LARGE_GOAT_MILK, new Pair<>(1.0, 600.0))
-                                    ), CraftingRecipeType.CHEESE_PRESS),
+                                            new Pair<>(AnimalProductsType.BIG_GOAT_MILK, new Pair<>(1.0, 600.0))
+                                    )), CraftingRecipeType.CHEESE_PRESS),
 
     MAYONNAISE("Mayonnaise", "It looks spreadable.", new Pair<>(0.0, 50), 3, new ArrayList<>(
                                             Arrays.asList(
@@ -123,6 +124,21 @@ public enum ArtisanType implements GoodType {
         this.processingHour = processingHour;
         this.ingredients = ingredients;
         this.craftingRecipeType = craftingRecipeType;
+    }
+
+    @Override
+    public int getSellPrice() {
+        return 0;
+    }
+
+    @Override
+    public int getEnergy() {
+        return 0;
+    }
+
+    @Override
+    public String getName() {
+        return "";
     }
 }
 
