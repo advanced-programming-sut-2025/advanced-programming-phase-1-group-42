@@ -22,6 +22,7 @@ import org.example.models.interactions.Player;
 import org.example.models.interactions.PlayerBuildings.FarmBuilding;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.Iterator;
 
 public class Game {
@@ -165,6 +166,11 @@ public class Game {
             }
         }
 
+        for (Player player : players) {
+            HashMap<Player, Boolean> interaction = player.getIsInteracted();
+            interaction.replaceAll((p, v) -> false);
+        }
+
 
         //for mixed seed
 
@@ -182,6 +188,8 @@ public class Game {
                 }
             }
         }
+
+
 
 
 
