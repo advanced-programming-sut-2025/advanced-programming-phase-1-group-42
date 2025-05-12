@@ -1,17 +1,18 @@
 package org.example.models.goods.artisans;
 
 import org.example.models.Pair;
+import org.example.models.goods.Good;
 import org.example.models.goods.GoodType;
 import org.example.models.goods.foods.Food;
 import org.example.models.goods.foods.FoodType;
 
-public class Artisan extends Food {
+public class Artisan extends Good {
 
     private Pair<GoodType, Integer> ingredients;
     private ArtisanType artisanType;
 
-    public Artisan(FoodType foodType) {
-        super(foodType);
+    public Artisan(ArtisanType artisanType) {
+        this.artisanType = artisanType;
     }
 
     @Override
@@ -19,16 +20,15 @@ public class Artisan extends Food {
         return artisanType.getName();
     }
 
-    @Override
-    public int getPrice() {
-        return artisanType.getSellPrice() ;
+    public int getEnergy() {
+        return artisanType.getEnergy();
     }
 
     public ArtisanType getType() {
         return artisanType;
     }
 
-
+    @Override
     public int getSellPrice() {
         return this.artisanType.getSellPrice(ingredients);
     }

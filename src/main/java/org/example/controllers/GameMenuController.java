@@ -396,13 +396,13 @@ public class GameMenuController extends Controller {
 
         if (energyConsumed > playerEnergy) {
             App.getCurrentGame().getCurrentPlayer().setCoordinate(coordinate);
-            App.getCurrentGame().getCurrentPlayer().getEnergy().decreaseDayEnergyLeft(playerEnergy);
+            App.getCurrentGame().getCurrentPlayer().getEnergy().decreaseTurnEnergyLeft(playerEnergy);
             App.getCurrentGame().getCurrentPlayer().getEnergy().setAwake(false);
             return new Result(true, "Your energy was enough to walk to " + goal +
                     " location! Now your are fainted & your daily energy is 0!");
         } else {
             App.getCurrentGame().getCurrentPlayer().setCoordinate(goal);
-            App.getCurrentGame().getCurrentPlayer().getEnergy().decreaseDayEnergyLeft(energyConsumed);
+            App.getCurrentGame().getCurrentPlayer().getEnergy().decreaseTurnEnergyLeft(energyConsumed);
             return new Result(true, "Your are now in " + goal + " location!");
         }
     }
@@ -438,7 +438,7 @@ public class GameMenuController extends Controller {
     public Result cheatEnergySet(String value) {
 
         int valueInt = Integer.parseInt(value);
-        App.getCurrentGame().getCurrentPlayer().getEnergy().increaseDayEnergyLeft(valueInt);
+        App.getCurrentGame().getCurrentPlayer().getEnergy().increaseTurnEnergyLeft(valueInt);
         return new Result(true, "");
     }
 
@@ -446,7 +446,7 @@ public class GameMenuController extends Controller {
         App.getCurrentGame().getCurrentPlayer().getEnergy().setMaxDayEnergy(Integer.MAX_VALUE);
         App.getCurrentGame().getCurrentPlayer().getEnergy().setMaxTurnEnergy(Integer.MAX_VALUE);
         App.getCurrentGame().getCurrentPlayer().getEnergy().increaseTurnEnergyLeft(Integer.MAX_VALUE);
-        App.getCurrentGame().getCurrentPlayer().getEnergy().increaseDayEnergyLeft(Integer.MAX_VALUE);
+        App.getCurrentGame().getCurrentPlayer().getEnergy().increaseTurnEnergyLeft(Integer.MAX_VALUE);
         return new Result(true, "");
     }
 
@@ -554,7 +554,7 @@ public class GameMenuController extends Controller {
             if (App.getCurrentGame().getMap().findTile(coordinate) == null)
                 return new Result(false, "Tile not found");
 
-            App.getCurrentGame().getCurrentPlayer().getEnergy().decreaseDayEnergyLeft(tool.getType().getEnergy());
+            App.getCurrentGame().getCurrentPlayer().getEnergy().decreaseTurnEnergyLeft(tool.getType().getEnergy());
             App.getCurrentGame().getCurrentPlayer().getEnergy().decreaseTurnEnergyLeft(tool.getType().getEnergy());
 
             return ToolFunctions.tooluse(tool, coordinate);
@@ -1269,8 +1269,8 @@ public class GameMenuController extends Controller {
 
             // If they are couple
             if (App.getCurrentGame().getCurrentPlayer().getMarried() == player) {
-                App.getCurrentGame().getCurrentPlayer().getEnergy().increaseDayEnergyLeft(50);
-                player.getEnergy().increaseDayEnergyLeft(50);
+                App.getCurrentGame().getCurrentPlayer().getEnergy().increaseTurnEnergyLeft(50);
+                player.getEnergy().increaseTurnEnergyLeft(50);
 
                 System.out.println("You and your partner got 50 extra energy!");
             } else {
@@ -1373,8 +1373,8 @@ public class GameMenuController extends Controller {
 
         if (!App.getCurrentGame().getCurrentPlayer().getIsInteracted().get(gift.first())) {
             if (App.getCurrentGame().getCurrentPlayer().getMarried() == gift.first()) {
-                App.getCurrentGame().getCurrentPlayer().getEnergy().increaseDayEnergyLeft(50);
-                gift.first().getEnergy().increaseDayEnergyLeft(50);
+                App.getCurrentGame().getCurrentPlayer().getEnergy().increaseTurnEnergyLeft(50);
+                gift.first().getEnergy().increaseTurnEnergyLeft(50);
 
                 System.out.println("You and your partner got 50 extra energy!");
             } else {
@@ -1422,8 +1422,8 @@ public class GameMenuController extends Controller {
 
         if (!App.getCurrentGame().getCurrentPlayer().getIsInteracted().get(player)) {
             if (App.getCurrentGame().getCurrentPlayer().getMarried() == player) {
-                App.getCurrentGame().getCurrentPlayer().getEnergy().increaseDayEnergyLeft(50);
-                player.getEnergy().increaseDayEnergyLeft(50);
+                App.getCurrentGame().getCurrentPlayer().getEnergy().increaseTurnEnergyLeft(50);
+                player.getEnergy().increaseTurnEnergyLeft(50);
 
                 System.out.println("You and your partner got 50 extra energy!");
             } else {
@@ -1478,8 +1478,8 @@ public class GameMenuController extends Controller {
             return new Result(false, "Your don't have any flower in your inventory to give to someone!");
         else if (!App.getCurrentGame().getCurrentPlayer().getIsInteracted().get(player)) {
             if (App.getCurrentGame().getCurrentPlayer().getMarried() == player) {
-                App.getCurrentGame().getCurrentPlayer().getEnergy().increaseDayEnergyLeft(50);
-                player.getEnergy().increaseDayEnergyLeft(50);
+                App.getCurrentGame().getCurrentPlayer().getEnergy().increaseTurnEnergyLeft(50);
+                player.getEnergy().increaseTurnEnergyLeft(50);
 
                 System.out.println("You and your partner got 50 extra energy!");
             } else {

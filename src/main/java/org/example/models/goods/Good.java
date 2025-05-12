@@ -1,5 +1,7 @@
 package org.example.models.goods;
 
+import org.example.models.goods.artisans.Artisan;
+import org.example.models.goods.artisans.ArtisanType;
 import org.example.models.goods.craftings.Crafting;
 import org.example.models.goods.craftings.CraftingType;
 import org.example.models.goods.farmings.*;
@@ -7,8 +9,6 @@ import org.example.models.goods.fishs.Fish;
 import org.example.models.goods.fishs.FishType;
 import org.example.models.goods.foods.Food;
 import org.example.models.goods.foods.FoodType;
-import org.example.models.goods.foods.artisans.Artisan;
-import org.example.models.goods.foods.artisans.ArtisanType;
 import org.example.models.goods.foragings.*;
 import org.example.models.goods.products.Product;
 import org.example.models.goods.products.ProductType;

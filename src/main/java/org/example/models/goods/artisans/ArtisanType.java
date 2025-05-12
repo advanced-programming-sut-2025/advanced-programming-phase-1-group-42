@@ -3,9 +3,12 @@ package org.example.models.goods.artisans;
 import org.example.models.Pair;
 import org.example.models.goods.GoodType;
 import org.example.models.goods.farmings.FarmingCropType;
+import org.example.models.goods.fishs.FishType;
 import org.example.models.goods.foods.FoodType;
 import org.example.models.goods.foragings.ForagingCropType;
+import org.example.models.goods.foragings.ForagingMineralType;
 import org.example.models.goods.foragings.ForagingSeedType;
+import org.example.models.goods.products.ProductType;
 import org.example.models.goods.recipes.CraftingRecipeType;
 import org.example.models.interactions.Animals.AnimalProductsType;
 import org.example.models.interactions.game_buildings.Quadruple;
@@ -113,116 +116,194 @@ public enum ArtisanType implements GoodType {
 
     WINE("Wine", "Drink in moderation.", new Pair<>(1.75, 0), 7 * 24,
             new ArrayList<>(// Tree Fruits (Year-round after maturity)
-                    new Quadruple<>(FoodType.APRICOT, 1, 3.0, 0.0),
-                    new Quadruple<>(FoodType.CHERRY, 1, 3.0, 0.0),
-                    new Quadruple<>(FoodType.ORANGE, 1, 3.0, 0.0),
-                    new Quadruple<>(FoodType.PEACH, 1, 3.0, 0.0),
-                    new Quadruple<>(FoodType.APPLE, 1, 3.0, 0.0),
-                    new Quadruple<>(FoodType.POMEGRANATE, 1, 3.0, 0.0),
+                    Arrays.asList(
+                            new Quadruple<>(FoodType.APRICOT, 1, 3.0, 0.0),
+                            new Quadruple<>(FoodType.CHERRY, 1, 3.0, 0.0),
+                            new Quadruple<>(FoodType.ORANGE, 1, 3.0, 0.0),
+                            new Quadruple<>(FoodType.PEACH, 1, 3.0, 0.0),
+                            new Quadruple<>(FoodType.APPLE, 1, 3.0, 0.0),
+                            new Quadruple<>(FoodType.POMEGRANATE, 1, 3.0, 0.0),
 
 // Seasonal Fruits (Grown from seeds)
-                    new Quadruple<>(FarmingCropType.STRAWBERRY, 1, 3.0, 0.0), // Spring
-                    new Quadruple<>(FarmingCropType.BLUEBERRY, 1, 3.0, 0.0),  // Summer
-                    new Quadruple<>(FarmingCropType.MELON, 1, 3.0, 0.0),      // Summer
-                    new Quadruple<>(FarmingCropType.RED_CABBAGE, 1, 3.0, 0.0),// Summer (technically a veg, but used in kegs)
-                    new Quadruple<>(FarmingCropType.CRANBERRY, 1, 3.0, 0.0),  // Fall
-                    new Quadruple<>(FarmingCropType.GRAPE, 1, 3.0, 0.0),      // Summer/Fall (trellis)
-                    new Quadruple<>(FarmingCropType.HOPS, 1, 3.0, 0.0),       // Summer (trellis, used for Pale Ale)
+                            new Quadruple<>(FarmingCropType.STRAWBERRY, 1, 3.0, 0.0), // Spring
+                            new Quadruple<>(FarmingCropType.BLUEBERRY, 1, 3.0, 0.0),  // Summer
+                            new Quadruple<>(FarmingCropType.MELON, 1, 3.0, 0.0),      // Summer
+                            new Quadruple<>(FarmingCropType.RED_CABBAGE, 1, 3.0, 0.0),// Summer (technically a veg, but used in kegs)
+                            new Quadruple<>(FarmingCropType.CRANBERRY, 1, 3.0, 0.0),  // Fall
+                            new Quadruple<>(FarmingCropType.GRAPE, 1, 3.0, 0.0),      // Summer/Fall (trellis)
+                            new Quadruple<>(FarmingCropType.HOPS, 1, 3.0, 0.0),       // Summer (trellis, used for Pale Ale)
 
 // Special Fruits (Foraging/Other)
-                    new Quadruple<>(ForagingCropType.BLACKBERRY, 1, 3.0, 0.0), // Foraged (Fall)
-                    new Quadruple<>(ForagingCropType.SALMONBERRY, 1, 3.0, 0.0),// Foraged (Spring)
-                    new Quadruple<>(ForagingCropType.SPICE_BERRY, 1, 3.0, 0.0), // Foraged (Summer)
-                    new Quadruple<>(ForagingCropType.WILD_HORSERADISH, 1, 3.0, 0.0), // Foraged (Spring, technically veg)
+                            new Quadruple<>(ForagingCropType.BLACKBERRY, 1, 3.0, 0.0), // Foraged (Fall)
+                            new Quadruple<>(ForagingCropType.SALMONBERRY, 1, 3.0, 0.0),// Foraged (Spring)
+                            new Quadruple<>(ForagingCropType.SPICE_BERRY, 1, 3.0, 0.0), // Foraged (Summer)
+                            new Quadruple<>(ForagingCropType.WILD_HORSERADISH, 1, 3.0, 0.0) // Foraged (Spring, technically veg)
 
 // Giant Crops (If included)
-                    new Quadruple<>(FarmingCropType.GIANT_MELON, 1, 3.0, 0.0),
-                    new Quadruple<>(FarmingCropType.GIANT_PUMPKIN, 1, 3.0, 0.0),
-                    new Quadruple<>(FarmingCropType.GIANT_CAULIFLOWER, 1, 3.0, 0.0)), CraftingRecipeType.KEG),
+//                    new Quadruple<>(FarmingCropType.GIANT_MELON, 1, 3.0, 0.0),
+//                    new Quadruple<>(FarmingCropType.GIANT_PUMPKIN, 1, 3.0, 0.0),
+//                    new Quadruple<>(FarmingCropType.GIANT_CAULIFLOWER, 1, 3.0, 0.0))
+                    ))
+            , CraftingRecipeType.KEG),
 
     PICKLES("Pickles", "A jar of your home-made pickles.", new Pair<>(1.75, 0), 6,
-            new ArrayList<>(Arrays.asList(new Quadruple<>(FarmingCropType.ARTICHOKE, 1, 2.25, 0.0),
-                    new Quadruple<>(FarmingCropType.BEET, 1, 2.25, 0.0),
-                    new Quadruple<>(FarmingCropType.BLUEBERRY, 1, 2.25, 0.0), // Technically a fruit, but included if needed
-                    new Quadruple<>(FarmingCropType.BOK_CHOY, 1, 2.25, 0.0),
-                    new Quadruple<>(FarmingCropType.RED_CABBAGE, 1, 2.25, 0.0),
-                    new Quadruple<>(FarmingCropType.CARROT, 1, 2.25, 0.0),
-                    new Quadruple<>(FarmingCropType.CAULIFLOWER, 1, 2.25, 0.0),
-                    new Quadruple<>(FarmingCropType.CORN, 1, 2.25, 0.0),
-                    new Quadruple<>(FarmingCropType.EGGPLANT, 1, 2.25, 0.0),
-                    new Quadruple<>(FarmingCropType.GARLIC, 1, 2.25, 0.0),
-                    new Quadruple<>(FarmingCropType.GREEN_BEAN, 1, 2.25, 0.0),
-                    new Quadruple<>(FarmingCropType.HOPS, 1, 2.25, 0.0), // Technically a flower, but brewed like a vegetable
-                    new Quadruple<>(FarmingCropType.KALE, 1, 2.25, 0.0),
-                    new Quadruple<>(FarmingCropType.MELON, 1, 2.25, 0.0), // Technically a fruit
-                    new Quadruple<>(FarmingCropType.PARSNIP, 1, 2.25, 0.0),
-                    new Quadruple<>(FarmingCropType.HOT_PEPPER, 1, 2.25, 0.0), // Technically a fruit
-                    new Quadruple<>(FarmingCropType.POTATO, 1, 2.25, 0.0),
-                    new Quadruple<>(FarmingCropType.PUMPKIN, 1, 2.25, 0.0),
-                    new Quadruple<>(FarmingCropType.RADISH, 1, 2.25, 0.0),
-                    new Quadruple<>(FarmingCropType.RED_CABBAGE, 1, 2.25, 0.0),
-                    new Quadruple<>(FarmingCropType.RHUBARB, 1, 2.25, 0.0), // Technically a vegetable, despite being used like a fruit
-                    new Quadruple<>(FarmingCropType.STARFRUIT, 1, 2.25, 0.0), // Technically a fruit
-                    new Quadruple<>(FarmingCropType.SUMMER_SPANGLE, 1, 2.25, 0.0), // Flower, not a vegetable
-                    new Quadruple<>(FarmingCropType.SWEET_GEM_BERRY, 1, 2.25, 0.0), // Technically a fruit
-                    new Quadruple<>(FarmingCropType.TOMATO, 1, 2.25, 0.0), // Technically a fruit
-                    new Quadruple<>(FarmingCropType.WHEAT, 1, 2.25, 0.0), // Grain, not a vegetable
-                    new Quadruple<>(FarmingCropType.YAM, 1, 2.25, 0.0))
-            ), CraftingRecipeType.PRESERVES_JAR),
+            new ArrayList<>(Arrays.asList(
+                    new Quadruple<>(FarmingCropType.ARTICHOKE, 1, 2.0, 50.0),
+                    new Quadruple<>(FarmingCropType.BEET, 1, 2.0, 50.0),
+                    new Quadruple<>(FarmingCropType.BLUEBERRY, 1, 2.0, 50.0),
+                    new Quadruple<>(FarmingCropType.BOK_CHOY, 1, 2.0, 50.0),
+                    new Quadruple<>(FarmingCropType.RED_CABBAGE, 1, 2.0, 50.0),
+                    new Quadruple<>(FarmingCropType.CARROT, 1, 2.0, 50.0),
+                    new Quadruple<>(FarmingCropType.CAULIFLOWER, 1, 2.0, 50.0),
+                    new Quadruple<>(FarmingCropType.CORN, 1, 2.0, 50.0),
+                    new Quadruple<>(FarmingCropType.EGGPLANT, 1, 2.0, 50.0),
+                    new Quadruple<>(FarmingCropType.GARLIC, 1, 2.0, 50.0),
+                    new Quadruple<>(FarmingCropType.GREEN_BEAN, 1, 2.0, 50.0),
+                    new Quadruple<>(FarmingCropType.HOPS, 1, 2.0, 50.0),
+                    new Quadruple<>(FarmingCropType.KALE, 1, 2.0, 50.0),
+                    new Quadruple<>(FarmingCropType.MELON, 1, 2.0, 50.0),
+                    new Quadruple<>(FarmingCropType.PARSNIP, 1, 2.0, 50.0),
+                    new Quadruple<>(FarmingCropType.HOT_PEPPER, 1, 2.0, 50.0),
+                    new Quadruple<>(FarmingCropType.POTATO, 1, 2.0, 50.0),
+                    new Quadruple<>(FarmingCropType.PUMPKIN, 1, 2.0, 50.0),
+                    new Quadruple<>(FarmingCropType.RADISH, 1, 2.0, 50.0),
+                    new Quadruple<>(FarmingCropType.RED_CABBAGE, 1, 2.0, 50.0),
+                    new Quadruple<>(FarmingCropType.RHUBARB, 1, 2.0, 50.0),
+                    new Quadruple<>(FarmingCropType.STARFRUIT, 1, 2.0, 50.0),
+                    new Quadruple<>(FarmingCropType.SUMMER_SPANGLE, 1, 2.0, 50.0),
+                    new Quadruple<>(FarmingCropType.SWEET_GEM_BERRY, 1, 2.0, 50.0),
+                    new Quadruple<>(FarmingCropType.TOMATO, 1, 2.0, 50.0),
+                    new Quadruple<>(FarmingCropType.WHEAT, 1, 2.0, 50.0),
+                    new Quadruple<>(FarmingCropType.YAM, 1, 2.0, 50.0)
+            )), CraftingRecipeType.PRESERVES_JAR),
 
     JELLY("Jelly", "Gooey.", new Pair<>(2.0, 0), 3 * 24,
-            new ArrayList<>(                    new Quadruple<>(FoodType.APRICOT, 1, 3.0, 0.0),
-                    new Quadruple<>(FoodType.CHERRY, 1, 3.0, 0.0),
-                    new Quadruple<>(FoodType.ORANGE, 1, 3.0, 0.0),
-                    new Quadruple<>(FoodType.PEACH, 1, 3.0, 0.0),
-                    new Quadruple<>(FoodType.APPLE, 1, 3.0, 0.0),
-                    new Quadruple<>(FoodType.POMEGRANATE, 1, 3.0, 0.0),
+            new ArrayList<>(// Tree Fruits (FoodType)
+                    Arrays.asList(new Quadruple<>(FoodType.APRICOT, 1, 2.0, 50.0),
+                            new Quadruple<>(FoodType.CHERRY, 1, 2.0, 50.0),
+                            new Quadruple<>(FoodType.ORANGE, 1, 2.0, 50.0),
+                            new Quadruple<>(FoodType.PEACH, 1, 2.0, 50.0),
+                            new Quadruple<>(FoodType.APPLE, 1, 2.0, 50.0),
+                            new Quadruple<>(FoodType.POMEGRANATE, 1, 2.0, 50.0),
 
-// Seasonal Fruits (Grown from seeds)
-                    new Quadruple<>(FarmingCropType.STRAWBERRY, 1, 3.0, 0.0), // Spring
-                    new Quadruple<>(FarmingCropType.BLUEBERRY, 1, 3.0, 0.0),  // Summer
-                    new Quadruple<>(FarmingCropType.MELON, 1, 3.0, 0.0),      // Summer
-                    new Quadruple<>(FarmingCropType.RED_CABBAGE, 1, 3.0, 0.0),// Summer (technically a veg, but used in kegs)
-                    new Quadruple<>(FarmingCropType.CRANBERRY, 1, 3.0, 0.0),  // Fall
-                    new Quadruple<>(FarmingCropType.GRAPE, 1, 3.0, 0.0),      // Summer/Fall (trellis)
-                    new Quadruple<>(FarmingCropType.HOPS, 1, 3.0, 0.0),       // Summer (trellis, used for Pale Ale)
+// Seasonal Fruits (FarmingCropType)
+                            new Quadruple<>(FarmingCropType.STRAWBERRY, 1, 2.0, 50.0),    // Spring
+                            new Quadruple<>(FarmingCropType.BLUEBERRY, 1, 2.0, 50.0),     // Summer
+                            new Quadruple<>(FarmingCropType.MELON, 1, 2.0, 50.0),         // Summer
+                            new Quadruple<>(FarmingCropType.RED_CABBAGE, 1, 2.0, 50.0),   // Summer (veg, but keg-compatible)
+                            new Quadruple<>(FarmingCropType.CRANBERRY, 1, 2.0, 50.0),     // Fall
+                            new Quadruple<>(FarmingCropType.GRAPE, 1, 2.0, 50.0),         // Summer/Fall (trellis)
+                            new Quadruple<>(FarmingCropType.HOPS, 1, 2.0, 50.0),          // Summer (trellis, Pale Ale)
 
-// Special Fruits (Foraging/Other)
-                    new Quadruple<>(ForagingCropType.BLACKBERRY, 1, 3.0, 0.0), // Foraged (Fall)
-                    new Quadruple<>(ForagingCropType.SALMONBERRY, 1, 3.0, 0.0),// Foraged (Spring)
-                    new Quadruple<>(ForagingCropType.SPICE_BERRY, 1, 3.0, 0.0), // Foraged (Summer)
-                    new Quadruple<>(ForagingCropType.WILD_HORSERADISH, 1, 3.0, 0.0), // Foraged (Spring, technically veg)
+// Foraged Fruits (ForagingCropType)
+                            new Quadruple<>(ForagingCropType.BLACKBERRY, 1, 2.0, 50.0),   // Fall
+                            new Quadruple<>(ForagingCropType.SALMONBERRY, 1, 2.0, 50.0),  // Spring
+                            new Quadruple<>(ForagingCropType.SPICE_BERRY, 1, 2.0, 50.0),  // Summer
+                            new Quadruple<>(ForagingCropType.WILD_HORSERADISH, 1, 2.0, 50.0) // Spring (veg)
 
-// Giant Crops (If included)
-                    new Quadruple<>(FarmingCropType.GIANT_MELON, 1, 3.0, 0.0),
-                    new Quadruple<>(FarmingCropType.GIANT_PUMPKIN, 1, 3.0, 0.0),
-                    new Quadruple<>(FarmingCropType.GIANT_CAULIFLOWER, 1, 3.0, 0.0)), CraftingRecipeType.PRESERVES_JAR),
+// Giant Crops (FarmingCropType)
+//                    new Quadruple<>(FarmingCropType.GIANT_MELON, 1, 2.0, 50.0),
+//                    new Quadruple<>(FarmingCropType.GIANT_PUMPKIN, 1, 2.0, 50.0),
+//                    new Quadruple<>(FarmingCropType.GIANT_CAULIFLOWER, 1, 2.0, 50.0))
+                    )), CraftingRecipeType.PRESERVES_JAR),
 
     DRIED_MUSHROOMS("Dried Mushrooms", "A package of gourmet mushrooms.", new Pair<>(0.0, 50), 24, new ArrayList<>(
-            Arrays.asList(new Quadruple<>(null, 1, 5.0, 7.5))
+            Arrays.asList(new Quadruple<>(FoodType.COMMON_MUSHROOM, 5, 7.5, 25.0),
+                    new Quadruple<>(ForagingCropType.RED_MUSHROOM, 5, 7.5, 25.0),
+                    new Quadruple<>(ForagingCropType.PURPLE_MUSHROOM, 5, 7.5, 25.0),
+                    new Quadruple<>(ForagingCropType.MOREL, 5, 7.5, 25.0),
+                    new Quadruple<>(ForagingCropType.CHANTERELLE, 5, 7.5, 25.0))
     ), CraftingRecipeType.DEHYDRATOR),
 
     DRIED_FRUIT("Dried Fruit", "Chewy pieces of dried fruit.", new Pair<>(0.0, 75), 24, new ArrayList<>(
-            Arrays.asList(new Quadruple<>(null, 1, 5.0, 7.5))
-    ), CraftingRecipeType.DEHYDRATOR),
+            Arrays.asList(// Tree Fruits (FoodType → Adjusted to FarmingCropType if needed)
+                    new Quadruple<>(FoodType.APRICOT, 5, 7.5, 25.0),
+                    new Quadruple<>(FoodType.CHERRY, 5, 7.5, 25.0),
+                    new Quadruple<>(FoodType.ORANGE, 5, 7.5, 25.0),
+                    new Quadruple<>(FoodType.PEACH, 5, 7.5, 25.0),
+                    new Quadruple<>(FoodType.APPLE, 5, 7.5, 25.0),
+                    new Quadruple<>(FoodType.POMEGRANATE, 5, 7.5, 25.0),
+
+// Seasonal Fruits (Grown from seeds)
+                    new Quadruple<>(FarmingCropType.STRAWBERRY, 5, 7.5, 25.0), // Spring
+                    new Quadruple<>(FarmingCropType.BLUEBERRY, 5, 7.5, 25.0),  // Summer
+                    new Quadruple<>(FarmingCropType.MELON, 5, 7.5, 25.0),      // Summer
+                    new Quadruple<>(FarmingCropType.RED_CABBAGE, 5, 7.5, 25.0),// Summer (technically veg, but used in kegs)
+                    new Quadruple<>(FarmingCropType.CRANBERRY, 5, 7.5, 25.0),  // Fall
+                    new Quadruple<>(FarmingCropType.GRAPE, 5, 7.5, 25.0),      // Summer/Fall (trellis)
+                    new Quadruple<>(FarmingCropType.HOPS, 5, 7.5, 25.0),       // Summer (trellis, Pale Ale)
+
+// Foraged Fruits (ForagingCropType → Adjusted if needed)
+                    new Quadruple<>(ForagingCropType.BLACKBERRY, 5, 7.5, 25.0), // Fall
+                    new Quadruple<>(ForagingCropType.SALMONBERRY, 5, 7.5, 25.0),// Spring
+                    new Quadruple<>(ForagingCropType.SPICE_BERRY, 5, 7.5, 25.0), // Summer
+                    new Quadruple<>(ForagingCropType.WILD_HORSERADISH, 5, 7.5, 25.0) // Spring (veg)
+
+// Giant Crops
+//                    new Quadruple<>(FarmingCropType.GIANT_MELON, 5, 7.5, 25.0),
+//                    new Quadruple<>(FarmingCropType.GIANT_PUMPKIN, 5, 7.5, 25.0),
+//                    new Quadruple<>(FarmingCropType.GIANT_CAULIFLOWER, 5, 7.5, 25.0))
+            )), CraftingRecipeType.DEHYDRATOR),
 
     RAISINS("Raisins", "It's said to be the Junimos' favorite food.", new Pair<>(0.0, 125), 24, new ArrayList<>(
-            Arrays.asList(new Quadruple<>(GoodType.GRAPES, 5, 5.0, 600.0))
+            Arrays.asList(new Quadruple<>(FarmingCropType.GRAPE, 5, 0.0, 600.0)))
             , CraftingRecipeType.DEHYDRATOR),
 
-            SMOKED_FISH("Smoked Fish", "A whole fish, smoked to perfection.", new Pair<>(1.5, 0), 1, new ArrayList<>(
-                    Arrays.asList(new Quadruple<>(null, 1, 1.0, 2.0))
-            ), CraftingRecipeType.FISH_SMOKER),
+    COAL("Coal", "Turns 10 pieces of wood into one piece of coal.", new Pair<>(0.0, 0), 1, new ArrayList<>(
+            Arrays.asList(new Quadruple<>(ProductType.WOOD, 10, 0.0, 50.0)))
+            , CraftingRecipeType.CHARCOAL_KILN),
 
-            COAL("Coal", "Turns 10 pieces of wood into one piece of coal.", new Pair<>(0.0, 0), 1, new ArrayList<>(
-                            Arrays.asList(new Quadruple<>(GoodType.WOOD, 10, 10.0, 50.0))
-                            , CraftingRecipeType.CHARCOAL_KILN),
+    SMOKED_FISH("Smoked Fish", "A whole fish, smoked to perfection.", new Pair<>(1.5, 0), 1, new ArrayList<>(
+            Arrays.asList(// Spring Fish
+                    new Quadruple<>(FishType.FLOUNDER, 1, 2.0, 0.0),
+                    new Quadruple<>(FishType.LIONFISH, 1, 2.0, 0.0),
+                    new Quadruple<>(FishType.HERRING, 1, 2.0, 0.0),
+                    new Quadruple<>(FishType.GHOSTFISH, 1, 2.0, 0.0),
 
-                    METAL_BAR("Any metal bar", "Turns ore and coal into metal bars.", new Pair<>(0.0, 0), 4, new ArrayList<>(
-                            Arrays.asList(
-                                    new Quadruple<>(GoodType.ORE, 1, 5.0, 0.0),
-                                    new Quadruple<>(GoodType.COAL, 1, 1.0, 0.0)
-                            )), CraftingRecipeType.FURNACE);
+// Summer Fish
+                    new Quadruple<>(FishType.TILAPIA, 1, 2.0, 0.0),
+                    new Quadruple<>(FishType.DORADO, 1, 2.0, 0.0),
+                    new Quadruple<>(FishType.SUNFISH, 1, 2.0, 0.0),
+                    new Quadruple<>(FishType.RAINBOW_TROUT, 1, 2.0, 0.0),
+
+// Fall Fish
+                    new Quadruple<>(FishType.SALMON, 1, 2.0, 0.0),
+                    new Quadruple<>(FishType.SARDINE, 1, 2.0, 0.0),
+                    new Quadruple<>(FishType.SHAD, 1, 2.0, 0.0),
+                    new Quadruple<>(FishType.BLUE_DISCUS, 1, 2.0, 0.0),
+
+// Winter Fish
+                    new Quadruple<>(FishType.MIDNIGHT_CARP, 1, 2.0, 0.0),
+                    new Quadruple<>(FishType.SQUID, 1, 2.0, 0.0),
+                    new Quadruple<>(FishType.TUNA, 1, 2.0, 0.0),
+                    new Quadruple<>(FishType.PERCH, 1, 2.0, 0.0),
+
+// Legendary Fish
+                    new Quadruple<>(FishType.LEGEND, 1, 2.0, 0.0),
+                    new Quadruple<>(FishType.CRIMSONFISH, 1, 2.0, 0.0),
+                    new Quadruple<>(FishType.ANGLER, 1, 2.0, 0.0),
+                    new Quadruple<>(FishType.GLACIERFISH, 1, 2.0, 0.0)),
+
+            //Coals
+            new Quadruple<>(ForagingMineralType.COAL, 1, 0.0, 0.0),
+            new Quadruple<>(ProductType.COAL, 1, 0.0, 0.0),
+            new Quadruple<>(ArtisanType.COAL, 1, 0.0, 0.0)
+    ), CraftingRecipeType.FISH_SMOKER),
+
+
+    METAL_BAR("Any metal bar", "Turns ore and coal into metal bars.", new Pair<>(0.0, 0), 4, new ArrayList<>(
+            Arrays.asList(
+                    new Quadruple<>(ProductType.COPPER_ORE, 5, 10.0, 0.0),
+                    new Quadruple<>(ProductType.GOLD_ORE, 5, 10.0, 0.0),
+                    new Quadruple<>(ProductType.IRON_ORE, 5, 10.0, 0.0),
+
+                    //Coals
+                    new Quadruple<>(ForagingMineralType.COAL, 1, 0.0, 0.0),
+                    new Quadruple<>(ProductType.COAL, 1, 0.0, 0.0),
+                    new Quadruple<>(ArtisanType.COAL, 1, 0.0, 0.0)
+            )), CraftingRecipeType.FURNACE),
+
+    DEHYDRATOR_RECIPE("", "", new Pair<>(0.0, 0), 0, new ArrayList<>(), null);
 
     private final String name;
     private final String description;

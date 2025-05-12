@@ -8,7 +8,6 @@ import org.example.models.goods.artisans.ArtisanType;
 import org.example.models.goods.farmings.FarmingCropType;
 import org.example.models.goods.fishs.FishType;
 import org.example.models.goods.foods.FoodType;
-import org.example.models.goods.foods.artisans.ArtisanType;
 import org.example.models.goods.foragings.ForagingMineralType;
 import org.example.models.goods.products.ProductType;
 
@@ -43,7 +42,7 @@ public enum NPCTypes {
             new Pair<>(Season.FALL,12),
             new Coordinate(10, 80)),
     ABIGAIL("Abigail",
-            new ArrayList<>(List.of(ArtisanType.Coffee, FoodType.PUMPKIN_PIE)),
+            new ArrayList<>(List.of(ArtisanType.COFFEE, FoodType.PUMPKIN_PIE)),
             new ArrayList<>(List.of(
                     "So… it’s my birthday today, in case anyone cares.",
                     "What a great day... or not.",
@@ -68,10 +67,10 @@ public enum NPCTypes {
             )),
             "Home",
             new Pair<>(Season.SPRING,2),
-            110, 100),
+            new Coordinate(110, 100)),
 
     HARVEY("Harvey",
-            new ArrayList<>(List.of(ArtisanType.Coffee, ArtisanType.WINE)),
+            new ArrayList<>(List.of(ArtisanType.COFFEE, ArtisanType.WINE)),
             new ArrayList<>(List.of(
                     "I just wanted to let you know that today is my birthday.",
                     "What a nice day to celebrate!",
@@ -92,7 +91,7 @@ public enum NPCTypes {
             new ArrayList<>(List.of(
                     new Pair<>(FarmingCropType.ANY,12),
                     new Pair<>(FishType.SALMON,1),
-                    new Pair<>(ArtisanType.WINE)
+                    new Pair<>(ArtisanType.WINE, 1)
 
             )),
             "Home",
