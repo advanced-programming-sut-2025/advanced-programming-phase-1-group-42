@@ -3,7 +3,9 @@ package org.example.models.interactions.game_buildings;
 import org.example.models.App;
 import org.example.models.Pair;
 import org.example.models.Result;
+import org.example.models.game_structure.Coordinate;
 import org.example.models.game_structure.Inventory;
+import org.example.models.game_structure.Tile;
 import org.example.models.goods.Good;
 import org.example.models.goods.GoodType;
 import org.example.models.goods.foragings.ForagingMineral;
@@ -27,11 +29,17 @@ public class Blacksmith extends GameBuilding {
     private final ArrayList<Integer> dailyTrashCanUpgradeLimit = new ArrayList<>();
     private final ArrayList<Pair<GoodType, Integer>> stock = new ArrayList<>();
 
-    public Blacksmith() {
-        super(null,
+    public static ArrayList<Tile> getExpectedTiles(ArrayList<Tile> tiles) {
+        return getTiles(tiles, 5, 55);
+    }
+
+    public Blacksmith(ArrayList<Tile> tiles) {
+        super(tiles,
                 "Blacksmith",
                 new NPC(NPCTypes.CLINT),
-                new Pair<>(9, 16));
+                new Pair<>(9, 16),
+                new Coordinate(5, 55),
+                new Coordinate(25, 75));
 
         upgradeToolCost.addAll(Arrays.asList(2000, 5000, 10000, 25000));
         upgradeTrashCanCost.addAll(Arrays.asList(1000, 2500, 5000, 12500));

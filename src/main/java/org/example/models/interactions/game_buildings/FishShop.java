@@ -3,6 +3,8 @@ package org.example.models.interactions.game_buildings;
 import org.example.models.App;
 import org.example.models.Pair;
 import org.example.models.Result;
+import org.example.models.game_structure.Coordinate;
+import org.example.models.game_structure.Tile;
 import org.example.models.goods.Good;
 import org.example.models.goods.GoodType;
 import org.example.models.goods.craftings.CraftingType;
@@ -20,11 +22,17 @@ public class FishShop extends GameBuilding {
     private final ArrayList<Pair<GoodType, Integer>> products;
     private final ArrayList<Integer> requiredLevel;
 
-    public FishShop() {
-        super(null,
+    public static ArrayList<Tile> getExpectedTiles(ArrayList<Tile> tiles) {
+        return getTiles(tiles, 115, 55);
+    }
+
+    public FishShop(ArrayList<Tile> tiles) {
+        super(tiles,
                 "FishShop",
                 new NPC(NPCTypes.WILLY),
-                new Pair<>(9, 17));
+                new Pair<>(9, 17),
+                new Coordinate(115, 55),
+                new Coordinate(155, 75));
 
         this.products = new ArrayList<>(Arrays.asList(
                 new Pair<>(CraftingRecipeType.FISH_SMOKER, 1),

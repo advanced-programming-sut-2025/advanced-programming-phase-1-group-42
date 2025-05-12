@@ -6,12 +6,12 @@ import org.example.models.game_structure.Tile;
 import java.util.ArrayList;
 
 public class GreenHouse extends Building {
+    private Coordinate size;
     private ArrayList<Tile> tiles;
     private boolean isAvailable;
 
     public GreenHouse(Coordinate startCoordinate, Coordinate endCoordinate, ArrayList<Tile> tiles) {
-        this.startCoordinate = startCoordinate;
-        this.endCoordinate = endCoordinate;
+        super(startCoordinate, endCoordinate);
         this.tiles = tiles;
         this.size = new Coordinate(6, 5);
         this.isAvailable = false;

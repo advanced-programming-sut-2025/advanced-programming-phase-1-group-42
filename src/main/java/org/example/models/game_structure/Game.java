@@ -121,7 +121,7 @@ public class Game {
 
         emptyShippingBin();
 
-        
+
 
 
         //for animals
@@ -197,10 +197,13 @@ public class Game {
         return null;
     }
 
-    public  ArrayList<NPC> getNPCs() {
+    public ArrayList<NPC> getNPCs() {
         return NPCs;
     }
 
+    public void setDateTime(DateTime dateTime) {
+        this.dateTime = dateTime;
+    }
     public void crowAttack(){
         for(Player player : App.getCurrentGame().getPlayers()){
         int cropCounter = 0;
@@ -214,6 +217,9 @@ public class Game {
                 }
             }
 
+    public void setWeather(Weather weather) {
+        this.weather = weather;
+    }
             int numberOfCrows =(int)Math.floor((double) cropCounter / 16);
             int crowCounter = 0;
 
@@ -253,5 +259,12 @@ public class Game {
                 }
             }
         }
+    }
+    public void setTomorrow(Tomorrow tomorrow) {
+        this.tomorrow = tomorrow;
+    }
+
+    public void setNPCs(ArrayList<NPC> npcs) {
+        this.NPCs.addAll(npcs);
     }
 }

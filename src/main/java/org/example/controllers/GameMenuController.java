@@ -46,6 +46,7 @@ import org.example.models.interactions.game_buildings.GameBuilding;
 import org.example.models.interactions.game_buildings.MarnieRanch;
 
 
+import java.awt.image.AreaAveragingScaleFilter;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.*;
@@ -55,10 +56,11 @@ import static java.lang.Math.abs;
 
 public class GameMenuController extends Controller {
 
-    private ArrayList<Farm> farmGame(ArrayList<Player> players, Scanner scanner) {
+    private ArrayList<Farm> farmGame(ArrayList<Player> players, Scanner scanner, ArrayList<Tile> tiles) {
         ArrayList<Farm> farms = new ArrayList<>();
         String input = "";
         Matcher matcher;
+        int ptr = 0;
         for (Player player : players) {
             System.out.println("Please enter the number of farm you want to play:");
             System.out.println("1. Normal Farm");
@@ -66,16 +68,20 @@ public class GameMenuController extends Controller {
             while (true) {
                 input = scanner.nextLine();
                 if ((matcher = GameMenuCommands.GAME_MAP.matcher(input)) == null ||
-                        !matcher.group("map_number").matches("\\d") ||
-                        Integer.parseInt(matcher.group("map_number")) > 2 ||
-                        Integer.parseInt(matcher.group("map_number")) < 1)
+                        !matcher.group("farm_number").matches("\\d") ||
+                        Integer.parseInt(matcher.group("farm_number")) > 2 ||
+                        Integer.parseInt(matcher.group("farm_number")) < 1) {
                     System.out.println("Invalid command for choosing your map, Please try again!");
+                    continue;
+                }
 
-                int mapNumber = Integer.parseInt(matcher.group("map_number"));
-//                Farm farm = DBInteractor.getFarmFromDB(mapNumber);
+                int mapNumber = Integer.parseInt(matcher.group("farm_number"));
+                Farm farm = new Farm(mapNumber, ptr, tiles);
                 player.setFarm(farm);
                 farms.add(farm);
+                break;
             }
+            ptr++;
         }
         return farms;
     }
@@ -95,18 +101,53 @@ public class GameMenuController extends Controller {
         return null;
     }
 
+    private ArrayList<Tile> createTiles() {
+        ArrayList<Tile> tiles = new ArrayList<>();
+
+        for (int i = 0; i < 140; i++) {
+            for (int j = 0; j < 160; j++) {
+                Tile tile = new Tile(new Coordinate(i, j));
+                //Plain
+                tile.setTileType(TileType.PLAIN);
+                if(j >= 80 && j < 110 && i >= 110 && i < 140)
+                    tile.setTileType(TileType.BEACH);
+
+                //Sea
+                if(i >= 140 && i < 150 && j >= 0 && j < 160)
+                    tile.setTileType(TileType.WATER);
+
+                //Square
+                if(j >= 77 && j < 83 && ((i >= 30 && i < 35) || (i >= 105 && i < 110)))
+                    tile.setTileType(TileType.SQUARE);
+
+                // Road
+                //TODO
+
+
+                tiles.add(tile);
+
+            }
+        }
+
+
+
+        return tiles;
+    }
+
     // Nader
     //game setting methods
     public Result newGame(ArrayList<String> usernames, Scanner scanner) {
-        //TODO
+        if(usernames.isEmpty() || usernames.size() > 3)
+            return new Result(false, "You have to add 1 to 3 Users to play with you in new game!");
 
         ArrayList<Player> players = new ArrayList<>();
         Player adminPlayer = null;
         players.add(new Player(App.getCurrentUser()));
         for (String username : usernames) {
-            if (username == null)
+            if (username.isEmpty())
                 continue;
 
+            boolean found = false;
             for (User user : App.getUsers()) {
                 if (username.equals(user.getUsername()) && user.getPlaying().equals(true))
                     return new Result(false, username + " is already playing in other game!");
@@ -114,26 +155,42 @@ public class GameMenuController extends Controller {
                 players.add(player);
                 if(user.getUsername().equals(App.getCurrentUser().getUsername()))
                     adminPlayer = player;
+                found = true;
             }
+            if(!found)
+                return new Result(false, "No player with username " + username + " found!");
         }
 
         Director director = new Director();
         WholeGameBuilder wholeGameBuilder = new WholeGameBuilder();
-        director.createNewGame(wholeGameBuilder, players);
+        director.createNewGame(wholeGameBuilder, players, adminPlayer);
         Game game = wholeGameBuilder.getGame();
 
-        ArrayList<Farm> farms = farmGame(players, scanner);
+        App.setCurrentGame(game);
+        for (Player player : players) {
+            player.getUser().setGame(game);
+            player.getUser().setPlaying(true);
+        }
+
+        ArrayList<Tile> tiles = createTiles();
+        ArrayList<Farm> farms = farmGame(players, scanner, tiles);
+        for (int i = 0; i < farms.size(); i++) {
+            players.get(i).setFarm(farms.get(i));
+        }
+
         WholeMapBuilder wholeMapBuilder = new WholeMapBuilder();
-        director.createNewMap(wholeMapBuilder, farms);
+        director.createNewMap(wholeMapBuilder, farms, tiles);
         game.setMap(wholeMapBuilder.getMap());
 
-        App.setCurrentGame(game);
 
         return new Result(true, "New game has successfully created & loaded!");
     }
 
     public Result loadGame() {
         Game game = DBInteractor.loadGameFromDB(App.getCurrentUser().getUsername());
+        if(game == null)
+            return new Result(false, "You have no game to load!");
+
         App.setCurrentGame(game);
 
         for (Player player : game.getPlayers()) {
@@ -178,6 +235,9 @@ public class GameMenuController extends Controller {
         for (Player player : App.getCurrentGame().getPlayers()) {
             player.getUser().setPlaying(false);
             player.getUser().setGame(null);
+            player.getUser().increaseEarnedPoints(player.getPoints());
+            player.getUser().maxMaxPoints(player.getPoints());
+            player.getUser().increaseGamePlay(App.getCurrentGame().getDateTime().getDays());
         }
         App.setCurrentGame(null);
 
@@ -187,7 +247,7 @@ public class GameMenuController extends Controller {
 
     public Result nextTurn() {
         App.getCurrentGame().nextPlayer();
-        return new Result(true, "");
+        return new Result(true, "Current player: " + App.getCurrentGame().getCurrentPlayer());
     }
 
 
@@ -877,7 +937,7 @@ public class GameMenuController extends Controller {
                     App.getCurrentGame().getCurrentPlayer().getInventory().removeItemsFromInventory(ProductType.WOOD, targetType.getWood());
                     App.getCurrentGame().getCurrentPlayer().getInventory().removeItemsFromInventory(ProductType.STONE, targetType.getStone());
                     App.getCurrentGame().getCurrentPlayer().getWallet().decreaseBalance(targetType.getCost());
-                    FarmBuilding newBuilding = carpenterShop.buildingFarmBuilding(targetType, coordinate);
+                    FarmBuilding newBuilding = carpenterShop.buildingFarmBuilding(targetType, startCoordinate);
                     App.getCurrentGame().getCurrentPlayer().getFarm().getFarmBuildings().add(newBuilding);
                     for (int sX = 0; sX < targetType.getSize().first(); sX++) {
                         for (int sY = 0; sY < targetType.getSize().second(); sY++) {

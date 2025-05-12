@@ -3,6 +3,8 @@ package org.example.models.interactions.game_buildings;
 import org.example.models.App;
 import org.example.models.Pair;
 import org.example.models.Result;
+import org.example.models.game_structure.Coordinate;
+import org.example.models.game_structure.Tile;
 import org.example.models.goods.Good;
 import org.example.models.goods.GoodType;
 import org.example.models.goods.foods.FoodType;
@@ -18,11 +20,17 @@ public class JojaMart extends GameBuilding {
     private final ArrayList<ArrayList<Pair<GoodType, Integer>>> products;
     private final ArrayList<String> stockParts;
 
-    public JojaMart() {
-        super(null,
+    public static ArrayList<Tile> getExpectedTiles(ArrayList<Tile> tiles) {
+        return getTiles(tiles, 45, 55);
+    }
+
+    public JojaMart(ArrayList<Tile> tiles) {
+        super(tiles,
                 "JojaMart",
                 new NPC(NPCTypes.MORRIS),
-                new Pair<>(9, 23));
+                new Pair<>(9, 23),
+                new Coordinate(45, 55),
+                new Coordinate(65, 75));
 
         this.products = new ArrayList<>();
         //Permanent Stock

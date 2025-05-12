@@ -10,46 +10,30 @@ import java.util.Iterator;
 
 public class DateTime {
     private int time = 9;
-    private int dayOfWeek = 1;
-    private int seasonOfYear = 1;
-    private Season season;
-    private int year = 1;
-    private int dayOfSeason = 1;
+    private int date = 1;
+    private Season season = Season.SPRING;
 
     // A Function to change game base of the cycle of players and moves the game forward
     public void timeFlow() {
         time++;
-        if (time >= 24) {
+        if (time >= 22) {
             App.getCurrentGame().gameFlow();
             time = 9;
-            dayOfWeek++;
-            if (dayOfWeek >= 7) {
-                dayOfWeek = 1;
-            }
-            dayOfSeason++;
-            if (dayOfSeason >= 28) {
-                seasonOfYear++;
-                seasonChange();
-                dayOfSeason = 1;
-            }
-            if (seasonOfYear >= 4) {
-                seasonOfYear = 1;
-                year++;
-            }
+            date++;
         }
     }
 
     public int getDayOfSeason() {
-        return dayOfSeason;
+        return date % 28 + 1;
     }
 
 
     public int getSeasonOfYearInt() {
-        return seasonOfYear;
+        return (date / 28) % 4 + 1;
     }
 
     public Season getSeasonOfYear() {
-        return switch (seasonOfYear) {
+        return switch ((date / 28) % 4 + 1) {
             case 1 -> Season.SPRING;
             case 2 -> Season.SUMMER;
             case 3 -> Season.FALL;
@@ -59,7 +43,7 @@ public class DateTime {
     }
 
     public String getDayOfWeek() {
-        return switch (dayOfWeek) {
+        return switch (date % 7 + 1) {
             case 1 -> "Saturday";
             case 2 -> "Sunday";
             case 3 -> "Monday";
@@ -76,7 +60,11 @@ public class DateTime {
     }
 
     public int getYear() {
-        return year;
+        return (date / (28 * 4)) + 1;
+    }
+
+    public int getDays() {
+        return date;
     }
 
     public Season getSeason() {

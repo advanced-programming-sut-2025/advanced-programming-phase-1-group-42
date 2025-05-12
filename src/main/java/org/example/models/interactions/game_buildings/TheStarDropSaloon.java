@@ -2,6 +2,8 @@ package org.example.models.interactions.game_buildings;
 
 import org.example.models.Pair;
 import org.example.models.Result;
+import org.example.models.game_structure.Coordinate;
+import org.example.models.game_structure.Tile;
 import org.example.models.goods.GoodType;
 import org.example.models.goods.foods.FoodType;
 import org.example.models.goods.recipes.CookingRecipeType;
@@ -14,12 +16,17 @@ import java.util.Arrays;
 public class TheStarDropSaloon extends GameBuilding {
     private final ArrayList<Pair<GoodType, Integer>> products;
 
+    public static ArrayList<Tile> getExpectedTiles(ArrayList<Tile> tiles) {
+        return getTiles(tiles, 75, 85);
+    }
 
-    public TheStarDropSaloon() {
-        super(null,
+    public TheStarDropSaloon(ArrayList<Tile> tiles) {
+        super(tiles,
                 "TheStarDropSaloon",
                 new NPC(NPCTypes.GUS),
-                new Pair<>(12, 24));
+                new Pair<>(12, 24),
+                new Coordinate(75, 85),
+                new Coordinate(95, 105));
 
         // Permanent Products
         this.products = new ArrayList<>(Arrays.asList(

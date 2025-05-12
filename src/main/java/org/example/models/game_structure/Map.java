@@ -512,4 +512,8 @@ public class Map {
             }
         }
     }
+
+    public void setTiles(ArrayList<Tile> tiles) {
+        this.tiles.addAll(tiles);
+    }
 }
