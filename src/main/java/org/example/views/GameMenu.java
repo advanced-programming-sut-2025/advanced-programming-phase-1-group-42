@@ -2,6 +2,7 @@ package org.example.views;
 
 import org.example.controllers.GameMenuController;
 import org.example.controllers.ProfileMenuController;
+import org.example.models.App;
 import org.example.models.enums.GameMenuCommands;
 import org.example.models.enums.LoginRegisterCommands;
 import org.example.models.enums.TradeMenuCommands;
@@ -28,7 +29,14 @@ public class GameMenu implements AppMenu {
 //            System.out.println(controller.farmGame(matcher.group("farm_number"), scanner));
         } else if ((matcher = GameMenuCommands.LOAD_GAME.matcher(input)) != null) {
             System.out.println(controller.loadGame());
-        } else if ((matcher = GameMenuCommands.EXIT_GAME.matcher(input)) != null) {
+        }
+
+        if(App.getCurrentGame() == null) {
+            System.out.println("You should run a game first to use this commands!");
+            return;
+        }
+
+        if ((matcher = GameMenuCommands.EXIT_GAME.matcher(input)) != null) {
             System.out.print(controller.exitGame());
         } else if ((matcher = GameMenuCommands.NEXT_TURN.matcher(input)) != null) {
             System.out.print(controller.nextTurn());
@@ -70,7 +78,7 @@ public class GameMenu implements AppMenu {
         }
         //Map & Walk
         else if ((matcher = GameMenuCommands.WALK.matcher(input)) != null) {
-            System.out.print(controller.walk(matcher.group("x"), matcher.group("y")));
+            System.out.print(controller.walk(matcher.group("x"), matcher.group("y"), scanner));
         } else if ((matcher = GameMenuCommands.PRINT_MAP.matcher(input)) != null) {
             System.out.println(controller.printMap(matcher.group("x"), matcher.group("y"), matcher.group("size")));
         } else if ((matcher = GameMenuCommands.HELP_READING_MAP.matcher(input)) != null) {
