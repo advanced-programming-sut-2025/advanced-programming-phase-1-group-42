@@ -24,8 +24,8 @@ public enum CraftingRecipeType implements GoodType {
     PRESERVES_JAR(CraftingType.PRESERVES_JAR,"50 wood + 40 stone + 8 coal"),
     DEHYDRATOR(CraftingType.DEHYDRATOR,"30 wood + 20 stone + 30 fiber"),
     FISH_SMOKER(CraftingType.FISH_SMOKER,"50 wood + 3 iron bar + 10 coal"),
-    MYSTIC_TREE_SEED(CraftingType.MYSTIC_TREE_SEED,"5 acorn + 5 maple see + 5 pine cone + 5 mahogany seed");
-
+    MYSTIC_TREE_SEED(CraftingType.MYSTIC_TREE_SEED,"5 acorn + 5 maple see + 5 pine cone + 5 mahogany seed"),
+    CASK()
 
 
     private final CraftingType craftingType;

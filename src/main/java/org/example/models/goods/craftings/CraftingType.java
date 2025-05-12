@@ -41,7 +41,9 @@ public enum CraftingType implements GoodType {
 
     FISH_SMOKER("Fish_Smoker",10000),
 
-    MYSTIC_TREE_SEED("Mystic_Tree_Seed",100);
+    MYSTIC_TREE_SEED("Mystic_Tree_Seed",100),
+
+    CASK("Cask",0);
 
 
     private final String name;

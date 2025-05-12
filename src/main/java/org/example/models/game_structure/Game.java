@@ -73,7 +73,11 @@ public class Game {
         }
         if(players.get(counter).getEnergy().isAwake()) {
             currentPlayer = players.get(counter);
-        } else { nextPlayer();}
+        } else {
+            nextPlayer();
+        }
+
+
     }
 
     public Map getMap() {

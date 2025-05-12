@@ -245,7 +245,14 @@ public class GameMenuController extends Controller {
 
     public Result nextTurn() {
         App.getCurrentGame().nextPlayer();
-        return new Result(true, "Current player: " + App.getCurrentGame().getCurrentPlayer());
+        StringBuilder news = new StringBuilder();
+        news.append("Current player: ").append(App.getCurrentGame().getCurrentPlayer());
+        int ctr = 1;
+        for (String s : App.getCurrentGame().getCurrentPlayer().getNews()) {
+            news.append("\t").append(ctr++).append(". ").append(s);
+        }
+        App.getCurrentGame().getCurrentPlayer().getNews().clear();
+        return new Result(true, news.toString());
     }
 
 
