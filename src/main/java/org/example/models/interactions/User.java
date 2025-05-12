@@ -110,6 +110,42 @@ public class User {
         this.email = email;
     }
 
+    public void setGame(Game game) {
+        this.game = game;
+    }
+
+    public void setEarnedPoints(int earnedPoints) {
+        this.earnedPoints = earnedPoints;
+    }
+
+    public void setGender(Gender gender) {
+        this.gender = gender;
+    }
+
+    public void setQuestionNumber(int questionNumber) {
+        this.questionNumber = questionNumber;
+    }
+
+    public void setAnswer(String answer) {
+        this.answer = answer;
+    }
+
+    public int getMaxPoints() {
+        return maxPoints;
+    }
+
+    public void setMaxPoints(int maxPoints) {
+        this.maxPoints = maxPoints;
+    }
+
+    public int getGamePlay() {
+        return gamePlay;
+    }
+
+    public void setGamePlay(int gamePlay) {
+        this.gamePlay = gamePlay;
+    }
+
     public String showInfo() {
         String info = "";
         info += "Username: " + this.username + "\n";
