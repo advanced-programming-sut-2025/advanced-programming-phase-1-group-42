@@ -55,4 +55,6 @@ public class ForagingMixedSeed extends Foraging {
         return seedType.getFarmingCropType();
     }
 
+
+
 }

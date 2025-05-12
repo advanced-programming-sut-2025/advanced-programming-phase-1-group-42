@@ -65,6 +65,14 @@ public class Animal {
                 System.out.println("You need Shear to get Sheep's wool");
                 return null;
             }
+        } else if (animalType.equals(AnimalTypes.PIG)) {
+            if (animalType.equals(AnimalTypes.PIG)) {
+                if (!isOutside){
+                    System.out.println("You need to bring Pig outSide to get Products");
+                } else {
+                    return products;
+                }
+            }
         }
         return products;
     }

@@ -5,16 +5,15 @@ import org.example.models.enums.TileType;
 import org.example.models.goods.Good;
 import org.example.models.goods.farmings.FarmingTree;
 import org.example.models.goods.farmings.FarmingTreeSapling;
-import org.example.models.goods.foragings.ForagingCropType;
-import org.example.models.goods.foragings.ForagingMineralType;
-import org.example.models.goods.foragings.ForagingSeedType;
-import org.example.models.goods.foragings.ForagingTree;
+import org.example.models.goods.foragings.*;
+import org.example.models.goods.products.ProductType;
 import org.example.models.interactions.Animals.Animal;
 import org.example.models.interactions.game_buildings.GameBuilding;
 
 import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Iterator;
 
 public class Map {
     private final ArrayList<Tile> tiles = new ArrayList<>();
@@ -506,6 +505,69 @@ public class Map {
                                 break;
                             default:
                                 break;
+                        }
+                    }
+                }
+            }
+        }
+    }
+
+    public void Furtulize(){
+        for (int i = 0; i < 140; i++) {
+            for (int j = 0; j < 160; j++) {
+                Coordinate coordinate = new Coordinate(i, j);
+                Tile tile = findTile(coordinate);
+                Iterator<Good> iterator = tile.getGoods().iterator();
+
+                while (iterator.hasNext()) {
+                    Good good = iterator.next();
+                    if (good.getType().equals(ProductType.DELUXE_RETAINING_SOIL)) {
+                        iterator.remove();
+                        if(tile.getTileType().equals(TileType.FARM)){
+                            tile.setWatered(true);
+                        }
+                    } else if (good.getType().equals(ProductType.QUALITY_RETAINING_SOIL)) {
+                        int rand = (int) Math.floor((Math.random() * 3));
+                        iterator.remove();
+                        if(tile.getTileType().equals(TileType.FARM)){
+                            if(!(rand == 0)){
+                            tile.setWatered(true);
+                            }
+                        }
+                    } else if (good.getType().equals(ProductType.BASIC_RETAINING_SOIL)) {
+                        int rand = (int) Math.floor((Math.random() * 3));
+                        iterator.remove();
+                        if(tile.getTileType().equals(TileType.FARM)){
+                            if(rand == 0){
+                                tile.setWatered(true);
+                            }
+                        }
+                    } else if (good.getType().equals(ProductType.SPEED_GRO)) {
+                        Iterator<Good> iterator2 = tile.getGoods().iterator();
+                        while (iterator2.hasNext()) {
+                            Good good2 = iterator.next();
+                            if (good2 instanceof ForagingSeed) {
+                                ForagingSeed seed = (ForagingSeed) good2;
+                                seed.dailyChange();
+                                if (seed.isCrop()) {
+                                    iterator2.remove();
+                                    tile.getGoods().add(Good.newGood(seed.getCropType()));
+                                }
+                            } else if (good instanceof FarmingTreeSapling) {
+                                FarmingTreeSapling sapling = (FarmingTreeSapling) good;
+                                sapling.dailyChange();
+                                if (sapling.isTree()) {
+                                    iterator.remove();
+                                    tile.getGoods().add(Good.newGood(sapling.getTreeType()));
+                                }
+                            } else if (good instanceof ForagingMixedSeed) {
+                                ForagingMixedSeed seed = (ForagingMixedSeed) good;
+                                seed.dailyChange();
+                                if (seed.isCrop()) {
+                                    iterator.remove();
+                                    tile.getGoods().add(Good.newGood(seed.getCropType()));
+                                }
+                            }
                         }
                     }
                 }

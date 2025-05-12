@@ -5,6 +5,7 @@ import org.example.models.Pair;
 import org.example.models.game_structure.*;
 import org.example.models.goods.Good;
 import org.example.models.goods.foods.Food;
+import org.example.models.goods.foods.FoodType;
 import org.example.models.goods.recipes.CookingRecipe;
 import org.example.models.goods.recipes.CraftingRecipe;
 import org.example.models.goods.tools.Tool;
@@ -29,7 +30,8 @@ public class Player {
     private Energy energy;
     private Tool trashCan;
     private Skill skill;
-    private Buff buff = null;
+    private Buff buff;
+    private Buff rejectionBuff;
 
     // level-value
     private final HashMap<Player, Pair<Integer, Integer>> friendShips = new HashMap<>();
@@ -74,7 +76,8 @@ public class Player {
         this.inventory = new Inventory();
         this.skill = new Skill();
         this.inHandGood = null;
-
+        this.buff = null;
+        this.rejectionBuff = null;
         for (Player player : App.getCurrentGame().getPlayers()) {
             if(player != this) {
                 friendShips.put(player, new Pair<>(0, 0));
@@ -85,11 +88,19 @@ public class Player {
 
     // Function for eat
     public void eat(Food food) {
-        App.getCurrentGame().getCurrentPlayer().getEnergy().increaseDayEnergyLeft(food.getEnergy());
-        Buff currentBuff = App.getCurrentGame().getCurrentPlayer().getBuff();
-        if (currentBuff != null) {
-            App.getCurrentGame().getCurrentPlayer().setBuff(currentBuff);
+        App.getCurrentGame().getCurrentPlayer().getEnergy().increaseTurnEnergyLeft(food.getEnergy());
+        FoodType type = (FoodType) food.getType();
+        Buff currentBuff = type.getBuff();
+
+        if(currentBuff.getType().equals(BuffType.ENERGY_BUFF)) {
+            App.getCurrentGame().getCurrentPlayer().getEnergy().increaseTurnEnergyLeft(currentBuff.getEffect());
+            App.getCurrentGame().getCurrentPlayer().getEnergy().setMaxDayEnergy(200 + currentBuff.getEffect());
         }
+        if(!App.getCurrentGame().getCurrentPlayer().getBuff().getType().equals(BuffType.ENERGY_BUFF)) {
+            App.getCurrentGame().getCurrentPlayer().getEnergy().setMaxDayEnergy(200);
+        }
+        App.getCurrentGame().getCurrentPlayer().setBuff(currentBuff);
+
     }
 
     public Inventory getInventory() {
@@ -221,5 +232,13 @@ public class Player {
 
     public int getPoints() {
         return points;
+    }
+
+    public Buff getRejectionBuff() {
+        return rejectionBuff;
+    }
+
+    public void setRejectionBuff(Buff rejectionBuff) {
+        this.rejectionBuff = rejectionBuff;
     }
 }

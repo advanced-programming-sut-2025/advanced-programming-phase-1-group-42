@@ -1,8 +1,6 @@
 package org.example.models.goods.recipes;
 
 import org.example.models.App;
-import org.example.models.Result;
-import org.example.models.game_structure.Game;
 import org.example.models.goods.Good;
 import org.example.models.goods.craftings.Crafting;
 import org.example.models.goods.craftings.CraftingType;
@@ -286,7 +284,7 @@ public class CraftingFunctions {
             Crafting crafting = new Crafting(CraftingType.CHERRY_BOMB);
             if (App.getCurrentGame().getCurrentPlayer().getInventory().addGood(crafting,1)){
                 System.out.println(crafting.getName()+" added to inventory");
-                App.getCurrentGame().getCurrentPlayer().getEnergy().increaseDayEnergyLeft(2);
+                App.getCurrentGame().getCurrentPlayer().getEnergy().increaseTurnEnergyLeft(2);
             } else {
                 System.out.println("Your inventory is full");
             }
@@ -302,7 +300,7 @@ public class CraftingFunctions {
             Crafting crafting = new Crafting(CraftingType.BOMB);
             if (App.getCurrentGame().getCurrentPlayer().getInventory().addGood(crafting,1)){
                 System.out.println(crafting.getName()+" added to inventory");
-                App.getCurrentGame().getCurrentPlayer().getEnergy().increaseDayEnergyLeft(2);
+                App.getCurrentGame().getCurrentPlayer().getEnergy().increaseTurnEnergyLeft(2);
             } else {
                 System.out.println("Your inventory is full");
             }
@@ -318,7 +316,7 @@ public class CraftingFunctions {
             Crafting crafting = new Crafting(CraftingType.MEGA_BOMB);
             if (App.getCurrentGame().getCurrentPlayer().getInventory().addGood(crafting,1)){
                 System.out.println(crafting.getName()+" added to inventory");
-                App.getCurrentGame().getCurrentPlayer().getEnergy().increaseDayEnergyLeft(2);
+                App.getCurrentGame().getCurrentPlayer().getEnergy().increaseTurnEnergyLeft(2);
             } else {
                 System.out.println("Your inventory is full");
             }
@@ -334,7 +332,7 @@ public class CraftingFunctions {
             Crafting crafting = new Crafting(CraftingType.SPRINKLER);
             if (App.getCurrentGame().getCurrentPlayer().getInventory().addGood(crafting,1)){
                 System.out.println(crafting.getName()+" added to inventory");
-                App.getCurrentGame().getCurrentPlayer().getEnergy().increaseDayEnergyLeft(2);
+                App.getCurrentGame().getCurrentPlayer().getEnergy().increaseTurnEnergyLeft(2);
             } else {
                 System.out.println("Your inventory is full");
             }
@@ -350,7 +348,7 @@ public class CraftingFunctions {
             Crafting crafting = new Crafting(CraftingType.QUALITY_SPRINKLER);
             if (App.getCurrentGame().getCurrentPlayer().getInventory().addGood(crafting,1)){
                 System.out.println(crafting.getName()+" added to inventory");
-                App.getCurrentGame().getCurrentPlayer().getEnergy().increaseDayEnergyLeft(2);
+                App.getCurrentGame().getCurrentPlayer().getEnergy().increaseTurnEnergyLeft(2);
             } else {
                 System.out.println("Your inventory is full");
             }
@@ -366,7 +364,7 @@ public class CraftingFunctions {
             Crafting crafting = new Crafting(CraftingType.IRIDIUM_SPRINKLER);
             if (App.getCurrentGame().getCurrentPlayer().getInventory().addGood(crafting,1)){
                 System.out.println(crafting.getName()+" added to inventory");
-                App.getCurrentGame().getCurrentPlayer().getEnergy().increaseDayEnergyLeft(2);
+                App.getCurrentGame().getCurrentPlayer().getEnergy().increaseTurnEnergyLeft(2);
             } else {
                 System.out.println("Your inventory is full");
             }
@@ -381,7 +379,7 @@ public class CraftingFunctions {
             Crafting crafting = new Crafting(CraftingType.CHARCOAL_KILN);
             if (App.getCurrentGame().getCurrentPlayer().getInventory().addGood(crafting,1)){
                 System.out.println(crafting.getName()+" added to inventory");
-                App.getCurrentGame().getCurrentPlayer().getEnergy().increaseDayEnergyLeft(2);
+                App.getCurrentGame().getCurrentPlayer().getEnergy().increaseTurnEnergyLeft(2);
             } else {
                 System.out.println("Your inventory is full");
             }
@@ -396,7 +394,7 @@ public class CraftingFunctions {
             Crafting crafting = new Crafting(CraftingType.FURNACE);
             if (App.getCurrentGame().getCurrentPlayer().getInventory().addGood(crafting,1)){
                 System.out.println(crafting.getName()+" added to inventory");
-                App.getCurrentGame().getCurrentPlayer().getEnergy().increaseDayEnergyLeft(2);
+                App.getCurrentGame().getCurrentPlayer().getEnergy().increaseTurnEnergyLeft(2);
             } else {
                 System.out.println("Your inventory is full");
             }
@@ -412,7 +410,7 @@ public class CraftingFunctions {
             Crafting crafting = new Crafting(CraftingType.SCARECROW);
             if (App.getCurrentGame().getCurrentPlayer().getInventory().addGood(crafting,1)){
                 System.out.println(crafting.getName()+" added to inventory");
-                App.getCurrentGame().getCurrentPlayer().getEnergy().increaseDayEnergyLeft(2);
+                App.getCurrentGame().getCurrentPlayer().getEnergy().increaseTurnEnergyLeft(2);
             } else {
                 System.out.println("Your inventory is full");
             }
@@ -428,7 +426,7 @@ public class CraftingFunctions {
             Crafting crafting = new Crafting(CraftingType.DELUXE_SCARECROW);
             if (App.getCurrentGame().getCurrentPlayer().getInventory().addGood(crafting,1)){
                 System.out.println(crafting.getName()+" added to inventory");
-                App.getCurrentGame().getCurrentPlayer().getEnergy().increaseDayEnergyLeft(2);
+                App.getCurrentGame().getCurrentPlayer().getEnergy().increaseTurnEnergyLeft(2);
             } else {
                 System.out.println("Your inventory is full");
             }
@@ -444,7 +442,7 @@ public class CraftingFunctions {
             Crafting crafting = new Crafting(CraftingType.BEE_HOUSE);
             if (App.getCurrentGame().getCurrentPlayer().getInventory().addGood(crafting,1)){
                 System.out.println(crafting.getName()+" added to inventory");
-                App.getCurrentGame().getCurrentPlayer().getEnergy().increaseDayEnergyLeft(2);
+                App.getCurrentGame().getCurrentPlayer().getEnergy().increaseTurnEnergyLeft(2);
             } else {
                 System.out.println("Your inventory is full");
             }
@@ -460,7 +458,7 @@ public class CraftingFunctions {
             Crafting crafting = new Crafting(CraftingType.CHEESE_PRESS);
             if (App.getCurrentGame().getCurrentPlayer().getInventory().addGood(crafting,1)){
                 System.out.println(crafting.getName()+" added to inventory");
-                App.getCurrentGame().getCurrentPlayer().getEnergy().increaseDayEnergyLeft(2);
+                App.getCurrentGame().getCurrentPlayer().getEnergy().increaseTurnEnergyLeft(2);
             } else {
                 System.out.println("Your inventory is full");
             }
@@ -476,7 +474,7 @@ public class CraftingFunctions {
             Crafting crafting = new Crafting(CraftingType.KEG);
             if (App.getCurrentGame().getCurrentPlayer().getInventory().addGood(crafting,1)){
                 System.out.println(crafting.getName()+" added to inventory");
-                App.getCurrentGame().getCurrentPlayer().getEnergy().increaseDayEnergyLeft(2);
+                App.getCurrentGame().getCurrentPlayer().getEnergy().increaseTurnEnergyLeft(2);
             } else {
                 System.out.println("Your inventory is full");
             }
@@ -492,7 +490,7 @@ public class CraftingFunctions {
             Crafting crafting = new Crafting(CraftingType.LOOM);
             if (App.getCurrentGame().getCurrentPlayer().getInventory().addGood(crafting,1)){
                 System.out.println(crafting.getName()+" added to inventory");
-                App.getCurrentGame().getCurrentPlayer().getEnergy().increaseDayEnergyLeft(2);
+                App.getCurrentGame().getCurrentPlayer().getEnergy().increaseTurnEnergyLeft(2);
             } else {
                 System.out.println("Your inventory is full");
             }
@@ -508,7 +506,7 @@ public class CraftingFunctions {
             Crafting crafting = new Crafting(CraftingType.MAYONNAISE_MACHINE);
             if (App.getCurrentGame().getCurrentPlayer().getInventory().addGood(crafting,1)){
                 System.out.println(crafting.getName()+" added to inventory");
-                App.getCurrentGame().getCurrentPlayer().getEnergy().increaseDayEnergyLeft(2);
+                App.getCurrentGame().getCurrentPlayer().getEnergy().increaseTurnEnergyLeft(2);
             } else {
                 System.out.println("Your inventory is full");
             }
@@ -525,7 +523,7 @@ public class CraftingFunctions {
             Crafting crafting = new Crafting(CraftingType.OIL_MAKER);
             if (App.getCurrentGame().getCurrentPlayer().getInventory().addGood(crafting,1)){
                 System.out.println(crafting.getName()+" added to inventory");
-                App.getCurrentGame().getCurrentPlayer().getEnergy().increaseDayEnergyLeft(2);
+                App.getCurrentGame().getCurrentPlayer().getEnergy().increaseTurnEnergyLeft(2);
             } else {
                 System.out.println("Your inventory is full");
             }
@@ -542,7 +540,7 @@ public class CraftingFunctions {
             Crafting crafting = new Crafting(CraftingType.PRESERVES_JAR);
             if (App.getCurrentGame().getCurrentPlayer().getInventory().addGood(crafting,1)){
                 System.out.println(crafting.getName()+" added to inventory");
-                App.getCurrentGame().getCurrentPlayer().getEnergy().increaseDayEnergyLeft(2);
+                App.getCurrentGame().getCurrentPlayer().getEnergy().increaseTurnEnergyLeft(2);
             } else {
                 System.out.println("Your inventory is full");
             }
@@ -559,7 +557,7 @@ public class CraftingFunctions {
             Crafting crafting = new Crafting(CraftingType.DEHYDRATOR);
             if (App.getCurrentGame().getCurrentPlayer().getInventory().addGood(crafting,1)){
                 System.out.println(crafting.getName()+" added to inventory");
-                App.getCurrentGame().getCurrentPlayer().getEnergy().increaseDayEnergyLeft(2);
+                App.getCurrentGame().getCurrentPlayer().getEnergy().increaseTurnEnergyLeft(2);
             } else {
                 System.out.println("Your inventory is full");
             }
@@ -576,7 +574,7 @@ public class CraftingFunctions {
             Crafting crafting = new Crafting(CraftingType.FISH_SMOKER);
             if (App.getCurrentGame().getCurrentPlayer().getInventory().addGood(crafting,1)){
                 System.out.println(crafting.getName()+" added to inventory");
-                App.getCurrentGame().getCurrentPlayer().getEnergy().increaseDayEnergyLeft(2);
+                App.getCurrentGame().getCurrentPlayer().getEnergy().increaseTurnEnergyLeft(2);
             } else {
                 System.out.println("Your inventory is full");
             }
@@ -594,7 +592,7 @@ public class CraftingFunctions {
             Crafting crafting = new Crafting(CraftingType.MYSTIC_TREE_SEED);
             if (App.getCurrentGame().getCurrentPlayer().getInventory().addGood(crafting,1)){
                 System.out.println(crafting.getName()+" added to inventory");
-                App.getCurrentGame().getCurrentPlayer().getEnergy().increaseDayEnergyLeft(2);
+                App.getCurrentGame().getCurrentPlayer().getEnergy().increaseTurnEnergyLeft(2);
             } else {
                 System.out.println("Your inventory is full");
             }

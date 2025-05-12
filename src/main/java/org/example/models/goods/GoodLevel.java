@@ -1,15 +1,18 @@
 package org.example.models.goods;
 
 public enum GoodLevel {
-    ORDINARY(0),
-    STEEL(1),
-    GOLD(2),
-    IRIDIUM(3);
+    ORDINARY(0, 1),
+    STEEL(1,1.25),
+    GOLD(2,1.5),
+    IRIDIUM(3,2);
 
     private int levelNumber;
+    private final double ratio;
 
-    GoodLevel(int levelNumber) {
+
+    GoodLevel(int levelNumber , double ratio) {
         this.levelNumber = levelNumber;
+        this.ratio = ratio;
     }
 
     public int getLevelNumber() {
@@ -32,4 +35,9 @@ public enum GoodLevel {
 
         return null;
     }
+
+    public double getRatio() {
+        return ratio;
+    }
+
 }

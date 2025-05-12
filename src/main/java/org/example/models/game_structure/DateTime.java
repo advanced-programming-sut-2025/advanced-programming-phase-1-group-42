@@ -1,11 +1,14 @@
 package org.example.models.game_structure;
 
 import org.example.models.App;
+import org.example.models.Pair;
 import org.example.models.enums.Season;
 import org.example.models.enums.TileType;
 import org.example.models.goods.Good;
 import org.example.models.goods.farmings.FarmingCrop;
+import org.example.models.interactions.Player;
 
+import java.util.HashMap;
 import java.util.Iterator;
 
 public class DateTime {
@@ -16,11 +19,29 @@ public class DateTime {
     // A Function to change game base of the cycle of players and moves the game forward
     public void timeFlow() {
         time++;
+
         if (time >= 22) {
             App.getCurrentGame().gameFlow();
             time = 9;
             date++;
         }
+
+        if(App.getCurrentGame().getCurrentPlayer().getBuff() != null){
+            App.getCurrentGame().getCurrentPlayer().getBuff().setRemainEffectTime();
+            if(App.getCurrentGame().getCurrentPlayer().getBuff().getRemainEffectTime() == 0){
+                App.getCurrentGame().getCurrentPlayer().setBuff(null);
+                App.getCurrentGame().getCurrentPlayer().getEnergy().setMaxDayEnergy(200);
+            }
+        }
+        for (Player player : App.getCurrentGame().getPlayers()) {
+            HashMap<Player, Pair<Integer, Integer>> friendships = player.getFriendShips();
+            for (Pair<Integer, Integer> friendshipData : friendships.values()) {
+                if (friendshipData.second() > (friendshipData.first() + 1) * 100) {
+                    friendshipData.setFirst(friendshipData.first() + 1);
+                }
+            }
+        }
+
     }
 
     public int getDayOfSeason() {
@@ -71,19 +92,25 @@ public class DateTime {
         return season;
     }
 
-    public void seasonChange() {
+    public void farmingSeasonChange() {
         for (int i = 0 ; i < 140 ; i++) {
             for (int j = 0; j < 160; j++) {
                 Coordinate coordinate = new Coordinate(i, j);
                 Tile tile = App.getCurrentGame().getMap().findTile(coordinate);
-                Iterator<Good> iterator = tile.getGoods().iterator();
-                while (iterator.hasNext()) {
-                    Good good = iterator.next();
-                    if (good instanceof FarmingCrop) {
-                        iterator.remove();
+                if(!tile.getTileType().equals(TileType.GREEN_HOUSE)) {
+                    Iterator<Good> iterator = tile.getGoods().iterator();
+                    while (iterator.hasNext()) {
+                        Good good = iterator.next();
+                        if (good instanceof FarmingCrop) {
+                            iterator.remove();
+                        }
                     }
                 }
             }
         }
+    }
+
+    public void setTime(int time) {
+        this.time = time;
     }
 }

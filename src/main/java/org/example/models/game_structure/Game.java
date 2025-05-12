@@ -22,6 +22,7 @@ import org.example.models.interactions.Player;
 import org.example.models.interactions.PlayerBuildings.FarmBuilding;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.Iterator;
 
 public class Game {
@@ -103,6 +104,7 @@ public class Game {
     public void gameFlow(){
 
         // Weather setups for next day
+        App.getCurrentGame().getDateTime().
         this.weather = tomorrow.getWeather();
         tomorrow.setWeather(weather);
         if(this.weather instanceof Storm){
@@ -113,9 +115,19 @@ public class Game {
             ((Rain) this.weather).waterAllTiles();
         }
         for(Player player : App.getCurrentGame().getPlayers()){
-            player.getEnergy().setTurnValueLeft(50);
-            player.getEnergy().setDayEnergyLeft(100);
-            player.getEnergy().setAwake(true);
+            if(player.getRejectionBuff() != null){
+                player.getRejectionBuff().setRemainEffectTime();
+                if(player.getRejectionBuff().getRemainEffectTime() == 0){
+                    player.setRejectionBuff(null);
+                }
+                player.getEnergy().setTurnValueLeft(50);
+                player.getEnergy().setDayEnergyLeft(100);
+                player.getEnergy().setAwake(true);
+            } else {
+                player.getEnergy().setTurnValueLeft(50);
+                player.getEnergy().setDayEnergyLeft(200);
+                player.getEnergy().setAwake(true);
+            }
         }
 
         crowAttack();
@@ -123,10 +135,13 @@ public class Game {
         App.getCurrentGame().getMap().generateRandomForagingSeed();
         App.getCurrentGame().getMap().generateRandomMinerals();
 
+        App.getCurrentGame().getMap().Furtulize();
+
         emptyShippingBin();
 
-
-
+        if(App.getCurrentGame().getDateTime().getDayOfSeason() == 1){
+            App.getCurrentGame().getDateTime().farmingSeasonChange();
+        }
 
         //for animals
         for (Player player : players) {
@@ -169,6 +184,11 @@ public class Game {
             }
         }
 
+        for (Player player : players) {
+            HashMap<Player, Boolean> interaction = player.getIsInteracted();
+            interaction.replaceAll((p, v) -> false);
+        }
+
 
         //for mixed seed
 
@@ -186,6 +206,8 @@ public class Game {
                 }
             }
         }
+
+
 
 
 
@@ -220,10 +242,6 @@ public class Game {
                     }
                 }
             }
-
-    public void setWeather(Weather weather) {
-        this.weather = weather;
-    }
             int numberOfCrows =(int)Math.floor((double) cropCounter / 16);
             int crowCounter = 0;
 
@@ -255,6 +273,7 @@ public class Game {
                                     Good good2 = iterator.next();
                                     if (good2 instanceof Food) {
                                         iterator.remove();
+                                        break;
                                     }
                                 }
                             }
@@ -264,10 +283,13 @@ public class Game {
             }
         }
     }
+
     public void setTomorrow(Tomorrow tomorrow) {
         this.tomorrow = tomorrow;
     }
-
+    public void setWeather(Weather weather) {
+        this.weather = weather;
+    }
     public void setNPCs(ArrayList<NPC> npcs) {
         this.NPCs.addAll(npcs);
     }

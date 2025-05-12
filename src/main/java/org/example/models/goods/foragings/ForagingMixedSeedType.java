@@ -54,5 +54,19 @@ public enum ForagingMixedSeedType implements GoodType {
         return name;
     }
 
+    @Override
+    public String toString() {
+        StringBuilder list =  new StringBuilder();
+        list.append("Name: ").append(name).append("\n");
+        list.append("Season: ").append(season).append("\n");
+        list.append("Possible Crops: ").append(possibleCrops).append("\n");
+        for (GoodType goodType : possibleCrops) {
+            list.append(goodType.getName()).append("\n");
+        }
+        list.append("\n");
+        
+        return list.toString();
+    }
+
 
 }
