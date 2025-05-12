@@ -521,8 +521,23 @@ public class GameMenuController extends Controller {
             return new Result(false, "You don't have " + seed + " in your inventory!");
         for (Good good : tile.getGoods()) {
             if (good instanceof FarmingTreeSapling || good instanceof FarmingTree ||
-                    good instanceof ForagingSeed || good instanceof ForagingTree || good instanceof ForagingMineral)
+                    good instanceof ForagingSeed || good instanceof ForagingTree || good instanceof ForagingMineral ||
+                    good instanceof ForagingMixedSeed)
                 return new Result(true, "A seed already planted in this tile!");
+        }
+
+
+        //mixed seed
+        try {
+            Good good = seeds.getLast();
+            if (good instanceof ForagingMixedSeed){
+                ForagingMixedSeedType type = (ForagingMixedSeedType) good.getType();
+                int random = (int) (Math.random() * type.getPossibleCrops().size());
+                ForagingSeedType crop = (ForagingSeedType) type.getPossibleCrops().get(random);
+                ((ForagingMixedSeed) good).setForagingSeedType(crop);
+            }
+        } catch (IndexOutOfBoundsException e) {
+            System.out.println("Plant Seed problem :(");
         }
 
         tile.getGoods().add(seeds.getLast());
