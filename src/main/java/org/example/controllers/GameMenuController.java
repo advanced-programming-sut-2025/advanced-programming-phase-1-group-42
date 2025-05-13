@@ -187,6 +187,9 @@ public class GameMenuController extends Controller {
 
         App.setCurrentGame(game);
         App.getGames().add(game);
+        for (Player player : players) {
+            player.iniFreindships();
+        }
         return new Result(true, "New game has successfully created & loaded!");
     }
 

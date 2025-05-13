@@ -66,7 +66,7 @@ public class WholeGameBuilder implements GameInterface {
     @Override
     public void setTomorrow() {
         Tomorrow tomorrow = new Tomorrow();
-        tomorrow.setTomorrowWeather();
+        tomorrow.setTomorrowWeather(game);
         this.game.setTomorrow(tomorrow);
     }
 

@@ -20,10 +20,10 @@ public class Tomorrow {
         this.weather = weather;
     }
 
-    public void setTomorrowWeather() {
+    public void setTomorrowWeather(Game game) {
         double probability = Math.random()*10;
 
-        if (App.getCurrentGame().getDateTime().getSeasonOfYear().equals("Spring")){
+        if (game.getDateTime().getSeasonOfYear().equals("Spring")){
 
             if(probability < 7){
                 weather = WeatherType.Sunny.getWeather();
@@ -32,13 +32,13 @@ public class Tomorrow {
             } else {
                 weather = WeatherType.Storm.getWeather();
             }
-        } else if (App.getCurrentGame().getDateTime().getSeasonOfYear().equals("Summer")){
+        } else if (game.getDateTime().getSeasonOfYear().equals("Summer")){
             if(probability < 9){
                 weather = WeatherType.Sunny.getWeather();
             } else {
                 weather = WeatherType.Rain.getWeather();
             }
-        } else if (App.getCurrentGame().getDateTime().getSeasonOfYear().equals("Fall")){
+        } else if (game.getDateTime().getSeasonOfYear().equals("Fall")){
             if (probability < 2){
                 weather = WeatherType.Sunny.getWeather();
             } else if( probability < 6){
@@ -48,7 +48,7 @@ public class Tomorrow {
             } else {
                 weather = WeatherType.Snow.getWeather();
             }
-        } else if (App.getCurrentGame().getDateTime().getSeasonOfYear().equals("Winter")){
+        } else if (game.getDateTime().getSeasonOfYear().equals("Winter")){
             if( probability < 2){
                 weather = WeatherType.Rain.getWeather();
             } else if(probability < 5){

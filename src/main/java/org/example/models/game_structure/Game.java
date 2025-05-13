@@ -106,13 +106,8 @@ public class Game {
         // Weather setups for next day
         this.weather = tomorrow.getWeather();
         tomorrow.setWeather(weather);
-        if(this.weather instanceof Storm){
-            ((Storm) this.weather).randomThunder();
-            ((Storm) this.weather).waterAllTiles();
-        }
-        if(this.weather instanceof Rain){
-            ((Rain) this.weather).waterAllTiles();
-        }
+        tomorrow.setTomorrowWeather(App.getCurrentGame());
+
         for(Player player : App.getCurrentGame().getPlayers()){
             if(player.getRejectionBuff() != null){
                 player.getRejectionBuff().setRemainEffectTime();
