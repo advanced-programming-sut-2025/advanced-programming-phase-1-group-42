@@ -42,6 +42,11 @@ public class WholeMapBuilder implements MapInterface {
     }
 
     @Override
+    public void setShippingBins() {
+
+    }
+
+    @Override
     public void setTiles(ArrayList<Tile> tiles) {
         map.setTiles(tiles);
     }

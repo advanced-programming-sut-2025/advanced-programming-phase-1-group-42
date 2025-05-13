@@ -25,5 +25,6 @@ public class Director {
         wholeMapBuilder.setTiles(tiles);
         wholeMapBuilder.setFarms(farms);
         wholeMapBuilder.setGameBuildings(tiles);
+        wholeMapBuilder.setGameBuildings();
     }
 }
