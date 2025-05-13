@@ -63,6 +63,10 @@ public class App {
     }
 
     public static void startGame() {
+        DBInteractor.loadUsers();
+        if (App.getCurrentUser() != null) {
+            App.setCurrentMenu(Menu.MainMenu);
+        }
 
     }
 

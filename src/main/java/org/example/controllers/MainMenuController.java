@@ -4,6 +4,8 @@ import org.example.models.App;
 import org.example.models.Result;
 import org.example.models.enums.Menu;
 
+import java.util.zip.ZipEntry;
+
 public class MainMenuController extends Controller {
 
     //TODO: Arani
@@ -32,6 +34,7 @@ public class MainMenuController extends Controller {
 
     public Result logout() {
         App.setCurrentMenu(Menu.LoginRegisterMenu);
+        App.getCurrentUser().setStayLogin(false);
         App.setCurrentUser(null);
 
         return new Result(true, "You have logged out! Redirecting to login/register menu!");
