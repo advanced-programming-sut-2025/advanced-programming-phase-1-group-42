@@ -13,6 +13,11 @@ public class WholeMapBuilder implements MapInterface {
     private Map map;
 
     @Override
+    public void setShippingBins(ArrayList<Tile> tiles) {
+
+    }
+
+    @Override
     public void reset() {
         this.map = new Map();
     }
@@ -41,10 +46,6 @@ public class WholeMapBuilder implements MapInterface {
         gameBuildings.add(new TheStarDropSaloon(TheStarDropSaloon.getExpectedTiles(tiles)));
     }
 
-    @Override
-    public void setShippingBins() {
-
-    }
 
     @Override
     public void setTiles(ArrayList<Tile> tiles) {

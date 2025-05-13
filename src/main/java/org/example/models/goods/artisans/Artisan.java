@@ -30,7 +30,8 @@ public class Artisan extends Good {
 
     @Override
     public int getSellPrice() {
-        return this.artisanType.getSellPrice(ingredients);
+        //return this.artisanType.getSellPrice(ingredients);
+        return 0;
     }
 
 

@@ -253,38 +253,33 @@ public enum ArtisanType implements GoodType {
             Arrays.asList(new Quadruple<>(ProductType.WOOD, 10, 0.0, 50.0)))
             , CraftingRecipeType.CHARCOAL_KILN),
 
-    SMOKED_FISH("Smoked Fish", "A whole fish, smoked to perfection.", new Pair<>(1.5, 0), 1, new ArrayList<>(
-            Arrays.asList(// Spring Fish
+    SMOKED_FISH("Smoked Fish", "A whole fish, smoked to perfection.", new Pair<>(1.5, 0), 1, new ArrayList<>
+            Arrays.asList(
                     new Quadruple<>(FishType.FLOUNDER, 1, 2.0, 0.0),
                     new Quadruple<>(FishType.LIONFISH, 1, 2.0, 0.0),
                     new Quadruple<>(FishType.HERRING, 1, 2.0, 0.0),
                     new Quadruple<>(FishType.GHOSTFISH, 1, 2.0, 0.0),
 
-// Summer Fish
                     new Quadruple<>(FishType.TILAPIA, 1, 2.0, 0.0),
                     new Quadruple<>(FishType.DORADO, 1, 2.0, 0.0),
                     new Quadruple<>(FishType.SUNFISH, 1, 2.0, 0.0),
                     new Quadruple<>(FishType.RAINBOW_TROUT, 1, 2.0, 0.0),
 
-// Fall Fish
                     new Quadruple<>(FishType.SALMON, 1, 2.0, 0.0),
                     new Quadruple<>(FishType.SARDINE, 1, 2.0, 0.0),
                     new Quadruple<>(FishType.SHAD, 1, 2.0, 0.0),
                     new Quadruple<>(FishType.BLUE_DISCUS, 1, 2.0, 0.0),
 
-// Winter Fish
                     new Quadruple<>(FishType.MIDNIGHT_CARP, 1, 2.0, 0.0),
                     new Quadruple<>(FishType.SQUID, 1, 2.0, 0.0),
                     new Quadruple<>(FishType.TUNA, 1, 2.0, 0.0),
                     new Quadruple<>(FishType.PERCH, 1, 2.0, 0.0),
 
-// Legendary Fish
                     new Quadruple<>(FishType.LEGEND, 1, 2.0, 0.0),
                     new Quadruple<>(FishType.CRIMSONFISH, 1, 2.0, 0.0),
                     new Quadruple<>(FishType.ANGLER, 1, 2.0, 0.0),
                     new Quadruple<>(FishType.GLACIERFISH, 1, 2.0, 0.0)),
 
-            //Coals
             new Quadruple<>(ForagingMineralType.COAL, 1, 0.0, 0.0),
             new Quadruple<>(ProductType.COAL, 1, 0.0, 0.0),
             new Quadruple<>(ArtisanType.COAL, 1, 0.0, 0.0)
@@ -297,7 +292,6 @@ public enum ArtisanType implements GoodType {
                     new Quadruple<>(ProductType.GOLD_ORE, 5, 10.0, 0.0),
                     new Quadruple<>(ProductType.IRON_ORE, 5, 10.0, 0.0),
 
-                    //Coals
                     new Quadruple<>(ForagingMineralType.COAL, 1, 0.0, 0.0),
                     new Quadruple<>(ProductType.COAL, 1, 0.0, 0.0),
                     new Quadruple<>(ArtisanType.COAL, 1, 0.0, 0.0)
