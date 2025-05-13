@@ -13,6 +13,8 @@ import org.example.models.goods.Good;
 import org.example.models.goods.GoodLevel;
 import org.example.models.goods.GoodType;
 import org.example.models.goods.farmings.FarmingTree;
+import org.example.models.goods.farmings.FarmingTreeSapling;
+import org.example.models.goods.farmings.FarmingTreeSaplingType;
 import org.example.models.goods.farmings.FarmingTreeType;
 import org.example.models.goods.fishs.FishType;
 
@@ -155,7 +157,10 @@ public class ToolFunctions {
 
                     App.getCurrentGame().getCurrentPlayer().getInventory().addGood(newGoods);
                 }
-            }
+            } else if(good instanceof FarmingTreeSapling) {
+                ArrayList<Good> newGoods = Good.newGoods(ProductType.WOOD, 2);
+                App.getCurrentGame().getCurrentPlayer().getInventory().addGood(newGoods);
+            } 
             else
                 tileGoods.add(good);
 
