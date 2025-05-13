@@ -10,7 +10,7 @@ import org.example.models.goods.foragings.ForagingCropType;
 import org.example.models.goods.foragings.ForagingMineralType;
 import org.example.models.goods.foragings.ForagingSeedType;
 import org.example.models.goods.products.ProductType;
-`import org.example.models.interactions.Animals.AnimalProductsType;
+import org.example.models.interactions.Animals.AnimalProductsType;
 import org.example.models.interactions.game_buildings.Quadruple;
 
 import java.util.ArrayList;
@@ -356,6 +356,15 @@ public enum ArtisanType implements GoodType {
 
     public ArrayList<Quadruple<GoodType, Integer, Double, Double>> getIngredients() {
         return ingredients;
+    }
+
+    public Quadruple<GoodType, Integer, Double, Double> hasIngredient(GoodType goodType) {
+        for (Quadruple<GoodType, Integer, Double, Double> ingredient : ingredients) {
+            if(ingredient.a == goodType) {
+                return ingredient;
+            }
+        }
+        return null;
     }
 }
 

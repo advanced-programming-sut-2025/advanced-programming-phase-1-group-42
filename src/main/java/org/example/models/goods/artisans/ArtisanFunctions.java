@@ -9,20 +9,32 @@ import org.example.models.goods.Good;
 import org.example.models.goods.GoodType;
 import org.example.models.goods.craftings.Crafting;
 import org.example.models.goods.craftings.CraftingType;
+import org.example.models.goods.products.ProductType;
 import org.example.models.interactions.game_buildings.Quadruple;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 
 public class ArtisanFunctions {
-    public static Result artisanFunction(Crafting crafting) {
+    public static Result artisanFunction(String artisanName, ArrayList<String> ourIngredients) {
+        ArrayList<Good> goods = App.getCurrentGame().getCurrentPlayer().getInventory().isInInventory(artisanName);
+        Crafting crafting = null;
+        if(goods != null && !goods.isEmpty()) {
+            crafting = (Crafting) goods.getLast();
+        }
+
+
         switch ((CraftingType) crafting.getType()) {
             case CraftingType.CHERRY_BOMB -> {
+                goods.removeLast();
                 return useCherryBomb(crafting);
             }
             case CraftingType.BOMB -> {
+                goods.removeLast();
                 return useBomb(crafting);
             }
             case CraftingType.MEGA_BOMB -> {
+                goods.removeLast();
                 return useMegaBomb(crafting);
             }
             case CraftingType.SPRINKLER -> {
@@ -35,15 +47,17 @@ public class ArtisanFunctions {
                 return useIridiumSprinkler(crafting);
             }
             case CraftingType.CHARCOAL_KILN -> {
-                return useCharcoalKiln(crafting);
+                return useCharcoalKiln(crafting, ourIngredients);
             }
             case CraftingType.FURNACE -> {
-                return useFurnace(crafting);
+                return useFurnace(crafting, ourIngredients);
             }
             case CraftingType.SCARECROW -> {
+                goods.removeLast();
                 return useScarecrow(crafting);
             }
             case CraftingType.DELUXE_SCARECROW -> {
+                goods.removeLast();
                 return useDeluxeScarecrow(crafting);
             }
             case CraftingType.BEE_HOUSE -> {
@@ -192,20 +206,43 @@ public class ArtisanFunctions {
     }
 
     private static Result useFurnace(Crafting crafting, ArrayList<String> ourIngredients) {
+        ArrayList<Good> metalGoods = App.getCurrentGame().getCurrentPlayer().getInventory().isInInventory(ourIngredients.getFirst());
+        ArrayList<Good> coalGoods = App.getCurrentGame().getCurrentPlayer().getInventory().isInInventory(ourIngredients.get(1));
+        Quadruple<GoodType, Integer, Double, Double> metalIngredient = ((ArtisanType) crafting.getType()).hasIngredient(metalGoods.getFirst().getType());
+        Quadruple<GoodType, Integer, Double, Double> coalIngredient = ((ArtisanType) crafting.getType()).hasIngredient(metalGoods.get(1).getType());
 
+        if(metalGoods == null || coalGoods == null
+            || ((ArtisanType) crafting.getType()).hasIngredient(metalGoods.getFirst().getType()) == null ||
+                ((ArtisanType) crafting.getType()).hasIngredient(metalGoods.get(1).getType()) == null ||
+                metalGoods.size() < metalIngredient.b || coalGoods.size() < coalIngredient.b) {
+            return new Result(false, "You don't have enough ingredients in your inventory!");
+        }
 
+        coalGoods.removeLast();
+        for (int i = 0; i < metalIngredient.b; i++)
+            metalGoods.removeLast();
+
+        App.getCurrentGame().getCurrentPlayer().getInventory().addGood(Good.newGoods(metalIngredient.a, 1));
+        return new Result(true, "A " + metalIngredient.a.getName() + " has been added to your inventory");
     }
 
     private static Result useScarecrow(Crafting crafting) {
-        // Implementation for Scarecrow
+        Tile tile = App.getCurrentGame().getMap().findTile(App.getCurrentGame().getCurrentPlayer().getCoordinate());
+        tile.getGoods().add(crafting);
+
+        return new Result(true, crafting.getName() + " has been added to " + App.getCurrentGame().getCurrentPlayer().getCoordinate());
     }
 
     private static Result useDeluxeScarecrow(Crafting crafting) {
-        // Implementation for Deluxe Scarecrow
+        Tile tile = App.getCurrentGame().getMap().findTile(App.getCurrentGame().getCurrentPlayer().getCoordinate());
+        tile.getGoods().add(crafting);
+
+        return new Result(true, crafting.getName() + " has been added to " + App.getCurrentGame().getCurrentPlayer().getCoordinate());
     }
 
     private static Result useBeeHouse(Crafting crafting) {
         // Implementation for Bee House
+        return null;
     }
 
     private static Result useCheesePress(Crafting crafting) {
