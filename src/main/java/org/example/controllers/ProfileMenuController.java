@@ -101,4 +101,7 @@ public class ProfileMenuController extends Controller {
         return new Result(true, "Redirecting to main menu!");
     }
 
+    public Result showCurrentMenu() {
+        return new Result(true, "Current Menu : Profile Menu");
+    }
 }

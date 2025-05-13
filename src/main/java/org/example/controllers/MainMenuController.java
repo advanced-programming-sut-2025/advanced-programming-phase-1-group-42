@@ -39,4 +39,8 @@ public class MainMenuController extends Controller {
 
         return new Result(true, "You have logged out! Redirecting to login/register menu!");
     }
+
+    public Result showCurrentMenu() {
+        return new Result(true, "Current Menu : Main Menu");
+    }
 }

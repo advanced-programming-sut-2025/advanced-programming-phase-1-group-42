@@ -1834,5 +1834,7 @@ public class GameMenuController extends Controller {
         return new Result(true, "");
     }
 
-
+    public Result showCurrentMenu() {
+        return new Result(true, "Current Menu : Game Menu");
+    }
 }

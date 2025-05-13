@@ -56,7 +56,7 @@ public class LoginRegisterMenuController extends Controller {
         }
 
         // Checking Username format
-        if(!username.matches("[A-Za-z0-9\\-]")) {
+        if(!username.matches("[A-Za-z0-9-]+")) {
             return new Result(false, "Invalid username format!");
         }
 

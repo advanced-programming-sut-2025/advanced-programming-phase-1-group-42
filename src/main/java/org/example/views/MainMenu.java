@@ -26,6 +26,9 @@ public class MainMenu implements AppMenu {
         else if(MainMenuCommands.Exit.matcher(input) != null) {
             System.out.println(controller.exit());
         }
+        else if(LoginRegisterCommands.ShowCurrentMenu.matcher(input) != null) {
+            System.out.println(controller.showCurrentMenu());
+        }
         else
             System.out.println("Invalid command!");
     }

@@ -23,7 +23,9 @@ public class GameMenu implements AppMenu {
         Matcher matcher;
 
         //game setting methods
-        if ((matcher = GameMenuCommands.NEW_GAME.matcher(input)) != null) {
+        if(LoginRegisterCommands.ShowCurrentMenu.matcher(input) != null) {
+            System.out.println(controller.showCurrentMenu());
+        } else if ((matcher = GameMenuCommands.NEW_GAME.matcher(input)) != null) {
             System.out.print(controller.newGame(new ArrayList<>(Arrays.asList(matcher.group("username_1"), matcher.group("username_2"), matcher.group("username_3"))), scanner));
 //        } else if ((matcher = GameMenuCommands.GAME_MAP.matcher(input)) != null) {
 //            System.out.println(controller.farmGame(matcher.group("farm_number"), scanner));
