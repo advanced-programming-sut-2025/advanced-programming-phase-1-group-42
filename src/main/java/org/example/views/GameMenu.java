@@ -9,6 +9,7 @@ import org.example.models.enums.TradeMenuCommands;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.List;
 import java.util.Scanner;
 import java.util.regex.Matcher;
 
@@ -23,11 +24,29 @@ public class GameMenu implements AppMenu {
         Matcher matcher;
 
         //game setting methods
-        if ((matcher = GameMenuCommands.NEW_GAME.matcher(input)) != null) {
-            System.out.print(controller.newGame(new ArrayList<>(Arrays.asList(matcher.group("username_1"), matcher.group("username_2"), matcher.group("username_3"))), scanner));
+        if ((matcher = GameMenuCommands.NEW_GAME.matcher(input)).matches()) {
+            ArrayList<String> usernames = new ArrayList<>();
+
+            // اضافه کردن username_1 اگر وجود دارد
+            if (matcher.group("username_1") != null) {
+                usernames.add(matcher.group("username_1"));
+            }
+
+            // اضافه کردن username_2 اگر وجود دارد
+            if (matcher.group("username_2") != null) {
+                usernames.add(matcher.group("username_2"));
+            }
+
+            // اضافه کردن username_3 اگر وجود دارد
+            if (matcher.group("username_3") != null) {
+                usernames.add(matcher.group("username_3"));
+            }
+
+            System.out.print(controller.newGame(usernames, scanner));
+        }
 //        } else if ((matcher = GameMenuCommands.GAME_MAP.matcher(input)) != null) {
 //            System.out.println(controller.farmGame(matcher.group("farm_number"), scanner));
-        } else if ((matcher = GameMenuCommands.LOAD_GAME.matcher(input)) != null) {
+        else if ((matcher = GameMenuCommands.LOAD_GAME.matcher(input)) != null) {
             System.out.println(controller.loadGame());
         }
 

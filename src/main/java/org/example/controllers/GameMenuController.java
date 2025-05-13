@@ -159,6 +159,7 @@ public class GameMenuController extends Controller {
             if (!found)
                 return new Result(false, "No player with username " + username + " found!");
         }
+
         for (int i = 0; i < 3 - usernames.size(); i++) {
             players.add(new Player(new User("Guest" + i, null, "Guest" + i,
                     null, null, 0, null)));
