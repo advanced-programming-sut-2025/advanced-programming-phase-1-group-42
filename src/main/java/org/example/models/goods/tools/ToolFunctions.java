@@ -18,6 +18,7 @@ import org.example.models.goods.farmings.FarmingTreeSaplingType;
 import org.example.models.goods.farmings.FarmingTreeType;
 import org.example.models.goods.fishs.FishType;
 
+import org.example.models.goods.foods.FoodType;
 import org.example.models.goods.foragings.*;
 import org.example.models.goods.products.ProductType;
 
@@ -129,6 +130,14 @@ public class ToolFunctions {
                 }
                 else
                     newGoods.add(good);
+            } else if(good instanceof FarmingTree farmingTree) {
+                FarmingTreeType type = (FarmingTreeType) farmingTree.getType();
+                Pair<GoodType,Integer> pair = type.getProducts().getFirst();
+                if (farmingTree.isFruitAvailable()){
+                    App.getCurrentGame().getCurrentPlayer().getInventory().addGood(
+                            Good.newGoods(pair.first(), pair.second())
+                    );
+                }
             }
             //TODO : باید درخت به بار رسیده باشد که بتوان محصولات آن را برداشت کرد
         }
@@ -147,14 +156,14 @@ public class ToolFunctions {
             if(good instanceof ForagingTree foragingTree) {
                 for (Pair<GoodType, Integer> product : ((ForagingTreeType) foragingTree.getType()).getProducts()) {
                     ArrayList<Good> newGoods = Good.newGoods(product.first(), product.second());
-
+                    //TODO
                     App.getCurrentGame().getCurrentPlayer().getInventory().addGood(newGoods);
                 }
             }
             else if(good instanceof FarmingTree farmingTree) {
                 for (Pair<GoodType, Integer> product : ((FarmingTreeType) farmingTree.getType()).getProducts()) {
                     ArrayList<Good> newGoods = Good.newGoods(product.first(), product.second());
-
+                    //TODO
                     App.getCurrentGame().getCurrentPlayer().getInventory().addGood(newGoods);
                 }
             } else if(good instanceof FarmingTreeSapling) {

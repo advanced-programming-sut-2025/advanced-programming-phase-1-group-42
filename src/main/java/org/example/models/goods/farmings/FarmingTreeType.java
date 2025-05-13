@@ -143,4 +143,16 @@ public enum FarmingTreeType implements GoodType {
     public ArrayList<Pair<GoodType, Integer>> getProducts() {
         return products;
     }
+
+    public GoodType getSaplingType() {
+        return saplingType;
+    }
+
+    public int getFruitHarvestCycle() {
+        return fruitHarvestCycle;
+    }
+
+    public ArrayList<Season> getSeasons() {
+        return seasons;
+    }
 }
