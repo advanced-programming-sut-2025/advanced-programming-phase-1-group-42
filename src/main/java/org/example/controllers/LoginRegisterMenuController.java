@@ -82,6 +82,7 @@ public class LoginRegisterMenuController extends Controller {
         }
         else {
             Matcher matcher = Pattern.compile("(?<password>\\S+)\\s+(?<confirmPassword>\\S+)").matcher(password);
+            matcher.matches();
             password = matcher.group("password");
             String confirmPassword = matcher.group("confirmPassword");
 
