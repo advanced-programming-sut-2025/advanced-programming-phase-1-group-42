@@ -75,6 +75,7 @@ public enum FarmingCropType implements GoodType {
     private boolean isEdible;
     private int energy;
     private int baseSellPrice;
+    private
 
     FarmingCropType(String name, GoodType foragingType, boolean isEdible, int energy, int baseSellPrice) {
         this.name = name;

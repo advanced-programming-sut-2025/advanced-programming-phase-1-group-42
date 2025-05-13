@@ -104,7 +104,6 @@ public class Game {
     public void gameFlow(){
 
         // Weather setups for next day
-        App.getCurrentGame().getDateTime().
         this.weather = tomorrow.getWeather();
         tomorrow.setWeather(weather);
         if(this.weather instanceof Storm){
@@ -122,11 +121,17 @@ public class Game {
                 }
                 player.getEnergy().setTurnValueLeft(50);
                 player.getEnergy().setDayEnergyLeft(100);
-                player.getEnergy().setAwake(true);
+                if(!player.getEnergy().isAwake()){
+                    player.getEnergy().setAwake(true);
+                    player.getEnergy().setDayEnergyLeft(75);
+                }
             } else {
                 player.getEnergy().setTurnValueLeft(50);
                 player.getEnergy().setDayEnergyLeft(200);
-                player.getEnergy().setAwake(true);
+                if(!player.getEnergy().isAwake()){
+                    player.getEnergy().setAwake(true);
+                    player.getEnergy().setDayEnergyLeft(75);
+                }
             }
         }
 

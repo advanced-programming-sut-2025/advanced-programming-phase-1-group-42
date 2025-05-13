@@ -99,7 +99,7 @@ public class Map {
                                     colorMap.get("Yellow")+" "+ colorMap.get("Reset"));
                         }
                     }
-                }else if(tile.getTileType() == TileType.PLAYER_BUILDING){
+                }else if(tile.getTileType() == TileType.PLAYER_BUILDING || tile.getTileType() == TileType.GAME_BUILDING){
                     System.out.print(colorMap.get("Yellow_Background")+" "+ colorMap.get("Reset") );
                 }else if(tile.getTileType() == TileType.ROAD){
                     System.out.print(colorMap.get("Gray_Background")+

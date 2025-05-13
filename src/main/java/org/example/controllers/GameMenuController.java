@@ -7,10 +7,7 @@ import org.example.models.Result;
 import org.example.models.builders.*;
 import org.example.models.builders.concrete_builders.WholeGameBuilder;
 import org.example.models.builders.concrete_builders.WholeMapBuilder;
-import org.example.models.enums.GameMenuCommands;
-import org.example.models.enums.Menu;
-import org.example.models.enums.TileType;
-import org.example.models.enums.WeatherType;
+import org.example.models.enums.*;
 import org.example.models.game_structure.Game;
 import org.example.models.game_structure.Tile;
 
@@ -396,13 +393,13 @@ public class GameMenuController extends Controller {
 
         if (energyConsumed > playerEnergy) {
             App.getCurrentGame().getCurrentPlayer().setCoordinate(coordinate);
-            App.getCurrentGame().getCurrentPlayer().getEnergy().decreaseDayEnergyLeft(playerEnergy);
+            App.getCurrentGame().getCurrentPlayer().getEnergy().decreaseTurnEnergyLeft(playerEnergy);
             App.getCurrentGame().getCurrentPlayer().getEnergy().setAwake(false);
             return new Result(true, "Your energy was enough to walk to " + goal +
                     " location! Now your are fainted & your daily energy is 0!");
         } else {
             App.getCurrentGame().getCurrentPlayer().setCoordinate(goal);
-            App.getCurrentGame().getCurrentPlayer().getEnergy().decreaseDayEnergyLeft(energyConsumed);
+            App.getCurrentGame().getCurrentPlayer().getEnergy().decreaseTurnEnergyLeft(energyConsumed);
             return new Result(true, "Your are now in " + goal + " location!");
         }
     }
@@ -416,15 +413,15 @@ public class GameMenuController extends Controller {
     }
 
     public Result helpReadingMap() {
-
         return new Result(true, " " + " -> " + "Tile don't exist\n"+
-                                                "F" + " -> " + "Farm\n"+
-                                                "W" + " -> " + "Water\n"+
-                                                "G" + " -> " + "Green House\n"+
-                                                "B" + " -> " + "Building\n"+
-                                                "R" + " -> " + "Road\n"+
-                                                "Q" + " -> " + "Quarry\n"+
-                                                "P" + " -> " + "Plain\n");
+                                                "Green" + " -> " + "Farm\n"+
+                                                "Cyan" + " -> " + "Water\n"+
+                                                "White" + " -> " + "Green House\n"+
+                                                "Blown T" + " -> " + "Tree\n"+
+                                                "Yellow" + " -> " + "Building\n"+
+                                                "Gray" + " -> " + "Quarry\n"+
+                                                "Gray with Purple -" + " -> " + "Road\n"+
+                                                "Green with Red -" + " -> " + "Plain\n");
     }
 
     // Parsa
@@ -438,7 +435,7 @@ public class GameMenuController extends Controller {
     public Result cheatEnergySet(String value) {
 
         int valueInt = Integer.parseInt(value);
-        App.getCurrentGame().getCurrentPlayer().getEnergy().increaseDayEnergyLeft(valueInt);
+        App.getCurrentGame().getCurrentPlayer().getEnergy().increaseTurnEnergyLeft(valueInt);
         return new Result(true, "");
     }
 
@@ -581,12 +578,14 @@ public class GameMenuController extends Controller {
         if (tile == null)
             return new Result(false, "You don't have access to this tile!");
 
-        if (tile.getTileType() != TileType.PLOWED_FARM)
-            return new Result(false, "Selected Tile is not plowed for planting!");
+        if (tile.getTileType() != TileType.PLOWED_FARM && tile.getTileType() != TileType.GREEN_HOUSE)
+            return new Result(false, "Selected Tile is not Plowed or GreenHouse for planting!");
 
         ArrayList<Good> seeds = App.getCurrentGame().getCurrentPlayer().getInventory().isInInventory(seed);
         if (seeds == null)
             return new Result(false, "You don't have " + seed + " in your inventory!");
+
+
         for (Good good : tile.getGoods()) {
             if (good instanceof FarmingTreeSapling || good instanceof FarmingTree ||
                     good instanceof ForagingSeed || good instanceof ForagingTree || good instanceof ForagingMineral ||
@@ -594,7 +593,19 @@ public class GameMenuController extends Controller {
                 return new Result(true, "A seed already planted in this tile!");
         }
 
-
+        boolean growable = false;
+        if(tile.getTileType() != TileType.GREEN_HOUSE) {
+            if (seeds.getFirst().getType() instanceof ForagingSeedType) {
+                for (Season season : ((ForagingSeedType) seeds.getFirst().getType()).getSeason()) {
+                    if (season.equals(App.getCurrentGame().getDateTime().getSeasonOfYear())) {
+                        growable = true;
+                    }
+                }
+                if (!growable) {
+                    return new Result(false, "You are not inside the Foraging Season of this seed!");
+                }
+            }
+        }
         //mixed seed
         try {
             Good good = seeds.getLast();
