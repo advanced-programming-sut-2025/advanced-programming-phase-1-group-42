@@ -2,6 +2,7 @@ package org.example.models.goods.artisans;
 
 import org.example.models.Pair;
 import org.example.models.goods.GoodType;
+import org.example.models.goods.craftings.CraftingType;
 import org.example.models.goods.farmings.FarmingCropType;
 import org.example.models.goods.fishs.FishType;
 import org.example.models.goods.foods.FoodType;
@@ -9,8 +10,7 @@ import org.example.models.goods.foragings.ForagingCropType;
 import org.example.models.goods.foragings.ForagingMineralType;
 import org.example.models.goods.foragings.ForagingSeedType;
 import org.example.models.goods.products.ProductType;
-import org.example.models.goods.recipes.CraftingRecipeType;
-import org.example.models.interactions.Animals.AnimalProductsType;
+`import org.example.models.interactions.Animals.AnimalProductsType;
 import org.example.models.interactions.game_buildings.Quadruple;
 
 import java.util.ArrayList;
@@ -21,60 +21,60 @@ public enum ArtisanType implements GoodType {
 
     HONEY("Honey", "It's a sweet syrup produced by bees.", new Pair<>(0.0, 75), 4 * 24, new ArrayList<>(
             Arrays.asList(new Quadruple<>(null, 1, 0.0, 350.0))),
-            CraftingRecipeType.BEE_HOUSE),
+            CraftingType.BEE_HOUSE),
 
     CLOTH("Cloth", "A bolt of fine wool cloth.", new Pair<>(0.0, 0), 4, new ArrayList<>(
             Arrays.asList(new Quadruple<>(AnimalProductsType.RABBIT_WOOL, 1, 0.0, 470.0),
                     new Quadruple<>(AnimalProductsType.SHEEP_WOOL, 1, 0.0, 470.0)))
-            , CraftingRecipeType.LOOM),
+            , CraftingType.LOOM),
 
     CHEESE("Cheese", "It's your basic cheese.", new Pair<>(0.0, 100), 3, new ArrayList<>(
             Arrays.asList(
                     new Quadruple<>(AnimalProductsType.COW_MILK, 1, 0.0, 230.0),
                     new Quadruple<>(AnimalProductsType.BIG_COW_MILK, 1, 0.0, 345.0)
-            )), CraftingRecipeType.CHEESE_PRESS),
+            )), CraftingType.CHEESE_PRESS),
 
     GOAT_CHEESE("Goat Cheese", "Soft cheese made from goat's milk.", new Pair<>(0.0, 100), 3, new ArrayList<>(
             Arrays.asList(
                     new Quadruple<>(AnimalProductsType.GOAT_MILK, 1, 0.0, 400.0),
                     new Quadruple<>(AnimalProductsType.BIG_GOAT_MILK, 1, 0.0, 600.0)
-            )), CraftingRecipeType.CHEESE_PRESS),
+            )), CraftingType.CHEESE_PRESS),
 
     MAYONNAISE("Mayonnaise", "It looks spreadable.", new Pair<>(0.0, 50), 3, new ArrayList<>(
             Arrays.asList(
                     new Quadruple<>(AnimalProductsType.CHICKEN_EGG, 1, 0.0, 190.0),
                     new Quadruple<>(AnimalProductsType.BIG_CHICKEN_EGG, 1, 0.0, 237.0)
-            )), CraftingRecipeType.MAYONNAISE_MACHINE),
+            )), CraftingType.MAYONNAISE_MACHINE),
 
     DUCK_MAYONNAISE("Duck Mayonnaise", "It's a rich, yellow mayonnaise.", new Pair<>(0.0, 75), 3, new ArrayList<>(
             Arrays.asList(new Quadruple<>(AnimalProductsType.DUCK_EGG, 1, 0.0, 190.0),
                     new Quadruple<>(AnimalProductsType.DINOSAUR_EGG, 1, 0.0, 237.0)))
-            , CraftingRecipeType.MAYONNAISE_MACHINE),
+            , CraftingType.MAYONNAISE_MACHINE),
 
     DINOSAUR_MAYONNAISE("Dinosaur Mayonnaise", "It's thick and creamy, with a vivid green hue. It smells like grass and leather.", new Pair<>(0.0, 125), 3, new ArrayList<>(
             Arrays.asList(new Quadruple<>(AnimalProductsType.DINOSAUR_EGG, 1, 0.0, 800.0)))
-            , CraftingRecipeType.MAYONNAISE_MACHINE),
+            , CraftingType.MAYONNAISE_MACHINE),
 
     TRUFFLE_OIL("Truffle Oil", "A gourmet cooking ingredient.", new Pair<>(0.0, 38), 6, new ArrayList<>(
             Arrays.asList(new Quadruple<>(AnimalProductsType.TRUFFLE, 1, 0.0, 1065.0)))
-            , CraftingRecipeType.OIL_MAKER),
+            , CraftingType.OIL_MAKER),
 
     OIL("Oil", "All purpose cooking oil.", new Pair<>(0.0, 13), 6, new ArrayList<>(Arrays.asList(new Quadruple<>(FarmingCropType.CORN, 1, 1.0, 100.0),
             new Quadruple<>(ForagingSeedType.SUNFLOWER_SEEDS, 1, 0.0, 100.0),
-            new Quadruple<>(FarmingCropType.SUNFLOWER, 1, 0.0, 100.0))), CraftingRecipeType.OIL_MAKER),
+            new Quadruple<>(FarmingCropType.SUNFLOWER, 1, 0.0, 100.0))), CraftingType.OIL_MAKER),
 
 
     BEER("Beer", "Drink in moderation.", new Pair<>(0.0, 50), 24, new ArrayList<>(
             Arrays.asList(new Quadruple<>(FarmingCropType.WHEAT, 1, 0.0, 200.0))
-    ), CraftingRecipeType.KEG),
+    ), CraftingType.KEG),
 
     VINEGAR("Vinegar", "An aged fermented liquid used in many cooking recipes.", new Pair<>(0.0, 13), 10, new ArrayList<>(
             Arrays.asList(new Quadruple<>(FoodType.RICE, 1, 0.0, 100.0))
-    ), CraftingRecipeType.CASK),
+    ), CraftingType.CASK),
 
     COFFEE("Coffee", "It smells delicious. This is sure to give you a boost.", new Pair<>(0.0, 75), 2, new ArrayList<>(
             Arrays.asList(new Quadruple<>(FarmingCropType.COFFEE_BEAN, 5, 0.0, 150.0))
-    ), CraftingRecipeType.KEG),
+    ), CraftingType.KEG),
 
     JUICE("Juice", "A sweet, nutritious beverage.", new Pair<>(2.0, 0), 4 * 24, new ArrayList<>(
             Arrays.asList(new Quadruple<>(FarmingCropType.ARTICHOKE, 1, 2.25, 0.0),
@@ -104,15 +104,15 @@ public enum ArtisanType implements GoodType {
                     new Quadruple<>(FarmingCropType.TOMATO, 1, 2.25, 0.0), // Technically a fruit
                     new Quadruple<>(FarmingCropType.WHEAT, 1, 2.25, 0.0), // Grain, not a vegetable
                     new Quadruple<>(FarmingCropType.YAM, 1, 2.25, 0.0))),
-            CraftingRecipeType.KEG),
+            CraftingType.KEG),
 
     MEAD("Mead", "A fermented beverage made from honey. Drink in moderation.", new Pair<>(0.0, 100), 10, new ArrayList<>(
             Arrays.asList(new Quadruple<>(ArtisanType.HONEY, 1, 0.0, 300.0)))
-            , CraftingRecipeType.KEG),
+            , CraftingType.KEG),
 
     PALE_ALE("Pale Ale", "Drink in moderation.", new Pair<>(0.0, 50), 3 * 24, new ArrayList<>(
             Arrays.asList(new Quadruple<>(FarmingCropType.HOPS, 1, 0.0, 300.0))
-    ), CraftingRecipeType.KEG),
+    ), CraftingType.KEG),
 
     WINE("Wine", "Drink in moderation.", new Pair<>(1.75, 0), 7 * 24,
             new ArrayList<>(// Tree Fruits (Year-round after maturity)
@@ -144,7 +144,7 @@ public enum ArtisanType implements GoodType {
 //                    new Quadruple<>(FarmingCropType.GIANT_PUMPKIN, 1, 3.0, 0.0),
 //                    new Quadruple<>(FarmingCropType.GIANT_CAULIFLOWER, 1, 3.0, 0.0))
                     ))
-            , CraftingRecipeType.KEG),
+            , CraftingType.KEG),
 
     PICKLES("Pickles", "A jar of your home-made pickles.", new Pair<>(1.75, 0), 6,
             new ArrayList<>(Arrays.asList(
@@ -175,7 +175,7 @@ public enum ArtisanType implements GoodType {
                     new Quadruple<>(FarmingCropType.TOMATO, 1, 2.0, 50.0),
                     new Quadruple<>(FarmingCropType.WHEAT, 1, 2.0, 50.0),
                     new Quadruple<>(FarmingCropType.YAM, 1, 2.0, 50.0)
-            )), CraftingRecipeType.PRESERVES_JAR),
+            )), CraftingType.PRESERVES_JAR),
 
     JELLY("Jelly", "Gooey.", new Pair<>(2.0, 0), 3 * 24,
             new ArrayList<>(// Tree Fruits (FoodType)
@@ -205,7 +205,7 @@ public enum ArtisanType implements GoodType {
 //                    new Quadruple<>(FarmingCropType.GIANT_MELON, 1, 2.0, 50.0),
 //                    new Quadruple<>(FarmingCropType.GIANT_PUMPKIN, 1, 2.0, 50.0),
 //                    new Quadruple<>(FarmingCropType.GIANT_CAULIFLOWER, 1, 2.0, 50.0))
-                    )), CraftingRecipeType.PRESERVES_JAR),
+                    )), CraftingType.PRESERVES_JAR),
 
     DRIED_MUSHROOMS("Dried Mushrooms", "A package of gourmet mushrooms.", new Pair<>(0.0, 50), 24, new ArrayList<>(
             Arrays.asList(new Quadruple<>(FoodType.COMMON_MUSHROOM, 5, 7.5, 25.0),
@@ -213,7 +213,7 @@ public enum ArtisanType implements GoodType {
                     new Quadruple<>(ForagingCropType.PURPLE_MUSHROOM, 5, 7.5, 25.0),
                     new Quadruple<>(ForagingCropType.MOREL, 5, 7.5, 25.0),
                     new Quadruple<>(ForagingCropType.CHANTERELLE, 5, 7.5, 25.0))
-    ), CraftingRecipeType.DEHYDRATOR),
+    ), CraftingType.DEHYDRATOR),
 
     DRIED_FRUIT("Dried Fruit", "Chewy pieces of dried fruit.", new Pair<>(0.0, 75), 24, new ArrayList<>(
             Arrays.asList(// Tree Fruits (FoodType → Adjusted to FarmingCropType if needed)
@@ -243,15 +243,15 @@ public enum ArtisanType implements GoodType {
 //                    new Quadruple<>(FarmingCropType.GIANT_MELON, 5, 7.5, 25.0),
 //                    new Quadruple<>(FarmingCropType.GIANT_PUMPKIN, 5, 7.5, 25.0),
 //                    new Quadruple<>(FarmingCropType.GIANT_CAULIFLOWER, 5, 7.5, 25.0))
-            )), CraftingRecipeType.DEHYDRATOR),
+            )), CraftingType.DEHYDRATOR),
 
     RAISINS("Raisins", "It's said to be the Junimos' favorite food.", new Pair<>(0.0, 125), 24, new ArrayList<>(
             Arrays.asList(new Quadruple<>(FarmingCropType.GRAPE, 5, 0.0, 600.0)))
-            , CraftingRecipeType.DEHYDRATOR),
+            , CraftingType.DEHYDRATOR),
 
     COAL("Coal", "Turns 10 pieces of wood into one piece of coal.", new Pair<>(0.0, 0), 1, new ArrayList<>(
             Arrays.asList(new Quadruple<>(ProductType.WOOD, 10, 0.0, 50.0)))
-            , CraftingRecipeType.CHARCOAL_KILN),
+            , CraftingType.CHARCOAL_KILN),
 
     SMOKED_FISH("Smoked Fish", "A whole fish, smoked to perfection.", new Pair<>(1.5, 0), 1, new ArrayList<>(
             Arrays.asList(// Spring Fish
@@ -288,7 +288,7 @@ public enum ArtisanType implements GoodType {
             new Quadruple<>(ForagingMineralType.COAL, 1, 0.0, 0.0),
             new Quadruple<>(ProductType.COAL, 1, 0.0, 0.0),
             new Quadruple<>(ArtisanType.COAL, 1, 0.0, 0.0)
-    ), CraftingRecipeType.FISH_SMOKER),
+    ), CraftingType.FISH_SMOKER),
 
 
     METAL_BAR("Any metal bar", "Turns ore and coal into metal bars.", new Pair<>(0.0, 0), 4, new ArrayList<>(
@@ -301,7 +301,7 @@ public enum ArtisanType implements GoodType {
                     new Quadruple<>(ForagingMineralType.COAL, 1, 0.0, 0.0),
                     new Quadruple<>(ProductType.COAL, 1, 0.0, 0.0),
                     new Quadruple<>(ArtisanType.COAL, 1, 0.0, 0.0)
-            )), CraftingRecipeType.FURNACE),
+            )), CraftingType.FURNACE),
 
     DEHYDRATOR_RECIPE("", "", new Pair<>(0.0, 0), 0, new ArrayList<>(), null);
 
@@ -310,31 +310,52 @@ public enum ArtisanType implements GoodType {
     private final Pair<Double, Integer> energyEquation;
     private final int processingHour;
     private final ArrayList<Quadruple<GoodType, Integer, Double, Double>> ingredients;
-    private final CraftingRecipeType craftingRecipeType;
+    private final CraftingType craftingType;
 
     ArtisanType(String name, String description, Pair<Double, Integer> energyEquation, int processingHour,
-                ArrayList<Quadruple<GoodType, Integer, Double, Double>> ingredients, CraftingRecipeType craftingRecipeType) {
+                ArrayList<Quadruple<GoodType, Integer, Double, Double>> ingredients, CraftingType craftingType) {
         this.name = name;
         this.description = description;
         this.energyEquation = energyEquation;
         this.processingHour = processingHour;
         this.ingredients = ingredients;
-        this.craftingRecipeType = craftingRecipeType;
+        this.craftingType = craftingType;
     }
 
     @Override
     public int getSellPrice() {
-        return 0;
+        return -1;
     }
 
     @Override
     public int getEnergy() {
-        return 0;
+        return -1;
     }
 
     @Override
     public String getName() {
-        return "";
+        return name;
+    }
+
+    public int getEnergy(GoodType goodType) {
+        if(energyEquation.first() == 0)
+            return energyEquation.second();
+        else {
+            return (int) (goodType.getEnergy() * energyEquation.first()) + energyEquation.second();
+        }
+    }
+
+    public int getSellPrice(GoodType goodType) {
+        for (Quadruple<GoodType, Integer, Double, Double> ingredient : ingredients) {
+            if(ingredient.a == goodType) {
+                return (int) (ingredient.c * goodType.getSellPrice() + ingredient.d);
+            }
+        }
+        return -1;
+    }
+
+    public ArrayList<Quadruple<GoodType, Integer, Double, Double>> getIngredients() {
+        return ingredients;
     }
 }
 

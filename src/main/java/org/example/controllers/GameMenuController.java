@@ -627,6 +627,7 @@ public class GameMenuController extends Controller {
         }
 
 
+
         //mixed seed
         try {
             Good good = seeds.getLast();
@@ -1221,7 +1222,8 @@ public class GameMenuController extends Controller {
     // artisan methods
     public Result artisanUse(String artisanName) {
         artisanName = artisanName.trim();
-        //TODO
+
+
         return new Result(true, "");
     }
 
