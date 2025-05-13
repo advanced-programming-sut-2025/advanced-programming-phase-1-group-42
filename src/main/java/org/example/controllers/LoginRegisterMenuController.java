@@ -31,6 +31,11 @@ public class LoginRegisterMenuController extends Controller {
 
     public Result register(String username, String password, String nickname, String email,
                            String gender, Scanner scanner) {
+        username = username.trim();
+        password = password.trim();
+        nickname = nickname.trim();
+        email = email.trim();
+        gender = gender.trim();
 
         User user = findAppUser(username);
 
@@ -127,6 +132,9 @@ public class LoginRegisterMenuController extends Controller {
     }
 
     public Result login(String username, String password, boolean stayLoggedIn) {
+        username = username.trim();
+        password = password.trim();
+
         User user = findAppUser(username);
         if(user == null) {
             return new Result(false, "User not found!");
@@ -147,6 +155,8 @@ public class LoginRegisterMenuController extends Controller {
     }
 
     public Result forgetPassword(String username, Scanner scanner) {
+        username = username.trim();
+        
         User user = findAppUser(username);
         if(user == null) {
             return new Result(false, "User not found!");

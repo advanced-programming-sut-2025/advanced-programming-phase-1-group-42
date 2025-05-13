@@ -5,8 +5,9 @@ import org.example.models.enums.WeatherType;
 import org.example.models.game_structure.DateTime;
 import org.example.models.game_structure.Game;
 import org.example.models.game_structure.Tomorrow;
-import org.example.models.game_structure.weathers.Sunny;
 import org.example.models.game_structure.weathers.Weather;
+import org.example.models.goods.Good;
+import org.example.models.goods.tools.ToolType;
 import org.example.models.interactions.NPCs.NPC;
 import org.example.models.interactions.NPCs.NPCTypes;
 import org.example.models.interactions.Player;
@@ -31,6 +32,13 @@ public class WholeGameBuilder implements GameInterface {
     @Override
     public void setPlayers(ArrayList<Player> players) {
         this.game.setPlayers(players);
+        for (Player player : players) {
+            player.getInventory().addGoodByObject(Good.newGood(ToolType.HOE));
+            player.getInventory().addGoodByObject(Good.newGood(ToolType.PICKAXE));
+            player.getInventory().addGoodByObject(Good.newGood(ToolType.AXE));
+            player.getInventory().addGoodByObject(Good.newGood(ToolType.WATERING_CAN));
+            player.getInventory().addGoodByObject(Good.newGood(ToolType.SCYTHE));
+        }
     }
 
     @Override

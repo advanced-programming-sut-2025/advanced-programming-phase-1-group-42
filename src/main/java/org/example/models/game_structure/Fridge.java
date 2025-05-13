@@ -33,4 +33,22 @@ public class Fridge {
         return false;
     }
 
+    public int howManyInFridge(FoodType foodType) {
+        int count = 0;
+        for (ArrayList<Food> foods : inFridgeItems) {
+            if (!foods.isEmpty()) {
+                for (Food f  : foods) {
+                    if (f.getType().equals(foodType)) {
+                        count++;
+                    }
+                }
+                if (count > 0) {
+                    return count;
+                }
+            }
+        }
+        return 0;
+    }
+
+
 }

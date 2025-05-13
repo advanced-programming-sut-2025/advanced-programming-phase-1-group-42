@@ -26,10 +26,11 @@ public abstract class GameBuilding extends Building {
     public abstract Result purchase(String productName, String count);
 
 
-    public boolean isInWorkingHours(int time) {
-        if(time > getHours().second() || time < getHours().first())
-            return false;
-        return true;
+    public boolean isInWorkingHours() {
+        if(App.getCurrentGame().getDateTime().getTime() < getHours().second()
+                || App.getCurrentGame().getDateTime().getTime() > getHours().first())
+            return true;
+        return false;
     }
 
     public GameBuilding(ArrayList<Tile> tiles, String name, NPC shopkeeper, Pair<Integer, Integer> hours,
