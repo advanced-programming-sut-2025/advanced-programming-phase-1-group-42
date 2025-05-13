@@ -38,7 +38,8 @@ public enum CraftingType implements GoodType {
                     ArtisanType.JUICE,
                     ArtisanType.MEAD,
                     ArtisanType.PALE_ALE,
-                    ArtisanType.WINE
+                    ArtisanType.WINE,
+                    ArtisanType.VINEGAR
             )
     )),
 
@@ -113,5 +114,7 @@ public enum CraftingType implements GoodType {
         return 0;
     }
 
-
+    public ArrayList<ArtisanType> getArtisanTypes() {
+        return artisanTypes;
+    }
 }

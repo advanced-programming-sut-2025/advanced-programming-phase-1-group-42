@@ -70,7 +70,7 @@ public enum ArtisanType implements GoodType {
 
     VINEGAR("Vinegar", "An aged fermented liquid used in many cooking recipes.", new Pair<>(0.0, 13), 10, new ArrayList<>(
             Arrays.asList(new Quadruple<>(FoodType.RICE, 1, 0.0, 100.0))
-    ), CraftingType.CASK),
+    ), CraftingType.KEG),
 
     COFFEE("Coffee", "It smells delicious. This is sure to give you a boost.", new Pair<>(0.0, 75), 2, new ArrayList<>(
             Arrays.asList(new Quadruple<>(FarmingCropType.COFFEE_BEAN, 5, 0.0, 150.0))

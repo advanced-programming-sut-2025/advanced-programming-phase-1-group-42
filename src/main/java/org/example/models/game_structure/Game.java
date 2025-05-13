@@ -6,6 +6,8 @@ import org.example.models.game_structure.weathers.Rain;
 import org.example.models.game_structure.weathers.Storm;
 import org.example.models.game_structure.weathers.Weather;
 import org.example.models.goods.Good;
+import org.example.models.goods.craftings.Crafting;
+import org.example.models.goods.craftings.CraftingType;
 import org.example.models.goods.farmings.FarmingCropType;
 import org.example.models.goods.farmings.FarmingTreeSapling;
 import org.example.models.goods.foragings.ForagingCrop;
@@ -209,9 +211,55 @@ public class Game {
             }
         }
 
+        Coordinate coordinate = App.getCurrentGame().getCurrentPlayer().getCoordinate();
+        for (Tile tile : map.getTiles()) {
+            for (Good good : tile.getGoods()) {
+                if(good instanceof Crafting crafting) {
+                    switch (crafting.getType()) {
+                        case CraftingType.SPRINKLER -> {
+                            for (int i = 0; i < 8; i += 2) {
+                                Coordinate coordinate1 = new Coordinate(coordinate.getX() + Coordinate.coordinates.get(i).getX(),
+                                        coordinate.getY() + Coordinate.coordinates.get(i).getY());
 
+                                Tile t = App.getCurrentGame().getMap().findTile(coordinate1);
+                                if(t != null) {
+                                    t.setWatered(true);
+                                }
+                            }
+                        }
+                        case CraftingType.QUALITY_SPRINKLER -> {
+                            for (int i = 0; i < 8; i += 1) {
+                                Coordinate coordinate1 = new Coordinate(coordinate.getX() + Coordinate.coordinates.get(i).getX(),
+                                        coordinate.getY() + Coordinate.coordinates.get(i).getY());
 
+                                Tile t = App.getCurrentGame().getMap().findTile(coordinate1);
+                                if(t != null) {
+                                    t.setWatered(true);
+                                }
+                            }
+                        }
+                        case CraftingType.IRIDIUM_SPRINKLER -> {
+                            for (int i = 0; i < 8; i += 1) {
+                                for (int j = 1; j <= 2; j++) {
+                                    Coordinate coordinate1 = new Coordinate(coordinate.getX() + j * Coordinate.coordinates.get(i).getX(),
+                                            coordinate.getY() + j * Coordinate.coordinates.get(i).getY());
 
+                                    Tile t = App.getCurrentGame().getMap().findTile(coordinate1);
+                                    if(t != null) {
+                                        t.setWatered(true);
+                                    }
+                                }
+                            }
+                        }
+                        case
+
+                        default -> {
+
+                        }
+                    }
+                }
+            }
+        }
 
 
         // Check weather
