@@ -24,7 +24,7 @@ public class GameMenu implements AppMenu {
         Matcher matcher;
 
         //game setting methods
-        if ((matcher = GameMenuCommands.NEW_GAME.matcher(input)).matches()) {
+        if ((matcher = GameMenuCommands.NEW_GAME.matcher(input)) != null) {
             ArrayList<String> usernames = new ArrayList<>();
 
             // اضافه کردن username_1 اگر وجود دارد
