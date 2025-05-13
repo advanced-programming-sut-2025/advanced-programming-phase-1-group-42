@@ -87,6 +87,8 @@ public class GameMenuController extends Controller {
     }
 
     private GoodType findCraft(String craftName) {
+        craftName = craftName.trim();
+
         for (FarmingCropType value : FarmingCropType.values()) {
             if (value.getName().equals(craftName)) {
                 return value;
@@ -304,6 +306,9 @@ public class GameMenuController extends Controller {
     // Parsa
     //Weather methods
     public Result cheatThunder(String x, String y) {
+        x = x.trim();
+        y = y.trim();
+
         int xInt = Integer.parseInt(x);
         int yInt = Integer.parseInt(y);
         App.getCurrentGame().getWeather().thunder(xInt, yInt);
@@ -319,6 +324,8 @@ public class GameMenuController extends Controller {
     }
 
     public Result cheatWeatherSet(String weather) {
+        weather = weather.trim();
+
         switch (weather) {
             case "Sunny":
                 App.getCurrentGame().cheatSetWeather(WeatherType.Sunny.getWeather());
@@ -361,6 +368,9 @@ public class GameMenuController extends Controller {
     //Parsa
     //Map methods
     public Result walk(String x, String y, Scanner scanner) {
+        x = x.trim();
+        y = y.trim();
+
         if (!x.matches("-?\\d+") || !y.matches("-?\\d+"))
             return new Result(false, "Invalid Coordinate input!");
 
@@ -411,6 +421,10 @@ public class GameMenuController extends Controller {
     }
 
     public Result printMap(String x, String y, String size) {
+        x = x.trim();
+        y = y.trim();
+        size = size.trim();
+
         int IntX = Integer.parseInt(x);
         int IntY = Integer.parseInt(y);
         int IntSize = Integer.parseInt(size);
@@ -439,6 +453,7 @@ public class GameMenuController extends Controller {
     }
 
     public Result cheatEnergySet(String value) {
+        value = value.trim();
 
         int valueInt = Integer.parseInt(value);
         App.getCurrentGame().getCurrentPlayer().getEnergy().increaseTurnEnergyLeft(valueInt);
@@ -454,6 +469,9 @@ public class GameMenuController extends Controller {
     }
 
     public Result inventoryTrashItem(String itemName, String number) {
+        itemName = itemName.trim();
+        number = number.trim();
+
         ArrayList<Good> goods = App.getCurrentGame().getCurrentPlayer().getInventory().isInInventory(itemName);
         if (goods == null)
             return new Result(false, "No good with name " + itemName + " found in your inventory!");
@@ -493,6 +511,8 @@ public class GameMenuController extends Controller {
     // Arani
     // Tools
     public Result toolsEquipment(String toolName) {
+        toolName = toolName.trim();
+
         boolean flag = false;
         for (ArrayList<Good> goods : App.getCurrentGame().getCurrentPlayer().getInventory().getList()) {
             if (!goods.isEmpty() && goods.getFirst().getName().equals(toolName) && goods.size() == 1) {
@@ -528,6 +548,8 @@ public class GameMenuController extends Controller {
     }
 
     public Result toolsUpgrade(String toolName) {
+        toolName = toolName.trim();
+
         Game game = App.getCurrentGame();
         if (!game.getMap().getBlackSmith().isInsideBuilding(game.getCurrentPlayer().getCoordinate()))
             return new Result(false, "You are not inside the BlackSmith Shop!");
@@ -546,6 +568,8 @@ public class GameMenuController extends Controller {
     }
 
     public Result toolsUse(String direction) {
+        direction = direction.trim();
+
         if (App.getCurrentGame().getCurrentPlayer().getInHandGood() instanceof Tool) {
             Tool tool = (Tool) App.getCurrentGame().getCurrentPlayer().getInHandGood();
             Coordinate coordinate = Coordinate.getDirection(direction);
@@ -568,6 +592,8 @@ public class GameMenuController extends Controller {
     // Arani
     // Craft Info
     public Result craftInfo(String craftName) {
+        craftName = craftName.trim();
+
         GoodType craft = findCraft(craftName);
         if (craft == null)
             return new Result(false, "Craft not found");
@@ -579,6 +605,9 @@ public class GameMenuController extends Controller {
     // Arani
     // Planting
     public Result plantSeed(String seed, String direction) {
+        seed = seed.trim();
+        direction = direction.trim();
+
         Coordinate coordinate = Coordinate.getDirection(direction);
         Tile tile = App.getCurrentGame().getCurrentPlayer().getFarm().checkInFarm(coordinate, App.getCurrentGame().getCurrentPlayer());
         if (tile == null)
@@ -618,7 +647,9 @@ public class GameMenuController extends Controller {
     }
 
     public Result showPlant(String x, String y) {
-        //TODO
+        x = x.trim();
+        y = y.trim();
+
         if (!x.matches("-?\\d+") || !y.matches("-?\\d+"))
             return new Result(false, "Invalid location format!");
 
@@ -644,6 +675,10 @@ public class GameMenuController extends Controller {
     }
 
     public Result fertilize(String fertilizerName, String direction) {
+
+        fertilizerName = fertilizerName.trim();
+        direction = direction.trim();
+
         Coordinate coordinate = Coordinate.getDirection(direction);
         Tile tile = App.getCurrentGame().getCurrentPlayer().getFarm().checkInFarm(coordinate,
                 App.getCurrentGame().getCurrentPlayer());
@@ -679,6 +714,8 @@ public class GameMenuController extends Controller {
     }
 
     public Result craftingCraft(String itemName) {
+        itemName = itemName.trim();
+
         for (CraftingRecipe craftingRecipe : App.getCurrentGame().getCurrentPlayer().getCraftingRecipes()) {
             if (craftingRecipe.getName().equals(itemName)) {
                 CraftingFunctions craftingFunctions = new CraftingFunctions();
@@ -690,6 +727,8 @@ public class GameMenuController extends Controller {
     }
 
     public Result placeItem(String itemName, String direction) {
+        itemName = itemName.trim();
+        direction = direction.trim();
 
         Good goodTemp = null;
         boolean found = false;
@@ -733,6 +772,10 @@ public class GameMenuController extends Controller {
 
 
     public Result cheatAddItem(String itemName, String count) {
+
+        itemName = itemName.trim();
+        count = count.trim();
+
         GoodType goodType = Good.newGoodType(itemName);
         if (goodType == null)
             return new Result(false, "An item with name '" + itemName + "' not found!");
@@ -754,6 +797,10 @@ public class GameMenuController extends Controller {
     // Nader
     // cooking methods
     public Result cookingRefrigerator(String status, String itemName) {
+
+        status = status.trim();
+        itemName = itemName.trim();
+
         Fridge fridge = App.getCurrentGame().getCurrentPlayer().getFridge();
         Inventory inventory = App.getCurrentGame().getCurrentPlayer().getInventory();
         Food item = null;
@@ -821,6 +868,8 @@ public class GameMenuController extends Controller {
     }
 
     public Result cookingPrepare(String recipeName) {
+        recipeName = recipeName.trim();
+
         CookingRecipe recipe = null;
         boolean found = false;
         boolean valid = false;
@@ -874,21 +923,20 @@ public class GameMenuController extends Controller {
     }
 
     public boolean checkCanCook(FoodType foodType, int requiredAmount) {
-        for (ArrayList<Good> good : App.getCurrentGame().getCurrentPlayer().getInventory().getList()) {
-            if (good.getFirst().getName().equalsIgnoreCase(foodType.getName())) {
-                return true;
-            }
+
+        if (App.getCurrentGame().getCurrentPlayer().getInventory().howManyInInventoryByType(foodType) >= requiredAmount) {
+            return true;
         }
-        for (ArrayList<Food> foods : App.getCurrentGame().getCurrentPlayer().getFridge().getInFridgeItems()) {
-            if (foods.getFirst().getName().equalsIgnoreCase(foodType.getName())) {
-                return true;
-            }
+        if (App.getCurrentGame().getCurrentPlayer().getFridge().howManyInFridge(foodType) >= requiredAmount) {
+            return true;
         }
+
         return false;
 
     }
 
     public Result eat(String foodName) {
+        foodName = foodName.trim();
         Good food = null;
         for (ArrayList<Good> goodArrayList : App.getCurrentGame().getCurrentPlayer().getInventory().getList()) {
             Iterator<Good> iterator = goodArrayList.iterator();
@@ -913,6 +961,10 @@ public class GameMenuController extends Controller {
     // Parsa
     // Animals & Fishing methods
     public Result buildBuilding(String buildingName, String x, String y) {
+        buildingName = buildingName.trim();
+        x = x.trim();
+        y = y.trim();
+
         CarpenterShop carpenterShop = (CarpenterShop) App.getCurrentGame().getMap().getCarpenterShop();
         if (!carpenterShop.isInWorkingHours()) {
             FarmBuildingTypes targetType = null;
@@ -969,6 +1021,9 @@ public class GameMenuController extends Controller {
     }
 
     public Result buyAnimal(String animalType, String animalName) {
+        animalType = animalType.trim();
+        animalName = animalName.trim();
+
         MarnieRanch marnieRanch = (MarnieRanch) App.getCurrentGame().getMap().getMarnieRanch();
         if (marnieRanch.isInWorkingHours()) {
             FarmBuildingTypes farmBuildingType = null;
@@ -1012,6 +1067,8 @@ public class GameMenuController extends Controller {
     }
 
     public Result petAnimal(String animalName) {
+        animalName = animalName.trim();
+
         Animal animal = App.getCurrentGame().getMap().findAnimalByName(animalName);
         if (abs(App.getCurrentGame().getCurrentPlayer().getCoordinate().getX() - animal.getCoordinate().getX()) <= 1 &&
                 abs(App.getCurrentGame().getCurrentPlayer().getCoordinate().getY() - animal.getCoordinate().getY()) <= 1) {
@@ -1028,6 +1085,9 @@ public class GameMenuController extends Controller {
     }
 
     public Result cheatSetAnimalFriendship(String animalName, String amount) {
+        animalName = animalName.trim();
+        animalName = animalName.trim();
+
         int amountInt = Integer.parseInt(amount);
         Animal animal = App.getCurrentGame().getMap().findAnimalByName(animalName);
         if (animal == null) {
@@ -1038,6 +1098,10 @@ public class GameMenuController extends Controller {
     }
 
     public Result shepherdAnimal(String animalName, String x, String y) {
+        animalName = animalName.trim();
+        x = x.trim();
+        y = y.trim();
+
         Animal animal = App.getCurrentGame().getMap().findAnimalByName(animalName);
         if (animal == null) {
             return new Result(false, "Animal not found");
@@ -1047,6 +1111,8 @@ public class GameMenuController extends Controller {
     }
 
     public Result feedHay(String animalName) {
+        animalName = animalName.trim();
+
         Animal animal = App.getCurrentGame().getMap().findAnimalByName(animalName);
         if (!App.getCurrentGame().getCurrentPlayer().getInventory().isInInventoryBoolean(ProductType.HAY)) {
             return new Result(false, "You don't have enough Hay");
@@ -1068,6 +1134,8 @@ public class GameMenuController extends Controller {
     }
 
     public Result collectProduct(String animalName) {
+        animalName = animalName.trim();
+
         Animal animal = App.getCurrentGame().getMap().findAnimalByName(animalName);
         if (animal == null) {
             return new Result(false, "Animal not found");
@@ -1083,6 +1151,8 @@ public class GameMenuController extends Controller {
     }
 
     public Result sellAnimal(String animalName) {
+        animalName = animalName.trim();
+
         Animal animal = App.getCurrentGame().getMap().findAnimalByName(animalName);
         if (animal == null) {
             return new Result(false, "Animal not found");
@@ -1099,6 +1169,8 @@ public class GameMenuController extends Controller {
     }
 
     public Result fishing(String fishingPole) {
+        fishingPole = fishingPole.trim();
+
         ToolType fishingPoleGood = ToolType.getTool(fishingPole);
         if (App.getCurrentGame().getCurrentPlayer().getInventory().isInInventory(fishingPole) == null) {
             return new Result(true, "You don't have this fishing pole");
@@ -1148,11 +1220,13 @@ public class GameMenuController extends Controller {
     // Nader
     // artisan methods
     public Result artisanUse(String artisanName) {
+        artisanName = artisanName.trim();
         //TODO
         return new Result(true, "");
     }
 
     public Result artisanGet(String artisanName) {
+        artisanName = artisanName.trim();
         //TODO
         return new Result(true, "");
     }
@@ -1186,6 +1260,9 @@ public class GameMenuController extends Controller {
     }
 
     public Result purchase(String productName, String count) {
+        productName = productName.trim();
+        count = count.trim();
+
         Coordinate coordinate = App.getCurrentGame().getCurrentPlayer().getCoordinate();
         Tile tile = App.getCurrentGame().getMap().findTile(App.getCurrentGame().getCurrentPlayer().getCoordinate());
         if (tile.getTileType() != TileType.GAME_BUILDING)
@@ -1199,12 +1276,17 @@ public class GameMenuController extends Controller {
     }
 
     public Result cheatAddDollars(String count) {
+        count = count.trim();
+
         int amount = Integer.parseInt(count);
         App.getCurrentGame().getCurrentPlayer().getWallet().increaseBalance(amount);
         return new Result(true, count + "G added to your wallet!");
     }
 
     public Result sell(String productName, String count) {
+        productName = productName.trim();
+        count = count.trim();
+
         ArrayList<Good> goods = App.getCurrentGame().getCurrentPlayer().getInventory().isInInventory(productName);
         if (goods == null)
             return new Result(false, "You don't have this good in your inventory!");
@@ -1260,6 +1342,9 @@ public class GameMenuController extends Controller {
     }
 
     public Result talk(String username, String message) {
+        username = username.trim();
+        message = message.trim();
+
         Player player = App.getCurrentGame().findPlayer(username);
         if (player == null) {
             return new Result(false, "Player not found!");
@@ -1300,17 +1385,24 @@ public class GameMenuController extends Controller {
     }
 
     public Result talkHistory(String username) {
+        username = username.trim();
+
         StringBuilder list = new StringBuilder();
         list.append("Talk History:\n");
         for (Pair<Player, String> talk : App.getCurrentGame().getCurrentPlayer().getTalkHistory()) {
-            list.append("\t<").append(talk.first().getUser().getUsername()).append("> ").append(talk.second()).append("\n");
-            list.append("\n");
+            if (talk.first().equals(username)){
+                list.append("\t<").append(talk.first().getUser().getUsername()).append("> ").append(talk.second()).append("\n");
+                list.append("\n");
+            }
         }
 
         return new Result(true, list.toString());
     }
 
     public Result gift(String username, String item, String amount) {
+        username = username.trim();
+        amount = amount.trim();
+
         Player player = App.getCurrentGame().findPlayer(username);
         if (player == null) {
             return new Result(false, "Player not found!");
@@ -1357,6 +1449,9 @@ public class GameMenuController extends Controller {
     }
 
     public Result giftRate(String giftNum, String rate) {
+        giftNum = giftNum.trim();
+        rate = rate.trim();
+
         int giftRate = Integer.parseInt(rate);
         int giftNumber = Integer.parseInt(giftNum);
 
@@ -1407,6 +1502,8 @@ public class GameMenuController extends Controller {
     }
 
     public Result giftHistory(String username) {
+        username = username.trim();
+
         StringBuilder list = new StringBuilder();
         list.append("Gifts History:\n");
         int ptr = 1;
@@ -1420,6 +1517,8 @@ public class GameMenuController extends Controller {
     }
 
     public Result hug(String username) {
+        username = username.trim();
+
         Player player = App.getCurrentGame().findPlayer(username);
         if (player == null) {
             return new Result(false, "Player not found!");
@@ -1454,6 +1553,8 @@ public class GameMenuController extends Controller {
     }
 
     public Result flower(String username) {
+        username = username.trim();
+
         Player player = App.getCurrentGame().findPlayer(username);
         if (player == null) {
             return new Result(false, "Player not found!");
@@ -1509,6 +1610,9 @@ public class GameMenuController extends Controller {
     }
 
     public Result askMarriage(String username, String ring) {
+        username = username.trim();
+        ring = ring.trim();
+
         Player player = App.getCurrentGame().findPlayer(username);
         Player mainPlayer = App.getCurrentGame().getCurrentPlayer();
 
@@ -1542,6 +1646,9 @@ public class GameMenuController extends Controller {
     }
 
     public Result respond(String status, String username) {
+        status = status.trim();
+        username = username.trim();
+
         Player player = App.getCurrentGame().findPlayer(username);
         Player mainPlayer = App.getCurrentGame().getCurrentPlayer();
         if (player == null)
@@ -1606,6 +1713,8 @@ public class GameMenuController extends Controller {
     // Nader
     // NPC methods
     public Result meetNPC(String npcName) {
+        npcName = npcName.trim();
+
         for (NPC npc : App.getCurrentGame().getNPCs()) {
             if (npc.getType().getName().equals(npcName)) {
                 if (abs(npc.getCordinate().getX() -
@@ -1624,6 +1733,9 @@ public class GameMenuController extends Controller {
     }
 
     public Result giftNPC(String npcName, String itemName) {
+        npcName = npcName.trim();
+        itemName = itemName.trim();
+
         Good good = null;
         boolean found = false;
         for (ArrayList<Good> goods : App.getCurrentGame().getCurrentPlayer().getInventory().getList()) {
@@ -1680,6 +1792,7 @@ public class GameMenuController extends Controller {
     }
 
     public Result questsFinish(String index) {
+        index = index.trim();
 
         int indexInt = Integer.parseInt(index);
         NPC targetNPC = null;

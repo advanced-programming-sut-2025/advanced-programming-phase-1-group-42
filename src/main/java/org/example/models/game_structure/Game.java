@@ -104,7 +104,7 @@ public class Game {
     public void gameFlow(){
 
         // Weather setups for next day
-        App.getCurrentGame().getDateTime().
+//        App.getCurrentGame().getDateTime().
         this.weather = tomorrow.getWeather();
         tomorrow.setWeather(weather);
         if(this.weather instanceof Storm){
