@@ -48,6 +48,7 @@ public enum CraftingType implements GoodType {
 
     private final String name;
     private final int sellPrice;
+
     CraftingType(String name, int sellPrice) {
         this.name = name;
         this.sellPrice = sellPrice;
@@ -61,10 +62,10 @@ public enum CraftingType implements GoodType {
         return sellPrice;
     }
 
+
+    //Crafts cant be eaten
     @Override
-    public int getEnergy() {
-        return 0;
-    }
+    public int getEnergy() {return -1;}
 
 
 }

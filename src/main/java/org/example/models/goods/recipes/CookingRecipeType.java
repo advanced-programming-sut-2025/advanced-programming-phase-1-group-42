@@ -171,9 +171,11 @@ public enum CookingRecipeType implements GoodType {
         return -1;
     }
 
+
+    //Check before merge
     @Override
     public String getName() {
-        return "";
+        return goodType.getName();
     }
 
 

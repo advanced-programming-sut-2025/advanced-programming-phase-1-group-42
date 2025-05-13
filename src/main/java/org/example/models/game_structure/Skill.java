@@ -18,7 +18,7 @@ public class Skill {
     public void increaseFarmingPoints(int value) {
         farmingPoints += value;
         if(farmingPoints == 150 || farmingPoints == 250 || farmingPoints == 350 || farmingPoints == 450) {
-            increaseCookingLevel();
+            increaseFarmingLevel();
         }
     }
     public void increaseCookingPoints(int value) {
@@ -30,19 +30,19 @@ public class Skill {
     public void increaseFishingPoints(int value) {
         fishingPoints += value;
         if(fishingPoints == 150 || fishingPoints == 250 || fishingPoints == 350 || fishingPoints == 450) {
-            increaseCookingLevel();
+            increaseFishingLevel();
         }
     }
     public void increaseMiningPoints(int value) {
         miningPoints += value;
         if(miningPoints == 150 || miningPoints == 250 || miningPoints == 350 || miningPoints == 450) {
-            increaseCookingLevel();
+            increaseMiningLevel();
         }
     }
     public void increaseForagingPoints(int value) {
         foragingPoints += value;
         if(foragingPoints == 150 || foragingPoints == 250 || foragingPoints == 350 || foragingPoints == 450) {
-            increaseCookingLevel();
+            increaseForagingLevel();
         }
     }
 

@@ -29,6 +29,7 @@ import org.example.models.interactions.Animals.Animal;
 import org.example.models.interactions.Animals.AnimalProduct;
 import org.example.models.interactions.Animals.AnimalTypes;
 import org.example.models.interactions.Gender;
+import org.example.models.interactions.GreenHouse;
 import org.example.models.interactions.NPCs.NPC;
 import org.example.models.goods.tools.Tool;
 import org.example.models.goods.tools.ToolFunctions;
@@ -612,6 +613,11 @@ public class GameMenuController extends Controller {
 
         if (tile.getTileType() != TileType.PLOWED_FARM && tile.getTileType() != TileType.GREEN_HOUSE)
             return new Result(false, "Selected Tile is not Plowed or GreenHouse for planting!");
+        if(tile.getTileType().equals(TileType.GREEN_HOUSE)){
+            if(App.getCurrentGame().getCurrentPlayer().getFarm().getGreenHouse().isAvailable()){
+                return new Result(false , "You haven't built your Green House yet")
+            }
+        }
 
         ArrayList<Good> seeds = App.getCurrentGame().getCurrentPlayer().getInventory().isInInventory(seed);
         if (seeds == null)
@@ -921,9 +927,11 @@ public class GameMenuController extends Controller {
         for (ArrayList<Good> goods : App.getCurrentGame().getCurrentPlayer().getInventory().getList()) {
             if (goods.getFirst().getName().equalsIgnoreCase(recipeName)) {
                 goods.add(food);
+                App.getCurrentGame().getCurrentPlayer().getSkill().increaseCookingPoints(10);
                 return new Result(true, "You put " + food.getName() + " into the inventory");
             } else if (goods.isEmpty()) {
                 goods.add(food);
+                App.getCurrentGame().getCurrentPlayer().getSkill().increaseCookingPoints(10);
                 return new Result(true, "You put " + food.getName() + " into the inventory");
             }
         }

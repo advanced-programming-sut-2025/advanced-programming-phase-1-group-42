@@ -54,9 +54,10 @@ public enum FarmingTreeSaplingType implements GoodType {
         return price;
     }
 
+    //Saplings can't be eaten
     @Override
     public int getEnergy() {
-        return 0;
+        return -1;
     }
 
     @Override
