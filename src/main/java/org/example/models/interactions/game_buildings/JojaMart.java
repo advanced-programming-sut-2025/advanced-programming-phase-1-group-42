@@ -35,12 +35,12 @@ public class JojaMart extends GameBuilding {
         this.products = new ArrayList<>();
         //Permanent Stock
         this.products.add(new ArrayList<>(Arrays.asList(
-                new Pair(ProductType.JOJA_MART, Integer.MAX_VALUE),
-                new Pair(ForagingSeedType.ANCIENT_SEEDS, 1),
-                new Pair(ProductType.GRASS_STARTER, Integer.MAX_VALUE),
-                new Pair(FoodType.SUGAR, Integer.MAX_VALUE),
-                new Pair(FoodType.WHEAT_FLOUR, Integer.MAX_VALUE),
-                new Pair(FoodType.RICE, Integer.MAX_VALUE)
+                new Pair<>(ProductType.JOJA_MART, Integer.MAX_VALUE),
+                new Pair<>(ForagingSeedType.ANCIENT_SEEDS, 1),
+                new Pair<>(ProductType.GRASS_STARTER, Integer.MAX_VALUE),
+                new Pair<>(FoodType.SUGAR, Integer.MAX_VALUE),
+                new Pair<>(FoodType.WHEAT_FLOUR, Integer.MAX_VALUE),
+                new Pair<>(FoodType.RICE, Integer.MAX_VALUE)
         )));
 
         // Spring Stock

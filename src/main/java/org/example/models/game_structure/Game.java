@@ -142,7 +142,7 @@ public class Game {
 
         App.getCurrentGame().getMap().Furtulize();
 
-        emptyShippingBin();
+        //emptyShippingBin();
 
         if(App.getCurrentGame().getDateTime().getDayOfSeason() == 1){
             App.getCurrentGame().getDateTime().farmingSeasonChange();

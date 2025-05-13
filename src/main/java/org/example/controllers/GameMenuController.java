@@ -615,7 +615,7 @@ public class GameMenuController extends Controller {
             return new Result(false, "Selected Tile is not Plowed or GreenHouse for planting!");
         if(tile.getTileType().equals(TileType.GREEN_HOUSE)){
             if(App.getCurrentGame().getCurrentPlayer().getFarm().getGreenHouse().isAvailable()){
-                return new Result(false , "You haven't built your Green House yet")
+                return new Result(false , "You haven't built your Green House yet");
             }
         }
 
