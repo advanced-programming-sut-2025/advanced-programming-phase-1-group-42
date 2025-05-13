@@ -12,14 +12,9 @@ import org.example.models.game_structure.Tile;
 import org.example.models.goods.Good;
 import org.example.models.goods.GoodLevel;
 import org.example.models.goods.GoodType;
-import org.example.models.goods.craftings.Crafting;
-import org.example.models.goods.farmings.Farming;
 import org.example.models.goods.farmings.FarmingTree;
-import org.example.models.goods.farmings.FarmingTreeSapling;
 import org.example.models.goods.farmings.FarmingTreeType;
-import org.example.models.goods.fishs.Fish;
 import org.example.models.goods.fishs.FishType;
-import org.example.models.goods.foods.Food;
 
 import org.example.models.goods.foragings.*;
 import org.example.models.goods.products.ProductType;

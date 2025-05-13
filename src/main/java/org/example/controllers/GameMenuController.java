@@ -87,6 +87,8 @@ public class GameMenuController extends Controller {
     }
 
     private GoodType findCraft(String craftName) {
+        craftName = craftName.trim();
+
         for (FarmingCropType value : FarmingCropType.values()) {
             if (value.getName().equals(craftName)) {
                 return value;
@@ -109,15 +111,15 @@ public class GameMenuController extends Controller {
                 Tile tile = new Tile(new Coordinate(i, j));
                 //Plain
                 tile.setTileType(TileType.PLAIN);
-                if(j >= 80 && j < 110 && i >= 110 && i < 140)
+                if (j >= 80 && j < 110 && i >= 110 && i < 140)
                     tile.setTileType(TileType.BEACH);
 
                 //Sea
-                if(i >= 140 && i < 150 && j >= 0 && j < 160)
+                if (i >= 140 && i < 150 && j >= 0 && j < 160)
                     tile.setTileType(TileType.WATER);
 
                 //Square
-                if(j >= 77 && j < 83 && ((i >= 30 && i < 35) || (i >= 105 && i < 110)))
+                if (j >= 77 && j < 83 && ((i >= 30 && i < 35) || (i >= 105 && i < 110)))
                     tile.setTileType(TileType.SQUARE);
 
                 // Road
@@ -130,14 +132,13 @@ public class GameMenuController extends Controller {
         }
 
 
-
         return tiles;
     }
 
     // Nader
     //game setting methods
     public Result newGame(ArrayList<String> usernames, Scanner scanner) {
-        if(usernames.isEmpty() || usernames.size() > 3)
+        if (usernames.isEmpty() || usernames.size() > 3)
             return new Result(false, "You have to add 1 to 3 Users to play with you in new game!");
 
         ArrayList<Player> players = new ArrayList<>();
@@ -153,12 +154,16 @@ public class GameMenuController extends Controller {
                     return new Result(false, username + " is already playing in other game!");
                 Player player = new Player(user);
                 players.add(player);
-                if(user.getUsername().equals(App.getCurrentUser().getUsername()))
+                if (user.getUsername().equals(App.getCurrentUser().getUsername()))
                     adminPlayer = player;
                 found = true;
             }
-            if(!found)
+            if (!found)
                 return new Result(false, "No player with username " + username + " found!");
+        }
+        for (int i = 0; i < 3 - usernames.size(); i++) {
+            players.add(new Player(new User("Guest" + i, null, "Guest" + i,
+                    null, null, 0, null)));
         }
 
         Director director = new Director();
@@ -188,7 +193,7 @@ public class GameMenuController extends Controller {
 
     public Result loadGame() {
         Game game = App.findGame(App.getCurrentUser());
-        if(game == null)
+        if (game == null)
             return new Result(false, "You have no game to load!");
 
         App.setCurrentGame(game);
@@ -301,6 +306,9 @@ public class GameMenuController extends Controller {
     // Parsa
     //Weather methods
     public Result cheatThunder(String x, String y) {
+        x = x.trim();
+        y = y.trim();
+
         int xInt = Integer.parseInt(x);
         int yInt = Integer.parseInt(y);
         App.getCurrentGame().getWeather().thunder(xInt, yInt);
@@ -316,6 +324,8 @@ public class GameMenuController extends Controller {
     }
 
     public Result cheatWeatherSet(String weather) {
+        weather = weather.trim();
+
         switch (weather) {
             case "Sunny":
                 App.getCurrentGame().cheatSetWeather(WeatherType.Sunny.getWeather());
@@ -358,6 +368,9 @@ public class GameMenuController extends Controller {
     //Parsa
     //Map methods
     public Result walk(String x, String y, Scanner scanner) {
+        x = x.trim();
+        y = y.trim();
+
         if (!x.matches("-?\\d+") || !y.matches("-?\\d+"))
             return new Result(false, "Invalid Coordinate input!");
 
@@ -367,7 +380,7 @@ public class GameMenuController extends Controller {
             return new Result(false, "Goal tile not found!");
 
         if (tile.getTileType() == TileType.GAME_BUILDING &&
-                !App.getCurrentGame().getMap().findGameBuilding(goal).isInWorkingHours(App.getCurrentGame().getDateTime().getTime())) {
+                !App.getCurrentGame().getMap().findGameBuilding(goal).isInWorkingHours()) {
             return new Result(false, App.getCurrentGame().getMap().findGameBuilding(goal).getName() + " hours have ended for today!");
         }
 
@@ -408,23 +421,27 @@ public class GameMenuController extends Controller {
     }
 
     public Result printMap(String x, String y, String size) {
+        x = x.trim();
+        y = y.trim();
+        size = size.trim();
+
         int IntX = Integer.parseInt(x);
         int IntY = Integer.parseInt(y);
         int IntSize = Integer.parseInt(size);
-        App.getCurrentGame().getMap().printMap(IntX,IntY,IntSize);
+        App.getCurrentGame().getMap().printMap(IntX, IntY, IntSize);
         return new Result(true, "");
     }
 
     public Result helpReadingMap() {
 
-        return new Result(true, " " + " -> " + "Tile don't exist\n"+
-                                                "F" + " -> " + "Farm\n"+
-                                                "W" + " -> " + "Water\n"+
-                                                "G" + " -> " + "Green House\n"+
-                                                "B" + " -> " + "Building\n"+
-                                                "R" + " -> " + "Road\n"+
-                                                "Q" + " -> " + "Quarry\n"+
-                                                "P" + " -> " + "Plain\n");
+        return new Result(true, " " + " -> " + "Tile don't exist\n" +
+                "F" + " -> " + "Farm\n" +
+                "W" + " -> " + "Water\n" +
+                "G" + " -> " + "Green House\n" +
+                "B" + " -> " + "Building\n" +
+                "R" + " -> " + "Road\n" +
+                "Q" + " -> " + "Quarry\n" +
+                "P" + " -> " + "Plain\n");
     }
 
     // Parsa
@@ -436,6 +453,7 @@ public class GameMenuController extends Controller {
     }
 
     public Result cheatEnergySet(String value) {
+        value = value.trim();
 
         int valueInt = Integer.parseInt(value);
         App.getCurrentGame().getCurrentPlayer().getEnergy().increaseTurnEnergyLeft(valueInt);
@@ -451,6 +469,9 @@ public class GameMenuController extends Controller {
     }
 
     public Result inventoryTrashItem(String itemName, String number) {
+        itemName = itemName.trim();
+        number = number.trim();
+
         ArrayList<Good> goods = App.getCurrentGame().getCurrentPlayer().getInventory().isInInventory(itemName);
         if (goods == null)
             return new Result(false, "No good with name " + itemName + " found in your inventory!");
@@ -490,6 +511,8 @@ public class GameMenuController extends Controller {
     // Arani
     // Tools
     public Result toolsEquipment(String toolName) {
+        toolName = toolName.trim();
+
         boolean flag = false;
         for (ArrayList<Good> goods : App.getCurrentGame().getCurrentPlayer().getInventory().getList()) {
             if (!goods.isEmpty() && goods.getFirst().getName().equals(toolName) && goods.size() == 1) {
@@ -525,6 +548,8 @@ public class GameMenuController extends Controller {
     }
 
     public Result toolsUpgrade(String toolName) {
+        toolName = toolName.trim();
+
         Game game = App.getCurrentGame();
         if (!game.getMap().getBlackSmith().isInsideBuilding(game.getCurrentPlayer().getCoordinate()))
             return new Result(false, "You are not inside the BlackSmith Shop!");
@@ -543,6 +568,8 @@ public class GameMenuController extends Controller {
     }
 
     public Result toolsUse(String direction) {
+        direction = direction.trim();
+
         if (App.getCurrentGame().getCurrentPlayer().getInHandGood() instanceof Tool) {
             Tool tool = (Tool) App.getCurrentGame().getCurrentPlayer().getInHandGood();
             Coordinate coordinate = Coordinate.getDirection(direction);
@@ -565,6 +592,8 @@ public class GameMenuController extends Controller {
     // Arani
     // Craft Info
     public Result craftInfo(String craftName) {
+        craftName = craftName.trim();
+
         GoodType craft = findCraft(craftName);
         if (craft == null)
             return new Result(false, "Craft not found");
@@ -576,6 +605,9 @@ public class GameMenuController extends Controller {
     // Arani
     // Planting
     public Result plantSeed(String seed, String direction) {
+        seed = seed.trim();
+        direction = direction.trim();
+
         Coordinate coordinate = Coordinate.getDirection(direction);
         Tile tile = App.getCurrentGame().getCurrentPlayer().getFarm().checkInFarm(coordinate, App.getCurrentGame().getCurrentPlayer());
         if (tile == null)
@@ -598,7 +630,7 @@ public class GameMenuController extends Controller {
         //mixed seed
         try {
             Good good = seeds.getLast();
-            if (good instanceof ForagingMixedSeed){
+            if (good instanceof ForagingMixedSeed) {
                 ForagingMixedSeedType type = (ForagingMixedSeedType) good.getType();
                 int random = (int) (Math.random() * type.getPossibleCrops().size());
                 ForagingSeedType crop = (ForagingSeedType) type.getPossibleCrops().get(random);
@@ -615,7 +647,9 @@ public class GameMenuController extends Controller {
     }
 
     public Result showPlant(String x, String y) {
-        //TODO
+        x = x.trim();
+        y = y.trim();
+
         if (!x.matches("-?\\d+") || !y.matches("-?\\d+"))
             return new Result(false, "Invalid location format!");
 
@@ -641,6 +675,10 @@ public class GameMenuController extends Controller {
     }
 
     public Result fertilize(String fertilizerName, String direction) {
+
+        fertilizerName = fertilizerName.trim();
+        direction = direction.trim();
+
         Coordinate coordinate = Coordinate.getDirection(direction);
         Tile tile = App.getCurrentGame().getCurrentPlayer().getFarm().checkInFarm(coordinate,
                 App.getCurrentGame().getCurrentPlayer());
@@ -676,6 +714,8 @@ public class GameMenuController extends Controller {
     }
 
     public Result craftingCraft(String itemName) {
+        itemName = itemName.trim();
+
         for (CraftingRecipe craftingRecipe : App.getCurrentGame().getCurrentPlayer().getCraftingRecipes()) {
             if (craftingRecipe.getName().equals(itemName)) {
                 CraftingFunctions craftingFunctions = new CraftingFunctions();
@@ -687,6 +727,8 @@ public class GameMenuController extends Controller {
     }
 
     public Result placeItem(String itemName, String direction) {
+        itemName = itemName.trim();
+        direction = direction.trim();
 
         Good goodTemp = null;
         boolean found = false;
@@ -730,6 +772,10 @@ public class GameMenuController extends Controller {
 
 
     public Result cheatAddItem(String itemName, String count) {
+
+        itemName = itemName.trim();
+        count = count.trim();
+
         GoodType goodType = Good.newGoodType(itemName);
         if (goodType == null)
             return new Result(false, "An item with name '" + itemName + "' not found!");
@@ -751,6 +797,10 @@ public class GameMenuController extends Controller {
     // Nader
     // cooking methods
     public Result cookingRefrigerator(String status, String itemName) {
+
+        status = status.trim();
+        itemName = itemName.trim();
+
         Fridge fridge = App.getCurrentGame().getCurrentPlayer().getFridge();
         Inventory inventory = App.getCurrentGame().getCurrentPlayer().getInventory();
         Food item = null;
@@ -818,6 +868,8 @@ public class GameMenuController extends Controller {
     }
 
     public Result cookingPrepare(String recipeName) {
+        recipeName = recipeName.trim();
+
         CookingRecipe recipe = null;
         boolean found = false;
         boolean valid = false;
@@ -871,21 +923,20 @@ public class GameMenuController extends Controller {
     }
 
     public boolean checkCanCook(FoodType foodType, int requiredAmount) {
-        for (ArrayList<Good> good : App.getCurrentGame().getCurrentPlayer().getInventory().getList()) {
-            if (good.getFirst().getName().equalsIgnoreCase(foodType.getName())) {
-                return true;
-            }
+
+        if (App.getCurrentGame().getCurrentPlayer().getInventory().howManyInInventoryByType(foodType) >= requiredAmount) {
+            return true;
         }
-        for (ArrayList<Food> foods : App.getCurrentGame().getCurrentPlayer().getFridge().getInFridgeItems()) {
-            if (foods.getFirst().getName().equalsIgnoreCase(foodType.getName())) {
-                return true;
-            }
+        if (App.getCurrentGame().getCurrentPlayer().getFridge().howManyInFridge(foodType) >= requiredAmount) {
+            return true;
         }
+
         return false;
 
     }
 
     public Result eat(String foodName) {
+        foodName = foodName.trim();
         Good food = null;
         for (ArrayList<Good> goodArrayList : App.getCurrentGame().getCurrentPlayer().getInventory().getList()) {
             Iterator<Good> iterator = goodArrayList.iterator();
@@ -910,99 +961,114 @@ public class GameMenuController extends Controller {
     // Parsa
     // Animals & Fishing methods
     public Result buildBuilding(String buildingName, String x, String y) {
-        CarpenterShop carpenterShop = (CarpenterShop) App.getCurrentGame().getMap().getCarpenterShop();
-        FarmBuildingTypes targetType = null;
-        for (FarmBuildingTypes type : carpenterShop.getProducts()) {
-            if (type.getName().equals(buildingName)) {
-                targetType = type;
-                break;
-            }
-        }
-        if (App.getCurrentGame().getCurrentPlayer().getWallet().getBalance() > targetType.getCost()) {
-            if (targetType.getWood() < App.getCurrentGame().getCurrentPlayer().getInventory()
-                    .howManyInInventoryByType(ProductType.WOOD) &&
-                    targetType.getStone() < App.getCurrentGame().getCurrentPlayer().getInventory()
-                            .howManyInInventoryByType(ProductType.STONE)) {
-                Coordinate coordinate = new Coordinate(Integer.parseInt(x), Integer.parseInt(y));
-                Coordinate startCoordinate = new Coordinate((int) Integer.parseInt(x) - targetType.getSize().first() / 2,
-                        (int) Integer.parseInt(y) - targetType.getSize().second() / 2);
+        buildingName = buildingName.trim();
+        x = x.trim();
+        y = y.trim();
 
-                boolean validSpace = true;
-                for (int sX = 0; sX < targetType.getSize().first(); sX++) {
-                    for (int sY = 0; sY < targetType.getSize().second(); sY++) {
-                        Tile tempTile = App.getCurrentGame().getMap().findTileByXY(sX + startCoordinate.getX(), sY + startCoordinate.getY());
-                        if (!(tempTile.getGoods().isEmpty() && tempTile.getTileType().equals(TileType.PLAIN))) {
-                            validSpace = false;
-                        }
-                    }
+        CarpenterShop carpenterShop = (CarpenterShop) App.getCurrentGame().getMap().getCarpenterShop();
+        if (!carpenterShop.isInWorkingHours()) {
+            FarmBuildingTypes targetType = null;
+            for (FarmBuildingTypes type : carpenterShop.getProducts()) {
+                if (type.getName().equals(buildingName)) {
+                    targetType = type;
+                    break;
                 }
-                if (validSpace) {
-                    return new Result(false, "You can't build this building here!");
-                } else {
-                    App.getCurrentGame().getCurrentPlayer().getInventory().removeItemsFromInventory(ProductType.WOOD, targetType.getWood());
-                    App.getCurrentGame().getCurrentPlayer().getInventory().removeItemsFromInventory(ProductType.STONE, targetType.getStone());
-                    App.getCurrentGame().getCurrentPlayer().getWallet().decreaseBalance(targetType.getCost());
-                    FarmBuilding newBuilding = carpenterShop.buildingFarmBuilding(targetType, startCoordinate);
-                    App.getCurrentGame().getCurrentPlayer().getFarm().getFarmBuildings().add(newBuilding);
+            }
+            if (App.getCurrentGame().getCurrentPlayer().getWallet().getBalance() > targetType.getCost()) {
+                if (targetType.getWood() < App.getCurrentGame().getCurrentPlayer().getInventory()
+                        .howManyInInventoryByType(ProductType.WOOD) &&
+                        targetType.getStone() < App.getCurrentGame().getCurrentPlayer().getInventory()
+                                .howManyInInventoryByType(ProductType.STONE)) {
+                    Coordinate coordinate = new Coordinate(Integer.parseInt(x), Integer.parseInt(y));
+                    Coordinate startCoordinate = new Coordinate((int) Integer.parseInt(x) - targetType.getSize().first() / 2,
+                            (int) Integer.parseInt(y) - targetType.getSize().second() / 2);
+
+                    boolean validSpace = true;
                     for (int sX = 0; sX < targetType.getSize().first(); sX++) {
                         for (int sY = 0; sY < targetType.getSize().second(); sY++) {
-                            App.getCurrentGame().getMap()
-                                    .findTileByXY(sX + startCoordinate.getX(), sY + startCoordinate.getY()).setTileType(TileType.GAME_BUILDING);
+                            Tile tempTile = App.getCurrentGame().getMap().findTileByXY(sX + startCoordinate.getX(), sY + startCoordinate.getY());
+                            if (!(tempTile.getGoods().isEmpty() && tempTile.getTileType().equals(TileType.PLAIN))) {
+                                validSpace = false;
+                            }
                         }
                     }
+                    if (validSpace) {
+                        return new Result(false, "You can't build this building here!");
+                    } else {
+                        App.getCurrentGame().getCurrentPlayer().getInventory().removeItemsFromInventory(ProductType.WOOD, targetType.getWood());
+                        App.getCurrentGame().getCurrentPlayer().getInventory().removeItemsFromInventory(ProductType.STONE, targetType.getStone());
+                        App.getCurrentGame().getCurrentPlayer().getWallet().decreaseBalance(targetType.getCost());
+                        FarmBuilding newBuilding = carpenterShop.buildingFarmBuilding(targetType, startCoordinate);
+                        App.getCurrentGame().getCurrentPlayer().getFarm().getFarmBuildings().add(newBuilding);
+                        for (int sX = 0; sX < targetType.getSize().first(); sX++) {
+                            for (int sY = 0; sY < targetType.getSize().second(); sY++) {
+                                App.getCurrentGame().getMap()
+                                        .findTileByXY(sX + startCoordinate.getX(), sY + startCoordinate.getY()).setTileType(TileType.GAME_BUILDING);
+                            }
+                        }
 
-                }
+                    }
 
 
-            } else return new Result(false, "You don't have enough Wood/Stone");
+                } else return new Result(false, "You don't have enough Wood/Stone");
 
-        } else {
-            return new Result(false, "You don't have enough Money");
+            } else {
+                return new Result(false, "You don't have enough Money");
+            }
         }
-
-        return new Result(true, "");
+        return new Result(false, "Store is not Open!\nWorking Time: " + carpenterShop.getHours().first()
+                + " ~ " + (carpenterShop.getHours().second()));
     }
 
     public Result buyAnimal(String animalType, String animalName) {
+        animalType = animalType.trim();
+        animalName = animalName.trim();
+
         MarnieRanch marnieRanch = (MarnieRanch) App.getCurrentGame().getMap().getMarnieRanch();
-        FarmBuildingTypes farmBuildingType = null;
-        FarmBuilding building = null;
-        AnimalTypes animalTypeEnum = null;
-        Animal animal = null;
-        boolean accepted = false;
-        for (AnimalTypes type : marnieRanch.animals) {
-            if (type.name().equals(animalType)) {
-                animalTypeEnum = type;
-                farmBuildingType = type.getFarmBuildingTypes();
-                if (App.getCurrentGame().getCurrentPlayer().getWallet().getBalance() > type.getPrice()) {
-                    for (FarmBuilding farmBuilding : App.getCurrentGame().getCurrentPlayer().getFarm().getFarmBuildings()) {
-                        if (farmBuilding.getType().equals(farmBuildingType)) {
-                            building = farmBuilding;
-                            accepted = true;
-                            break;
+        if (marnieRanch.isInWorkingHours()) {
+            FarmBuildingTypes farmBuildingType = null;
+            FarmBuilding building = null;
+            AnimalTypes animalTypeEnum = null;
+            Animal animal = null;
+            boolean accepted = false;
+            for (AnimalTypes type : marnieRanch.animals) {
+                if (type.name().equals(animalType)) {
+                    animalTypeEnum = type;
+                    farmBuildingType = type.getFarmBuildingTypes();
+                    if (App.getCurrentGame().getCurrentPlayer().getWallet().getBalance() > type.getPrice()) {
+                        for (FarmBuilding farmBuilding : App.getCurrentGame().getCurrentPlayer().getFarm().getFarmBuildings()) {
+                            if (farmBuilding.getType().equals(farmBuildingType)) {
+                                building = farmBuilding;
+                                accepted = true;
+                                break;
+                            }
                         }
                     }
                 }
             }
-        }
-        if (!accepted) {
-            return new Result(false, "You can't buy this animal");
-        } else {
-            App.getCurrentGame().getCurrentPlayer().getWallet().decreaseBalance(animalTypeEnum.getPrice());
-            animal = marnieRanch.buildAnimal(animalTypeEnum, animalName);
-            if (building.addAnimal(animal)) {
-                building.getAnimals().add(animal);
-                animal.setLocatedPLace(building);
-                App.getCurrentGame().getMap().allAnimals().add(animal);
+            if (!accepted) {
+                return new Result(false, "You can't buy this animal");
             } else {
-                return new Result(false, building.getName() + " is full");
-            }
+                App.getCurrentGame().getCurrentPlayer().getWallet().decreaseBalance(animalTypeEnum.getPrice());
+                animal = marnieRanch.buildAnimal(animalTypeEnum, animalName);
+                if (building.addAnimal(animal)) {
+                    building.getAnimals().add(animal);
+                    animal.setLocatedPLace(building);
+                    App.getCurrentGame().getMap().allAnimals().add(animal);
+                } else {
+                    return new Result(false, building.getName() + " is full");
+                }
 
+            }
+            return new Result(true, "A/An" + animalType + "has been added to your farm!");
         }
-        return new Result(true, "A/An" + animalType + "has been added to your farm!");
+        return new Result(false, "Store is not Open!\nWorking Time: " + marnieRanch.getHours().first()
+                + " ~ " + (marnieRanch.getHours().second()));
     }
 
     public Result petAnimal(String animalName) {
+        animalName = animalName.trim();
+
         Animal animal = App.getCurrentGame().getMap().findAnimalByName(animalName);
         if (abs(App.getCurrentGame().getCurrentPlayer().getCoordinate().getX() - animal.getCoordinate().getX()) <= 1 &&
                 abs(App.getCurrentGame().getCurrentPlayer().getCoordinate().getY() - animal.getCoordinate().getY()) <= 1) {
@@ -1019,6 +1085,9 @@ public class GameMenuController extends Controller {
     }
 
     public Result cheatSetAnimalFriendship(String animalName, String amount) {
+        animalName = animalName.trim();
+        animalName = animalName.trim();
+
         int amountInt = Integer.parseInt(amount);
         Animal animal = App.getCurrentGame().getMap().findAnimalByName(animalName);
         if (animal == null) {
@@ -1029,6 +1098,10 @@ public class GameMenuController extends Controller {
     }
 
     public Result shepherdAnimal(String animalName, String x, String y) {
+        animalName = animalName.trim();
+        x = x.trim();
+        y = y.trim();
+
         Animal animal = App.getCurrentGame().getMap().findAnimalByName(animalName);
         if (animal == null) {
             return new Result(false, "Animal not found");
@@ -1038,6 +1111,8 @@ public class GameMenuController extends Controller {
     }
 
     public Result feedHay(String animalName) {
+        animalName = animalName.trim();
+
         Animal animal = App.getCurrentGame().getMap().findAnimalByName(animalName);
         if (!App.getCurrentGame().getCurrentPlayer().getInventory().isInInventoryBoolean(ProductType.HAY)) {
             return new Result(false, "You don't have enough Hay");
@@ -1059,6 +1134,8 @@ public class GameMenuController extends Controller {
     }
 
     public Result collectProduct(String animalName) {
+        animalName = animalName.trim();
+
         Animal animal = App.getCurrentGame().getMap().findAnimalByName(animalName);
         if (animal == null) {
             return new Result(false, "Animal not found");
@@ -1074,6 +1151,8 @@ public class GameMenuController extends Controller {
     }
 
     public Result sellAnimal(String animalName) {
+        animalName = animalName.trim();
+
         Animal animal = App.getCurrentGame().getMap().findAnimalByName(animalName);
         if (animal == null) {
             return new Result(false, "Animal not found");
@@ -1090,19 +1169,21 @@ public class GameMenuController extends Controller {
     }
 
     public Result fishing(String fishingPole) {
+        fishingPole = fishingPole.trim();
+
         ToolType fishingPoleGood = ToolType.getTool(fishingPole);
-        if(App.getCurrentGame().getCurrentPlayer().getInventory().isInInventory(fishingPole) == null) {
+        if (App.getCurrentGame().getCurrentPlayer().getInventory().isInInventory(fishingPole) == null) {
             return new Result(true, "You don't have this fishing pole");
         }
         for (Coordinate coordinate : Coordinate.coordinates) {
-            Coordinate c = Coordinate.checkAround(App.getCurrentGame().getCurrentPlayer().getCoordinate() , coordinate);
+            Coordinate c = Coordinate.checkAround(App.getCurrentGame().getCurrentPlayer().getCoordinate(), coordinate);
             Tile tile = App.getCurrentGame().getMap().findTile(c);
-            if(tile.getTileType() == TileType.WATER){
+            if (tile.getTileType() == TileType.WATER) {
                 Weather weather = App.getCurrentGame().getWeather();
                 Skill skill = App.getCurrentGame().getCurrentPlayer().getSkill();
                 double chance = Math.random();
 
-                double numberOfFishes = Math.max(weather.getFishChance()*chance*(2 + skill.getFishingLevel()), 6);
+                double numberOfFishes = Math.max(weather.getFishChance() * chance * (2 + skill.getFishingLevel()), 6);
 
 
                 double poleRarityChange = 0;
@@ -1124,10 +1205,10 @@ public class GameMenuController extends Controller {
                 }
 
                 double rarityChance = Math.random();
-                double fishRarity = Math.max(((rarityChance*(2 + skill.getFishingLevel())*poleRarityChange)/ (7 - weather.getFishChance())) , 4);
+                double fishRarity = Math.max(((rarityChance * (2 + skill.getFishingLevel()) * poleRarityChange) / (7 - weather.getFishChance())), 4);
 
 
-                ToolFunctions.fish(fishingPoleGood ,numberOfFishes ,fishRarity);
+                ToolFunctions.fish(fishingPoleGood, numberOfFishes, fishRarity);
 
                 return new Result(true, "You've Caught a Fish");
             }
@@ -1139,11 +1220,13 @@ public class GameMenuController extends Controller {
     // Nader
     // artisan methods
     public Result artisanUse(String artisanName) {
+        artisanName = artisanName.trim();
         //TODO
         return new Result(true, "");
     }
 
     public Result artisanGet(String artisanName) {
+        artisanName = artisanName.trim();
         //TODO
         return new Result(true, "");
     }
@@ -1155,7 +1238,7 @@ public class GameMenuController extends Controller {
         Tile tile = App.getCurrentGame().getMap().findTile(coordinate);
         if (tile.getTileType() != TileType.GAME_BUILDING)
             return new Result(false, "You should be in a game building to show all products!");
-        if (!App.getCurrentGame().getMap().findGameBuilding(coordinate).isInWorkingHours(App.getCurrentGame().getDateTime().getTime())) {
+        if (!App.getCurrentGame().getMap().findGameBuilding(coordinate).isInWorkingHours()) {
             return new Result(false, App.getCurrentGame().getMap().findGameBuilding(coordinate).getName() + " hours have ended for today!");
         }
 
@@ -1168,7 +1251,7 @@ public class GameMenuController extends Controller {
         Tile tile = App.getCurrentGame().getMap().findTile(App.getCurrentGame().getCurrentPlayer().getCoordinate());
         if (tile.getTileType() != TileType.GAME_BUILDING)
             return new Result(false, "You should be in a game building to show all available products!");
-        if (!App.getCurrentGame().getMap().findGameBuilding(coordinate).isInWorkingHours(App.getCurrentGame().getDateTime().getTime())) {
+        if (!App.getCurrentGame().getMap().findGameBuilding(coordinate).isInWorkingHours()) {
             return new Result(false, App.getCurrentGame().getMap().findGameBuilding(coordinate).getName() + " hours have ended for today!");
         }
 
@@ -1177,11 +1260,14 @@ public class GameMenuController extends Controller {
     }
 
     public Result purchase(String productName, String count) {
+        productName = productName.trim();
+        count = count.trim();
+
         Coordinate coordinate = App.getCurrentGame().getCurrentPlayer().getCoordinate();
         Tile tile = App.getCurrentGame().getMap().findTile(App.getCurrentGame().getCurrentPlayer().getCoordinate());
         if (tile.getTileType() != TileType.GAME_BUILDING)
             return new Result(false, "You should be in a game building to purchase a product!");
-        if (!App.getCurrentGame().getMap().findGameBuilding(coordinate).isInWorkingHours(App.getCurrentGame().getDateTime().getTime())) {
+        if (!App.getCurrentGame().getMap().findGameBuilding(coordinate).isInWorkingHours()) {
             return new Result(false, App.getCurrentGame().getMap().findGameBuilding(coordinate).getName() + " hours have ended for today!");
         }
 
@@ -1190,21 +1276,26 @@ public class GameMenuController extends Controller {
     }
 
     public Result cheatAddDollars(String count) {
+        count = count.trim();
+
         int amount = Integer.parseInt(count);
         App.getCurrentGame().getCurrentPlayer().getWallet().increaseBalance(amount);
         return new Result(true, count + "G added to your wallet!");
     }
 
     public Result sell(String productName, String count) {
+        productName = productName.trim();
+        count = count.trim();
+
         ArrayList<Good> goods = App.getCurrentGame().getCurrentPlayer().getInventory().isInInventory(productName);
-        if(goods == null)
+        if (goods == null)
             return new Result(false, "You don't have this good in your inventory!");
 
-        if(!count.matches("-?\\d+") && !count.isEmpty())
+        if (!count.matches("-?\\d+") && !count.isEmpty())
             return new Result(false, "Invalid Quantity format!");
 
         int quantity = (count.isEmpty()) ? goods.size() : Integer.parseInt(count);
-        if(quantity > goods.size())
+        if (quantity > goods.size())
             return new Result(false, "You don't have enough number of this good in your inventory!");
 
         boolean flag = false;
@@ -1214,7 +1305,7 @@ public class GameMenuController extends Controller {
                     App.getCurrentGame().getCurrentPlayer().getCoordinate().getY() + Coordinate.coordinates.get(i).getY());
 
             Tile tile = App.getCurrentGame().getMap().findTile(coordinate);
-            if(tile != null && tile.findGood("ShippingBin") != null) {
+            if (tile != null && tile.findGood("ShippingBin") != null) {
                 ArrayList<Good> newGoods = new ArrayList<>(goods);
                 for (int j = 0; j < quantity; j++) {
                     newGoods.add(goods.getLast());
@@ -1228,7 +1319,7 @@ public class GameMenuController extends Controller {
             }
         }
 
-        if(flag)
+        if (flag)
             return new Result(true, quantity + " number of " + productName + " has been added to ShippingBin!");
         else
             return new Result(false, "No ShippingBin found around you!");
@@ -1251,6 +1342,9 @@ public class GameMenuController extends Controller {
     }
 
     public Result talk(String username, String message) {
+        username = username.trim();
+        message = message.trim();
+
         Player player = App.getCurrentGame().findPlayer(username);
         if (player == null) {
             return new Result(false, "Player not found!");
@@ -1291,17 +1385,24 @@ public class GameMenuController extends Controller {
     }
 
     public Result talkHistory(String username) {
+        username = username.trim();
+
         StringBuilder list = new StringBuilder();
         list.append("Talk History:\n");
         for (Pair<Player, String> talk : App.getCurrentGame().getCurrentPlayer().getTalkHistory()) {
-            list.append("\t<").append(talk.first().getUser().getUsername()).append("> ").append(talk.second()).append("\n");
-            list.append("\n");
+            if (talk.first().equals(username)){
+                list.append("\t<").append(talk.first().getUser().getUsername()).append("> ").append(talk.second()).append("\n");
+                list.append("\n");
+            }
         }
 
         return new Result(true, list.toString());
     }
 
     public Result gift(String username, String item, String amount) {
+        username = username.trim();
+        amount = amount.trim();
+
         Player player = App.getCurrentGame().findPlayer(username);
         if (player == null) {
             return new Result(false, "Player not found!");
@@ -1348,6 +1449,9 @@ public class GameMenuController extends Controller {
     }
 
     public Result giftRate(String giftNum, String rate) {
+        giftNum = giftNum.trim();
+        rate = rate.trim();
+
         int giftRate = Integer.parseInt(rate);
         int giftNumber = Integer.parseInt(giftNum);
 
@@ -1398,6 +1502,8 @@ public class GameMenuController extends Controller {
     }
 
     public Result giftHistory(String username) {
+        username = username.trim();
+
         StringBuilder list = new StringBuilder();
         list.append("Gifts History:\n");
         int ptr = 1;
@@ -1411,6 +1517,8 @@ public class GameMenuController extends Controller {
     }
 
     public Result hug(String username) {
+        username = username.trim();
+
         Player player = App.getCurrentGame().findPlayer(username);
         if (player == null) {
             return new Result(false, "Player not found!");
@@ -1445,6 +1553,8 @@ public class GameMenuController extends Controller {
     }
 
     public Result flower(String username) {
+        username = username.trim();
+
         Player player = App.getCurrentGame().findPlayer(username);
         if (player == null) {
             return new Result(false, "Player not found!");
@@ -1500,6 +1610,9 @@ public class GameMenuController extends Controller {
     }
 
     public Result askMarriage(String username, String ring) {
+        username = username.trim();
+        ring = ring.trim();
+
         Player player = App.getCurrentGame().findPlayer(username);
         Player mainPlayer = App.getCurrentGame().getCurrentPlayer();
 
@@ -1533,6 +1646,9 @@ public class GameMenuController extends Controller {
     }
 
     public Result respond(String status, String username) {
+        status = status.trim();
+        username = username.trim();
+
         Player player = App.getCurrentGame().findPlayer(username);
         Player mainPlayer = App.getCurrentGame().getCurrentPlayer();
         if (player == null)
@@ -1597,6 +1713,8 @@ public class GameMenuController extends Controller {
     // Nader
     // NPC methods
     public Result meetNPC(String npcName) {
+        npcName = npcName.trim();
+
         for (NPC npc : App.getCurrentGame().getNPCs()) {
             if (npc.getType().getName().equals(npcName)) {
                 if (abs(npc.getCordinate().getX() -
@@ -1615,6 +1733,9 @@ public class GameMenuController extends Controller {
     }
 
     public Result giftNPC(String npcName, String itemName) {
+        npcName = npcName.trim();
+        itemName = itemName.trim();
+
         Good good = null;
         boolean found = false;
         for (ArrayList<Good> goods : App.getCurrentGame().getCurrentPlayer().getInventory().getList()) {
@@ -1671,6 +1792,7 @@ public class GameMenuController extends Controller {
     }
 
     public Result questsFinish(String index) {
+        index = index.trim();
 
         int indexInt = Integer.parseInt(index);
         NPC targetNPC = null;

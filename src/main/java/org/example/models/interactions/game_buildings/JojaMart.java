@@ -52,7 +52,7 @@ public class JojaMart extends GameBuilding {
                 new Pair(ForagingSeedType.STRAWBERRY_SEEDS, 5),
                 new Pair(ForagingSeedType.TULIP_BULB, 5),
                 new Pair(ForagingSeedType.KALE_SEEDS, 5),
-                new Pair(ForagingSeedType.COFFEE_BEAN, 1),
+                new Pair(ForagingSeedType.COFFEE_BEAN_SEEDS, 1),
                 new Pair(ForagingSeedType.CARROT_SEEDS, 10),
                 new Pair(ForagingSeedType.RHUBARB_SEEDS, 5),
                 new Pair(ForagingSeedType.JAZZ_SEEDS, 5)
@@ -70,7 +70,7 @@ public class JojaMart extends GameBuilding {
                 new Pair(ForagingSeedType.POPPY_SEEDS, 5),
                 new Pair(ForagingSeedType.SPANGLE_SEEDS, 5),
                 new Pair(ForagingSeedType.STARFRUIT_SEEDS, 5),
-                new Pair(ForagingSeedType.COFFEE_BEAN, 1),
+                new Pair(ForagingSeedType.COFFEE_BEAN_SEEDS, 1),
                 new Pair(ForagingSeedType.SUNFLOWER_SEEDS, 5)
         )));
 

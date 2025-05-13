@@ -33,6 +33,7 @@ public class MarnieRanch extends GameBuilding {
         return getTiles(tiles, 45, 85);
     }
 
+
     public MarnieRanch(ArrayList<Tile> tiles) {
         super(tiles,
                 "MarineRanch",
