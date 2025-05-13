@@ -63,11 +63,14 @@ public class App {
     }
 
     public static void startGame() {
-        DBInteractor.loadUsers();
+        try {
+            DBInteractor.loadUsers();
+        } catch (Exception e) {
+            System.out.println("Oh-No! Something went wrong while loading users!");
+        }
         if (App.getCurrentUser() != null) {
             App.setCurrentMenu(Menu.MainMenu);
         }
-
     }
 
     public static ArrayList<Game> getGames() {
