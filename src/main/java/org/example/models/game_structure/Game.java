@@ -213,8 +213,15 @@ public class Game {
         }
 
 
-
-
+        // tree fruits
+        for (Tile tile : map.getTiles()) {
+            for (Good good : tile.getGoods()) {
+                if (good instanceof FarmingTree) {
+                    FarmingTree tree = (FarmingTree) good;
+                    tree.treeDayResult();
+                }
+            }
+        }
 
 
         // Check weather
