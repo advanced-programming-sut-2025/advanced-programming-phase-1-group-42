@@ -16,9 +16,11 @@ public class Farm {
     private ArrayList<Tile> lakes;
     private ArrayList<Tile> quarry;
     private int farmNumber;
+    private ShippingBin shippingBin;
 
     public Farm(int farmNumber, int playerNumber, ArrayList<Tile> tiles) {
         this.farmNumber = farmNumber;
+        this.shippingBin = null;
 
         for (int i = (playerNumber % 2) * 70; i < (playerNumber % 2 + 1) * 70; i++) {
             boolean flag = (i == 0 || (i + 1 == (playerNumber % 2 + 1) * 70));
@@ -219,10 +221,16 @@ public class Farm {
                 return tile;
             }
         }
+
+
         return null;
     }
 
     public ArrayList<FarmBuilding> getFarmBuildings() {
         return farmBuildings;
+    }
+
+    public void setShippingBin(ShippingBin shippingBin) {
+        this.shippingBin = shippingBin;
     }
 }

@@ -7,11 +7,13 @@ import org.example.models.interactions.Player;
 import java.util.ArrayList;
 import java.util.HashMap;
 
-public class ShippingBin extends Good{
+public class ShippingBin extends Good {
+    private final Coordinate coordinate;
     private final HashMap<Player, ArrayList<ArrayList<Good>>> list;
 
-    public ShippingBin() {
-        list = new HashMap<>();
+    public ShippingBin(Coordinate coordinate, HashMap<Player, ArrayList<ArrayList<Good>>> list) {
+        this.coordinate = coordinate;
+        this.list = list;
     }
 
     public void addGood(ArrayList<Good> addingGood, Player player) {
@@ -44,6 +46,10 @@ public class ShippingBin extends Good{
             }
             player.getWallet().increaseBalance(totalSellPrice);
         }
+    }
+
+    public HashMap<Player, ArrayList<ArrayList<Good>>> getList() {
+        return list;
     }
 
     @Override

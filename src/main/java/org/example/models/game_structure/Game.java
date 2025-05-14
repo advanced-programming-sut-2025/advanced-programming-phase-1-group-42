@@ -6,6 +6,8 @@ import org.example.models.game_structure.weathers.Rain;
 import org.example.models.game_structure.weathers.Storm;
 import org.example.models.game_structure.weathers.Weather;
 import org.example.models.goods.Good;
+import org.example.models.goods.craftings.Crafting;
+import org.example.models.goods.craftings.CraftingType;
 import org.example.models.goods.farmings.FarmingCropType;
 import org.example.models.goods.farmings.FarmingTreeSapling;
 import org.example.models.goods.foragings.ForagingCrop;
@@ -36,7 +38,7 @@ public class Game {
     private Map map = null;
     private Player currentPlayingPlayer;
     private final ArrayList<NPC> NPCs = new ArrayList<>();
-    private int counter = 1;
+    private int counter = 0;
 
     public void setPlayers(ArrayList<Player> players) {
         this.players.addAll(players);
@@ -72,12 +74,13 @@ public class Game {
             counter = 0;
             this.dateTime.timeFlow();
         }
-
         if(players.get(counter).getEnergy().isAwake()) {
             currentPlayer = players.get(counter);
         } else {
             nextPlayer();
         }
+
+
     }
 
     public Map getMap() {
@@ -94,7 +97,6 @@ public class Game {
 
     public void cheatSetWeather(Weather weather) {
         tomorrow.setWeather(weather);
-        System.out.println("Tomorrow's weather has been set to " + weather.getName());
     }
 
     public Tomorrow getTomorrow() {
@@ -104,10 +106,16 @@ public class Game {
     public void gameFlow(){
 
         // Weather setups for next day
+        App.getCurrentGame().getDateTime().setTime(9);
         this.weather = tomorrow.getWeather();
         tomorrow.setWeather(weather);
-        tomorrow.setTomorrowWeather(App.getCurrentGame());
-
+        if(this.weather instanceof Storm){
+            ((Storm) this.weather).randomThunder();
+            ((Storm) this.weather).waterAllTiles();
+        }
+        if(this.weather instanceof Rain){
+            ((Rain) this.weather).waterAllTiles();
+        }
         for(Player player : App.getCurrentGame().getPlayers()){
             if(player.getRejectionBuff() != null){
                 player.getRejectionBuff().setRemainEffectTime();
@@ -116,17 +124,11 @@ public class Game {
                 }
                 player.getEnergy().setTurnValueLeft(50);
                 player.getEnergy().setDayEnergyLeft(100);
-                if(!player.getEnergy().isAwake()){
-                    player.getEnergy().setAwake(true);
-                    player.getEnergy().setDayEnergyLeft(75);
-                }
+                player.getEnergy().setAwake(true);
             } else {
                 player.getEnergy().setTurnValueLeft(50);
                 player.getEnergy().setDayEnergyLeft(200);
-                if(!player.getEnergy().isAwake()){
-                    player.getEnergy().setAwake(true);
-                    player.getEnergy().setDayEnergyLeft(75);
-                }
+                player.getEnergy().setAwake(true);
             }
         }
 
@@ -137,7 +139,9 @@ public class Game {
 
         App.getCurrentGame().getMap().Furtulize();
 
-        //emptyShippingBin();
+        for (ShippingBin shippingBin : App.getCurrentGame().getMap().getShippingBins()) {
+            shippingBin.emptyShippingBin();
+        }
 
         if(App.getCurrentGame().getDateTime().getDayOfSeason() == 1){
             App.getCurrentGame().getDateTime().farmingSeasonChange();
@@ -207,13 +211,50 @@ public class Game {
             }
         }
 
-
-        // tree fruits
+        Coordinate coordinate = App.getCurrentGame().getCurrentPlayer().getCoordinate();
         for (Tile tile : map.getTiles()) {
             for (Good good : tile.getGoods()) {
-                if (good instanceof FarmingTree) {
-                    FarmingTree tree = (FarmingTree) good;
-                    tree.treeDayResult();
+                if(good instanceof Crafting crafting) {
+                    switch (crafting.getType()) {
+                        case CraftingType.SPRINKLER -> {
+                            for (int i = 0; i < 8; i += 2) {
+                                Coordinate coordinate1 = new Coordinate(coordinate.getX() + Coordinate.coordinates.get(i).getX(),
+                                        coordinate.getY() + Coordinate.coordinates.get(i).getY());
+
+                                Tile t = App.getCurrentGame().getMap().findTile(coordinate1);
+                                if(t != null) {
+                                    t.setWatered(true);
+                                }
+                            }
+                        }
+                        case CraftingType.QUALITY_SPRINKLER -> {
+                            for (int i = 0; i < 8; i += 1) {
+                                Coordinate coordinate1 = new Coordinate(coordinate.getX() + Coordinate.coordinates.get(i).getX(),
+                                        coordinate.getY() + Coordinate.coordinates.get(i).getY());
+
+                                Tile t = App.getCurrentGame().getMap().findTile(coordinate1);
+                                if(t != null) {
+                                    t.setWatered(true);
+                                }
+                            }
+                        }
+                        case CraftingType.IRIDIUM_SPRINKLER -> {
+                            for (int i = 0; i < 8; i += 1) {
+                                for (int j = 1; j <= 2; j++) {
+                                    Coordinate coordinate1 = new Coordinate(coordinate.getX() + j * Coordinate.coordinates.get(i).getX(),
+                                            coordinate.getY() + j * Coordinate.coordinates.get(i).getY());
+
+                                    Tile t = App.getCurrentGame().getMap().findTile(coordinate1);
+                                    if(t != null) {
+                                        t.setWatered(true);
+                                    }
+                                }
+                            }
+                        }
+                        default -> {
+
+                        }
+                    }
                 }
             }
         }
@@ -287,7 +328,6 @@ public class Game {
                         }
                     }
                 }
-
             }
         }
     }

@@ -10,6 +10,7 @@ public class Artisan extends Good {
 
     private Pair<GoodType, Integer> ingredients;
     private ArtisanType artisanType;
+    private GoodType goodType;
 
     public Artisan(ArtisanType artisanType) {
         this.artisanType = artisanType;
@@ -21,7 +22,7 @@ public class Artisan extends Good {
     }
 
     public int getEnergy() {
-        return artisanType.getEnergy();
+        return artisanType.getEnergy(this.goodType);
     }
 
     public ArtisanType getType() {
@@ -30,9 +31,10 @@ public class Artisan extends Good {
 
     @Override
     public int getSellPrice() {
-//        return this.artisanType.getSellPrice(ingredients);
-        return 0;
+        return artisanType.getSellPrice(this.goodType);
     }
 
-
+    public void setGoodType(GoodType goodType) {
+        this.goodType = goodType;
+    }
 }
