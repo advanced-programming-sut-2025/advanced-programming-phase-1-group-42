@@ -10,10 +10,9 @@ public enum GameMenuCommands implements Command {
 
     //Nader
     // Game Commands
-    ShowCurrentMenu("\\s*show\\s+current\\s+menu\\s*"),
-
-    NEW_GAME("\\s*game\\s*new\\s-u\\s(?<username_1>\\S+)\\s(?<username_2>\\S+)\\s(?<username_3>\\S+)\\s*"),
-    GAME_MAP("\\s*game\\s*map\\s(?<farm_number>\\S+)\\s*"),
+//    NEW_GAME("\\s*game\\s*new\\s-u\\s(?<username_1>\\S+)\\s(?<username_2>\\S+)\\s(?<username_3>\\S+)\\s*"),
+    NEW_GAME("\\s*game\\s+new\\s-u\\s(?<username1>\\S+)\\s(?<username2>\\S+)\\s(?<username3>\\S+)\\s*"),
+    GAME_MAP("\\s*game\\s*map\\s(?<farmNumber>\\S+)\\s*"),
     LOAD_GAME("\\s*load\\s*game\\s*"),
     EXIT_GAME("\\s*exit\\s*game\\s*"),
     NEXT_TURN("\\s*next\\s*turn\\s*"),

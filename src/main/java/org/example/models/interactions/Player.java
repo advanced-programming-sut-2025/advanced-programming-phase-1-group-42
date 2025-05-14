@@ -78,6 +78,10 @@ public class Player {
         this.inHandGood = null;
         this.buff = null;
         this.rejectionBuff = null;
+
+    }
+
+    public void iniFreindships() {
         for (Player player : App.getCurrentGame().getPlayers()) {
             if(player != this) {
                 friendShips.put(player, new Pair<>(0, 0));

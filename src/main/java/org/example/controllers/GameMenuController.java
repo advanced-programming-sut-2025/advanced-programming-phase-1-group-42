@@ -66,14 +66,14 @@ public class GameMenuController extends Controller {
             while (true) {
                 input = scanner.nextLine();
                 if ((matcher = GameMenuCommands.GAME_MAP.matcher(input)) == null ||
-                        !matcher.group("farm_number").matches("\\d") ||
-                        Integer.parseInt(matcher.group("farm_number")) > 2 ||
-                        Integer.parseInt(matcher.group("farm_number")) < 1) {
+                        !matcher.group("farmNumber").matches("\\s*\\d\\s*") ||
+                        Integer.parseInt(matcher.group("farmNumber")) > 2 ||
+                        Integer.parseInt(matcher.group("farmNumber")) < 1) {
                     System.out.println("Invalid command for choosing your map, Please try again!");
                     continue;
                 }
 
-                int mapNumber = Integer.parseInt(matcher.group("farm_number"));
+                int mapNumber = Integer.parseInt(matcher.group("farmNumber"));
                 Farm farm = new Farm(mapNumber, ptr, tiles);
                 player.setFarm(farm);
                 farms.add(farm);
@@ -104,7 +104,7 @@ public class GameMenuController extends Controller {
     private ArrayList<Tile> createTiles() {
         ArrayList<Tile> tiles = new ArrayList<>();
 
-        for (int i = 0; i < 140; i++) {
+        for (int i = 0; i < 150; i++) {
             for (int j = 0; j < 160; j++) {
                 Tile tile = new Tile(new Coordinate(i, j));
                 //Plain
@@ -125,7 +125,6 @@ public class GameMenuController extends Controller {
 
 
                 tiles.add(tile);
-
             }
         }
 
@@ -187,6 +186,9 @@ public class GameMenuController extends Controller {
 
         App.setCurrentGame(game);
         App.getGames().add(game);
+        for (Player player : players) {
+            player.iniFreindships();
+        }
         return new Result(true, "New game has successfully created & loaded!");
     }
 

@@ -27,26 +27,28 @@ public class GameMenu implements AppMenu {
         if ((matcher = GameMenuCommands.NEW_GAME.matcher(input)) != null) {
             ArrayList<String> usernames = new ArrayList<>();
 
-            // اضافه کردن username_1 اگر وجود دارد
-            if (matcher.group("username_1") != null) {
-                usernames.add(matcher.group("username_1"));
-            }
+            try {
 
-            // اضافه کردن username_2 اگر وجود دارد
-            if (matcher.group("username_2") != null) {
-                usernames.add(matcher.group("username_2"));
-            }
+                // اضافه کردن username_1 اگر وجود دارد
+                if (matcher.group("username1") != null) {
+                    usernames.add(matcher.group("username1"));
+                }
 
-            // اضافه کردن username_3 اگر وجود دارد
-            if (matcher.group("username_3") != null) {
-                usernames.add(matcher.group("username_3"));
+                // اضافه کردن username_2 اگر وجود دارد
+                if (matcher.group("username2") != null) {
+                    usernames.add(matcher.group("username2"));
+                }
+
+                // اضافه کردن username_3 اگر وجود دارد
+                if (matcher.group("username3") != null) {
+                    usernames.add(matcher.group("username3"));
+                }
+            } catch (Exception e) {
+                System.out.println("meow");
             }
 
             System.out.print(controller.newGame(usernames, scanner));
-        }
-//        } else if ((matcher = GameMenuCommands.GAME_MAP.matcher(input)) != null) {
-//            System.out.println(controller.farmGame(matcher.group("farm_number"), scanner));
-        else if ((matcher = GameMenuCommands.LOAD_GAME.matcher(input)) != null) {
+        } else if ((matcher = GameMenuCommands.LOAD_GAME.matcher(input)) != null) {
             System.out.println(controller.loadGame());
         }
 
