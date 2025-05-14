@@ -7,6 +7,7 @@ import org.example.models.game_structure.Coordinate;
 import org.example.models.game_structure.Tile;
 import org.example.models.goods.Good;
 import org.example.models.goods.GoodType;
+import org.example.models.goods.craftings.CraftingType;
 import org.example.models.goods.foods.FoodType;
 import org.example.models.goods.foragings.ForagingSeedType;
 import org.example.models.goods.products.ProductType;
@@ -37,7 +38,7 @@ public class JojaMart extends GameBuilding {
         this.products.add(new ArrayList<>(Arrays.asList(
                 new Pair<>(ProductType.JOJA_MART, Integer.MAX_VALUE),
                 new Pair<>(ForagingSeedType.ANCIENT_SEEDS, 1),
-                new Pair<>(ProductType.GRASS_STARTER, Integer.MAX_VALUE),
+                new Pair<>(CraftingType.GRASS_STARTER, Integer.MAX_VALUE),
                 new Pair<>(FoodType.SUGAR, Integer.MAX_VALUE),
                 new Pair<>(FoodType.WHEAT_FLOUR, Integer.MAX_VALUE),
                 new Pair<>(FoodType.RICE, Integer.MAX_VALUE)
