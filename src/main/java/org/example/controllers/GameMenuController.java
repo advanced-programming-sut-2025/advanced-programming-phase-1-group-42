@@ -1408,17 +1408,21 @@ public class GameMenuController extends Controller {
         if (player == null) {
             return new Result(false, "Player not found!");
         }
-
+        
         if (App.getCurrentGame().getCurrentPlayer().getCoordinate().distance(player.getCoordinate()) > 1)
             return new Result(false, "You should be neighbor to " + username + " for talking!");
 
-        player.getTalkHistory().add(new Pair<>(App.getCurrentGame().getCurrentPlayer(),
-                dateTime().message() + ": " + message));
-        App.getCurrentGame().getCurrentPlayer().getTalkHistory().add(new Pair<>(App.getCurrentGame().getCurrentPlayer(),
-                dateTime().message() + ": " + message));
+        player.getTalkHistory().add(new Pair<>(
+                App.getCurrentGame().getCurrentPlayer(),
+                dateTime().message() + ": " + message
+        ));
 
-        if (!App.getCurrentGame().getCurrentPlayer().getIsInteracted().get(player)) {
+        App.getCurrentGame().getCurrentPlayer().getTalkHistory().add(new Pair<>(
+                player,
+                dateTime().message() + ": " + message
+        ));
 
+        if (App.getCurrentGame().getCurrentPlayer().getIsInteracted().get(player).equals(false)) {
 
             // If they are couple
             if (App.getCurrentGame().getCurrentPlayer().getMarried() == player) {
@@ -1449,9 +1453,9 @@ public class GameMenuController extends Controller {
         StringBuilder list = new StringBuilder();
         list.append("Talk History:\n");
         for (Pair<Player, String> talk : App.getCurrentGame().getCurrentPlayer().getTalkHistory()) {
-            if (talk.first().equals(username)){
-                list.append("\t<").append(talk.first().getUser().getUsername()).append("> ").append(talk.second()).append("\n");
-                list.append("\n");
+            if (talk.first().getPlayerUsername().equals(username)){
+                list.append("\t<").append(talk.first().getUser().getUsername()).append("> ")
+                        .append(talk.second()).append("\n");
             }
         }
 
