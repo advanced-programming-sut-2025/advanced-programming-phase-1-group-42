@@ -65,10 +65,13 @@ public class Map {
                 Coordinate coordinate = new Coordinate(x + i,y + j);
                 Tile tile = findTile(coordinate);
 
+                int counter = 0;
+
                 Outer:
                 for(Player player: App.getCurrentGame().getPlayers()) {
+                    counter++;
                     if (player.getCoordinate().equals(coordinate)) {
-                        System.out.print(colorMap.get("Purple") + colorMap.get("Red_Background") + "P" + colorMap.get("Reset"));
+                        System.out.print(colorMap.get("Purple") + colorMap.get("Red_Background") + counter + colorMap.get("Reset"));
                         break Outer;
                     }
 
