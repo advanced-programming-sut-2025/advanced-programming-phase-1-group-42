@@ -92,20 +92,22 @@ public class Player {
     }
 
     // Function for eat
-    public void eat(Food food) {
-        App.getCurrentGame().getCurrentPlayer().getEnergy().increaseTurnEnergyLeft(food.getEnergy());
-        FoodType type = (FoodType) food.getType();
-        Buff currentBuff = type.getBuff();
+    public void eat(Good food) {
+        App.getCurrentGame().getCurrentPlayer().getEnergy().increaseTurnEnergyLeft(Good.newGoodType(food.getName()).getEnergy());
+        if (food instanceof Food) {
+            FoodType type = (FoodType) food.getType();
+            Buff currentBuff = type.getBuff();
+            if(currentBuff.getType().equals(BuffType.ENERGY_BUFF)) {
+                App.getCurrentGame().getCurrentPlayer().getEnergy().increaseTurnEnergyLeft(currentBuff.getEffect());
+                App.getCurrentGame().getCurrentPlayer().getEnergy().setMaxDayEnergy(200 + currentBuff.getEffect());
+            }
+            if(!App.getCurrentGame().getCurrentPlayer().getBuff().getType().equals(BuffType.ENERGY_BUFF)) {
+                App.getCurrentGame().getCurrentPlayer().getEnergy().setMaxDayEnergy(200);
+            }
+            App.getCurrentGame().getCurrentPlayer().setBuff(currentBuff);
 
-        if(currentBuff.getType().equals(BuffType.ENERGY_BUFF)) {
-            App.getCurrentGame().getCurrentPlayer().getEnergy().increaseTurnEnergyLeft(currentBuff.getEffect());
-            App.getCurrentGame().getCurrentPlayer().getEnergy().setMaxDayEnergy(200 + currentBuff.getEffect());
         }
-        if(!App.getCurrentGame().getCurrentPlayer().getBuff().getType().equals(BuffType.ENERGY_BUFF)) {
-            App.getCurrentGame().getCurrentPlayer().getEnergy().setMaxDayEnergy(200);
-        }
-        App.getCurrentGame().getCurrentPlayer().setBuff(currentBuff);
-
+        App.getCurrentGame().getCurrentPlayer().getInventory().removeItemsFromInventory(food.getType(),1);
     }
 
     public Inventory getInventory() {

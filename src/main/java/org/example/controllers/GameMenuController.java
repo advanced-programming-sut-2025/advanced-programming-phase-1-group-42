@@ -15,7 +15,9 @@ import org.example.models.game_structure.*;
 import org.example.models.game_structure.weathers.Weather;
 import org.example.models.goods.Good;
 import org.example.models.goods.GoodType;
+import org.example.models.goods.artisans.Artisan;
 import org.example.models.goods.artisans.ArtisanFunctions;
+import org.example.models.goods.farmings.FarmingCrop;
 import org.example.models.goods.farmings.FarmingCropType;
 import org.example.models.goods.farmings.FarmingTree;
 import org.example.models.goods.farmings.FarmingTreeSapling;
@@ -492,7 +494,7 @@ public class GameMenuController extends Controller {
         App.getCurrentGame().getCurrentPlayer().getEnergy().setMaxTurnEnergy(Integer.MAX_VALUE);
         App.getCurrentGame().getCurrentPlayer().getEnergy().setTurnValueLeft(Integer.MAX_VALUE);
         App.getCurrentGame().getCurrentPlayer().getEnergy().setDayEnergyLeft(Integer.MAX_VALUE);
-        return new Result(true, "");
+        return new Result(true, "Energy set to Unlimited");
     }
 
     public Result inventoryTrashItem(String itemName, String number) {
@@ -826,19 +828,19 @@ public class GameMenuController extends Controller {
 
         GoodType goodType = Good.newGoodType(itemName);
         if (goodType == null)
-            return new Result(false, "An item with name '" + itemName + "' not found!");
+            return new Result(false, "An item with name '" + itemName + "' not found!\n");
 
         if (!count.matches("-?\\d+"))
-            return new Result(false, "Invalid number format!");
+            return new Result(false, "Invalid number format!\n");
 
         Player player = App.getCurrentGame().getCurrentPlayer();
         if (player.getInventory().isInInventory(goodType) == null && player.getInventory().isFull())
-            return new Result(false, "Your inventory is full!");
+            return new Result(false, "Your inventory is full!\n");
 
         ArrayList<Good> newGoods = Good.newGoods(goodType, Integer.parseInt(count));
         player.getInventory().addGood(newGoods);
 
-        return new Result(true, "You have added (" + count + ") "+ itemName + " to the inventory!");
+        return new Result(true, "You have added (" + count + ") "+ itemName + " to the inventory!\n");
     }
 
 
@@ -1003,7 +1005,16 @@ public class GameMenuController extends Controller {
         if (food == null) {
             return new Result(false, "This item is not eatable!");
         }
-        App.getCurrentGame().getCurrentPlayer().eat((Food) food);
+
+        if (food instanceof FarmingCrop ) {
+            App.getCurrentGame().getCurrentPlayer().eat(food);
+        } else if (food instanceof Artisan) {
+            App.getCurrentGame().getCurrentPlayer().eat(food);
+        } else if (food instanceof Food) {
+            App.getCurrentGame().getCurrentPlayer().eat(food);
+        } else {
+            return new Result(false, "NO NO! What are you trying to eat MMD Jan?");
+        }
         return new Result(true, "Khosmaz, Yum Yum!");
     }
 

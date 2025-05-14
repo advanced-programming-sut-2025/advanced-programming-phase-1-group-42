@@ -5,6 +5,7 @@ import org.example.models.goods.Good;
 import org.example.models.goods.GoodType;
 
 import java.util.ArrayList;
+import java.util.Iterator;
 
 public class Inventory {
     private ArrayList<ArrayList<Good>> list;
@@ -179,13 +180,25 @@ public class Inventory {
         return 0;
     }
 
-    public void removeItemsFromInventory(GoodType type , int count) {
-        if (!(howManyInInventoryByType(type)>=count)){
+    public void removeItemsFromInventory(GoodType type, int count) {
+        if (howManyInInventoryByType(type) < count) {
             return;
         }
+
+        int remainingToRemove = count;
+
         for (ArrayList<Good> goods : list) {
-            if (!goods.isEmpty()) {
-                goods.removeIf(g -> g.getType() == type);
+            if (remainingToRemove <= 0) {
+                break;
+            }
+
+            Iterator<Good> iterator = goods.iterator();
+            while (iterator.hasNext() && remainingToRemove > 0) {
+                Good good = iterator.next();
+                if (good.getType() == type) {
+                    iterator.remove();
+                    remainingToRemove--;
+                }
             }
         }
     }
