@@ -23,30 +23,35 @@ public class Farm {
         for (int i = (playerNumber % 2) * 70; i < (playerNumber % 2 + 1) * 70; i++) {
             boolean flag = (i == 0 || (i + 1 == (playerNumber % 2 + 1) * 70));
             for (int j = (playerNumber / 2) * 110; j < (playerNumber / 2) * 110 + 50; j++) {
-                this.tiles.add(tiles.get(i + (j * 150)));
-                this.tiles.getLast().setTileType(TileType.FARM);
-                if(flag || j == 0 || (j + 1 == (playerNumber / 2) * 110 + 50))
-                    this.tiles.getLast().setTileType(TileType.STONE_WALL);
+                try { //TODO
+                    this.tiles.add(tiles.get(i + (j * 150)));
+                    this.tiles.getLast().setTileType(TileType.FARM);
+                    if(flag || j == 0 || (j + 1 == (playerNumber / 2) * 110 + 50))
+                        this.tiles.getLast().setTileType(TileType.STONE_WALL);
 
-                switch (playerNumber) {
-                    case 0:
-                        if(j == 50 && i >= 30 && i < 35)
-                            this.tiles.getLast().setTileType(TileType.PLAIN);
-                        break;
-                    case 1:
-                        if(j == 50 && i >= 105 && i < 110)
-                            this.tiles.getLast().setTileType(TileType.PLAIN);
-                        break;
-                    case 2:
-                        if(j == 110 && i >= 30 && i < 35)
-                            this.tiles.getLast().setTileType(TileType.PLAIN);
-                        break;
+                    switch (playerNumber) {
+                        case 0:
+                            if(j == 50 && i >= 30 && i < 35)
+                                this.tiles.getLast().setTileType(TileType.PLAIN);
+                            break;
+                        case 1:
+                            if(j == 50 && i >= 105 && i < 110)
+                                this.tiles.getLast().setTileType(TileType.PLAIN);
+                            break;
+                        case 2:
+                            if(j == 110 && i >= 30 && i < 35)
+                                this.tiles.getLast().setTileType(TileType.PLAIN);
+                            break;
 
-                    case 3:
-                        if(j == 110 && i >= 105 && i < 110)
-                            this.tiles.getLast().setTileType(TileType.PLAIN);
-                        break;
+                        case 3:
+                            if(j == 110 && i >= 105 && i < 110)
+                                this.tiles.getLast().setTileType(TileType.PLAIN);
+                            break;
+                    }
+                } catch (Exception e) {
+                    System.out.println("Ops");
                 }
+
             }
         }
 
@@ -98,7 +103,11 @@ public class Farm {
             startCoordinate = new Coordinate((playerNumber % 2) * 70 + 25, (playerNumber / 2) * 110 + 15);
             for (int i = 25; i - 25 < 20; i++) {
                 for (int j = 15; j - 15 < 20; j++) {
-                    this.tiles.get(i + (j * 150)).setTileType(TileType.PLAYER_BUILDING);
+                    try { //TODO
+                        this.tiles.get(i + (j * 150)).setTileType(TileType.PLAYER_BUILDING);
+                    } catch (Exception e) {
+                        System.out.println("OPs");
+                    }
                 }
             }
         }
@@ -121,8 +130,13 @@ public class Farm {
             startCoordinate = new Coordinate(0, 0);
             for (int i = startCoordinate.getX(); i < 5; i++) {
                 for (int j = startCoordinate.getY(); j < 50; j++) {
-                    lakes.add(this.tiles.get(i + (j * 150)));
-                    lakes.getLast().setTileType(TileType.WATER);
+                    try {  //TODO
+
+                        lakes.add(this.tiles.get(i + (j * 150)));
+                        lakes.getLast().setTileType(TileType.WATER);
+                    } catch (Exception e) {
+                        System.out.println("OPs");
+                    }
                 }
             }
         }
@@ -146,8 +160,13 @@ public class Farm {
             startCoordinate = new Coordinate(55, 35);
             for (int i = startCoordinate.getX(); i - 55 < 10; i++) {
                 for (int j = startCoordinate.getY(); j - 35 < 10; j++) {
-                    quarryTiles.add(this.tiles.get(i + (j * 150)));
-                    quarryTiles.getLast().setTileType(TileType.QUARRY);
+                    try { //TODO
+
+                        quarryTiles.add(this.tiles.get(i + (j * 150)));
+                        quarryTiles.getLast().setTileType(TileType.QUARRY);
+                    } catch (Exception e) {
+                        System.out.println("OPs");
+                    }
                 }
             }
         }

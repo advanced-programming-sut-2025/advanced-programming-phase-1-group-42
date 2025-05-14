@@ -66,14 +66,14 @@ public class GameMenuController extends Controller {
             while (true) {
                 input = scanner.nextLine();
                 if ((matcher = GameMenuCommands.GAME_MAP.matcher(input)) == null ||
-                        !matcher.group("farm_number").matches("\\d") ||
-                        Integer.parseInt(matcher.group("farm_number")) > 2 ||
-                        Integer.parseInt(matcher.group("farm_number")) < 1) {
+                        !matcher.group("farmNumber").matches("\\d") ||
+                        Integer.parseInt(matcher.group("farmNumber")) > 2 ||
+                        Integer.parseInt(matcher.group("farmNumber")) < 1) {
                     System.out.println("Invalid command for choosing your map, Please try again!");
                     continue;
                 }
 
-                int mapNumber = Integer.parseInt(matcher.group("farm_number"));
+                int mapNumber = Integer.parseInt(matcher.group("farmNumber"));
                 Farm farm = new Farm(mapNumber, ptr, tiles);
                 player.setFarm(farm);
                 farms.add(farm);
