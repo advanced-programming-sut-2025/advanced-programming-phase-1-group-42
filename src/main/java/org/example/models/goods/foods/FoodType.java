@@ -57,42 +57,42 @@ public enum FoodType implements GoodType {
     MINERS_TREAT("Miners_Treat", 125, 200, new Buff(BuffType.MINING_BUFF,5,1)),
 
     // Fruit Trees
-    APRICOT("Apricot", 38, 59, null),
+    APRICOT("Apricot", 38, 59, new Buff(BuffType.ENERGY_BUFF,0,0)),
 
-    CHERRY("Cherry", 38, 80, null),
+    CHERRY("Cherry", 38, 80, new Buff(BuffType.ENERGY_BUFF,0,0)),
 
-    BANANA("Banana", 75, 150, null),
+    BANANA("Banana", 75, 150, new Buff(BuffType.ENERGY_BUFF,0,0)),
 
-    MANGO("Mango", 100, 130, null),
+    MANGO("Mango", 100, 130, new Buff(BuffType.ENERGY_BUFF,0,0)),
 
-    ORANGE("Orange", 38, 100, null),
+    ORANGE("Orange", 38, 100, new Buff(BuffType.ENERGY_BUFF,0,0)),
 
-    PEACH("Peach", 38, 140, null),
+    PEACH("Peach", 38, 140, new Buff(BuffType.ENERGY_BUFF,0,0)),
 
-    APPLE("Apple", 38, 100, null),
+    APPLE("Apple", 38, 100, new Buff(BuffType.ENERGY_BUFF,0,0)),
 
-    POMEGRANATE("Pomegranate", 38, 140, null),
+    POMEGRANATE("Pomegranate", 38, 140, new Buff(BuffType.ENERGY_BUFF,0,0)),
 
     // Special Tree Products
-    SAP("Sap", -2, 2, null),
+    SAP("Sap", -2, 2, new Buff(BuffType.ENERGY_BUFF,0,0)),
 
-    COMMON_MUSHROOM("Common_Mushroom", 38, 40, null),
+    COMMON_MUSHROOM("Common_Mushroom", 38, 40, new Buff(BuffType.ENERGY_BUFF,0,0)),
 
-    MYSTIC_SYRUP("Mystic_Syrup", 500, 1000, null),
+    MYSTIC_SYRUP("Mystic_Syrup", 500, 1000, new Buff(BuffType.ENERGY_BUFF,0,0)),
 
     // TODO: the price should be get times 2 in Stardrop saloon Shop
-    BEER("Beer", 0, 20, null),
+    BEER("Beer", 0, 20, new Buff(BuffType.ENERGY_BUFF,0,0)),
 
-    COFFEE("Coffee", 0, 150, null),
+    COFFEE("Coffee", 0, 150, new Buff(BuffType.ENERGY_BUFF,0,0)),
 
     // Base Types
-    WHEAT_FLOUR("Wheat_Flour", -1, -1, null),
+    WHEAT_FLOUR("Wheat_Flour", -1, -1, new Buff(BuffType.ENERGY_BUFF,0,0)),
 
-    SUGAR("Sugar", -1, -1, null),
+    SUGAR("Sugar", -1, -1, new Buff(BuffType.ENERGY_BUFF,0,0)),
 
-    CHEESE("Cheese", -1, -1, null),
+    CHEESE("Cheese", -1, -1, new Buff(BuffType.ENERGY_BUFF,0,0)),
 
-    RICE("Rice", -1, -1, null);
+    RICE("Rice", -1, -1, new Buff(BuffType.ENERGY_BUFF,0,0));
 
     private final String name;
     private final int energy;

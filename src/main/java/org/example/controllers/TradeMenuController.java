@@ -22,7 +22,7 @@ public class TradeMenuController {
     public Result tradeWithMoney(String receiver, String tradeType, String item,
                                  String amount, String price) {
 
-        System.out.println(tradeType + " " + item + " " + amount + " " + price);
+        System.out.println(tradeType + " " + amount + " " + item + " " + "For" + price + "g from" + receiver );
 
         Player currentPlayer = App.getCurrentGame().getCurrentPlayer();
         Player receiverPlayer = App.getCurrentGame().findPlayer(receiver);
@@ -109,9 +109,9 @@ public class TradeMenuController {
             accept = false;
         }
 
-        TradeManager.respondToTrade(currentPlayer, tradeIdInt, accept);
+        boolean realResponse = TradeManager.respondToTrade(currentPlayer, tradeIdInt, accept);
 
-        return new Result(true, accept ? "Trade accepted." : "Trade rejected.");
+        return new Result(true, realResponse ? "Trade accepted." : "Trade rejected.");
     }
 
     public Result tradeHistory() {

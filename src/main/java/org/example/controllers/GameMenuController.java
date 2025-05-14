@@ -1905,4 +1905,13 @@ public class GameMenuController extends Controller {
     public Result showBalance() {
         return new Result(true, "Balance: " + App.getCurrentGame().getCurrentPlayer().getWallet().getBalance() + " g");
     }
+    public Result test(){
+        App.getCurrentGame().getCurrentPlayer().getInventory().addGood(Good.newGood(Good.newGoodType("Omelet")), 12);
+
+        GoodType goodType = Good.newGoodType("Omelet");
+        ArrayList<Good> newGoods = Good.newGoods(goodType, 12);
+        App.getCurrentGame().getCurrentPlayer().getInventory().addGood(newGoods);
+
+        return new Result(true, "test");
+    }
 }

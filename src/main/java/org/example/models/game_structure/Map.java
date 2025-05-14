@@ -25,8 +25,10 @@ public class Map {
     private final ArrayList<ShippingBin> shippingBins = new ArrayList<>();
 
     static final HashMap<String, String> colorMap = new HashMap<String, String>() {{
+        // Reset
         put("Reset", "\u001B[0m");
-        // Foreground colors
+
+        // Standard Foreground Colors
         put("Black", "\033[0;30m");
         put("Red", "\033[0;31m");
         put("Green", "\033[0;32m");
@@ -37,7 +39,17 @@ public class Map {
         put("White", "\033[0;37m");
         put("Gray", "\033[0;90m");
 
-        // Background colors
+        // Bright/Bold Foreground Colors
+        put("Bright_Black", "\033[1;30m");
+        put("Bright_Red", "\033[1;31m");
+        put("Bright_Green", "\033[1;32m");
+        put("Bright_Yellow", "\033[1;33m");
+        put("Bright_Blue", "\033[1;34m");
+        put("Bright_Purple", "\033[1;35m");
+        put("Bright_Cyan", "\033[1;36m");
+        put("Bright_White", "\033[1;37m");
+
+        // Standard Background Colors
         put("Black_Background", "\033[40m");
         put("Red_Background", "\033[41m");
         put("Green_Background", "\033[42m");
@@ -47,6 +59,39 @@ public class Map {
         put("Cyan_Background", "\033[46m");
         put("White_Background", "\033[47m");
         put("Gray_Background", "\033[100m");
+
+        // Bright Background Colors
+        put("Bright_Black_Background", "\033[100m");  // Same as Gray_Background
+        put("Bright_Red_Background", "\033[101m");
+        put("Bright_Green_Background", "\033[102m");
+        put("Bright_Yellow_Background", "\033[103m");
+        put("Bright_Blue_Background", "\033[104m");
+        put("Bright_Purple_Background", "\033[105m");
+        put("Bright_Cyan_Background", "\033[106m");
+        put("Bright_White_Background", "\033[107m");
+
+        // 8-bit (256-color) Foreground (example selections)
+        put("Orange", "\033[38;5;208m");      // Vivid orange
+        put("Pink", "\033[38;5;205m");        // Pink
+        put("Lime", "\033[38;5;154m");        // Bright lime green
+        put("Teal", "\033[38;5;6m");          // Teal
+        put("Indigo", "\033[38;5;54m");       // Indigo
+        put("Maroon", "\033[38;5;88m");       // Dark red/maroon
+        put("Gold", "\033[38;5;178m");        // Gold
+
+        // 8-bit (256-color) Background (example selections)
+        put("Orange_Background", "\033[48;5;208m");
+        put("Pink_Background", "\033[48;5;205m");
+        put("Lime_Background", "\033[48;5;154m");
+        put("Teal_Background", "\033[48;5;6m");
+        put("Indigo_Background", "\033[48;5;54m");
+        put("Maroon_Background", "\033[48;5;88m");
+        put("Gold_Background", "\033[48;5;178m");
+
+        // RGB (True Color) Support (if terminal supports it)
+        // Format: \033[38;2;R;G;Bm (foreground) or \033[48;2;R;G;Bm (background)
+        put("Custom_RGB_Foreground", "\033[38;2;255;100;0m");  // Example: Orange
+        put("Custom_RGB_Background", "\033[48;2;50;50;150m");  // Example: Dark blue
     }};
 
 
@@ -73,7 +118,7 @@ public class Map {
                 for(Player player: App.getCurrentGame().getPlayers()) {
                     counter++;
                     if (player.getCoordinate().equals(coordinate)) {
-                        System.out.print(colorMap.get("Black") + colorMap.get("Red_Background") + counter + colorMap.get("Reset"));
+                        System.out.print(colorMap.get("White") + counter + colorMap.get("Reset"));
                         printedPlayer = true;
                     }
                 }
@@ -85,6 +130,7 @@ public class Map {
                         printedPlayer = true;
                     }
                 }
+
                 if(!printedPlayer && !printedNPC) {
                     if (tile == null) {
                         System.out.print(colorMap.get("Purple") + colorMap.get("White_Background") + "N" + colorMap.get("Reset"));
@@ -93,22 +139,21 @@ public class Map {
                         boolean printed = false;
                         for (Good good : tile.getGoods()) {
                             if (good instanceof ForagingTree) {
-                                System.out.print(colorMap.get("Green_Background") +
-                                        colorMap.get("Yellow") + "T" + colorMap.get("Reset"));
+                                System.out.print(colorMap.get("Black") + colorMap.get("Green_Background") +
+                                        "T" + colorMap.get("Reset"));
                                 printed = true;
-
                             } else if (good instanceof FarmingTree) {
-                                System.out.print(colorMap.get("Green_Background") +
-                                        colorMap.get("Yellow") + "T" + colorMap.get("Reset"));
+                                System.out.print(colorMap.get("Black") + colorMap.get("Green_Background") +
+                                        "T" + colorMap.get("Reset"));
                                 printed = true;
                             } else if (good instanceof FarmingTreeSapling) {
-                                System.out.print(colorMap.get("Green_Background") +
-                                        colorMap.get("Yellow") + "T" + colorMap.get("Reset"));
+                                System.out.print(colorMap.get("Black") + colorMap.get("Green_Background") +
+                                        "T" + colorMap.get("Reset"));
                                 printed = true;
                             }
                         }
                         if (!printed) {
-                            System.out.print(colorMap.get("Green_Background")
+                            System.out.print(colorMap.get("Bright_Green_Background")
                                     + " " + colorMap.get("Reset"));
                         }
                     } else if (tile.getTileType() == TileType.WATER) {
@@ -141,14 +186,44 @@ public class Map {
                     } else if (tile.getTileType() == TileType.ROAD) {
                         System.out.print(colorMap.get("Gray_Background") +
                                 colorMap.get("Purple") + "-" + colorMap.get("Reset"));
+
                     } else if (tile.getTileType() == TileType.QUARRY) {
-                        System.out.print(colorMap.get("Gray_Background") + " " + colorMap.get("Reset"));
+                        boolean printed = false;
+                        for (Good good : tile.getGoods()) {
+                            if (good instanceof ForagingMineral) {
+                                System.out.print(colorMap.get("Teal") + colorMap.get("Gray_Background") +
+                                         "s" + colorMap.get("Reset"));
+                                printed = true;
+                            }
+                        }
+                        if (!printed) {
+                            System.out.print(colorMap.get("Gray_Background") + "-" + colorMap.get("Reset"));
+                        }
                     } else if (tile.getTileType() == TileType.PLAIN) {
-                        System.out.print(colorMap.get("Red") +
-                                colorMap.get("Green_Background") + "-" + colorMap.get("Reset"));
+                        boolean printed = false;
+                        for (Good good : tile.getGoods()) {
+                            if (good instanceof ForagingTree) {
+                                System.out.print(colorMap.get("Black") + colorMap.get("Green_Background") +
+                                         "T" + colorMap.get("Reset"));
+                                printed = true;
+                            } else if (good instanceof FarmingTree) {
+                                System.out.print(colorMap.get("Black") + colorMap.get("Green_Background") +
+                                          "T" + colorMap.get("Reset"));
+                                printed = true;
+                            } else if (good instanceof FarmingTreeSapling) {
+                                System.out.print(colorMap.get("Black") + colorMap.get("Green_Background") +
+                                          "T" + colorMap.get("Reset"));
+                                printed = true;
+                            }
+                        }
+                        if (!printed) {
+                            System.out.print(colorMap.get("Red") +
+                                    colorMap.get("Bright_Green_Background") + "-" + colorMap.get("Reset"));
+                        }
+
                     } else if (tile.getTileType() == TileType.STONE_WALL) {
                         System.out.print(colorMap.get("Black") +
-                                colorMap.get("Blue_Background") + "|" + colorMap.get("Reset"));
+                                colorMap.get("Indigo_Background") + "|" + colorMap.get("Reset"));
                     } else if (tile.getTileType() == TileType.BEACH) {
                         System.out.print(colorMap.get("Gray") +
                                 colorMap.get("Yellow_Background") + "B" + colorMap.get("Reset"));
@@ -158,6 +233,9 @@ public class Map {
                     } else if (tile.getTileType() == TileType.PLOWED_FARM) {
                         System.out.print(colorMap.get("Gray") +
                                 colorMap.get("Green_Background") + "p" + colorMap.get("Reset"));
+                    } else if (tile.getTileType() == TileType.SHIPPING_BIN) {
+                        System.out.print(colorMap.get("Gray") +
+                                colorMap.get("Maroon") + " " + colorMap.get("Reset"));
                     }
                 }
             }

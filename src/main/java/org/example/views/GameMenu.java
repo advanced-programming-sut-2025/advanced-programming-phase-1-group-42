@@ -274,8 +274,9 @@ public class GameMenu implements AppMenu {
              System.out.println(controller.showPlayerCoordinate());
          } else if ((matcher = GameMenuCommands.SHOW_BALANCE.matcher(input)) != null) {
             System.out.println(controller.showBalance());
-        }
-
+         } else if ((matcher = GameMenuCommands.Test.matcher(input)) != null) {
+            System.out.println(controller.test());
+         }
 
 
          else {

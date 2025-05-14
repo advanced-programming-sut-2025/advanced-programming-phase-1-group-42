@@ -49,6 +49,12 @@ public class Energy {
     public void increaseTurnEnergyLeft(int value) {
         this.dayEnergyLeft += value;
         this.turnValueLeft += value;
+        if(dayEnergyLeft >= maxDayEnergy){
+            dayEnergyLeft = maxDayEnergy;
+        }
+        if(turnValueLeft >= maxTurnEnergy){
+            turnValueLeft = maxTurnEnergy;
+        }
     }
 
 
