@@ -222,14 +222,14 @@ public class ArtisanFunctions {
 
         Good good = Good.newGood(((CraftingType) crafting.getType()).getArtisanTypes().getFirst());
         App.getCurrentGame().getCurrentPlayer().getInventory().addGood(new ArrayList<>(Arrays.asList(good)));
-        return new Result(true, "You have extracted honey by " + good.getName());
+        return new Result(true, "You have extracted honey by " + crafting.getName());
     }
 
     private static Result useCheesePress(Crafting crafting, ArrayList<String> ourIngredients) {
         ArrayList<Good> milks = App.getCurrentGame().getCurrentPlayer().getInventory().isInInventory(ourIngredients.getFirst());
         Quadruple<GoodType, Integer, Double, Double> milkIngredient = ((CraftingType) crafting.getType()).getArtisanTypes().getFirst().hasIngredient(milks.getFirst().getType());
         if(milkIngredient == null)
-            milkIngredient = ((CraftingType) crafting.getType()).getArtisanTypes().get(1).hasIngredient(milks.getFirst().getType())
+            milkIngredient = ((CraftingType) crafting.getType()).getArtisanTypes().get(1).hasIngredient(milks.getFirst().getType());
 
         if(milks == null
                 || milkIngredient == null ||
@@ -242,13 +242,35 @@ public class ArtisanFunctions {
         milks.removeLast();
 
         App.getCurrentGame().getCurrentPlayer().getInventory().addGood(new ArrayList<>(Arrays.asList(good)));
-        return new Result(true, "You have extracted " + good.getName() + " by " + good.getName());
+        return new Result(true, "You have extracted " + good.getName() + " by " + crafting.getName());
     }
 
     private static Result useKeg(Crafting crafting, ArrayList<String> ourIngredients) {
         ArrayList<Good> ingredients = App.getCurrentGame().getCurrentPlayer().getInventory().isInInventory(ourIngredients.getFirst());
+        boolean flag = false;
+        Quadruple<GoodType, Integer, Double, Double> kegIngredient = null;
+        if(ingredients == null)
+            return new Result(false, "You don't have " + ourIngredients.getFirst() + " in your inventory!");
 
+        for (ArtisanType artisanType : ((CraftingType) crafting.getType()).getArtisanTypes()) {
+            kegIngredient = artisanType.hasIngredient(ingredients.getFirst().getType());
+            if(kegIngredient != null) {
+                flag = true;
+                break;
+            }
+        }
 
+        if(!flag)
+            return new Result(false, "There isn't any " + ourIngredients.getFirst() + " in your " + crafting.getName() + "ingredients!");
+        if(ingredients.size() < kegIngredient.b)
+            return new Result(false, "You don't have enough ingredients in your inventory!");
+
+        Good good = Good.newGood(kegIngredient.a);
+        ((Artisan) good).setGoodType(ingredients.getFirst().getType());
+        ingredients.removeLast();
+
+        App.getCurrentGame().getCurrentPlayer().getInventory().addGood(new ArrayList<>(Arrays.asList(good)));
+        return new Result(true, "You have extracted " + good.getName() + " by " + crafting.getName());
     }
 
     private static Result useLoom(Crafting crafting) {
