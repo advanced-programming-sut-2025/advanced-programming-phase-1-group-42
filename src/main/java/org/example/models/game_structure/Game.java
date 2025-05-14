@@ -36,7 +36,7 @@ public class Game {
     private Map map = null;
     private Player currentPlayingPlayer;
     private final ArrayList<NPC> NPCs = new ArrayList<>();
-    private int counter = 0;
+    private int counter = 1;
 
     public void setPlayers(ArrayList<Player> players) {
         this.players.addAll(players);
@@ -72,13 +72,12 @@ public class Game {
             counter = 0;
             this.dateTime.timeFlow();
         }
+
         if(players.get(counter).getEnergy().isAwake()) {
             currentPlayer = players.get(counter);
         } else {
             nextPlayer();
         }
-
-
     }
 
     public Map getMap() {
@@ -95,6 +94,7 @@ public class Game {
 
     public void cheatSetWeather(Weather weather) {
         tomorrow.setWeather(weather);
+        System.out.println("Tomorrow's weather has been set to " + weather.getName());
     }
 
     public Tomorrow getTomorrow() {

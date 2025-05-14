@@ -31,7 +31,7 @@ public enum GameMenuCommands implements Command {
 
     // Parsa
     //Weather
-    CHEAT_THUNDER("\\s*cheat\\s+thunder\\s(?<x>\\S+)\\s(?<y>\\S+)\\s*"),
+    CHEAT_THUNDER("\\s*cheat\\s+Thor\\s(?<x>\\S+)\\s(?<y>\\S+)\\s*"),
     WEATHER("\\s*weather\\s*"),
     WEATHER_FORECAST("\\s*weather\\s+forecast\\s*"),
     CHEAT_WEATHER_SET("\\s*cheat\\s+weather\\s+set\\s(?<weather>\\S+)\\s*"),

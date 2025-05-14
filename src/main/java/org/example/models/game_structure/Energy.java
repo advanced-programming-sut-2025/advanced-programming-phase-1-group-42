@@ -3,7 +3,7 @@ package org.example.models.game_structure;
 import org.example.models.App;
 
 public class Energy {
-    private int dayEnergyLeft;
+    private int dayEnergyLeft = 200;
     private int maxDayEnergy = 200;
     private int maxTurnEnergy = 50;
     private int turnValueLeft = 50;
