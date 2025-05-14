@@ -320,7 +320,10 @@ public class GameMenuController extends Controller {
     }
 
     public Result cheatAdvanceDate(String date) {
-        //TODO
+        int dateInt = Integer.parseInt(date);
+        for (int i = 0 ; i < dateInt ; i++) {
+            App.getCurrentGame().gameFlow();
+        }
         return new Result(true, "");
     }
 
