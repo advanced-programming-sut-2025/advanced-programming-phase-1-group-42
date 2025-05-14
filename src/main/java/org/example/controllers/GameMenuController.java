@@ -203,6 +203,8 @@ public class GameMenuController extends Controller {
         App.getCurrentGame().getMap().generateRandomForagingSeed(93);
         App.getCurrentGame().getMap().generateRandomMinerals(93);
         App.getCurrentGame().getMap().generateRandomForagingTrees(93);
+        App.getCurrentGame().getMap().generateRandomGrassTrees(93);
+
 
         return new Result(true, "New game has successfully created & loaded!\n");
     }

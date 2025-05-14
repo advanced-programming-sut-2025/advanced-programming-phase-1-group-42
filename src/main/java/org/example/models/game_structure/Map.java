@@ -244,6 +244,8 @@ public class Map {
 
 
 
+
+
     public void setFarms(ArrayList<Farm> farms) {
         this.farms.addAll(farms);
     }
@@ -673,6 +675,7 @@ public class Map {
             }
         }
     }
+
     public void Fertilize(){
         for (int i = 0; i < 140; i++) {
             for (int j = 0; j < 160; j++) {
@@ -729,6 +732,23 @@ public class Map {
                                     tile.getGoods().add(Good.newGood(seed.getCropType()));
                                 }
                             }
+                        }
+                    }
+                }
+            }
+        }
+    }
+
+    public void generateRandomGrassTrees(int probability) {
+        for (int i = 0 ; i < 140 ; i++){
+            for(int j = 0 ; j < 160 ; j++){
+                int random = (int)Math.floor((Math.random()*100));
+                Coordinate coordinate = new Coordinate(i , j);
+                Tile tile = findTile(coordinate);
+                if(tile != null){
+                    if(tile.getTileType().equals(TileType.FARM) || tile.getTileType().equals(TileType.PLAIN)  ){
+                        if(random >= probability){
+                            tile.addGood(Good.newGood(ProductType.GRASS));
                         }
                     }
                 }

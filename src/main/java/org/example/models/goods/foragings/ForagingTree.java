@@ -5,6 +5,7 @@ import org.example.models.goods.GoodType;
 public class ForagingTree extends Foraging{
     private ForagingTreeType type;
 
+
     public ForagingTree(ForagingTreeType type) {
         this.type = type;
     }
