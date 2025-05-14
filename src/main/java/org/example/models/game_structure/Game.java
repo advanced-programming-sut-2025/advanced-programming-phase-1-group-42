@@ -8,14 +8,10 @@ import org.example.models.game_structure.weathers.Weather;
 import org.example.models.goods.Good;
 import org.example.models.goods.craftings.Crafting;
 import org.example.models.goods.craftings.CraftingType;
-import org.example.models.goods.farmings.FarmingCropType;
 import org.example.models.goods.farmings.FarmingTreeSapling;
-import org.example.models.goods.foragings.ForagingCrop;
 import org.example.models.goods.foragings.ForagingMixedSeed;
 import org.example.models.goods.foragings.ForagingSeed;
-import org.example.models.goods.foragings.ForagingSeedType;
 import org.example.models.interactions.Animals.Animal;
-import org.example.models.goods.Good;
 import org.example.models.goods.farmings.FarmingCrop;
 import org.example.models.goods.farmings.FarmingTree;
 import org.example.models.goods.foods.Food;
@@ -132,11 +128,11 @@ public class Game {
         }
 
         crowAttack();
-        App.getCurrentGame().getMap().generateRandomForagingCrops();
-        App.getCurrentGame().getMap().generateRandomForagingSeed();
-        App.getCurrentGame().getMap().generateRandomMinerals();
+        App.getCurrentGame().getMap().generateRandomForagingCrops(99);
+        App.getCurrentGame().getMap().generateRandomForagingSeed(99);
+        App.getCurrentGame().getMap().generateRandomMinerals(99);
 
-        App.getCurrentGame().getMap().Furtulize();
+        App.getCurrentGame().getMap().Fertilize();
 
         for (ShippingBin shippingBin : App.getCurrentGame().getMap().getShippingBins()) {
             shippingBin.emptyShippingBin();

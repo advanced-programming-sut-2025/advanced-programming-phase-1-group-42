@@ -23,7 +23,7 @@ public class FishShop extends GameBuilding {
     private final ArrayList<Integer> requiredLevel;
 
     public static ArrayList<Tile> getExpectedTiles(ArrayList<Tile> tiles) {
-        return getTiles(tiles, 115, 55);
+        return getTiles(tiles, new Coordinate(120, 60));
     }
 
     public FishShop(ArrayList<Tile> tiles) {
@@ -31,8 +31,8 @@ public class FishShop extends GameBuilding {
                 "FishShop",
                 new NPC(NPCTypes.WILLY),
                 new Pair<>(9, 17),
-                new Coordinate(115, 55),
-                new Coordinate(155, 75));
+                new Coordinate(120, 60),
+                new Coordinate(130, 70));
 
         this.products = new ArrayList<>(Arrays.asList(
                 new Pair<>(CraftingRecipeType.FISH_SMOKER, 1),

@@ -13,6 +13,7 @@ public enum TileType {
     STONE_WALL(),
     SQUARE(),
     BEACH(),
+    SHIPPING_BIN(),
 
     PLAYER_BUILDING(),
     GAME_BUILDING();

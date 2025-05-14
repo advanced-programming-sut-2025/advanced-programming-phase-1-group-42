@@ -196,6 +196,13 @@ public class GameMenuController extends Controller {
         for (Player player : players) {
             player.iniFriendships();
         }
+
+        //Goods generating
+        App.getCurrentGame().getMap().generateRandomForagingCrops(93);
+        App.getCurrentGame().getMap().generateRandomForagingSeed(93);
+        App.getCurrentGame().getMap().generateRandomMinerals(93);
+        App.getCurrentGame().getMap().generateRandomForagingTrees(93);
+
         return new Result(true, "New game has successfully created & loaded!\n");
     }
 

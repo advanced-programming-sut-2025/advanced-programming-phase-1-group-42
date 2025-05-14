@@ -30,7 +30,7 @@ public class Blacksmith extends GameBuilding {
     private final ArrayList<Pair<GoodType, Integer>> stock = new ArrayList<>();
 
     public static ArrayList<Tile> getExpectedTiles(ArrayList<Tile> tiles) {
-        return getTiles(tiles, 5, 55);
+        return getTiles(tiles, new Coordinate(10, 60));
     }
 
     public Blacksmith(ArrayList<Tile> tiles) {
@@ -38,8 +38,8 @@ public class Blacksmith extends GameBuilding {
                 "Blacksmith",
                 new NPC(NPCTypes.CLINT),
                 new Pair<>(9, 16),
-                new Coordinate(5, 55),
-                new Coordinate(25, 75));
+                new Coordinate(10, 60),
+                new Coordinate(20, 70));
 
         upgradeToolCost.addAll(Arrays.asList(2000, 5000, 10000, 25000));
         upgradeTrashCanCost.addAll(Arrays.asList(1000, 2500, 5000, 12500));

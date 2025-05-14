@@ -66,4 +66,8 @@ public class ShippingBin extends Good {
     public GoodType getType() {
         return null;
     }
+
+    public Coordinate getCoordinate() {
+        return coordinate;
+    }
 }

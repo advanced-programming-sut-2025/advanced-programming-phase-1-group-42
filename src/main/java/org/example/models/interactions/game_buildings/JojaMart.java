@@ -22,7 +22,7 @@ public class JojaMart extends GameBuilding {
     private final ArrayList<String> stockParts;
 
     public static ArrayList<Tile> getExpectedTiles(ArrayList<Tile> tiles) {
-        return getTiles(tiles, 45, 55);
+        return getTiles(tiles, new Coordinate(50, 60));
     }
 
     public JojaMart(ArrayList<Tile> tiles) {
@@ -30,8 +30,8 @@ public class JojaMart extends GameBuilding {
                 "JojaMart",
                 new NPC(NPCTypes.MORRIS),
                 new Pair<>(9, 23),
-                new Coordinate(45, 55),
-                new Coordinate(65, 75));
+                new Coordinate(50, 60),
+                new Coordinate(60, 70));
 
         this.products = new ArrayList<>();
         //Permanent Stock

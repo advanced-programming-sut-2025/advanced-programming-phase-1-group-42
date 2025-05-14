@@ -1,6 +1,7 @@
 package org.example.models.builders.concrete_builders;
 
 import org.example.models.builders.builder_interfaces.MapInterface;
+import org.example.models.enums.TileType;
 import org.example.models.game_structure.*;
 import org.example.models.goods.Good;
 import org.example.models.goods.artisans.Artisan;
@@ -50,9 +51,9 @@ public class WholeMapBuilder implements MapInterface {
         HashMap<Player, ArrayList<ArrayList<Good>>> list = new HashMap<>();
         ArrayList<ShippingBin> shippingBins = new ArrayList<>(
                 Arrays.asList(
-                        new ShippingBin(new Coordinate(30, 50), list),
-                        new ShippingBin(new Coordinate(105, 50), list),
-                        new ShippingBin(new Coordinate(30, 110), list),
+                        new ShippingBin(new Coordinate(25, 49), list),
+                        new ShippingBin(new Coordinate(105, 49), list),
+                        new ShippingBin(new Coordinate(25, 110), list),
                         new ShippingBin(new Coordinate(105, 110), list),
                         new ShippingBin(new Coordinate(35, 80), list),
                         new ShippingBin(new Coordinate(110, 80), list)
@@ -63,6 +64,9 @@ public class WholeMapBuilder implements MapInterface {
         int ptr = 0;
         for (Farm farm : this.map.getFarms()) {
             farm.setShippingBin(shippingBins.get(ptr++));
+        }
+        for (ShippingBin shippingBin : shippingBins) {
+            this.map.getTiles().get((shippingBin.getCoordinate().getX() * 160) + shippingBin.getCoordinate().getY()).setTileType(TileType.SHIPPING_BIN);
         }
     }
 

@@ -24,7 +24,7 @@ public class PierreGeneralStore extends GameBuilding {
     private final ArrayList<String> stockParts;
 
     public static ArrayList<Tile> getExpectedTiles(ArrayList<Tile> tiles) {
-        return getTiles(tiles, 75, 55);
+        return getTiles(tiles, new Coordinate(80, 60));
     }
 
     public PierreGeneralStore(ArrayList<Tile> tiles) {
@@ -32,8 +32,8 @@ public class PierreGeneralStore extends GameBuilding {
                 "PierreGeneralStore",
                 new NPC(NPCTypes.PIERRE),
                 new Pair<>(9, 17),
-                new Coordinate(75, 55),
-                new Coordinate(95, 75));
+                new Coordinate(80, 60),
+                new Coordinate(90, 70));
 
         stockParts = new ArrayList<>(Arrays.asList(
                 "Year-Round Stock", "Spring", "Summer", "Fall", "Winter", "BackPacks"

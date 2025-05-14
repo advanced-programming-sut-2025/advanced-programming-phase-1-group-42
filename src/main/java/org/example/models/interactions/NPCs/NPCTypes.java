@@ -153,8 +153,8 @@ public enum NPCTypes {
                     new Pair<>(ProductType.WOOD,1000)
             )),
             "Home",
-            new Pair<>(Season.WINTER,27),
-            new Coordinate(80, 80)
+            new Pair<>(Season.WINTER, 27),
+            new Coordinate(15, 95)
     ),
 
     CLINT("Clint",

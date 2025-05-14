@@ -269,17 +269,16 @@ public class Map {
         return null;
     }
 
-    public void generateRandomForagingCrops(){
+    public void generateRandomForagingCrops(int probability) {
         for (int i = 0 ; i < 140 ; i++){
             for(int j = 0 ; j < 160 ; j++){
                 int random = (int)Math.floor((Math.random()*100));
                 Coordinate coordinate = new Coordinate(i , j);
                 Tile tile = findTile(coordinate);
                 if(tile != null){
-                    if(tile.getTileType().equals(TileType.FARM) || tile.getTileType().equals(TileType.PLAIN)  ){
-                        if(random == 50){
+                    if(tile.getTileType().equals(TileType.FARM) || tile.getTileType().equals(TileType.PLAIN)){
+                        if(random >= probability){
                             int randomForaging = (int)Math.floor((Math.random()*9));
-
                             switch (App.getCurrentGame().getDateTime().getSeasonOfYear().getName()){
                                 case "Spring":
                                     switch(randomForaging) {
@@ -379,7 +378,8 @@ public class Map {
             }
         }
     }
-    public void generateRandomForagingSeed() {
+
+    public void generateRandomForagingSeed(int probability) {
         for (int i = 0; i < 140; i++) {
             for (int j = 0; j < 160; j++) {
                 int random = (int) Math.floor((Math.random() * 100));
@@ -387,7 +387,7 @@ public class Map {
                 Tile tile = findTile(coordinate);
 
                 if (tile != null && tile.getTileType().equals(TileType.PLOWED_FARM)) {
-                    if (random == 50) {
+                    if (random >= probability) {
                         int randomForaging = (int) Math.floor((Math.random() * 9));
                         String season = App.getCurrentGame().getDateTime().getSeasonOfYear().getName();
 
@@ -490,7 +490,7 @@ public class Map {
             }
         }
     }
-    public void generateRandomMinerals(){
+    public void generateRandomMinerals(int probability) {
         for (int i = 0; i < 140; i++) {
             for (int j = 0; j < 160; j++) {
                 int random = (int) Math.floor((Math.random() * 100));
@@ -498,7 +498,7 @@ public class Map {
                 Tile tile = findTile(coordinate);
 
                 if (tile != null && tile.getTileType().equals(TileType.QUARRY)) {
-                    if (random == 50) {
+                    if (random >= probability) {
                         int randomMineral = (int) Math.floor((Math.random() * 17)); // 0 to 16 (17 minerals)
                         switch (randomMineral) {
                             case 0:
@@ -561,7 +561,41 @@ public class Map {
         }
     }
 
-    public void Furtulize(){
+    public void generateRandomForagingTrees(int probability) {
+        for (int i = 0 ; i < 140 ; i++){
+            for(int j = 0 ; j < 160 ; j++){
+                int random = (int)Math.floor((Math.random()*100));
+                Coordinate coordinate = new Coordinate(i , j);
+                Tile tile = findTile(coordinate);
+                if(tile != null){
+                    if(tile.getTileType().equals(TileType.FARM) || tile.getTileType().equals(TileType.PLAIN)  ){
+                        if(random >= probability){
+                            int randomForaging = (int)Math.floor((Math.random()*5));
+
+                            switch (randomForaging) {
+                                case 0:
+                                    tile.addGood(Good.newGood(ForagingTreeType.ACORNS));
+                                    break;
+                                case 1:
+                                    tile.addGood(Good.newGood(ForagingTreeType.MAHOGANY_SEEDS));
+                                    break;
+                                case 2:
+                                    tile.addGood(Good.newGood(ForagingTreeType.MUSHROOM_TREE_SEEDS));
+                                    break;
+                                case 3:
+                                    tile.addGood(Good.newGood(ForagingTreeType.MAPLE_SEEDS));
+                                    break;
+                                case 4:
+                                    tile.addGood(Good.newGood(ForagingTreeType.PINE_CONES));
+                                    break;
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
+    public void Fertilize(){
         for (int i = 0; i < 140; i++) {
             for (int j = 0; j < 160; j++) {
                 Coordinate coordinate = new Coordinate(i, j);

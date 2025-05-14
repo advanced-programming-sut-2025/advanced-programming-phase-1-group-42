@@ -25,7 +25,7 @@ public class CarpenterShop extends GameBuilding {
     );
 
     public static ArrayList<Tile> getExpectedTiles(ArrayList<Tile> tiles) {
-        return getTiles(tiles, 5, 85);
+        return getTiles(tiles, new Coordinate(10, 90));
     }
 
     public CarpenterShop(ArrayList<Tile> tiles) {
@@ -33,8 +33,8 @@ public class CarpenterShop extends GameBuilding {
                 "CarpenterShop",
                 new NPC(NPCTypes.ROBIN),
                 new Pair<>(9, 20),
-                new Coordinate(5, 85),
-                new Coordinate(25, 105));
+                new Coordinate(10, 90),
+                new Coordinate(20, 100));
     }
 
     @Override
