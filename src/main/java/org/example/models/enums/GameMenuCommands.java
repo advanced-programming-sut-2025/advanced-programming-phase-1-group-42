@@ -31,7 +31,7 @@ public enum GameMenuCommands implements Command {
 
     // Parsa
     //Weather
-    CHEAT_THUNDER("\\s*cheat\\s+Thor\\s(?<x>\\S+)\\s(?<y>\\S+)\\s*"),
+    CHEAT_THUNDER("\\s*cheat\\s+Thor\\s+-l\\s(?<x>\\S+)\\s(?<y>\\S+)\\s*"),
     WEATHER("\\s*weather\\s*"),
     WEATHER_FORECAST("\\s*weather\\s+forecast\\s*"),
     CHEAT_WEATHER_SET("\\s*cheat\\s+weather\\s+set\\s(?<weather>\\S+)\\s*"),
@@ -144,7 +144,10 @@ public enum GameMenuCommands implements Command {
     GIFT_NPC("\\s*gift\\s*NPC\\s(?<npcName>\\S+)\\s+-i\\s(?<item>\\S+)\\s*"),
     FRIENDSHIP_NPC_LIST("\\s*friendship\\s*NPC\\s*list\\s*"),
     QUESTS_LIST("\\s*quests\\s*list\\s*"),
-    QUESTS_FINISH("\\s*quests\\s*finish\\s+-i\\s(?<index>\\S+)\\s*"),;
+    QUESTS_FINISH("\\s*quests\\s*finish\\s+-i\\s(?<index>\\S+)\\s*"),
+
+    //Additional Functions
+    SHOW_PLAYER_COORDINATE("\\s*show\\s*coordinate\\s*");
 
 
 

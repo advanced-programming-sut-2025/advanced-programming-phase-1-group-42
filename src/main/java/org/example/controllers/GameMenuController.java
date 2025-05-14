@@ -1861,4 +1861,12 @@ public class GameMenuController extends Controller {
     public Result showCurrentMenu() {
         return new Result(true, "Current Menu : Game Menu");
     }
+
+
+    //Additional Functions
+    public Result showPlayerCoordinate(){
+        return new Result(true, "Coordinate: " + App.getCurrentGame().getCurrentPlayer().getCoordinate().getX() +
+                ", " + App.getCurrentGame().getCurrentPlayer().getCoordinate().getX() +
+                " " + App.getCurrentGame().getCurrentPlayer().getCoordinate().getY());
+    }
 }
