@@ -460,9 +460,4 @@ public class ToolFunctions {
 
         return finalPrice;
     }
-
-
-
-
-
 }

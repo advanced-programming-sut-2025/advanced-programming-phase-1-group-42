@@ -63,7 +63,7 @@ public class Map {
                 Tile tile = findTile(coordinate);
 
                 if(tile == null){
-                    System.out.print(colorMap.get("White_Background")+ colorMap.get("Purple") + "B" + colorMap.get("Reset"));
+                    System.out.print(colorMap.get("Purple")+colorMap.get("White_Background") +"N" + colorMap.get("Reset"));
                 }else if(tile.getTileType() == TileType.FARM){
                     boolean printed = false;
                     for (Good good : tile.getGoods()) {
