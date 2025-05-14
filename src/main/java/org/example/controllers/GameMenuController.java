@@ -367,9 +367,9 @@ public class GameMenuController extends Controller {
 
     public Result greenHouseBuild() {
         Game game = App.getCurrentGame();
-        if (game.getCurrentPlayer().getWallet().getBalance() < 1000)
+        if (game.getCurrentPlayer().getWallet().getBalance() < 1000) {
             return new Result(false, "You have not enough money to build green house!");
-
+        }
 
         boolean flag = false;
         for (ArrayList<Good> goods : game.getCurrentPlayer().getInventory().getList()) {
