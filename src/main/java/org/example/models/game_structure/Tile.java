@@ -11,7 +11,7 @@ import java.util.ArrayList;
 public class Tile {
     private Coordinate coordinate;
     private TileType tileType;
-    private ArrayList<Good> goods;
+    private ArrayList<Good> goods = new ArrayList<>();
     private boolean isWatered = false;
 
     public Tile(Coordinate coordinate) {

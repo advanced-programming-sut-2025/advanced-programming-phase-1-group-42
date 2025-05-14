@@ -10,7 +10,6 @@ import org.example.models.goods.products.ProductType;
 import org.example.models.interactions.Animals.Animal;
 import org.example.models.interactions.game_buildings.GameBuilding;
 
-import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
@@ -56,7 +55,7 @@ public class Map {
     }
 
     // A function to print map
-    public String printMap(int x , int y, int size) {
+    public void printMap(int x , int y, int size) {
         for(int i = 0 ; i < size; i++){
             System.out.print("\n");
             for(int j = 0 ; j < size; j++){
@@ -112,7 +111,6 @@ public class Map {
                 }
             }
         }
-        return "";
     }
 
 
