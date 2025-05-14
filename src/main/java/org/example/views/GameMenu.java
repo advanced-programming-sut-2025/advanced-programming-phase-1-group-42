@@ -268,5 +268,9 @@ public class GameMenu implements AppMenu {
         }
 
 
+        //Additional Functions
+         else if ((matcher = GameMenuCommands.SHOW_PLAYER_COORDINATE.matcher(input)) != null) {
+             System.out.print(controller.showPlayerCoordinate());
+         }
     }
 }

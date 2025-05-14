@@ -59,8 +59,12 @@ public class GameMenuController extends Controller {
         String input = "";
         Matcher matcher;
         int ptr = 0;
+        for(Player player : players) {
+            System.out.println(player.getUser().getUsername());
+        }
+        System.out.println("____________________________");
         for (Player player : players) {
-            System.out.println(player.getPlayerUsername());
+            System.out.println(player.getUser().getUsername());
             System.out.println("Please enter the number of farm you want to play:");
             System.out.println("1. Normal Farm");
             System.out.println("2. Aquatic Farm");
@@ -179,6 +183,8 @@ public class GameMenuController extends Controller {
         }
 
         ArrayList<Tile> tiles = createTiles();
+        players.subList(0, 1).clear();
+        players.subList(4, players.size()).clear();
         ArrayList<Farm> farms = farmGame(players, scanner, tiles);
         for (int i = 0; i < farms.size(); i++) {
             players.get(i).setFarm(farms.get(i));
@@ -193,7 +199,7 @@ public class GameMenuController extends Controller {
         for (Player player : players) {
             player.iniFreindships();
         }
-        return new Result(true, "New game has successfully created & loaded!");
+        return new Result(true, "New game has successfully created & loaded!\n");
     }
 
     public Result loadGame() {
@@ -256,12 +262,20 @@ public class GameMenuController extends Controller {
     public Result nextTurn() {
         App.getCurrentGame().nextPlayer();
         StringBuilder news = new StringBuilder();
-        news.append("Current player: ").append(App.getCurrentGame().getCurrentPlayer());
+        news.append("Current player: ").append(App.getCurrentGame().getCurrentPlayer().getUser().getUsername());
         int ctr = 1;
         for (String s : App.getCurrentGame().getCurrentPlayer().getNews()) {
             news.append("\t").append(ctr++).append(". ").append(s);
         }
         App.getCurrentGame().getCurrentPlayer().getNews().clear();
+
+        System.out.println(App.getCurrentGame().getCurrentPlayer().getUser().getUsername());
+        System.out.println(App.getCurrentGame().getPlayers().getFirst().getUser().getUsername());
+        if(App.getCurrentGame().getCurrentPlayer().getUser().getUsername().equals(App.getCurrentGame().getPlayers().getFirst().getUser().getUsername())) {
+            App.getCurrentGame().getDateTime().timeFlow();
+            System.out.println("MMD");
+        }
+
         return new Result(true, news.toString());
     }
 
@@ -298,7 +312,10 @@ public class GameMenuController extends Controller {
     }
 
     public Result cheatAdvanceTime(String hour) {
-        //TODO
+        int hourInt = Integer.parseInt(hour);
+        for (int i = 0 ; i < hourInt ; i++) {
+            App.getCurrentGame().getDateTime().timeFlow();
+        }
         return new Result(true, "");
     }
 
@@ -452,24 +469,28 @@ public class GameMenuController extends Controller {
     // Parsa
     //inventory & Energy methods
     public Result energyShow() {
-
+        if(App.getCurrentGame().
+                getCurrentPlayer().getEnergy().getDayEnergyLeft() > 3000) {
+            return new Result(true, ("INFINITE"));
+        }
         return new Result(true, (App.getCurrentGame().
-                getCurrentPlayer().getEnergy()).getDayEnergyLeft() + "");
+                getCurrentPlayer().getEnergy()).getDayEnergyLeft() + "\n");
     }
 
     public Result cheatEnergySet(String value) {
         value = value.trim();
 
         int valueInt = Integer.parseInt(value);
-        App.getCurrentGame().getCurrentPlayer().getEnergy().increaseTurnEnergyLeft(valueInt);
-        return new Result(true, "");
+        App.getCurrentGame().getCurrentPlayer().getEnergy().setDayEnergyLeft(valueInt);
+        App.getCurrentGame().getCurrentPlayer().getEnergy().setTurnValueLeft(50);
+        return new Result(true, "Your energy been set to " + valueInt);
     }
 
     public Result cheatEnergyUnlimited() {
         App.getCurrentGame().getCurrentPlayer().getEnergy().setMaxDayEnergy(Integer.MAX_VALUE);
         App.getCurrentGame().getCurrentPlayer().getEnergy().setMaxTurnEnergy(Integer.MAX_VALUE);
-        App.getCurrentGame().getCurrentPlayer().getEnergy().increaseTurnEnergyLeft(Integer.MAX_VALUE);
-        App.getCurrentGame().getCurrentPlayer().getEnergy().increaseTurnEnergyLeft(Integer.MAX_VALUE);
+        App.getCurrentGame().getCurrentPlayer().getEnergy().setTurnValueLeft(Integer.MAX_VALUE);
+        App.getCurrentGame().getCurrentPlayer().getEnergy().setDayEnergyLeft(Integer.MAX_VALUE);
         return new Result(true, "");
     }
 
@@ -1843,5 +1864,13 @@ public class GameMenuController extends Controller {
 
     public Result showCurrentMenu() {
         return new Result(true, "Current Menu : Game Menu");
+    }
+
+
+    //Additional Functions
+    public Result showPlayerCoordinate(){
+        return new Result(true, "Coordinate: " + App.getCurrentGame().getCurrentPlayer().getCoordinate().getX() +
+                ", " + App.getCurrentGame().getCurrentPlayer().getCoordinate().getX() +
+                " " + App.getCurrentGame().getCurrentPlayer().getCoordinate().getY());
     }
 }
