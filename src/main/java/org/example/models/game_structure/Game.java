@@ -79,8 +79,6 @@ public class Game {
         } else {
             nextPlayer();
         }
-
-
     }
 
     public Map getMap() {
