@@ -162,10 +162,19 @@ public class ToolFunctions {
                     newGoods.add(good);
             } else if(good instanceof FarmingTree farmingTree) {
                 FarmingTreeType type = (FarmingTreeType) farmingTree.getType();
-                Pair<GoodType,Integer> pair = type.getProducts().getFirst();
-                if (farmingTree.isFruitAvailable()){
+                for (Pair<GoodType, Integer> product : type.getProducts()) {
+                    if (farmingTree.isFruitAvailable()){
+                        App.getCurrentGame().getCurrentPlayer().getInventory().addGood(
+                                Good.newGoods(product.first(), product.second())
+                        );
+                    }
+                }
+            }
+            else if(good instanceof ForagingTree foragingTree) {
+                ForagingTreeType type = (ForagingTreeType) foragingTree.getType();
+                for (Pair<GoodType, Integer> product : type.getProducts()) {
                     App.getCurrentGame().getCurrentPlayer().getInventory().addGood(
-                            Good.newGoods(pair.first(), pair.second())
+                            Good.newGoods(product.first(), product.second())
                     );
                 }
             }
@@ -243,7 +252,7 @@ public class ToolFunctions {
             return new Result(true, ((ToolType) tool.getType()).getName() + "'s capacity gets full");
         }
 
-        if(App.getCurrentGame().getCurrentPlayer().getFarm().checkInFarm(coordinate, App.getCurrentGame().getCurrentPlayer()) == null)
+        if(App.getCurrentGame().getCurrentPlayer().getFarm().findTile(App.getCurrentGame().getCurrentPlayer().getCoordinate()) == null)
             return new Result(false, "Selected Tile should be in your farm");
 
         if(tool.capacity == 0)

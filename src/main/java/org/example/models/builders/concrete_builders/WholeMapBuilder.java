@@ -51,9 +51,9 @@ public class WholeMapBuilder implements MapInterface {
         HashMap<Player, ArrayList<ArrayList<Good>>> list = new HashMap<>();
         ArrayList<ShippingBin> shippingBins = new ArrayList<>(
                 Arrays.asList(
-                        new ShippingBin(new Coordinate(35, 49), list),
-                        new ShippingBin(new Coordinate(100, 49), list),
-                        new ShippingBin(new Coordinate(35, 110), list),
+                        new ShippingBin(new Coordinate(30, 49), list),
+                        new ShippingBin(new Coordinate(105, 49), list),
+                        new ShippingBin(new Coordinate(25, 110), list),
                         new ShippingBin(new Coordinate(100, 110), list),
                         new ShippingBin(new Coordinate(35, 80), list),
                         new ShippingBin(new Coordinate(104, 80), list)
@@ -67,6 +67,7 @@ public class WholeMapBuilder implements MapInterface {
         }
         for (ShippingBin shippingBin : shippingBins) {
             this.map.getTiles().get((shippingBin.getCoordinate().getX() * 160) + shippingBin.getCoordinate().getY()).setTileType(TileType.SHIPPING_BIN);
+            this.map.getTiles().get((shippingBin.getCoordinate().getX() * 160) + shippingBin.getCoordinate().getY()).getGoods().add(shippingBin);
         }
     }
 

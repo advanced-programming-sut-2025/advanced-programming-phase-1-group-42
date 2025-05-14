@@ -123,12 +123,14 @@ public class GameMenuController extends Controller {
                 if (i >= 140 && i < 150 && j >= 0 && j < 160)
                     tile.setTileType(TileType.WATER);
 
+                // Road
+                if((j >= 50 && j < 110 && (i >= 30 && i < 35 || i >= 105 && i < 110)) ||
+                        (j >= 77 && j < 83 && i >= 0 && i < 110))
+                    tile.setTileType(TileType.ROAD);
+
                 //Square
                 if (j >= 77 && j < 83 && ((i >= 30 && i < 35) || (i >= 105 && i < 110)))
                     tile.setTileType(TileType.SQUARE);
-
-                // Road
-                //TODO
 
                 tiles.add(tile);
             }
@@ -203,6 +205,8 @@ public class GameMenuController extends Controller {
         App.getCurrentGame().getMap().generateRandomForagingSeed(93);
         App.getCurrentGame().getMap().generateRandomMinerals(93);
         App.getCurrentGame().getMap().generateRandomForagingTrees(93);
+        App.getCurrentGame().getMap().generateRandomGrassTrees(93);
+
 
         return new Result(true, "New game has successfully created & loaded!\n");
     }
