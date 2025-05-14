@@ -116,7 +116,6 @@ public enum FarmingCropType implements GoodType {
         StringBuilder list = new StringBuilder();
         list.append("Name: ").append(name).append("\n");
         list.append("Source: ").append(foragingType.getName()).append("\n");
-        list.append("\n");
         list.append("Energy: ").append(energy).append("\n");
         list.append(getSeedType().toString());
         list.append("Is Edible: ").append(isEdible).append("\n");
