@@ -52,7 +52,7 @@ public enum FarmingCropType implements GoodType {
     SWEET_GEM_BERRY("Sweet_Gem_Berry", ForagingSeedType.RARE_SEED, false, 0, 3000),
 
     // Winter Crop
-    POWDERMELON("Powdermelon", ForagingSeedType.POWDERMELON_SEEDS, true, 63, 60),
+    POWDERMELON("PowderMelon", ForagingSeedType.POWDERMELON_SEEDS, true, 63, 60),
 
     // Special Crop (Grows in all seasons except Winter)
     ANCIENT_FRUIT("Ancient_Fruit", ForagingSeedType.ANCIENT_SEEDS, false, 0, 550),
@@ -67,7 +67,7 @@ public enum FarmingCropType implements GoodType {
 
     PINE_TAR("Pine_Tar", ForagingTreeType.PINE_CONES, false, -1, 100),
 
-    ANY(null,null,false,-1,-1);
+    ANY("null",null,false,-1,-1);
 
 
     private String name;
@@ -86,7 +86,7 @@ public enum FarmingCropType implements GoodType {
     }
 
     public String getName() {
-        return name;
+        return this.name;
     }
 
     public GoodType getSeedType() {

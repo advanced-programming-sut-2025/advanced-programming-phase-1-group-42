@@ -102,7 +102,7 @@ public class DBInteractor {
                 System.out.println("No documents found");
             }
         } catch (Exception e) {
-            System.err.println("Error connecting to the database: " + e.getMessage());
+            System.err.println("Error connecting to the database");
         }
     }
 }
