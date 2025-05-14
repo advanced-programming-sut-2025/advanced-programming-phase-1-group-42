@@ -29,6 +29,7 @@ import org.example.models.goods.recipes.CraftingFunctions;
 import org.example.models.goods.recipes.CraftingRecipe;
 import org.example.models.interactions.Animals.Animal;
 import org.example.models.interactions.Animals.AnimalProduct;
+import org.example.models.interactions.Animals.AnimalProductsType;
 import org.example.models.interactions.Animals.AnimalTypes;
 import org.example.models.interactions.Gender;
 import org.example.models.interactions.NPCs.NPC;
@@ -912,7 +913,10 @@ public class GameMenuController extends Controller {
 
     public Result showCookingRecipes() {
         for (CookingRecipe cookingRecipe : App.getCurrentGame().getCurrentPlayer().getCookingRecipes()) {
-            System.out.println(cookingRecipe.getName());
+            System.out.println(cookingRecipe.getName() + " ---");
+            for (Pair<GoodType, Integer> ingredient : cookingRecipe.getType().getIngredients()) {
+                System.out.println(ingredient.first().getName() + " " + ingredient.second());
+            }
         }
         return new Result(true, "< COOKING RECIPES >");
     }
@@ -947,45 +951,29 @@ public class GameMenuController extends Controller {
 
         for (Pair<GoodType, Integer> ingredient : recipe.getType().getIngredients()) {
 
-            FoodType ingredientType = (FoodType) ingredient.first();
+            GoodType ingredientType = (GoodType) ingredient.first();
             int requiredAmount = ingredient.second();
-            if (!checkCanCook(ingredientType, requiredAmount)) {
+            if (App.getCurrentGame().getCurrentPlayer().getInventory().howManyInInventoryByType(ingredientType)< requiredAmount) {
                 return new Result(false, "Not enough " + ingredientType.getName() +
                         " (needed: " + requiredAmount + ")");
             }
         }
 
-        Food food = new Food((FoodType) ((CookingRecipeType) recipe.getType()).getGoodType());
-
-        for (ArrayList<Good> goods : App.getCurrentGame().getCurrentPlayer().getInventory().getList()) {
-            if (goods.getFirst().getName().equalsIgnoreCase(recipeName)) {
-                goods.add(food);
-                App.getCurrentGame().getCurrentPlayer().getSkill().increaseCookingPoints(10);
-                return new Result(true, "You put " + food.getName() + " into the inventory");
-            } else if (goods.isEmpty()) {
-                goods.add(food);
-                App.getCurrentGame().getCurrentPlayer().getSkill().increaseCookingPoints(10);
-                return new Result(true, "You put " + food.getName() + " into the inventory");
-            }
+        for (Pair<GoodType, Integer> ingredient : recipe.getType().getIngredients()) {
+            GoodType ingredientType = (GoodType) ingredient.first();
+            int requiredAmount = ingredient.second();
+            App.getCurrentGame().getCurrentPlayer().getInventory().removeItemsFromInventory(ingredientType, requiredAmount);
         }
-
+        Good food = Good.newGood(recipe.getType().getGoodType());
+        App.getCurrentGame().getCurrentPlayer().getSkill().increaseCookingPoints(10);
+        App.getCurrentGame().getCurrentPlayer().getEnergy().decreaseTurnEnergyLeft(3);
+        if (App.getCurrentGame().getCurrentPlayer().getInventory().addGood(Good.newGoods(recipe.getType().getGoodType(), 1))) {
+            return new Result(true, "You put " + food.getName() + " into the inventory");
+        }
         return new Result(false, "Your inventory is full");
 
-
     }
 
-    public boolean checkCanCook(FoodType foodType, int requiredAmount) {
-
-        if (App.getCurrentGame().getCurrentPlayer().getInventory().howManyInInventoryByType(foodType) >= requiredAmount) {
-            return true;
-        }
-        if (App.getCurrentGame().getCurrentPlayer().getFridge().howManyInFridge(foodType) >= requiredAmount) {
-            return true;
-        }
-
-        return false;
-
-    }
 
     public Result eat(String foodName) {
         foodName = foodName.trim();
@@ -1913,7 +1901,8 @@ public class GameMenuController extends Controller {
     public Result showBalance() {
         return new Result(true, "Balance: " + App.getCurrentGame().getCurrentPlayer().getWallet().getBalance() + " g");
     }
-    public Result test(){
+
+    public Result test() {
         App.getCurrentGame().getCurrentPlayer().getInventory().addGood(Good.newGood(Good.newGoodType("Omelet")), 12);
 
         GoodType goodType = Good.newGoodType("Omelet");

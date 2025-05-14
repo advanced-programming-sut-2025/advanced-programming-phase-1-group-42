@@ -5,7 +5,7 @@ import org.example.models.goods.GoodLevel;
 import org.example.models.goods.GoodType;
 
 public class AnimalProduct extends Good {
-    private AnimalProductsType animalProductType;
+    private final AnimalProductsType animalProductType;
     private GoodLevel goodLevel;
 
     public AnimalProduct(AnimalProductsType animalProductType , GoodLevel animalProductQuality) {
@@ -25,7 +25,7 @@ public class AnimalProduct extends Good {
 
     @Override
     public GoodType getType() {
-        return null;
+        return animalProductType;
     }
 
     public String getQuality() {

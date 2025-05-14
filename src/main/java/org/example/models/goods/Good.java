@@ -18,6 +18,8 @@ import org.example.models.goods.recipes.CraftingRecipe;
 import org.example.models.goods.recipes.CraftingRecipeType;
 import org.example.models.goods.tools.Tool;
 import org.example.models.goods.tools.ToolType;
+import org.example.models.interactions.Animals.AnimalProduct;
+import org.example.models.interactions.Animals.AnimalProductsType;
 
 import java.util.ArrayList;
 
@@ -72,6 +74,8 @@ public abstract class Good {
 
         if(type instanceof ToolType)
             return new Tool((ToolType) type);
+        if (type instanceof AnimalProductsType)
+            return new AnimalProduct((AnimalProductsType) type , GoodLevel.ORDINARY);
 
         return null;
     }
@@ -175,6 +179,11 @@ public abstract class Good {
         }
 
         for (ToolType value : ToolType.values()) {
+            if(value.getName().equals(typeName))
+                return value;
+        }
+
+        for (AnimalProductsType value : AnimalProductsType.values()) {
             if(value.getName().equals(typeName))
                 return value;
         }

@@ -1,6 +1,7 @@
 package org.example.models.interactions.Animals;
 
 import org.example.models.goods.GoodType;
+import org.example.models.goods.foods.FoodType;
 
 public enum AnimalProductsType implements GoodType {
     CHICKEN_EGG("Egg",50),
@@ -38,4 +39,5 @@ public enum AnimalProductsType implements GoodType {
     public String getName() {
         return name;
     }
+
 }

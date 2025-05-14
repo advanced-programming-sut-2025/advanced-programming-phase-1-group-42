@@ -8,7 +8,7 @@ import java.util.ArrayList;
 import java.util.Iterator;
 
 public class Inventory {
-    private ArrayList<ArrayList<Good>> list;
+    private ArrayList<ArrayList<Good>> list ;
     private int size = 12;
 
 
@@ -97,19 +97,32 @@ public class Inventory {
 
 
     public boolean addGood(ArrayList<Good> addingGood) {
+        if (addingGood == null || addingGood.isEmpty()) {
+            return false; // یا پرتاب استثنا: throw new IllegalArgumentException("addingGood cannot be null or empty");
+        }
+
+        Good firstAddingGood = addingGood.getFirst();
+        if (firstAddingGood == null) {
+            return false; // یا پرتاب استثنا
+        }
+
         for (ArrayList<Good> goods : list) {
-            if (!goods.isEmpty() && goods.getFirst().getName().equals(addingGood.getFirst().getName())) {
+            if (!goods.isEmpty()) {
+                Good firstGood = goods.getFirst();
+                if (firstGood != null && firstGood.getName().equals(firstAddingGood.getName())) {
+                    goods.addAll(addingGood);
+                    return true;
+                }
+            }
+        }
+
+        for (ArrayList<Good> goods : list) {
+            if (goods.isEmpty()) {
                 goods.addAll(addingGood);
                 return true;
             }
         }
 
-        for(ArrayList<Good> goods : list) {
-            if(goods.isEmpty()) {
-                goods.addAll(addingGood);
-                return true;
-            }
-        }
         return false;
     }
 
@@ -168,7 +181,7 @@ public class Inventory {
         for (ArrayList<Good> goods : list) {
             if (!goods.isEmpty()) {
                 for (Good g : goods) {
-                    if (g.getType() == type) {
+                    if (g.getType().equals(type)) {
                         count++;
                     }
                 }
@@ -195,7 +208,7 @@ public class Inventory {
             Iterator<Good> iterator = goods.iterator();
             while (iterator.hasNext() && remainingToRemove > 0) {
                 Good good = iterator.next();
-                if (good.getType() == type) {
+                if (good.getType().equals(type)) {
                     iterator.remove();
                     remainingToRemove--;
                 }
