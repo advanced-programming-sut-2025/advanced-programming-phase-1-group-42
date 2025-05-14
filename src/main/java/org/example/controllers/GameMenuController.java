@@ -15,6 +15,7 @@ import org.example.models.game_structure.*;
 import org.example.models.game_structure.weathers.Weather;
 import org.example.models.goods.Good;
 import org.example.models.goods.GoodType;
+import org.example.models.goods.artisans.ArtisanFunctions;
 import org.example.models.goods.farmings.FarmingCropType;
 import org.example.models.goods.farmings.FarmingTree;
 import org.example.models.goods.farmings.FarmingTreeSapling;
@@ -316,7 +317,7 @@ public class GameMenuController extends Controller {
         for (int i = 0 ; i < hourInt ; i++) {
             App.getCurrentGame().getDateTime().timeFlow();
         }
-        return new Result(true, "");
+        return new Result(true, "You have cheat advance time for " + hourInt + " hours!");
     }
 
     public Result cheatAdvanceDate(String date) {
@@ -324,7 +325,7 @@ public class GameMenuController extends Controller {
         for (int i = 0 ; i < dateInt ; i++) {
             App.getCurrentGame().gameFlow();
         }
-        return new Result(true, "");
+        return new Result(true, "You have cheat advance date for " + dateInt + " days!");
     }
 
 
@@ -675,6 +676,8 @@ public class GameMenuController extends Controller {
                 }
             }
         }
+
+
         //mixed seed
         try {
             Good good = seeds.getLast();
@@ -912,7 +915,7 @@ public class GameMenuController extends Controller {
         for (CookingRecipe cookingRecipe : App.getCurrentGame().getCurrentPlayer().getCookingRecipes()) {
             System.out.println(cookingRecipe.getName());
         }
-        return new Result(true, "");
+        return new Result(true, "< COOKING RECIPES >");
     }
 
     public Result cookingPrepare(String recipeName) {
@@ -1269,10 +1272,15 @@ public class GameMenuController extends Controller {
 
     // Nader
     // artisan methods
-    public Result artisanUse(String artisanName) {
+    public Result artisanUse(String artisanName, String artisanIngredient1, String artisanIngredient2) {
         artisanName = artisanName.trim();
-        //TODO
-        return new Result(true, "");
+        ArrayList<String> ourIngredients = new ArrayList<>();
+        if(!artisanIngredient1.isEmpty())
+            ourIngredients.add(artisanIngredient1);
+        if(!artisanIngredient2.isEmpty())
+            ourIngredients.add(artisanIngredient2);
+
+        return ArtisanFunctions.useArtisan(artisanName, ourIngredients);
     }
 
     public Result artisanGet(String artisanName) {

@@ -201,11 +201,12 @@ public class GameMenu implements AppMenu {
 
 
         // Artisan Commands
-//        else if ((matcher = GameMenuCommands.ARTISAN_USE.matcher(input)) != null) {
-//            System.out.println(controller.artisanUse(matcher.group("artisan_name") , matcher.group("item1_name")));
-//        }
-        else if ((matcher = GameMenuCommands.ARTISAN_GET.matcher(input)) != null) {
-            System.out.println(controller.artisanGet(matcher.group("artisanName")));
+        else if ((matcher = GameMenuCommands.ARTISAN_USE.matcher(input)) != null) {
+            System.out.println(controller.artisanUse(matcher.group("artisan_name") ,
+                    (matcher.group("item1Name") != null ? matcher.group("item1Name").trim() : ""),
+                    (matcher.group("item2Name") != null ? matcher.group("item2Name").trim() : "")));
+        } else if ((matcher = GameMenuCommands.ARTISAN_GET.matcher(input)) != null) {
+            System.out.print(controller.artisanGet(matcher.group("artisan_name")));
         }
 
 

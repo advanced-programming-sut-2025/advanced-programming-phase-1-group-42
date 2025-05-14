@@ -36,10 +36,6 @@ public enum ProductType implements GoodType {
 
     BOUQUET("Bouquet", -1, 1000),
 
-    GRASS_STARTER_RECIPE("Grass_Starter_Recipe", -1, 1000),
-
-    GRASS_STARTER("Grass_Starter", -1, 100),
-
     SPEED_GRO("Speed_Gro", -1, 100),
 
     BASIC_RETAINING_SOIL("Basic_Retaining_Soil", -1, 100),
