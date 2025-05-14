@@ -345,7 +345,7 @@ public class GameMenuController extends Controller {
                 App.getCurrentGame().cheatSetWeather(WeatherType.Snow.getWeather());
                 break;
         }
-        return new Result(true, "");
+        return new Result(true, "Weather set to " + weather);
     }
 
     public Result greenHouseBuild() {

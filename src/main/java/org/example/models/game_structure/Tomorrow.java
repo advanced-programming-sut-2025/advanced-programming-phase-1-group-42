@@ -2,10 +2,12 @@ package org.example.models.game_structure;
 
 import org.example.models.App;
 import org.example.models.enums.WeatherType;
+import org.example.models.game_structure.weathers.Rain;
+import org.example.models.game_structure.weathers.Sunny;
 import org.example.models.game_structure.weathers.Weather;
 
 public class Tomorrow {
-    private Weather weather;
+    private Weather weather = new Sunny(1,1);
 
     // Function for forecasting the weather of tomorrow
     public Weather weatherForecast() {
