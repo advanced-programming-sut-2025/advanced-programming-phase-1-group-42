@@ -55,8 +55,8 @@ public class Player {
 
     public void setFarm(Farm farm) {
         this.farm = farm;
-        this.coordinate = new Coordinate(farm.getFarmBuildings().getFirst().getStartCordinate().getX() + 10,
-                farm.getFarmBuildings().getFirst().getStartCordinate().getY() + 10);
+        this.coordinate = new Coordinate(farm.getFarmBuildings().getFirst().getStartCordinate().getX() + 5,
+                farm.getFarmBuildings().getFirst().getStartCordinate().getY() + 5);
         System.out.println(this.coordinate);
 
     }

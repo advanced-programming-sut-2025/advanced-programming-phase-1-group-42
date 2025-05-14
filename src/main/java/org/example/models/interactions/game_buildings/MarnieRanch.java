@@ -30,7 +30,7 @@ public class MarnieRanch extends GameBuilding {
     );
 
     public static ArrayList<Tile> getExpectedTiles(ArrayList<Tile> tiles) {
-        return getTiles(tiles, 45, 85);
+        return getTiles(tiles, new Coordinate(50, 90));
     }
 
 
@@ -39,8 +39,8 @@ public class MarnieRanch extends GameBuilding {
                 "MarineRanch",
                 new NPC(NPCTypes.MARNIE),
                 new Pair<>(9, 16),
-                new Coordinate(45, 85),
-                new Coordinate(65, 105));
+                new Coordinate(50, 90),
+                new Coordinate(60, 100));
     }
 
 

@@ -104,6 +104,8 @@ public class Farm {
                 for (int j = 5; j - 5 < 5; j++) {
                     this.tiles.get((i * 50) + j).setTileType(TileType.GREEN_HOUSE);
                     greenHouseTile.add(this.tiles.get((i * 50) + j));
+                    if(j == 5)
+                        greenHouseTile.getLast().setTileType(TileType.WATER);
                 }
             }
             startCoordinate = new Coordinate((playerNumber % 2) * 70 + 32, (playerNumber / 2) * 110 + 5);
@@ -114,6 +116,8 @@ public class Farm {
                 for (int j = 5; j - 5 < 5; j++) {
                     this.tiles.get((i * 50) + j).setTileType(TileType.GREEN_HOUSE);
                     greenHouseTile.add(this.tiles.get((i * 50) + j));
+                    if(j == 5)
+                        greenHouseTile.getLast().setTileType(TileType.WATER);
                 }
             }
             startCoordinate = new Coordinate((playerNumber % 2) * 70 + 59, (playerNumber / 2) * 110 + 5);
@@ -126,16 +130,16 @@ public class Farm {
         Coordinate startCoordinate = null;
         if(farmNumber == 0) {
             startCoordinate = new Coordinate((playerNumber % 2) * 70 + 45,  (playerNumber / 2) * 110 + 5);
-            for (int i = 45; i - 45 < 20; i++) {
-                for (int j = 5; j - 5 < 20; j++) {
+            for (int i = 45; i - 45 < 10; i++) {
+                for (int j = 5; j - 5 < 10; j++) {
                     this.tiles.get((i * 50) + j).setTileType(TileType.PLAYER_BUILDING);
                 }
             }
         }
         else {
             startCoordinate = new Coordinate((playerNumber % 2) * 70 + 25, (playerNumber / 2) * 110 + 15);
-            for (int i = 25; i - 25 < 20; i++) {
-                for (int j = 15; j - 15 < 20; j++) {
+            for (int i = 25; i - 25 < 10; i++) {
+                for (int j = 15; j - 15 < 10; j++) {
                     try { //TODO
                         this.tiles.get((i * 50) + j).setTileType(TileType.PLAYER_BUILDING);
                     } catch (Exception e) {
@@ -161,7 +165,7 @@ public class Farm {
         }
         else {
             startCoordinate = new Coordinate(0, 0);
-            for (int i = startCoordinate.getX(); i < 5; i++) {
+            for (int i = startCoordinate.getX(); i < 7; i++) {
                 for (int j = startCoordinate.getY(); j < 50; j++) {
                     try {  //TODO
 

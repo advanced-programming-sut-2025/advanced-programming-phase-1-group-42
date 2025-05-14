@@ -107,10 +107,10 @@ public abstract class GameBuilding extends Building {
         return new Result(true, productName + " " + quantity + "x stock purchased!");
     }
 
-    protected static ArrayList<Tile> getTiles(ArrayList<Tile> tiles, int i2, int i3) {
+    protected static ArrayList<Tile> getTiles(ArrayList<Tile> tiles, Coordinate startCoordinate) {
         ArrayList<Tile> upgradeTiles = new ArrayList<>();
-        for (int i = i2; i - i2 < 20; i++) {
-            for (int j = i3; j - i3 < 20; j++) {
+        for (int i = startCoordinate.getX(); i - startCoordinate.getX() < 10; i++) {
+            for (int j = startCoordinate.getY(); j - startCoordinate.getY() < 10; j++) {
                 upgradeTiles.add(tiles.get((i * 160) + j));
                 upgradeTiles.getLast().setTileType(TileType.GAME_BUILDING);
             }

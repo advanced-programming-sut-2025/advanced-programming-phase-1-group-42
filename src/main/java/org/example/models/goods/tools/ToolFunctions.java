@@ -57,27 +57,34 @@ public class ToolFunctions {
     public static Result tooluse(Tool tool, Coordinate coordinate) {
         switch ((ToolType) tool.getType()){
             case ToolType.HOE -> {
-
-                if(App.getCurrentGame().getCurrentPlayer().getBuff().getType().equals(BuffType.FARMING_BUFF)){
-                    App.getCurrentGame().getCurrentPlayer().getEnergy().increaseTurnEnergyLeft(1);
+                if(App.getCurrentGame().getCurrentPlayer().getBuff() != null) {
+                    if (App.getCurrentGame().getCurrentPlayer().getBuff().getType().equals(BuffType.FARMING_BUFF)) {
+                        App.getCurrentGame().getCurrentPlayer().getEnergy().increaseTurnEnergyLeft(1);
+                    }
                 }
                 return useHoe(tool, coordinate);
             }
             case ToolType.PICKAXE -> {
-                if(App.getCurrentGame().getCurrentPlayer().getBuff().getType().equals(BuffType.MINING_BUFF)){
-                    App.getCurrentGame().getCurrentPlayer().getEnergy().increaseTurnEnergyLeft(1);
+                if(App.getCurrentGame().getCurrentPlayer().getBuff() != null) {
+                    if (App.getCurrentGame().getCurrentPlayer().getBuff().getType().equals(BuffType.MINING_BUFF)) {
+                        App.getCurrentGame().getCurrentPlayer().getEnergy().increaseTurnEnergyLeft(1);
+                    }
                 }
                 return usePickaxe(tool, coordinate);
             }
             case ToolType.AXE -> {
-                if(App.getCurrentGame().getCurrentPlayer().getBuff().getType().equals(BuffType.FORAGING_BUFF)){
-                    App.getCurrentGame().getCurrentPlayer().getEnergy().increaseTurnEnergyLeft(1);
+                if(App.getCurrentGame().getCurrentPlayer().getBuff() != null) {
+                    if (App.getCurrentGame().getCurrentPlayer().getBuff().getType().equals(BuffType.FORAGING_BUFF)) {
+                        App.getCurrentGame().getCurrentPlayer().getEnergy().increaseTurnEnergyLeft(1);
+                    }
                 }
                 return useAxe(tool, coordinate);
             }
             case ToolType.WATERING_CAN -> {
-                if(App.getCurrentGame().getCurrentPlayer().getBuff().getType().equals(BuffType.FARMING_BUFF)){
-                    App.getCurrentGame().getCurrentPlayer().getEnergy().increaseTurnEnergyLeft(1);
+                if(App.getCurrentGame().getCurrentPlayer().getBuff() != null) {
+                    if (App.getCurrentGame().getCurrentPlayer().getBuff().getType().equals(BuffType.FARMING_BUFF)) {
+                        App.getCurrentGame().getCurrentPlayer().getEnergy().increaseTurnEnergyLeft(1);
+                    }
                 }
                 return useWateringCan(tool, coordinate);
             }
@@ -249,14 +256,17 @@ public class ToolFunctions {
 
     public static Result fish(ToolType fishingPole, double numberOfFishes, double rarityChance) {
 
-        if(App.getCurrentGame().getCurrentPlayer().getBuff().getType().equals(BuffType.FISHING_BUFF)){
-            App.getCurrentGame().getCurrentPlayer().getEnergy().increaseTurnEnergyLeft(1);
+        if(App.getCurrentGame().getCurrentPlayer().getBuff() != null) {
+            if (App.getCurrentGame().getCurrentPlayer().getBuff().getType().equals(BuffType.FISHING_BUFF)) {
+                App.getCurrentGame().getCurrentPlayer().getEnergy().increaseTurnEnergyLeft(1);
+            }
         }
 
         App.getCurrentGame().getCurrentPlayer().getSkill().increaseFishingPoints(5);
 
         int numberOfFishesInt = (int)Math.floor(numberOfFishes);
         int fishQuality = (int) Math.floor(rarityChance);
+
         GoodLevel fishLevel;
         switch (fishQuality){
             case 0:
@@ -279,6 +289,7 @@ public class ToolFunctions {
         if(App.getCurrentGame().getCurrentPlayer().getInventory().isFull()){
             return new Result(true, "Your inventory is full!");
         }
+
         Season season = App.getCurrentGame().getDateTime().getSeasonOfYear();
         ArrayList<Good> good = null;
 
@@ -412,6 +423,7 @@ public class ToolFunctions {
                     break;
             }
         }
+
         App.getCurrentGame().getCurrentPlayer().getInventory().addGood(good);
 
         return new Result(true,"You've got " + good.lastIndexOf(good.getFirst()) + " " + good.getFirst().getName() + " !!!");

@@ -196,6 +196,13 @@ public class GameMenuController extends Controller {
         for (Player player : players) {
             player.iniFriendships();
         }
+
+        //Goods generating
+        App.getCurrentGame().getMap().generateRandomForagingCrops(93);
+        App.getCurrentGame().getMap().generateRandomForagingSeed(93);
+        App.getCurrentGame().getMap().generateRandomMinerals(93);
+        App.getCurrentGame().getMap().generateRandomForagingTrees(93);
+
         return new Result(true, "New game has successfully created & loaded!\n");
     }
 
@@ -1905,5 +1912,14 @@ public class GameMenuController extends Controller {
 
     public Result showBalance() {
         return new Result(true, "Balance: " + App.getCurrentGame().getCurrentPlayer().getWallet().getBalance() + " g");
+    }
+    public Result test(){
+        App.getCurrentGame().getCurrentPlayer().getInventory().addGood(Good.newGood(Good.newGoodType("Omelet")), 12);
+
+        GoodType goodType = Good.newGoodType("Omelet");
+        ArrayList<Good> newGoods = Good.newGoods(goodType, 12);
+        App.getCurrentGame().getCurrentPlayer().getInventory().addGood(newGoods);
+
+        return new Result(true, "test");
     }
 }

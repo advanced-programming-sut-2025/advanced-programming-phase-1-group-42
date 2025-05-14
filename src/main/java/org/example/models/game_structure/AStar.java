@@ -108,8 +108,11 @@ public class AStar {
             return false;
 
         if(tile.getTileType() == TileType.WATER || tile.getTileType() == TileType.STONE_WALL ||
-        (tile.getTileType() == TileType.GREEN_HOUSE && App.getCurrentGame().getCurrentPlayer().getFarm().getGreenHouse() == null))
+        (tile.getTileType() == TileType.GREEN_HOUSE && !App.getCurrentGame().getCurrentPlayer().getFarm().getGreenHouse().isAvailable()) ||
+                (tile.getTileType() == TileType.GAME_BUILDING &&
+                        !App.getCurrentGame().getMap().findGameBuilding(App.getCurrentGame().getCurrentPlayer().getCoordinate()).isInWorkingHours()))
             return false;
+
 
         for(Good good : tile.getGoods()) {
             if(good instanceof FarmingTree || good instanceof ForagingTree || good instanceof ForagingMineral)

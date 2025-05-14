@@ -17,7 +17,7 @@ public class TheStarDropSaloon extends GameBuilding {
     private final ArrayList<Pair<GoodType, Integer>> products;
 
     public static ArrayList<Tile> getExpectedTiles(ArrayList<Tile> tiles) {
-        return getTiles(tiles, 75, 85);
+        return getTiles(tiles, new Coordinate(80, 90));
     }
 
     public TheStarDropSaloon(ArrayList<Tile> tiles) {
@@ -25,8 +25,8 @@ public class TheStarDropSaloon extends GameBuilding {
                 "TheStarDropSaloon",
                 new NPC(NPCTypes.GUS),
                 new Pair<>(12, 24),
-                new Coordinate(75, 85),
-                new Coordinate(95, 105));
+                new Coordinate(80, 90),
+                new Coordinate(90, 100));
 
         // Permanent Products
         this.products = new ArrayList<>(Arrays.asList(
