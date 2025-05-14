@@ -77,7 +77,7 @@ public class GameMenuController extends Controller {
                 }
 
                 int mapNumber = Integer.parseInt(matcher.group("farmNumber"));
-                Farm farm = new Farm(mapNumber, ptr, tiles);
+                Farm farm = new Farm(mapNumber - 1, ptr, tiles);
                 player.setFarm(farm);
                 farms.add(farm);
                 break;
