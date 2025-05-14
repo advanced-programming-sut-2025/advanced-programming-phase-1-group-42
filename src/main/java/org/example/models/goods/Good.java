@@ -96,6 +96,9 @@ public abstract class Good {
     }
 
     public static GoodType newGoodType(String typeName) {
+
+        typeName = typeName.trim();
+
         for (CraftingType value : CraftingType.values()) {
             if(value.getName().equals(typeName))
                 return value;

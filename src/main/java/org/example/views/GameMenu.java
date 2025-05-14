@@ -58,9 +58,9 @@ public class GameMenu implements AppMenu {
         }
 
         if ((matcher = GameMenuCommands.EXIT_GAME.matcher(input)) != null) {
-            System.out.print(controller.exitGame());
+            System.out.println(controller.exitGame());
         } else if ((matcher = GameMenuCommands.NEXT_TURN.matcher(input)) != null) {
-            System.out.print(controller.nextTurn());
+            System.out.println(controller.nextTurn());
         } else if(GameMenuCommands.FORCE_TERMINATE.matcher(input) != null) {
             System.out.println(controller.forceTerminate(scanner));
         }
@@ -71,15 +71,15 @@ public class GameMenu implements AppMenu {
         } else if ((matcher = GameMenuCommands.DATE.matcher(input)) != null) {
             System.out.println(controller.date());
         } else if ((matcher = GameMenuCommands.DATE_TIME.matcher(input)) != null) {
-            System.out.print(controller.dateTime());
+            System.out.println(controller.dateTime());
         } else if ((matcher = GameMenuCommands.DAY_OF_THE_WEEK.matcher(input)) != null) {
-            System.out.print(controller.dayOfTheWeek());
+            System.out.println(controller.dayOfTheWeek());
         } else if ((matcher = GameMenuCommands.SEASON.matcher(input)) != null) {
             System.out.println(controller.showSeason());
         } else if ((matcher = GameMenuCommands.CHEAT_ADVANCE_TIME.matcher(input)) != null) {
-            System.out.print(controller.cheatAdvanceTime(matcher.group("X")));
+            System.out.println(controller.cheatAdvanceTime(matcher.group("X")));
         } else if ((matcher = GameMenuCommands.CHEAT_ADVANCE_DATE.matcher(input)) != null) {
-            System.out.print(controller.cheatAdvanceDate(matcher.group("X")));
+            System.out.println(controller.cheatAdvanceDate(matcher.group("X")));
         }
 
         //Weather
@@ -90,16 +90,16 @@ public class GameMenu implements AppMenu {
         } else if ((matcher = GameMenuCommands.WEATHER_FORECAST.matcher(input)) != null) {
             System.out.println(controller.weatherForecast());
         } else if ((matcher = GameMenuCommands.CHEAT_WEATHER_SET.matcher(input)) != null) {
-            System.out.print(controller.cheatWeatherSet(matcher.group("weather")));
+            System.out.println(controller.cheatWeatherSet(matcher.group("weather")));
         }
 
         //GreenHouse
         else if ((matcher = GameMenuCommands.GREEN_HOUSE_BUILD.matcher(input)) != null) {
-            System.out.print(controller.greenHouseBuild());
+            System.out.println(controller.greenHouseBuild());
         }
         //Map & Walk
         else if ((matcher = GameMenuCommands.WALK.matcher(input)) != null) {
-            System.out.print(controller.walk(matcher.group("x"), matcher.group("y"), scanner));
+            System.out.println(controller.walk(matcher.group("x"), matcher.group("y"), scanner));
         } else if ((matcher = GameMenuCommands.PRINT_MAP.matcher(input)) != null) {
             System.out.println(controller.printMap(matcher.group("x"), matcher.group("y"), matcher.group("size")));
         } else if ((matcher = GameMenuCommands.HELP_READING_MAP.matcher(input)) != null) {
@@ -108,9 +108,9 @@ public class GameMenu implements AppMenu {
 
         //Energy
         else if ((matcher = GameMenuCommands.ENERGY_SHOW.matcher(input)) != null) {
-            System.out.print(controller.energyShow());
+            System.out.println(controller.energyShow());
         } else if ((matcher = GameMenuCommands.CHEAT_ENERGY_SET.matcher(input)) != null) {
-            System.out.print(controller.cheatEnergySet(matcher.group("value")));
+            System.out.println(controller.cheatEnergySet(matcher.group("value")));
         } else if ((matcher = GameMenuCommands.CHEAT_ENERGY_UNLIMITED.matcher(input)) != null) {
             System.out.println(controller.cheatEnergyUnlimited());
         }
@@ -124,13 +124,13 @@ public class GameMenu implements AppMenu {
 
         // Tools
         else if ((matcher = GameMenuCommands.TOOLS_EQUIPMENT.matcher(input)) != null) {
-            System.out.print(controller.toolsEquipment(matcher.group("toolName")));
+            System.out.println(controller.toolsEquipment(matcher.group("toolName")));
         } else if ((matcher = GameMenuCommands.TOOLS_SHOW_CURRENT.matcher(input)) != null) {
-            System.out.print(controller.toolsShowCurrent());
+            System.out.println(controller.toolsShowCurrent());
         } else if ((matcher = GameMenuCommands.TOOLS_SHOW_AVAILABLE.matcher(input)) != null) {
             System.out.println(controller.toolsShowAvailable());
         } else if ((matcher = GameMenuCommands.TOOLS_UPGRADE.matcher(input)) != null) {
-            System.out.print(controller.toolsUpgrade(matcher.group("toolName")));
+            System.out.println(controller.toolsUpgrade(matcher.group("toolName")));
         } else if ((matcher = GameMenuCommands.TOOLS_USE.matcher(input)) != null) {
             System.out.println(controller.toolsUse(matcher.group("direction")));
         }
@@ -141,18 +141,18 @@ public class GameMenu implements AppMenu {
 
         // Planting
         else if ((matcher = GameMenuCommands.PLANT_SEED.matcher(input)) != null) {
-            System.out.print(controller.plantSeed(matcher.group("seed") , matcher.group("direction")));
+            System.out.println(controller.plantSeed(matcher.group("seed") , matcher.group("direction")));
         } else if ((matcher = GameMenuCommands.SHOW_PLANT.matcher(input)) != null) {
-            System.out.print(controller.showPlant(matcher.group("x"), matcher.group("y")));
+            System.out.println(controller.showPlant(matcher.group("x"), matcher.group("y")));
         } else if ((matcher = GameMenuCommands.FERTILIZE.matcher(input)) != null) {
             System.out.println(controller.fertilize("fertilize", matcher.group("direction")));
         } else if ((matcher = GameMenuCommands.HOW_MUCH_WATER.matcher(input)) != null) {
-            System.out.print(controller.howMuchWater());
+            System.out.println(controller.howMuchWater());
         }
 
         // Crafting Commands
         else if ((matcher = GameMenuCommands.SHOW_CRAFTING_RECIPES.matcher(input)) != null) {
-            System.out.print(controller.showCraftingRecipes());
+            System.out.println(controller.showCraftingRecipes());
         } else if ((matcher = GameMenuCommands.CRAFTING_CRAFT.matcher(input)) != null) {
             System.out.print(controller.craftingCraft(matcher.group("itemName")));
         } else if ((matcher = GameMenuCommands.PLACE_ITEM.matcher(input)) != null) {
@@ -163,40 +163,40 @@ public class GameMenu implements AppMenu {
 
         // Cooking Commands
         else if ((matcher = GameMenuCommands.COOKING_REFRIGERATOR.matcher(input)) != null) {
-            System.out.print(controller.cookingRefrigerator(matcher.group("status"), matcher.group("itemName")));
+            System.out.println(controller.cookingRefrigerator(matcher.group("status"), matcher.group("itemName")));
         } else if ((matcher = GameMenuCommands.SHOW_COOKING_RECIPES.matcher(input)) != null) {
             System.out.println(controller.showCookingRecipes());
         } else if ((matcher = GameMenuCommands.COOKING_PREPARE.matcher(input)) != null) {
-            System.out.print(controller.cookingPrepare(matcher.group("recipeName")));
+            System.out.println(controller.cookingPrepare(matcher.group("recipeName")));
         } else if ((matcher = GameMenuCommands.EAT.matcher(input)) != null) {
-            System.out.print(controller.eat(matcher.group("foodName")));
+            System.out.println(controller.eat(matcher.group("foodName")));
         }
 
         // Animals & Fishing
         else if ((matcher = GameMenuCommands.BUILD_BUILDING.matcher(input)) != null) {
-            System.out.print(controller.buildBuilding(matcher.group("buildingName"), matcher.group("x"), matcher.group("y")));
+            System.out.println(controller.buildBuilding(matcher.group("buildingName"), matcher.group("x"), matcher.group("y")));
         } else if ((matcher = GameMenuCommands.BUY_ANIMAL.matcher(input)) != null) {
             System.out.println(controller.buyAnimal(matcher.group("animalName"), matcher.group("number")));
         } else if ((matcher = GameMenuCommands.PET_ANIMAL.matcher(input)) != null) {
-            System.out.print(controller.petAnimal(matcher.group("petName")));
+            System.out.println(controller.petAnimal(matcher.group("petName")));
         } else if ((matcher = GameMenuCommands.ANIMAL_LIST.matcher(input)) != null) {
-            System.out.print(controller.animalList());
+            System.out.println(controller.animalList());
         } else if ((matcher = GameMenuCommands.CHEAT_SET_ANIMAL_FRIENDSHIP.matcher(input)) != null) {
-            System.out.print(controller.cheatSetAnimalFriendship(matcher.group("animalName"), matcher.group("amount")));
+            System.out.println(controller.cheatSetAnimalFriendship(matcher.group("animalName"), matcher.group("amount")));
         } else if ((matcher = GameMenuCommands.SHEPHERD_ANIMAL.matcher(input)) != null) {
             System.out.println(controller.shepherdAnimal(matcher.group("animalName"), matcher.group("x"), matcher.group("y")));
         } else if ((matcher = GameMenuCommands.FEED_HAY.matcher(input)) != null) {
-            System.out.print(controller.feedHay(matcher.group("animalName")));
+            System.out.println(controller.feedHay(matcher.group("animalName")));
         } else if ((matcher = GameMenuCommands.ANIMAL_PRODUCTION_LIST.matcher(input)) != null) {
-            System.out.print(controller.animalProductionList());
+            System.out.println(controller.animalProductionList());
         } else if ((matcher = GameMenuCommands.COLLECT_PRODUCT.matcher(input)) != null) {
             System.out.println(controller.collectProduct(matcher.group("name")));
         } else if ((matcher = GameMenuCommands.SELL_ANIMAL.matcher(input)) != null) {
-            System.out.print(controller.sellAnimal(matcher.group("name")));
+            System.out.println(controller.sellAnimal(matcher.group("name")));
         }
         //Fishing
         else if ((matcher = GameMenuCommands.FISHING.matcher(input)) != null) {
-            System.out.print(controller.fishing(matcher.group("fishingPole")));
+            System.out.println(controller.fishing(matcher.group("fishingPole")));
         }
 
 
@@ -205,51 +205,51 @@ public class GameMenu implements AppMenu {
 //            System.out.println(controller.artisanUse(matcher.group("artisan_name") , matcher.group("item1_name")));
 //        }
         else if ((matcher = GameMenuCommands.ARTISAN_GET.matcher(input)) != null) {
-            System.out.print(controller.artisanGet(matcher.group("artisanName")));
+            System.out.println(controller.artisanGet(matcher.group("artisanName")));
         }
 
 
         // Sell & Buy Commands
         else if ((matcher = GameMenuCommands.SHOW_ALL_PRODUCTS.matcher(input)) != null) {
-            System.out.print(controller.showAllProducts());
+            System.out.println(controller.showAllProducts());
         } else if ((matcher = GameMenuCommands.SHOW_ALL_AVAILABLE_PRODUCTS.matcher(input)) != null) {
-            System.out.print(controller.showAllAvailableProducts());
+            System.out.println(controller.showAllAvailableProducts());
         } else if ((matcher = GameMenuCommands.PURCHASE.matcher(input)) != null) {
             System.out.println(controller.purchase(matcher.group("purchaseName"), matcher.group("count")));
         } else if ((matcher = GameMenuCommands.SELL.matcher(input)) != null) {
-            System.out.print(controller.sell(matcher.group("productName"), matcher.group("count")));
+            System.out.println(controller.sell(matcher.group("productName"), matcher.group("count")));
         } else if ((matcher = GameMenuCommands.CHEAT_ADD_DOLLARS.matcher(input)) != null) {
-            System.out.print(controller.cheatAddDollars(matcher.group("count")));
+            System.out.println(controller.cheatAddDollars(matcher.group("count")));
         }
 
         // Trading
         else if ((matcher = GameMenuCommands.START_TRADE.matcher(input)) != null) {
-            System.out.print(controller.startTrade());
+            System.out.println(controller.startTrade());
         }
 
         // Friendships
         else if ((matcher = GameMenuCommands.FRIENDSHIPS.matcher(input)) != null) {
             System.out.println(controller.friendships());
         } else if ((matcher = GameMenuCommands.TALK.matcher(input)) != null) {
-            System.out.print(controller.talk(matcher.group("username"), matcher.group("message")));
+            System.out.println(controller.talk(matcher.group("username"), matcher.group("message")));
         } else if ((matcher = GameMenuCommands.TALK_HISTORY.matcher(input)) != null) {
-            System.out.print(controller.talkHistory(matcher.group("username")));
+            System.out.println(controller.talkHistory(matcher.group("username")));
         } else if ((matcher = GameMenuCommands.GIFT.matcher(input)) != null) {
             System.out.println(controller.gift(matcher.group("username"),matcher.group("item"),matcher.group("amount")));
         } else if ((matcher = GameMenuCommands.GIFT_LIST.matcher(input)) != null) {
-            System.out.print(controller.giftList());
+            System.out.println(controller.giftList());
         } else if ((matcher = GameMenuCommands.GIFT_RATE.matcher(input)) != null) {
-            System.out.print(controller.giftRate(matcher.group("giftNumber"),matcher.group("rate")));
+            System.out.println(controller.giftRate(matcher.group("giftNumber"),matcher.group("rate")));
         } else if ((matcher = GameMenuCommands.GIFT_HISTORY.matcher(input)) != null) {
             System.out.println(controller.giftHistory(matcher.group("username")));
         } else if ((matcher = GameMenuCommands.HUG.matcher(input)) != null) {
-            System.out.print(controller.hug(matcher.group("username")));
+            System.out.println(controller.hug(matcher.group("username")));
         } else if ((matcher = GameMenuCommands.FLOWER.matcher(input)) != null) {
-            System.out.print(controller.flower(matcher.group("username")));
+            System.out.println(controller.flower(matcher.group("username")));
         } else if ((matcher = GameMenuCommands.ASK_MARRIAGE.matcher(input)) != null) {
             System.out.println(controller.askMarriage(matcher.group("username"),matcher.group("ring")));
         } else if ((matcher = GameMenuCommands.RESPOND.matcher(input)) != null) {
-            System.out.print(controller.respond(matcher.group("status") , matcher.group("username")));
+            System.out.println(controller.respond(matcher.group("status") , matcher.group("username")));
         }
 
 
@@ -258,19 +258,19 @@ public class GameMenu implements AppMenu {
         else if ((matcher = GameMenuCommands.MEET_NPC.matcher(input)) != null) {
             System.out.println(controller.meetNPC(matcher.group("npcName")));
         } else if ((matcher = GameMenuCommands.GIFT_NPC.matcher(input)) != null) {
-            System.out.print(controller.giftNPC(matcher.group("npcName"),matcher.group("item")));
+            System.out.println(controller.giftNPC(matcher.group("npcName"),matcher.group("item")));
         } else if ((matcher = GameMenuCommands.FRIENDSHIP_NPC_LIST.matcher(input)) != null) {
-            System.out.print(controller.friendshipNPCList());
+            System.out.println(controller.friendshipNPCList());
         } else if ((matcher = GameMenuCommands.QUESTS_LIST.matcher(input)) != null) {
             System.out.println(controller.questsList());
         } else if ((matcher = GameMenuCommands.QUESTS_FINISH.matcher(input)) != null) {
-            System.out.print(controller.questsFinish(matcher.group("index")));
+            System.out.println(controller.questsFinish(matcher.group("index")));
         }
 
 
         //Additional Functions
          else if ((matcher = GameMenuCommands.SHOW_PLAYER_COORDINATE.matcher(input)) != null) {
-             System.out.print(controller.showPlayerCoordinate());
+             System.out.println(controller.showPlayerCoordinate());
          }
 
 

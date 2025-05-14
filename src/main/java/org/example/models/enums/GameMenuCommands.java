@@ -39,8 +39,8 @@ public enum GameMenuCommands implements Command {
 
     // Parsa
     //Map
-    WALK("\\s*walk\\s-l\\s(?<x>\\S)\\s(?<y>\\S)\\s*"),
-    PRINT_MAP("\\s*print\\s*map\\s+-l\\s(?<x>\\S+)\\s(?<y>\\S+)\\s*\\s+-s\\s(?<size>\\S+)\\s*"),
+    WALK("\\s*walk\\s*-l\\s*(?<x>\\S+)\\s*(?<y>\\S+)\\s*"),
+    PRINT_MAP("\\s*print\\s*map\\s-l\\s(?<x>\\S+)\\s(?<y>\\S+)\\s*\\s-s\\s(?<size>\\S+)\\s*"),
     HELP_READING_MAP("\\s*help\\s*reading\\s*map\\s*"),
 
     // Parsa
@@ -79,7 +79,7 @@ public enum GameMenuCommands implements Command {
     CRAFTING_CRAFT("\\s*crafting\\s*craft\\s(?<itemName>\\S+)\\s*"),
     PLACE_ITEM("\\s*place\\s*item\\s+-n\\s(?<itemName>\\S+)\\s-d\\s(?<direction>\\S+)\\s*"),
     // --> cheat codes
-    CHEAT_ADD_ITEM("\\s*cheat\\s*add\\s*item\\s+-n\\s(?<itemName>\\S)\\s+-c\\s(?<count>\\S)\\s*"),
+    CHEAT_ADD_ITEM("\\s*cheat\\s*add\\s*item\\s+-n\\s(?<itemName>\\S*)\\s+-c\\s(?<count>\\S*)\\s*"),
 
     // Nader
     // Cooking Commands

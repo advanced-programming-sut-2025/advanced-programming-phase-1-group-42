@@ -838,7 +838,7 @@ public class GameMenuController extends Controller {
         ArrayList<Good> newGoods = Good.newGoods(goodType, Integer.parseInt(count));
         player.getInventory().addGood(newGoods);
 
-        return new Result(true, "You have added (cheated) " + count + " number of " + itemName + " to your inventory!");
+        return new Result(true, "You have added (" + count + ") "+ itemName + " to the inventory!");
     }
 
 
