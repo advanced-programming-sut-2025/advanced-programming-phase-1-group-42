@@ -1841,17 +1841,27 @@ public class GameMenuController extends Controller {
     public Result questsList() {
 
         for (NPC npc : App.getCurrentGame().getNPCs()) {
-            if (npc.getFriendship().getAvailableQuests().contains(1)) {
-                System.out.print(npc.getType().getRequests().get(0).first() + " ");
-                System.out.println(npc.getType().getRequests().get(0).second());
-            }
-            if (npc.getFriendship().getAvailableQuests().contains(2)) {
-                System.out.print(npc.getType().getRequests().get(1).first() + " ");
-                System.out.println(npc.getType().getRequests().get(1).second());
-            }
-            if (npc.getFriendship().getAvailableQuests().contains(3)) {
-                System.out.print(npc.getType().getRequests().get(2).first() + " ");
-                System.out.println(npc.getType().getRequests().get(2).second());
+            if (npc.getType().getName().equals("Harvey") ||
+                    npc.getType().getName().equals("Abigail") ||
+                    npc.getType().getName().equals("Leah") ||
+                    npc.getType().getName().equals("Robin") ||
+                    npc.getType().getName().equals("Sebastian")) {
+
+                System.out.println(npc.getType().getName());
+                if (npc.getFriendship().getAvailableQuests().contains(1)) {
+                    System.out.println(npc.getType().getRequests().getFirst().first().getName() + " Count: " +
+                            npc.getType().getRequests().getFirst().second());
+                }
+                if (npc.getFriendship().getAvailableQuests().contains(2)) {
+                    System.out.println(npc.getType().getRequests().get(1).first().getName() + " " +
+                            npc.getType().getRequests().get(1).second());
+                }
+                if (npc.getFriendship().getAvailableQuests().contains(3)) {
+                    System.out.println(npc.getType().getRequests().get(2).first().getName() + " " +
+                            npc.getType().getRequests().get(2).second());
+                }
+                System.out.println("-----------------");
+
             }
 
         }
@@ -1866,13 +1876,11 @@ public class GameMenuController extends Controller {
         NPC targetNPC = null;
         boolean found = false;
         for (NPC npc : App.getCurrentGame().getNPCs()) {
-            if (abs(npc.getCoordinate().getX() -
+            if (abs(npc.getType().getCoordinate().getX() -
                     App.getCurrentGame().getCurrentPlayer().getCoordinate().getX()) == 1 &&
-                    abs(npc.getCoordinate().getY() -
+                    abs(npc.getType().getCoordinate().getY() -
                             App.getCurrentGame().getCurrentPlayer().getCoordinate().getY()) == 1) {
-                targetNPC = npc;
-                found = true;
-                break;
+
             }
         }
         if (!found) {
