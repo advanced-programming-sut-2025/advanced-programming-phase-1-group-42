@@ -21,7 +21,9 @@ public class TradeMenuController {
 
     public Result tradeWithMoney(String receiver, String tradeType, String item,
                                  String amount, String price) {
-        //TODO
+
+        System.out.println(tradeType + " " + item + " " + amount + " " + price);
+
         Player currentPlayer = App.getCurrentGame().getCurrentPlayer();
         Player receiverPlayer = App.getCurrentGame().findPlayer(receiver);
         if(receiverPlayer == null) {

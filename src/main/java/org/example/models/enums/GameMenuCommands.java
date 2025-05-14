@@ -94,7 +94,7 @@ public enum GameMenuCommands implements Command {
     BUILD_BUILDING("\\s*build\\s+-a\\s+(?<buildingName>\\S+)\\s+-l\\s+(?<x>\\S+)\\s+(?<y>\\S+)\\s*"),
     BUY_ANIMAL("\\s*build\\s+-a\\s+(?<animalName>\\S+)\\s+-n\\s+(?<number>\\S+)\\s*"),
     PET_ANIMAL("\\s*pet\\s+-n\\s+(?<petName>\\S+)\\s*"),
-    ANIMAL_LIST("\\s*animal\\s*"),
+    ANIMAL_LIST("\\s*animals\\s*"),
     CHEAT_SET_ANIMAL_FRIENDSHIP("\\s*cheat\\s*set\\s*friendship\\s+-n\\s+(?<animalName>\\S+)\\s+-c\\s+(?<amount>\\S+)\\s*"),
     SHEPHERD_ANIMAL("\\s*shepherd\\s*animals\\s+-n\\s+(?<animalName>\\S+)\\s+-l\\s+(?<x>\\S+)\\s*\\s+(?<y>\\S+)\\s*"),
     FEED_HAY("\\s*feed\\s*hay\\s+-n\\s+(?<animaName>\\S+)\\s*"),
@@ -120,7 +120,7 @@ public enum GameMenuCommands implements Command {
     // Arani
     // Friendships
     FRIENDSHIPS("\\s*friendships\\s*"),
-    TALK("\\s*talk\\s+-u\\s+(?<username>\\S+)\\s+-m\\s+(?<message>\\S+)\\s*"),
+    TALK("\\s*talk\\s+-u\\s+(?<username>\\S+)\\s+-m\\s+(?<message>.*)\\s*"),
     TALK_HISTORY("\\s*talk\\s*history\\s+-u\\s+(?<username>\\S+)\\s*"),
     GIFT("\\s*gift\\s+-u\\s+(?<username>\\S+)\\s+-i\\s+(?<item>\\S+)\\s+-a\\s+(?<amount>\\S+)\\s*"),
     GIFT_LIST("\\s*gift\\s*list\\s*"),
