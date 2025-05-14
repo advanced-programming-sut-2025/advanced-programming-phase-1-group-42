@@ -1774,10 +1774,11 @@ public class GameMenuController extends Controller {
     public Result startTrade() {
         App.setCurrentMenu(Menu.TradeMenu);
 
-//        for(Player player : App.getCurrentGame().getPlayers()) {
-//            System.out.println(player.getUser().getUsername());
-//        }
-//        System.out.println("____________________________");
+        System.out.println("Players: ");
+        for(Player player : App.getCurrentGame().getPlayers()) {
+            System.out.println(player.getUser().getUsername());
+        }
+        System.out.println("____________________________");
 
         return new Result(true, "You are now in Trade Menu!");
     }
@@ -1897,5 +1898,8 @@ public class GameMenuController extends Controller {
         return new Result(true, "Coordinate: " +
                 App.getCurrentGame().getCurrentPlayer().getCoordinate().getX() + ", " +
                 " " + App.getCurrentGame().getCurrentPlayer().getCoordinate().getY());
+    }
+    public Result showBalance(){
+        return new Result(true, "Balance: " + App.getCurrentGame().getCurrentPlayer().getWallet().getBalance() + " g");
     }
 }
