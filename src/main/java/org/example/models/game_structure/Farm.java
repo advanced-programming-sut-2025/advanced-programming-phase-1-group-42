@@ -23,31 +23,31 @@ public class Farm {
         this.shippingBin = null;
 
         for (int i = (playerNumber % 2) * 70; i < (playerNumber % 2 + 1) * 70; i++) {
-            boolean flag = (i == 0 || (i + 1 == (playerNumber % 2 + 1) * 70));
+            boolean flag = (i == (playerNumber % 2) * 70) || (i + 1 == (playerNumber % 2 + 1) * 70);
             for (int j = (playerNumber / 2) * 110; j < (playerNumber / 2) * 110 + 50; j++) {
                 try { //TODO
                     this.tiles.add(tiles.get((i * 160) + j));
                     this.tiles.getLast().setTileType(TileType.FARM);
 
-                    if(flag || j == 0 || (j + 1 == (playerNumber / 2) * 110 + 50))
+                    if(flag || j == (playerNumber / 2) * 110 || (j + 1 == (playerNumber / 2) * 110 + 50))
                         this.tiles.getLast().setTileType(TileType.STONE_WALL);
 
                     switch (playerNumber) {
                         case 0:
-                            if(j == 50 && i >= 30 && i < 35)
+                            if(j == 49 && i >= 30 && i < 40)
                                 this.tiles.getLast().setTileType(TileType.PLAIN);
                             break;
                         case 1:
-                            if(j == 50 && i >= 105 && i < 110)
+                            if(j == 49 && i >= 105 && i < 115)
                                 this.tiles.getLast().setTileType(TileType.PLAIN);
                             break;
                         case 2:
-                            if(j == 110 && i >= 30 && i < 35)
+                            if(j == 109 && i >= 30 && i < 40)
                                 this.tiles.getLast().setTileType(TileType.PLAIN);
                             break;
 
                         case 3:
-                            if(j == 110 && i >= 105 && i < 110)
+                            if(j == 109 && i >= 105 && i < 115)
                                 this.tiles.getLast().setTileType(TileType.PLAIN);
                             break;
                     }
@@ -62,6 +62,36 @@ public class Farm {
         iniGreenHouse(playerNumber);
         lakes = getLakes(playerNumber, tiles);
         quarry = getQuarry(playerNumber, tiles);
+
+        for (int i = (playerNumber % 2) * 70; i < (playerNumber % 2 + 1) * 70; i++) {
+            boolean flag = (i == (playerNumber % 2) * 70 || (i + 1 == (playerNumber % 2 + 1) * 70));
+            for (int j = (playerNumber / 2) * 110; j < (playerNumber / 2) * 110 + 50; j++) {
+
+                int ii = i - (playerNumber % 2) * 70, jj = j - (playerNumber / 2) * 110;
+                if(flag || (j == (playerNumber / 2) * 110) || (j + 1 == (playerNumber / 2) * 110 + 50))
+                    this.tiles.get((ii * 50) + jj).setTileType(TileType.STONE_WALL);
+
+                switch (playerNumber) {
+                    case 0:
+                        if (j == 49 && i >= 30 && i < 40)
+                            this.tiles.get((ii * 50) + jj).setTileType(TileType.PLAIN);
+                        break;
+                    case 1:
+                        if (j == 49 && i >= 105 && i < 115)
+                            this.tiles.get((ii * 50) + jj).setTileType(TileType.PLAIN);
+                        break;
+                    case 2:
+                        if (j == 110 && i >= 25 && i < 35)
+                            this.tiles.get((ii * 50) + jj).setTileType(TileType.PLAIN);
+                        break;
+
+                    case 3:
+                        if (j == 110 && i >= 100 && i < 110)
+                            this.tiles.get((ii * 50) + jj).setTileType(TileType.PLAIN);
+                        break;
+                }
+            }
+        }
     }
 
     private void iniGreenHouse(int playerNumber) {
@@ -73,7 +103,7 @@ public class Farm {
             for (int i = 32; i - 32 < 6; i++) {
                 for (int j = 5; j - 5 < 5; j++) {
                     this.tiles.get((i * 50) + j).setTileType(TileType.GREEN_HOUSE);
-                    greenHouseTile.add(this.tiles.get((i * 160) + j));
+                    greenHouseTile.add(this.tiles.get((i * 50) + j));
                 }
             }
             startCoordinate = new Coordinate((playerNumber % 2) * 70 + 32, (playerNumber / 2) * 110 + 5);
