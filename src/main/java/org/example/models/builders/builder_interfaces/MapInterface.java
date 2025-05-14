@@ -12,7 +12,7 @@ public interface MapInterface {
     public void setTiles(ArrayList<Tile> tiles);
     public void setFarms(ArrayList<Farm> farms);
     public void setGameBuildings(ArrayList<Tile> tiles);
-    public void setShippingBins(ArrayList<Tile> tiles);
+    public void setShippingBins();
     //TODO : After building the map on DB, we will complete this section
 
 }

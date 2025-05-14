@@ -195,6 +195,7 @@ public class ToolFunctions {
             else
                 tileGoods.add(good);
 
+
             //TODO باید درخت به بار رسیده باشد که بتوان محصولات آن را برداشت کرد
         }
 

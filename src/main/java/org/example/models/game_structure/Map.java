@@ -595,4 +595,20 @@ public class Map {
     public void setTiles(ArrayList<Tile> tiles) {
         this.tiles.addAll(tiles);
     }
+
+    public void setGameBuildings(ArrayList<GameBuilding> gameBuildings) {
+        this.gameBuildings.addAll(gameBuildings);
+    }
+
+    public void setShippingBins(ArrayList<ShippingBin> shippingBins) {
+        this.shippingBins.addAll(shippingBins);
+    }
+
+    public ArrayList<Farm> getFarms() {
+        return farms;
+    }
+
+    public ArrayList<ShippingBin> getShippingBins() {
+        return shippingBins;
+    }
 }
