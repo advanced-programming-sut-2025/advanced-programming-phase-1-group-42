@@ -81,6 +81,7 @@ public class GameMenuController extends Controller {
 
                 int mapNumber = Integer.parseInt(matcher.group("farmNumber"));
                 Farm farm = new Farm(mapNumber, ptr, tiles);
+                player.setFarm(farm);
                 farms.add(farm);
                 break;
             }
@@ -187,9 +188,6 @@ public class GameMenuController extends Controller {
 
         ArrayList<Tile> tiles = createTiles();
         ArrayList<Farm> farms = farmGame(players, scanner, tiles);
-        for (int i = 0; i < farms.size(); i++) {
-            players.get(i).setFarm(farms.get(i));
-        }
 
         WholeMapBuilder wholeMapBuilder = new WholeMapBuilder();
         director.createNewMap(wholeMapBuilder, farms, tiles);
@@ -200,7 +198,6 @@ public class GameMenuController extends Controller {
         int ptr = 0;
         for (Player player : players) {
             player.iniFriendships();
-            player.setFarm(farms.get(ptr));
         }
         return new Result(true, "New game has successfully created & loaded!\n");
     }
@@ -264,17 +261,16 @@ public class GameMenuController extends Controller {
 
     public Result nextTurn() {
         App.getCurrentGame().nextPlayer();
+
         StringBuilder news = new StringBuilder();
         news.append("Current player: ").append(App.getCurrentGame().getCurrentPlayer().getUser().getUsername());
         int ctr = 1;
         for (String s : App.getCurrentGame().getCurrentPlayer().getNews()) {
             news.append("\t").append(ctr++).append(". ").append(s);
         }
+
         App.getCurrentGame().getCurrentPlayer().getNews().clear();
 
-        if(App.getCurrentGame().getCurrentPlayer().getUser().getUsername().equals(App.getCurrentGame().getPlayers().getFirst().getUser().getUsername())) {
-            App.getCurrentGame().getDateTime().timeFlow();
-        }
 
         return new Result(true, news.toString());
     }
@@ -418,9 +414,9 @@ public class GameMenuController extends Controller {
 
         int energyConsumed = path.getLast().first() / 20;
         int playerEnergy = App.getCurrentGame().getCurrentPlayer().getEnergy().getDayEnergyLeft();
-        System.out.println("Energy needed to walk to " + goal + " location is " + energyConsumed + "(Your Energy: " +
+        System.out.println("Energy needed to walk to " + goal + " location is " + energyConsumed + " (Your Energy: " +
                 playerEnergy
-                + "). Do you want to continue? (y/n)");
+                + ")\n.Do you want to continue? (y/n)");
         String input = scanner.nextLine();
         if (!input.matches("\\s*y\\s*")) {
             return new Result(true, "You didn't walked!");
