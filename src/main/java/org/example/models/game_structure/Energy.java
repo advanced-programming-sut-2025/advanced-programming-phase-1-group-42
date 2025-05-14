@@ -17,6 +17,7 @@ public class Energy {
     public void setMaxTurnEnergy(int maxTurnEnergy) {
         this.maxTurnEnergy = maxTurnEnergy;
     }
+
     public void setTurnValueLeft(int turnValueLeft) {
         this.turnValueLeft = turnValueLeft;
     }

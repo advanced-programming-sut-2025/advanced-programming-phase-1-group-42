@@ -469,24 +469,28 @@ public class GameMenuController extends Controller {
     // Parsa
     //inventory & Energy methods
     public Result energyShow() {
-
+        if(App.getCurrentGame().
+                getCurrentPlayer().getEnergy().getDayEnergyLeft() > 3000) {
+            return new Result(true, ("INFINITE"));
+        }
         return new Result(true, (App.getCurrentGame().
-                getCurrentPlayer().getEnergy()).getDayEnergyLeft() + "");
+                getCurrentPlayer().getEnergy()).getDayEnergyLeft() + "\n");
     }
 
     public Result cheatEnergySet(String value) {
         value = value.trim();
 
         int valueInt = Integer.parseInt(value);
-        App.getCurrentGame().getCurrentPlayer().getEnergy().increaseTurnEnergyLeft(valueInt);
-        return new Result(true, "");
+        App.getCurrentGame().getCurrentPlayer().getEnergy().setDayEnergyLeft(valueInt);
+        App.getCurrentGame().getCurrentPlayer().getEnergy().setTurnValueLeft(50);
+        return new Result(true, "Your energy been set to " + valueInt);
     }
 
     public Result cheatEnergyUnlimited() {
         App.getCurrentGame().getCurrentPlayer().getEnergy().setMaxDayEnergy(Integer.MAX_VALUE);
         App.getCurrentGame().getCurrentPlayer().getEnergy().setMaxTurnEnergy(Integer.MAX_VALUE);
-        App.getCurrentGame().getCurrentPlayer().getEnergy().increaseTurnEnergyLeft(Integer.MAX_VALUE);
-        App.getCurrentGame().getCurrentPlayer().getEnergy().increaseTurnEnergyLeft(Integer.MAX_VALUE);
+        App.getCurrentGame().getCurrentPlayer().getEnergy().setTurnValueLeft(Integer.MAX_VALUE);
+        App.getCurrentGame().getCurrentPlayer().getEnergy().setDayEnergyLeft(Integer.MAX_VALUE);
         return new Result(true, "");
     }
 
