@@ -254,4 +254,8 @@ public enum NPCTypes {
     public Pair<Season, Integer> getBirthday() {
         return birthday;
     }
+
+    public Coordinate getCoordinate() {
+        return coordinate;
+    }
 }

@@ -32,7 +32,7 @@ public class NPC {
                 && App.getCurrentGame().getDateTime().getDayOfSeason()==type.getBirthday().second();
     }
 
-    public Coordinate getCordinate() {
+    public Coordinate getCoordinate() {
         return coordinate;
     }
 
