@@ -81,7 +81,6 @@ public class GameMenuController extends Controller {
 
                 int mapNumber = Integer.parseInt(matcher.group("farmNumber"));
                 Farm farm = new Farm(mapNumber, ptr, tiles);
-                player.setFarm(farm);
                 farms.add(farm);
                 break;
             }
@@ -132,7 +131,6 @@ public class GameMenuController extends Controller {
                 // Road
                 //TODO
 
-
                 tiles.add(tile);
             }
         }
@@ -150,19 +148,26 @@ public class GameMenuController extends Controller {
         ArrayList<Player> players = new ArrayList<>();
         Player adminPlayer = null;
         players.add(new Player(App.getCurrentUser()));
+        System.out.println(usernames.size());
         for (String username : usernames) {
             if (username.isEmpty())
                 continue;
 
             boolean found = false;
             for (User user : App.getUsers()) {
-                if (username.equals(user.getUsername()) && user.getPlaying().equals(true))
-                    return new Result(false, username + " is already playing in other game!");
-                Player player = new Player(user);
-                players.add(player);
-                if (user.getUsername().equals(App.getCurrentUser().getUsername()))
-                    adminPlayer = player;
-                found = true;
+                if (username.equals(user.getUsername())) {
+                    if(user.getPlaying().equals(true))
+                        return new Result(false, username + " is already playing in other game!");
+
+                    Player player = new Player(user);
+                    players.add(player);
+
+                    if (user.getUsername().equals(App.getCurrentUser().getUsername()))
+                        adminPlayer = player;
+                    user.setPlaying(true);
+                    found = true;
+                    break;
+                }
             }
             if (!found)
                 return new Result(false, "No player with username " + username + " found!");
@@ -197,8 +202,10 @@ public class GameMenuController extends Controller {
 
         App.setCurrentGame(game);
         App.getGames().add(game);
+        int ptr = 0;
         for (Player player : players) {
-            player.iniFreindships();
+            player.iniFriendships();
+            player.setFarm(farms.get(ptr));
         }
         return new Result(true, "New game has successfully created & loaded!\n");
     }

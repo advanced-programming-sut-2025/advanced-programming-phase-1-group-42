@@ -57,6 +57,7 @@ public class Player {
         this.farm = farm;
         this.coordinate = new Coordinate(farm.getFarmBuildings().getFirst().getStartCordinate().getX() + 10,
                 farm.getFarmBuildings().getFirst().getStartCordinate().getY() + 10);
+        System.out.println(this.coordinate);
 
     }
 
@@ -79,10 +80,11 @@ public class Player {
         this.inHandGood = null;
         this.buff = null;
         this.rejectionBuff = null;
-
+        this.farm = null;
+        this.coordinate = new Coordinate(0, 0);
     }
 
-    public void iniFreindships() {
+    public void iniFriendships() {
         for (Player player : App.getCurrentGame().getPlayers()) {
             if(player != this) {
                 friendShips.put(player, new Pair<>(0, 0));
@@ -136,7 +138,9 @@ public class Player {
     }
 
     public Coordinate getCoordinate() {
-        return new Coordinate(coordinate.getX(), coordinate.getY());
+        int x = this.coordinate.getX();
+        int y = this.coordinate.getY();
+        return new Coordinate(x, y);
     }
 
     public void setBuff(Buff buff) {
@@ -251,5 +255,9 @@ public class Player {
 
     public String getPlayerUsername(){
         return user.getUsername();
+    }
+
+    public void setUser(User user) {
+        this.user = user;
     }
 }
