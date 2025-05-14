@@ -316,7 +316,7 @@ public class GameMenuController extends Controller {
         for (int i = 0 ; i < hourInt ; i++) {
             App.getCurrentGame().getDateTime().timeFlow();
         }
-        return new Result(true, "");
+        return new Result(true, "You have cheat advance time for " + hourInt + " hours!");
     }
 
     public Result cheatAdvanceDate(String date) {
@@ -324,7 +324,7 @@ public class GameMenuController extends Controller {
         for (int i = 0 ; i < dateInt ; i++) {
             App.getCurrentGame().gameFlow();
         }
-        return new Result(true, "");
+        return new Result(true, "You have cheat advance date for " + dateInt + " days!");
     }
 
 
@@ -912,7 +912,7 @@ public class GameMenuController extends Controller {
         for (CookingRecipe cookingRecipe : App.getCurrentGame().getCurrentPlayer().getCookingRecipes()) {
             System.out.println(cookingRecipe.getName());
         }
-        return new Result(true, "");
+        return new Result(true, "< COOKING RECIPES >");
     }
 
     public Result cookingPrepare(String recipeName) {
