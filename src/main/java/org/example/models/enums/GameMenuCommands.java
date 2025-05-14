@@ -31,7 +31,7 @@ public enum GameMenuCommands implements Command {
 
     // Parsa
     //Weather
-    CHEAT_THUNDER("\\s*cheat\\s+Thor\\s+-l\\s+(?<x>\\S+)\\s+(?<y>\\S+)\\s*"),
+    CHEAT_THUNDER("\\s*cheat\\s+Thor\\s+-l\\s*(?<x>\\S+)\\s*(?<y>\\S+)\\s*"),
     WEATHER("\\s*weather\\s*"),
     WEATHER_FORECAST("\\s*weather\\s+forecast\\s*"),
     CHEAT_WEATHER_SET("\\s*cheat\\s+weather\\s+set\\s+(?<weather>\\S+)\\s*"),
@@ -49,7 +49,7 @@ public enum GameMenuCommands implements Command {
     CHEAT_ENERGY_SET("\\s*energy\\s*set\\s+(?<value>\\S+)\\s*"),
     CHEAT_ENERGY_UNLIMITED("\\s*energy\\s*unlimited\\s*"),
     INVENTORY_TRASH_ITEM("\\s*inventory\\s+trash\\s+-i\\s+(?<item>\\S+)\\s+-n\\s+(?<number>\\S+)\\s*"),
-    INVENTORY_SHOW("\\s*inventory\\s+show\\s*"),
+    INVENTORY_SHOW("\\s*inventory\\s*show\\s*"),
 
     // Arani
     // Tools

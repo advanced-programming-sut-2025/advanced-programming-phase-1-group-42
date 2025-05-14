@@ -60,14 +60,18 @@ public class Trade {
         return targetAmount;
     }
 
+
     public boolean isAccepted() { return accepted; }
+
     public void setAccepted(boolean accepted) { this.accepted = accepted; }
+
     public boolean isShown() { return Shown; }
     public void setShown(boolean Shown) { this.Shown = Shown; }
     @Override
     public String toString() {
         return "Trade{id=" + id + ", type=" + type + ", sender=" + sender.getUser().getUsername() +
+                ", receiver=" + receiver.getUser().getUsername() +
                 ", item=" + item + ", amount=" + amount + ", price=" + price +
-                ", targetItem=" + targetItem + ", targetAmount=" + targetAmount + "}";
+                ", targetItem=" + targetItem + ", targetAmount=" + targetAmount + ", Acceptance=" + accepted + "}";
     }
 }

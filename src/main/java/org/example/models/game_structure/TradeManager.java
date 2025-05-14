@@ -44,6 +44,7 @@ public class TradeManager {
                                         (k, pair) -> new Pair<>(pair.first(), pair.second() - 30));
                                 trade.getSender().getFriendShips().computeIfPresent(App.getCurrentGame().getCurrentPlayer(),
                                         (k, pair) -> new Pair<>(pair.first(), pair.second() - 30));
+                                trade.setAccepted(false);
                                 return false;
                             } else {
                                 trade.getSender().getWallet().increaseBalance(trade.getAmount());
@@ -58,6 +59,7 @@ public class TradeManager {
                                         (k, pair) -> new Pair<>(pair.first(), pair.second() + 30));
                                 trade.getSender().getFriendShips().computeIfPresent(App.getCurrentGame().getCurrentPlayer(),
                                         (k, pair) -> new Pair<>(pair.first(), pair.second() + 30));
+                                trade.setAccepted(true);
                                 return true;
                             }
                         }
@@ -68,6 +70,7 @@ public class TradeManager {
                                         (k, pair) -> new Pair<>(pair.first(), pair.second() - 30));
                                 trade.getSender().getFriendShips().computeIfPresent(App.getCurrentGame().getCurrentPlayer(),
                                         (k, pair) -> new Pair<>(pair.first(), pair.second() - 30));
+                                trade.setAccepted(false);
                                 return false;
                             } else {
 
@@ -84,6 +87,7 @@ public class TradeManager {
                                         (k, pair) -> new Pair<>(pair.first(), pair.second() + 30));
                                 trade.getSender().getFriendShips().computeIfPresent(App.getCurrentGame().getCurrentPlayer(),
                                         (k, pair) -> new Pair<>(pair.first(), pair.second() + 30));
+                                trade.setAccepted(true);
                                 return true;
                             }
                         }
@@ -95,6 +99,7 @@ public class TradeManager {
                                         (k, pair) -> new Pair<>(pair.first(), pair.second() - 30));
                                 trade.getSender().getFriendShips().computeIfPresent(App.getCurrentGame().getCurrentPlayer(),
                                         (k, pair) -> new Pair<>(pair.first(), pair.second() - 30));
+                                trade.setAccepted(false);
                                 return false;
                             } else {
                                 trade.getReceiver().getInventory().addGood(Good.newGood(Good.newGoodType(trade.getItem())), trade.getAmount());
@@ -109,6 +114,7 @@ public class TradeManager {
                                         (k, pair) -> new Pair<>(pair.first(), pair.second() + 30));
                                 trade.getSender().getFriendShips().computeIfPresent(App.getCurrentGame().getCurrentPlayer(),
                                         (k, pair) -> new Pair<>(pair.first(), pair.second() + 30));
+                                trade.setAccepted(true);
                                 return true;
                             }
                         }
@@ -119,6 +125,7 @@ public class TradeManager {
                                         (k, pair) -> new Pair<>(pair.first(), pair.second() - 30));
                                 trade.getSender().getFriendShips().computeIfPresent(App.getCurrentGame().getCurrentPlayer(),
                                         (k, pair) -> new Pair<>(pair.first(), pair.second() - 30));
+                                trade.setAccepted(true);
                                 return false;
                             } else {
                                 trade.getSender().getInventory().addGood(Good.newGood(Good.newGoodType(trade.getItem())), trade.getAmount());
@@ -133,6 +140,7 @@ public class TradeManager {
                                         (k, pair) -> new Pair<>(pair.first(), pair.second() + 30));
                                 trade.getSender().getFriendShips().computeIfPresent(App.getCurrentGame().getCurrentPlayer(),
                                         (k, pair) -> new Pair<>(pair.first(), pair.second() + 30));
+                                trade.setAccepted(true);
                                 return true;
                             }
                         }
@@ -142,6 +150,7 @@ public class TradeManager {
                             (k, pair) -> new Pair<>(pair.first(), pair.second() - 30));
                     trade.getSender().getFriendShips().computeIfPresent(App.getCurrentGame().getCurrentPlayer(),
                             (k, pair) -> new Pair<>(pair.first(), pair.second() - 30));
+                    trade.setAccepted(false);
                     return false;
                 }
 

@@ -13,6 +13,8 @@ import org.example.models.goods.foragings.ForagingMineralType;
 import org.example.models.goods.foragings.ForagingTree;
 
 import java.util.Iterator;
+import java.util.List;
+import java.util.stream.Collectors;
 
 public abstract class Weather {
     double weatherEffectingEnergy;
@@ -21,32 +23,45 @@ public abstract class Weather {
 
     public void thunder(int x, int y) {
         Coordinate coordinate = new Coordinate(x, y);
-//        if(App.getCurrentGame().getCurrentPlayer().getCoordinate().equals(coordinate)){
-//            System.out.println("You've Been Struck by Thunder!");
-//        }
-//        else
-        {
-            Tile tile = App.getCurrentGame().getMap().findTile(coordinate);
-            System.out.println("Thunder has been struck");
-            if(!(tile.getTileType().equals(TileType.GREEN_HOUSE))) {
-                Iterator<Good> iterator = tile.getGoods().iterator();
-                while (iterator.hasNext()) {
-                    Good good = iterator.next();
-                    if (good instanceof ForagingTree) {
-                        iterator.remove();
-                        tile.addGoodToTile(Good.newGood(ForagingMineralType.COAL));
-                        System.out.println("A Tree has been Fallen By Thor");
-                    } else if (good instanceof FarmingTree) {
-                        iterator.remove();
-                        tile.addGoodToTile(Good.newGood(ForagingMineralType.COAL));
-                        System.out.println("A Tree has been Fallen By Thor");
-                    } else if (good instanceof FarmingTreeSapling) {
-                        iterator.remove();
-                        tile.addGoodToTile(Good.newGood(ForagingMineralType.COAL));
-                        System.out.println("A Tree has been Fallen By Thor");
-                    }
-                }
+        if(App.getCurrentGame().getCurrentPlayer().getCoordinate().equals(coordinate)){
+            System.out.println("You've Been Struck by Thunder!");
+        } else {
+            // Null checks first
+            if (App.getCurrentGame() == null || App.getCurrentGame().getMap() == null) {
+                System.err.println("Error: Game or map not loaded.");
+                return;
             }
+
+            Tile tile = App.getCurrentGame().getMap().findTile(coordinate);
+            if (tile == null) {
+                System.err.println("Error: Tile not found at coordinate " + coordinate);
+                return;
+            }
+
+            System.out.println("Thunder has been struck");
+
+            // Skip if GREEN_HOUSE
+            if (TileType.GREEN_HOUSE.equals(tile.getTileType())) {
+                System.out.println("Green House tiles are protected.");
+                return;
+            }
+
+
+            // Single message variable (avoid duplication)
+            final String TREE_FALLEN_MSG = "A Tree has been Fallen By Thor";
+
+            // Remove all tree types and replace with coal
+            List<Good> treesToRemove = tile.getGoods().stream()
+                    .filter(good -> good instanceof ForagingTree
+                            || good instanceof FarmingTree
+                            || good instanceof FarmingTreeSapling)
+                    .collect(Collectors.toList());
+
+            treesToRemove.forEach(tree -> {
+                System.out.println(TREE_FALLEN_MSG);
+                tile.addGoodToTile(Good.newGood(ForagingMineralType.COAL));
+                tile.getGoods().remove(tree); // Safe because we're not iterating
+            });
         }
     }
     public abstract double getWeatherEffectingEnergy();

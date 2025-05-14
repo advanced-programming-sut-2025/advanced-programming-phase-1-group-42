@@ -191,7 +191,7 @@ public class Map {
                         boolean printed = false;
                         for (Good good : tile.getGoods()) {
                             if (good instanceof ForagingMineral) {
-                                System.out.print(colorMap.get("Teal") + colorMap.get("Gray_Background") +
+                                System.out.print(colorMap.get("Maroon") + colorMap.get("Gray_Background") +
                                          "s" + colorMap.get("Reset"));
                                 printed = true;
                             }
@@ -235,7 +235,7 @@ public class Map {
                                 colorMap.get("Green_Background") + "p" + colorMap.get("Reset"));
                     } else if (tile.getTileType() == TileType.SHIPPING_BIN) {
                         System.out.print(colorMap.get("Gray") +
-                                colorMap.get("Maroon") + " " + colorMap.get("Reset"));
+                                colorMap.get("Gold_Background") + " " + colorMap.get("Reset"));
                     }
                 }
             }

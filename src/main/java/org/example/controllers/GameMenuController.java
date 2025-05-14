@@ -321,8 +321,8 @@ public class GameMenuController extends Controller {
 
     public Result cheatAdvanceDate(String date) {
         int dateInt = Integer.parseInt(date);
-        for (int i = 0; i < dateInt; i++) {
-            App.getCurrentGame().gameFlow();
+        for (int i = 0; i < dateInt*13; i++) {
+            App.getCurrentGame().getDateTime().timeFlow();
         }
         return new Result(true, "You have cheat advance date for " + dateInt + " days!");
     }
@@ -1244,7 +1244,7 @@ public class GameMenuController extends Controller {
                 Skill skill = App.getCurrentGame().getCurrentPlayer().getSkill();
                 double chance = Math.random();
 
-                double numberOfFishes = Math.max(weather.getFishChance() * chance * (2 + skill.getFishingLevel()), 6);
+                double numberOfFishes = Math.min(weather.getFishChance() * chance * (2 + skill.getFishingLevel()), 6);
 
 
                 double poleRarityChange = 0;
@@ -1266,12 +1266,12 @@ public class GameMenuController extends Controller {
                 }
 
                 double rarityChance = Math.random();
-                double fishRarity = Math.max(((rarityChance * (2 + skill.getFishingLevel()) * poleRarityChange) / (7 - weather.getFishChance())), 4);
+                double fishRarity = Math.min(((rarityChance * (2 + skill.getFishingLevel()) * poleRarityChange) / (7 - weather.getFishChance())), 4);
 
 
                 ToolFunctions.fish(fishingPoleGood, numberOfFishes, fishRarity);
 
-                return new Result(true, "You've Caught a Fish");
+                return new Result(true, "Better luck next time");
             }
         }
         return new Result(true, "You are not close to water source");
