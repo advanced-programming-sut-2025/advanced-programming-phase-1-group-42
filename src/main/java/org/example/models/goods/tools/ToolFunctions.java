@@ -267,6 +267,11 @@ public class ToolFunctions {
         int numberOfFishesInt = (int)Math.floor(numberOfFishes);
         int fishQuality = (int) Math.floor(rarityChance);
 
+
+        if(numberOfFishesInt == 0){
+            return new Result(true , "Better luck next time!");
+        }
+
         GoodLevel fishLevel;
         switch (fishQuality){
             case 0:
@@ -300,7 +305,6 @@ public class ToolFunctions {
                 case SPRING:
                     good = Good.newFishs(FishType.HERRING,numberOfFishesInt , fishLevel);
                     break;
-
                 case SUMMER:
                     good = Good.newFishs(FishType.SUNFISH,numberOfFishesInt, fishLevel);
                     break;
@@ -321,9 +325,6 @@ public class ToolFunctions {
                         case 0:
                             good = Good.newFishs(FishType.HERRING, numberOfFishesInt, fishLevel);
                             break;
-                        case 1:
-                            good = Good.newFishs(FishType.FLOUNDER, numberOfFishesInt, fishLevel);
-                            break;
                         case 2:
                             good = Good.newFishs(FishType.LIONFISH, numberOfFishesInt, fishLevel);
                             break;
@@ -333,7 +334,8 @@ public class ToolFunctions {
                         case 4:
                             if (skill.getFishingLevel() == 5) {
                                 good = Good.newFishs(FishType.LEGEND, numberOfFishesInt, fishLevel);
-                            } else {
+                            }
+                            else {
                                 good = Good.newFishs(FishType.HERRING, numberOfFishesInt, fishLevel);
                             }
                             break;
@@ -346,9 +348,6 @@ public class ToolFunctions {
                     switch (chance) {
                         case 0:
                             good = Good.newFishs(FishType.SUNFISH, numberOfFishesInt, fishLevel);
-                            break;
-                        case 1:
-                            good = Good.newFishs(FishType.DORADO, numberOfFishesInt, fishLevel);
                             break;
                         case 2:
                             good = Good.newFishs(FishType.TILAPIA, numberOfFishesInt, fishLevel);
@@ -379,9 +378,6 @@ public class ToolFunctions {
                         case 2:
                             good = Good.newFishs(FishType.SHAD, numberOfFishesInt, fishLevel);
                             break;
-                        case 3:
-                            good = Good.newFishs(FishType.BLUE_DISCUS, numberOfFishesInt, fishLevel);
-                            break;
                         case 4:
                             if (skill.getFishingLevel() == 5) {
                                 good = Good.newFishs(FishType.ANGLER, numberOfFishesInt, fishLevel);
@@ -405,9 +401,6 @@ public class ToolFunctions {
                         case 2:
                             good = Good.newFishs(FishType.MIDNIGHT_CARP, numberOfFishesInt, fishLevel);
                             break;
-                        case 3:
-                            good = Good.newFishs(FishType.TUNA, numberOfFishesInt, fishLevel);
-                            break;
                         case 4:
                             if (skill.getFishingLevel() == 5) {
                                 good = Good.newFishs(FishType.GLACIERFISH, numberOfFishesInt, fishLevel);
@@ -425,7 +418,7 @@ public class ToolFunctions {
         }
 
         App.getCurrentGame().getCurrentPlayer().getInventory().addGood(good);
-
+        System.out.println("You've got " + good.size() + " " + good.getFirst().getName() + " !!!");
         return new Result(true,"You've got " + good.lastIndexOf(good.getFirst()) + " " + good.getFirst().getName() + " !!!");
     }
 

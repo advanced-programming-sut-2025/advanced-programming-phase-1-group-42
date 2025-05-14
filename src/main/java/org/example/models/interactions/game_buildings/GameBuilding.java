@@ -43,10 +43,11 @@ public abstract class GameBuilding extends Building {
     }
 
     public boolean isInBuilding(Coordinate coordinate) {
-        for (Tile tile : tiles) {
-            if(tile.getCordinate().equals(coordinate))
-                return true;
-        }
+        if(startCoordinate.getX() <= coordinate.getX() &&
+                endCoordinate.getX() > coordinate.getX() &&
+                startCoordinate.getY() <= coordinate.getY() &&
+                endCoordinate.getY() > coordinate.getY())
+            return true;
         return false;
     }
 

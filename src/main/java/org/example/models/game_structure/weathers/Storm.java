@@ -35,8 +35,8 @@ public class Storm extends Weather {
     }
 
     public void randomThunder() {
-        int[][] x = new int[3][4];
-        int[][] y = new int[3][4];
+        int[][] x = new int[4][5];
+        int[][] y = new int[4][5];
 
         for (int i = 0; i < 5; i++) {
             for (int j = 0; j < 3; j++) {
