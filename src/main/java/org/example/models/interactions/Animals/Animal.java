@@ -44,6 +44,7 @@ public class Animal {
         if (animalType.equals(AnimalTypes.COW)) {
             if (App.getCurrentGame().getCurrentPlayer().getInventory().isInInventoryBoolean(ToolType.MILK_PAIL)) {
                 friendShip += 5;
+                App.getCurrentGame().getCurrentPlayer().getEnergy().decreaseTurnEnergyLeft(7);
                 return products;
             } else {
                 System.out.println("You need Milk Pail to get Milk");
@@ -52,6 +53,7 @@ public class Animal {
         } else if (animalType.equals(AnimalTypes.GOAT)) {
             if (App.getCurrentGame().getCurrentPlayer().getInventory().isInInventoryBoolean(ToolType.MILK_PAIL)) {
                 friendShip += 5;
+                App.getCurrentGame().getCurrentPlayer().getEnergy().decreaseTurnEnergyLeft(7);
                 return products;
             } else {
                 System.out.println("You need Milk Pail to get Milk");
@@ -60,6 +62,7 @@ public class Animal {
         } else if (animalType.equals(AnimalTypes.SHEEP)) {
             if (App.getCurrentGame().getCurrentPlayer().getInventory().isInInventoryBoolean(ToolType.SHEAR)) {
                 friendShip += 5;
+                App.getCurrentGame().getCurrentPlayer().getEnergy().decreaseTurnEnergyLeft(7);
                 return products;
             } else {
                 System.out.println("You need Shear to get Sheep's wool");

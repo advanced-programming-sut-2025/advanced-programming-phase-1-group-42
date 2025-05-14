@@ -1,6 +1,7 @@
 package org.example.views;
 
 import org.example.controllers.ProfileMenuController;
+import org.example.models.enums.LoginRegisterCommands;
 import org.example.models.enums.ProfileMenuCommands;
 
 import java.util.Scanner;
@@ -41,6 +42,8 @@ public class ProfileMenu implements AppMenu {
         }
         else if(ProfileMenuCommands.Exit.matcher(input) != null) {
             System.out.println(controller.exit());
+        } else if(LoginRegisterCommands.ShowCurrentMenu.matcher(input) != null) {
+            System.out.println(controller.showCurrentMenu());
         }
         else
             System.out.println("Invalid command!");

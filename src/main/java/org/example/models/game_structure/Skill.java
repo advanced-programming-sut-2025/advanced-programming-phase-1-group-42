@@ -13,11 +13,46 @@ public class Skill {
     private int miningLevel = 0;
     private int foragingLevel = 0;
 
+
+
+    public void increaseFarmingPoints(int value) {
+        farmingPoints += value;
+        if(farmingPoints == 150 || farmingPoints == 250 || farmingPoints == 350 || farmingPoints == 450) {
+            increaseFarmingLevel();
+        }
+    }
+    public void increaseCookingPoints(int value) {
+        cookingPoints += value;
+        if(cookingPoints == 150 || cookingPoints == 250 || cookingPoints == 350 || cookingPoints == 450) {
+            increaseCookingLevel();
+        }
+    }
+    public void increaseFishingPoints(int value) {
+        fishingPoints += value;
+        if(fishingPoints == 150 || fishingPoints == 250 || fishingPoints == 350 || fishingPoints == 450) {
+            increaseFishingLevel();
+        }
+    }
+    public void increaseMiningPoints(int value) {
+        miningPoints += value;
+        if(miningPoints == 150 || miningPoints == 250 || miningPoints == 350 || miningPoints == 450) {
+            increaseMiningLevel();
+        }
+    }
+    public void increaseForagingPoints(int value) {
+        foragingPoints += value;
+        if(foragingPoints == 150 || foragingPoints == 250 || foragingPoints == 350 || foragingPoints == 450) {
+            increaseForagingLevel();
+        }
+    }
+
+
+
     public int getCookingLevel() {
         return cookingLevel;
     }
 
-    public void increaseCookingLevel(int cookingLevel) {
+    public void increaseCookingLevel() {
         this.cookingLevel++;
     }
 
@@ -25,7 +60,7 @@ public class Skill {
         return miningLevel;
     }
 
-    public void increaseMiningLevel(int miningLevel) {
+    public void increaseMiningLevel() {
         this.miningLevel++;
     }
 
@@ -33,7 +68,7 @@ public class Skill {
         return farmingLevel;
     }
 
-    public void increaseFarmingLevel(int farmingLevel) {
+    public void increaseFarmingLevel() {
         this.farmingLevel++;
     }
 
@@ -41,7 +76,7 @@ public class Skill {
         return foragingLevel;
     }
 
-    public void increaseForagingLevel(int foragingLevel) {
+    public void increaseForagingLevel() {
         this.foragingLevel++;
     }
 
@@ -49,7 +84,7 @@ public class Skill {
         return fishingLevel;
     }
 
-    public void increaseFishingLevel(int fishingLevel) {
+    public void increaseFishingLevel() {
         this.fishingLevel++;
     }
 }

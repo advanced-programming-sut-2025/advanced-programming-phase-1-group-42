@@ -1,11 +1,14 @@
 package org.example.models.game_structure;
 
 import org.example.models.App;
+import org.example.models.enums.Season;
 import org.example.models.enums.WeatherType;
+import org.example.models.game_structure.weathers.Rain;
+import org.example.models.game_structure.weathers.Sunny;
 import org.example.models.game_structure.weathers.Weather;
 
 public class Tomorrow {
-    private Weather weather;
+    private Weather weather = new Sunny(1,1);
 
     // Function for forecasting the weather of tomorrow
     public Weather weatherForecast() {
@@ -20,10 +23,10 @@ public class Tomorrow {
         this.weather = weather;
     }
 
-    public void setTomorrowWeather() {
+    public void setTomorrowWeather(Game game) {
         double probability = Math.random()*10;
 
-        if (App.getCurrentGame().getDateTime().getSeasonOfYear().equals("Spring")){
+        if (game.getDateTime().getSeasonOfYear().equals(Season.SPRING)) {
 
             if(probability < 7){
                 weather = WeatherType.Sunny.getWeather();
@@ -32,13 +35,13 @@ public class Tomorrow {
             } else {
                 weather = WeatherType.Storm.getWeather();
             }
-        } else if (App.getCurrentGame().getDateTime().getSeasonOfYear().equals("Summer")){
+        } else if (game.getDateTime().getSeasonOfYear().equals(Season.SUMMER)){
             if(probability < 9){
                 weather = WeatherType.Sunny.getWeather();
             } else {
                 weather = WeatherType.Rain.getWeather();
             }
-        } else if (App.getCurrentGame().getDateTime().getSeasonOfYear().equals("Fall")){
+        } else if (game.getDateTime().getSeasonOfYear().equals(Season.FALL)){
             if (probability < 2){
                 weather = WeatherType.Sunny.getWeather();
             } else if( probability < 6){
@@ -48,7 +51,7 @@ public class Tomorrow {
             } else {
                 weather = WeatherType.Snow.getWeather();
             }
-        } else if (App.getCurrentGame().getDateTime().getSeasonOfYear().equals("Winter")){
+        } else if (game.getDateTime().getSeasonOfYear().equals(Season.WINTER)){
             if( probability < 2){
                 weather = WeatherType.Rain.getWeather();
             } else if(probability < 5){

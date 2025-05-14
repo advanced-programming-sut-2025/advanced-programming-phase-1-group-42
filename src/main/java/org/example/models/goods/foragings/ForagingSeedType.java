@@ -105,6 +105,16 @@ public enum ForagingSeedType implements GoodType {
 
     //TODO: Mixed seed left
 
+    private String name;
+    private FarmingCropType farmingCropType;
+    private ArrayList<Integer> stages;
+    private int totalHarvestTime;
+    private boolean oneTime;
+    private int regrowthTime;
+    private int seasonPrice;
+    private int otherSeasonPrice;
+    private ArrayList<Season> seasons;
+    private boolean canBecomeGiant;
 
     ForagingSeedType(String name, FarmingCropType farmingCropType, ArrayList<Integer> stages, int totalHarvestTime, boolean oneTime, int regrowthTime, int seasonPrice, int otherSeasonPrice, ArrayList<Season> seasons, boolean canBecomeGiant) {
         this.name = name;
@@ -119,16 +129,6 @@ public enum ForagingSeedType implements GoodType {
         this.canBecomeGiant = canBecomeGiant;
     }
 
-    private String name;
-    private FarmingCropType farmingCropType;
-    private ArrayList<Integer> stages;
-    private int totalHarvestTime;
-    private boolean oneTime;
-    private int regrowthTime;
-    private int seasonPrice;
-    private int otherSeasonPrice;
-    private ArrayList<Season> seasons;
-    private boolean canBecomeGiant;
 
 
     @Override
@@ -153,6 +153,8 @@ public enum ForagingSeedType implements GoodType {
     public FarmingCropType getFarmingCropType() {
         return farmingCropType;
     }
+
+    public ArrayList<Season> getSeason() {return seasons;}
 
     public int getTotalHarvestTime() {
         return totalHarvestTime;

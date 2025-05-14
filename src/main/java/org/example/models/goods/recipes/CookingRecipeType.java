@@ -7,6 +7,7 @@ import org.example.models.goods.fishs.FishType;
 import org.example.models.goods.foods.FoodType;
 import org.example.models.goods.foragings.ForagingCropType;
 import org.example.models.goods.products.ProductType;
+import org.example.models.interactions.Animals.AnimalProductsType;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -15,7 +16,7 @@ import java.util.Arrays;
 public enum CookingRecipeType implements GoodType {
 
     FRIED_EGG(new ArrayList<>(Arrays.asList(
-            new Pair<>(FoodType.EGG, 1)
+            new Pair<>(AnimalProductsType.CHICKEN_EGG, 1)
     )), FoodType.FRIED_EGG),
 
     BAKED_FISH(new ArrayList<>(Arrays.asList(
@@ -30,14 +31,14 @@ public enum CookingRecipeType implements GoodType {
     )), FoodType.SALAD),
 
     OMELET(new ArrayList<>(Arrays.asList(
-            new Pair<>(FoodType.EGG, 1),
-            new Pair<>(FoodType.MILK, 1)
+            new Pair<>(AnimalProductsType.CHICKEN_EGG, 1),
+            new Pair<>(AnimalProductsType.COW_MILK, 1)
     )), FoodType.OMELET),
 
     PUMPKIN_PIE(new ArrayList<>(Arrays.asList(
             new Pair<>(FarmingCropType.PUMPKIN, 1),
             new Pair<>(FoodType.WHEAT_FLOUR, 1),
-            new Pair<>(FoodType.MILK, 1),
+            new Pair<>(AnimalProductsType.COW_MILK, 1),
             new Pair<>(FoodType.SUGAR, 1)
     )), FoodType.PUMPKIN_PIE),
 
@@ -69,7 +70,7 @@ public enum CookingRecipeType implements GoodType {
     COOKIE(new ArrayList<>(Arrays.asList(
             new Pair<>(FoodType.WHEAT_FLOUR, 1),
             new Pair<>(FoodType.SUGAR, 1),
-            new Pair<>(FoodType.EGG, 1)
+            new Pair<>(AnimalProductsType.CHICKEN_EGG, 1)
     )), FoodType.COOKIE),
 
     HASH_BROWNS(new ArrayList<>(Arrays.asList(
@@ -79,7 +80,7 @@ public enum CookingRecipeType implements GoodType {
 
     PANCAKES(new ArrayList<>(Arrays.asList(
             new Pair<>(FoodType.WHEAT_FLOUR, 1),
-            new Pair<>(FoodType.EGG, 1)
+            new Pair<>(AnimalProductsType.CHICKEN_EGG, 1)
     )), FoodType.PANCAKES),
 
     FRUIT_SALAD(new ArrayList<>(Arrays.asList(
@@ -132,7 +133,7 @@ public enum CookingRecipeType implements GoodType {
     MINERS_TREAT(new ArrayList<>(Arrays.asList(
             new Pair<>(FarmingCropType.CARROT, 2),
             new Pair<>(FoodType.SUGAR, 1),
-            new Pair<>(FoodType.MILK, 1)
+            new Pair<>(AnimalProductsType.COW_MILK, 1)
     )), FoodType.MINERS_TREAT);
 
     private final ArrayList<Pair<GoodType, Integer>> ingredients;
@@ -171,9 +172,11 @@ public enum CookingRecipeType implements GoodType {
         return -1;
     }
 
+
+    //Check before merge
     @Override
     public String getName() {
-        return "";
+        return goodType.getName();
     }
 
 

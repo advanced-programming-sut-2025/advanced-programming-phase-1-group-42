@@ -13,9 +13,10 @@ public class User {
     private Gender gender;
     private int questionNumber;
     private String answer;
-    private Boolean isPlaying;
+    private boolean isPlaying;
     private int maxPoints;
     private int gamePlay;
+    private boolean stayLogin;
 
     public User(String username, String password, String nickname, String email, Gender gender, int questionNumber, String answer) {
         this.username = username;
@@ -30,6 +31,7 @@ public class User {
         this.isPlaying = false;
         this.maxPoints = 0;
         this.gamePlay = 0;
+        this.stayLogin = false;
     }
 
     public String getUsername() {
@@ -146,5 +148,13 @@ public class User {
 
     public void maxMaxPoints(int points) {
         this.maxPoints = Math.max(this.maxPoints, points);
+    }
+
+    public boolean isStayLogin() {
+        return stayLogin;
+    }
+
+    public void setStayLogin(boolean stayLogin) {
+        this.stayLogin = stayLogin;
     }
 }

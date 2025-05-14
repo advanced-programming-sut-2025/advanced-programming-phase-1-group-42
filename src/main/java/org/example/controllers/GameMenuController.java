@@ -7,10 +7,7 @@ import org.example.models.Result;
 import org.example.models.builders.*;
 import org.example.models.builders.concrete_builders.WholeGameBuilder;
 import org.example.models.builders.concrete_builders.WholeMapBuilder;
-import org.example.models.enums.GameMenuCommands;
-import org.example.models.enums.Menu;
-import org.example.models.enums.TileType;
-import org.example.models.enums.WeatherType;
+import org.example.models.enums.*;
 import org.example.models.game_structure.Game;
 import org.example.models.game_structure.Tile;
 
@@ -33,6 +30,7 @@ import org.example.models.interactions.Animals.Animal;
 import org.example.models.interactions.Animals.AnimalProduct;
 import org.example.models.interactions.Animals.AnimalTypes;
 import org.example.models.interactions.Gender;
+import org.example.models.interactions.GreenHouse;
 import org.example.models.interactions.NPCs.NPC;
 import org.example.models.goods.tools.Tool;
 import org.example.models.goods.tools.ToolFunctions;
@@ -62,27 +60,35 @@ public class GameMenuController extends Controller {
         String input = "";
         Matcher matcher;
         int ptr = 0;
+        for(Player player : players) {
+            System.out.println(player.getUser().getUsername());
+        }
+        System.out.println("____________________________");
         for (Player player : players) {
+            System.out.println(player.getUser().getUsername());
             System.out.println("Please enter the number of farm you want to play:");
             System.out.println("1. Normal Farm");
             System.out.println("2. Aquatic Farm");
             while (true) {
                 input = scanner.nextLine();
                 if ((matcher = GameMenuCommands.GAME_MAP.matcher(input)) == null ||
-                        !matcher.group("farm_number").matches("\\d") ||
-                        Integer.parseInt(matcher.group("farm_number")) > 2 ||
-                        Integer.parseInt(matcher.group("farm_number")) < 1) {
+                        !matcher.group("farmNumber").matches("\\s*\\d\\s*") ||
+                        Integer.parseInt(matcher.group("farmNumber")) > 2 ||
+                        Integer.parseInt(matcher.group("farmNumber")) < 1) {
                     System.out.println("Invalid command for choosing your map, Please try again!");
                     continue;
                 }
 
-                int mapNumber = Integer.parseInt(matcher.group("farm_number"));
+                int mapNumber = Integer.parseInt(matcher.group("farmNumber"));
                 Farm farm = new Farm(mapNumber, ptr, tiles);
                 player.setFarm(farm);
                 farms.add(farm);
                 break;
             }
             ptr++;
+            if (ptr == 4) {
+                break;
+            }
         }
         return farms;
     }
@@ -107,7 +113,7 @@ public class GameMenuController extends Controller {
     private ArrayList<Tile> createTiles() {
         ArrayList<Tile> tiles = new ArrayList<>();
 
-        for (int i = 0; i < 140; i++) {
+        for (int i = 0; i < 150; i++) {
             for (int j = 0; j < 160; j++) {
                 Tile tile = new Tile(new Coordinate(i, j));
                 //Plain
@@ -116,7 +122,7 @@ public class GameMenuController extends Controller {
                     tile.setTileType(TileType.BEACH);
 
                 //Sea
-                if (i >= 140 && i < 150 && j >= 0 && j < 160)
+                if(i >= 140 && i < 150 && j >= 0 && j < 160)
                     tile.setTileType(TileType.WATER);
 
                 //Square
@@ -128,7 +134,6 @@ public class GameMenuController extends Controller {
 
 
                 tiles.add(tile);
-
             }
         }
 
@@ -162,6 +167,7 @@ public class GameMenuController extends Controller {
             if (!found)
                 return new Result(false, "No player with username " + username + " found!");
         }
+
         for (int i = 0; i < 3 - usernames.size(); i++) {
             players.add(new Player(new User("Guest" + i, null, "Guest" + i,
                     null, null, 0, null)));
@@ -178,6 +184,8 @@ public class GameMenuController extends Controller {
         }
 
         ArrayList<Tile> tiles = createTiles();
+        players.subList(0, 1).clear();
+        players.subList(4, players.size()).clear();
         ArrayList<Farm> farms = farmGame(players, scanner, tiles);
         for (int i = 0; i < farms.size(); i++) {
             players.get(i).setFarm(farms.get(i));
@@ -189,7 +197,10 @@ public class GameMenuController extends Controller {
 
         App.setCurrentGame(game);
         App.getGames().add(game);
-        return new Result(true, "New game has successfully created & loaded!");
+        for (Player player : players) {
+            player.iniFreindships();
+        }
+        return new Result(true, "New game has successfully created & loaded!\n");
     }
 
     public Result loadGame() {
@@ -252,12 +263,20 @@ public class GameMenuController extends Controller {
     public Result nextTurn() {
         App.getCurrentGame().nextPlayer();
         StringBuilder news = new StringBuilder();
-        news.append("Current player: ").append(App.getCurrentGame().getCurrentPlayer());
+        news.append("Current player: ").append(App.getCurrentGame().getCurrentPlayer().getUser().getUsername());
         int ctr = 1;
         for (String s : App.getCurrentGame().getCurrentPlayer().getNews()) {
             news.append("\t").append(ctr++).append(". ").append(s);
         }
         App.getCurrentGame().getCurrentPlayer().getNews().clear();
+
+        System.out.println(App.getCurrentGame().getCurrentPlayer().getUser().getUsername());
+        System.out.println(App.getCurrentGame().getPlayers().getFirst().getUser().getUsername());
+        if(App.getCurrentGame().getCurrentPlayer().getUser().getUsername().equals(App.getCurrentGame().getPlayers().getFirst().getUser().getUsername())) {
+            App.getCurrentGame().getDateTime().timeFlow();
+            System.out.println("MMD");
+        }
+
         return new Result(true, news.toString());
     }
 
@@ -294,12 +313,18 @@ public class GameMenuController extends Controller {
     }
 
     public Result cheatAdvanceTime(String hour) {
-        //TODO
+        int hourInt = Integer.parseInt(hour);
+        for (int i = 0 ; i < hourInt ; i++) {
+            App.getCurrentGame().getDateTime().timeFlow();
+        }
         return new Result(true, "");
     }
 
     public Result cheatAdvanceDate(String date) {
-        //TODO
+        int dateInt = Integer.parseInt(date);
+        for (int i = 0 ; i < dateInt ; i++) {
+            App.getCurrentGame().gameFlow();
+        }
         return new Result(true, "");
     }
 
@@ -341,14 +366,14 @@ public class GameMenuController extends Controller {
                 App.getCurrentGame().cheatSetWeather(WeatherType.Snow.getWeather());
                 break;
         }
-        return new Result(true, "");
+        return new Result(true, "Weather set to " + weather);
     }
 
     public Result greenHouseBuild() {
         Game game = App.getCurrentGame();
-        if (game.getCurrentPlayer().getWallet().getBalance() < 1000)
+        if (game.getCurrentPlayer().getWallet().getBalance() < 1000) {
             return new Result(false, "You have not enough money to build green house!");
-
+        }
 
         boolean flag = false;
         for (ArrayList<Good> goods : game.getCurrentPlayer().getInventory().getList()) {
@@ -434,38 +459,42 @@ public class GameMenuController extends Controller {
     }
 
     public Result helpReadingMap() {
-
-        return new Result(true, " " + " -> " + "Tile don't exist\n" +
-                "F" + " -> " + "Farm\n" +
-                "W" + " -> " + "Water\n" +
-                "G" + " -> " + "Green House\n" +
-                "B" + " -> " + "Building\n" +
-                "R" + " -> " + "Road\n" +
-                "Q" + " -> " + "Quarry\n" +
-                "P" + " -> " + "Plain\n");
+        return new Result(true, " " + " -> " + "Tile don't exist\n"+
+                                                "Green" + " -> " + "Farm\n"+
+                                                "Cyan" + " -> " + "Water\n"+
+                                                "White" + " -> " + "Green House\n"+
+                                                "Blown T" + " -> " + "Tree\n"+
+                                                "Yellow" + " -> " + "Building\n"+
+                                                "Gray" + " -> " + "Quarry\n"+
+                                                "Gray with Purple -" + " -> " + "Road\n"+
+                                                "Green with Red -" + " -> " + "Plain\n");
     }
 
     // Parsa
     //inventory & Energy methods
     public Result energyShow() {
-
+        if(App.getCurrentGame().
+                getCurrentPlayer().getEnergy().getDayEnergyLeft() > 3000) {
+            return new Result(true, ("INFINITE"));
+        }
         return new Result(true, (App.getCurrentGame().
-                getCurrentPlayer().getEnergy()).getDayEnergyLeft() + "");
+                getCurrentPlayer().getEnergy()).getDayEnergyLeft() + "\n");
     }
 
     public Result cheatEnergySet(String value) {
         value = value.trim();
 
         int valueInt = Integer.parseInt(value);
-        App.getCurrentGame().getCurrentPlayer().getEnergy().increaseTurnEnergyLeft(valueInt);
-        return new Result(true, "");
+        App.getCurrentGame().getCurrentPlayer().getEnergy().setDayEnergyLeft(valueInt);
+        App.getCurrentGame().getCurrentPlayer().getEnergy().setTurnValueLeft(50);
+        return new Result(true, "Your energy been set to " + valueInt);
     }
 
     public Result cheatEnergyUnlimited() {
         App.getCurrentGame().getCurrentPlayer().getEnergy().setMaxDayEnergy(Integer.MAX_VALUE);
         App.getCurrentGame().getCurrentPlayer().getEnergy().setMaxTurnEnergy(Integer.MAX_VALUE);
-        App.getCurrentGame().getCurrentPlayer().getEnergy().increaseTurnEnergyLeft(Integer.MAX_VALUE);
-        App.getCurrentGame().getCurrentPlayer().getEnergy().increaseTurnEnergyLeft(Integer.MAX_VALUE);
+        App.getCurrentGame().getCurrentPlayer().getEnergy().setTurnValueLeft(Integer.MAX_VALUE);
+        App.getCurrentGame().getCurrentPlayer().getEnergy().setDayEnergyLeft(Integer.MAX_VALUE);
         return new Result(true, "");
     }
 
@@ -614,12 +643,19 @@ public class GameMenuController extends Controller {
         if (tile == null)
             return new Result(false, "You don't have access to this tile!");
 
-        if (tile.getTileType() != TileType.PLOWED_FARM)
-            return new Result(false, "Selected Tile is not plowed for planting!");
+        if (tile.getTileType() != TileType.PLOWED_FARM && tile.getTileType() != TileType.GREEN_HOUSE)
+            return new Result(false, "Selected Tile is not Plowed or GreenHouse for planting!");
+        if(tile.getTileType().equals(TileType.GREEN_HOUSE)){
+            if(App.getCurrentGame().getCurrentPlayer().getFarm().getGreenHouse().isAvailable()){
+                return new Result(false , "You haven't built your Green House yet");
+            }
+        }
 
         ArrayList<Good> seeds = App.getCurrentGame().getCurrentPlayer().getInventory().isInInventory(seed);
         if (seeds == null)
             return new Result(false, "You don't have " + seed + " in your inventory!");
+
+
         for (Good good : tile.getGoods()) {
             if (good instanceof FarmingTreeSapling || good instanceof FarmingTree ||
                     good instanceof ForagingSeed || good instanceof ForagingTree || good instanceof ForagingMineral ||
@@ -627,6 +663,19 @@ public class GameMenuController extends Controller {
                 return new Result(true, "A seed already planted in this tile!");
         }
 
+        boolean growable = false;
+        if(tile.getTileType() != TileType.GREEN_HOUSE) {
+            if (seeds.getFirst().getType() instanceof ForagingSeedType) {
+                for (Season season : ((ForagingSeedType) seeds.getFirst().getType()).getSeason()) {
+                    if (season.equals(App.getCurrentGame().getDateTime().getSeasonOfYear())) {
+                        growable = true;
+                    }
+                }
+                if (!growable) {
+                    return new Result(false, "You are not inside the Foraging Season of this seed!");
+                }
+            }
+        }
 
 
         //mixed seed
@@ -792,7 +841,7 @@ public class GameMenuController extends Controller {
         ArrayList<Good> newGoods = Good.newGoods(goodType, Integer.parseInt(count));
         player.getInventory().addGood(newGoods);
 
-        return new Result(true, "You have added (cheated) " + count + " number of " + itemName + " to your inventory!");
+        return new Result(true, "You have added (" + count + ") "+ itemName + " to the inventory!");
     }
 
 
@@ -912,9 +961,11 @@ public class GameMenuController extends Controller {
         for (ArrayList<Good> goods : App.getCurrentGame().getCurrentPlayer().getInventory().getList()) {
             if (goods.getFirst().getName().equalsIgnoreCase(recipeName)) {
                 goods.add(food);
+                App.getCurrentGame().getCurrentPlayer().getSkill().increaseCookingPoints(10);
                 return new Result(true, "You put " + food.getName() + " into the inventory");
             } else if (goods.isEmpty()) {
                 goods.add(food);
+                App.getCurrentGame().getCurrentPlayer().getSkill().increaseCookingPoints(10);
                 return new Result(true, "You put " + food.getName() + " into the inventory");
             }
         }
@@ -1822,5 +1873,15 @@ public class GameMenuController extends Controller {
         return new Result(true, "");
     }
 
+    public Result showCurrentMenu() {
+        return new Result(true, "Current Menu : Game Menu");
+    }
 
+
+    //Additional Functions
+    public Result showPlayerCoordinate(){
+        return new Result(true, "Coordinate: " +
+                App.getCurrentGame().getCurrentPlayer().getCoordinate().getX() + ", " +
+                " " + App.getCurrentGame().getCurrentPlayer().getCoordinate().getY());
+    }
 }

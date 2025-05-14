@@ -10,18 +10,20 @@ public class Product extends Good {
         this.type = type;
     }
 
+
+
     @Override
     public String getName() {
-        return "";
+        return type.getName();
     }
 
     @Override
     public int getSellPrice() {
-        return 0;
+        return type.getSellPrice();
     }
 
     @Override
     public GoodType getType() {
-        return null;
+        return type;
     }
 }

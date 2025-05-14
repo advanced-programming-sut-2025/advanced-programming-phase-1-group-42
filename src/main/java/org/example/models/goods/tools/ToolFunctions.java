@@ -12,15 +12,21 @@ import org.example.models.game_structure.Tile;
 import org.example.models.goods.Good;
 import org.example.models.goods.GoodLevel;
 import org.example.models.goods.GoodType;
+import org.example.models.goods.farmings.FarmingCrop;
+import org.example.models.goods.farmings.FarmingCropType;
 import org.example.models.goods.farmings.FarmingTree;
+import org.example.models.goods.farmings.FarmingTreeSapling;
+import org.example.models.goods.farmings.FarmingTreeSaplingType;
 import org.example.models.goods.farmings.FarmingTreeType;
 import org.example.models.goods.fishs.FishType;
 
+import org.example.models.goods.foods.FoodType;
 import org.example.models.goods.foragings.*;
 import org.example.models.goods.products.ProductType;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Iterator;
 
 public class ToolFunctions {
     private static boolean checkCanBreak(Tool tool, ForagingMineral foragingMineral) {
@@ -104,6 +110,17 @@ public class ToolFunctions {
             return new Result(false, "You can only use your tool in farm tiles!");
 
         tile.setTileType(TileType.PLOWED_FARM);
+
+        Iterator<Good> iterator = tile.getGoods().iterator();
+        while (iterator.hasNext()) {
+            Good good = iterator.next();
+            if (good.getType() instanceof FarmingCropType || good.getType() instanceof ForagingSeedType) {
+                App.getCurrentGame().getCurrentPlayer().getInventory().addGoodByObject(good);
+                App.getCurrentGame().getCurrentPlayer().getSkill().increaseFarmingPoints(5);
+                iterator.remove(); // Safe removal
+            }
+        }
+
         return new Result(true, ((ToolType) tool.getType()).getName() + " used!");
     }
 
@@ -121,12 +138,28 @@ public class ToolFunctions {
         for (Good good : tile.getGoods()) {
             if (good instanceof ForagingMineral foragingMineral) {
                 if(checkCanBreak(tool, foragingMineral)) {
-                    App.getCurrentGame().getCurrentPlayer().getInventory().addGood(
-                            new ArrayList<>(Arrays.asList(good))
-                    );
+
+                    App.getCurrentGame().getCurrentPlayer().getSkill().increaseMiningPoints(10);
+
+                    if(App.getCurrentGame().getCurrentPlayer().getSkill().getMiningLevel() >= 2){
+                        ArrayList<Good> gooods = Good.newGoods(good.getType(), 2);
+                        App.getCurrentGame().getCurrentPlayer().getInventory().addGood(gooods);
+                    }
+                    else{
+                        ArrayList<Good> gooods = Good.newGoods(good.getType(), 1);
+                        App.getCurrentGame().getCurrentPlayer().getInventory().addGood(gooods);
+                    }
                 }
                 else
                     newGoods.add(good);
+            } else if(good instanceof FarmingTree farmingTree) {
+                FarmingTreeType type = (FarmingTreeType) farmingTree.getType();
+                Pair<GoodType,Integer> pair = type.getProducts().getFirst();
+                if (farmingTree.isFruitAvailable()){
+                    App.getCurrentGame().getCurrentPlayer().getInventory().addGood(
+                            Good.newGoods(pair.first(), pair.second())
+                    );
+                }
             }
             //TODO : باید درخت به بار رسیده باشد که بتوان محصولات آن را برداشت کرد
         }
@@ -145,17 +178,20 @@ public class ToolFunctions {
             if(good instanceof ForagingTree foragingTree) {
                 for (Pair<GoodType, Integer> product : ((ForagingTreeType) foragingTree.getType()).getProducts()) {
                     ArrayList<Good> newGoods = Good.newGoods(product.first(), product.second());
-
+                    //TODO
                     App.getCurrentGame().getCurrentPlayer().getInventory().addGood(newGoods);
                 }
             }
             else if(good instanceof FarmingTree farmingTree) {
                 for (Pair<GoodType, Integer> product : ((FarmingTreeType) farmingTree.getType()).getProducts()) {
                     ArrayList<Good> newGoods = Good.newGoods(product.first(), product.second());
-
+                    //TODO
                     App.getCurrentGame().getCurrentPlayer().getInventory().addGood(newGoods);
                 }
-            }
+            } else if(good instanceof FarmingTreeSapling) {
+                ArrayList<Good> newGoods = Good.newGoods(ProductType.WOOD, 2);
+                App.getCurrentGame().getCurrentPlayer().getInventory().addGood(newGoods);
+            } 
             else
                 tileGoods.add(good);
 
@@ -164,6 +200,17 @@ public class ToolFunctions {
         }
 
         tile.setGoods(tileGoods);
+
+
+        Iterator<Good> iterator = tile.getGoods().iterator();
+        while (iterator.hasNext()) {
+            Good good = iterator.next();
+            if (good.getType() instanceof ForagingSeedType || good.getType() instanceof ForagingCropType) {
+                App.getCurrentGame().getCurrentPlayer().getInventory().addGoodByObject(good);
+                App.getCurrentGame().getCurrentPlayer().getSkill().increaseForagingPoints(10);
+                iterator.remove(); // Safe removal
+            }
+        }
         return new Result(true, ((ToolType) tool.getType()).getName() + " used!");
     }
 
@@ -204,6 +251,8 @@ public class ToolFunctions {
         if(App.getCurrentGame().getCurrentPlayer().getBuff().getType().equals(BuffType.FISHING_BUFF)){
             App.getCurrentGame().getCurrentPlayer().getEnergy().increaseTurnEnergyLeft(1);
         }
+
+        App.getCurrentGame().getCurrentPlayer().getSkill().increaseFishingPoints(5);
 
         int numberOfFishesInt = (int)Math.floor(numberOfFishes);
         int fishQuality = (int) Math.floor(rarityChance);

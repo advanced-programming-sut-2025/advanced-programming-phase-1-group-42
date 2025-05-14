@@ -17,7 +17,7 @@ public class ProfileMenuController extends Controller {
             return new Result(false, "Your new username should be different from the current one.");
         }
         // Check username format
-        if(!username.matches("[A-Za-z0-9\\-]")) {
+        if(!username.matches("[A-Za-z0-9\\-]+")) {
             return new Result(false, "Invalid username format!");
         }
 
@@ -101,4 +101,7 @@ public class ProfileMenuController extends Controller {
         return new Result(true, "Redirecting to main menu!");
     }
 
+    public Result showCurrentMenu() {
+        return new Result(true, "Current Menu : Profile Menu");
+    }
 }

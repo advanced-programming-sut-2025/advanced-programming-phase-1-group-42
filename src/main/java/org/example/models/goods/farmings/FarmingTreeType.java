@@ -125,6 +125,9 @@ public enum FarmingTreeType implements GoodType {
         this.seasons = seasons;
     }
 
+
+
+    //Trees can't be eaten or Sold
     @Override
     public int getSellPrice() {
         return -1;
@@ -142,5 +145,17 @@ public enum FarmingTreeType implements GoodType {
 
     public ArrayList<Pair<GoodType, Integer>> getProducts() {
         return products;
+    }
+
+    public GoodType getSaplingType() {
+        return saplingType;
+    }
+
+    public int getFruitHarvestCycle() {
+        return fruitHarvestCycle;
+    }
+
+    public ArrayList<Season> getSeasons() {
+        return seasons;
     }
 }

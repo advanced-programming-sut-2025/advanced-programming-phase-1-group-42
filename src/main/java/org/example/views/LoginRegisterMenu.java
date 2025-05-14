@@ -39,7 +39,7 @@ public class LoginRegisterMenu implements AppMenu {
         }
         else if((matcher = LoginRegisterCommands.ForgetPassword.matcher(input)) != null) {
             System.out.println(controller.forgetPassword(
-                    matcher.group("username"),
+                    matcher.group("username").trim(),
                     scanner
             ));
         }

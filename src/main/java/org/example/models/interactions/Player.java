@@ -54,8 +54,8 @@ public class Player {
 
     public void setFarm(Farm farm) {
         this.farm = farm;
-        this.coordinate = new Coordinate(farm.getFarmBuildings().get(0).getStartCordinate().getX() + 10,
-                farm.getFarmBuildings().get(0).getStartCordinate().getY() + 10);
+        this.coordinate = new Coordinate(farm.getFarmBuildings().getFirst().getStartCordinate().getX() + 10,
+                farm.getFarmBuildings().getFirst().getStartCordinate().getY() + 10);
 
     }
 
@@ -78,6 +78,10 @@ public class Player {
         this.inHandGood = null;
         this.buff = null;
         this.rejectionBuff = null;
+
+    }
+
+    public void iniFreindships() {
         for (Player player : App.getCurrentGame().getPlayers()) {
             if(player != this) {
                 friendShips.put(player, new Pair<>(0, 0));
@@ -240,5 +244,9 @@ public class Player {
 
     public void setRejectionBuff(Buff rejectionBuff) {
         this.rejectionBuff = rejectionBuff;
+    }
+
+    public String getPlayerUsername(){
+        return user.getUsername();
     }
 }

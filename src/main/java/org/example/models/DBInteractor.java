@@ -38,13 +38,8 @@ public class DBInteractor {
                 e.printStackTrace();
             }
 
-            User user = new User("Parsa", "passme", "mamad", "Email@a", null, 2, "np");
-            user.setPlaying(true);
-            user.setGamePlay(0);
-            user.setEarnedPoints(0);
-            user.setMaxPoints(0);
 
-            for (User user1 : App.getUsers() ) {
+            for (User user : App.getUsers() ) {
                 Document userDoc = new Document()
                         .append("username", user.getUsername())
                         .append("password", user.getPassword())
@@ -56,7 +51,8 @@ public class DBInteractor {
                         .append("setPlaying",user.getPlaying())
                         .append("maxPoints",user.getMaxPoints())
                         .append("gamePlay",user.getGamePlay())
-                        .append("earnedPoints",user.getEarnedPoints());
+                        .append("earnedPoints",user.getEarnedPoints())
+                        .append("stayLogin",user.isStayLogin());
                 collection.insertOne(userDoc);
 
             }
@@ -94,14 +90,19 @@ public class DBInteractor {
                 newUser.setQuestionNumber(doc.getInteger("questionNumber"));
                 newUser.setAnswer(doc.getString("answer"));
                 newUser.setMaxPoints(doc.getInteger("maxPoints"));
+                newUser.setStayLogin(doc.getBoolean("stayLogin"));
 
+                //stay Login
+                if (newUser.isStayLogin()) {
+                    App.setCurrentUser(newUser);
+                }
 
                 App.getUsers().add(newUser);
             } else {
                 System.out.println("No documents found");
             }
         } catch (Exception e) {
-            System.err.println("Error connecting to the database: " + e.getMessage());
+            System.err.println("Error connecting to the database");
         }
     }
 }

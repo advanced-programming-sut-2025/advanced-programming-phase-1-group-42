@@ -10,7 +10,6 @@ import org.example.models.goods.products.ProductType;
 import org.example.models.interactions.Animals.Animal;
 import org.example.models.interactions.game_buildings.GameBuilding;
 
-import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
@@ -56,7 +55,7 @@ public class Map {
     }
 
     // A function to print map
-    public String printMap(int x , int y, int size) {
+    public void printMap(int x , int y, int size) {
         for(int i = 0 ; i < size; i++){
             System.out.print("\n");
             for(int j = 0 ; j < size; j++){
@@ -99,7 +98,7 @@ public class Map {
                                     colorMap.get("Yellow")+" "+ colorMap.get("Reset"));
                         }
                     }
-                }else if(tile.getTileType() == TileType.PLAYER_BUILDING){
+                }else if(tile.getTileType() == TileType.PLAYER_BUILDING || tile.getTileType() == TileType.GAME_BUILDING){
                     System.out.print(colorMap.get("Yellow_Background")+" "+ colorMap.get("Reset") );
                 }else if(tile.getTileType() == TileType.ROAD){
                     System.out.print(colorMap.get("Gray_Background")+
@@ -107,12 +106,11 @@ public class Map {
                 }else if(tile.getTileType() == TileType.QUARRY) {
                     System.out.print(colorMap.get("Gray_Background")+" "+ colorMap.get("Reset"));
                 }else if(tile.getTileType() == TileType.PLAIN) {
-                    System.out.print(colorMap.get("Green_Background")+
-                            colorMap.get("Red")+"-"+ colorMap.get("Reset"));
+                    System.out.print(colorMap.get("Red")+
+                            colorMap.get("Green_Background")+"-"+ colorMap.get("Reset"));
                 }
             }
         }
-        return "";
     }
 
 
