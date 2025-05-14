@@ -67,7 +67,7 @@ public enum FarmingCropType implements GoodType {
 
     PINE_TAR("Pine_Tar", ForagingTreeType.PINE_CONES, false, -1, 100),
 
-    ANY("null",null,false,-1,-1);
+    ANY("Any Crop",null,false,-1,-1);
 
 
     private String name;

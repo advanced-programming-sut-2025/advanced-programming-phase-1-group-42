@@ -107,11 +107,16 @@ public class AStar {
                         (App.getCurrentGame().getCurrentPlayer().getMarried() != null && App.getCurrentGame().getCurrentPlayer().getMarried().getFarm() == farm)))
             return false;
 
-        if(tile.getTileType() == TileType.WATER || tile.getTileType() == TileType.STONE_WALL ||
-        (tile.getTileType() == TileType.GREEN_HOUSE && !App.getCurrentGame().getCurrentPlayer().getFarm().getGreenHouse().isAvailable()) ||
-                (tile.getTileType() == TileType.GAME_BUILDING &&
-                        !App.getCurrentGame().getMap().findGameBuilding(App.getCurrentGame().getCurrentPlayer().getCoordinate()).isInWorkingHours()))
-            return false;
+        try {
+            if(tile.getTileType() == TileType.WATER || tile.getTileType() == TileType.STONE_WALL ||
+                    (tile.getTileType() == TileType.GREEN_HOUSE && !App.getCurrentGame().getCurrentPlayer().getFarm().getGreenHouse().isAvailable()) ||
+                    (tile.getTileType() == TileType.GAME_BUILDING &&
+                            !App.getCurrentGame().getMap().findGameBuilding(new Coordinate(x, y)).isInWorkingHours()))
+                return false;
+        }  catch (Exception e) {
+            System.out.println(new Coordinate(x, y));
+        }
+
 
 
         for(Good good : tile.getGoods()) {

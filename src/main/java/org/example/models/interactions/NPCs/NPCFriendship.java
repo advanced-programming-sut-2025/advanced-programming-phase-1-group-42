@@ -19,7 +19,7 @@ public class NPCFriendship {
 
     public NPCFriendship(Player player , NPC npc) {
         friendshipPoints = 0;
-        friendshipLevel = 0;
+        friendshipLevel = 1;
         gifts = new ArrayList<>();
         availableQuests.add(1);
         this.player = player;
