@@ -20,6 +20,7 @@ import org.example.models.goods.farmings.FarmingCrop;
 import org.example.models.goods.farmings.FarmingTree;
 import org.example.models.goods.foods.Food;
 import org.example.models.interactions.NPCs.NPC;
+import org.example.models.interactions.NPCs.NPCFriendship;
 import org.example.models.interactions.Player;
 import org.example.models.interactions.PlayerBuildings.FarmBuilding;
 
@@ -254,6 +255,13 @@ public class Game {
                         }
                     }
                 }
+            }
+        }
+
+        //NPC friendShips
+        for (NPC npc : getNPCs()){
+            for (NPCFriendship friendship : npc.getFriendships()) {
+                friendship.setFriendshipToday();
             }
         }
 

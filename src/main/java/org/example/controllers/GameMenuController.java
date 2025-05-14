@@ -119,7 +119,7 @@ public class GameMenuController extends Controller {
                     tile.setTileType(TileType.BEACH);
 
                 //Sea
-                if(i >= 140 && i < 150 && j >= 0 && j < 160)
+                if (i >= 140 && i < 150 && j >= 0 && j < 160)
                     tile.setTileType(TileType.WATER);
 
                 //Square
@@ -154,7 +154,7 @@ public class GameMenuController extends Controller {
             boolean found = false;
             for (User user : App.getUsers()) {
                 if (username.equals(user.getUsername())) {
-                    if(user.getPlaying().equals(true))
+                    if (user.getPlaying().equals(true))
                         return new Result(false, username + " is already playing in other game!");
 
                     Player player = new Player(user);
@@ -306,7 +306,7 @@ public class GameMenuController extends Controller {
 
     public Result cheatAdvanceTime(String hour) {
         int hourInt = Integer.parseInt(hour);
-        for (int i = 0 ; i < hourInt ; i++) {
+        for (int i = 0; i < hourInt; i++) {
             App.getCurrentGame().getDateTime().timeFlow();
         }
         return new Result(true, "You have cheat advance time for " + hourInt + " hours!");
@@ -314,7 +314,7 @@ public class GameMenuController extends Controller {
 
     public Result cheatAdvanceDate(String date) {
         int dateInt = Integer.parseInt(date);
-        for (int i = 0 ; i < dateInt ; i++) {
+        for (int i = 0; i < dateInt; i++) {
             App.getCurrentGame().gameFlow();
         }
         return new Result(true, "You have cheat advance date for " + dateInt + " days!");
@@ -451,21 +451,21 @@ public class GameMenuController extends Controller {
     }
 
     public Result helpReadingMap() {
-        return new Result(true, " " + " -> " + "Tile don't exist\n"+
-                                                "Green" + " -> " + "Farm\n"+
-                                                "Cyan" + " -> " + "Water\n"+
-                                                "White" + " -> " + "Green House\n"+
-                                                "Blown T" + " -> " + "Tree\n"+
-                                                "Yellow" + " -> " + "Building\n"+
-                                                "Gray" + " -> " + "Quarry\n"+
-                                                "Gray with Purple -" + " -> " + "Road\n"+
-                                                "Green with Red -" + " -> " + "Plain\n");
+        return new Result(true, " " + " -> " + "Tile don't exist\n" +
+                "Green" + " -> " + "Farm\n" +
+                "Cyan" + " -> " + "Water\n" +
+                "White" + " -> " + "Green House\n" +
+                "Blown T" + " -> " + "Tree\n" +
+                "Yellow" + " -> " + "Building\n" +
+                "Gray" + " -> " + "Quarry\n" +
+                "Gray with Purple -" + " -> " + "Road\n" +
+                "Green with Red -" + " -> " + "Plain\n");
     }
 
     // Parsa
     //inventory & Energy methods
     public Result energyShow() {
-        if(App.getCurrentGame().
+        if (App.getCurrentGame().
                 getCurrentPlayer().getEnergy().getDayEnergyLeft() > 3000) {
             return new Result(true, ("INFINITE"));
         }
@@ -637,9 +637,9 @@ public class GameMenuController extends Controller {
 
         if (tile.getTileType() != TileType.PLOWED_FARM && tile.getTileType() != TileType.GREEN_HOUSE)
             return new Result(false, "Selected Tile is not Plowed or GreenHouse for planting!");
-        if(tile.getTileType().equals(TileType.GREEN_HOUSE)){
-            if(App.getCurrentGame().getCurrentPlayer().getFarm().getGreenHouse().isAvailable()){
-                return new Result(false , "You haven't built your Green House yet");
+        if (tile.getTileType().equals(TileType.GREEN_HOUSE)) {
+            if (App.getCurrentGame().getCurrentPlayer().getFarm().getGreenHouse().isAvailable()) {
+                return new Result(false, "You haven't built your Green House yet");
             }
         }
 
@@ -656,7 +656,7 @@ public class GameMenuController extends Controller {
         }
 
         boolean growable = false;
-        if(tile.getTileType() != TileType.GREEN_HOUSE) {
+        if (tile.getTileType() != TileType.GREEN_HOUSE) {
             if (seeds.getFirst().getType() instanceof ForagingSeedType) {
                 for (Season season : ((ForagingSeedType) seeds.getFirst().getType()).getSeason()) {
                     if (season.equals(App.getCurrentGame().getDateTime().getSeasonOfYear())) {
@@ -833,7 +833,7 @@ public class GameMenuController extends Controller {
         ArrayList<Good> newGoods = Good.newGoods(goodType, Integer.parseInt(count));
         player.getInventory().addGood(newGoods);
 
-        return new Result(true, "You have added (" + count + ") "+ itemName + " to the inventory!\n");
+        return new Result(true, "You have added (" + count + ") " + itemName + " to the inventory!\n");
     }
 
 
@@ -999,7 +999,7 @@ public class GameMenuController extends Controller {
             return new Result(false, "This item is not eatable!");
         }
 
-        if (food instanceof FarmingCrop ) {
+        if (food instanceof FarmingCrop) {
             App.getCurrentGame().getCurrentPlayer().eat(food);
         } else if (food instanceof Artisan) {
             App.getCurrentGame().getCurrentPlayer().eat(food);
@@ -1276,9 +1276,9 @@ public class GameMenuController extends Controller {
     public Result artisanUse(String artisanName, String artisanIngredient1, String artisanIngredient2) {
         artisanName = artisanName.trim();
         ArrayList<String> ourIngredients = new ArrayList<>();
-        if(!artisanIngredient1.isEmpty())
+        if (!artisanIngredient1.isEmpty())
             ourIngredients.add(artisanIngredient1);
-        if(!artisanIngredient2.isEmpty())
+        if (!artisanIngredient2.isEmpty())
             ourIngredients.add(artisanIngredient2);
 
         return ArtisanFunctions.useArtisan(artisanName, ourIngredients);
@@ -1408,7 +1408,7 @@ public class GameMenuController extends Controller {
         if (player == null) {
             return new Result(false, "Player not found!");
         }
-        
+
         if (App.getCurrentGame().getCurrentPlayer().getCoordinate().distance(player.getCoordinate()) > 1)
             return new Result(false, "You should be neighbor to " + username + " for talking!");
 
@@ -1453,7 +1453,7 @@ public class GameMenuController extends Controller {
         StringBuilder list = new StringBuilder();
         list.append("Talk History:\n");
         for (Pair<Player, String> talk : App.getCurrentGame().getCurrentPlayer().getTalkHistory()) {
-            if (talk.first().getPlayerUsername().equals(username)){
+            if (talk.first().getPlayerUsername().equals(username)) {
                 list.append("\t<").append(talk.first().getUser().getUsername()).append("> ")
                         .append(talk.second()).append("\n");
             }
@@ -1772,7 +1772,7 @@ public class GameMenuController extends Controller {
         App.setCurrentMenu(Menu.TradeMenu);
 
         System.out.println("Players: ");
-        for(Player player : App.getCurrentGame().getPlayers()) {
+        for (Player player : App.getCurrentGame().getPlayers()) {
             System.out.println(player.getUser().getUsername());
         }
         System.out.println("____________________________");
@@ -1787,19 +1787,17 @@ public class GameMenuController extends Controller {
 
         for (NPC npc : App.getCurrentGame().getNPCs()) {
             if (npc.getType().getName().equals(npcName)) {
-                if (abs(npc.getCoordinate().getX() -
+                if (abs(npc.getType().getCoordinate().getX() -
                         App.getCurrentGame().getCurrentPlayer().getCoordinate().getX()) == 1 &&
-                        abs(npc.getCoordinate().getY() -
+                        abs(npc.getType().getCoordinate().getY() -
                                 App.getCurrentGame().getCurrentPlayer().getCoordinate().getY()) == 1) {
                     npc.getFriendship();
                     npc.npcDialogs();
                     return new Result(true, "");
-                } else {
-                    return new Result(true, "Too far away. Approach the NPC to speak.");
                 }
             }
         }
-        return new Result(true, "");
+        return new Result(true, "Too far away. Approach the NPC to speak.");
     }
 
     public Result giftNPC(String npcName, String itemName) {
@@ -1891,12 +1889,13 @@ public class GameMenuController extends Controller {
 
 
     //Additional Functions
-    public Result showPlayerCoordinate(){
+    public Result showPlayerCoordinate() {
         return new Result(true, "Coordinate: " +
                 App.getCurrentGame().getCurrentPlayer().getCoordinate().getX() + ", " +
                 " " + App.getCurrentGame().getCurrentPlayer().getCoordinate().getY());
     }
-    public Result showBalance(){
+
+    public Result showBalance() {
         return new Result(true, "Balance: " + App.getCurrentGame().getCurrentPlayer().getWallet().getBalance() + " g");
     }
 }

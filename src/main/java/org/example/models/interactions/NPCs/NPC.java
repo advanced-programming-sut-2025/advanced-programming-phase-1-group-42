@@ -13,6 +13,7 @@ public class NPC {
     private final NPCTypes type;
     private final ArrayList<NPCFriendship> friendships = new ArrayList<>();
     Coordinate coordinate;
+    private boolean isFirstMeet = true;
 
     public NPC(NPCTypes type) {
         this.type = type;
@@ -38,7 +39,14 @@ public class NPC {
 
 
     public void npcDialogs() {
-        getFriendship().setFriendshipPoints(20);
+        for (NPCFriendship friendship : friendships) {
+            if (friendship.getPlayer().equals(App.getCurrentGame().getCurrentPlayer())) {
+                if (friendship.getFirstMeetToday()){
+                    getFriendship().setFriendshipPoints(20);
+                    friendship.setFirstMeetToday();
+                }
+            }
+        }
 
         if (isBirthdayToday()) {
             System.out.print(type.getDialogs().getFirst());
@@ -98,6 +106,11 @@ public class NPC {
             }
         }
         friendships.add(new NPCFriendship(App.getCurrentGame().getCurrentPlayer(),this));
+        for (NPCFriendship friendship : friendships) {
+            if (friendship.getPlayer().equals(App.getCurrentGame().getCurrentPlayer())) {
+                return friendship;
+            }
+        }
         return null;
     }
 
@@ -117,7 +130,7 @@ public class NPC {
 
     public void getGift(Good good) {
         getFriendship().getGifts().add(good);
-        if (getFriendship().getGotGiftToday()){
+        if (!getFriendship().getGotGiftToday()){
             if (type.getFavorites().contains(good.getType())){
                 getFriendship().setFriendshipPoints(200);
             } else {

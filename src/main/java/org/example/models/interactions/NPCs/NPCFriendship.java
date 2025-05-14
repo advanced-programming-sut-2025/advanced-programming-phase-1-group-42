@@ -14,6 +14,7 @@ public class NPCFriendship {
     private ArrayList<Good> gifts;
     private ArrayList<Integer> availableQuests = new ArrayList<>();
     private int firstMeetSeason;
+    private boolean firstMeetToday = true;
     private boolean gotGiftToday = false;
 
     public NPCFriendship(Player player , NPC npc) {
@@ -80,15 +81,28 @@ public class NPCFriendship {
         return availableQuests;
     }
     public void setGotGiftToday() {
-        gotGiftToday = false;
+        gotGiftToday = true;
     }
 
     public boolean getGotGiftToday() {
         return gotGiftToday;
     }
 
+    public void setFirstMeetToday() {
+        firstMeetToday = false;
+    }
+
+    public boolean getFirstMeetToday() {
+        return firstMeetToday;
+    }
+
     public NPC getNpc() {
         return npc;
+    }
+
+    public void setFriendshipToday(){
+        firstMeetToday = true;
+        gotGiftToday = false;
     }
 
 
