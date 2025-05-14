@@ -148,9 +148,9 @@ public class GameMenuController extends Controller {
             return new Result(false, "You have to add 1 to 3 Users to play with you in new game!");
 
         ArrayList<Player> players = new ArrayList<>();
-        Player adminPlayer = null;
         players.add(new Player(App.getCurrentUser()));
-        System.out.println(usernames.size());
+        Player adminPlayer = players.get(0);
+//        System.out.println(usernames.size());
         for (String username : usernames) {
             if (username.isEmpty())
                 continue;
@@ -163,9 +163,6 @@ public class GameMenuController extends Controller {
 
                     Player player = new Player(user);
                     players.add(player);
-
-                    if (user.getUsername().equals(App.getCurrentUser().getUsername()))
-                        adminPlayer = player;
                     user.setPlaying(true);
                     found = true;
                     break;
@@ -191,8 +188,6 @@ public class GameMenuController extends Controller {
         }
 
         ArrayList<Tile> tiles = createTiles();
-        players.subList(0, 1).clear();
-        players.subList(4, players.size()).clear();
         ArrayList<Farm> farms = farmGame(players, scanner, tiles);
         for (int i = 0; i < farms.size(); i++) {
             players.get(i).setFarm(farms.get(i));
