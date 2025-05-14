@@ -106,8 +106,8 @@ public class Map {
                 }else if(tile.getTileType() == TileType.QUARRY) {
                     System.out.print(colorMap.get("Gray_Background")+" "+ colorMap.get("Reset"));
                 }else if(tile.getTileType() == TileType.PLAIN) {
-                    System.out.print(colorMap.get("Green_Background")+
-                            colorMap.get("Red")+"-"+ colorMap.get("Reset"));
+                    System.out.print(colorMap.get("Red")+
+                            colorMap.get("Green_Background")+"-"+ colorMap.get("Reset"));
                 }
             }
         }
