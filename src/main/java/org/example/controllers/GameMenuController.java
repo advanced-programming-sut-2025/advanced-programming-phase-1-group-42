@@ -62,10 +62,8 @@ public class GameMenuController extends Controller {
         String input = "";
         Matcher matcher;
         int ptr = 0;
-        for(Player player : players) {
-            System.out.println(player.getUser().getUsername());
-        }
-        System.out.println("____________________________");
+
+
         for (Player player : players) {
             System.out.println(player.getUser().getUsername());
             System.out.println("Please enter the number of farm you want to play:");
@@ -1775,6 +1773,12 @@ public class GameMenuController extends Controller {
     // Trading methods
     public Result startTrade() {
         App.setCurrentMenu(Menu.TradeMenu);
+
+//        for(Player player : App.getCurrentGame().getPlayers()) {
+//            System.out.println(player.getUser().getUsername());
+//        }
+//        System.out.println("____________________________");
+
         return new Result(true, "You are now in Trade Menu!");
     }
 
