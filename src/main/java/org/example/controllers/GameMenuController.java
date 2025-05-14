@@ -60,6 +60,7 @@ public class GameMenuController extends Controller {
         Matcher matcher;
         int ptr = 0;
         for (Player player : players) {
+            System.out.println(player.getPlayerUsername());
             System.out.println("Please enter the number of farm you want to play:");
             System.out.println("1. Normal Farm");
             System.out.println("2. Aquatic Farm");
@@ -80,6 +81,9 @@ public class GameMenuController extends Controller {
                 break;
             }
             ptr++;
+            if (ptr == 4) {
+                break;
+            }
         }
         return farms;
     }

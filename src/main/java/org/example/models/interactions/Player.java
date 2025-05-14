@@ -245,4 +245,8 @@ public class Player {
     public void setRejectionBuff(Buff rejectionBuff) {
         this.rejectionBuff = rejectionBuff;
     }
+
+    public String getPlayerUsername(){
+        return user.getUsername();
+    }
 }

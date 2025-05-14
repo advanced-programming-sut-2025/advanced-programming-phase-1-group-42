@@ -85,7 +85,7 @@ public enum GameMenuCommands implements Command {
     // Cooking Commands
 
     //????????????????????????????????????????????????//
-    COOKING_REFRIGERATOR(""),
+    COOKING_REFRIGERATOR("cooking\\s*refrigerator\\s*(?<status>[pick|put])\\s*(?<item>\\S+)\\s*"),
     SHOW_COOKING_RECIPES("\\s*cooking\\s*show\\s*recipes\\s*"),
     COOKING_PREPARE("\\s*cooking\\s*prepare\\s(?<recipeName>\\S+)\\s*"),
     EAT("\\s*eat\\s(?<foodName>\\S+)\\s*"),
@@ -106,7 +106,7 @@ public enum GameMenuCommands implements Command {
 
     // Nader
     // Artisan Commands
-    ARTISAN_USE("\\s*artisan\\s*use\\s(?<artisanName>\\S+)\\s(?<item1Name>\\S+)\\s*"),
+//    ARTISAN_USE("\\s*artisan\\s*use\\s(?<artisanName>\\S+)\\s(?<item1Name>\\S+)\\s*"),
     ARTISAN_GET("\\s*artisan\\s*get\\s(?<artisanName>\\S+)\\s*"),
 
     // Nader

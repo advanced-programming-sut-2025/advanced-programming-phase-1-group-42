@@ -163,7 +163,7 @@ public class GameMenu implements AppMenu {
 
         // Cooking Commands
         else if ((matcher = GameMenuCommands.COOKING_REFRIGERATOR.matcher(input)) != null) {
-            System.out.print(controller.cookingRefrigerator(matcher.group("status"), matcher.group("item_name")));
+            System.out.print(controller.cookingRefrigerator(matcher.group("status"), matcher.group("itemName")));
         } else if ((matcher = GameMenuCommands.SHOW_COOKING_RECIPES.matcher(input)) != null) {
             System.out.println(controller.showCookingRecipes());
         } else if ((matcher = GameMenuCommands.COOKING_PREPARE.matcher(input)) != null) {
@@ -186,7 +186,7 @@ public class GameMenu implements AppMenu {
         } else if ((matcher = GameMenuCommands.SHEPHERD_ANIMAL.matcher(input)) != null) {
             System.out.println(controller.shepherdAnimal(matcher.group("animalName"), matcher.group("x"), matcher.group("y")));
         } else if ((matcher = GameMenuCommands.FEED_HAY.matcher(input)) != null) {
-            System.out.print(controller.feedHay(matcher.group("animaName")));
+            System.out.print(controller.feedHay(matcher.group("animalName")));
         } else if ((matcher = GameMenuCommands.ANIMAL_PRODUCTION_LIST.matcher(input)) != null) {
             System.out.print(controller.animalProductionList());
         } else if ((matcher = GameMenuCommands.COLLECT_PRODUCT.matcher(input)) != null) {
@@ -201,9 +201,10 @@ public class GameMenu implements AppMenu {
 
 
         // Artisan Commands
-        else if ((matcher = GameMenuCommands.ARTISAN_USE.matcher(input)) != null) {
-//            System.out.println(controller.artisanUse(matcher.group("artisanName") , matcher.group("item1Name")));
-        } else if ((matcher = GameMenuCommands.ARTISAN_GET.matcher(input)) != null) {
+//        else if ((matcher = GameMenuCommands.ARTISAN_USE.matcher(input)) != null) {
+//            System.out.println(controller.artisanUse(matcher.group("artisan_name") , matcher.group("item1_name")));
+//        }
+        else if ((matcher = GameMenuCommands.ARTISAN_GET.matcher(input)) != null) {
             System.out.print(controller.artisanGet(matcher.group("artisanName")));
         }
 
