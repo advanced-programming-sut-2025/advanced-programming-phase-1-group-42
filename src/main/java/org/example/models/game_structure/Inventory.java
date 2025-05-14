@@ -140,10 +140,11 @@ public class Inventory {
                 for (Good g : goods) {
                     if (g.getType() == good.getType()) {
                         for (int i = 0; i < count; i++) {
+                            System.out.println(g.getName());
                             goods.add(Good.newGood(good.getType()));
                         }
+                        return true;
                     }
-                    return true;
                 }
             }
         }

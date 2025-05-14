@@ -1015,7 +1015,7 @@ public class GameMenuController extends Controller {
         y = y.trim();
 
         CarpenterShop carpenterShop = (CarpenterShop) App.getCurrentGame().getMap().getCarpenterShop();
-        if (!carpenterShop.isInWorkingHours()) {
+        if (carpenterShop.isInWorkingHours()) {
             FarmBuildingTypes targetType = null;
             for (FarmBuildingTypes type : carpenterShop.getProducts()) {
                 if (type.getName().equals(buildingName)) {
@@ -1036,12 +1036,13 @@ public class GameMenuController extends Controller {
                     for (int sX = 0; sX < targetType.getSize().first(); sX++) {
                         for (int sY = 0; sY < targetType.getSize().second(); sY++) {
                             Tile tempTile = App.getCurrentGame().getMap().findTileByXY(sX + startCoordinate.getX(), sY + startCoordinate.getY());
-                            if (!(tempTile.getGoods().isEmpty() && tempTile.getTileType().equals(TileType.PLAIN))) {
+                            if (tempTile.getTileType().equals(TileType.GAME_BUILDING) ||
+                                    tempTile.getTileType().equals(TileType.BEACH) ) {
                                 validSpace = false;
                             }
                         }
                     }
-                    if (validSpace) {
+                    if (!validSpace) {
                         return new Result(false, "You can't build this building here!");
                     } else {
                         App.getCurrentGame().getCurrentPlayer().getInventory().removeItemsFromInventory(ProductType.WOOD, targetType.getWood());
@@ -1052,9 +1053,11 @@ public class GameMenuController extends Controller {
                         for (int sX = 0; sX < targetType.getSize().first(); sX++) {
                             for (int sY = 0; sY < targetType.getSize().second(); sY++) {
                                 App.getCurrentGame().getMap()
-                                        .findTileByXY(sX + startCoordinate.getX(), sY + startCoordinate.getY()).setTileType(TileType.GAME_BUILDING);
+                                        .findTileByXY(sX + startCoordinate.getX(), sY +
+                                                startCoordinate.getY()).setTileType(TileType.GAME_BUILDING);
                             }
                         }
+                        return new Result(true, "You build a " + buildingName + "!");
 
                     }
 
@@ -1070,49 +1073,55 @@ public class GameMenuController extends Controller {
     }
 
     public Result buyAnimal(String animalType, String animalName) {
+        if (animalType == null || animalName == null || animalType.trim().isEmpty() || animalName.trim().isEmpty()) {
+            return new Result(false, "Invalid animal type or name");
+        }
         animalType = animalType.trim();
         animalName = animalName.trim();
 
         MarnieRanch marnieRanch = (MarnieRanch) App.getCurrentGame().getMap().getMarnieRanch();
-        if (marnieRanch.isInWorkingHours()) {
-            FarmBuildingTypes farmBuildingType = null;
-            FarmBuilding building = null;
-            AnimalTypes animalTypeEnum = null;
-            Animal animal = null;
-            boolean accepted = false;
-            for (AnimalTypes type : marnieRanch.animals) {
-                if (type.name().equals(animalType)) {
-                    animalTypeEnum = type;
-                    farmBuildingType = type.getFarmBuildingTypes();
-                    if (App.getCurrentGame().getCurrentPlayer().getWallet().getBalance() > type.getPrice()) {
-                        for (FarmBuilding farmBuilding : App.getCurrentGame().getCurrentPlayer().getFarm().getFarmBuildings()) {
-                            if (farmBuilding.getType().equals(farmBuildingType)) {
-                                building = farmBuilding;
-                                accepted = true;
-                                break;
-                            }
-                        }
-                    }
-                }
-            }
-            if (!accepted) {
-                return new Result(false, "You can't buy this animal");
-            } else {
-                App.getCurrentGame().getCurrentPlayer().getWallet().decreaseBalance(animalTypeEnum.getPrice());
-                animal = marnieRanch.buildAnimal(animalTypeEnum, animalName);
-                if (building.addAnimal(animal)) {
-                    building.getAnimals().add(animal);
-                    animal.setLocatedPLace(building);
-                    App.getCurrentGame().getMap().allAnimals().add(animal);
-                } else {
-                    return new Result(false, building.getName() + " is full");
-                }
-
-            }
-            return new Result(true, "A/An" + animalType + "has been added to your farm!");
+        if (!marnieRanch.isInWorkingHours()) {
+            return new Result(false, "Store is not Open!\nWorking Time: " + marnieRanch.getHours().first()
+                    + " ~ " + (marnieRanch.getHours().second()));
         }
-        return new Result(false, "Store is not Open!\nWorking Time: " + marnieRanch.getHours().first()
-                + " ~ " + (marnieRanch.getHours().second()));
+        AnimalTypes animalTypeEnum = null;
+        for (AnimalTypes type : marnieRanch.animals) {
+            if (type.getName().equals(animalType)) {
+                animalTypeEnum = type;
+                break;
+            }
+        }
+        if (animalTypeEnum == null) {
+            return new Result(false, "Animal type not found: " + animalType);
+        }
+        if (App.getCurrentGame().getCurrentPlayer().getWallet().getBalance() < animalTypeEnum.getPrice()) {
+            return new Result(false, "You don't have enough Money!");
+        }
+
+        FarmBuilding suitableBuilding = null;
+        for (FarmBuilding farmBuilding : App.getCurrentGame().getCurrentPlayer().getFarm().getFarmBuildings()) {
+            if (farmBuilding.getType().equals(animalTypeEnum.getFarmBuildingTypes())) {
+                suitableBuilding = farmBuilding;
+                break;
+            }
+        }
+        if (suitableBuilding == null) {
+            return new Result(false, "You don't have a suitable building for this animal!");
+        }
+
+        Animal animal = marnieRanch.buildAnimal(animalTypeEnum, animalName);
+        if (!suitableBuilding.addAnimal(animal)) {
+            return new Result(false, suitableBuilding.getName() + " is full");
+        }
+
+        App.getCurrentGame().getCurrentPlayer().getWallet().decreaseBalance(animalTypeEnum.getPrice());
+        animal.setLocatedPLace(suitableBuilding);
+        App.getCurrentGame().getMap().allAnimals().add(animal);
+        int x = (int) (suitableBuilding.getStartCordinate().getX() + Math.random()*2);
+        int y = (int) (suitableBuilding.getEndCordinate().getY() - Math.random()*2);
+        animal.setCoordinate(new Coordinate(x, y));
+
+        return new Result(true, "A " + animalType + " named " + animalName + " has been added to your farm!");
     }
 
     public Result petAnimal(String animalName) {

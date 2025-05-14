@@ -188,5 +188,9 @@ public class Animal {
         return locatedPLace;
     }
 
+    public AnimalTypes getAnimalType() {
+        return animalType;
+    }
+
 
 }

@@ -92,7 +92,7 @@ public enum GameMenuCommands implements Command {
     // Parsa
     // Animals & Fishing
     BUILD_BUILDING("\\s*build\\s+-a\\s+(?<buildingName>\\S+)\\s+-l\\s+(?<x>\\S+)\\s+(?<y>\\S+)\\s*"),
-    BUY_ANIMAL("\\s*build\\s+-a\\s+(?<animalName>\\S+)\\s+-n\\s+(?<number>\\S+)\\s*"),
+    BUY_ANIMAL("\\s*buy\\s+animal\\s+-a\\s+(?<animalName>\\S+)\\s+-n\\s+(?<number>\\S+)\\s*"),
     PET_ANIMAL("\\s*pet\\s+-n\\s+(?<petName>\\S+)\\s*"),
     ANIMAL_LIST("\\s*animals\\s*"),
     CHEAT_SET_ANIMAL_FRIENDSHIP("\\s*cheat\\s*set\\s*friendship\\s+-n\\s+(?<animalName>\\S+)\\s+-c\\s+(?<amount>\\S+)\\s*"),

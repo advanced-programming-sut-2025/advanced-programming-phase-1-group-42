@@ -215,10 +215,10 @@ public class Player {
     public void showAnimals(){
         for (FarmBuilding farmBuilding : farm.getFarmBuildings()) {
             for (Animal animal : farmBuilding.getAnimals()) {
-                System.out.println(animal.getName());
+                System.out.println(animal.getAnimalType().getName() + " > " + animal.getName());
                 System.out.println("FriendShips: " + animal.getFriendship());
                 System.out.println("Petted: " + animal.isPetted());
-                System.out.println("Fed" + animal.isFed());
+                System.out.println("Fed: " + animal.isFed());
             }
             System.out.println("------------------------------");
         }

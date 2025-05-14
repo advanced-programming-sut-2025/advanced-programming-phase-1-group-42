@@ -19,7 +19,7 @@ import java.util.List;
 
 public class CarpenterShop extends GameBuilding {
 
-    private ArrayList<FarmBuildingTypes> products = new ArrayList<>(
+    private final ArrayList<FarmBuildingTypes> products = new ArrayList<>(
             List.of(FarmBuildingTypes.BARN, FarmBuildingTypes.BIG_BARN, FarmBuildingTypes.DELUXE_BARN,
                     FarmBuildingTypes.COOP, FarmBuildingTypes.BIG_COOP, FarmBuildingTypes.DELUXE_COOP)
     );
@@ -39,10 +39,15 @@ public class CarpenterShop extends GameBuilding {
 
     @Override
     public String showAllProducts() {
+        StringBuilder result = new StringBuilder();
         for (FarmBuildingTypes farmBuildingType : products) {
-            System.out.println(farmBuildingType.getName() + "  " + farmBuildingType.getCost() + "G");
+            result.append(farmBuildingType.getName()).append(" ").append(farmBuildingType.getCost()).append("\n");
         }
-        return null;
+        result.append(ProductType.WOOD.getName()).append(" ").append(ProductType.WOOD.getSellPrice()).append("\n");
+        result.append(ProductType.STONE.getName()).append(" ").append(ProductType.STONE.getSellPrice()).append("\n");
+
+        return result.toString();
+
     }
 
     @Override
@@ -56,10 +61,10 @@ public class CarpenterShop extends GameBuilding {
         ProductType type = null;
         if (productName.equals("Wood")) {
             type = ProductType.WOOD;
-            if (!(App.getCurrentGame().getCurrentPlayer().getWallet().getBalance() > countInt * type.getSellPrice())) {
+            if (!(App.getCurrentGame().getCurrentPlayer().getWallet().getBalance() >= countInt * type.getSellPrice())) {
                 return new Result(false, "You don't have enough money");
             } else {
-                if (!App.getCurrentGame().getCurrentPlayer().getInventory().addGood((Good) new Product(ProductType.WOOD), countInt)) {
+                if (!App.getCurrentGame().getCurrentPlayer().getInventory().addGood(Good.newGood(ProductType.WOOD), countInt)) {
                     return new Result(false, "Your inventory is full");
                 } else {
                     App.getCurrentGame().getCurrentPlayer().getWallet().decreaseBalance(countInt * type.getSellPrice());
@@ -67,11 +72,11 @@ public class CarpenterShop extends GameBuilding {
                 return new Result(true, "You bought " + countInt + " Wood");
             }
         } else if (productName.equals("Stone")) {
-            type = ProductType.WOOD;
-            if (!(App.getCurrentGame().getCurrentPlayer().getWallet().getBalance() > countInt * type.getSellPrice())) {
+            type = ProductType.STONE;
+            if (!(App.getCurrentGame().getCurrentPlayer().getWallet().getBalance() >= countInt * type.getSellPrice())) {
                 return new Result(false, "You don't have enough money");
             } else {
-                if (!App.getCurrentGame().getCurrentPlayer().getInventory().addGood((Good) new Product(ProductType.WOOD), countInt)) {
+                if (!App.getCurrentGame().getCurrentPlayer().getInventory().addGood(Good.newGood(ProductType.STONE), countInt)) {
                     return new Result(false, "Your inventory is full");
                 } else {
                     App.getCurrentGame().getCurrentPlayer().getWallet().decreaseBalance(countInt * type.getSellPrice());
