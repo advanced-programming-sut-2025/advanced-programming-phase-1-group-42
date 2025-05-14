@@ -261,6 +261,10 @@ public class Game {
             }
         }
 
+        for (Player player : players) {
+            player.setCoordinate(new Coordinate(player.getFarm().getFarmBuildings().getFirst().getStartCordinate().getX() + 5,
+                    player.getFarm().getFarmBuildings().getFirst().getStartCordinate().getY() + 5));
+        }
 
         // Check weather
     }
