@@ -418,9 +418,9 @@ public class GameMenuController extends Controller {
 
         int energyConsumed = path.getLast().first() / 20;
         int playerEnergy = App.getCurrentGame().getCurrentPlayer().getEnergy().getDayEnergyLeft();
-        System.out.println("Energy needed to walk to " + goal + " location is " + energyConsumed + "(Your Energy: " +
+        System.out.println("Energy needed to walk to " + goal + " location is " + energyConsumed + " (Your Energy: " +
                 playerEnergy
-                + "). Do you want to continue? (y/n)");
+                + ")\n.Do you want to continue? (y/n)");
         String input = scanner.nextLine();
         if (!input.matches("\\s*y\\s*")) {
             return new Result(true, "You didn't walked!");
