@@ -30,6 +30,7 @@ public class Player {
     private Energy energy;
     private Tool trashCan;
     private Skill skill;
+
     private Buff buff;
     private Buff rejectionBuff;
 

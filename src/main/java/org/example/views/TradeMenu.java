@@ -21,7 +21,7 @@ public class TradeMenu implements AppMenu {
 
         //Trading
          if ((matcher = TradeMenuCommands.TRADE_WITH_MONEY.matcher(input)) != null) {
-            System.out.println(controller.tradeWithMoney(matcher.group("receiver"), matcher.group("trade_type")
+            System.out.println(controller.tradeWithMoney(matcher.group("username"), matcher.group("trade_type")
                     , matcher.group("item"), matcher.group("amount"), matcher.group("price")));
          } else if ((matcher = TradeMenuCommands.TRADE_WITH_GOODS.matcher(input)) != null) {
             System.out.print(controller.tradeWithGoods(matcher.group("receiver"), matcher.group("trade_type")
@@ -37,6 +37,8 @@ public class TradeMenu implements AppMenu {
             System.out.print(controller.tradeHistory());
          } else if ((matcher = TradeMenuCommands.EXIT_TRADE.matcher(input)) != null) {
              System.out.print(controller.exitTradeMenu());
+         } else {
+             System.out.println("Invalid input");
          }
 
 

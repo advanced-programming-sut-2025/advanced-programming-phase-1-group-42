@@ -270,11 +270,8 @@ public class GameMenuController extends Controller {
         }
         App.getCurrentGame().getCurrentPlayer().getNews().clear();
 
-        System.out.println(App.getCurrentGame().getCurrentPlayer().getUser().getUsername());
-        System.out.println(App.getCurrentGame().getPlayers().getFirst().getUser().getUsername());
         if(App.getCurrentGame().getCurrentPlayer().getUser().getUsername().equals(App.getCurrentGame().getPlayers().getFirst().getUser().getUsername())) {
             App.getCurrentGame().getDateTime().timeFlow();
-            System.out.println("MMD");
         }
 
         return new Result(true, news.toString());
