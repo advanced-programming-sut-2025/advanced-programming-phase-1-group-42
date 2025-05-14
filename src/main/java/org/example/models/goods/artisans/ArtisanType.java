@@ -10,6 +10,7 @@ import org.example.models.goods.foragings.ForagingCropType;
 import org.example.models.goods.foragings.ForagingMineralType;
 import org.example.models.goods.foragings.ForagingSeedType;
 import org.example.models.goods.products.ProductType;
+import org.example.models.goods.recipes.CraftingRecipeType;
 import org.example.models.interactions.Animals.AnimalProductsType;
 import org.example.models.interactions.game_buildings.Quadruple;
 
@@ -254,41 +255,43 @@ public enum ArtisanType implements GoodType {
             , CraftingType.CHARCOAL_KILN),
 
     SMOKED_FISH("Smoked Fish", "A whole fish, smoked to perfection.", new Pair<>(1.5, 0), 1, new ArrayList<>(
-            Arrays.asList(// Spring Fish
+            Arrays.asList(
+                    // Spring Fish
                     new Quadruple<>(FishType.FLOUNDER, 1, 2.0, 0.0),
                     new Quadruple<>(FishType.LIONFISH, 1, 2.0, 0.0),
                     new Quadruple<>(FishType.HERRING, 1, 2.0, 0.0),
                     new Quadruple<>(FishType.GHOSTFISH, 1, 2.0, 0.0),
 
-// Summer Fish
+                    // Summer Fish
                     new Quadruple<>(FishType.TILAPIA, 1, 2.0, 0.0),
                     new Quadruple<>(FishType.DORADO, 1, 2.0, 0.0),
                     new Quadruple<>(FishType.SUNFISH, 1, 2.0, 0.0),
                     new Quadruple<>(FishType.RAINBOW_TROUT, 1, 2.0, 0.0),
 
-// Fall Fish
+                    // Fall Fish
                     new Quadruple<>(FishType.SALMON, 1, 2.0, 0.0),
                     new Quadruple<>(FishType.SARDINE, 1, 2.0, 0.0),
                     new Quadruple<>(FishType.SHAD, 1, 2.0, 0.0),
                     new Quadruple<>(FishType.BLUE_DISCUS, 1, 2.0, 0.0),
 
-// Winter Fish
+                    // Winter Fish
                     new Quadruple<>(FishType.MIDNIGHT_CARP, 1, 2.0, 0.0),
                     new Quadruple<>(FishType.SQUID, 1, 2.0, 0.0),
                     new Quadruple<>(FishType.TUNA, 1, 2.0, 0.0),
                     new Quadruple<>(FishType.PERCH, 1, 2.0, 0.0),
 
-// Legendary Fish
+                    // Legendary Fish
                     new Quadruple<>(FishType.LEGEND, 1, 2.0, 0.0),
                     new Quadruple<>(FishType.CRIMSONFISH, 1, 2.0, 0.0),
                     new Quadruple<>(FishType.ANGLER, 1, 2.0, 0.0),
-                    new Quadruple<>(FishType.GLACIERFISH, 1, 2.0, 0.0)),
+                    new Quadruple<>(FishType.GLACIERFISH, 1, 2.0, 0.0),
 
-            //Coals
-            new Quadruple<>(ForagingMineralType.COAL, 1, 0.0, 0.0),
-            new Quadruple<>(ProductType.COAL, 1, 0.0, 0.0),
-            new Quadruple<>(ArtisanType.COAL, 1, 0.0, 0.0)
-    ), CraftingType.FISH_SMOKER),
+                    // Coals
+                    new Quadruple<>(ForagingMineralType.COAL, 1, 0.0, 0.0),
+                    new Quadruple<>(ProductType.COAL, 1, 0.0, 0.0),
+                    new Quadruple<>(ArtisanType.COAL, 1, 0.0, 0.0)
+            )
+    ), CraftingRecipeType.FISH_SMOKER),
 
 
     METAL_BAR("Any metal bar", "Turns ore and coal into metal bars.", new Pair<>(0.0, 0), 4, new ArrayList<>(
