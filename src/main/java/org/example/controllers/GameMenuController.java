@@ -260,7 +260,7 @@ public class GameMenuController extends Controller {
         App.getCurrentGame().nextPlayer();
 
         StringBuilder news = new StringBuilder();
-        news.append("Current player: ").append(App.getCurrentGame().getCurrentPlayer().getUser().getUsername());
+        news.append("Current player: ").append(App.getCurrentGame().getCurrentPlayer().getUser().getUsername() + "\nNews:");
         int ctr = 1;
         for (String s : App.getCurrentGame().getCurrentPlayer().getNews()) {
             news.append("\t").append(ctr++).append(". ").append(s);
