@@ -102,7 +102,12 @@ public class TradeMenuController {
 
         int tradeIdInt = Integer.parseInt(tradeID);
 
-        boolean accept = Boolean.parseBoolean(response);
+        boolean accept = false;
+        if(response.equals("–accept")){
+            accept = true;
+        } else if (response.equals("–reject")){
+            accept = false;
+        }
 
         TradeManager.respondToTrade(currentPlayer, tradeIdInt, accept);
 
