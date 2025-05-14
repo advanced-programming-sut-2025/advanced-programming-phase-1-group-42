@@ -56,50 +56,60 @@ public class Map {
 
     // A function to print map
     public void printMap(int x , int y, int size) {
-        for(int i = 0 ; i < size; i++){
+        for(int j = 0 ; j < size; j++){
             System.out.print("\n");
-            for(int j = 0 ; j < size; j++){
+            for(int i = 0 ; i < size; i++){
                 Coordinate coordinate = new Coordinate(x + i,y + j);
                 Tile tile = findTile(coordinate);
 
                 if(tile == null){
-                    System.out.print(colorMap.get("Black_Background") + " " + colorMap.get("Reset"));
+                    System.out.print(colorMap.get("White_Background")+ colorMap.get("Purple") + "B" + colorMap.get("Reset"));
                 }else if(tile.getTileType() == TileType.FARM){
+                    boolean printed = false;
                     for (Good good : tile.getGoods()) {
                         if(good instanceof ForagingTree){
                             System.out.print(colorMap.get("Green_Background")+
                                     colorMap.get("Yellow")+"T"+ colorMap.get("Reset"));
+                            printed = true;
                         } else if(good instanceof FarmingTree){
                             System.out.print(colorMap.get("Green_Background")+
                                     colorMap.get("Yellow")+"T"+ colorMap.get("Reset"));
+                            printed = true;
                         } else if(good instanceof FarmingTreeSapling){
                             System.out.print(colorMap.get("Green_Background")+
                                     colorMap.get("Yellow")+"T"+ colorMap.get("Reset"));
-                        } else{
-                            System.out.print(colorMap.get("Green_Background")+
-                                    colorMap.get("Yellow")+" "+ colorMap.get("Reset"));
+                            printed = true;
                         }
+                    }
+                    if(!printed){
+                        System.out.print(colorMap.get("Green_Background")
+                                +" "+ colorMap.get("Reset"));
                     }
                 }else if(tile.getTileType() == TileType.WATER){
                     System.out.print(colorMap.get("Cyan_Background") + " "+ colorMap.get("Reset"));
                 }else if(tile.getTileType() == TileType.GREEN_HOUSE) {
+                    boolean printed = false;
                     for (Good good : tile.getGoods()) {
                         if(good instanceof ForagingTree){
                             System.out.print(colorMap.get("White_Background")+
                                     colorMap.get("Yellow")+"T"+ colorMap.get("Reset"));
+                            printed = true;
                         } else if(good instanceof FarmingTree){
                             System.out.print(colorMap.get("White_Background")+
                                     colorMap.get("Yellow")+"T"+ colorMap.get("Reset"));
+                            printed = true;
                         } else if(good instanceof FarmingTreeSapling){
                             System.out.print(colorMap.get("White_Background")+
                                     colorMap.get("Yellow")+"T"+ colorMap.get("Reset"));
-                        } else{
-                            System.out.print(colorMap.get("White_Background")+
-                                    colorMap.get("Yellow")+" "+ colorMap.get("Reset"));
+                            printed = true;
                         }
                     }
+                    if(!printed){
+                        System.out.print(colorMap.get("White_Background")
+                                +" "+ colorMap.get("Reset"));
+                    }
                 }else if(tile.getTileType() == TileType.PLAYER_BUILDING || tile.getTileType() == TileType.GAME_BUILDING){
-                    System.out.print(colorMap.get("Yellow_Background")+" "+ colorMap.get("Reset") );
+                    System.out.print(colorMap.get("Yellow_Background")+"H"+ colorMap.get("Reset") );
                 }else if(tile.getTileType() == TileType.ROAD){
                     System.out.print(colorMap.get("Gray_Background")+
                             colorMap.get("Purple")+"-"+ colorMap.get("Reset"));
@@ -108,6 +118,15 @@ public class Map {
                 }else if(tile.getTileType() == TileType.PLAIN) {
                     System.out.print(colorMap.get("Red")+
                             colorMap.get("Green_Background")+"-"+ colorMap.get("Reset"));
+                } else if(tile.getTileType() == TileType.STONE_WALL) {
+                    System.out.print(colorMap.get("Black")+
+                            colorMap.get("Blue_Background")+"|"+ colorMap.get("Reset"));
+                } else if(tile.getTileType() == TileType.BEACH) {
+                    System.out.print(colorMap.get("Gray")+
+                            colorMap.get("Yellow_Background")+"B"+ colorMap.get("Reset"));
+                } else if(tile.getTileType() == TileType.SQUARE) {
+                    System.out.print(colorMap.get("Black")+
+                            colorMap.get("Red_Background")+"O"+ colorMap.get("Reset"));
                 }
             }
         }

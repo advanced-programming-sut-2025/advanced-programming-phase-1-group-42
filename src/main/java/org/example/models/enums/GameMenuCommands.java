@@ -35,12 +35,12 @@ public enum GameMenuCommands implements Command {
     WEATHER("\\s*weather\\s*"),
     WEATHER_FORECAST("\\s*weather\\s+forecast\\s*"),
     CHEAT_WEATHER_SET("\\s*cheat\\s+weather\\s+set\\s(?<weather>\\S+)\\s*"),
-    GREEN_HOUSE_BUILD("\\s*green\\s+house\\s+build\\s*"),
+    GREEN_HOUSE_BUILD("\\s*green\\s*house\\s+build\\s*"),
 
     // Parsa
     //Map
     WALK("\\s*walk\\s-l\\s(?<x>\\S)\\s(?<y>\\S)\\s*"),
-    PRINT_MAP("\\s*print\\s*map\\s-l\\s(?<x>\\S+)\\s(?<y>\\S+)\\s*\\s-s\\s(?<size>\\S+)\\s*"),
+    PRINT_MAP("\\s*print\\s*map\\s+-l\\s(?<x>\\S+)\\s(?<y>\\S+)\\s*\\s+-s\\s(?<size>\\S+)\\s*"),
     HELP_READING_MAP("\\s*help\\s*reading\\s*map\\s*"),
 
     // Parsa

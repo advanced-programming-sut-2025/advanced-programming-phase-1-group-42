@@ -21,10 +21,13 @@ public abstract class Weather {
 
     public void thunder(int x, int y) {
         Coordinate coordinate = new Coordinate(x, y);
-        if(App.getCurrentGame().getCurrentPlayer().getCoordinate().equals(coordinate)){
-            System.out.println("You've Been Struck by Thunder!");
-        }else {
+//        if(App.getCurrentGame().getCurrentPlayer().getCoordinate().equals(coordinate)){
+//            System.out.println("You've Been Struck by Thunder!");
+//        }
+//        else
+        {
             Tile tile = App.getCurrentGame().getMap().findTile(coordinate);
+            System.out.println("Thunder has been struck");
             if(!(tile.getTileType().equals(TileType.GREEN_HOUSE))) {
                 Iterator<Good> iterator = tile.getGoods().iterator();
                 while (iterator.hasNext()) {
@@ -32,12 +35,15 @@ public abstract class Weather {
                     if (good instanceof ForagingTree) {
                         iterator.remove();
                         tile.addGoodToTile(Good.newGood(ForagingMineralType.COAL));
+                        System.out.println("A Tree has been Fallen By Thor");
                     } else if (good instanceof FarmingTree) {
                         iterator.remove();
                         tile.addGoodToTile(Good.newGood(ForagingMineralType.COAL));
+                        System.out.println("A Tree has been Fallen By Thor");
                     } else if (good instanceof FarmingTreeSapling) {
                         iterator.remove();
                         tile.addGoodToTile(Good.newGood(ForagingMineralType.COAL));
+                        System.out.println("A Tree has been Fallen By Thor");
                     }
                 }
             }
