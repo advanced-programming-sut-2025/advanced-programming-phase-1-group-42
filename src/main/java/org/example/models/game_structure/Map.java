@@ -8,6 +8,8 @@ import org.example.models.goods.farmings.FarmingTreeSapling;
 import org.example.models.goods.foragings.*;
 import org.example.models.goods.products.ProductType;
 import org.example.models.interactions.Animals.Animal;
+import org.example.models.interactions.NPCs.NPC;
+import org.example.models.interactions.Player;
 import org.example.models.interactions.game_buildings.GameBuilding;
 
 import java.util.ArrayList;
@@ -58,75 +60,101 @@ public class Map {
     public void printMap(int x , int y, int size) {
         for(int j = 0 ; j < size; j++){
             System.out.print("\n");
+
+
             for(int i = 0 ; i < size; i++){
+                boolean printedPlayer = false;
+                boolean printedNPC = false;
                 Coordinate coordinate = new Coordinate(x + i,y + j);
                 Tile tile = findTile(coordinate);
 
-                if(tile == null){
-                    System.out.print(colorMap.get("Purple")+colorMap.get("White_Background") +"N" + colorMap.get("Reset"));
-                }else if(tile.getTileType() == TileType.FARM){
-                    boolean printed = false;
-                    for (Good good : tile.getGoods()) {
-                        if(good instanceof ForagingTree){
-                            System.out.print(colorMap.get("Green_Background")+
-                                    colorMap.get("Yellow")+"T"+ colorMap.get("Reset"));
-                            printed = true;
-                        } else if(good instanceof FarmingTree){
-                            System.out.print(colorMap.get("Green_Background")+
-                                    colorMap.get("Yellow")+"T"+ colorMap.get("Reset"));
-                            printed = true;
-                        } else if(good instanceof FarmingTreeSapling){
-                            System.out.print(colorMap.get("Green_Background")+
-                                    colorMap.get("Yellow")+"T"+ colorMap.get("Reset"));
-                            printed = true;
+                int counter = 0;
+
+                for(Player player: App.getCurrentGame().getPlayers()) {
+                    if (player.getCoordinate().equals(coordinate)) {
+                        System.out.print(colorMap.get("Purple") + colorMap.get("Red_Background") + counter + colorMap.get("Reset"));
+                        printedPlayer = true;
+                    }
+                }
+                for(NPC npc: App.getCurrentGame().getNPCs()) {
+                    if (npc.getType().getCoordinate().equals(coordinate)) {
+                        String name = npc.getType().getName();
+                        String firstName = name.substring(0, 1).toUpperCase();
+                        System.out.print(colorMap.get("Purple") + colorMap.get("Red_Background") + firstName + colorMap.get("Reset"));
+                        printedPlayer = true;
+                    }
+                }
+                if(!printedPlayer && !printedNPC) {
+                    if (tile == null) {
+                        System.out.print(colorMap.get("Purple") + colorMap.get("White_Background") + "N" + colorMap.get("Reset"));
+
+                    } else if (tile.getTileType() == TileType.FARM) {
+                        boolean printed = false;
+                        for (Good good : tile.getGoods()) {
+                            if (good instanceof ForagingTree) {
+                                System.out.print(colorMap.get("Green_Background") +
+                                        colorMap.get("Yellow") + "T" + colorMap.get("Reset"));
+                                printed = true;
+
+                            } else if (good instanceof FarmingTree) {
+                                System.out.print(colorMap.get("Green_Background") +
+                                        colorMap.get("Yellow") + "T" + colorMap.get("Reset"));
+                                printed = true;
+                            } else if (good instanceof FarmingTreeSapling) {
+                                System.out.print(colorMap.get("Green_Background") +
+                                        colorMap.get("Yellow") + "T" + colorMap.get("Reset"));
+                                printed = true;
+                            }
                         }
-                    }
-                    if(!printed){
-                        System.out.print(colorMap.get("Green_Background")
-                                +" "+ colorMap.get("Reset"));
-                    }
-                }else if(tile.getTileType() == TileType.WATER){
-                    System.out.print(colorMap.get("Cyan_Background") + " "+ colorMap.get("Reset"));
-                }else if(tile.getTileType() == TileType.GREEN_HOUSE) {
-                    boolean printed = false;
-                    for (Good good : tile.getGoods()) {
-                        if(good instanceof ForagingTree){
-                            System.out.print(colorMap.get("White_Background")+
-                                    colorMap.get("Yellow")+"T"+ colorMap.get("Reset"));
-                            printed = true;
-                        } else if(good instanceof FarmingTree){
-                            System.out.print(colorMap.get("White_Background")+
-                                    colorMap.get("Yellow")+"T"+ colorMap.get("Reset"));
-                            printed = true;
-                        } else if(good instanceof FarmingTreeSapling){
-                            System.out.print(colorMap.get("White_Background")+
-                                    colorMap.get("Yellow")+"T"+ colorMap.get("Reset"));
-                            printed = true;
+                        if (!printed) {
+                            System.out.print(colorMap.get("Green_Background")
+                                    + " " + colorMap.get("Reset"));
                         }
+                    } else if (tile.getTileType() == TileType.WATER) {
+                        System.out.print(colorMap.get("Cyan_Background") + " " + colorMap.get("Reset"));
+                    } else if (tile.getTileType() == TileType.GREEN_HOUSE) {
+                        boolean printed = false;
+                        for (Good good : tile.getGoods()) {
+                            if (good instanceof ForagingTree) {
+                                System.out.print(colorMap.get("White_Background") +
+                                        colorMap.get("Yellow") + "T" + colorMap.get("Reset"));
+                                printed = true;
+                            } else if (good instanceof FarmingTree) {
+                                System.out.print(colorMap.get("White_Background") +
+                                        colorMap.get("Yellow") + "T" + colorMap.get("Reset"));
+                                printed = true;
+                            } else if (good instanceof FarmingTreeSapling) {
+                                System.out.print(colorMap.get("White_Background") +
+                                        colorMap.get("Yellow") + "T" + colorMap.get("Reset"));
+                                printed = true;
+                            }
+                        }
+                        if (!printed) {
+                            System.out.print(colorMap.get("White_Background")
+                                    + " " + colorMap.get("Reset"));
+                        }
+                    } else if (tile.getTileType() == TileType.PLAYER_BUILDING ) {
+                        System.out.print(colorMap.get("Yellow_Background") + "H" + colorMap.get("Reset"));
+                    } else if (tile.getTileType() == TileType.GAME_BUILDING) {
+                        System.out.print(colorMap.get("Yellow_Background") + "U" + colorMap.get("Reset"));
+                    } else if (tile.getTileType() == TileType.ROAD) {
+                        System.out.print(colorMap.get("Gray_Background") +
+                                colorMap.get("Purple") + "-" + colorMap.get("Reset"));
+                    } else if (tile.getTileType() == TileType.QUARRY) {
+                        System.out.print(colorMap.get("Gray_Background") + " " + colorMap.get("Reset"));
+                    } else if (tile.getTileType() == TileType.PLAIN) {
+                        System.out.print(colorMap.get("Red") +
+                                colorMap.get("Green_Background") + "-" + colorMap.get("Reset"));
+                    } else if (tile.getTileType() == TileType.STONE_WALL) {
+                        System.out.print(colorMap.get("Black") +
+                                colorMap.get("Blue_Background") + "|" + colorMap.get("Reset"));
+                    } else if (tile.getTileType() == TileType.BEACH) {
+                        System.out.print(colorMap.get("Gray") +
+                                colorMap.get("Yellow_Background") + "B" + colorMap.get("Reset"));
+                    } else if (tile.getTileType() == TileType.SQUARE) {
+                        System.out.print(colorMap.get("Black") +
+                                colorMap.get("Red_Background") + "O" + colorMap.get("Reset"));
                     }
-                    if(!printed){
-                        System.out.print(colorMap.get("White_Background")
-                                +" "+ colorMap.get("Reset"));
-                    }
-                }else if(tile.getTileType() == TileType.PLAYER_BUILDING || tile.getTileType() == TileType.GAME_BUILDING){
-                    System.out.print(colorMap.get("Yellow_Background")+"H"+ colorMap.get("Reset") );
-                }else if(tile.getTileType() == TileType.ROAD){
-                    System.out.print(colorMap.get("Gray_Background")+
-                            colorMap.get("Purple")+"-"+ colorMap.get("Reset"));
-                }else if(tile.getTileType() == TileType.QUARRY) {
-                    System.out.print(colorMap.get("Gray_Background")+" "+ colorMap.get("Reset"));
-                }else if(tile.getTileType() == TileType.PLAIN) {
-                    System.out.print(colorMap.get("Red")+
-                            colorMap.get("Green_Background")+"-"+ colorMap.get("Reset"));
-                } else if(tile.getTileType() == TileType.STONE_WALL) {
-                    System.out.print(colorMap.get("Black")+
-                            colorMap.get("Blue_Background")+"|"+ colorMap.get("Reset"));
-                } else if(tile.getTileType() == TileType.BEACH) {
-                    System.out.print(colorMap.get("Gray")+
-                            colorMap.get("Yellow_Background")+"B"+ colorMap.get("Reset"));
-                } else if(tile.getTileType() == TileType.SQUARE) {
-                    System.out.print(colorMap.get("Black")+
-                            colorMap.get("Red_Background")+"O"+ colorMap.get("Reset"));
                 }
             }
         }

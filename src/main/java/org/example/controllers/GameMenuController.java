@@ -1,7 +1,6 @@
 package org.example.controllers;
 
 import org.example.models.App;
-import org.example.models.DBInteractor;
 import org.example.models.Pair;
 import org.example.models.Result;
 import org.example.models.builders.*;
@@ -32,7 +31,6 @@ import org.example.models.interactions.Animals.Animal;
 import org.example.models.interactions.Animals.AnimalProduct;
 import org.example.models.interactions.Animals.AnimalTypes;
 import org.example.models.interactions.Gender;
-import org.example.models.interactions.GreenHouse;
 import org.example.models.interactions.NPCs.NPC;
 import org.example.models.goods.tools.Tool;
 import org.example.models.goods.tools.ToolFunctions;
@@ -47,7 +45,6 @@ import org.example.models.interactions.game_buildings.GameBuilding;
 import org.example.models.interactions.game_buildings.MarnieRanch;
 
 
-import java.awt.image.AreaAveragingScaleFilter;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.*;
@@ -1774,10 +1771,11 @@ public class GameMenuController extends Controller {
     public Result startTrade() {
         App.setCurrentMenu(Menu.TradeMenu);
 
-//        for(Player player : App.getCurrentGame().getPlayers()) {
-//            System.out.println(player.getUser().getUsername());
-//        }
-//        System.out.println("____________________________");
+        System.out.println("Players: ");
+        for(Player player : App.getCurrentGame().getPlayers()) {
+            System.out.println(player.getUser().getUsername());
+        }
+        System.out.println("____________________________");
 
         return new Result(true, "You are now in Trade Menu!");
     }
@@ -1789,9 +1787,9 @@ public class GameMenuController extends Controller {
 
         for (NPC npc : App.getCurrentGame().getNPCs()) {
             if (npc.getType().getName().equals(npcName)) {
-                if (abs(npc.getCordinate().getX() -
+                if (abs(npc.getCoordinate().getX() -
                         App.getCurrentGame().getCurrentPlayer().getCoordinate().getX()) == 1 &&
-                        abs(npc.getCordinate().getY() -
+                        abs(npc.getCoordinate().getY() -
                                 App.getCurrentGame().getCurrentPlayer().getCoordinate().getY()) == 1) {
                     npc.getFriendship();
                     npc.npcDialogs();
@@ -1870,9 +1868,9 @@ public class GameMenuController extends Controller {
         NPC targetNPC = null;
         boolean found = false;
         for (NPC npc : App.getCurrentGame().getNPCs()) {
-            if (abs(npc.getCordinate().getX() -
+            if (abs(npc.getCoordinate().getX() -
                     App.getCurrentGame().getCurrentPlayer().getCoordinate().getX()) == 1 &&
-                    abs(npc.getCordinate().getY() -
+                    abs(npc.getCoordinate().getY() -
                             App.getCurrentGame().getCurrentPlayer().getCoordinate().getY()) == 1) {
                 targetNPC = npc;
                 found = true;
@@ -1897,5 +1895,8 @@ public class GameMenuController extends Controller {
         return new Result(true, "Coordinate: " +
                 App.getCurrentGame().getCurrentPlayer().getCoordinate().getX() + ", " +
                 " " + App.getCurrentGame().getCurrentPlayer().getCoordinate().getY());
+    }
+    public Result showBalance(){
+        return new Result(true, "Balance: " + App.getCurrentGame().getCurrentPlayer().getWallet().getBalance() + " g");
     }
 }

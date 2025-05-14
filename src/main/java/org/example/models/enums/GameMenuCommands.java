@@ -146,8 +146,8 @@ public enum GameMenuCommands implements Command {
     QUESTS_FINISH("\\s*quests\\s*finish\\s+-i\\s+(?<index>\\S+)\\s*"),
 
     //Additional Functions
-    SHOW_PLAYER_COORDINATE("\\s*show\\s*coordinate\\s*");
-
+    SHOW_PLAYER_COORDINATE("\\s*show\\s*coordinate\\s*"),
+    SHOW_BALANCE("\\s*show\\s*balance\\s*");
 
 
 
