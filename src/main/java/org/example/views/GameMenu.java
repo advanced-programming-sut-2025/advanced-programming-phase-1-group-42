@@ -272,5 +272,11 @@ public class GameMenu implements AppMenu {
          else if ((matcher = GameMenuCommands.SHOW_PLAYER_COORDINATE.matcher(input)) != null) {
              System.out.print(controller.showPlayerCoordinate());
          }
+
+
+
+         else {
+             System.out.println("Invalid Command");
+        }
     }
 }

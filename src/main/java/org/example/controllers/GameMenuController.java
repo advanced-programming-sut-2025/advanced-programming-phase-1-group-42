@@ -320,7 +320,10 @@ public class GameMenuController extends Controller {
     }
 
     public Result cheatAdvanceDate(String date) {
-        //TODO
+        int dateInt = Integer.parseInt(date);
+        for (int i = 0 ; i < dateInt ; i++) {
+            App.getCurrentGame().gameFlow();
+        }
         return new Result(true, "");
     }
 
@@ -1869,8 +1872,8 @@ public class GameMenuController extends Controller {
 
     //Additional Functions
     public Result showPlayerCoordinate(){
-        return new Result(true, "Coordinate: " + App.getCurrentGame().getCurrentPlayer().getCoordinate().getX() +
-                ", " + App.getCurrentGame().getCurrentPlayer().getCoordinate().getX() +
+        return new Result(true, "Coordinate: " +
+                App.getCurrentGame().getCurrentPlayer().getCoordinate().getX() + ", " +
                 " " + App.getCurrentGame().getCurrentPlayer().getCoordinate().getY());
     }
 }
