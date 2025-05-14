@@ -290,10 +290,8 @@ public enum ArtisanType implements GoodType {
                     new Quadruple<>(ForagingMineralType.COAL, 1, 0.0, 0.0),
                     new Quadruple<>(ProductType.COAL, 1, 0.0, 0.0),
                     new Quadruple<>(ArtisanType.COAL, 1, 0.0, 0.0)
-            )
-    ), CraftingRecipeType.FISH_SMOKER),
-
-
+            )), CraftingType.FISH_SMOKER),
+    
     METAL_BAR("Any metal bar", "Turns ore and coal into metal bars.", new Pair<>(0.0, 0), 4, new ArrayList<>(
             Arrays.asList(
                     new Quadruple<>(ProductType.COPPER_ORE, 5, 10.0, 0.0),
