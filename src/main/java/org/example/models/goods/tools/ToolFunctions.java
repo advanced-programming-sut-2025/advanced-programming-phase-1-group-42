@@ -57,6 +57,7 @@ public class ToolFunctions {
     public static Result tooluse(Tool tool, Coordinate coordinate) {
         switch ((ToolType) tool.getType()){
             case ToolType.HOE -> {
+
                 if(App.getCurrentGame().getCurrentPlayer().getBuff().getType().equals(BuffType.FARMING_BUFF)){
                     App.getCurrentGame().getCurrentPlayer().getEnergy().increaseTurnEnergyLeft(1);
                 }

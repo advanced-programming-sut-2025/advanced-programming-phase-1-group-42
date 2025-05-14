@@ -71,8 +71,9 @@ public class Map {
                 int counter = 0;
 
                 for(Player player: App.getCurrentGame().getPlayers()) {
+                    counter++;
                     if (player.getCoordinate().equals(coordinate)) {
-                        System.out.print(colorMap.get("Purple") + colorMap.get("Red_Background") + counter + colorMap.get("Reset"));
+                        System.out.print(colorMap.get("Black") + colorMap.get("Red_Background") + counter + colorMap.get("Reset"));
                         printedPlayer = true;
                     }
                 }
@@ -80,7 +81,7 @@ public class Map {
                     if (npc.getType().getCoordinate().equals(coordinate)) {
                         String name = npc.getType().getName();
                         String firstName = name.substring(0, 1).toUpperCase();
-                        System.out.print(colorMap.get("Purple") + colorMap.get("Red_Background") + firstName + colorMap.get("Reset"));
+                        System.out.print(colorMap.get("Black") + colorMap.get("Red_Background") + firstName + colorMap.get("Reset"));
                         printedPlayer = true;
                     }
                 }
@@ -154,6 +155,9 @@ public class Map {
                     } else if (tile.getTileType() == TileType.SQUARE) {
                         System.out.print(colorMap.get("Black") +
                                 colorMap.get("Red_Background") + "O" + colorMap.get("Reset"));
+                    } else if (tile.getTileType() == TileType.PLOWED_FARM) {
+                        System.out.print(colorMap.get("Gray") +
+                                colorMap.get("Green_Background") + "p" + colorMap.get("Reset"));
                     }
                 }
             }

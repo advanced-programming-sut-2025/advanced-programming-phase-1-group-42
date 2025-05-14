@@ -99,11 +99,13 @@ public class Player {
         if (food instanceof Food) {
             FoodType type = (FoodType) food.getType();
             Buff currentBuff = type.getBuff();
-            if(currentBuff.getType().equals(BuffType.ENERGY_BUFF)) {
+            if(currentBuff != null) {
+
+            } else if(currentBuff.getType().equals(BuffType.ENERGY_BUFF)) {
+
                 App.getCurrentGame().getCurrentPlayer().getEnergy().increaseTurnEnergyLeft(currentBuff.getEffect());
                 App.getCurrentGame().getCurrentPlayer().getEnergy().setMaxDayEnergy(200 + currentBuff.getEffect());
-            }
-            if(!App.getCurrentGame().getCurrentPlayer().getBuff().getType().equals(BuffType.ENERGY_BUFF)) {
+            }else if(!App.getCurrentGame().getCurrentPlayer().getBuff().getType().equals(BuffType.ENERGY_BUFF)) {
                 App.getCurrentGame().getCurrentPlayer().getEnergy().setMaxDayEnergy(200);
             }
             App.getCurrentGame().getCurrentPlayer().setBuff(currentBuff);
