@@ -111,7 +111,7 @@ public abstract class GameBuilding extends Building {
         ArrayList<Tile> upgradeTiles = new ArrayList<>();
         for (int i = i2; i - i2 < 20; i++) {
             for (int j = i3; j - i3 < 20; j++) {
-                upgradeTiles.add(tiles.get(i + (j * 150)));
+                upgradeTiles.add(tiles.get((i * 160) + j));
                 upgradeTiles.getLast().setTileType(TileType.GAME_BUILDING);
             }
         }

@@ -24,8 +24,9 @@ public class Farm {
             boolean flag = (i == 0 || (i + 1 == (playerNumber % 2 + 1) * 70));
             for (int j = (playerNumber / 2) * 110; j < (playerNumber / 2) * 110 + 50; j++) {
                 try { //TODO
-                    this.tiles.add(tiles.get(i + (j * 150)));
+                    this.tiles.add(tiles.get((i * 160) + j));
                     this.tiles.getLast().setTileType(TileType.FARM);
+
                     if(flag || j == 0 || (j + 1 == (playerNumber / 2) * 110 + 50))
                         this.tiles.getLast().setTileType(TileType.STONE_WALL);
 
@@ -69,8 +70,8 @@ public class Farm {
         if(farmNumber == 0) {
             for (int i = 32; i - 32 < 6; i++) {
                 for (int j = 5; j - 5 < 5; j++) {
-                    this.tiles.get(i + (j * 150)).setTileType(TileType.GREEN_HOUSE);
-                    greenHouseTile.add(this.tiles.get(i + (j * 150)));
+                    this.tiles.get((i * 50) + j).setTileType(TileType.GREEN_HOUSE);
+                    greenHouseTile.add(this.tiles.get((i * 160) + j));
                 }
             }
             startCoordinate = new Coordinate((playerNumber % 2) * 70 + 32, (playerNumber / 2) * 110 + 5);
@@ -79,8 +80,8 @@ public class Farm {
         else {
             for (int i = 59; i - 59 < 6; i++) {
                 for (int j = 5; j - 5 < 5; j++) {
-                    this.tiles.get(i + (j * 150)).setTileType(TileType.GREEN_HOUSE);
-                    greenHouseTile.add(this.tiles.get(i + (j * 150)));
+                    this.tiles.get((i * 50) + j).setTileType(TileType.GREEN_HOUSE);
+                    greenHouseTile.add(this.tiles.get((i * 50) + j));
                 }
             }
             startCoordinate = new Coordinate((playerNumber % 2) * 70 + 59, (playerNumber / 2) * 110 + 5);
@@ -95,7 +96,7 @@ public class Farm {
             startCoordinate = new Coordinate((playerNumber % 2) * 70 + 45,  (playerNumber / 2) * 110 + 5);
             for (int i = 45; i - 45 < 20; i++) {
                 for (int j = 5; j - 5 < 20; j++) {
-                    this.tiles.get(i + (j * 150)).setTileType(TileType.PLAYER_BUILDING);
+                    this.tiles.get((i * 50) + j).setTileType(TileType.PLAYER_BUILDING);
                 }
             }
         }
@@ -104,9 +105,9 @@ public class Farm {
             for (int i = 25; i - 25 < 20; i++) {
                 for (int j = 15; j - 15 < 20; j++) {
                     try { //TODO
-                        this.tiles.get(i + (j * 150)).setTileType(TileType.PLAYER_BUILDING);
+                        this.tiles.get((i * 50) + j).setTileType(TileType.PLAYER_BUILDING);
                     } catch (Exception e) {
-                        System.out.println("OPs");
+                        System.out.println(e.getMessage());
                     }
                 }
             }
@@ -121,7 +122,7 @@ public class Farm {
             startCoordinate = new Coordinate( 25, 35);
             for (int i = startCoordinate.getX(); i - 25 < 20; i++) {
                 for (int j = startCoordinate.getY(); j - 35 < 10; j++) {
-                    lakes.add(this.tiles.get(i + (j * 150)));
+                    lakes.add(this.tiles.get((i * 50) + j));
                     lakes.getLast().setTileType(TileType.WATER);
                 }
             }
@@ -132,10 +133,10 @@ public class Farm {
                 for (int j = startCoordinate.getY(); j < 50; j++) {
                     try {  //TODO
 
-                        lakes.add(this.tiles.get(i + (j * 150)));
+                        lakes.add(this.tiles.get((i * 50) + j));
                         lakes.getLast().setTileType(TileType.WATER);
                     } catch (Exception e) {
-                        System.out.println("OPs");
+                        System.out.println(e.getMessage());
                     }
                 }
             }
@@ -151,7 +152,7 @@ public class Farm {
             startCoordinate = new Coordinate(5, 10);
             for (int i = startCoordinate.getX(); i - 5 < 10; i++) {
                 for (int j = startCoordinate.getY(); j - 10 < 10; j++) {
-                    quarryTiles.add(this.tiles.get(i + (j * 150)));
+                    quarryTiles.add(this.tiles.get((i * 50) + j));
                     quarryTiles.getLast().setTileType(TileType.QUARRY);
                 }
             }
@@ -162,10 +163,10 @@ public class Farm {
                 for (int j = startCoordinate.getY(); j - 35 < 10; j++) {
                     try { //TODO
 
-                        quarryTiles.add(this.tiles.get(i + (j * 150)));
+                        quarryTiles.add(this.tiles.get((i * 50) + j));
                         quarryTiles.getLast().setTileType(TileType.QUARRY);
                     } catch (Exception e) {
-                        System.out.println("OPs");
+                        System.out.println(e.getMessage());
                     }
                 }
             }
