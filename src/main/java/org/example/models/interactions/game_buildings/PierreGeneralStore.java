@@ -7,10 +7,12 @@ import org.example.models.game_structure.Coordinate;
 import org.example.models.game_structure.Tile;
 import org.example.models.goods.GoodType;
 import org.example.models.goods.artisans.ArtisanType;
+import org.example.models.goods.craftings.CraftingType;
 import org.example.models.goods.farmings.FarmingTreeSaplingType;
 import org.example.models.goods.foods.FoodType;
 import org.example.models.goods.foragings.ForagingSeedType;
 import org.example.models.goods.products.ProductType;
+import org.example.models.goods.recipes.CraftingRecipeType;
 import org.example.models.interactions.NPCs.NPC;
 import org.example.models.interactions.NPCs.NPCTypes;
 
@@ -46,12 +48,12 @@ public class PierreGeneralStore extends GameBuilding {
                 new Pair(ProductType.BOUQUET, 2),
                 new Pair(ProductType.WEDDING_RING, 2),
                 new Pair(ArtisanType.DEHYDRATOR_RECIPE, 1),
-                new Pair(ProductType.GRASS_STARTER_RECIPE, 1),
+                new Pair(CraftingRecipeType.GRASS_STARTER_RECIPE, 1),
                 new Pair(FoodType.SUGAR, Integer.MAX_VALUE),
                 new Pair(ProductType.OIL, Integer.MAX_VALUE),
                 new Pair(ArtisanType.VINEGAR, Integer.MAX_VALUE),
                 new Pair(ProductType.DELUXE_RETAINING_SOIL, Integer.MAX_VALUE),
-                new Pair(ProductType.GRASS_STARTER, Integer.MAX_VALUE),
+                new Pair(CraftingType.GRASS_STARTER, Integer.MAX_VALUE),
                 new Pair(ProductType.SPEED_GRO, Integer.MAX_VALUE),
                 new Pair(FarmingTreeSaplingType.APPLE_SAPLING, Integer.MAX_VALUE),
                 new Pair(FarmingTreeSaplingType.APRICOT_SAPLING, Integer.MAX_VALUE),

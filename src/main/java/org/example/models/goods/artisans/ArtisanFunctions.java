@@ -1,6 +1,5 @@
 package org.example.models.goods.artisans;
 
-import com.mongodb.client.model.QuantileMethod;
 import org.example.models.App;
 import org.example.models.Result;
 import org.example.models.game_structure.Coordinate;
@@ -9,6 +8,7 @@ import org.example.models.goods.Good;
 import org.example.models.goods.GoodType;
 import org.example.models.goods.craftings.Crafting;
 import org.example.models.goods.craftings.CraftingType;
+import org.example.models.goods.farmings.FarmingTreeSaplingType;
 import org.example.models.goods.products.ProductType;
 import org.example.models.interactions.game_buildings.Quadruple;
 
@@ -16,11 +16,14 @@ import java.util.ArrayList;
 import java.util.Arrays;
 
 public class ArtisanFunctions {
-    public static Result artisanFunction(String artisanName, ArrayList<String> ourIngredients) {
+    public static Result useArtisan(String artisanName, ArrayList<String> ourIngredients) {
         ArrayList<Good> goods = App.getCurrentGame().getCurrentPlayer().getInventory().isInInventory(artisanName);
         Crafting crafting = null;
         if(goods != null && !goods.isEmpty()) {
             crafting = (Crafting) goods.getLast();
+        }
+        else {
+            return new Result(false, "You don't have " + artisanName + " in your inventory");
         }
 
 
@@ -67,31 +70,35 @@ public class ArtisanFunctions {
                 return useCheesePress(crafting, ourIngredients);
             }
             case CraftingType.KEG -> {
-                return useKeg(crafting);
+                return useKeg(crafting, ourIngredients);
             }
             case CraftingType.LOOM -> {
-                return useLoom(crafting);
+                return useLoom(crafting, ourIngredients);
             }
             case CraftingType.MAYONNAISE_MACHINE -> {
-                return useMayonnaiseMachine(crafting);
+                return useMayonnaiseMachine(crafting, ourIngredients);
             }
             case CraftingType.OIL_MAKER -> {
-                return useOilMaker(crafting);
+                return useOilMaker(crafting, ourIngredients);
             }
             case CraftingType.PRESERVES_JAR -> {
-                return usePreservesJar(crafting);
+                return usePreservesJar(crafting, ourIngredients);
             }
             case CraftingType.DEHYDRATOR -> {
-                return useDehydrator(crafting);
+                return useDehydrator(crafting, ourIngredients);
             }
             case CraftingType.FISH_SMOKER -> {
-                return useFishSmoker(crafting);
+                return useFishSmoker(crafting, ourIngredients);
             }
             case CraftingType.MYSTIC_TREE_SEED -> {
                 return useMysticTreeSeed(crafting);
             }
             case CraftingType.CASK -> {
-                return useCask(crafting);
+                return useCask(crafting, ourIngredients);
+            }
+            case CraftingType.GRASS_STARTER -> {
+                goods.removeLast();
+                return useGrassStarter(crafting);
             }
         }
 
@@ -108,6 +115,62 @@ public class ArtisanFunctions {
                 tile.getGoods().clear();
             }
         }
+    }
+
+    private static Result multipleArtisan(Crafting crafting, ArrayList<String> ourIngredients) {
+        ArrayList<Good> goods = App.getCurrentGame().getCurrentPlayer().getInventory().isInInventory(ourIngredients.getFirst());
+        boolean flag = false;
+        Quadruple<GoodType, Integer, Double, Double> ingredients = null;
+        if(goods == null)
+            return new Result(false, "You don't have " + ourIngredients.getFirst() + " in your inventory!");
+
+        for (ArtisanType artisanType : ((CraftingType) crafting.getType()).getArtisanTypes()) {
+            ingredients = artisanType.hasIngredient(goods.getFirst().getType());
+            if(ingredients != null) {
+                flag = true;
+                break;
+            }
+        }
+
+        if(!flag)
+            return new Result(false, "There isn't any " + ourIngredients.getFirst() + " in your " + crafting.getName() + "ingredients!");
+        if(goods.size() < ingredients.b)
+            return new Result(false, "You don't have enough ingredients in your inventory!");
+
+        Good good = Good.newGood(ingredients.a);
+        ((Artisan) good).setGoodType(goods.getFirst().getType());
+        for (int i = 0; i < ingredients.b; i++) {
+            goods.removeLast();
+        }
+
+        App.getCurrentGame().getCurrentPlayer().getInventory().addGood(new ArrayList<>(Arrays.asList(good)));
+        return new Result(true, "You have extracted " + good.getName() + " by " + crafting.getName());
+    }
+
+    private static Result doubleArtisan(Crafting crafting, ArrayList<String> ourIngredients) {
+        ArrayList<Good> fishGoods = App.getCurrentGame().getCurrentPlayer().getInventory().isInInventory(ourIngredients.getFirst());
+        ArrayList<Good> coalGoods = App.getCurrentGame().getCurrentPlayer().getInventory().isInInventory(ourIngredients.get(1));
+        if(fishGoods == null || coalGoods == null)
+            return new Result(false, "You don't have enough ingredients in your inventory");
+
+        Quadruple<GoodType, Integer, Double, Double> metalIngredient = ((CraftingType) crafting.getType()).getArtisanTypes().getFirst().hasIngredient(fishGoods.getFirst().getType());
+        Quadruple<GoodType, Integer, Double, Double> coalIngredient = ((CraftingType) crafting.getType()).getArtisanTypes().getFirst().hasIngredient(fishGoods.get(1).getType());
+
+        if(metalIngredient == null || coalIngredient == null )
+            return new Result(false, "Your ingredients don't match the crafting necessary ingredients!");
+        if(fishGoods.size() < metalIngredient.b || coalGoods.size() < coalIngredient.b) {
+            return new Result(false, "You don't have enough ingredients in your inventory!");
+        }
+
+        Good good = Good.newGood(metalIngredient.a);
+        ((Artisan) good).setGoodType(fishGoods.getFirst().getType());
+        App.getCurrentGame().getCurrentPlayer().getInventory().addGood(new ArrayList<>(Arrays.asList(good)));
+
+        coalGoods.removeLast();
+        for (int i = 0; i < metalIngredient.b; i++)
+            fishGoods.removeLast();
+
+        return new Result(true, "A " + metalIngredient.a.getName() + " has been added to your inventory");
     }
 
     private static Result useCherryBomb(Crafting crafting) {
@@ -178,27 +241,7 @@ public class ArtisanFunctions {
     }
 
     private static Result useFurnace(Crafting crafting, ArrayList<String> ourIngredients) {
-        ArrayList<Good> metalGoods = App.getCurrentGame().getCurrentPlayer().getInventory().isInInventory(ourIngredients.getFirst());
-        ArrayList<Good> coalGoods = App.getCurrentGame().getCurrentPlayer().getInventory().isInInventory(ourIngredients.get(1));
-        Quadruple<GoodType, Integer, Double, Double> metalIngredient = ((CraftingType) crafting.getType()).getArtisanTypes().getFirst().hasIngredient(metalGoods.getFirst().getType());
-        Quadruple<GoodType, Integer, Double, Double> coalIngredient = ((CraftingType) crafting.getType()).getArtisanTypes().getFirst().hasIngredient(metalGoods.get(1).getType());
-
-        if(metalGoods == null || coalGoods == null
-                || metalIngredient == null ||
-                coalIngredient == null ||
-                metalGoods.size() < metalIngredient.b || coalGoods.size() < coalIngredient.b) {
-            return new Result(false, "You don't have enough ingredients in your inventory!");
-        }
-
-        Good good = Good.newGood(metalIngredient.a);
-        ((Artisan) good).setGoodType(metalGoods.getFirst().getType());
-        App.getCurrentGame().getCurrentPlayer().getInventory().addGood(new ArrayList<>(Arrays.asList(good)));
-
-        coalGoods.removeLast();
-        for (int i = 0; i < metalIngredient.b; i++)
-            metalGoods.removeLast();
-
-        return new Result(true, "A " + metalIngredient.a.getName() + " has been added to your inventory");
+        return doubleArtisan(crafting, ourIngredients);
     }
 
     private static Result useScarecrow(Crafting crafting) {
@@ -227,82 +270,110 @@ public class ArtisanFunctions {
 
     private static Result useCheesePress(Crafting crafting, ArrayList<String> ourIngredients) {
         ArrayList<Good> milks = App.getCurrentGame().getCurrentPlayer().getInventory().isInInventory(ourIngredients.getFirst());
+        if(milks == null)
+            return new Result(false, "You don't have " + ourIngredients.getFirst() + " in your inventory");
+
         Quadruple<GoodType, Integer, Double, Double> milkIngredient = ((CraftingType) crafting.getType()).getArtisanTypes().getFirst().hasIngredient(milks.getFirst().getType());
         if(milkIngredient == null)
             milkIngredient = ((CraftingType) crafting.getType()).getArtisanTypes().get(1).hasIngredient(milks.getFirst().getType());
 
-        if(milks == null
-                || milkIngredient == null ||
-                milks.size() < milkIngredient.b) {
+        if(milkIngredient == null)
+            return new Result(false, "There isn't any " + ourIngredients.getFirst() + " in your " + crafting.getName() + "ingredients!");
+        if(milks.size() < milkIngredient.b) {
             return new Result(false, "You don't have enough ingredients in your inventory!");
         }
 
         Good good = Good.newGood(milkIngredient.a);
         ((Artisan) good).setGoodType(milks.getFirst().getType());
-        milks.removeLast();
+        for (int i = 0; i < milkIngredient.b; i++)
+            milks.removeLast();
 
         App.getCurrentGame().getCurrentPlayer().getInventory().addGood(new ArrayList<>(Arrays.asList(good)));
         return new Result(true, "You have extracted " + good.getName() + " by " + crafting.getName());
     }
 
     private static Result useKeg(Crafting crafting, ArrayList<String> ourIngredients) {
-        ArrayList<Good> ingredients = App.getCurrentGame().getCurrentPlayer().getInventory().isInInventory(ourIngredients.getFirst());
-        boolean flag = false;
-        Quadruple<GoodType, Integer, Double, Double> kegIngredient = null;
-        if(ingredients == null)
+        return multipleArtisan(crafting, ourIngredients);
+    }
+
+    private static Result useLoom(Crafting crafting, ArrayList<String> ourIngredients) {
+        ArrayList<Good> goods = App.getCurrentGame().getCurrentPlayer().getInventory().isInInventory(ourIngredients.getFirst());
+        if(goods == null)
             return new Result(false, "You don't have " + ourIngredients.getFirst() + " in your inventory!");
 
-        for (ArtisanType artisanType : ((CraftingType) crafting.getType()).getArtisanTypes()) {
-            kegIngredient = artisanType.hasIngredient(ingredients.getFirst().getType());
-            if(kegIngredient != null) {
-                flag = true;
-                break;
-            }
-        }
+        Quadruple<GoodType, Integer, Double, Double> loomIngredient = ((CraftingType) crafting.getType()).
+                getArtisanTypes().getFirst().hasIngredient(goods.getFirst().getType());
 
-        if(!flag)
+        if(loomIngredient == null)
             return new Result(false, "There isn't any " + ourIngredients.getFirst() + " in your " + crafting.getName() + "ingredients!");
-        if(ingredients.size() < kegIngredient.b)
+        if(goods.size() < loomIngredient.b)
             return new Result(false, "You don't have enough ingredients in your inventory!");
 
-        Good good = Good.newGood(kegIngredient.a);
-        ((Artisan) good).setGoodType(ingredients.getFirst().getType());
-        ingredients.removeLast();
+        Good good = Good.newGood(loomIngredient.a);
+        for (int i = 0; i < loomIngredient.b; i++) {
+            goods.removeLast();
+        }
 
         App.getCurrentGame().getCurrentPlayer().getInventory().addGood(new ArrayList<>(Arrays.asList(good)));
         return new Result(true, "You have extracted " + good.getName() + " by " + crafting.getName());
     }
 
-    private static Result useLoom(Crafting crafting) {
-        // Implementation for Loom
+    private static Result useMayonnaiseMachine(Crafting crafting, ArrayList<String> ourIngredients) {
+        return multipleArtisan(crafting, ourIngredients);
     }
 
-    private static Result useMayonnaiseMachine(Crafting crafting) {
-        // Implementation for Mayonnaise Machine
+    private static Result useOilMaker(Crafting crafting, ArrayList<String> ourIngredients) {
+        return multipleArtisan(crafting, ourIngredients);
     }
 
-    private static Result useOilMaker(Crafting crafting) {
-        // Implementation for Oil Maker
+    private static Result usePreservesJar(Crafting crafting, ArrayList<String> ourIngredients) {
+        return multipleArtisan(crafting, ourIngredients);
     }
 
-    private static Result usePreservesJar(Crafting crafting) {
-        // Implementation for Preserves Jar
+    private static Result useDehydrator(Crafting crafting, ArrayList<String> ourIngredients) {
+        return multipleArtisan(crafting, ourIngredients);
     }
 
-    private static Result useDehydrator(Crafting crafting) {
-        // Implementation for Dehydrator
-    }
-
-    private static Result useFishSmoker(Crafting crafting) {
-        // Implementation for Fish Smoker
+    private static Result useFishSmoker(Crafting crafting, ArrayList<String> ourIngredients) {
+        return doubleArtisan(crafting, ourIngredients);
     }
 
     private static Result useMysticTreeSeed(Crafting crafting) {
-        // Implementation for Mystic Tree Seed
+        Tile tile = App.getCurrentGame().getMap().findTile(App.getCurrentGame().getCurrentPlayer().getCoordinate());
+        tile.getGoods().add(Good.newGood(FarmingTreeSaplingType.MYSTIC_SAPLING));
+
+        return new Result(true, "A Mystic_Sapling has been added to " +
+                App.getCurrentGame().getCurrentPlayer().getCoordinate() + " with your " + crafting.getName() + "!");
     }
 
-    private static Result useCask(Crafting crafting) {
-        // Implementation for Cask
+    private static Result useCask(Crafting crafting, ArrayList<String> ourIngredients) {
+        ArrayList<Good> goods = App.getCurrentGame().getCurrentPlayer().getInventory().isInInventory(ourIngredients.getFirst());
+        if(goods == null)
+            return new Result(false, "You don't have " + ourIngredients.getFirst() + " in your inventory!");
+
+        Quadruple<GoodType, Integer, Double, Double> loomIngredient = ((CraftingType) crafting.getType()).
+                getArtisanTypes().getFirst().hasIngredient(goods.getFirst().getType());
+
+        if(loomIngredient == null)
+            return new Result(false, "There isn't any " + ourIngredients.getFirst() + " in your " + crafting.getName() + "ingredients!");
+        if(goods.size() < loomIngredient.b)
+            return new Result(false, "You don't have enough ingredients in your inventory!");
+
+        Good good = Good.newGood(loomIngredient.a);
+        for (int i = 0; i < loomIngredient.b; i++) {
+            goods.removeLast();
+        }
+
+        App.getCurrentGame().getCurrentPlayer().getInventory().addGood(new ArrayList<>(Arrays.asList(good)));
+        return new Result(true, "You have extracted " + good.getName() + " by " + crafting.getName());
+    }
+
+    private static Result useGrassStarter(Crafting crafting) {
+        Tile tile = App.getCurrentGame().getMap().findTile(App.getCurrentGame().getCurrentPlayer().getCoordinate());
+        tile.getGoods().add(Good.newGood(ProductType.GRASS));
+
+        return new Result(true, "A Grass has been added to " +
+                App.getCurrentGame().getCurrentPlayer().getCoordinate() + " with your " + crafting.getName() + "!");
     }
 }
 

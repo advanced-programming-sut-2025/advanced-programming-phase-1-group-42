@@ -105,7 +105,7 @@ public enum GameMenuCommands implements Command {
 
     // Nader
     // Artisan Commands
-    ARTISAN_USE("\\s*artisan\\s*use\\s(?<artisan_name>\\S+)\\s(?<item1_name>\\S+)\\s*"),
+    ARTISAN_USE("\\s*artisan\\s*use\\s(?<artisanName>\\S+)\\s?(?<item1Name>\\S+)?\\s?(?<item2Name>\\S+)?"),
     ARTISAN_GET("\\s*artisan\\s*get\\s(?<artisan_name>\\S+)\\s*"),
 
     // Nader

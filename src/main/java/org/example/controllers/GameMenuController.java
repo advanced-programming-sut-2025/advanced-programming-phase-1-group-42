@@ -18,6 +18,7 @@ import org.example.models.game_structure.*;
 import org.example.models.game_structure.weathers.Weather;
 import org.example.models.goods.Good;
 import org.example.models.goods.GoodType;
+import org.example.models.goods.artisans.ArtisanFunctions;
 import org.example.models.goods.farmings.FarmingCropType;
 import org.example.models.goods.farmings.FarmingTree;
 import org.example.models.goods.farmings.FarmingTreeSapling;
@@ -1220,11 +1221,15 @@ public class GameMenuController extends Controller {
 
     // Nader
     // artisan methods
-    public Result artisanUse(String artisanName) {
+    public Result artisanUse(String artisanName, String artisanIngredient1, String artisanIngredient2) {
         artisanName = artisanName.trim();
+        ArrayList<String> ourIngredients = new ArrayList<>();
+        if(!artisanIngredient1.isEmpty())
+            ourIngredients.add(artisanIngredient1);
+        if(!artisanIngredient2.isEmpty())
+            ourIngredients.add(artisanIngredient2);
 
-
-        return new Result(true, "");
+        return ArtisanFunctions.useArtisan(artisanName, ourIngredients);
     }
 
     public Result artisanGet(String artisanName) {

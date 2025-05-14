@@ -88,7 +88,10 @@ public enum CraftingType implements GoodType {
             Arrays.asList(
                     ArtisanType.VINEGAR
             ))
-    );
+    ),
+
+    GRASS_STARTER("Grass_Starter", 100, new ArrayList<>(Arrays.asList()));
+
 
 
     private final String name;

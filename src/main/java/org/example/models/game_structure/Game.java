@@ -251,8 +251,6 @@ public class Game {
                                 }
                             }
                         }
-                        case
-
                         default -> {
 
                         }
