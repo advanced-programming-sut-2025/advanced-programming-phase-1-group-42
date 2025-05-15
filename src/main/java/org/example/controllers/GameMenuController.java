@@ -148,7 +148,7 @@ public class GameMenuController extends Controller {
 
         ArrayList<Player> players = new ArrayList<>();
         players.add(new Player(App.getCurrentUser()));
-        Player adminPlayer = players.get(0);
+        Player adminPlayer = players.getFirst();
 //        System.out.println(usernames.size());
         for (String username : usernames) {
             if (username.isEmpty())
@@ -181,11 +181,6 @@ public class GameMenuController extends Controller {
         director.createNewGame(wholeGameBuilder, players, adminPlayer);
         Game game = wholeGameBuilder.getGame();
 
-        for (Player player : players) {
-            player.getUser().setGame(game);
-            player.getUser().setPlaying(true);
-        }
-
         ArrayList<Tile> tiles = createTiles();
         ArrayList<Farm> farms = farmGame(players, scanner, tiles);
 
@@ -195,9 +190,10 @@ public class GameMenuController extends Controller {
 
         App.setCurrentGame(game);
         App.getGames().add(game);
-        int ptr = 0;
         for (Player player : players) {
-            player.iniFriendships();
+            player.getUser().setGame(game);
+            player.getUser().setPlaying(true);
+            player.iniFriendships(players);
         }
 
         //Goods generating
@@ -272,7 +268,7 @@ public class GameMenuController extends Controller {
         App.getCurrentGame().nextPlayer();
 
         StringBuilder news = new StringBuilder();
-        news.append("Current player: ").append(App.getCurrentGame().getCurrentPlayer().getUser().getUsername() + "\nNews:");
+        news.append("Current player: ").append(App.getCurrentGame().getCurrentPlayer().getUser().getUsername() + "\nNews:\n");
         int ctr = 1;
         for (String s : App.getCurrentGame().getCurrentPlayer().getNews()) {
             news.append("\t").append(ctr++).append(". ").append(s);
@@ -1444,6 +1440,8 @@ public class GameMenuController extends Controller {
                 App.getCurrentGame().getCurrentPlayer().getFriendShips().computeIfPresent(player,
                         (k, pair) -> new Pair<>(pair.first(), pair.second() + 20));
 
+                player.updateFriendShips(App.getCurrentGame().getCurrentPlayer());
+                App.getCurrentGame().getCurrentPlayer().updateFriendShips(player);
                 System.out.println("Your friendship value with " + username + " is increased to " +
                         App.getCurrentGame().getCurrentPlayer().getFriendShips().get(player).second());
             }
@@ -1499,7 +1497,7 @@ public class GameMenuController extends Controller {
         }
 
         Gift gift = new Gift(giftGoods);
-        player.getGiftList().add(new Pair<>(player, gift));
+        player.getGiftList().add(new Pair<>(App.getCurrentGame().getCurrentPlayer(), gift));
         player.getNews().add("A new gift has been added to your gift list from " + username + "!");
 
         return new Result(true, "Your gift has been sent to " + username + "!");
@@ -1538,15 +1536,15 @@ public class GameMenuController extends Controller {
         App.getCurrentGame().getCurrentPlayer().getGiftHistory().add(new Pair<>(gift.first(),
                 "A gift from " + gift.first().getUser().getUsername()
                         + " with " + gift.second().getList().size() + " amount of " + gift.second().getList().getFirst().getName() +
-                        " have been given to you! Your rate : " + giftRate + "."));
+                        " have been given to you! Your rate : " + giftRate + " !"));
 
         gift.first().getGiftHistory().add(new Pair<>(App.getCurrentGame().getCurrentPlayer(),
                 "A gift with " + gift.second().getList().size() +
                         " amount of " + gift.second().getList().getFirst().getName() +
                         " have been given to " + App.getCurrentGame().getCurrentPlayer().getUser().getUsername() + " from you! " +
-                        App.getCurrentGame().getCurrentPlayer().getUser().getUsername() + "'s rate : " + giftRate + "."));
+                        App.getCurrentGame().getCurrentPlayer().getUser().getUsername() + "'s rate : " + giftRate + " !"));
 
-        if (!App.getCurrentGame().getCurrentPlayer().getIsInteracted().get(gift.first())) {
+        if (App.getCurrentGame().getCurrentPlayer().getIsInteracted().get(gift.first()).equals(false)) {
             if (App.getCurrentGame().getCurrentPlayer().getMarried() == gift.first()) {
                 App.getCurrentGame().getCurrentPlayer().getEnergy().increaseTurnEnergyLeft(50);
                 gift.first().getEnergy().increaseTurnEnergyLeft(50);
@@ -1559,6 +1557,8 @@ public class GameMenuController extends Controller {
                 gift.first().getFriendShips().computeIfPresent(App.getCurrentGame().getCurrentPlayer(),
                         (k, pair) -> new Pair<>(pair.first(), pair.second() + value));
 
+                gift.first().updateFriendShips(App.getCurrentGame().getCurrentPlayer());
+                App.getCurrentGame().getCurrentPlayer().updateFriendShips(gift.first());
                 System.out.println("Your friendship value with " + gift.first().getUser().getUsername() + " is increased to " +
                         App.getCurrentGame().getCurrentPlayer().getFriendShips().get(gift.first()).second());
             }
@@ -1611,6 +1611,8 @@ public class GameMenuController extends Controller {
                 player.getFriendShips().computeIfPresent(App.getCurrentGame().getCurrentPlayer(),
                         (k, pair) -> new Pair<>(pair.first(), pair.second() + 60));
 
+                player.updateFriendShips(App.getCurrentGame().getCurrentPlayer());
+                App.getCurrentGame().getCurrentPlayer().updateFriendShips(player);
                 System.out.println("Your friendship value with " + username + " is increased to " +
                         App.getCurrentGame().getCurrentPlayer().getFriendShips().get(player).second());
             }
@@ -1669,6 +1671,8 @@ public class GameMenuController extends Controller {
                 player.getFriendShips().computeIfPresent(App.getCurrentGame().getCurrentPlayer(),
                         (k, pair) -> new Pair<>(pair.first() + 1, pair.second()));
 
+                player.updateFriendShips(App.getCurrentGame().getCurrentPlayer());
+                App.getCurrentGame().getCurrentPlayer().updateFriendShips(player);
                 System.out.println("Your friendship level with " + username + " has been increased to 3!");
 
             }
@@ -1738,6 +1742,8 @@ public class GameMenuController extends Controller {
             player.getFriendShips().computeIfPresent(mainPlayer,
                     (k, pair) -> new Pair<>(4, pair.second()));
 
+            player.updateFriendShips(App.getCurrentGame().getCurrentPlayer());
+            App.getCurrentGame().getCurrentPlayer().updateFriendShips(player);
             // The Wallets are shared!
             mainPlayer.getWallet().increaseBalance(player.getWallet().getBalance());
             player.setWallet(mainPlayer.getWallet());
@@ -1764,6 +1770,8 @@ public class GameMenuController extends Controller {
             player.getFriendShips().computeIfPresent(mainPlayer,
                     (k, pair) -> new Pair<>(0, pair.second()));
 
+            player.updateFriendShips(App.getCurrentGame().getCurrentPlayer());
+            App.getCurrentGame().getCurrentPlayer().updateFriendShips(player);
             player.setBuff(new Buff(BuffType.REJECT_BUFF, 7, 100));
             player.getInventory().addGood(new ArrayList<>(Arrays.asList(mainPlayer.getMarriageList().get(player))));
             player.getNews().add(mainPlayer.getUser().getUsername() + " has rejected your marriage!");

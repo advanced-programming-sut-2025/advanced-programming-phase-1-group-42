@@ -132,7 +132,7 @@ public class Game {
         App.getCurrentGame().getMap().generateRandomForagingSeed(99);
         App.getCurrentGame().getMap().generateRandomMinerals(99);
 
-        App.getCurrentGame().getMap().Fertilize();
+//        App.getCurrentGame().getMap().Fertilize();
 
         for (ShippingBin shippingBin : App.getCurrentGame().getMap().getShippingBins()) {
             shippingBin.emptyShippingBin();

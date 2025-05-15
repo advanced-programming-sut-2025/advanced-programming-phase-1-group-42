@@ -36,7 +36,7 @@ public class Player {
 
     // level-value
     private final HashMap<Player, Pair<Integer, Integer>> friendShips = new HashMap<>();
-    private final HashMap<Player, Boolean> isInteracted = new HashMap<>();
+    private final HashMap<Player, Boolean> isInteracted;
     private final ArrayList<Pair<Player, String>> talkHistory = new ArrayList<>();
 
     private final ArrayList<Pair<Player, Gift>> giftList = new ArrayList<>();
@@ -81,14 +81,15 @@ public class Player {
         this.buff = null;
         this.rejectionBuff = null;
         this.farm = null;
+        this.isInteracted = new HashMap<>();
         this.coordinate = new Coordinate(0, 0);
     }
 
-    public void iniFriendships() {
-        for (Player player : App.getCurrentGame().getPlayers()) {
-            if(player != this) {
-                friendShips.put(player, new Pair<>(0, 0));
-                isInteracted.put(player, false);
+    public void iniFriendships(ArrayList<Player> players) {
+        for (Player player : players) {
+            if(!player.getUser().getUsername().equals(user.getUsername())) {
+                this.friendShips.put(player, new Pair<>(0, 0));
+                this.isInteracted.put(player, false);
             }
         }
     }
@@ -261,5 +262,27 @@ public class Player {
 
     public void setUser(User user) {
         this.user = user;
+    }
+
+    public void updateFriendShips(Player player) {
+        Pair<Integer, Integer> friendship = friendShips.get(player);
+        int points = 0;
+        for (int i = 0; i < friendship.first(); i++) {
+            points += (i + 1) * 100;
+        }
+
+        if(friendship.second() - points >= ((friendship.first() + 1) * 100)) {
+            friendShips.computeIfPresent(player,
+                    (k, pair) -> new Pair<>(pair.first() + 1, friendship.second()));
+            player.getFriendShips().computeIfPresent(this, (k, pair) -> new Pair<>(pair.first() + 1, friendship.second()));
+        }
+        else if(friendship.second() < points) {
+            if(friendship.first() > 0) {
+                friendShips.computeIfPresent(player,
+                        (k, pair) -> new Pair<>(pair.first() - 1, friendship.second()));
+                player.getFriendShips().computeIfPresent(this,
+                        (k, pair) -> new Pair<>(pair.first() - 1, friendship.second()));
+            }
+        }
     }
 }
