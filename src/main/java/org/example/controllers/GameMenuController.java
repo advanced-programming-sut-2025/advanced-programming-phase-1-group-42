@@ -744,7 +744,24 @@ public class GameMenuController extends Controller {
         tile.getGoods().add(fertilizer.getLast());
         fertilizer.removeLast();
 
-        return new Result(true, "You have fertilized tile in location " + coordinate + " with " + fertilizer + "!");
+        boolean isThereAPlant = false;
+        for (Good good : tile.getGoods()) {
+            if (good instanceof FarmingTreeSapling) {
+                isThereAPlant = true;
+            }   else if (good instanceof FarmingTree) {
+                isThereAPlant = true;
+            }   else if (good instanceof ForagingSeed) {
+                isThereAPlant = true;
+            }   else if (good instanceof ForagingTree) {
+                isThereAPlant = true;
+            }   else if (good instanceof ForagingMixedSeed) {
+                isThereAPlant = true;
+            }
+        }
+        if(!isThereAPlant){
+            return new Result(false, "There is no plant in this location!");
+        }
+        return new Result(true, "You have fertilized tile in location " + coordinate + " with " + fertilizer.getFirst().getName() + "!");
     }
 
     public Result howMuchWater() {

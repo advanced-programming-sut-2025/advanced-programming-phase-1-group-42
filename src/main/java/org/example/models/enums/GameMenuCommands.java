@@ -69,7 +69,7 @@ public enum GameMenuCommands implements Command {
     // Planting
     PLANT_SEED("\\s*plant\\s+-s\\s+(?<seed>\\S+)\\s*\\s+-d\\s+(?<direction>\\S+)\\s*"),
     SHOW_PLANT("\\s*showplant\\s+-l\\s+(?<x>\\S+)\\s*\\s+(?<y>\\S+)\\s*"),
-    FERTILIZE("\\s*fertilize\\s+-f\\s+(?<fertilizer>\\S++)\\s+-d\\s+(?<direction>\\S+)\\s*"),
+    FERTILIZE("\\s*fertilize\\s+-f\\s(?<fertilizer>\\S+)\\s+-d\\s+(?<direction>\\S+)\\s*"),
     HOW_MUCH_WATER("\\s*howmuch\\s*water\\s*"),
 
 

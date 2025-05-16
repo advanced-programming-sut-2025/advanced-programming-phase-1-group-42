@@ -139,7 +139,7 @@ public class Map {
 
                         }
                     } else if (tile.getTileType() == TileType.WATER) {
-                        map[i][j] = colorMap.get("Cyan_Background") + " " + colorMap.get("Reset");
+                        map[i][j] = colorMap.get("Custom_RGB_Background") + " " + colorMap.get("Reset");
 
                     } else if (tile.getTileType() == TileType.GREEN_HOUSE) {
                         boolean printed = false;
@@ -217,7 +217,7 @@ public class Map {
                         map[i][j] = colorMap.get("Black") + colorMap.get("Red_Background") + "O" + colorMap.get("Reset");
 
                     } else if (tile.getTileType() == TileType.PLOWED_FARM) {
-                        map[i][j] = colorMap.get("Gray") + colorMap.get("Green_Background") + "p" + colorMap.get("Reset");
+                        map[i][j] = colorMap.get("Black") + colorMap.get("Bright_Green_Background") + "p" + colorMap.get("Reset");
 
                     } else if (tile.getTileType() == TileType.SHIPPING_BIN) {
                         map[i][j] = colorMap.get("Gray") + colorMap.get("Gold_Background") + " " + colorMap.get("Reset");
@@ -232,17 +232,31 @@ public class Map {
                 Tile tile = findTile(coordinate);
                 if (tile != null) {
                     if(tile.isWatered()) {
-                        map[i][j] = colorMap.get("Teal") + colorMap.get("Bright_Green_Background") + "w" + colorMap.get("Reset");
+                        map[i][j] =  colorMap.get("Teal_Background") + " " + colorMap.get("Reset");
                     }
                     for (Good good : tile.getGoods()) {
                         if(good != null) {
                             if (good instanceof ForagingCrop) {
                                 map[i][j] = colorMap.get("Maroon") + colorMap.get("Bright_Green_Background") + "c" + colorMap.get("Reset");
+                                if(tile.isWatered()){
+                                    map[i][j] = colorMap.get("Maroon") + colorMap.get("Teal_Background") + "c" + colorMap.get("Reset");
+                                }
                             } else if (good instanceof ForagingSeed) {
-                                map[i][j] = colorMap.get("Maroon") + colorMap.get("Bright_Green_Background") + "s" + colorMap.get("Reset");
+                                map[i][j] = colorMap.get("Pink") + colorMap.get("Bright_Green_Background") + "s" + colorMap.get("Reset");
+                                if(tile.isWatered()){
+                                    map[i][j] = colorMap.get("Pink") + colorMap.get("Teal_Background") + "s" + colorMap.get("Reset");
+                                }
                             } else if (good.getName().equals("Grass")) {
                                 map[i][j] = colorMap.get("Lime") + colorMap.get("Bright_Green_Background") + "g" + colorMap.get("Reset");
+                                if(tile.isWatered()){
+                                    map[i][j] = colorMap.get("Lime") + colorMap.get("Teal_Background") + "g" + colorMap.get("Reset");
+                                }
                             }
+                        }
+                    }
+                    if(tile.getTileType() == TileType.PLOWED_FARM) {
+                        if(tile.isWatered()) {
+                            map[i][j] = colorMap.get("Teal_Background") + "p" + colorMap.get("Reset");
                         }
                     }
                 }
@@ -725,31 +739,31 @@ public class Map {
 
                 while (iterator.hasNext()) {
                     Good good = iterator.next();
-                    if (good.getType().equals(ProductType.DELUXE_RETAINING_SOIL)) {
+                    if (good.getType() != null && good.getType().equals(ProductType.DELUXE_RETAINING_SOIL)) {
                         iterator.remove();
-                        if(tile.getTileType().equals(TileType.FARM)){
+                        if (tile.getTileType().equals(TileType.PLOWED_FARM) || tile.getTileType().equals(TileType.FARM)) {
                             tile.setWatered(true);
                         }
-                    } else if (good.getType().equals(ProductType.QUALITY_RETAINING_SOIL)) {
+                    } else if (good.getType() != null && good.getType().equals(ProductType.QUALITY_RETAINING_SOIL)) {
                         int rand = (int) Math.floor((Math.random() * 3));
                         iterator.remove();
-                        if(tile.getTileType().equals(TileType.FARM)){
-                            if(!(rand == 0)){
-                            tile.setWatered(true);
-                            }
-                        }
-                    } else if (good.getType().equals(ProductType.BASIC_RETAINING_SOIL)) {
-                        int rand = (int) Math.floor((Math.random() * 3));
-                        iterator.remove();
-                        if(tile.getTileType().equals(TileType.FARM)){
-                            if(rand == 0){
+                        if (tile.getTileType().equals(TileType.PLOWED_FARM) || tile.getTileType().equals(TileType.FARM)) {
+                            if (!(rand == 0)) {
                                 tile.setWatered(true);
                             }
                         }
-                    } else if (good.getType().equals(ProductType.SPEED_GRO)) {
+                    } else if (good.getType() != null && good.getType().equals(ProductType.BASIC_RETAINING_SOIL)) {
+                        int rand = (int) Math.floor((Math.random() * 3));
+                        iterator.remove();
+                        if (tile.getTileType().equals(TileType.PLOWED_FARM) || tile.getTileType().equals(TileType.FARM)) {
+                            if (rand == 0) {
+                                tile.setWatered(true);
+                            }
+                        }
+                    } else if (good.getType() != null && good.getType().equals(ProductType.SPEED_GRO)) {
                         Iterator<Good> iterator2 = tile.getGoods().iterator();
                         while (iterator2.hasNext()) {
-                            Good good2 = iterator.next();
+                            Good good2 = iterator2.next();
                             if (good2 instanceof ForagingSeed) {
                                 ForagingSeed seed = (ForagingSeed) good2;
                                 seed.dailyChange();
