@@ -231,15 +231,22 @@ public class Map {
                 Coordinate coordinate = new Coordinate(x + i,y + j);
                 Tile tile = findTile(coordinate);
                 if (tile != null) {
+                    if(tile.isWatered()) {
+                        map[i][j] = colorMap.get("Teal") + colorMap.get("Bright_Green_Background") + "w" + colorMap.get("Reset");
+                    }
                     for (Good good : tile.getGoods()) {
-                        if (good instanceof ForagingCrop) {
-                            map[i][j] = colorMap.get("Maroon") + colorMap.get("Bright_Green_Background") + "c" + colorMap.get("Reset");
-                        } else
-                            if (good instanceof ForagingSeed) {
-                            map[i][j] = colorMap.get("Maroon") + colorMap.get("Bright_Green_Background") + "s" + colorMap.get("Reset");
+                        if(good != null) {
+                            if (good instanceof ForagingCrop) {
+                                map[i][j] = colorMap.get("Maroon") + colorMap.get("Bright_Green_Background") + "c" + colorMap.get("Reset");
+                            } else if (good instanceof ForagingSeed) {
+                                map[i][j] = colorMap.get("Maroon") + colorMap.get("Bright_Green_Background") + "s" + colorMap.get("Reset");
+                            } else if (good.getName().equals("Grass")) {
+                                map[i][j] = colorMap.get("Lime") + colorMap.get("Bright_Green_Background") + "g" + colorMap.get("Reset");
+                            }
                         }
                     }
                 }
+
                 int counter = 0;
                 for(Player player: App.getCurrentGame().getPlayers()) {
                     counter++;
@@ -251,6 +258,14 @@ public class Map {
                 for(NPC npc: App.getCurrentGame().getNPCs()) {
                     if (npc.getType().getCoordinate().equals(coordinate)) {
                         String name = npc.getType().getName();
+                        String firstName = name.substring(0, 1).toUpperCase();
+                        map[i][j] = colorMap.get("Black") + colorMap.get("Red_Background") + firstName + colorMap.get("Reset");
+
+                    }
+                }
+                for(Animal animal: App.getCurrentGame().getMap().allAnimals()) {
+                    if (animal.getCoordinate().equals(coordinate)) {
+                        String name = animal.getName();
                         String firstName = name.substring(0, 1).toUpperCase();
                         map[i][j] = colorMap.get("Black") + colorMap.get("Red_Background") + firstName + colorMap.get("Reset");
 
