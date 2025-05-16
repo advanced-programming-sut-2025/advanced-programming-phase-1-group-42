@@ -15,8 +15,7 @@ public enum LoginRegisterCommands implements Command {
     PickQuestion("\\s*pick\\s+question\\s+-q\\s+(?<questionNumber>\\S+)\\s+-a\\s+(?<answer>\\S+)\\s+-c\\s+" +
             "(?<answerConfirm>\\S+)\\s*"),
 
-    Login("\\s*login\\s+-u\\s+(?<username>\\S+)\\s+-p\\s+(?<password>\\S+)\\s*(?<stayLogin>-stay-logged-in)?\\s*"),
-
+    LOGIN("\\s*login\\s+-u\\s+(?<username>\\S+)\\s+-p\\s+(?<password>\\S+)(\\s+(?<stayLogin>\\S+))?\\s*"),
     ForgetPassword("\\s*forget\\s+password\\s+-u\\s+(?<username>\\S+)\\s*"),
 
     AnswerQuestion("\\s*answer\\s*-a\\s*(?<answer>\\S+)\\s*");

@@ -1,6 +1,7 @@
 package org.example.controllers;
 
 import org.example.models.App;
+import org.example.models.DBInteractor;
 import org.example.models.Result;
 import org.example.models.enums.LoginRegisterCommands;
 import org.example.models.enums.Menu;
@@ -21,6 +22,7 @@ public class LoginRegisterMenuController extends Controller {
 
 
     public Result exit() {
+        DBInteractor.saveUser();
         App.setCurrentMenu(Menu.ExitMenu);
         return new Result(true, "Goodbye!");
     }
@@ -132,7 +134,7 @@ public class LoginRegisterMenuController extends Controller {
         return new Result(true, "Your account has been successfully registered!");
     }
 
-    public Result login(String username, String password, boolean stayLoggedIn) {
+    public Result login(String username, String password, String stayLoggedIn) {
         username = username.trim();
         password = password.trim();
 
@@ -146,8 +148,8 @@ public class LoginRegisterMenuController extends Controller {
         }
 
 
-        if(stayLoggedIn) {
-            //TODO
+        if(stayLoggedIn.equals("–stay-logged-in")) {
+            user.setStayLogin(true);
         }
 
         App.setCurrentUser(user);

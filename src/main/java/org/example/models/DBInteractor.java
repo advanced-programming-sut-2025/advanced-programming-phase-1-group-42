@@ -8,9 +8,11 @@ import com.mongodb.client.MongoDatabase;
 import org.bson.Document;
 import org.example.models.game_structure.Farm;
 import org.example.models.game_structure.Game;
+import org.example.models.interactions.Gender;
 import org.example.models.interactions.User;
 
 import java.util.ArrayList;
+import java.util.List;
 
 public class DBInteractor {
 
@@ -70,40 +72,58 @@ public class DBInteractor {
 
     }
 
+    public static void loadUsers() {
+        String connectionString = "mongodb+srv://namoder123:passme@cluster01.unmuffl.mongodb.net/?retryWrites=true&w=majority&appName=Cluster01";
 
-    public static void loadUsers(){
-        String uri = "mongodb+srv://namoder123:passme@cluster01.unmuffl.mongodb.net/?retryWrites=true&w=majority&appName=Cluster01";
+        ServerApi serverApi = ServerApi.builder()
+                .version(ServerApiVersion.V1)
+                .build();
 
-        try {
-            MongoDatabase database = MongoClients.create(uri).getDatabase("Game");
+        MongoClientSettings settings = MongoClientSettings.builder()
+                .applyConnectionString(new ConnectionString(connectionString))
+                .serverApi(serverApi)
+                .build();
+
+        try (MongoClient mongoClient = MongoClients.create(settings)) {
+            MongoDatabase database = mongoClient.getDatabase("Game");
             MongoCollection<Document> collection = database.getCollection("USERS");
 
-            Document doc = collection.find().first();
-            if (doc != null) {
-                User newUser = new User(null,null,null,null,null,0,null);
-                newUser.setUsername(doc.getString("username"));
-                newUser.setPassword(doc.getString("nickname"));
-                newUser.setEmail(doc.getString("email"));
-                newUser.setPassword(doc.getString("password"));
-                newUser.setPlaying(doc.getBoolean("playing"));
-                newUser.setEarnedPoints(doc.getInteger("earnedPoints"));
-                newUser.setGamePlay(doc.getInteger(("gamePlay")));
-                newUser.setQuestionNumber(doc.getInteger("questionNumber"));
-                newUser.setAnswer(doc.getString("answer"));
-                newUser.setMaxPoints(doc.getInteger("maxPoints"));
-                newUser.setStayLogin(doc.getBoolean("stayLogin"));
+            List<Document> documents = collection.find().into(new ArrayList<>());
 
-                //stay Login
-                if (newUser.isStayLogin()) {
-                    App.setCurrentUser(newUser);
-                }
-
-                App.getUsers().add(newUser);
+            if (documents.isEmpty()) {
+                System.out.println("No users found in the database.");
             } else {
-                System.out.println("No documents found");
+                App.getUsers().clear();
+
+                for (Document doc : documents) {
+                    User newUser = new User(null, null, null, null, null, 0, null);
+                    newUser.setUsername(doc.getString("username"));
+                    newUser.setPassword(doc.getString("password"));
+                    newUser.setNickname(doc.getString("nickname"));
+                    newUser.setEmail(doc.getString("email"));
+                    newUser.setGender(Gender.valueOf(doc.getString("gender")));
+                    newUser.setQuestionNumber(doc.getInteger("questionNumber"));
+                    newUser.setAnswer(doc.getString("answer"));
+                    newUser.setPlaying(doc.getBoolean("setPlaying"));
+                    newUser.setMaxPoints(doc.getInteger("maxPoints"));
+                    newUser.setGamePlay(doc.getInteger("gamePlay"));
+                    newUser.setEarnedPoints(doc.getInteger("earnedPoints"));
+                    newUser.setStayLogin(doc.getBoolean("stayLogin"));
+
+                    // بررسی stayLogin
+                    if (newUser.isStayLogin()) {
+                        System.out.println("You are logged in as " + newUser.getUsername());
+                        App.setCurrentUser(newUser);
+                    }
+
+                    // اضافه کردن کاربر به لیست
+                    App.getUsers().add(newUser);
+                }
             }
         } catch (Exception e) {
-            System.out.println("Error connecting to the database");
+            System.out.println("Error while loading users from the database.");
+            e.printStackTrace();
         }
     }
+
 }

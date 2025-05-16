@@ -1,6 +1,7 @@
 package org.example.controllers;
 
 import org.example.models.App;
+import org.example.models.DBInteractor;
 import org.example.models.Result;
 import org.example.models.enums.Menu;
 
@@ -28,6 +29,7 @@ public class MainMenuController extends Controller {
     }
 
     public Result exit() {
+        DBInteractor.saveUser();
         App.setCurrentMenu(Menu.ExitMenu);
         return new Result(true, "Goodbye!");
     }

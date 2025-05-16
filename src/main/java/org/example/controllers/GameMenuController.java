@@ -228,6 +228,7 @@ public class GameMenuController extends Controller {
             return new Result(false, "Just game admin can exit the game!");
         } else {
             App.setCurrentGame(null);
+            App.setCurrentMenu(Menu.MainMenu);
             return new Result(true, "You have successfully exited the game!");
         }
     }
@@ -774,7 +775,7 @@ public class GameMenuController extends Controller {
     // Nader
     // crafting methods
     public Result showCraftingRecipes() {
-        
+
         for (CraftingRecipe craftingRecipe : App.getCurrentGame().getCurrentPlayer().getCraftingRecipes()) {
             System.out.println(craftingRecipe.getName());
             System.out.println("\t"+((CraftingRecipeType) craftingRecipe.getType()).getIngredients());
