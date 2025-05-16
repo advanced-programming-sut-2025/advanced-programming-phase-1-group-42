@@ -855,57 +855,40 @@ public class GameMenuController extends Controller {
 
         Fridge fridge = App.getCurrentGame().getCurrentPlayer().getFridge();
         Inventory inventory = App.getCurrentGame().getCurrentPlayer().getInventory();
-        Food item = null;
-        boolean found = false;
+        GoodType type = Good.newGoodType(itemName);
+        Good good = Good.newGood(type);
+
+        if (type == null) {
+            return new Result(false, "This item is invalid!");
+        }
+
+        if (!(good instanceof Food || good instanceof Artisan || good instanceof AnimalProduct
+              || good instanceof FarmingCrop)) {
+            return new Result(false, "Hey! You can't add this item to your fridge!");
+        }
 
         if (status.equals("pick")) {
-
-            for (ArrayList<Food> fridgeList : fridge.getInFridgeItems()) {
-                Iterator<Food> iterator = fridgeList.iterator();
-                while (iterator.hasNext()) {
-                    Food food = iterator.next();
-                    if (food.getName().equalsIgnoreCase(itemName)) {
-                        item = food;
-                        iterator.remove();
-                        found = true;
-                        break;
-                    }
+            int count = fridge.howManyInFridge(type);
+            if (count == 0) {
+                return new Result(false, "There is no " + itemName + " in the fridge!");
+            } else {
+                fridge.removeItemsFromFridge(type, 1);
+                boolean added = inventory.addGood(good, 1);
+                if (added) {
+                    return new Result(true, "You have added " + itemName + " to the inventory!");
                 }
-                if (found) break;
-            }
-
-            if (!found) {
-                return new Result(false, "Item is not available in the fridge");
-            }
-
-            if (App.getCurrentGame().getCurrentPlayer().getInventory().addGood(new ArrayList<>(Arrays.asList(item)))) {
-                return new Result(true, item.getName() + " added to the inventory");
             }
             return new Result(false, "Inventory is full");
 
         } else if (status.equals("put")) {
-            for (ArrayList<Good> inventoryList : inventory.getList()) {
-                Iterator<Good> iterator = inventoryList.iterator();
-                while (iterator.hasNext()) {
-                    Good good = iterator.next();
-                    if (good instanceof Food && good.getName().equalsIgnoreCase(itemName)) {
-                        item = (Food) good;
-                        iterator.remove();
-                        found = true;
-                        break;
-                    }
-                }
-                if (found) break;
+            int count = inventory.howManyInInventory(good);
+            if (count == 0) {
+                return new Result(false, "There is no " + itemName + " in the inventory!");
+            } else {
+                inventory.removeItemsFromInventory(type, 1);
+                fridge.addItemToFridge(good);
+                return new Result(true, "You have added " + itemName + " to the fridge!");
             }
-
-            if (!found) {
-                return new Result(false, "Item is not available in the Inventory");
-            }
-
-            if (App.getCurrentGame().getCurrentPlayer().getFridge().addItemToFridge(item)) {
-                return new Result(true, item.getName() + " added to the fridge");
-            }
-            return new Result(false, "Fridge is full");
 
         }
 

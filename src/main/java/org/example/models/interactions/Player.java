@@ -51,7 +51,7 @@ public class Player {
     private Player married = null;
 
     private final ArrayList<Quest> questList = new ArrayList<>();
-    private Fridge fridge;
+    private Fridge fridge = new Fridge();
 
     public void setFarm(Farm farm) {
         this.farm = farm;
