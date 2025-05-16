@@ -618,16 +618,16 @@ public class Map {
                                 tile.addGood(Good.newGood(ForagingMineralType.PRISMATIC_SHARD));
                                 break;
                             case 12:
-                                tile.addGood(Good.newGood(ForagingMineralType.COPPER));
+                                tile.addGood(Good.newGood(ForagingMineralType.COPPER_ORE));
                                 break;
                             case 13:
-                                tile.addGood(Good.newGood(ForagingMineralType.IRON));
+                                tile.addGood(Good.newGood(ForagingMineralType.IRON_ORE));
                                 break;
                             case 14:
-                                tile.addGood(Good.newGood(ForagingMineralType.GOLD));
+                                tile.addGood(Good.newGood(ForagingMineralType.GOLD_ORE));
                                 break;
                             case 15:
-                                tile.addGood(Good.newGood(ForagingMineralType.IRIDIUM));
+                                tile.addGood(Good.newGood(ForagingMineralType.IRIDIUM_ORE));
                                 break;
                             case 16:
                                 tile.addGood(Good.newGood(ForagingMineralType.COAL));

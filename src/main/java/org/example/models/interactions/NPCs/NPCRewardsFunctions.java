@@ -41,7 +41,7 @@ public class NPCRewardsFunctions {
             System.out.println("Quest Finished, You received " + rewardCount * npcFriendship.getFriendshipLevel() +
                     " Golds");
             App.getCurrentGame().getCurrentPlayer().getInventory()
-                    .addGood(Good.newGoods((ForagingMineralType.GOLD), rewardCount * npcFriendship.getFriendshipLevel()));
+                    .addGood(Good.newGoods((ForagingMineralType.GOLD_ORE), rewardCount * npcFriendship.getFriendshipLevel()));
             npcFriendship.getAvailableQuests().remove(Integer.valueOf(2));
         } else if (npcFriendship.getAvailableQuests().contains(3) &&
                 App.getCurrentGame().getCurrentPlayer().getInventory().howManyInInventoryByType
@@ -77,7 +77,7 @@ public class NPCRewardsFunctions {
             int rewardCount = 500;
             System.out.println("Quest Finished, You received " + rewardCount * npcFriendship.getFriendshipLevel() + " Pumpkins");
             App.getCurrentGame().getCurrentPlayer().getInventory()
-                    .addGood(Good.newGoods((ForagingMineralType.GOLD), rewardCount * npcFriendship.getFriendshipLevel()));
+                    .addGood(Good.newGoods((ForagingMineralType.GOLD_ORE), rewardCount * npcFriendship.getFriendshipLevel()));
 
             npcFriendship.getAvailableQuests().remove(Integer.valueOf(2));
         } else if (npcFriendship.getAvailableQuests().contains(3) &&
@@ -112,7 +112,7 @@ public class NPCRewardsFunctions {
                             int rewardCount = 750;
                             System.out.println("Quest Finished, You received " + rewardCount * npcFriendship.getFriendshipLevel() + " Golds");
                             App.getCurrentGame().getCurrentPlayer().getInventory()
-                                    .addGood(Good.newGoods((ForagingMineralType.GOLD), rewardCount * npcFriendship.getFriendshipLevel()));
+                                    .addGood(Good.newGoods((ForagingMineralType.GOLD_ORE), rewardCount * npcFriendship.getFriendshipLevel()));
 
                             npcFriendship.getAvailableQuests().remove(Integer.valueOf(1));
                         }
@@ -212,7 +212,7 @@ public class NPCRewardsFunctions {
             int rewardCount = 25000;
             System.out.println("Quest Finished, You received " + rewardCount * npcFriendship.getFriendshipLevel() + " Golds");
             App.getCurrentGame().getCurrentPlayer().getInventory()
-                    .addGood(Good.newGoods((ForagingMineralType.GOLD), rewardCount * npcFriendship.getFriendshipLevel()));
+                    .addGood(Good.newGoods((ForagingMineralType.GOLD_ORE), rewardCount * npcFriendship.getFriendshipLevel()));
 
             npcFriendship.getAvailableQuests().remove(Integer.valueOf(3));
         } else {

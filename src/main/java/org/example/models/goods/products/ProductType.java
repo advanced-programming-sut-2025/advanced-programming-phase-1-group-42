@@ -7,13 +7,15 @@ public enum ProductType implements GoodType {
     //TODO
 
     //BlackSmith
-    COPPER_ORE("Copper_Ore", -1, 75),
+    COPPER_BAR("Copper_Bar", -1, 75),
 
-    IRON_ORE("Iron_Ore", -1, 150),
+    IRON_BAR("Iron_Bar", -1, 150),
 
     COAL("Coal", -1, 150),
 
-    GOLD_ORE("Gold_Ore", -1, 400),
+    GOLD_BAR("Gold_Bar", -1, 400),
+
+    IRIDIUM_BAR("Iridium_Bar", -1, 500),
 
     //JojaMart
     JOJA_MART("Joja_Mart", 13, 75),

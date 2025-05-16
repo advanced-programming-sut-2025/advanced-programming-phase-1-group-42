@@ -34,7 +34,7 @@ public enum NPCTypes {
                     "Pumpkin pie reminds me of fall—a cozy treat for chilly days."
             )),
             new ArrayList<>(List.of(
-                    new Pair<>(ForagingMineralType.IRON , 50),
+                    new Pair<>(ForagingMineralType.IRON_ORE, 50),
                     new Pair<>(FoodType.PUMPKIN_PIE,1),
                     new Pair<>(ProductType.STONE,150)
             )),
@@ -61,7 +61,7 @@ public enum NPCTypes {
                     "Pumpkin pie tastes amazing—it’s the highlight of fall for me."
             )),
             new ArrayList<>(List.of(
-                    new Pair<>(ProductType.GOLD_ORE,1),
+                    new Pair<>(ForagingMineralType.COPPER_ORE,1),
                     new Pair<>(FarmingCropType.PUMPKIN,1),
                     new Pair<>(FarmingCropType.WHEAT,50)
             )),
@@ -149,7 +149,7 @@ public enum NPCTypes {
             )),
             new ArrayList<>(List.of(
                     new Pair<>(ProductType.WOOD,80),
-                    new Pair<>(ProductType.IRON_ORE,10),
+                    new Pair<>(ForagingMineralType.IRON_ORE,10),
                     new Pair<>(ProductType.WOOD,1000)
             )),
             "Home",

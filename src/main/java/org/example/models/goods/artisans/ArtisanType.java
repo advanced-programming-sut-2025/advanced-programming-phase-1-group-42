@@ -10,13 +10,11 @@ import org.example.models.goods.foragings.ForagingCropType;
 import org.example.models.goods.foragings.ForagingMineralType;
 import org.example.models.goods.foragings.ForagingSeedType;
 import org.example.models.goods.products.ProductType;
-import org.example.models.goods.recipes.CraftingRecipeType;
 import org.example.models.interactions.Animals.AnimalProductsType;
 import org.example.models.interactions.game_buildings.Quadruple;
 
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Objects;
 
 public enum ArtisanType implements GoodType {
 
@@ -294,9 +292,9 @@ public enum ArtisanType implements GoodType {
     
     METAL_BAR("Any metal bar", "Turns ore and coal into metal bars.", new Pair<>(0.0, 0), 4, new ArrayList<>(
             Arrays.asList(
-                    new Quadruple<>(ProductType.COPPER_ORE, 5, 10.0, 0.0),
-                    new Quadruple<>(ProductType.GOLD_ORE, 5, 10.0, 0.0),
-                    new Quadruple<>(ProductType.IRON_ORE, 5, 10.0, 0.0),
+                    new Quadruple<>(ForagingMineralType.COPPER_ORE, 5, 10.0, 0.0),
+                    new Quadruple<>(ForagingMineralType.IRON_ORE, 5, 10.0, 0.0),
+                    new Quadruple<>(ForagingMineralType.GOLD_ORE, 5, 10.0, 0.0),
 
                     //Coals
                     new Quadruple<>(ForagingMineralType.COAL, 1, 0.0, 0.0),

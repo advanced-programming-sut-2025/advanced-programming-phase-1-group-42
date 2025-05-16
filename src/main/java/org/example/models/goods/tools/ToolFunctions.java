@@ -12,15 +12,12 @@ import org.example.models.game_structure.Tile;
 import org.example.models.goods.Good;
 import org.example.models.goods.GoodLevel;
 import org.example.models.goods.GoodType;
-import org.example.models.goods.farmings.FarmingCrop;
 import org.example.models.goods.farmings.FarmingCropType;
 import org.example.models.goods.farmings.FarmingTree;
 import org.example.models.goods.farmings.FarmingTreeSapling;
-import org.example.models.goods.farmings.FarmingTreeSaplingType;
 import org.example.models.goods.farmings.FarmingTreeType;
 import org.example.models.goods.fishs.FishType;
 
-import org.example.models.goods.foods.FoodType;
 import org.example.models.goods.foragings.*;
 import org.example.models.goods.products.ProductType;
 
@@ -32,19 +29,19 @@ public class ToolFunctions {
     private static boolean checkCanBreak(Tool tool, ForagingMineral foragingMineral) {
         switch (tool.getToolLevel()) {
             case ToolLevel.ORDINARY -> {
-                return foragingMineral.getType() != ForagingMineralType.COPPER &&
-                        foragingMineral.getType() != ForagingMineralType.IRON &&
-                        foragingMineral.getType() != ForagingMineralType.GOLD &&
-                        foragingMineral.getType() != ForagingMineralType.IRIDIUM;
+                return foragingMineral.getType() != ForagingMineralType.COPPER_ORE &&
+                        foragingMineral.getType() != ForagingMineralType.IRON_ORE &&
+                        foragingMineral.getType() != ForagingMineralType.GOLD_ORE &&
+                        foragingMineral.getType() != ForagingMineralType.IRIDIUM_ORE;
             }
             case ToolLevel.COPPER -> {
-                return foragingMineral.getType() != ForagingMineralType.IRON &&
-                        foragingMineral.getType() != ForagingMineralType.GOLD &&
-                        foragingMineral.getType() != ForagingMineralType.IRIDIUM;
+                return foragingMineral.getType() != ForagingMineralType.IRON_ORE &&
+                        foragingMineral.getType() != ForagingMineralType.GOLD_ORE &&
+                        foragingMineral.getType() != ForagingMineralType.IRIDIUM_ORE;
             }
             case ToolLevel.IRON -> {
-                return foragingMineral.getType() != ForagingMineralType.GOLD &&
-                        foragingMineral.getType() != ForagingMineralType.IRIDIUM;
+                return foragingMineral.getType() != ForagingMineralType.GOLD_ORE &&
+                        foragingMineral.getType() != ForagingMineralType.IRIDIUM_ORE;
             }
             case ToolLevel.GOLD, ToolLevel.IRIDIUM -> {
                 return true;

@@ -29,13 +29,13 @@ public enum ForagingMineralType implements GoodType {
 
     PRISMATIC_SHARD("Prismatic_Shard", 2000),
 
-    COPPER("Copper", 5),
+    COPPER_ORE("Copper", 5),
 
-    IRON("Iron", 10),
+    IRON_ORE("Iron", 10),
 
-    GOLD("GOLD", 25),
+    GOLD_ORE("GOLD", 25),
 
-    IRIDIUM("Iridium", 100),
+    IRIDIUM_ORE("Iridium", 100),
 
     COAL("Coal", 15);
 

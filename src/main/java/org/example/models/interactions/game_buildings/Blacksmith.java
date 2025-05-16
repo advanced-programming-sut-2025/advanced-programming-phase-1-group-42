@@ -8,7 +8,6 @@ import org.example.models.game_structure.Inventory;
 import org.example.models.game_structure.Tile;
 import org.example.models.goods.Good;
 import org.example.models.goods.GoodType;
-import org.example.models.goods.foragings.ForagingMineral;
 import org.example.models.goods.foragings.ForagingMineralType;
 import org.example.models.goods.products.ProductType;
 import org.example.models.goods.tools.Tool;
@@ -24,7 +23,7 @@ import java.util.Arrays;
 public class Blacksmith extends GameBuilding {
     private final ArrayList<Integer> upgradeToolCost = new ArrayList<>();
     private final ArrayList<Integer> upgradeTrashCanCost = new ArrayList<>();
-    private final ArrayList<Pair<ForagingMineralType, Integer>> upgradeIngredients = new ArrayList<>();
+    private final ArrayList<Pair<ProductType, Integer>> upgradeIngredients = new ArrayList<>();
     private final ArrayList<Integer> dailyToolUpgradeLimit = new ArrayList<>();
     private final ArrayList<Integer> dailyTrashCanUpgradeLimit = new ArrayList<>();
     private final ArrayList<Pair<GoodType, Integer>> stock = new ArrayList<>();
@@ -43,18 +42,18 @@ public class Blacksmith extends GameBuilding {
 
         upgradeToolCost.addAll(Arrays.asList(2000, 5000, 10000, 25000));
         upgradeTrashCanCost.addAll(Arrays.asList(1000, 2500, 5000, 12500));
-        upgradeIngredients.addAll(Arrays.asList(new Pair<>(ForagingMineralType.COPPER, 5),
-                new Pair<>(ForagingMineralType.IRON, 5), new Pair<>(ForagingMineralType.GOLD, 5),
-                new Pair<>(ForagingMineralType.IRIDIUM, 5)));
+        upgradeIngredients.addAll(Arrays.asList(new Pair<>(ProductType.COPPER_BAR, 5),
+                new Pair<>(ProductType.IRON_BAR, 5), new Pair<>(ProductType.GOLD_BAR, 5),
+                new Pair<>(ProductType.IRIDIUM_BAR, 5)));
 
         dailyToolUpgradeLimit.addAll(Arrays.asList(1, 1, 1, 1));
         dailyTrashCanUpgradeLimit.addAll(Arrays.asList(1, 1, 1, 1));
 
         stock.addAll(Arrays.asList(
-            new Pair<>(ProductType.COPPER_ORE, Integer.MAX_VALUE),
-            new Pair<>(ProductType.IRON_ORE, Integer.MAX_VALUE),
+            new Pair<>(ForagingMineralType.COPPER_ORE, Integer.MAX_VALUE),
+            new Pair<>(ForagingMineralType.IRON_ORE, Integer.MAX_VALUE),
                 new Pair<>(ProductType.COAL, Integer.MAX_VALUE),
-                new Pair<>(ProductType.GOLD_ORE, Integer.MAX_VALUE)
+                new Pair<>(ForagingMineralType.GOLD_ORE, Integer.MAX_VALUE)
         ));
     }
 
