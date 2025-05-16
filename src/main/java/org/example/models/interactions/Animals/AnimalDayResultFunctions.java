@@ -11,11 +11,11 @@ public class AnimalDayResultFunctions {
 
     public static void chicken(Animal animal) {
         animal.setProductCounter();
-        ArrayList<AnimalProduct> products = animal.getProducts();
+        ArrayList<AnimalProduct> products = animal.getProductList();
         int counter = animal.getProductCounter();
         if (counter == 1) {
             animal.resetProductCounter();
-            animal.getProducts().clear();
+            animal.getProductList().clear();
             // choose product
             double randomNumberWhichProduct = 0.5 + (Math.random() * 1.0);
             int whichProduct = ((int) (animal.getFriendship() + (150 * randomNumberWhichProduct))) / 1500;
@@ -55,11 +55,11 @@ public class AnimalDayResultFunctions {
 
     public static void duck(Animal animal) {
         animal.setProductCounter();
-        ArrayList<AnimalProduct> products = animal.getProducts();
+        ArrayList<AnimalProduct> products = animal.getProductList();
         int counter = animal.getProductCounter();
         if (counter == 2) {
             animal.resetProductCounter();
-            animal.getProducts().clear();
+            animal.getProductList().clear();
             // choose product
             double randomNumberWhichProduct = 0.5 + (Math.random() * 1.0);
             int whichProduct = ((int) (animal.getFriendship() + (150 * randomNumberWhichProduct))) / 1500;
@@ -99,11 +99,11 @@ public class AnimalDayResultFunctions {
 
     public static void rabbit(Animal animal) {
         animal.setProductCounter();
-        ArrayList<AnimalProduct> products = animal.getProducts();
+        ArrayList<AnimalProduct> products = animal.getProductList();
         int counter = animal.getProductCounter();
         if (counter == 4) {
             animal.resetProductCounter();
-            animal.getProducts().clear();
+            animal.getProductList().clear();
             // choose product
             double randomNumberWhichProduct = 0.5 + (Math.random() * 1.0);
             int whichProduct = ((int) (animal.getFriendship() + (150 * randomNumberWhichProduct))) / 1500;
@@ -143,11 +143,11 @@ public class AnimalDayResultFunctions {
 
     public static void dinosaur(Animal animal) {
         animal.setProductCounter();
-        ArrayList<AnimalProduct> products = animal.getProducts();
+        ArrayList<AnimalProduct> products = animal.getProductList();
         int counter = animal.getProductCounter();
         if (counter == 7) {
             animal.resetProductCounter();
-            animal.getProducts().clear();
+            animal.getProductList().clear();
 
             // choose product
             double randomNumberQuality = Math.random() * 1.0;
@@ -181,11 +181,11 @@ public class AnimalDayResultFunctions {
 
     public static void cow(Animal animal) {
         animal.setProductCounter();
-        ArrayList<AnimalProduct> products = animal.getProducts();
+        ArrayList<AnimalProduct> products = animal.getProductList();
         int counter = animal.getProductCounter();
         if (counter == 1) {
             animal.resetProductCounter();
-            animal.getProducts().clear();
+            animal.getProductList().clear();
             // choose product
             double randomNumberWhichProduct = 0.5 + (Math.random() * 1.0);
             int whichProduct = ((int) (animal.getFriendship() + (150 * randomNumberWhichProduct))) / 1500;
@@ -225,11 +225,11 @@ public class AnimalDayResultFunctions {
 
     public static void goat(Animal animal) {
         animal.setProductCounter();
-        ArrayList<AnimalProduct> products = animal.getProducts();
+        ArrayList<AnimalProduct> products = animal.getProductList();
         int counter = animal.getProductCounter();
         if (counter == 1) {
             animal.resetProductCounter();
-            animal.getProducts().clear();
+            animal.getProductList().clear();
 
             // choose product
             double randomNumberWhichProduct = 0.5 + (Math.random() * 1.0);
@@ -270,11 +270,11 @@ public class AnimalDayResultFunctions {
 
     public static void sheep(Animal animal) {
         animal.setProductCounter();
-        ArrayList<AnimalProduct> products = animal.getProducts();
+        ArrayList<AnimalProduct> products = animal.getProductList();
         int counter = animal.getProductCounter();
         if (counter == 1) {
             animal.resetProductCounter();
-            animal.getProducts().clear();
+            animal.getProductList().clear();
             // choose product
 
             double randomNumberQuality = Math.random() * 1.0;
@@ -308,11 +308,11 @@ public class AnimalDayResultFunctions {
 
     public static void pig(Animal animal) {
         animal.setProductCounter();
-        ArrayList<AnimalProduct> products = animal.getProducts();
+        ArrayList<AnimalProduct> products = animal.getProductList();
         int counter = animal.getProductCounter();
         if (counter == 1 && animal.getWentOutside()) {
             animal.resetProductCounter();
-            animal.getProducts().clear();
+            animal.getProductList().clear();
 
             // choose product
             double randomNumberQuality = Math.random() * 1.0;

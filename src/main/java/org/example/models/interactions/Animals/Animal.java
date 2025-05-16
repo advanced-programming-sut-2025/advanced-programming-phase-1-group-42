@@ -3,6 +3,7 @@ package org.example.models.interactions.Animals;
 import org.example.models.App;
 import org.example.models.game_structure.Coordinate;
 import org.example.models.goods.Good;
+import org.example.models.goods.products.ProductType;
 import org.example.models.goods.tools.ToolType;
 import org.example.models.interactions.PlayerBuildings.FarmBuilding;
 
@@ -23,7 +24,7 @@ public class Animal {
     private Coordinate coordinate = null;
     private FarmBuilding locatedPLace = null;
 
-    public Animal(AnimalTypes animalType,String name) {
+    public Animal(AnimalTypes animalType, String name) {
         this.animalType = animalType;
         this.name = name;
     }
@@ -42,8 +43,9 @@ public class Animal {
 
     public ArrayList<AnimalProduct> getProducts() {
         if (animalType.equals(AnimalTypes.COW)) {
-            if (App.getCurrentGame().getCurrentPlayer().getInventory().isInInventoryBoolean(ToolType.MILK_PAIL)) {
+            if (App.getCurrentGame().getCurrentPlayer().getInventory().isInInventoryBoolean(ProductType.MILK_PAIL)) {
                 friendShip += 5;
+                App.getCurrentGame().getCurrentPlayer().getInventory().removeItemsFromInventory(ProductType.MILK_PAIL,1);
                 App.getCurrentGame().getCurrentPlayer().getEnergy().decreaseTurnEnergyLeft(7);
                 return products;
             } else {
@@ -51,8 +53,9 @@ public class Animal {
                 return null;
             }
         } else if (animalType.equals(AnimalTypes.GOAT)) {
-            if (App.getCurrentGame().getCurrentPlayer().getInventory().isInInventoryBoolean(ToolType.MILK_PAIL)) {
+            if (App.getCurrentGame().getCurrentPlayer().getInventory().isInInventoryBoolean(ProductType.MILK_PAIL)) {
                 friendShip += 5;
+                App.getCurrentGame().getCurrentPlayer().getInventory().removeItemsFromInventory(ProductType.MILK_PAIL,1);
                 App.getCurrentGame().getCurrentPlayer().getEnergy().decreaseTurnEnergyLeft(7);
                 return products;
             } else {
@@ -60,8 +63,9 @@ public class Animal {
                 return null;
             }
         } else if (animalType.equals(AnimalTypes.SHEEP)) {
-            if (App.getCurrentGame().getCurrentPlayer().getInventory().isInInventoryBoolean(ToolType.SHEAR)) {
+            if (App.getCurrentGame().getCurrentPlayer().getInventory().isInInventoryBoolean(ProductType.SHEARS)) {
                 friendShip += 5;
+                App.getCurrentGame().getCurrentPlayer().getInventory().removeItemsFromInventory(ProductType.SHEARS,1);
                 App.getCurrentGame().getCurrentPlayer().getEnergy().decreaseTurnEnergyLeft(7);
                 return products;
             } else {
@@ -69,14 +73,16 @@ public class Animal {
                 return null;
             }
         } else if (animalType.equals(AnimalTypes.PIG)) {
-            if (animalType.equals(AnimalTypes.PIG)) {
-                if (!isOutside){
+                if (!isOutside) {
                     System.out.println("You need to bring Pig outSide to get Products");
                 } else {
                     return products;
-                }
             }
         }
+        return products;
+    }
+
+    public ArrayList<AnimalProduct> getProductList() {
         return products;
     }
 
@@ -104,7 +110,7 @@ public class Animal {
         } else if (App.getCurrentGame().getWeather().getName().equals("Storm")) {
             System.out.println("It's Stormy. You can't feed animals outside");
         } else {
-            if (isOutside){
+            if (isOutside) {
                 isOutside = false;
             } else {
                 isOutside = true;
@@ -162,26 +168,28 @@ public class Animal {
     }
 
     public int getAnimalSellPrice() {
-        return (int) (animalType.getPrice()*((int)(friendShip/1000) + 0.3f));
+        return (int) (animalType.getPrice() * ((int) (friendShip / 1000) + 0.3f));
     }
 
     // specially for pig
     public void setWentOutside(boolean wentOutside) {
         this.wentOutside = wentOutside;
     }
+
     public boolean getWentOutside() {
         return wentOutside;
     }
 
     public void showProducts() {
+        System.out.println(" " + animalType.getName() + " " + name + " >");
         for (AnimalProduct product : products) {
-            System.out.println(product.getName() + " " + product.getQuality() + " " + product.getSellPrice());
+            System.out.println("\t" + product.getName() + " " + product.getQuality());
         }
         System.out.println("------------------------------------");
     }
 
     public void setLocatedPLace(FarmBuilding locatedPLace) {
-        locatedPLace = locatedPLace;
+        this.locatedPLace = locatedPLace;
     }
 
     public FarmBuilding getLocatedPLace() {

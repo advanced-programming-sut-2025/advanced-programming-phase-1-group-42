@@ -15,7 +15,7 @@ public class AnimalProduct extends Good {
 
     @Override
     public String getName() {
-        return animalProductType.name();
+        return animalProductType.getName();
     }
 
     @Override
@@ -29,6 +29,6 @@ public class AnimalProduct extends Good {
     }
 
     public String getQuality() {
-        return goodLevel.name();
+        return goodLevel.name().toLowerCase();
     }
 }

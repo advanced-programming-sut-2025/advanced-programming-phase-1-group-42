@@ -86,8 +86,9 @@ public class Inventory {
     }
 
     public boolean isInInventoryBoolean(GoodType goodName) {
-        for (int i = 0; i < size; i++) {
-            if (!list.get(i).isEmpty() && list.get(i).getFirst().getType().equals(goodName)) {
+
+        for (ArrayList<Good> goods : list) {
+            if (!goods.isEmpty() && goods.getFirst().getType().equals(goodName)) {
                 return true;
             }
         }

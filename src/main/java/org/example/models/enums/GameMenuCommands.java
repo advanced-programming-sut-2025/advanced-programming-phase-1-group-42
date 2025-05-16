@@ -97,7 +97,7 @@ public enum GameMenuCommands implements Command {
     ANIMAL_LIST("\\s*animals\\s*"),
     CHEAT_SET_ANIMAL_FRIENDSHIP("\\s*cheat\\s*set\\s*friendship\\s+-n\\s+(?<animalName>\\S+)\\s+-c\\s+(?<amount>\\S+)\\s*"),
     SHEPHERD_ANIMAL("\\s*shepherd\\s*animals\\s+-n\\s+(?<animalName>\\S+)\\s+-l\\s+(?<x>\\S+)\\s*\\s+(?<y>\\S+)\\s*"),
-    FEED_HAY("\\s*feed\\s*hay\\s+-n\\s+(?<animaName>\\S+)\\s*"),
+    FEED_HAY("\\s*feed\\s*hay\\s+-n\\s+(?<animalName>\\S+)\\s*"),
     ANIMAL_PRODUCTION_LIST("\\s*produces\\s*"),
     COLLECT_PRODUCT("\\s*collect\\s*produce\\s+-n\\s+(?<name>\\S+)\\s*"),
     SELL_ANIMAL("\\s*sell\\s*animal\\s+-n\\s+(?<name>\\S+)\\s*"),

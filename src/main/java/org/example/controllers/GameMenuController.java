@@ -52,6 +52,7 @@ import java.util.*;
 import java.util.regex.Matcher;
 
 import static java.lang.Math.abs;
+import static java.lang.Math.min;
 
 public class GameMenuController extends Controller {
 
@@ -124,7 +125,7 @@ public class GameMenuController extends Controller {
                     tile.setTileType(TileType.WATER);
 
                 // Road
-                if((j >= 50 && j < 110 && (i >= 30 && i < 35 || i >= 105 && i < 110)) ||
+                if ((j >= 50 && j < 110 && (i >= 30 && i < 35 || i >= 105 && i < 110)) ||
                         (j >= 77 && j < 83 && i >= 0 && i < 110))
                     tile.setTileType(TileType.ROAD);
 
@@ -322,7 +323,7 @@ public class GameMenuController extends Controller {
 
     public Result cheatAdvanceDate(String date) {
         int dateInt = Integer.parseInt(date);
-        for (int i = 0; i < dateInt*13; i++) {
+        for (int i = 0; i < dateInt * 13; i++) {
             App.getCurrentGame().getDateTime().timeFlow();
         }
         return new Result(true, "You have cheat advance date for " + dateInt + " days!");
@@ -953,7 +954,7 @@ public class GameMenuController extends Controller {
 
             GoodType ingredientType = (GoodType) ingredient.first();
             int requiredAmount = ingredient.second();
-            if (App.getCurrentGame().getCurrentPlayer().getInventory().howManyInInventoryByType(ingredientType)< requiredAmount) {
+            if (App.getCurrentGame().getCurrentPlayer().getInventory().howManyInInventoryByType(ingredientType) < requiredAmount) {
                 return new Result(false, "Not enough " + ingredientType.getName() +
                         " (needed: " + requiredAmount + ")");
             }
@@ -1023,6 +1024,9 @@ public class GameMenuController extends Controller {
                     break;
                 }
             }
+            if (targetType == null) {
+                return new Result(false, "This building is invalid");
+            }
             if (App.getCurrentGame().getCurrentPlayer().getWallet().getBalance() > targetType.getCost()) {
                 if (targetType.getWood() < App.getCurrentGame().getCurrentPlayer().getInventory()
                         .howManyInInventoryByType(ProductType.WOOD) &&
@@ -1037,7 +1041,8 @@ public class GameMenuController extends Controller {
                         for (int sY = 0; sY < targetType.getSize().second(); sY++) {
                             Tile tempTile = App.getCurrentGame().getMap().findTileByXY(sX + startCoordinate.getX(), sY + startCoordinate.getY());
                             if (tempTile.getTileType().equals(TileType.GAME_BUILDING) ||
-                                    tempTile.getTileType().equals(TileType.BEACH) ) {
+                                    tempTile.getTileType().equals(TileType.BEACH) ||
+                                    tempTile.getTileType().equals(TileType.PLAYER_BUILDING)) {
                                 validSpace = false;
                             }
                         }
@@ -1117,8 +1122,8 @@ public class GameMenuController extends Controller {
         App.getCurrentGame().getCurrentPlayer().getWallet().decreaseBalance(animalTypeEnum.getPrice());
         animal.setLocatedPLace(suitableBuilding);
         App.getCurrentGame().getMap().allAnimals().add(animal);
-        int x = (int) (suitableBuilding.getStartCordinate().getX() + Math.random()*2);
-        int y = (int) (suitableBuilding.getEndCordinate().getY() - Math.random()*2);
+        int x = (int) (suitableBuilding.getStartCordinate().getX() + Math.random() * 2);
+        int y = (int) (suitableBuilding.getEndCordinate().getY() - Math.random() * 2);
         animal.setCoordinate(new Coordinate(x, y));
 
         return new Result(true, "A " + animalType + " named " + animalName + " has been added to your farm!");
@@ -1128,10 +1133,13 @@ public class GameMenuController extends Controller {
         animalName = animalName.trim();
 
         Animal animal = App.getCurrentGame().getMap().findAnimalByName(animalName);
+        if (animal == null) {
+            return new Result(false, "Animal not found: " + animalName);
+        }
         if (abs(App.getCurrentGame().getCurrentPlayer().getCoordinate().getX() - animal.getCoordinate().getX()) <= 1 &&
                 abs(App.getCurrentGame().getCurrentPlayer().getCoordinate().getY() - animal.getCoordinate().getY()) <= 1) {
             animal.petAnimal();
-            return new Result(true, "You petted" + animalName);
+            return new Result(true, "You petted " + animalName);
         }
         return new Result(false, "You are not close enough to this animal to pet");
 
@@ -1151,8 +1159,8 @@ public class GameMenuController extends Controller {
         if (animal == null) {
             return new Result(false, "Animal not found");
         }
-        animal.setFriendship(amountInt);
-        return new Result(true, "You set your friendship with" + animalName + "to " + amountInt);
+        animal.setFriendship(Math.min(1000, amountInt));
+        return new Result(true, "You set your friendship with " + animalName + " to " + Math.min(1000, amountInt));
     }
 
     public Result shepherdAnimal(String animalName, String x, String y) {
@@ -1165,7 +1173,7 @@ public class GameMenuController extends Controller {
             return new Result(false, "Animal not found");
         }
         animal.shepherdAnimal(new Coordinate(Integer.parseInt(x), Integer.parseInt(y)));
-        return new Result(true, "");
+        return new Result(true, "You shepherd " + animalName);
     }
 
     public Result feedHay(String animalName) {
@@ -1183,9 +1191,11 @@ public class GameMenuController extends Controller {
 
     public Result animalProductionList() {
         for (FarmBuilding building : App.getCurrentGame().getCurrentPlayer().getFarm().getFarmBuildings()) {
-            System.out.println(building.getName());
-            for (Animal animal : building.getAnimals()) {
-                animal.showProducts();
+            if (!building.getName().equals("Home")) {
+                System.out.println(building.getName() + " >");
+                for (Animal animal : building.getAnimals()) {
+                    animal.showProducts();
+                }
             }
         }
         return new Result(true, "");
@@ -1203,7 +1213,8 @@ public class GameMenuController extends Controller {
             for (AnimalProduct product : animal.getProducts()) {
                 App.getCurrentGame().getCurrentPlayer().getInventory().addGoodByObject(product);
             }
-            animal.getProducts().clear(); ///!!!!!!
+            System.out.println("You collected animal Products.");
+            animal.getProducts().clear();
         }
         return new Result(true, "");
     }
@@ -1544,7 +1555,7 @@ public class GameMenuController extends Controller {
                         " have been given to " + App.getCurrentGame().getCurrentPlayer().getUser().getUsername() + " from you! " +
                         App.getCurrentGame().getCurrentPlayer().getUser().getUsername() + "'s rate : " + giftRate + " !"));
         gift.first().getNews().add(App.getCurrentGame().getCurrentPlayer().getUser().getUsername() + " has rated your gift with amount " +
-                giftRate + " !") ;
+                giftRate + " !");
 
         if (App.getCurrentGame().getCurrentPlayer().getIsInteracted().get(gift.first()).equals(false)) {
             if (App.getCurrentGame().getCurrentPlayer().getMarried() == gift.first()) {
@@ -1804,7 +1815,7 @@ public class GameMenuController extends Controller {
         }
         boolean hasSomething = false;
         for (Trade trade : trades) {
-            if(!trade.isShown()) {
+            if (!trade.isShown()) {
                 hasSomething = true;
                 trade.setShown(true);
                 System.out.println(trade);

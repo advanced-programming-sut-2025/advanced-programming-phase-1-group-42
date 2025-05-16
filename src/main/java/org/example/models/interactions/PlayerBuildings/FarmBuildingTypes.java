@@ -6,11 +6,11 @@ public enum FarmBuildingTypes {
 
     HOME("Home", -1, new Pair<>(20, 20), -1, -1, -1),
     BARN("Barn", 4,new Pair<>(7,4),6000,350,150),
-    BIG_BARN("Big Barn", 8,new Pair<>(7,4),12000,450,200),
-    DELUXE_BARN("Deluxe Barn", 12,new Pair<>(7,4),25000,550,300),
+    BIG_BARN("Big_Barn", 8,new Pair<>(7,4),12000,450,200),
+    DELUXE_BARN("Deluxe_Barn", 12,new Pair<>(7,4),25000,550,300),
     COOP("Coop", 4,new Pair<>(6,3),4000,300,100),
-    BIG_COOP("Big Coop", 8,new Pair<>(6,3),10000,400,150),
-    DELUXE_COOP("Deluxe Coop", 12,new Pair<>(6,3),20000,500,200);
+    BIG_COOP("Big_Coop", 8,new Pair<>(6,3),10000,400,150),
+    DELUXE_COOP("Deluxe_Coop", 12,new Pair<>(6,3),20000,500,200);
 
     private final String name;
     private final int capacity;
