@@ -145,7 +145,7 @@ public class GameMenu implements AppMenu {
         } else if ((matcher = GameMenuCommands.SHOW_PLANT.matcher(input)) != null) {
             System.out.println(controller.showPlant(matcher.group("x"), matcher.group("y")));
         } else if ((matcher = GameMenuCommands.FERTILIZE.matcher(input)) != null) {
-            System.out.println(controller.fertilize("fertilize", matcher.group("direction")));
+            System.out.println(controller.fertilize(matcher.group("fertilizer"), matcher.group("direction")));
         } else if ((matcher = GameMenuCommands.HOW_MUCH_WATER.matcher(input)) != null) {
             System.out.println(controller.howMuchWater());
         }

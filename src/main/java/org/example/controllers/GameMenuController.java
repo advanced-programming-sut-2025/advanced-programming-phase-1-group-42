@@ -745,7 +745,8 @@ public class GameMenuController extends Controller {
         tile.getGoods().add(fertilizer.getLast());
         fertilizer.removeLast();
 
-        return new Result(true, "You have fertilized tile in location " + coordinate + " with " + fertilizer + "!");
+        return new Result(true, "You have fertilized tile in location " + coordinate + " with " +
+                tile.getGoods().getLast().getName() + " !");
     }
 
     public Result howMuchWater() {
