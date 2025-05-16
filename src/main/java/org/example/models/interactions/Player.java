@@ -274,15 +274,16 @@ public class Player {
         if(friendship.second() - points >= ((friendship.first() + 1) * 100)) {
             friendShips.computeIfPresent(player,
                     (k, pair) -> new Pair<>(pair.first() + 1, friendship.second()));
-            player.getFriendShips().computeIfPresent(this, (k, pair) -> new Pair<>(pair.first() + 1, friendship.second()));
+            player.getFriendShips().computeIfPresent(this,
+                    (k, pair) -> new Pair<>(pair.first() + 1, friendship.second()));
         }
-        else if(friendship.second() < points) {
-            if(friendship.first() > 0) {
-                friendShips.computeIfPresent(player,
-                        (k, pair) -> new Pair<>(pair.first() - 1, friendship.second()));
-                player.getFriendShips().computeIfPresent(this,
-                        (k, pair) -> new Pair<>(pair.first() - 1, friendship.second()));
-            }
-        }
+//        else if(friendship.second() < points) {
+//            if(friendship.first() > 0) {
+//                friendShips.computeIfPresent(player,
+//                        (k, pair) -> new Pair<>(pair.first() - 1, friendship.second()));
+//                player.getFriendShips().computeIfPresent(this,
+//                        (k, pair) -> new Pair<>(pair.first() - 1, friendship.second()));
+//            }
+//        }
     }
 }

@@ -1,8 +1,8 @@
 package org.example.models.interactions;
 
 public enum Gender {
-    MALE("male"),
-    FEMALE("female");
+    MALE("Male"),
+    FEMALE("Female");
 
 
     private String name;

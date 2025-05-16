@@ -129,9 +129,7 @@ public enum GameMenuCommands implements Command {
     HUG("\\s*hug\\s+-u\\s+(?<username>\\S+)\\s*"),
     FLOWER("\\s*flower\\s+-u\\s+(?<username>\\S+)\\s*"),
     ASK_MARRIAGE("\\s*ask\\s*marriage\\s+-u\\s+(?<username>\\S+)\\s+-r\\s+(?<ring>\\S+)\\s*"),
-
-
-    RESPOND("\\s+respond\\s+(?<status>[accept|reject])\\s+-u\\s+(?<username>\\S+)\\s*"),
+    RESPOND("\\s*respond\\s+(?<status>-accept|-reject)\\s+-u\\s+(?<username>\\S+)\\s*"),
 
     // Parsa
     //Trading

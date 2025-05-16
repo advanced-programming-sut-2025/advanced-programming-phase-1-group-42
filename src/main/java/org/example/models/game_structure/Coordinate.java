@@ -87,7 +87,7 @@ public class Coordinate {
 
     @Override
     public String toString() {
-        return "{x:" + x + " y:" + y + "}";
+        return "(x:" + x + ", y:" + y + ")";
     }
 
     public int distance(Coordinate coordinate) {

@@ -1543,6 +1543,8 @@ public class GameMenuController extends Controller {
                         " amount of " + gift.second().getList().getFirst().getName() +
                         " have been given to " + App.getCurrentGame().getCurrentPlayer().getUser().getUsername() + " from you! " +
                         App.getCurrentGame().getCurrentPlayer().getUser().getUsername() + "'s rate : " + giftRate + " !"));
+        gift.first().getNews().add(App.getCurrentGame().getCurrentPlayer().getUser().getUsername() + " has rated your gift with amount " +
+                giftRate + " !") ;
 
         if (App.getCurrentGame().getCurrentPlayer().getIsInteracted().get(gift.first()).equals(false)) {
             if (App.getCurrentGame().getCurrentPlayer().getMarried() == gift.first()) {
@@ -1728,7 +1730,7 @@ public class GameMenuController extends Controller {
         Player mainPlayer = App.getCurrentGame().getCurrentPlayer();
         if (player == null)
             return new Result(false, "Player not found!");
-        if (player.getUser().getGender() == Gender.MALE)
+        if (mainPlayer.getUser().getGender() == Gender.MALE)
             return new Result(false, "Your gender should be female to respond!");
         if (mainPlayer.getMarriageList().get(player) == null)
             return new Result(false, username + " has not been asked you to marry him!");
