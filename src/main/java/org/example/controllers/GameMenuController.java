@@ -1002,7 +1002,7 @@ public class GameMenuController extends Controller {
         } else if (food instanceof Food) {
             App.getCurrentGame().getCurrentPlayer().eat(food);
         } else {
-            return new Result(false, "NO NO! What are you trying to eat MMD Jan?");
+            return new Result(false, "NO NO! What are you trying to eat mmd Jan?");
         }
         return new Result(true, "Khosmaz, Yum Yum!");
     }
