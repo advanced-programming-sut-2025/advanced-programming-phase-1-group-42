@@ -106,13 +106,16 @@ public class ArtisanFunctions {
     }
 
     private static void eliminateTileGoods(Coordinate coordinate, int i) {
-        for (int j = 0; j < 8; j++) {
-            Coordinate coordinate1 = new Coordinate(coordinate.getX() + i * Coordinate.coordinates.get(j).getX(),
-                    coordinate.getY() + i * Coordinate.coordinates.get(j).getY());
-
-            Tile tile = App.getCurrentGame().getMap().findTile(coordinate1);
-            if(tile != null) {
-                tile.getGoods().clear();
+        for (int j = coordinate.getX() + (i * Coordinate.coordinates.get(7).getX());
+        j < coordinate.getX() + (i * Coordinate.coordinates.get(3).getX()); j++) {
+            for (int k = coordinate.getY() + (i * Coordinate.coordinates.get(7).getY());
+            k < coordinate.getY() + (i * Coordinate.coordinates.get(3).getY()); k++) {
+                Coordinate coordinate1 = new Coordinate(j, k);
+                
+                Tile tile = App.getCurrentGame().getMap().findTile(coordinate1);
+                if(tile != null) {
+                    tile.getGoods().clear();
+                }
             }
         }
     }
@@ -190,7 +193,8 @@ public class ArtisanFunctions {
             eliminateTileGoods(coordinate, i);
         }
 
-        return new Result(true, crafting.getName() + " has been used");    }
+        return new Result(true, crafting.getName() + " has been used");
+    }
 
     private static Result useMegaBomb(Crafting crafting) {
         Coordinate coordinate = App.getCurrentGame().getCurrentPlayer().getCoordinate();

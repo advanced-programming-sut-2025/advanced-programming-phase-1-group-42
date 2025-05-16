@@ -145,7 +145,7 @@ public class GameMenu implements AppMenu {
         } else if ((matcher = GameMenuCommands.SHOW_PLANT.matcher(input)) != null) {
             System.out.println(controller.showPlant(matcher.group("x"), matcher.group("y")));
         } else if ((matcher = GameMenuCommands.FERTILIZE.matcher(input)) != null) {
-            System.out.println(controller.fertilize("fertilize", matcher.group("direction")));
+            System.out.println(controller.fertilize(matcher.group("fertilizer"), matcher.group("direction")));
         } else if ((matcher = GameMenuCommands.HOW_MUCH_WATER.matcher(input)) != null) {
             System.out.println(controller.howMuchWater());
         }
@@ -202,11 +202,11 @@ public class GameMenu implements AppMenu {
 
         // Artisan Commands
         else if ((matcher = GameMenuCommands.ARTISAN_USE.matcher(input)) != null) {
-            System.out.println(controller.artisanUse(matcher.group("artisan_name") ,
+            System.out.println(controller.artisanUse(matcher.group("artisanName") ,
                     (matcher.group("item1Name") != null ? matcher.group("item1Name").trim() : ""),
                     (matcher.group("item2Name") != null ? matcher.group("item2Name").trim() : "")));
         } else if ((matcher = GameMenuCommands.ARTISAN_GET.matcher(input)) != null) {
-            System.out.print(controller.artisanGet(matcher.group("artisan_name")));
+            System.out.print(controller.artisanGet(matcher.group("artisanName")));
         }
 
 

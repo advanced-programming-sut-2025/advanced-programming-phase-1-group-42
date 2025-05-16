@@ -723,7 +723,7 @@ public class GameMenuController extends Controller {
         if (plant == null)
             return new Result(false, "There is no plant in this location!");
 
-        return new Result(true, "Plant Info:\n" + plant.toString());
+        return new Result(true, "Plant Info:\n" + plant.getType().toString());
     }
 
     public Result fertilize(String fertilizerName, String direction) {
@@ -745,12 +745,34 @@ public class GameMenuController extends Controller {
         tile.getGoods().add(fertilizer.getLast());
         fertilizer.removeLast();
 
-        return new Result(true, "You have fertilized tile in location " + coordinate + " with " + fertilizer + "!");
+<<<<<<< HEAD
+        boolean isThereAPlant = false;
+        for (Good good : tile.getGoods()) {
+            if (good instanceof FarmingTreeSapling) {
+                isThereAPlant = true;
+            }   else if (good instanceof FarmingTree) {
+                isThereAPlant = true;
+            }   else if (good instanceof ForagingSeed) {
+                isThereAPlant = true;
+            }   else if (good instanceof ForagingTree) {
+                isThereAPlant = true;
+            }   else if (good instanceof ForagingMixedSeed) {
+                isThereAPlant = true;
+            }
+        }
+        if(!isThereAPlant){
+            return new Result(false, "There is no plant in this location!");
+        }
+        return new Result(true, "You have fertilized tile in location " + coordinate + " with " + fertilizer.getFirst().getName() + "!");
+=======
+        return new Result(true, "You have fertilized tile in location " + coordinate + " with " +
+                tile.getGoods().getLast().getName() + " !");
+>>>>>>> a6d866bc1c6cf4ecbe0fff3cb929ffd6acc099b1
     }
 
     public Result howMuchWater() {
         Tool tool = (Tool) App.getCurrentGame().getCurrentPlayer().getInventory().isInInventory(ToolType.WATERING_CAN.getName()).getFirst();
-        return new Result(true, "Your watering can have capacity:" + tool.capacity);
+        return new Result(true, "Your watering can have capacity: " + tool.capacity);
     }
 
 

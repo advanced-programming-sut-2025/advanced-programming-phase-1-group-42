@@ -127,12 +127,16 @@ public class Game {
             }
         }
 
+        for(Tile tile : App.getCurrentGame().getMap().getTiles()){
+            tile.setWatered(false);
+        }
+
         crowAttack();
         App.getCurrentGame().getMap().generateRandomForagingCrops(99);
         App.getCurrentGame().getMap().generateRandomForagingSeed(99);
         App.getCurrentGame().getMap().generateRandomMinerals(99);
 
-//        App.getCurrentGame().getMap().Fertilize();
+        App.getCurrentGame().getMap().Fertilize();
 
         for (ShippingBin shippingBin : App.getCurrentGame().getMap().getShippingBins()) {
             shippingBin.emptyShippingBin();
