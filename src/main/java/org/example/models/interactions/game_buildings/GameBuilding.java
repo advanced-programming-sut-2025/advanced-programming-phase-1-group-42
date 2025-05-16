@@ -16,8 +16,6 @@ import java.util.ArrayList;
 import java.util.Arrays;
 
 public abstract class GameBuilding extends Building {
-    private ArrayList<Tile> tiles;
-    private String name;
     private NPC shopkeeper;
     private final Pair<Integer, Integer> hours;
 
@@ -35,9 +33,7 @@ public abstract class GameBuilding extends Building {
 
     public GameBuilding(ArrayList<Tile> tiles, String name, NPC shopkeeper, Pair<Integer, Integer> hours,
                         Coordinate startCoordinate, Coordinate endCoordinate) {
-        super(startCoordinate, endCoordinate);
-        this.tiles = tiles;
-        this.name = name;
+        super(startCoordinate, endCoordinate, tiles, name);
         this.shopkeeper = shopkeeper;
         this.hours = hours;
     }
@@ -51,9 +47,7 @@ public abstract class GameBuilding extends Building {
         return false;
     }
 
-    public String getName() {
-        return name;
-    }
+
 
     public Pair<Integer, Integer> getHours() {
         return hours;

@@ -107,9 +107,10 @@ public class TradeManager {
 
                                 GoodType goodType = Good.newGoodType(trade.getItem());
                                 ArrayList<Good> newGoods = Good.newGoods(goodType, trade.getAmount());
-                                trade.getReceiver().getInventory().addGood(newGoods);
+                                trade.getSender().getInventory().addGood(newGoods);
 
-                                trade.getSender().getInventory().removeItemsFromInventory(Good.newGoodType(trade.getTargetItem()), trade.getTargetAmount());
+                                trade.getReceiver().getInventory().removeItemsFromInventory(Good.newGoodType(trade.getTargetItem()), trade.getTargetAmount());
+
                                 App.getCurrentGame().getCurrentPlayer().getFriendShips().computeIfPresent(trade.getSender(),
                                         (k, pair) -> new Pair<>(pair.first(), pair.second() + 30));
                                 trade.getSender().getFriendShips().computeIfPresent(App.getCurrentGame().getCurrentPlayer(),
@@ -125,17 +126,18 @@ public class TradeManager {
                                         (k, pair) -> new Pair<>(pair.first(), pair.second() - 30));
                                 trade.getSender().getFriendShips().computeIfPresent(App.getCurrentGame().getCurrentPlayer(),
                                         (k, pair) -> new Pair<>(pair.first(), pair.second() - 30));
-                                trade.setAccepted(true);
+                                trade.setAccepted(false);
                                 return false;
                             } else {
-                                trade.getSender().getInventory().addGood(Good.newGood(Good.newGoodType(trade.getItem())), trade.getAmount());
-                                trade.getReceiver().getInventory().removeItemsFromInventory(Good.newGoodType(trade.getItem()), trade.getAmount());
+                                trade.getReceiver().getInventory().addGood(Good.newGood(Good.newGoodType(trade.getItem())), trade.getAmount());
+                                trade.getSender().getInventory().removeItemsFromInventory(Good.newGoodType(trade.getItem()), trade.getAmount());
 
                                 GoodType goodType = Good.newGoodType(trade.getItem());
                                 ArrayList<Good> newGoods = Good.newGoods(goodType, trade.getAmount());
                                 trade.getSender().getInventory().addGood(newGoods);
 
                                 trade.getReceiver().getInventory().removeItemsFromInventory(Good.newGoodType(trade.getTargetItem()), trade.getTargetAmount());
+
                                 App.getCurrentGame().getCurrentPlayer().getFriendShips().computeIfPresent(trade.getSender(),
                                         (k, pair) -> new Pair<>(pair.first(), pair.second() + 30));
                                 trade.getSender().getFriendShips().computeIfPresent(App.getCurrentGame().getCurrentPlayer(),
