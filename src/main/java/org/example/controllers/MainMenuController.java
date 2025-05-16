@@ -5,8 +5,6 @@ import org.example.models.DBInteractor;
 import org.example.models.Result;
 import org.example.models.enums.Menu;
 
-import java.util.zip.ZipEntry;
-
 public class MainMenuController extends Controller {
 
     //TODO: Arani
@@ -29,13 +27,17 @@ public class MainMenuController extends Controller {
     }
 
     public Result exit() {
-        DBInteractor.saveUser();
+        DBInteractor.saveUsers();
         App.setCurrentMenu(Menu.ExitMenu);
         return new Result(true, "Goodbye!");
     }
 
     public Result logout() {
         App.setCurrentMenu(Menu.LoginRegisterMenu);
+        if (App.getCurrentUser().isStayLogin()) {
+            DBInteractor.resetStayLogin();
+        }
+        DBInteractor.saveUsers();
         App.getCurrentUser().setStayLogin(false);
         App.setCurrentUser(null);
 

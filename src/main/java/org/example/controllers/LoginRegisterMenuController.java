@@ -5,12 +5,9 @@ import org.example.models.DBInteractor;
 import org.example.models.Result;
 import org.example.models.enums.LoginRegisterCommands;
 import org.example.models.enums.Menu;
-import org.example.models.goods.products.Product;
 import org.example.models.interactions.Gender;
 import org.example.models.interactions.User;
 
-import java.security.MessageDigest;
-import java.security.NoSuchAlgorithmException;
 import java.util.Random;
 import java.util.Scanner;
 import java.util.regex.Matcher;
@@ -22,7 +19,7 @@ public class LoginRegisterMenuController extends Controller {
 
 
     public Result exit() {
-        DBInteractor.saveUser();
+        DBInteractor.saveUsers();
         App.setCurrentMenu(Menu.ExitMenu);
         return new Result(true, "Goodbye!");
     }
@@ -130,6 +127,12 @@ public class LoginRegisterMenuController extends Controller {
         }
 
         String answer = matcher.group("answer").trim();
+        String answerConfirm = matcher.group("answerConfirm").trim();
+
+        if (!answer.equals(answerConfirm)) {
+            return new Result(false, "Answer and confirm are not same!");
+        }
+
         App.getUsers().add(new User(username, getSHA256(password), nickname, email, Gender.findGender(gender), num, answer));
         return new Result(true, "Your account has been successfully registered!");
     }
@@ -148,8 +151,10 @@ public class LoginRegisterMenuController extends Controller {
         }
 
 
-        if(stayLoggedIn.equals("–stay-logged-in")) {
-            user.setStayLogin(true);
+        if (stayLoggedIn!= null) {
+            if (stayLoggedIn.equals("–stay-logged-in")) {
+                user.setStayLogin(true);
+            }
         }
 
         App.setCurrentUser(user);

@@ -30,11 +30,11 @@ public class LoginRegisterMenu implements AppMenu {
                     scanner
             ));
         }
-        else if((matcher = LoginRegisterCommands.LOGIN.matcher(input)) != null) {
+        else if ((matcher = LoginRegisterCommands.LOGIN.matcher(input)) != null) {
             System.out.println(controller.login(
                     matcher.group("username").trim(),
                     matcher.group("password").trim(),
-                    matcher.group("stayLogin").trim()
+                    matcher.group("stayLogin") != null ? matcher.group("stayLogin").trim() : null
             ));
         }
         else if((matcher = LoginRegisterCommands.ForgetPassword.matcher(input)) != null) {
