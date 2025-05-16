@@ -143,9 +143,7 @@ public class ToolFunctions {
         for (Good good : tile.getGoods()) {
             if (good instanceof ForagingMineral foragingMineral) {
                 if(checkCanBreak(tool, foragingMineral)) {
-
-                    App.getCurrentGame().getCurrentPlayer().getSkill().increaseMiningPoints(10);
-
+                    //? i deleted something?
                     if(App.getCurrentGame().getCurrentPlayer().getSkill().getMiningLevel() >= 2){
                         ArrayList<Good> gooods = Good.newGoods(good.getType(), 2);
                         App.getCurrentGame().getCurrentPlayer().getInventory().addGood(gooods);

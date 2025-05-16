@@ -723,7 +723,7 @@ public class GameMenuController extends Controller {
         if (plant == null)
             return new Result(false, "There is no plant in this location!");
 
-        return new Result(true, "Plant Info:\n" + plant.getType().toString());
+        return new Result(true, "Plant Info:\n" + plant.toString());
     }
 
     public Result fertilize(String fertilizerName, String direction) {
@@ -745,7 +745,6 @@ public class GameMenuController extends Controller {
         tile.getGoods().add(fertilizer.getLast());
         fertilizer.removeLast();
 
-<<<<<<< HEAD
         boolean isThereAPlant = false;
         for (Good good : tile.getGoods()) {
             if (good instanceof FarmingTreeSapling) {
@@ -764,24 +763,24 @@ public class GameMenuController extends Controller {
             return new Result(false, "There is no plant in this location!");
         }
         return new Result(true, "You have fertilized tile in location " + coordinate + " with " + fertilizer.getFirst().getName() + "!");
-=======
-        return new Result(true, "You have fertilized tile in location " + coordinate + " with " +
-                tile.getGoods().getLast().getName() + " !");
->>>>>>> a6d866bc1c6cf4ecbe0fff3cb929ffd6acc099b1
     }
 
     public Result howMuchWater() {
         Tool tool = (Tool) App.getCurrentGame().getCurrentPlayer().getInventory().isInInventory(ToolType.WATERING_CAN.getName()).getFirst();
-        return new Result(true, "Your watering can have capacity: " + tool.capacity);
+        return new Result(true, "Your watering can have capacity:" + tool.capacity);
     }
 
 
     // Nader
     // crafting methods
     public Result showCraftingRecipes() {
+        
         for (CraftingRecipe craftingRecipe : App.getCurrentGame().getCurrentPlayer().getCraftingRecipes()) {
             System.out.println(craftingRecipe.getName());
-            System.out.println(((CraftingRecipeType) craftingRecipe.getType()).getIngredients());
+            System.out.println("\t"+((CraftingRecipeType) craftingRecipe.getType()).getIngredients());
+            if (((CraftingRecipeType) craftingRecipe.getType()).getSource() != null) {
+                System.out.println("\t"+((CraftingRecipeType) craftingRecipe.getType()).getSource());
+            }
             System.out.println("-------------------------------------------");
         }
         return new Result(true, "");
@@ -789,7 +788,6 @@ public class GameMenuController extends Controller {
 
     public Result craftingCraft(String itemName) {
         itemName = itemName.trim();
-
         for (CraftingRecipe craftingRecipe : App.getCurrentGame().getCurrentPlayer().getCraftingRecipes()) {
             if (craftingRecipe.getName().equals(itemName)) {
                 CraftingFunctions craftingFunctions = new CraftingFunctions();
@@ -797,7 +795,7 @@ public class GameMenuController extends Controller {
                 return new Result(true, "");
             }
         }
-        return new Result(false, "");
+        return new Result(false, "You don't have " + itemName + " recipe!");
     }
 
     public Result placeItem(String itemName, String direction) {
@@ -874,6 +872,11 @@ public class GameMenuController extends Controller {
 
         status = status.trim();
         itemName = itemName.trim();
+
+        TileType tileType = App.getCurrentGame().getMap().findTileType(App.getCurrentGame().getCurrentPlayer().getCoordinate());
+        if (!tileType.equals(TileType.PLAYER_BUILDING)) {
+            return new Result(false, "You are not in Home!");
+        }
 
         Fridge fridge = App.getCurrentGame().getCurrentPlayer().getFridge();
         Inventory inventory = App.getCurrentGame().getCurrentPlayer().getInventory();

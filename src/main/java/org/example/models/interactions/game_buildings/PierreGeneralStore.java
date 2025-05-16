@@ -48,7 +48,7 @@ public class PierreGeneralStore extends GameBuilding {
                 new Pair<>(ProductType.BOUQUET, 2),
                 new Pair<>(ProductType.WEDDING_RING, 2),
                 new Pair<>(ArtisanType.DEHYDRATOR_RECIPE, 1),
-                new Pair<>(CraftingRecipeType.GRASS_STARTER_RECIPE, 1),
+                new Pair<>(CraftingRecipeType.GRASS_STARTER, 1),
                 new Pair<>(FoodType.SUGAR, Integer.MAX_VALUE),
                 new Pair<>(ProductType.OIL, Integer.MAX_VALUE),
                 new Pair<>(ArtisanType.VINEGAR, Integer.MAX_VALUE),
