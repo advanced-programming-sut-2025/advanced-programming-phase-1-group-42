@@ -22,7 +22,7 @@ public class TradeMenuController {
     public Result tradeWithMoney(String receiver, String tradeType, String item,
                                  String amount, String price) {
 
-        System.out.println(tradeType + " " + amount + " " + item + " " + "For" + price + "g from" + receiver );
+        System.out.println(tradeType + " " + amount + " " + item + " " + "for " + price + "g from " + receiver );
 
         Player currentPlayer = App.getCurrentGame().getCurrentPlayer();
         Player receiverPlayer = App.getCurrentGame().findPlayer(receiver);
@@ -130,7 +130,7 @@ public class TradeMenuController {
 
     public Result exitTradeMenu() {
         App.setCurrentMenu(Menu.GameMenu);
-        return new Result(true, "You are now exiting trade");
+        return new Result(true, "You are now exiting trade\n");
     }
 
 }

@@ -1794,8 +1794,27 @@ public class GameMenuController extends Controller {
             System.out.println(player.getUser().getUsername());
         }
         System.out.println("____________________________");
+        System.out.println("You are now in Trade Menu!");
 
-        return new Result(true, "You are now in Trade Menu!");
+        Player currentPlayer = App.getCurrentGame().getCurrentPlayer();
+        List<Trade> trades = TradeManager.getTradesFor(currentPlayer);
+
+        if (trades.isEmpty()) {
+            return new Result(true, "No trades found.");
+        }
+        boolean hasSomething = false;
+        for (Trade trade : trades) {
+            if(!trade.isShown()) {
+                hasSomething = true;
+                trade.setShown(true);
+                System.out.println(trade);
+            }
+        }
+        if (!hasSomething) {
+            System.out.println("No new Trade found.!");
+        }
+
+        return new Result(true, "");
     }
 
     // Nader
