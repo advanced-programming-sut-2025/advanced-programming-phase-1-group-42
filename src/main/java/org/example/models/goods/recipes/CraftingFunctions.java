@@ -19,7 +19,7 @@ public class CraftingFunctions {
             case SPRINKLER -> sprinklerFunc();
             case QUALITY_SPRINKLER -> qualitySprinklerFunc();
             case IRIDIUM_SPRINKLER -> iridiumSprinklerFunc();
-            case CHARCOAL_KILN -> charcoalKlinFunc();
+            case CHARCOAL_KILN -> charcoalKilnFunc();
             case FURNACE -> furnaceFunc();
             case SCARECROW -> scarecrowFunc();
             case DELUXE_SCARECROW -> deluxScarecrowFunc();
@@ -317,7 +317,7 @@ public class CraftingFunctions {
         }
     }
 
-    public void charcoalKlinFunc() {
+    public void charcoalKilnFunc() {
 
         if (checkIsEnough2Item("Wood", "Copper_Bar", 20, 2, "foraging", 1)) {
             Crafting crafting = new Crafting(CraftingType.CHARCOAL_KILN);

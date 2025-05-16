@@ -24,7 +24,7 @@ public class Crafting extends Good {
 
     @Override
     public GoodType getType() {
-        return craftingType;
+        return this.craftingType;
     }
 
 }

@@ -35,7 +35,7 @@ public enum ForagingMineralType implements GoodType {
 
     GOLD_ORE("Gold_Ore", 25),
 
-    IRIDIUM_ORE("Iridium", 100),
+    IRIDIUM_ORE("Iridium_Ore", 100),
 
     COAL("Coal", 15);
 

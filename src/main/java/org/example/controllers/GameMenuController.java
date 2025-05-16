@@ -845,7 +845,6 @@ public class GameMenuController extends Controller {
 
 
     public Result cheatAddItem(String itemName, String count) {
-
         itemName = itemName.trim();
         count = count.trim();
 

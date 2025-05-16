@@ -18,6 +18,8 @@ public class Artisan extends Good {
 
     @Override
     public String getName() {
+        if(goodType != null)
+            return artisanType.name() + "_" + goodType.getName();
         return artisanType.getName();
     }
 

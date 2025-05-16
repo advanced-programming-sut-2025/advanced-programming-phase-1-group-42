@@ -33,7 +33,7 @@ public enum ArtisanType implements GoodType {
                     new Quadruple<>(AnimalProductsType.BIG_COW_MILK, 1, 0.0, 345.0)
             )), CraftingType.CHEESE_PRESS),
 
-    GOAT_CHEESE("Goat Cheese", "Soft cheese made from goat's milk.", new Pair<>(0.0, 100), 3, new ArrayList<>(
+    GOAT_CHEESE("Goat_Cheese", "Soft cheese made from goat's milk.", new Pair<>(0.0, 100), 3, new ArrayList<>(
             Arrays.asList(
                     new Quadruple<>(AnimalProductsType.GOAT_MILK, 1, 0.0, 400.0),
                     new Quadruple<>(AnimalProductsType.BIG_GOAT_MILK, 1, 0.0, 600.0)
@@ -45,16 +45,16 @@ public enum ArtisanType implements GoodType {
                     new Quadruple<>(AnimalProductsType.BIG_CHICKEN_EGG, 1, 0.0, 237.0)
             )), CraftingType.MAYONNAISE_MACHINE),
 
-    DUCK_MAYONNAISE("Duck Mayonnaise", "It's a rich, yellow mayonnaise.", new Pair<>(0.0, 75), 3, new ArrayList<>(
+    DUCK_MAYONNAISE("Duck_Mayonnaise", "It's a rich, yellow mayonnaise.", new Pair<>(0.0, 75), 3, new ArrayList<>(
             Arrays.asList(new Quadruple<>(AnimalProductsType.DUCK_EGG, 1, 0.0, 190.0),
                     new Quadruple<>(AnimalProductsType.DINOSAUR_EGG, 1, 0.0, 237.0)))
             , CraftingType.MAYONNAISE_MACHINE),
 
-    DINOSAUR_MAYONNAISE("Dinosaur Mayonnaise", "It's thick and creamy, with a vivid green hue. It smells like grass and leather.", new Pair<>(0.0, 125), 3, new ArrayList<>(
+    DINOSAUR_MAYONNAISE("Dinosaur_Mayonnaise", "It's thick and creamy, with a vivid green hue. It smells like grass and leather.", new Pair<>(0.0, 125), 3, new ArrayList<>(
             Arrays.asList(new Quadruple<>(AnimalProductsType.DINOSAUR_EGG, 1, 0.0, 800.0)))
             , CraftingType.MAYONNAISE_MACHINE),
 
-    TRUFFLE_OIL("Truffle Oil", "A gourmet cooking ingredient.", new Pair<>(0.0, 38), 6, new ArrayList<>(
+    TRUFFLE_OIL("Truffle_Oil", "A gourmet cooking ingredient.", new Pair<>(0.0, 38), 6, new ArrayList<>(
             Arrays.asList(new Quadruple<>(AnimalProductsType.TRUFFLE, 1, 0.0, 1065.0)))
             , CraftingType.OIL_MAKER),
 
@@ -109,7 +109,7 @@ public enum ArtisanType implements GoodType {
             Arrays.asList(new Quadruple<>(ArtisanType.HONEY, 1, 0.0, 300.0)))
             , CraftingType.KEG),
 
-    PALE_ALE("Pale Ale", "Drink in moderation.", new Pair<>(0.0, 50), 3 * 24, new ArrayList<>(
+    PALE_ALE("Pale_Ale", "Drink in moderation.", new Pair<>(0.0, 50), 3 * 24, new ArrayList<>(
             Arrays.asList(new Quadruple<>(FarmingCropType.HOPS, 1, 0.0, 300.0))
     ), CraftingType.KEG),
 
@@ -206,7 +206,7 @@ public enum ArtisanType implements GoodType {
 //                    new Quadruple<>(FarmingCropType.GIANT_CAULIFLOWER, 1, 2.0, 50.0))
                     )), CraftingType.PRESERVES_JAR),
 
-    DRIED_MUSHROOMS("Dried Mushrooms", "A package of gourmet mushrooms.", new Pair<>(0.0, 50), 24, new ArrayList<>(
+    DRIED_MUSHROOMS("Dried_Mushrooms", "A package of gourmet mushrooms.", new Pair<>(0.0, 50), 24, new ArrayList<>(
             Arrays.asList(new Quadruple<>(FoodType.COMMON_MUSHROOM, 5, 7.5, 25.0),
                     new Quadruple<>(ForagingCropType.RED_MUSHROOM, 5, 7.5, 25.0),
                     new Quadruple<>(ForagingCropType.PURPLE_MUSHROOM, 5, 7.5, 25.0),
@@ -214,7 +214,7 @@ public enum ArtisanType implements GoodType {
                     new Quadruple<>(ForagingCropType.CHANTERELLE, 5, 7.5, 25.0))
     ), CraftingType.DEHYDRATOR),
 
-    DRIED_FRUIT("Dried Fruit", "Chewy pieces of dried fruit.", new Pair<>(0.0, 75), 24, new ArrayList<>(
+    DRIED_FRUIT("Dried_Fruit", "Chewy pieces of dried fruit.", new Pair<>(0.0, 75), 24, new ArrayList<>(
             Arrays.asList(// Tree Fruits (FoodType → Adjusted to FarmingCropType if needed)
                     new Quadruple<>(FoodType.APRICOT, 5, 7.5, 25.0),
                     new Quadruple<>(FoodType.CHERRY, 5, 7.5, 25.0),
@@ -252,7 +252,7 @@ public enum ArtisanType implements GoodType {
             Arrays.asList(new Quadruple<>(ProductType.WOOD, 10, 0.0, 50.0)))
             , CraftingType.CHARCOAL_KILN),
 
-    SMOKED_FISH("Smoked Fish", "A whole fish, smoked to perfection.", new Pair<>(1.5, 0), 1, new ArrayList<>(
+    SMOKED_FISH("Smoked_Fish", "A whole fish, smoked to perfection.", new Pair<>(1.5, 0), 1, new ArrayList<>(
             Arrays.asList(
                     // Spring Fish
                     new Quadruple<>(FishType.FLOUNDER, 1, 2.0, 0.0),
@@ -290,11 +290,12 @@ public enum ArtisanType implements GoodType {
                     new Quadruple<>(ArtisanType.COAL, 1, 0.0, 0.0)
             )), CraftingType.FISH_SMOKER),
     
-    METAL_BAR("Any metal bar", "Turns ore and coal into metal bars.", new Pair<>(0.0, 0), 4, new ArrayList<>(
+    METAL_BAR("Metal_Bar", "Turns ore and coal into metal bars.", new Pair<>(0.0, 0), 4, new ArrayList<>(
             Arrays.asList(
                     new Quadruple<>(ForagingMineralType.COPPER_ORE, 5, 10.0, 0.0),
                     new Quadruple<>(ForagingMineralType.IRON_ORE, 5, 10.0, 0.0),
                     new Quadruple<>(ForagingMineralType.GOLD_ORE, 5, 10.0, 0.0),
+                    new Quadruple<>(ForagingMineralType.IRIDIUM_ORE, 5, 10.0, 0.0),
 
                     //Coals
                     new Quadruple<>(ForagingMineralType.COAL, 1, 0.0, 0.0),
