@@ -723,7 +723,7 @@ public class GameMenuController extends Controller {
         if (plant == null)
             return new Result(false, "There is no plant in this location!");
 
-        return new Result(true, "Plant Info:\n" + plant.toString());
+        return new Result(true, "Plant Info:\n" + plant.getType().toString());
     }
 
     public Result fertilize(String fertilizerName, String direction) {
@@ -750,7 +750,7 @@ public class GameMenuController extends Controller {
 
     public Result howMuchWater() {
         Tool tool = (Tool) App.getCurrentGame().getCurrentPlayer().getInventory().isInInventory(ToolType.WATERING_CAN.getName()).getFirst();
-        return new Result(true, "Your watering can have capacity:" + tool.capacity);
+        return new Result(true, "Your watering can have capacity: " + tool.capacity);
     }
 
 
