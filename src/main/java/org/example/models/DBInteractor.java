@@ -70,6 +70,7 @@ public class DBInteractor {
 
     }
 
+
     public static void loadUsers(){
         String uri = "mongodb+srv://namoder123:passme@cluster01.unmuffl.mongodb.net/?retryWrites=true&w=majority&appName=Cluster01";
 
@@ -102,7 +103,7 @@ public class DBInteractor {
                 System.out.println("No documents found");
             }
         } catch (Exception e) {
-            System.err.println("Error connecting to the database");
+            System.out.println("Error connecting to the database");
         }
     }
 }

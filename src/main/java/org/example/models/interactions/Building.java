@@ -1,15 +1,31 @@
 package org.example.models.interactions;
 
 import org.example.models.game_structure.Coordinate;
+import org.example.models.game_structure.Tile;
+
+import java.util.ArrayList;
 
 public abstract class Building {
     protected Coordinate startCoordinate;
     protected Coordinate endCoordinate;
+    private ArrayList<Tile> tiles;
+    private String name;
 
+
+    public Building(Coordinate startCoordinate, Coordinate endCoordinate, ArrayList<Tile> tiles, String name) {
+        this.startCoordinate = startCoordinate;
+        this.endCoordinate = endCoordinate;
+        this.tiles = tiles;
+        this.name = name;
+    }
 
     public Building(Coordinate startCoordinate, Coordinate endCoordinate) {
         this.startCoordinate = startCoordinate;
         this.endCoordinate = endCoordinate;
+    }
+
+    public String getName() {
+        return name;
     }
 
     public Coordinate getStartCordinate() {
@@ -34,4 +50,5 @@ public abstract class Building {
             return true;
         return false;
     }
+
 }
