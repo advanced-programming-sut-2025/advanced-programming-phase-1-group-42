@@ -1054,7 +1054,7 @@ public class GameMenuController extends Controller {
                             for (int sY = 0; sY < targetType.getSize().second(); sY++) {
                                 App.getCurrentGame().getMap()
                                         .findTileByXY(sX + startCoordinate.getX(), sY +
-                                                startCoordinate.getY()).setTileType(TileType.GAME_BUILDING);
+                                                startCoordinate.getY()).setTileType(TileType.PLAYER_BUILDING);
                             }
                         }
                         return new Result(true, "You build a " + buildingName + "!");
