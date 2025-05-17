@@ -3,6 +3,7 @@ package org.example.views;
 import org.example.controllers.ProfileMenuController;
 import org.example.models.enums.LoginRegisterCommands;
 import org.example.models.enums.ProfileMenuCommands;
+import org.example.models.game_structure.Game;
 
 import java.util.Scanner;
 import java.util.regex.Matcher;
@@ -13,6 +14,9 @@ public class ProfileMenu implements AppMenu {
     @Override
     public void check(Scanner scanner) {
         String input = scanner.nextLine();
+        if (input != null) {
+            Game.writeIntoFile(input);
+        }
 
         Matcher matcher;
         if((matcher = ProfileMenuCommands.ChangeUsername.matcher(input)) != null) {

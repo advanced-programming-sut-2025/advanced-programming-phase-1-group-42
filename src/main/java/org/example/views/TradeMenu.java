@@ -4,6 +4,7 @@ import org.example.controllers.GameMenuController;
 import org.example.controllers.TradeMenuController;
 import org.example.models.enums.GameMenuCommands;
 import org.example.models.enums.TradeMenuCommands;
+import org.example.models.game_structure.Game;
 
 import java.util.Scanner;
 import java.util.regex.Matcher;
@@ -15,6 +16,9 @@ public class TradeMenu implements AppMenu {
     @Override
     public void check(Scanner scanner) {
         String input = scanner.nextLine();
+        if (input != null) {
+            Game.writeIntoFile(input);
+        }
 
         Matcher matcher;
 
