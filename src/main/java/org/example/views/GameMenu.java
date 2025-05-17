@@ -33,17 +33,14 @@ public class GameMenu implements AppMenu {
 
             try {
 
-                // اضافه کردن username_1 اگر وجود دارد
                 if (matcher.group("username1") != null) {
                     usernames.add(matcher.group("username1"));
                 }
 
-                // اضافه کردن username_2 اگر وجود دارد
                 if (matcher.group("username2") != null) {
                     usernames.add(matcher.group("username2"));
                 }
 
-                // اضافه کردن username_3 اگر وجود دارد
                 if (matcher.group("username3") != null) {
                     usernames.add(matcher.group("username3"));
                 }
@@ -283,7 +280,10 @@ public class GameMenu implements AppMenu {
             System.out.println(controller.test());
          } else if ((matcher = GameMenuCommands.SHOW_FRIDGE.matcher(input)) != null) {
              App.getCurrentGame().getCurrentPlayer().getFridge().showFridge();
+        } else if ((matcher = GameMenuCommands.SHOW_CURRENT_MENU.matcher(input)) != null) {
+            System.out.println("current menu: Game Menu");
         }
+
 
 
          else {

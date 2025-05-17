@@ -147,7 +147,8 @@ public enum GameMenuCommands implements Command {
     SHOW_BALANCE("\\s*show\\s*balance\\s*"),
 
     Test("test"),
-    SHOW_FRIDGE("\\s*show\\s+fridge\\s*");
+    SHOW_FRIDGE("\\s*show\\s+fridge\\s*"),
+    SHOW_CURRENT_MENU("\\s*show\\s*current_menu\\s*");
 
 
     private final String pattern;
