@@ -30,17 +30,13 @@ public enum ToolLevel {
     }
 
     public ToolLevel increaseGoodLevel() {
-        switch (levelNumber) {
-            case 0:
-                return COPPER;
-            case 1:
-                return IRON;
-            case 2:
-                return GOLD;
-            case 3:
-                return IRIDIUM;
-        }
-        return null;
+        return switch (levelNumber) {
+            case 0 -> COPPER;
+            case 1 -> IRON;
+            case 2 -> GOLD;
+            case 3 -> IRIDIUM;
+            default -> null;
+        };
     }
 
     public String getName() {

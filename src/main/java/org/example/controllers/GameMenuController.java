@@ -552,6 +552,10 @@ public class GameMenuController extends Controller {
                 flag = true;
                 break;
             }
+            if(!flag && toolName.equals("Trash_Can")) {
+                App.getCurrentGame().getCurrentPlayer().setInHandGood(App.getCurrentGame().getCurrentPlayer().getTrashCan());
+                flag = true;
+            }
         }
         if (!flag)
             return new Result(false, "You don't have " + toolName + "to use!");

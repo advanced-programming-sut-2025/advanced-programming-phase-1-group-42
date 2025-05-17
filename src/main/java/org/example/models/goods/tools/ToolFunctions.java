@@ -456,17 +456,18 @@ public class ToolFunctions {
     public static int useTrashCan(Tool tool, int totalPrice) {
         int finalPrice = totalPrice;
 
+        System.out.println(tool.getToolLevel().getName());
         switch (tool.getToolLevel()) {
             case ToolLevel.ORDINARY ->
                 finalPrice = 0;
             case ToolLevel.COPPER ->
-                finalPrice = totalPrice * 15 / 100;
+                finalPrice = (totalPrice * 15) / 100;
             case ToolLevel.IRON ->
-                finalPrice = totalPrice * 30 / 100;
+                finalPrice = (totalPrice * 30) / 100;
             case ToolLevel.GOLD ->
-                finalPrice = totalPrice * 45 / 100;
+                finalPrice = (totalPrice * 45) / 100;
             case ToolLevel.IRIDIUM ->
-                finalPrice = totalPrice * 60 / 100;
+                finalPrice = (totalPrice * 60) / 100;
         }
 
         return finalPrice;

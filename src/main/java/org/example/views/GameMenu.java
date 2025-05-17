@@ -117,7 +117,8 @@ public class GameMenu implements AppMenu {
 
         //inventory
         else if ((matcher = GameMenuCommands.INVENTORY_TRASH_ITEM.matcher(input)) != null) {
-            System.out.println(controller.inventoryTrashItem(matcher.group("item"), matcher.group("number")));
+            System.out.println(controller.inventoryTrashItem(matcher.group("item"),
+                    (matcher.group("number") == null) ? "" : matcher.group("number")));
         } else if ((matcher = GameMenuCommands.INVENTORY_SHOW.matcher(input)) != null) {
             System.out.println(controller.inventoryShow());
         }

@@ -48,7 +48,7 @@ public enum GameMenuCommands implements Command {
     ENERGY_SHOW("\\s*energy\\s*show\\s*"),
     CHEAT_ENERGY_SET("\\s*energy\\s*set\\s+(?<value>\\S+)\\s*"),
     CHEAT_ENERGY_UNLIMITED("\\s*energy\\s*unlimited\\s*"),
-    INVENTORY_TRASH_ITEM("\\s*inventory\\s+trash\\s+-i\\s+(?<item>\\S+)\\s+-n\\s+(?<number>\\S+)\\s*"),
+    INVENTORY_TRASH_ITEM("\\s*inventory\\s+trash\\s+-i\\s+(?<item>\\S+)\\s*(-n)?\\s*(?<number>\\S+)?\\s*"),
     INVENTORY_SHOW("\\s*inventory\\s*show\\s*"),
 
     // Arani
