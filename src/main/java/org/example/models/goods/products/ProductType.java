@@ -60,7 +60,7 @@ public enum ProductType implements GoodType {
 
     DELUXE_PACK("Deluxe_Pack", -1, 10000),
 
-    HARD_WOOD("Hard Wood",-1,0);
+    HARD_WOOD("Hard_Wood",-1,0);
 
     ProductType(String name, int energy, int price) {
         this.name = name;

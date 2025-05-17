@@ -552,7 +552,7 @@ public class GameMenuController extends Controller {
                 flag = true;
                 break;
             }
-            if(!flag && toolName.equals("Trash_Can")) {
+            if (!flag && toolName.equals("Trash_Can")) {
                 App.getCurrentGame().getCurrentPlayer().setInHandGood(App.getCurrentGame().getCurrentPlayer().getTrashCan());
                 flag = true;
             }
@@ -754,17 +754,17 @@ public class GameMenuController extends Controller {
         for (Good good : tile.getGoods()) {
             if (good instanceof FarmingTreeSapling) {
                 isThereAPlant = true;
-            }   else if (good instanceof FarmingTree) {
+            } else if (good instanceof FarmingTree) {
                 isThereAPlant = true;
-            }   else if (good instanceof ForagingSeed) {
+            } else if (good instanceof ForagingSeed) {
                 isThereAPlant = true;
-            }   else if (good instanceof ForagingTree) {
+            } else if (good instanceof ForagingTree) {
                 isThereAPlant = true;
-            }   else if (good instanceof ForagingMixedSeed) {
+            } else if (good instanceof ForagingMixedSeed) {
                 isThereAPlant = true;
             }
         }
-        if(!isThereAPlant){
+        if (!isThereAPlant) {
             return new Result(false, "There is no plant in this location!");
         }
         return new Result(true, "You have fertilized tile in location " + coordinate + " with " + fertilizer.getFirst().getName() + "!");
@@ -782,9 +782,9 @@ public class GameMenuController extends Controller {
 
         for (CraftingRecipe craftingRecipe : App.getCurrentGame().getCurrentPlayer().getCraftingRecipes()) {
             System.out.println(craftingRecipe.getName());
-            System.out.println("\t"+((CraftingRecipeType) craftingRecipe.getType()).getIngredients());
+            System.out.println("\t" + ((CraftingRecipeType) craftingRecipe.getType()).getIngredients());
             if (((CraftingRecipeType) craftingRecipe.getType()).getSource() != null) {
-                System.out.println("\t"+((CraftingRecipeType) craftingRecipe.getType()).getSource());
+                System.out.println("\t" + ((CraftingRecipeType) craftingRecipe.getType()).getSource());
             }
             System.out.println("-------------------------------------------");
         }
@@ -892,7 +892,7 @@ public class GameMenuController extends Controller {
         }
 
         if (!(good instanceof Food || good instanceof Artisan || good instanceof AnimalProduct
-              || good instanceof FarmingCrop)) {
+                || good instanceof FarmingCrop)) {
             return new Result(false, "Hey! You can't add this item to your fridge!");
         }
 
@@ -1862,10 +1862,15 @@ public class GameMenuController extends Controller {
 
         for (NPC npc : App.getCurrentGame().getNPCs()) {
             if (npc.getType().getName().equals(npcName)) {
-                if (abs(npc.getType().getCoordinate().getX() -
-                        App.getCurrentGame().getCurrentPlayer().getCoordinate().getX()) == 1 &&
-                        abs(npc.getType().getCoordinate().getY() -
-                                App.getCurrentGame().getCurrentPlayer().getCoordinate().getY()) == 1) {
+                if ((abs(npc.getType().getCoordinate().getX() -
+                        App.getCurrentGame().getCurrentPlayer().getCoordinate().getX()) == 1 ||
+                        (abs(npc.getType().getCoordinate().getX() -
+                                App.getCurrentGame().getCurrentPlayer().getCoordinate().getX()) == 0))
+                        &&
+                        (abs(npc.getType().getCoordinate().getY() -
+                                App.getCurrentGame().getCurrentPlayer().getCoordinate().getY()) == 1 ||
+                                abs(npc.getType().getCoordinate().getY() -
+                                        App.getCurrentGame().getCurrentPlayer().getCoordinate().getY()) == 0)) {
                     npc.getFriendship();
                     npc.npcDialogs();
                     return new Result(true, "");
@@ -1951,11 +1956,18 @@ public class GameMenuController extends Controller {
         NPC targetNPC = null;
         boolean found = false;
         for (NPC npc : App.getCurrentGame().getNPCs()) {
-            if (abs(npc.getType().getCoordinate().getX() -
-                    App.getCurrentGame().getCurrentPlayer().getCoordinate().getX()) == 1 &&
-                    abs(npc.getType().getCoordinate().getY() -
-                            App.getCurrentGame().getCurrentPlayer().getCoordinate().getY()) == 1) {
-
+            if ((abs(npc.getType().getCoordinate().getX() -
+                    App.getCurrentGame().getCurrentPlayer().getCoordinate().getX()) == 1 ||
+                    (abs(npc.getType().getCoordinate().getX() -
+                            App.getCurrentGame().getCurrentPlayer().getCoordinate().getX()) == 0))
+                    &&
+                    (abs(npc.getType().getCoordinate().getY() -
+                            App.getCurrentGame().getCurrentPlayer().getCoordinate().getY()) == 1 ||
+                            abs(npc.getType().getCoordinate().getY() -
+                                    App.getCurrentGame().getCurrentPlayer().getCoordinate().getY()) == 0)) {
+                targetNPC = npc;
+                found = true;
+                break;
             }
         }
         if (!found) {
