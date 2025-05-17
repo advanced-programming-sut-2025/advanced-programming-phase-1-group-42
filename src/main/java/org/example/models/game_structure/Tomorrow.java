@@ -1,11 +1,14 @@
 package org.example.models.game_structure;
 
+import org.example.Main;
 import org.example.models.App;
 import org.example.models.enums.Season;
 import org.example.models.enums.WeatherType;
 import org.example.models.game_structure.weathers.Rain;
 import org.example.models.game_structure.weathers.Sunny;
 import org.example.models.game_structure.weathers.Weather;
+
+import java.util.Random;
 
 public class Tomorrow {
     private Weather weather = new Sunny(1,1);
@@ -24,7 +27,7 @@ public class Tomorrow {
     }
 
     public void setTomorrowWeather(Game game) {
-        double probability = Math.random()*10;
+        double probability = (new Random(game.getDateTime().getTime())).nextInt(11);
 
         if (game.getDateTime().getSeasonOfYear().equals(Season.SPRING)) {
 

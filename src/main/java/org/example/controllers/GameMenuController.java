@@ -228,7 +228,7 @@ public class GameMenuController extends Controller {
             return new Result(false, "Just game admin can exit the game!");
         } else {
             App.setCurrentGame(null);
-            App.setCurrentMenu(Menu.MainMenu);
+            App.setCurrentMenu(Menu.GameMenu);
             return new Result(true, "You have successfully exited the game!");
         }
     }
