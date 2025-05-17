@@ -331,6 +331,7 @@ public class Game {
                         crowCounter++;
                     }
                 }
+                System.out.println("there is a chance " + crowCounter + " Crows would attack your crops");
                 if (randomAttack == 2) {
                     if (!(randomTile.checkAroundForScarCrow())) {
                         Iterator<Good> iterator = randomTile.getGoods().iterator();
