@@ -338,6 +338,8 @@ public class Game {
                             Good good = iterator.next();
                             if (good instanceof FarmingCrop) {
                                 iterator.remove();
+                                System.out.println("a Crow attacked your crops");
+                                break;
                             }
                         }
                     }
@@ -350,6 +352,7 @@ public class Game {
                                     Good good2 = iterator.next();
                                     if (good2 instanceof Food) {
                                         iterator.remove();
+                                        System.out.println("a Crow attacked your trees");
                                         break;
                                     }
                                 }
