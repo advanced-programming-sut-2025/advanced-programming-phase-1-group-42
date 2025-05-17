@@ -13,7 +13,7 @@ import java.util.Iterator;
 
 public class DateTime {
     private int time = 9;
-    private int date = 1;
+    private int date = 0;
     private Season season = Season.SPRING;
 
     // A Function to change game base of the cycle of players and moves the game forward

@@ -304,11 +304,6 @@ public class Map {
         this.farms.addAll(farms);
     }
 
-    public boolean dfsCheck(Coordinate start, Coordinate end) {
-        //TODO
-        return false;
-    }
-
     public GameBuilding getBlackSmith() {
         return this.gameBuildings.get(0);
     }

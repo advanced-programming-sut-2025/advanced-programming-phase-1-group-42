@@ -11,7 +11,6 @@ import java.util.Scanner;
 
 public class ProfileMenuController extends Controller {
 
-    //TODO: Arani
     public Result changeUsername(String username, Scanner scanner) {
         // Check Username is new
         if(App.getCurrentUser().getUsername().equals(username)) {

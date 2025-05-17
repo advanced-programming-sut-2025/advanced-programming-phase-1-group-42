@@ -25,7 +25,7 @@ public class Farm {
         for (int i = (playerNumber % 2) * 70; i < (playerNumber % 2 + 1) * 70; i++) {
             boolean flag = (i == (playerNumber % 2) * 70) || (i + 1 == (playerNumber % 2 + 1) * 70);
             for (int j = (playerNumber / 2) * 110; j < (playerNumber / 2) * 110 + 50; j++) {
-                try { //TODO
+                try {
                     this.tiles.add(tiles.get((i * 160) + j));
                     this.tiles.getLast().setTileType(TileType.FARM);
 
@@ -140,7 +140,7 @@ public class Farm {
             startCoordinate = new Coordinate((playerNumber % 2) * 70 + 25, (playerNumber / 2) * 110 + 15);
             for (int i = 25; i - 25 < 10; i++) {
                 for (int j = 15; j - 15 < 10; j++) {
-                    try { //TODO
+                    try {
                         this.tiles.get((i * 50) + j).setTileType(TileType.PLAYER_BUILDING);
                     } catch (Exception e) {
                         System.out.println(e.getMessage());
@@ -167,7 +167,7 @@ public class Farm {
             startCoordinate = new Coordinate(0, 0);
             for (int i = startCoordinate.getX(); i < 7; i++) {
                 for (int j = startCoordinate.getY(); j < 50; j++) {
-                    try {  //TODO
+                    try {
 
                         lakes.add(this.tiles.get((i * 50) + j));
                         lakes.getLast().setTileType(TileType.WATER);
@@ -197,7 +197,7 @@ public class Farm {
             startCoordinate = new Coordinate(55, 35);
             for (int i = startCoordinate.getX(); i - 55 < 10; i++) {
                 for (int j = startCoordinate.getY(); j - 35 < 10; j++) {
-                    try { //TODO
+                    try {
 
                         quarryTiles.add(this.tiles.get((i * 50) + j));
                         quarryTiles.getLast().setTileType(TileType.QUARRY);

@@ -7,11 +7,9 @@ import org.example.models.enums.Menu;
 
 public class MainMenuController extends Controller {
 
-    //TODO: Arani
     public Result menuEnter(String menuName) {
         switch (menuName) {
             case "avatar":
-                //TODO
                 break;
             case "profile":
                 App.setCurrentMenu(Menu.ProfileMenu);

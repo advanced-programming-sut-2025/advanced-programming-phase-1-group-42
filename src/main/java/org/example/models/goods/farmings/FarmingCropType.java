@@ -57,7 +57,6 @@ public enum FarmingCropType implements GoodType {
     // Special Crop (Grows in all seasons except Winter)
     ANCIENT_FRUIT("Ancient_Fruit", ForagingSeedType.ANCIENT_SEEDS, false, 0, 550),
 
-    //TODO
     //Giant Farming Goods do not forget to implement
 
     //Trees Crop Not eatable

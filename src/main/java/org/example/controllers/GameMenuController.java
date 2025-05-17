@@ -1023,6 +1023,14 @@ public class GameMenuController extends Controller {
     // Parsa
     // Animals & Fishing methods
     public Result buildBuilding(String buildingName, String x, String y) {
+        Coordinate coordinate = App.getCurrentGame().getCurrentPlayer().getCoordinate();
+        Tile tile = App.getCurrentGame().getMap().findTile(coordinate);
+        if (tile.getTileType() != TileType.GAME_BUILDING)
+            return new Result(false, "You should be in a game building to show all products!");
+        if (!App.getCurrentGame().getMap().findGameBuilding(coordinate).isInWorkingHours()) {
+            return new Result(false, App.getCurrentGame().getMap().findGameBuilding(coordinate).getName() + " hours have ended for today!");
+        }
+        
         buildingName = buildingName.trim();
         x = x.trim();
         y = y.trim();
@@ -1090,6 +1098,15 @@ public class GameMenuController extends Controller {
     }
 
     public Result buyAnimal(String animalType, String animalName) {
+        Coordinate coordinate = App.getCurrentGame().getCurrentPlayer().getCoordinate();
+        Tile tile = App.getCurrentGame().getMap().findTile(coordinate);
+        if (tile.getTileType() != TileType.GAME_BUILDING)
+            return new Result(false, "You should be in a game building to show all products!");
+        if (!App.getCurrentGame().getMap().findGameBuilding(coordinate).isInWorkingHours()) {
+            return new Result(false, App.getCurrentGame().getMap().findGameBuilding(coordinate).getName() + " hours have ended for today!");
+        }
+
+
         if (animalType == null || animalName == null || animalType.trim().isEmpty() || animalName.trim().isEmpty()) {
             return new Result(false, "Invalid animal type or name");
         }
@@ -1313,7 +1330,6 @@ public class GameMenuController extends Controller {
 
     public Result artisanGet(String artisanName) {
         artisanName = artisanName.trim();
-        //TODO
         return new Result(true, "");
     }
 

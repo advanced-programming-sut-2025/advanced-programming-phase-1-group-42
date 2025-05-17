@@ -5,7 +5,6 @@ import java.util.regex.Pattern;
 
 public enum TradeMenuCommands implements Command{
 
-    //TODO: Parsa
     //Trading
 
     TRADE_WITH_MONEY("\\s*trade\\s+-u\\s(?<receiver>\\S+)\\s+-t\\s(?<tradeType>\\S+)\\s+-i\\s(?<item>\\S+)\\s+-a\\s(?<amount>\\S+)\\s+-p\\s(?<price>\\S+)\\s*"),

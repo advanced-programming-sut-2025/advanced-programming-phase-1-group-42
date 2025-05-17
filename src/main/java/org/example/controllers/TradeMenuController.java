@@ -16,7 +16,6 @@ import java.util.*;
 
 public class TradeMenuController {
 
-    //TODO: Parsa
     // Trading methods
 
     public Result tradeWithMoney(String receiver, String tradeType, String item,

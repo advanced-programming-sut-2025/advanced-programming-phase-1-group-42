@@ -135,7 +135,6 @@ public enum GameMenuCommands implements Command {
     //Trading
     START_TRADE("\\s*start\\s*trade\\s*"),
 
-    //TODO: Nader
     // NPC
     MEET_NPC("\\s*meet\\s*NPC\\s+(?<npcName>\\S+)\\s*"),
     GIFT_NPC("\\s*gift\\s*NPC\\s+(?<npcName>\\S+)\\s+-i\\s+(?<item>\\S+)\\s*"),

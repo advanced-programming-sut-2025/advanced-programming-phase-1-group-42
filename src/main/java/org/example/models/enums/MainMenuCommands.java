@@ -4,7 +4,6 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 public enum MainMenuCommands implements Command {
-    //TODO: Arani
     ShowCurrentMenu("\\s*show\\s+current\\s+menu\\s*"),
     MenuEnter("\\s*menu\\s+enter\\s+(?<targetMenu>avatar|profile|game)\\s*"),
     Exit("\\s*menu\\s+exit\\s*"),
