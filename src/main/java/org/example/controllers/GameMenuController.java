@@ -1030,7 +1030,7 @@ public class GameMenuController extends Controller {
         if (!App.getCurrentGame().getMap().findGameBuilding(coordinate).isInWorkingHours()) {
             return new Result(false, App.getCurrentGame().getMap().findGameBuilding(coordinate).getName() + " hours have ended for today!");
         }
-        
+
         buildingName = buildingName.trim();
         x = x.trim();
         y = y.trim();
@@ -1052,7 +1052,6 @@ public class GameMenuController extends Controller {
                         .howManyInInventoryByType(ProductType.WOOD) &&
                         targetType.getStone() < App.getCurrentGame().getCurrentPlayer().getInventory()
                                 .howManyInInventoryByType(ProductType.STONE)) {
-                    Coordinate coordinate = new Coordinate(Integer.parseInt(x), Integer.parseInt(y));
                     Coordinate startCoordinate = new Coordinate((int) Integer.parseInt(x) - targetType.getSize().first() / 2,
                             (int) Integer.parseInt(y) - targetType.getSize().second() / 2);
 
