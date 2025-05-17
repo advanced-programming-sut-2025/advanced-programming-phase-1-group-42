@@ -547,7 +547,7 @@ public class GameMenuController extends Controller {
 
         boolean flag = false;
         for (ArrayList<Good> goods : App.getCurrentGame().getCurrentPlayer().getInventory().getList()) {
-            if (!goods.isEmpty() && goods.getFirst().getName().equals(toolName) && goods.size() == 1) {
+            if (!goods.isEmpty() && goods.getFirst().getName().equals(toolName) && goods.size() >= 1) {
                 App.getCurrentGame().getCurrentPlayer().setInHandGood((Tool) goods.getFirst());
                 flag = true;
                 break;
@@ -558,7 +558,7 @@ public class GameMenuController extends Controller {
             }
         }
         if (!flag)
-            return new Result(false, "You don't have " + toolName + "to use!");
+            return new Result(false, "You don't have " + toolName + " to use!");
 
         return new Result(true, "Now you can use " + toolName);
     }

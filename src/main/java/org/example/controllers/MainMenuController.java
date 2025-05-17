@@ -26,6 +26,7 @@ public class MainMenuController extends Controller {
 
     public Result exit() {
         DBInteractor.saveUsers();
+        DBInteractor.setStayLogin();
         App.setCurrentMenu(Menu.ExitMenu);
         return new Result(true, "Goodbye!");
     }
