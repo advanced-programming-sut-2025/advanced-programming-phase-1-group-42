@@ -1464,6 +1464,14 @@ public class GameMenuController extends Controller {
                 dateTime().message() + ": " + message
         ));
 
+        try {
+            if (App.getCurrentGame().getCurrentPlayer().getIsInteracted().get(player).equals(true)) {
+
+            }
+        } catch (Exception e) {
+            return new Result(false, "You are not interacted!");
+        }
+
         if (App.getCurrentGame().getCurrentPlayer().getIsInteracted().get(player).equals(false)) {
 
             // If they are couple
