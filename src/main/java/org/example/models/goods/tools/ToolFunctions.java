@@ -173,7 +173,9 @@ public class ToolFunctions {
                     );
                 }
             }
-            //TODO : باید درخت به بار رسیده باشد که بتوان محصولات آن را برداشت کرد
+            else {
+                App.getCurrentGame().getCurrentPlayer().getInventory().addGood(new ArrayList<>(Arrays.asList(good)));
+            }
         }
 
         tile.setGoods(newGoods);
@@ -190,14 +192,12 @@ public class ToolFunctions {
             if(good instanceof ForagingTree foragingTree) {
                 for (Pair<GoodType, Integer> product : ((ForagingTreeType) foragingTree.getType()).getProducts()) {
                     ArrayList<Good> newGoods = Good.newGoods(product.first(), product.second());
-                    //TODO
                     App.getCurrentGame().getCurrentPlayer().getInventory().addGood(newGoods);
                 }
             }
-            else if(good instanceof FarmingTree farmingTree) {
+            else if(good instanceof FarmingTree farmingTree && farmingTree.isFruitAvailable()) {
                 for (Pair<GoodType, Integer> product : ((FarmingTreeType) farmingTree.getType()).getProducts()) {
                     ArrayList<Good> newGoods = Good.newGoods(product.first(), product.second());
-                    //TODO
                     App.getCurrentGame().getCurrentPlayer().getInventory().addGood(newGoods);
                 }
             } else if(good instanceof FarmingTreeSapling) {
@@ -207,8 +207,6 @@ public class ToolFunctions {
             else
                 tileGoods.add(good);
 
-
-            //TODO باید درخت به بار رسیده باشد که بتوان محصولات آن را برداشت کرد
         }
 
         tile.setGoods(tileGoods);
@@ -432,16 +430,34 @@ public class ToolFunctions {
         if(tile == null)
             return new Result(false, "Selected Tile should be in your farm");
 
+        ArrayList<Good> goods = new ArrayList<>();
         for (Good good : tile.getGoods()) {
             if(good.getType() != ProductType.GRASS) {
                 App.getCurrentGame().getCurrentPlayer().getInventory().addGood(
                         new ArrayList<>(Arrays.asList(good))
                 );
             }
+            else if(good instanceof ForagingTree foragingTree) {
+                for (Pair<GoodType, Integer> product : ((ForagingTreeType) foragingTree.getType()).getProducts()) {
+                    ArrayList<Good> newGoods = Good.newGoods(product.first(), product.second());
+                    App.getCurrentGame().getCurrentPlayer().getInventory().addGood(newGoods);
+                }
+            }
+            else if(good instanceof FarmingTree farmingTree && farmingTree.isFruitAvailable()) {
+                for (Pair<GoodType, Integer> product : ((FarmingTreeType) farmingTree.getType()).getProducts()) {
+                    ArrayList<Good> newGoods = Good.newGoods(product.first(), product.second());
+                    App.getCurrentGame().getCurrentPlayer().getInventory().addGood(newGoods);
+                }
+            } else if(good instanceof FarmingTreeSapling) {
+                ArrayList<Good> newGoods = Good.newGoods(ProductType.WOOD, 2);
+                App.getCurrentGame().getCurrentPlayer().getInventory().addGood(newGoods);
+            }
+            else
+                goods.add(good);
         }
-        //TODO باید درخت به بار رسیده باشد که بتوان محصولات آن را برداشت کرد
 
-        tile.setGoods(new ArrayList<>());
+
+        tile.setGoods(goods);
         return null;
     }
 

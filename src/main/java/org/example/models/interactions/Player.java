@@ -105,6 +105,10 @@ public class Player {
             Buff currentBuff = type.getBuff();
             if (currentBuff != null) {
                 App.getCurrentGame().getCurrentPlayer().setBuff(currentBuff);
+                if (currentBuff.getType() == BuffType.ENERGY_BUFF) {
+                    App.getCurrentGame().getCurrentPlayer().getEnergy().setDayEnergyLeft(300);
+                    App.getCurrentGame().getCurrentPlayer().getEnergy().setMaxDayEnergy(300);
+                }
             }
         }
         App.getCurrentGame().getCurrentPlayer().getInventory().removeItemsFromInventory(food.getType(),1);

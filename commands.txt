@@ -291,3 +291,53 @@ cooking refrigerator put Carrot
 walk -l 119 80
 quests finish -i 1
 inventory show
+register -u Parsa -p Parsa1234* Parsa1234* -n Parsa -e Parsapak84@gmail.com -g Male
+register -u Mmd -p Parsa1234* Parsa1234* -n Parsa -e Parsapak84@gmail.com -g Female
+register -u Ali -p Parsa1234* Parsa1234* -n Parsa -e Parsapak84@gmail.com -g Male
+register -u Reza -p Parsa1234* Parsa1234* -n Parsa -e Parsapak84@gmail.com -g Male
+login -u Parsa -p Parsa1234*
+menu enter game
+game new -u Mmd Ali Reza
+
+print map -l 0 0 -s 160
+register -u Parsa -p Parsa1234* Parsa1234* -n Parsa -e Parsapak84@gmail.com -g Male
+register -u Mmd -p Parsa1234* Parsa1234* -n Parsa -e Parsapak84@gmail.com -g Female
+register -u Ali -p Parsa1234* Parsa1234* -n Parsa -e Parsapak84@gmail.com -g Male
+register -u Reza -p Parsa1234* Parsa1234* -n Parsa -e Parsapak84@gmail.com -g Male
+login -u Parsa -p Parsa1234*
+menu enter game
+game new -u Mmd Ali Reza
+cheat add item -n Triple Shot Espresso -c 10
+cheat add item -n Triple_Shot_Espresso -c 10
+eat Triple_Shot_Espresso
+energy show
+register -u Parsa -p Parsa1234* Parsa1234* -n Parsa -e Parsapak84@gmail.com -g Male
+register -u Mmd -p Parsa1234* Parsa1234* -n Parsa -e Parsapak84@gmail.com -g Female
+register -u Ali -p Parsa1234* Parsa1234* -n Parsa -e Parsapak84@gmail.com -g Male
+register -u Reza -p Parsa1234* Parsa1234* -n Parsa -e Parsapak84@gmail.com -g Male
+login -u Parsa -p Parsa1234*
+menu enter game
+game new -u Mmd Ali Reza
+cheat add item -n Triple_Shot_Espresso -c 10
+eat Triple_Shot_Espresso
+energy show
+register -u Parsa -p Parsa1234* Parsa1234* -n Parsa -e Parsapak84@gmail.com -g Male
+register -u Mmd -p Parsa1234* Parsa1234* -n Parsa -e Parsapak84@gmail.com -g Female
+register -u Ali -p Parsa1234* Parsa1234* -n Parsa -e Parsapak84@gmail.com -g Male
+register -u Reza -p Parsa1234* Parsa1234* -n Parsa -e Parsapak84@gmail.com -g Male
+login -u Parsa -p Parsa1234*
+menu enter game
+game new -u Mmd Ali Reza
+cheat add item -n Triple_Shot_Espresso -c 10
+eat Triple_Shot_Espresso
+energy show
+register -u Parsa -p Parsa1234* Parsa1234* -n Parsa -e Parsapak84@gmail.com -g Male
+register -u Mmd -p Parsa1234* Parsa1234* -n Parsa -e Parsapak84@gmail.com -g Female
+register -u Ali -p Parsa1234* Parsa1234* -n Parsa -e Parsapak84@gmail.com -g Male
+register -u Reza -p Parsa1234* Parsa1234* -n Parsa -e Parsapak84@gmail.com -g Male
+login -u Parsa -p Parsa1234*
+menu enter game
+game new -u Mmd Ali Reza
+cheat add item -n Triple_Shot_Espresso -c 10
+eat Triple_Shot_Espresso
+energy show

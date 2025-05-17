@@ -62,4 +62,11 @@ public class Energy {
         return dayEnergyLeft;
     }
 
+    public int getMaxDayEnergy() {
+        return maxDayEnergy;
+    }
+
+    public int getMaxTurnEnergy() {
+        return maxTurnEnergy;
+    }
 }

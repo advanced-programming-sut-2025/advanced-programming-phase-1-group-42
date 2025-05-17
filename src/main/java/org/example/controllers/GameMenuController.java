@@ -1820,7 +1820,7 @@ public class GameMenuController extends Controller {
 
             player.updateFriendShips(App.getCurrentGame().getCurrentPlayer());
             App.getCurrentGame().getCurrentPlayer().updateFriendShips(player);
-            player.setBuff(new Buff(BuffType.REJECT_BUFF, 7, 100));
+            player.setRejectionBuff(new Buff(BuffType.REJECT_BUFF, 7, 100));
             player.getInventory().addGood(new ArrayList<>(Arrays.asList(mainPlayer.getMarriageList().get(player))));
             player.getNews().add(mainPlayer.getUser().getUsername() + " has rejected your marriage!");
             mainPlayer.getFriendShips().remove(player);

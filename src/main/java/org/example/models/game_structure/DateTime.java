@@ -35,16 +35,14 @@ public class DateTime {
             if(App.getCurrentGame().getCurrentPlayer().getBuff().getRemainEffectTime() == 0){
                 App.getCurrentGame().getCurrentPlayer().setBuff(null);
                 App.getCurrentGame().getCurrentPlayer().getEnergy().setMaxDayEnergy(200);
+                App.getCurrentGame().getCurrentPlayer().getEnergy().setDayEnergyLeft(200);
+            }
+            else {
+                App.getCurrentGame().getCurrentPlayer().getEnergy().setDayEnergyLeft(300);
+                App.getCurrentGame().getCurrentPlayer().getEnergy().setMaxDayEnergy(300);
             }
         }
         for (Player player : App.getCurrentGame().getPlayers()) {
-            HashMap<Player, Pair<Integer, Integer>> friendships = player.getFriendShips();
-            for (Pair<Integer, Integer> friendshipData : friendships.values()) {
-                if (friendshipData.second() > (friendshipData.first() + 1) * 100) {
-                    friendshipData.setFirst(friendshipData.first() + 1);
-                }
-            }
-
             ArrayList<Pair<Integer, Good>> newArtisanGoods = new ArrayList<>();
             for (Pair<Integer, Good> integerGoodPair : player.getArtisansGoodTime()) {
                 if(integerGoodPair.first() - difTime <= 0) {
