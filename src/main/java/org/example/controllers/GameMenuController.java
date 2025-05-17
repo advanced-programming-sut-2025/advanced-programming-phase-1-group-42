@@ -1059,9 +1059,7 @@ public class GameMenuController extends Controller {
                     for (int sX = 0; sX < targetType.getSize().first(); sX++) {
                         for (int sY = 0; sY < targetType.getSize().second(); sY++) {
                             Tile tempTile = App.getCurrentGame().getMap().findTileByXY(sX + startCoordinate.getX(), sY + startCoordinate.getY());
-                            if (tempTile.getTileType().equals(TileType.GAME_BUILDING) ||
-                                    tempTile.getTileType().equals(TileType.BEACH) ||
-                                    tempTile.getTileType().equals(TileType.PLAYER_BUILDING)) {
+                            if (!tempTile.getTileType().equals(TileType.FARM)) {
                                 validSpace = false;
                             }
                         }
@@ -1456,12 +1454,12 @@ public class GameMenuController extends Controller {
 
         player.getTalkHistory().add(new Pair<>(
                 App.getCurrentGame().getCurrentPlayer(),
-                dateTime().message() + ": " + message
+                "\t<"+App.getCurrentGame().getCurrentPlayer().getPlayerUsername() + "> " + dateTime().message() + ": " + message
         ));
 
         App.getCurrentGame().getCurrentPlayer().getTalkHistory().add(new Pair<>(
                 player,
-                dateTime().message() + ": " + message
+                "\t<"+App.getCurrentGame().getCurrentPlayer().getPlayerUsername() + "> " + dateTime().message() + ": " + message
         ));
 
         try {
@@ -1506,8 +1504,7 @@ public class GameMenuController extends Controller {
         list.append("Talk History:\n");
         for (Pair<Player, String> talk : App.getCurrentGame().getCurrentPlayer().getTalkHistory()) {
             if (talk.first().getPlayerUsername().equals(username)) {
-                list.append("\t<").append(talk.first().getUser().getUsername()).append("> ")
-                        .append(talk.second()).append("\n");
+                list.append(talk.second()).append("\n");
             }
         }
 
