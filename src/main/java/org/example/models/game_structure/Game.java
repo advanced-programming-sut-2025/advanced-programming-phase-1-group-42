@@ -321,6 +321,7 @@ public class Game {
             }
             int numberOfCrows = (int) Math.floor((double) cropCounter / 16);
             int crowCounter = 0;
+            System.out.println("there is a chance " + crowCounter + " Crows would attack "+ player.getUser().getUsername() + " crops");
 
             while (numberOfCrows != crowCounter) {
                 int randomAttack = (int) Math.floor((Math.random() * 4));
@@ -331,7 +332,6 @@ public class Game {
                         crowCounter++;
                     }
                 }
-                System.out.println("there is a chance " + crowCounter + " Crows would attack your crops");
                 if (randomAttack == 2) {
                     if (!(randomTile.checkAroundForScarCrow())) {
                         Iterator<Good> iterator = randomTile.getGoods().iterator();

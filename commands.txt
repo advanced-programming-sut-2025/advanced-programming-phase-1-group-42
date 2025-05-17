@@ -16,3 +16,25 @@ login -u Marsa -p Parsa1234* –stay-logged-in
 menu exit
 menu enter profile
 user info
+register -u Parsa -p Parsa1234* Parsa1234* -n Parsa -e Parsapak84@gmail.com -g Male
+register -u Mmd -p Parsa1234* Parsa1234* -n Parsa -e Parsapak84@gmail.com -g Male
+register -u Ali -p Parsa1234* Parsa1234* -n Parsa -e Parsapak84@gmail.com -g Male
+register -u Reza -p Parsa1234* Parsa1234* -n Parsa -e Parsapak84@gmail.com -g Male
+login -u Parsa -p Parsa1234*
+menu enter game
+game new -u Mmd Ali Reza
+load game
+
+print map -l 0 0 -s 40
+cheat date advance 1d
+
+cheat advance date 1d
+register -u Parsa -p Parsa1234* Parsa1234* -n Parsa -e Parsapak84@gmail.com -g Male
+register -u Mmd -p Parsa1234* Parsa1234* -n Parsa -e Parsapak84@gmail.com -g Male
+register -u Ali -p Parsa1234* Parsa1234* -n Parsa -e Parsapak84@gmail.com -g Male
+register -u Reza -p Parsa1234* Parsa1234* -n Parsa -e Parsapak84@gmail.com -g Male
+login -u Parsa -p Parsa1234*
+menu enter game
+game new -u Mmd Ali Reza
+load game
+cheat advance date 1d
