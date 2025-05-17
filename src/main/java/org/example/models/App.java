@@ -4,6 +4,7 @@ import java.awt.*;
 import java.util.ArrayList;
 import java.util.Arrays;
 
+import org.example.MusicPlayer;
 import org.example.models.enums.Menu;
 import org.example.models.game_structure.Farm;
 import org.example.models.game_structure.Game;
@@ -63,6 +64,14 @@ public class App {
     }
 
     public static void startGame() {
+        MusicPlayer player = new MusicPlayer("src/main/java/org/example/stardew.wav");
+
+        // اجرای پخش در یک Thread جداگانه
+        Thread musicThread = new Thread(player);
+        musicThread.setDaemon(true); // اگر برنامه تموم شه، این Thread هم بسته میشه
+        musicThread.start();
+
+
         try {
             DBInteractor.loadUsers();
         } catch (Exception e) {
