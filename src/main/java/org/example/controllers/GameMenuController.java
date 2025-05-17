@@ -1,5 +1,18 @@
 package org.example.controllers;
 
+import com.mongodb.ConnectionString;
+import com.mongodb.MongoClientSettings;
+import com.mongodb.ServerApi;
+import com.mongodb.ServerApiVersion;
+import com.mongodb.client.MongoClient;
+import com.mongodb.client.MongoClients;
+import com.mongodb.client.MongoCollection;
+import com.mongodb.client.MongoDatabase;
+import com.mongodb.client.model.Filters;
+import com.mongodb.client.model.Updates;
+import com.mongodb.client.result.UpdateResult;
+import org.bson.Document;
+import org.bson.conversions.Bson;
 import org.example.models.App;
 import org.example.models.Pair;
 import org.example.models.Result;
@@ -261,6 +274,31 @@ public class GameMenuController extends Controller {
         }
 
         App.getGames().remove(App.getCurrentGame());
+        String connectionString = "mongodb+srv://namoder123:passme@cluster01.unmuffl.mongodb.net/?retryWrites=true&w=majority&appName=Cluster01";
+
+        ServerApi serverApi = ServerApi.builder()
+                .version(ServerApiVersion.V1)
+                .build();
+
+        MongoClientSettings settings = MongoClientSettings.builder()
+                .applyConnectionString(new ConnectionString(connectionString))
+                .serverApi(serverApi)
+                .build();
+
+        try (MongoClient mongoClient = MongoClients.create(settings)) {
+            MongoDatabase database = mongoClient.getDatabase("Game");
+            MongoCollection<Document> collection = database.getCollection("USERS");
+
+            Bson filter ;
+            for (Player player : App.getCurrentGame().getPlayers()) {
+                filter = Filters.eq("username",player.getUser().getUsername());
+                Bson update = Updates.set("setPlaying", false);
+                UpdateResult result = collection.updateOne(filter, update);
+
+            }
+        } catch (Exception e) {
+            System.out.println("Error while setting is Playing  user.");
+        }
         App.setCurrentGame(null);
         return new Result(true, "Game terminated successfully!");
 
