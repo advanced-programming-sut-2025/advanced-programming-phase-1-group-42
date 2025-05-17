@@ -146,7 +146,8 @@ public enum GameMenuCommands implements Command {
     SHOW_PLAYER_COORDINATE("\\s*show\\s*coordinate\\s*"),
     SHOW_BALANCE("\\s*show\\s*balance\\s*"),
 
-    Test("test");
+    Test("test"),
+    SHOW_FRIDGE("\\s*show\\s+fridge\\s*");
 
 
     private final String pattern;

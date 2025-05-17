@@ -2,6 +2,7 @@ package org.example.views;
 
 import org.example.controllers.LoginRegisterMenuController;
 import org.example.models.enums.LoginRegisterCommands;
+import org.example.models.game_structure.Game;
 
 import java.util.Scanner;
 import java.util.regex.Matcher;
@@ -12,6 +13,9 @@ public class LoginRegisterMenu implements AppMenu {
     @Override
     public void check(Scanner scanner) {
         String input = scanner.nextLine();
+        if (input != null) {
+            Game.writeIntoFile(input);
+        }
 
         Matcher matcher;
         if(LoginRegisterCommands.Exit.matcher(input) != null) {

@@ -20,6 +20,8 @@ import org.example.models.interactions.NPCs.NPCFriendship;
 import org.example.models.interactions.Player;
 import org.example.models.interactions.PlayerBuildings.FarmBuilding;
 
+import java.io.FileWriter;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
@@ -36,6 +38,17 @@ public class Game {
     private Player currentPlayingPlayer;
     private final ArrayList<NPC> NPCs = new ArrayList<>();
     private int counter = 0;
+    private static FileWriter myWriter;
+
+    public static void writeIntoFile(String string) {
+        try (FileWriter myWriter = new FileWriter("commands.txt", true)) {
+            myWriter.append(string);
+            myWriter.append("\n");
+        } catch (Exception e) {
+            System.out.println("Error writing to file");
+        }
+    }
+
 
     public void setPlayers(ArrayList<Player> players) {
         this.players.addAll(players);
@@ -71,7 +84,7 @@ public class Game {
             counter = 0;
             this.dateTime.timeFlow();
         }
-        if(players.get(counter).getEnergy().isAwake()) {
+        if (players.get(counter).getEnergy().isAwake()) {
             currentPlayer = players.get(counter);
         } else {
             nextPlayer();
@@ -86,9 +99,13 @@ public class Game {
         return dateTime;
     }
 
-    public String getWeatherName() {return weather.getName();}
+    public String getWeatherName() {
+        return weather.getName();
+    }
 
-    public Weather getWeather() {return weather;}
+    public Weather getWeather() {
+        return weather;
+    }
 
     public void cheatSetWeather(Weather weather) {
         tomorrow.setWeather(weather);
@@ -98,23 +115,23 @@ public class Game {
         return tomorrow;
     }
 
-    public void gameFlow(){
+    public void gameFlow() {
 
         // Weather setups for next day
         App.getCurrentGame().getDateTime().setTime(9);
         this.weather = tomorrow.getWeather();
         tomorrow.setWeather(weather);
-        if(this.weather instanceof Storm){
+        if (this.weather instanceof Storm) {
             ((Storm) this.weather).randomThunder();
             ((Storm) this.weather).waterAllTiles();
         }
-        if(this.weather instanceof Rain){
+        if (this.weather instanceof Rain) {
             ((Rain) this.weather).waterAllTiles();
         }
-        for(Player player : App.getCurrentGame().getPlayers()){
-            if(player.getRejectionBuff() != null){
+        for (Player player : App.getCurrentGame().getPlayers()) {
+            if (player.getRejectionBuff() != null) {
                 player.getRejectionBuff().setRemainEffectTime();
-                if(player.getRejectionBuff().getRemainEffectTime() == 0){
+                if (player.getRejectionBuff().getRemainEffectTime() == 0) {
                     player.setRejectionBuff(null);
                 }
                 player.getEnergy().setTurnValueLeft(50);
@@ -127,7 +144,7 @@ public class Game {
             }
         }
 
-        for(Tile tile : App.getCurrentGame().getMap().getTiles()){
+        for (Tile tile : App.getCurrentGame().getMap().getTiles()) {
             tile.setWatered(false);
         }
 
@@ -142,14 +159,14 @@ public class Game {
             shippingBin.emptyShippingBin();
         }
 
-        if(App.getCurrentGame().getDateTime().getDayOfSeason() == 1){
+        if (App.getCurrentGame().getDateTime().getDayOfSeason() == 1) {
             App.getCurrentGame().getDateTime().farmingSeasonChange();
         }
 
         //for animals
         for (Player player : players) {
-            for (FarmBuilding building: player.getFarm().getFarmBuildings()){
-                for (Animal animal: building.getAnimals()){
+            for (FarmBuilding building : player.getFarm().getFarmBuildings()) {
+                for (Animal animal : building.getAnimals()) {
                     animal.animalDayResult();
                 }
             }
@@ -213,7 +230,7 @@ public class Game {
         Coordinate coordinate = App.getCurrentGame().getCurrentPlayer().getCoordinate();
         for (Tile tile : map.getTiles()) {
             for (Good good : tile.getGoods()) {
-                if(good instanceof Crafting crafting) {
+                if (good instanceof Crafting crafting) {
                     switch (crafting.getType()) {
                         case CraftingType.SPRINKLER -> {
                             for (int i = 0; i < 8; i += 2) {
@@ -221,7 +238,7 @@ public class Game {
                                         coordinate.getY() + Coordinate.coordinates.get(i).getY());
 
                                 Tile t = App.getCurrentGame().getMap().findTile(coordinate1);
-                                if(t != null) {
+                                if (t != null) {
                                     t.setWatered(true);
                                 }
                             }
@@ -232,7 +249,7 @@ public class Game {
                                         coordinate.getY() + Coordinate.coordinates.get(i).getY());
 
                                 Tile t = App.getCurrentGame().getMap().findTile(coordinate1);
-                                if(t != null) {
+                                if (t != null) {
                                     t.setWatered(true);
                                 }
                             }
@@ -244,7 +261,7 @@ public class Game {
                                             coordinate.getY() + j * Coordinate.coordinates.get(i).getY());
 
                                     Tile t = App.getCurrentGame().getMap().findTile(coordinate1);
-                                    if(t != null) {
+                                    if (t != null) {
                                         t.setWatered(true);
                                     }
                                 }
@@ -259,7 +276,7 @@ public class Game {
         }
 
         //NPC friendShips
-        for (NPC npc : getNPCs()){
+        for (NPC npc : getNPCs()) {
             for (NPCFriendship friendship : npc.getFriendships()) {
                 friendship.setFriendshipToday();
             }
@@ -276,7 +293,7 @@ public class Game {
 
     public Player findPlayer(String playerName) {
         for (Player player : players) {
-            if(player.getUser().getUsername().equals(playerName))
+            if (player.getUser().getUsername().equals(playerName))
                 return player;
         }
         return null;
@@ -289,11 +306,12 @@ public class Game {
     public void setDateTime(DateTime dateTime) {
         this.dateTime = dateTime;
     }
-    public void crowAttack(){
-        for(Player player : App.getCurrentGame().getPlayers()){
-        int cropCounter = 0;
-            for(Tile tile :player.getFarm().getTiles()){
-                if(!(tile.getTileType().equals(TileType.GREEN_HOUSE))){
+
+    public void crowAttack() {
+        for (Player player : App.getCurrentGame().getPlayers()) {
+            int cropCounter = 0;
+            for (Tile tile : player.getFarm().getTiles()) {
+                if (!(tile.getTileType().equals(TileType.GREEN_HOUSE))) {
                     for (Good good : tile.getGoods()) {
                         if (good instanceof FarmingCrop) {
                             cropCounter++;
@@ -301,20 +319,20 @@ public class Game {
                     }
                 }
             }
-            int numberOfCrows =(int)Math.floor((double) cropCounter / 16);
+            int numberOfCrows = (int) Math.floor((double) cropCounter / 16);
             int crowCounter = 0;
 
-            while(numberOfCrows != crowCounter){
-                int randomAttack = (int)Math.floor((Math.random() * 4));
-                int x =(int)Math.floor(Math.random()*(player.getFarm().getTiles().size()));
+            while (numberOfCrows != crowCounter) {
+                int randomAttack = (int) Math.floor((Math.random() * 4));
+                int x = (int) Math.floor(Math.random() * (player.getFarm().getTiles().size()));
                 Tile randomTile = player.getFarm().getTiles().get(x);
                 for (Good good : randomTile.getGoods()) {
                     if (good instanceof FarmingCrop) {
                         crowCounter++;
                     }
                 }
-                if(randomAttack == 2){
-                    if(!(randomTile.checkAroundForScarCrow())) {
+                if (randomAttack == 2) {
+                    if (!(randomTile.checkAroundForScarCrow())) {
                         Iterator<Good> iterator = randomTile.getGoods().iterator();
                         while (iterator.hasNext()) {
                             Good good = iterator.next();
@@ -323,9 +341,9 @@ public class Game {
                             }
                         }
                     }
-                } else if( randomAttack == 3){
-                    if(!(randomTile.checkAroundForScarCrow())) {
-                        for(Good good : randomTile.getGoods()) {
+                } else if (randomAttack == 3) {
+                    if (!(randomTile.checkAroundForScarCrow())) {
+                        for (Good good : randomTile.getGoods()) {
                             if (good instanceof FarmingTree) {
                                 Iterator<Good> iterator = randomTile.getGoods().iterator();
                                 while (iterator.hasNext()) {
@@ -346,10 +364,12 @@ public class Game {
     public void setTomorrow(Tomorrow tomorrow) {
         this.tomorrow = tomorrow;
     }
+
     public void setWeather(Weather weather) {
         this.weather = weather;
     }
-    public void setNPCs(ArrayList<NPC> npcs) {
-        this.NPCs.addAll(npcs);
+
+    public void setNPCs(ArrayList<NPC> NPCs) {
+        this.NPCs.addAll(NPCs);
     }
 }

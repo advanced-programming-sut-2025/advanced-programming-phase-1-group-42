@@ -6,6 +6,7 @@ import org.example.models.App;
 import org.example.models.enums.GameMenuCommands;
 import org.example.models.enums.LoginRegisterCommands;
 import org.example.models.enums.TradeMenuCommands;
+import org.example.models.game_structure.Game;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -20,6 +21,9 @@ public class GameMenu implements AppMenu {
     @Override
     public void check(Scanner scanner) {
         String input = scanner.nextLine();
+        if (input != null) {
+            Game.writeIntoFile(input);
+        }
 
         Matcher matcher;
 
@@ -47,7 +51,7 @@ public class GameMenu implements AppMenu {
                 System.out.println("meow");
             }
 
-            System.out.print(controller.newGame(usernames, scanner));
+            System.out.println(controller.newGame(usernames, scanner));
         } else if ((matcher = GameMenuCommands.LOAD_GAME.matcher(input)) != null) {
             System.out.println(controller.loadGame());
         }
@@ -277,7 +281,9 @@ public class GameMenu implements AppMenu {
             System.out.println(controller.showBalance());
          } else if ((matcher = GameMenuCommands.Test.matcher(input)) != null) {
             System.out.println(controller.test());
-         }
+         } else if ((matcher = GameMenuCommands.SHOW_FRIDGE.matcher(input)) != null) {
+             App.getCurrentGame().getCurrentPlayer().getFridge().showFridge();
+        }
 
 
          else {

@@ -1,5 +1,6 @@
 package org.example.models.game_structure;
 
+import org.example.models.Pair;
 import org.example.models.goods.Good;
 import org.example.models.goods.GoodType;
 import org.example.models.goods.foods.Food;
@@ -18,6 +19,15 @@ public class Fridge {
     public Fridge (){
         for (int i = 0; i < 20; i++) {
             inFridgeItems.add(new ArrayList<>());
+        }
+    }
+
+    public void showFridge() {
+        System.out.println("fridge items: ");
+        for (ArrayList<Good> goods : inFridgeItems) {
+            if (!goods.isEmpty()) {
+                System.out.println("\t"+goods.getFirst().getType().getName()+ " " + goods.size() );
+            }
         }
     }
 
