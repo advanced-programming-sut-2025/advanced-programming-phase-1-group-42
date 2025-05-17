@@ -4,6 +4,7 @@ import org.example.models.App;
 import org.example.models.Pair;
 import org.example.models.game_structure.*;
 import org.example.models.goods.Good;
+import org.example.models.goods.artisans.Artisan;
 import org.example.models.goods.foods.Food;
 import org.example.models.goods.foods.FoodType;
 import org.example.models.goods.recipes.CookingRecipe;
@@ -52,6 +53,8 @@ public class Player {
 
     private final ArrayList<Quest> questList = new ArrayList<>();
     private Fridge fridge = new Fridge();
+
+    private ArrayList<Pair<Integer, Good>> artisansGoodTime = new ArrayList<>();
 
     public void setFarm(Farm farm) {
         this.farm = farm;
@@ -278,5 +281,13 @@ public class Player {
 //                        (k, pair) -> new Pair<>(pair.first() - 1, friendship.second()));
 //            }
 //        }
+    }
+
+    public ArrayList<Pair<Integer, Good>> getArtisansGoodTime() {
+        return artisansGoodTime;
+    }
+
+    public void setArtisansGoodTime(ArrayList<Pair<Integer, Good>> artisansGoodTime) {
+        this.artisansGoodTime = artisansGoodTime;
     }
 }

@@ -1,6 +1,7 @@
 package org.example.models.goods.artisans;
 
 import org.example.models.App;
+import org.example.models.Pair;
 import org.example.models.Result;
 import org.example.models.game_structure.Coordinate;
 import org.example.models.game_structure.Tile;
@@ -127,7 +128,7 @@ public class ArtisanFunctions {
             return new Result(false, "You should input your desired ingredients!");
 
         ArrayList<Good> goods = App.getCurrentGame().getCurrentPlayer().getInventory().isInInventory(ourIngredients.getFirst());
-        ArtisanType artisanTypeOrginal = null;
+        ArtisanType artisanTypeOriginal = null;
         boolean flag = false;
         Quadruple<GoodType, Integer, Double, Double> ingredient = null;
         if(goods == null)
@@ -135,7 +136,7 @@ public class ArtisanFunctions {
 
         for (ArtisanType artisanType : ingredients) {
             ingredient = artisanType.hasIngredient(goods.getFirst().getType());
-            artisanTypeOrginal = artisanType;
+            artisanTypeOriginal = artisanType;
             if(ingredient != null) {
                 flag = true;
                 break;
@@ -147,14 +148,15 @@ public class ArtisanFunctions {
         if(goods.size() < ingredient.b)
             return new Result(false, "You don't have enough ingredients in your inventory!");
 
-        Good good = Good.newGood(artisanTypeOrginal);
+        Good good = Good.newGood(artisanTypeOriginal);
         ((Artisan) good).setGoodType(goods.getFirst().getType());
         for (int i = 0; i < ingredient.b; i++) {
             goods.removeLast();
         }
 
-        App.getCurrentGame().getCurrentPlayer().getInventory().addGood(new ArrayList<>(Arrays.asList(good)));
-        return new Result(true, "You have extracted " + good.getName() + " by " + crafting.getName());
+
+        App.getCurrentGame().getCurrentPlayer().getArtisansGoodTime().add(new Pair<>(artisanTypeOriginal.getProcessingHour(), good));
+        return new Result(true, "You will extract " + good.getName() + " by " + crafting.getName() + " in " + artisanTypeOriginal.getProcessingHour() + " hours!");
     }
 
     private static Result doubleArtisan(Crafting crafting, ArrayList<String> ourIngredients, ArtisanType ingredient1) {
@@ -177,13 +179,13 @@ public class ArtisanFunctions {
 
         Good good = Good.newGood(ingredient1);
         ((Artisan) good).setGoodType(goods1.getFirst().getType());
-        App.getCurrentGame().getCurrentPlayer().getInventory().addGood(new ArrayList<>(Arrays.asList(good)));
+        App.getCurrentGame().getCurrentPlayer().getArtisansGoodTime().add(new Pair<>(ingredient1.getProcessingHour(), good));
 
         goods2.removeLast();
         for (int i = 0; i < metalIngredient.b; i++)
             goods1.removeLast();
 
-        return new Result(true, "A " + good.getName() + " has been added to your inventory");
+        return new Result(true, "A " + good.getName() + " has will be added to your inventory in " + ingredient1.getProcessingHour() + " hours!");
     }
 
     private static Result useCherryBomb(Crafting crafting) {
@@ -252,9 +254,9 @@ public class ArtisanFunctions {
         for (int i = 0; i < ingredient.b; i++)
             goods.removeLast();
 
-        App.getCurrentGame().getCurrentPlayer().getInventory().addGood(Good.newGoods(ArtisanType.COAL, 1));
+        App.getCurrentGame().getCurrentPlayer().getArtisansGoodTime().add(new Pair<>(ArtisanType.COAL.getProcessingHour(), Good.newGood(ArtisanType.COAL)));
         return new Result(true, crafting.getName() + " has been used & A " + ArtisanType.COAL.getName() +
-                " has been added to your inventory");
+                " has will be added to your inventory in " + ArtisanType.COAL.getProcessingHour() + " hours!");
     }
 
     private static Result useFurnace(Crafting crafting, ArrayList<String> ourIngredients) {
@@ -281,8 +283,8 @@ public class ArtisanFunctions {
             return new Result(false, "You should be in your farm to use " + crafting.getName() + "!");
 
         Good good = Good.newGood(ArtisanType.HONEY);
-        App.getCurrentGame().getCurrentPlayer().getInventory().addGood(new ArrayList<>(Arrays.asList(good)));
-        return new Result(true, "You have extracted Honey by " + crafting.getName());
+        App.getCurrentGame().getCurrentPlayer().getArtisansGoodTime().add(new Pair<>(ArtisanType.HONEY.getProcessingHour(), good));
+        return new Result(true, "You will extract Honey by " + crafting.getName() + " in " + ArtisanType.HONEY.getProcessingHour() + " hours!");
     }
 
     private static Result useCheesePress(Crafting crafting, ArrayList<String> ourIngredients) {
@@ -312,8 +314,8 @@ public class ArtisanFunctions {
         for (int i = 0; i < milkIngredient.b; i++)
             milks.removeLast();
 
-        App.getCurrentGame().getCurrentPlayer().getInventory().addGood(new ArrayList<>(Arrays.asList(good)));
-        return new Result(true, "You have extracted " + good.getName() + " by " + crafting.getName());
+        App.getCurrentGame().getCurrentPlayer().getArtisansGoodTime().add(new Pair<>(artisanType.getProcessingHour(), good));
+        return new Result(true, "You will extract " + good.getName() + " by " + crafting.getName() + " in " + artisanType.getProcessingHour() + " hours!");
     }
 
     private static Result useKeg(Crafting crafting, ArrayList<String> ourIngredients) {
@@ -350,8 +352,8 @@ public class ArtisanFunctions {
             goods.removeLast();
         }
 
-        App.getCurrentGame().getCurrentPlayer().getInventory().addGood(new ArrayList<>(Arrays.asList(good)));
-        return new Result(true, "You have extracted " + good.getName() + " by " + crafting.getName());
+        App.getCurrentGame().getCurrentPlayer().getArtisansGoodTime().add(new Pair<>(ArtisanType.CLOTH.getProcessingHour(), good));
+        return new Result(true, "You will extract " + good.getName() + " by " + crafting.getName() + " in " + ArtisanType.CLOTH.getProcessingHour() + " hours!");
     }
 
     private static Result useMayonnaiseMachine(Crafting crafting, ArrayList<String> ourIngredients) {
@@ -417,8 +419,8 @@ public class ArtisanFunctions {
             goods.removeLast();
         }
 
-        App.getCurrentGame().getCurrentPlayer().getInventory().addGood(new ArrayList<>(Arrays.asList(good)));
-        return new Result(true, "You have extracted " + ArtisanType.VINEGAR.getName() + " by " + crafting.getName());
+        App.getCurrentGame().getCurrentPlayer().getArtisansGoodTime().add(new Pair<>(ArtisanType.VINEGAR.getProcessingHour(), good));
+        return new Result(true, "You will extract " + ArtisanType.VINEGAR.getName() + " by " + crafting.getName() + " in " + ArtisanType.VINEGAR.getProcessingHour() + " hours!");
     }
 
     private static Result useGrassStarter(Crafting crafting) {

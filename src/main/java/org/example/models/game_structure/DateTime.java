@@ -8,6 +8,8 @@ import org.example.models.goods.Good;
 import org.example.models.goods.farmings.FarmingCrop;
 import org.example.models.interactions.Player;
 
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Iterator;
 
@@ -18,11 +20,13 @@ public class DateTime {
 
     // A Function to change game base of the cycle of players and moves the game forward
     public void timeFlow() {
+        int difTime = 1;
         time++;
 
         if (time >= 22) {
             App.getCurrentGame().gameFlow();
             time = 9;
+            difTime = 11;
             date++;
         }
 
@@ -40,6 +44,17 @@ public class DateTime {
                     friendshipData.setFirst(friendshipData.first() + 1);
                 }
             }
+
+            ArrayList<Pair<Integer, Good>> newArtisanGoods = new ArrayList<>();
+            for (Pair<Integer, Good> integerGoodPair : player.getArtisansGoodTime()) {
+                if(integerGoodPair.first() - difTime <= 0) {
+                    App.getCurrentGame().getCurrentPlayer().getInventory().addGood(new ArrayList<>(Arrays.asList(integerGoodPair.second())));
+                    App.getCurrentGame().getCurrentPlayer().getNews().add(integerGoodPair.second().getName() + " has been added to the inventory");
+                }
+                else
+                    newArtisanGoods.add(new Pair<>(integerGoodPair.first() - difTime, integerGoodPair.second()));
+            }
+            player.setArtisansGoodTime(newArtisanGoods);
         }
 
     }

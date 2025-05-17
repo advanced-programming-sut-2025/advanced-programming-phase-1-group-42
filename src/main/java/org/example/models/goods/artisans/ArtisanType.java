@@ -366,6 +366,10 @@ public enum ArtisanType implements GoodType {
         }
         return null;
     }
+
+    public int getProcessingHour() {
+        return processingHour;
+    }
 }
 
 
