@@ -64,16 +64,16 @@ public class App {
     }
 
     public static void startGame() {
-        MusicPlayer player = new MusicPlayer("src/main/java/org/example/stardew.wav");
-
-        // اجرای پخش در یک Thread جداگانه
-        Thread musicThread = new Thread(player);
-        musicThread.setDaemon(true); // اگر برنامه تموم شه، این Thread هم بسته میشه
-        musicThread.start();
+//        MusicPlayer player = new MusicPlayer("src/main/java/org/example/stardew.wav");
+//
+//        // اجرای پخش در یک Thread جداگانه
+//        Thread musicThread = new Thread(player);
+//        musicThread.setDaemon(true); // اگر برنامه تموم شه، این Thread هم بسته میشه
+//        musicThread.start();
 
 
         try {
-            DBInteractor.loadUsers();
+//            DBInteractor.loadUsers();
         } catch (Exception e) {
             System.out.println("Oh-No! Something went wrong while loading users!");
         }

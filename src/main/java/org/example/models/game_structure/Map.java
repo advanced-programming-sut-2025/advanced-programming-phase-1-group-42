@@ -3,6 +3,7 @@ package org.example.models.game_structure;
 import org.example.models.App;
 import org.example.models.enums.TileType;
 import org.example.models.goods.Good;
+import org.example.models.goods.farmings.FarmingCrop;
 import org.example.models.goods.farmings.FarmingTree;
 import org.example.models.goods.farmings.FarmingTreeSapling;
 import org.example.models.goods.foragings.*;
@@ -132,6 +133,12 @@ public class Map {
                                 map[i][j] = colorMap.get("Black") + colorMap.get("Green_Background") + "T" + colorMap.get("Reset");
 
                                 printed = true;
+                            } else if(good instanceof ForagingSeed) {
+                                map[i][j] = colorMap.get("Black") + colorMap.get("Green_Background") + "S" + colorMap.get("Reset");
+                                printed = true;
+                            } else if(good instanceof ForagingCrop | good instanceof FarmingCrop) {
+                                map[i][j] = colorMap.get("Black") + colorMap.get("Green_Background") + "C" + colorMap.get("Reset");
+                                printed = true;
                             }
                         }
                         if (!printed) {
@@ -216,8 +223,8 @@ public class Map {
                     } else if (tile.getTileType() == TileType.SQUARE) {
                         map[i][j] = colorMap.get("Black") + colorMap.get("Red_Background") + "O" + colorMap.get("Reset");
 
-                    } else if (tile.getTileType() == TileType.PLOWED_FARM) {
-                        map[i][j] = colorMap.get("Black") + colorMap.get("Bright_Green_Background") + "p" + colorMap.get("Reset");
+//                    } else if (tile.getTileType() == TileType.PLOWED_FARM) {
+//                        map[i][j] = colorMap.get("Black") + colorMap.get("Bright_Green_Background") + "p" + colorMap.get("Reset");
 
                     } else if (tile.getTileType() == TileType.SHIPPING_BIN) {
                         map[i][j] = colorMap.get("Gray") + colorMap.get("Gold_Background") + " " + colorMap.get("Reset");
@@ -254,11 +261,11 @@ public class Map {
                             }
                         }
                     }
-                    if(tile.getTileType() == TileType.PLOWED_FARM) {
-                        if(tile.isWatered()) {
-                            map[i][j] = colorMap.get("Teal_Background") + "p" + colorMap.get("Reset");
-                        }
-                    }
+//                    if(tile.getTileType() == TileType.PLOWED_FARM) {
+//                        if(tile.isWatered()) {
+//                            map[i][j] = colorMap.get("Teal_Background") + "p" + colorMap.get("Reset");
+//                        }
+//                    }
                 }
 
                 int counter = 0;
@@ -757,6 +764,7 @@ public class Map {
                         }
                     } else if (good.getType() != null && good.getType().equals(ProductType.SPEED_GRO)) {
                         Iterator<Good> iterator2 = tile.getGoods().iterator();
+                        ArrayList<Good> goodsToAdd = new ArrayList<>();
                         while (iterator2.hasNext()) {
                             Good good2 = iterator2.next();
                             if (good2 instanceof ForagingSeed) {
@@ -764,23 +772,24 @@ public class Map {
                                 seed.dailyChange();
                                 if (seed.isCrop()) {
                                     iterator2.remove();
-                                    tile.getGoods().add(Good.newGood(seed.getCropType()));
+                                    goodsToAdd.add(Good.newGood(seed.getCropType()));
                                 }
-                            } else if (good instanceof FarmingTreeSapling) {
-                                FarmingTreeSapling sapling = (FarmingTreeSapling) good;
+                            } else if (good instanceof FarmingTreeSapling sapling) {
                                 sapling.dailyChange();
                                 if (sapling.isTree()) {
                                     iterator.remove();
-                                    tile.getGoods().add(Good.newGood(sapling.getTreeType()));
+                                    goodsToAdd.add(Good.newGood(sapling.getTreeType()));
                                 }
                             } else if (good instanceof ForagingMixedSeed) {
                                 ForagingMixedSeed seed = (ForagingMixedSeed) good;
                                 seed.dailyChange();
                                 if (seed.isCrop()) {
                                     iterator.remove();
-                                    tile.getGoods().add(Good.newGood(seed.getCropType()));
+                                    goodsToAdd.add(Good.newGood(seed.getCropType()));
                                 }
                             }
+
+                            Game.addGoodToTile(tile, goodsToAdd);
                         }
                     }
                 }

@@ -29,10 +29,7 @@ import org.example.models.goods.Good;
 import org.example.models.goods.GoodType;
 import org.example.models.goods.artisans.Artisan;
 import org.example.models.goods.artisans.ArtisanFunctions;
-import org.example.models.goods.farmings.FarmingCrop;
-import org.example.models.goods.farmings.FarmingCropType;
-import org.example.models.goods.farmings.FarmingTree;
-import org.example.models.goods.farmings.FarmingTreeSapling;
+import org.example.models.goods.farmings.*;
 import org.example.models.goods.foods.Food;
 import org.example.models.goods.foods.FoodType;
 import org.example.models.goods.foragings.*;
@@ -119,6 +116,14 @@ public class GameMenuController extends Controller {
                 return value;
             }
         }
+
+        for (FarmingTreeSaplingType value : FarmingTreeSaplingType.values()) {
+            if (value.getName().equals(craftName)) {
+                return value;
+            }
+        }
+
+
         return null;
     }
 

@@ -48,4 +48,12 @@ public class FarmingTree extends Farming {
         return isFruitAvailable;
     }
 
+    @Override
+    public String toString() {
+        return "FarmingTree: \n" +
+                "type: " + type +
+                "\nharvestCycleCounter: " + harvestCycleCounter +
+                "\nisFruitAvailable: " + isFruitAvailable +
+                "\nlevel: " + level + "\n";
+    }
 }

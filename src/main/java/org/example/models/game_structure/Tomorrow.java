@@ -27,7 +27,7 @@ public class Tomorrow {
     }
 
     public void setTomorrowWeather(Game game) {
-        double probability = (new Random(game.getDateTime().getTime())).nextInt(11);
+        double probability = (new Random()).nextInt(11);
 
         if (game.getDateTime().getSeasonOfYear().equals(Season.SPRING)) {
 

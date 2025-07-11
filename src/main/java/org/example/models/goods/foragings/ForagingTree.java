@@ -25,5 +25,11 @@ public class ForagingTree extends Foraging{
         return type;
     }
 
+    @Override
+    public String toString() {
+        return "ForagingTree: \n" +
+                "type: " + type +
+                "\nlevel: " + level + "\n";
+    }
 
 }

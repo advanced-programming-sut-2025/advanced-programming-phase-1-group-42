@@ -7,7 +7,7 @@ public enum ToolType implements GoodType {
     HOE("Hoe", -1, 5),
     PICKAXE("Pickaxe", -1,5),
     AXE("Axe", -1, 5),
-    WATERING_CAN("WateringCan", -1, 5),
+    WATERING_CAN("Watering_Can", -1, 5),
     SCYTHE("Scythe", -1, 2),
     MILK_PAIL("Milk_Pail", 1000, 4),
     SHEAR("Shear", 1000, 4),

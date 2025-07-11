@@ -40,7 +40,7 @@ public class ProfileMenuController extends Controller {
         }
 
         App.getCurrentUser().setUsername(username);
-        DBInteractor.changeUserInDatabase(username,"username");
+//        DBInteractor.changeUserInDatabase(username,"username");
         return new Result(true, "Your username was successfully changed to " + username + ".");
     }
 
@@ -51,7 +51,7 @@ public class ProfileMenuController extends Controller {
         }
 
         App.getCurrentUser().setNickname(nickname);
-        DBInteractor.changeUserInDatabase(nickname,"nickname");
+//        DBInteractor.changeUserInDatabase(nickname,"nickname");
         return new Result(true, "Your nickname was successfully changed to " + nickname + ".");
     }
 
@@ -67,7 +67,7 @@ public class ProfileMenuController extends Controller {
         }
 
         App.getCurrentUser().setEmail(email);
-        DBInteractor.changeUserInDatabase(email,"email");
+//        DBInteractor.changeUserInDatabase(email,"email");
         return new Result(true, "Your email was successfully changed to " + email + ".");
     }
 
@@ -91,7 +91,7 @@ public class ProfileMenuController extends Controller {
 
 
         App.getCurrentUser().setPassword(newPassword);
-        DBInteractor.changeUserInDatabase(newPassword,"password");
+//        DBInteractor.changeUserInDatabase(newPassword,"password");
         return new Result(true, "Your password was successfully changed to " + newPassword + ".");
     }
 

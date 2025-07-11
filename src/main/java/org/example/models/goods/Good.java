@@ -154,8 +154,9 @@ public abstract class Good {
         }
 
         for (ForagingSeedType value : ForagingSeedType.values()) {
-            if(value.getName().equals(typeName))
+            if(value.getName().equals(typeName)) {
                 return value;
+            }
         }
 
         for (ForagingCropType value : ForagingCropType.values()) {

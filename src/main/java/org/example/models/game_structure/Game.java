@@ -8,9 +8,11 @@ import org.example.models.game_structure.weathers.Weather;
 import org.example.models.goods.Good;
 import org.example.models.goods.craftings.Crafting;
 import org.example.models.goods.craftings.CraftingType;
+import org.example.models.goods.farmings.FarmingCropType;
 import org.example.models.goods.farmings.FarmingTreeSapling;
 import org.example.models.goods.foragings.ForagingMixedSeed;
 import org.example.models.goods.foragings.ForagingSeed;
+import org.example.models.goods.foragings.ForagingSeedType;
 import org.example.models.interactions.Animals.Animal;
 import org.example.models.goods.farmings.FarmingCrop;
 import org.example.models.goods.farmings.FarmingTree;
@@ -25,6 +27,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
+import java.util.List;
 
 public class Game {
 
@@ -120,7 +123,7 @@ public class Game {
         // Weather setups for next day
         App.getCurrentGame().getDateTime().setTime(9);
         this.weather = tomorrow.getWeather();
-        tomorrow.setWeather(weather);
+        tomorrow.setTomorrowWeather(this);
         if (this.weather instanceof Storm) {
             ((Storm) this.weather).randomThunder();
             ((Storm) this.weather).waterAllTiles();
@@ -175,33 +178,40 @@ public class Game {
         //for foraging seed
         for (Tile tile : map.getTiles()) {
             Iterator<Good> iterator = tile.getGoods().iterator();
+            List<Good> goodsToAdd = new ArrayList<>();
+
             while (iterator.hasNext()) {
                 Good good = iterator.next();
-                if (good instanceof ForagingSeed) {
-                    ForagingSeed seed = (ForagingSeed) good;
+                if (good instanceof ForagingSeed seed) {
                     seed.dailyChange();
                     if (seed.isCrop()) {
+                        goodsToAdd.add(Good.newGood(seed.getCropType()));
                         iterator.remove();
-                        tile.getGoods().add(Good.newGood(seed.getCropType()));
                     }
                 }
             }
+
+            addGoodToTile(tile, goodsToAdd);
         }
+
 
         //for farming tree sapling
         for (Tile tile : map.getTiles()) {
+            List<Good> goodsToAdd = new ArrayList<>();
             Iterator<Good> iterator = tile.getGoods().iterator();
+
             while (iterator.hasNext()) {
                 Good good = iterator.next();
-                if (good instanceof FarmingTreeSapling) {
-                    FarmingTreeSapling sapling = (FarmingTreeSapling) good;
+                if (good instanceof FarmingTreeSapling sapling) {
                     sapling.dailyChange();
                     if (sapling.isTree()) {
                         iterator.remove();
-                        tile.getGoods().add(Good.newGood(sapling.getTreeType()));
+                        goodsToAdd.add(Good.newGood(sapling.getTreeType()));
                     }
                 }
             }
+
+            addGoodToTile(tile, goodsToAdd);
         }
 
         for (Player player : players) {
@@ -214,17 +224,20 @@ public class Game {
 
         for (Tile tile : map.getTiles()) {
             Iterator<Good> iterator = tile.getGoods().iterator();
+            ArrayList<Good> goodsToAdd = new ArrayList<>();
+
             while (iterator.hasNext()) {
                 Good good = iterator.next();
-                if (good instanceof ForagingMixedSeed) {
-                    ForagingMixedSeed seed = (ForagingMixedSeed) good;
+                if (good instanceof ForagingMixedSeed seed) {
                     seed.dailyChange();
                     if (seed.isCrop()) {
                         iterator.remove();
-                        tile.getGoods().add(Good.newGood(seed.getCropType()));
+                        goodsToAdd.add(Good.newGood(seed.getCropType()));
                     }
                 }
             }
+
+            addGoodToTile(tile, goodsToAdd);
         }
 
         Coordinate coordinate = App.getCurrentGame().getCurrentPlayer().getCoordinate();
@@ -289,6 +302,21 @@ public class Game {
         }
 
         // Check weather
+    }
+
+    public static void addGoodToTile(Tile tile, List<Good> goodsToAdd) {
+        tile.getGoods().addAll(goodsToAdd);
+
+        ArrayList<Integer> haveToRemove = new ArrayList<>();
+        for (int i = 0; i < tile.getGoods().size(); i++) {
+            if(tile.getGoods().get(i) == null) {
+                haveToRemove.add(i);
+            }
+        }
+
+        for (Integer i : haveToRemove) {
+            tile.getGoods().remove((int) i);
+        }
     }
 
     public Player findPlayer(String playerName) {
