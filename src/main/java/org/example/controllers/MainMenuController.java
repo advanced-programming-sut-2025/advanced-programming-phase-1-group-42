@@ -25,7 +25,8 @@ public class MainMenuController extends Controller {
     }
 
     public Result exit() {
-        DBInteractor.saveUsers();
+//        DBInteractor.saveUsers();
+//        DBInteractor.setStayLogin();
         App.setCurrentMenu(Menu.ExitMenu);
         return new Result(true, "Goodbye!");
     }
@@ -33,9 +34,9 @@ public class MainMenuController extends Controller {
     public Result logout() {
         App.setCurrentMenu(Menu.LoginRegisterMenu);
         if (App.getCurrentUser().isStayLogin()) {
-            DBInteractor.resetStayLogin();
+//            DBInteractor.resetStayLogin();
         }
-        DBInteractor.saveUsers();
+//        DBInteractor.saveUsers();
         App.getCurrentUser().setStayLogin(false);
         App.setCurrentUser(null);
 

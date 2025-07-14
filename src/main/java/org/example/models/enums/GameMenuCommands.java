@@ -11,7 +11,7 @@ public enum GameMenuCommands implements Command {
     //Nader
     // Game Commands
 //    NEW_GAME("\\s*game\\s*new\\s-u\\s(?<username_1>\\S+)\\s(?<username_2>\\S+)\\s(?<username_3>\\S+)\\s*"),
-    NEW_GAME("\\s*game\\s+new\\s+-u\\s+(?<username1>\\S+)\\s+(?<username2>\\S+)\\s+(?<username3>\\S+)\\s*"),
+    NEW_GAME("\\s*game\\s+new\\s+-u\\s+(?<username1>\\S+)?\\s*(?<username2>\\S+)?\\s*(?<username3>\\S+)?\\s*"),
     GAME_MAP("\\s*game\\s*map\\s+(?<farmNumber>\\S+)\\s*"),
     LOAD_GAME("\\s*load\\s*game\\s*"),
     EXIT_GAME("\\s*exit\\s*game\\s*"),
@@ -46,7 +46,7 @@ public enum GameMenuCommands implements Command {
     // Parsa
     //inventory & Energy
     ENERGY_SHOW("\\s*energy\\s*show\\s*"),
-    CHEAT_ENERGY_SET("\\s*energy\\s*set\\s+(?<value>\\S+)\\s*"),
+    CHEAT_ENERGY_SET("\\s*energy\\s*set\\s*-v\\s+(?<value>\\S+)\\s*"),
     CHEAT_ENERGY_UNLIMITED("\\s*energy\\s*unlimited\\s*"),
     INVENTORY_TRASH_ITEM("\\s*inventory\\s+trash\\s+-i\\s+(?<item>\\S+)\\s*(-n)?\\s*(?<number>\\S+)?\\s*"),
     INVENTORY_SHOW("\\s*inventory\\s*show\\s*"),
@@ -147,7 +147,8 @@ public enum GameMenuCommands implements Command {
     SHOW_BALANCE("\\s*show\\s*balance\\s*"),
 
     Test("test"),
-    SHOW_FRIDGE("\\s*show\\s+fridge\\s*");
+    SHOW_FRIDGE("\\s*show\\s+fridge\\s*"),
+    SHOW_CURRENT_MENU("\\s*show\\s*current_menu\\s*");
 
 
     private final String pattern;

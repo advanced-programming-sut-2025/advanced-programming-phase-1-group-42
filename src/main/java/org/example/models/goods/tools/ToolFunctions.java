@@ -458,7 +458,7 @@ public class ToolFunctions {
 
 
         tile.setGoods(goods);
-        return null;
+        return new Result(true, ((ToolType) tool.getType()).getName() + " used");
     }
 
     private static Result useMilkPail(Tool tool, Coordinate coordinate) {

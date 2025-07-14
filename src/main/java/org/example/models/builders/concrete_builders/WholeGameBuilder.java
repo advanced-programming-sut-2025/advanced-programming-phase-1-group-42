@@ -7,6 +7,9 @@ import org.example.models.game_structure.Game;
 import org.example.models.game_structure.Tomorrow;
 import org.example.models.game_structure.weathers.Weather;
 import org.example.models.goods.Good;
+import org.example.models.goods.craftings.CraftingType;
+import org.example.models.goods.recipes.CookingRecipeType;
+import org.example.models.goods.recipes.CraftingRecipeType;
 import org.example.models.goods.tools.ToolType;
 import org.example.models.interactions.NPCs.NPC;
 import org.example.models.interactions.NPCs.NPCTypes;
@@ -38,6 +41,8 @@ public class WholeGameBuilder implements GameInterface {
             player.getInventory().addGoodByObject(Good.newGood(ToolType.AXE));
             player.getInventory().addGoodByObject(Good.newGood(ToolType.WATERING_CAN));
             player.getInventory().addGoodByObject(Good.newGood(ToolType.SCYTHE));
+            player.getInventory().addGoodByObject(Good.newGood(CraftingRecipeType.BOMB));
+            player.getInventory().addGoodByObject(Good.newGood(CookingRecipeType.BREAD));
         }
     }
 

@@ -8,13 +8,16 @@ import org.example.models.goods.artisans.Artisan;
 import org.example.models.goods.foods.Food;
 import org.example.models.goods.foods.FoodType;
 import org.example.models.goods.recipes.CookingRecipe;
+import org.example.models.goods.recipes.CookingRecipeType;
 import org.example.models.goods.recipes.CraftingRecipe;
+import org.example.models.goods.recipes.CraftingRecipeType;
 import org.example.models.goods.tools.Tool;
 import org.example.models.goods.tools.ToolType;
 import org.example.models.interactions.Animals.Animal;
 import org.example.models.interactions.PlayerBuildings.FarmBuilding;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 
@@ -22,8 +25,8 @@ public class Player {
     private Coordinate coordinate ;
     private Inventory inventory ;
     private Good inHandGood;
-    private final ArrayList<CookingRecipe> cookingRecipes = new ArrayList<>();
-    private final ArrayList<CraftingRecipe> craftingRecipes = new ArrayList<>();
+    private final ArrayList<CookingRecipe> cookingRecipes = new ArrayList<>(Arrays.asList(new CookingRecipe(CookingRecipeType.BREAD)));
+    private final ArrayList<CraftingRecipe> craftingRecipes = new ArrayList<>(Arrays.asList(new CraftingRecipe(CraftingRecipeType.BOMB)));
     private User user;
     private int points;
     private Wallet wallet;

@@ -1,296 +1,52 @@
-register -u Parsa -p Parsa1234* Parsa1234* -n Parsa -e Parsapak84@gmail.com -g Male
-register -u Parsakhar -p Parsa1234* Parsa1234* -n Parsa -e Parsapak84@gmail.com -g Male
-register -u ParsaGov -p Parsa1234* Parsa1234* -n Parsa -e Parsapak84@gmail.com -g Male
-register -u ParsaMoew -p Parsa1234* Parsa1234* -n Parsa -e Parsapak84@gmail.com -g Male
+forget password -u Parsakhar
+login -u Parsakhar -p Parsa1234* –stay-logged-in
+show current manu
+show current menu
+login -u Parsa -p Parsa1234* 
+login -u Marsa -p Parsa1234* 
+logout useer
+logout user
+user logout
 login -u Parsa -p Parsa1234* –stay-logged-in
-menu enter game
-game new -u Parsakhar ParsaGov ParsaMoew
-cheat add item -n Coal -c 2
-Triple Shot Espresso
-cheat add item -n Wood -c 200000
-cheat add item -n Stone -c 200000
-cheat add 300000 dollars
-cheat add item -n Triple_Shot_Espresso -c 200000
-inventory show
-eat Triple_Shot_Espresso
-show energy
-energy show
+login -u Marsa -p Parsa1234* –stay-logged-in
+exit 
+exit menu
+menu exit
+login -u Marsa -p Parsa1234* –stay-logged-in
+menu exit
+menu enter profile
+user info
 register -u Parsa -p Parsa1234* Parsa1234* -n Parsa -e Parsapak84@gmail.com -g Male
-register -u Parsakhar -p Parsa1234* Parsa1234* -n Parsa -e Parsapak84@gmail.com -g Male
-register -u ParsaGov -p Parsa1234* Parsa1234* -n Parsa -e Parsapak84@gmail.com -g Male
-register -u ParsaMoew -p Parsa1234* Parsa1234* -n Parsa -e Parsapak84@gmail.com -g Male
-login -u Parsa -p Parsa1234* –stay-logged-in
+register -u Mmd -p Parsa1234* Parsa1234* -n Parsa -e Parsapak84@gmail.com -g Male
+register -u Ali -p Parsa1234* Parsa1234* -n Parsa -e Parsapak84@gmail.com -g Male
+register -u Reza -p Parsa1234* Parsa1234* -n Parsa -e Parsapak84@gmail.com -g Male
+login -u Parsa -p Parsa1234*
 menu enter game
-game new -u Parsakhar ParsaGov ParsaMoew
-cheat add item -n Coal -c 2
-Triple Shot Espresso
-cheat add item -n Wood -c 200000
-cheat add item -n Stone -c 200000
-cheat add 300000 dollars
-cheat add item -n Triple_Shot_Espresso -c 200000
-eat Triple_Shot_Espresso
-register -u Parsa -p Parsa1234* Parsa1234* -n Parsa -e Parsapak84@gmail.com -g Male
-register -u Parsakhar -p Parsa1234* Parsa1234* -n Parsa -e Parsapak84@gmail.com -g Male
-register -u ParsaGov -p Parsa1234* Parsa1234* -n Parsa -e Parsapak84@gmail.com -g Male
-register -u ParsaMoew -p Parsa1234* Parsa1234* -n Parsa -e Parsapak84@gmail.com -g Male
-login -u Parsa -p Parsa1234* –stay-logged-in
-menu enter game
-game new -u Parsakhar ParsaGov ParsaMoew
-cheat add item -n Coal -c 2
-Triple Shot Espresso
-cheat add item -n Wood -c 200000
-cheat add item -n Stone -c 200000
-cheat add 300000 dollars
-cheat add item -n Triple_Shot_Espresso -c 200000
-eat Triple_Shot_Espresso
-energy show
-register -u Parsa -p Parsa1234* Parsa1234* -n Parsa -e Parsapak84@gmail.com -g Male
-register -u Parsakhar -p Parsa1234* Parsa1234* -n Parsa -e Parsapak84@gmail.com -g Male
-register -u ParsaGov -p Parsa1234* Parsa1234* -n Parsa -e Parsapak84@gmail.com -g Male
-register -u ParsaMoew -p Parsa1234* Parsa1234* -n Parsa -e Parsapak84@gmail.com -g Male
-login -u Parsa -p Parsa1234* –stay-logged-in
-menu enter game
-game new -u Parsakhar ParsaGov ParsaMoew
-game map 1
-game map 2
-game map 1
-game map 2
-cheat add item -n Coal -c 2
-Triple Shot Espresso
-cheat add item -n Wood -c 200000
-cheat add item -n Stone -c 200000
-cheat add 300000 dollars
-cheat add item -n Triple_Shot_Espresso -c 200000
-eat Triple_Shot_Espresso
-register -u Parsa -p Parsa1234* Parsa1234* -n Parsa -e Parsapak84@gmail.com -g Male
-register -u Parsakhar -p Parsa1234* Parsa1234* -n Parsa -e Parsapak84@gmail.com -g Male
-register -u ParsaGov -p Parsa1234* Parsa1234* -n Parsa -e Parsapak84@gmail.com -g Male
-register -u ParsaMoew -p Parsa1234* Parsa1234* -n Parsa -e Parsapak84@gmail.com -g Male
-login -u Parsa -p Parsa1234* –stay-logged-in
-menu enter game
-game new -u Parsakhar ParsaGov ParsaMoew
-cheat add item -n Coal -c 2
-Triple Shot Espresso
-cheat add item -n Wood -c 200000
-cheat add item -n Stone -c 200000
-cheat add 300000 dollars
-cheat add item -n Triple_Shot_Espresso -c 200000
-eat Triple_Shot_Espresso
-cooking refrigerator put Triple_Shot_Espresso
-show fridge
-cooking refrigerator put Triple_Shot_Espresso
-show fridge
-inventory show
-cheat add item -n Carrot -c 200000
-cooking refrigerator put Carrot
-inventory show
-cooking refrigerator put Carrot
-inventory show
-inventory show
-cooking refrigerator pick Carrot
-inventory show
-print map -l 0 0 -s 100
-walk -l 100 100
-walk -l 120 100
-print map -l 0 0 -s 100
-walk -l 109 100
-meet NPC
-meet Abgial
+game new -u Mmd Ali Reza
+load game
 
-meet NPC Abgail
-print map -l 0 0 -s 600
+print map -l 0 0 -s 40
+cheat date advance 1d
+
+cheat advance date 1d
 register -u Parsa -p Parsa1234* Parsa1234* -n Parsa -e Parsapak84@gmail.com -g Male
-register -u Parsakhar -p Parsa1234* Parsa1234* -n Parsa -e Parsapak84@gmail.com -g Male
-register -u ParsaGov -p Parsa1234* Parsa1234* -n Parsa -e Parsapak84@gmail.com -g Male
-register -u ParsaMoew -p Parsa1234* Parsa1234* -n Parsa -e Parsapak84@gmail.com -g Male
-login -u Parsa -p Parsa1234* –stay-logged-in
+register -u Mmd -p Parsa1234* Parsa1234* -n Parsa -e Parsapak84@gmail.com -g Male
+register -u Ali -p Parsa1234* Parsa1234* -n Parsa -e Parsapak84@gmail.com -g Male
+register -u Reza -p Parsa1234* Parsa1234* -n Parsa -e Parsapak84@gmail.com -g Male
+login -u Parsa -p Parsa1234*
 menu enter game
-game new -u Parsakhar ParsaGov ParsaMoew
-cheat add item -n Coal -c 2
-Triple Shot Espresso
-cheat add item -n Wood -c 200000
-cheat add item -n Stone -c 200000
-cheat add 300000 dollars
-cheat add item -n Triple_Shot_Espresso -c 200000
-eat Triple_Shot_Espresso
-cheat add item -n Carrot -c 200000
-cooking refrigerator put Carrot
-walk -l 119 80
-meet NPC Leah
-print map -l 0 0 -s 200
-meet NPC Leah
-register -u Parsa -p Parsa1234* Parsa1234* -n Parsa -e Parsapak84@gmail.com -g Male
-register -u Parsakhar -p Parsa1234* Parsa1234* -n Parsa -e Parsapak84@gmail.com -g Male
-register -u ParsaGov -p Parsa1234* Parsa1234* -n Parsa -e Parsapak84@gmail.com -g Male
-register -u ParsaMoew -p Parsa1234* Parsa1234* -n Parsa -e Parsapak84@gmail.com -g Male
-login -u Parsa -p Parsa1234* –stay-logged-in
-menu enter game
-game new -u Parsakhar ParsaGov ParsaMoew
-cheat add item -n Coal -c 2
-Triple Shot Espresso
-cheat add item -n Wood -c 200000
-cheat add item -n Stone -c 200000
-cheat add 300000 dollars
-cheat add item -n Triple_Shot_Espresso -c 200000
-eat Triple_Shot_Espresso
-cheat add item -n Carrot -c 200000
-cooking refrigerator put Carrot
-walk -l 119 80
-energy show
-meet NPC Leah
-gift NPC Leah -i Carrot
-inventory show
-friendship NPC list
-register -u Parsa -p Parsa1234* Parsa1234* -n Parsa -e Parsapak84@gmail.com -g Male
-register -u Parsakhar -p Parsa1234* Parsa1234* -n Parsa -e Parsapak84@gmail.com -g Male
-register -u ParsaGov -p Parsa1234* Parsa1234* -n Parsa -e Parsapak84@gmail.com -g Male
-register -u ParsaMoew -p Parsa1234* Parsa1234* -n Parsa -e Parsapak84@gmail.com -g Male
-login -u Parsa -p Parsa1234* –stay-logged-in
-menu enter game
-game new -u Parsakhar ParsaGov ParsaMoew
-cheat add item -n Coal -c 2
-Triple Shot Espresso
-cheat add item -n Wood -c 200000
-cheat add item -n Stone -c 200000
-cheat add 300000 dollars
-cheat add item -n Triple_Shot_Espresso -c 200000
-eat Triple_Shot_Espresso
-cheat add item -n Carrot -c 200000
-cooking refrigerator put Carrot
-walk -l 109 80
-y
-walk -l 109 80
-gift NPC Leah -I Carrot
-gift NPC Leah -i Carrot
-friendship NPC list
-quests list
-cheat add item -n Hard_Wood -c 200000
-cheat add item -n Hard_Wood -c 200000
-register -u Parsa -p Parsa1234* Parsa1234* -n Parsa -e Parsapak84@gmail.com -g Male
-register -u Parsakhar -p Parsa1234* Parsa1234* -n Parsa -e Parsapak84@gmail.com -g Male
-register -u ParsaGov -p Parsa1234* Parsa1234* -n Parsa -e Parsapak84@gmail.com -g Male
-register -u ParsaMoew -p Parsa1234* Parsa1234* -n Parsa -e Parsapak84@gmail.com -g Male
-login -u Parsa -p Parsa1234* –stay-logged-in
-menu enter game
-game new -u Parsakhar ParsaGov ParsaMoew
-cheat add item -n Coal -c 2
-Triple Shot Espresso
-cheat add item -n Wood -c 200000
-cheat add item -n Stone -c 200000
-cheat add item -n Hard_Wood -c 200000
-cheat add 300000 dollars
-cheat add item -n Triple_Shot_Espresso -c 200000
-eat Triple_Shot_Espresso
-cheat add item -n Carrot -c 200000
-cooking refrigerator put Carrot
-walk -l 109 80
-quests finish -i 0
-register -u Parsa -p Parsa1234* Parsa1234* -n Parsa -e Parsapak84@gmail.com -g Male
-register -u Parsakhar -p Parsa1234* Parsa1234* -n Parsa -e Parsapak84@gmail.com -g Male
-register -u ParsaGov -p Parsa1234* Parsa1234* -n Parsa -e Parsapak84@gmail.com -g Male
-register -u ParsaMoew -p Parsa1234* Parsa1234* -n Parsa -e Parsapak84@gmail.com -g Male
-login -u Parsa -p Parsa1234* –stay-logged-in
-menu enter game
-game new -u Parsakhar ParsaGov ParsaMoew
-cheat add item -n Coal -c 2
-Triple Shot Espresso
-cheat add item -n Wood -c 200000
-cheat add item -n Stone -c 200000
-cheat add item -n Hard_Wood -c 200000
-cheat add 300000 dollars
-cheat add item -n Triple_Shot_Espresso -c 200000
-eat Triple_Shot_Espresso
-cheat add item -n Carrot -c 200000
-cooking refrigerator put Carrot
-walk -l 109 80
-quests finish -i 1
-meet NPC Leah
-walk -l 119 80
-quests finish -i 1
-register -u Parsa -p Parsa1234* Parsa1234* -n Parsa -e Parsapak84@gmail.com -g Male
-register -u Parsakhar -p Parsa1234* Parsa1234* -n Parsa -e Parsapak84@gmail.com -g Male
-register -u ParsaGov -p Parsa1234* Parsa1234* -n Parsa -e Parsapak84@gmail.com -g Male
-register -u ParsaMoew -p Parsa1234* Parsa1234* -n Parsa -e Parsapak84@gmail.com -g Male
-login -u Parsa -p Parsa1234* –stay-logged-in
-menu enter game
-game new -u Parsakhar ParsaGov ParsaMoew
-cheat add item -n Coal -c 2
-Triple Shot Espresso
-cheat add item -n Wood -c 200000
-cheat add item -n Stone -c 200000
-cheat add item -n Hard_Wood -c 200000
-cheat add 300000 dollars
-cheat add item -n Triple_Shot_Espresso -c 200000
-eat Triple_Shot_Espresso
-cheat add item -n Carrot -c 200000
-cooking refrigerator put Carrot
-walk -l 119 80
-friendship NPC list
-quests finish -i 1
-quests list
-friendship NPC list
-register -u Parsa -p Parsa1234* Parsa1234* -n Parsa -e Parsapak84@gmail.com -g Male
-register -u Parsakhar -p Parsa1234* Parsa1234* -n Parsa -e Parsapak84@gmail.com -g Male
-register -u ParsaGov -p Parsa1234* Parsa1234* -n Parsa -e Parsapak84@gmail.com -g Male
-register -u ParsaMoew -p Parsa1234* Parsa1234* -n Parsa -e Parsapak84@gmail.com -g Male
-login -u Parsa -p Parsa1234* –stay-logged-in
-menu enter game
-game new -u Parsakhar ParsaGov ParsaMoew
-cheat add item -n Coal -c 2
-Triple Shot Espresso
-cheat add item -n Wood -c 200000
-cheat add item -n Stone -c 200000
-cheat add item -n Hard_Wood -c 200000
-cheat add 300000 dollars
-cheat add item -n Triple_Shot_Espresso -c 200000
-eat Triple_Shot_Espresso
-cheat add item -n Carrot -c 200000
-cooking refrigerator put Carrot
-walk -l 119 80
-quests finish -i 1
-inventory show
-register -u Parsa -p Parsa1234* Parsa1234* -n Parsa -e Parsapak84@gmail.com -g Male
-register -u Parsakhar -p Parsa1234* Parsa1234* -n Parsa -e Parsapak84@gmail.com -g Male
-register -u ParsaGov -p Parsa1234* Parsa1234* -n Parsa -e Parsapak84@gmail.com -g Male
-register -u ParsaMoew -p Parsa1234* Parsa1234* -n Parsa -e Parsapak84@gmail.com -g Male
-login -u Parsa -p Parsa1234* –stay-logged-in
-menu enter game
-game new -u Parsakhar ParsaGov ParsaMoew
-game map 1
-game map 2
-game map 1
-game map 2
-cheat add item -n Coal -c 2
-Triple Shot Espresso
-cheat add item -n Wood -c 200000
-cheat add item -n Stone -c 200000
-cheat add item -n Hard_Wood -c 200000
-cheat add 300000 dollars
-cheat add item -n Triple_Shot_Espresso -c 200000
-eat Triple_Shot_Espresso
-cheat add item -n Carrot -c 200000
-cooking refrigerator put Carrot
-walk -l 119 80
-register -u Parsa -p Parsa1234* Parsa1234* -n Parsa -e Parsapak84@gmail.com -g Male
-register -u Parsakhar -p Parsa1234* Parsa1234* -n Parsa -e Parsapak84@gmail.com -g Male
-register -u ParsaGov -p Parsa1234* Parsa1234* -n Parsa -e Parsapak84@gmail.com -g Male
-register -u ParsaMoew -p Parsa1234* Parsa1234* -n Parsa -e Parsapak84@gmail.com -g Male
-login -u Parsa -p Parsa1234* –stay-logged-in
-menu enter game
-game new -u Parsakhar ParsaGov ParsaMoew
-cheat add item -n Coal -c 2
-Triple Shot Espresso
-cheat add item -n Wood -c 200000
-cheat add item -n Stone -c 200000
-cheat add item -n Hard_Wood -c 200000
-cheat add 300000 dollars
-cheat add item -n Triple_Shot_Espresso -c 200000
-eat Triple_Shot_Espresso
-cheat add item -n Carrot -c 200000
-cooking refrigerator put Carrot
-walk -l 119 80
-quests finish -i 1
-inventory show
+game new -u Mmd Ali Reza
+load game
+cheat advance date 1d
+game new B
+game new B C D
+game new -u B C
+craftinfo -n Orange_Tree
+craftinfo -n Banana_Sapling
+register -u A -p passW0r! passW0r! -n a -e bbb@gmail.com -g Male
+register -u B -p passW0r! passW0r! -n a -e bbb@gmail.com -g Male
+register -u C -p passW0r! passW0r! -n a -e bbb@gmail.com -g Male
+register -u D -p passW0r! passW0r! -n a -e bbb@gmail.com -g Male
 register -u Parsa -p Parsa1234* Parsa1234* -n Parsa -e Parsapak84@gmail.com -g Male
 register -u Mmd -p Parsa1234* Parsa1234* -n Parsa -e Parsapak84@gmail.com -g Female
 register -u Ali -p Parsa1234* Parsa1234* -n Parsa -e Parsapak84@gmail.com -g Male
@@ -298,8 +54,538 @@ register -u Reza -p Parsa1234* Parsa1234* -n Parsa -e Parsapak84@gmail.com -g Ma
 login -u Parsa -p Parsa1234*
 menu enter game
 game new -u Mmd Ali Reza
+walk -l 15 65
+show all products
+cheat add item Copper_Bar -c 10
+cheat add item -n Copper_Bar -c 10
+tools upgrade Hoe
+tools equip Hoe
+tools upgrade Hoe
+cheat add 100000 dollars
+tools upgrade Hoe
+cheat advance date 1d
+crafting show recipies
+crafting show recipes
+register -u Parsa -p Parsa1234* Parsa1234* -n Parsa -e Parsapak84@gmail.com -g Male
+register -u Mmd -p Parsa1234* Parsa1234* -n Parsa -e Parsapak84@gmail.com -g Female
+register -u Ali -p Parsa1234* Parsa1234* -n Parsa -e Parsapak84@gmail.com -g Male
+register -u Reza -p Parsa1234* Parsa1234* -n Parsa -e Parsapak84@gmail.com -g Male
+login -u Parsa -p Parsa1234*
+menu enter game
+game new -u Mmd Ali Reza
+
+crafting show recipes
+cooking show recipes
+cooking show recipes
+crafting show recipes
+
+ffff
+
+
+register -u Parsa -p Parsa1234* Parsa1234* -n Parsa -e Parsapak84@gmail.com -g Male
+register -u Mmd -p Parsa1234* Parsa1234* -n Parsa -e Parsapak84@gmail.com -g Female
+register -u Ali -p Parsa1234* Parsa1234* -n Parsa -e Parsapak84@gmail.com -g Male
+register -u Reza -p Parsa1234* Parsa1234* -n Parsa -e Parsapak84@gmail.com -g Male
+login -u Parsa -p Parsa1234*
+menu enter game
+game new -u Mmd Ali Reza
+time
+date
+datetime
+day of the week
+cheat advance time 3h
+cheat advance date 3d
+season
+tie
+time
+print map -l 0 0 -s 160
+cheat Thor -l 5 4
+weather
+weather forecast
+cheat advance date 1d
+weather
+weather forecast
+register -u Parsa -p Parsa1234* Parsa1234* -n Parsa -e Parsapak84@gmail.com -g Male
+register -u Ali -p Parsa1234* Parsa1234* -n Parsa -e Parsapak84@gmail.com -g Male
+login -u Parsa -p Parsa1234*
+menu enter game
+game new -u Mmd Ali Reza
+time
+date
+datetime
+day of the week
+cheat advance time 3h
+cheat advance date 3d
+season
+tie
+time
+print map -l 0 0 -s 160
+cheat Thor -l 5 4
+weather
+weather forecast
+cheat advance date 1d
+weather
+weather forecast
+
+
+register -u Parsa -p Parsa1234* Parsa1234* -n Parsa -e Parsapak84@gmail.com -g Male
+register -u Ali -p Parsa1234* Parsa1234* -n Parsa -e Parsapak84@gmail.com -g Male
+login -u Parsa -p Parsa1234*
+menu enter game
+game new -u Mmd Ali Reza
+time
+date
+datetime
+day of the week
+cheat advance time 3h
+cheat advance date 3d
+season
+tie
+time
+print map -l 0 0 -s 160
+cheat Thor -l 5 4
+weather
+weather forecast
+cheat advance date 1d
+weather
+weather forecast
+
+
+register -u Parsa -p Parsa1234* Parsa1234* -n Parsa -e Parsapak84@gmail.com -g Male
+register -u Ali -p Parsa1234* Parsa1234* -n Parsa -e Parsapak84@gmail.com -g Male
+login -u Parsa -p Parsa1234*
+menu enter game
+game new -u Mmd Ali Reza
+time
+date
+datetime
+day of the week
+cheat advance time 3h
+cheat advance date 3d
+season
+tie
+time
+print map -l 0 0 -s 160
+cheat Thor -l 5 4
+weather
+weather forecast
+cheat advance date 1d
+weather
+weather forecast
+
+
+register -u Parsa -p Parsa1234* Parsa1234* -n Parsa -e Parsapak84@gmail.com -g Male
+register -u Mmd -p Parsa1234* Parsa1234* -n Parsa -e Parsapak84@gmail.com -g Female
+register -u Ali -p Parsa1234* Parsa1234* -n Parsa -e Parsapak84@gmail.com -g Male
+register -u Reza -p Parsa1234* Parsa1234* -n Parsa -e Parsapak84@gmail.com -g Male
+login -u Parsa -p Parsa1234*
+menu enter game
+game new -u Mmd Ali Reza
+
+weather
+weather forecast
+cheat advance date 1d
+weather
+weather forecast
+cheat advance date 1d
+weather forecast
+
+
+register -u Parsa -p Parsa1234* Parsa1234* -n Parsa -e Parsapak84@gmail.com -g Male
+register -u Mmd -p Parsa1234* Parsa1234* -n Parsa -e Parsapak84@gmail.com -g Female
+register -u Ali -p Parsa1234* Parsa1234* -n Parsa -e Parsapak84@gmail.com -g Male
+register -u Reza -p Parsa1234* Parsa1234* -n Parsa -e Parsapak84@gmail.com -g Male
+login -u Parsa -p Parsa1234*
+menu enter game
+game new -u Mmd Ali Reza
+weather
+weather forecast
+cheat advace date 1d
+cheat advance date 1d
+weather forecast
+cheat advance date 10d
+weather
+weather forecast
+cheat advance date 1d
+weather
+weather forecast
+cheat weather set Sunny
+cheat add 200000 dollars
+cheat add item -n Wood -c 1000
+greenhouse build
+print map -l 0 0 -s 160
+walk -l 40 20
+print map -l 0 0 -s 160
+print map -l 25 15
+walk -l 25 15
+print map -l 0 0 -s 160
+walk -l 28 10
+print map -l 0 0 -s 160
+walk -l 22 8
+pirnt map -l 0 0 -s 160
+print map -l 0 0 -s 160
+walk -l 30 8
+print map -l 0 0 -s 160
+walk -l 33 8
+print map -l 0 0 -s 160
+help reading map
+energy show
+energy set -v 250
+energy set -v 250
+energy set 250
+energy show
+energy unlimited
+energy show
+
+
+register -u Parsa -p Parsa1234* Parsa1234* -n Parsa -e Parsapak84@gmail.com -g Male
+register -u Mmd -p Parsa1234* Parsa1234* -n Parsa -e Parsapak84@gmail.com -g Female
+register -u Ali -p Parsa1234* Parsa1234* -n Parsa -e Parsapak84@gmail.com -g Male
+register -u Reza -p Parsa1234* Parsa1234* -n Parsa -e Parsapak84@gmail.com -g Male
+login -u Parsa -p Parsa1234*
+menu enter game
+game new -u Mmd Ali Reza
+
+energy set -v 150
+energy set -v 250
+energy unlimited
+energy show
+print map -l 0 0 -s 160
+cheat add 200000 dollars
+cheat add item -n Wood -c 1000
+greenhouse build
+inventory how
+inventory show
+inventory trash -i Wood -n 100
+tools equip Hoe
+print map -l 0 0 -s 150
+walk -l 30 30
+print map -l 0 0 -s 60
+tools show current
+tools show available
+tools use -d l
+tools use -d left
+print map -l 0 0 -s 60
+print map -l 0 0 -s 160
+walk -l 90 90
+walk -l 90 90
+walk -l 60 60
+print map -l 0 0 -s 160
+walk -l 80 90
+print map -l 0 0 -s 160
+cheat add item -n Copper_Bar -c 100
+show balance
+tools upgrade Hoe
+walk -l 10 60
+tools upgrade Hoe
+walk -l 30 30
+print map -l 0 0 -s 160
+tools use Pickax
+tools use Pickaxe
+tools equip Pickaxe
+tools use up
+tools use -d up
+print map -l 0 0 -s 160
+walk -l 30 15
+print map -l 0 0 -s 160
+walk -l 34 15
+print map -l 0 0 -s 160
+tools equip Axe
+tools use -d down
+print map -l 0 0 -s 160
+walk -l 30 30
+tools equip Watering_Can
+tools equip Watering_Can
+tools equip WateringCan
+tools use -d left
+print map -l 0 0 -s 160
+walk -l 30 34
+print map -l 0 0 -s 160
+Craftinfo -n Carrot
+craftinto -n Carrot
+craftinfo -n Carrot
+walk -l 30 30
+cheat add item -n Carrot_Seed
+cheat add item -n Carrot_Seeds -c 10
+plant -s Carrot_Seeds -d left
+show plant -l 29 30
+showplant -n 29 30
+showplant -l 29 30
+cheat add item -n Deluxe_Retaining_Soil -c 10
+show inventory
+inventory show
+inventory trash -i Grass
+inventory show
+inventory trash -i Sap
+cheat add item -n Deluxe_Retaining_Soil -c 10
+fertilize -f Deluxe_Retaining_Soil -d left
+print map -l 0 0 -s 160
+howmuch water
+cheat advance date 1d
+print map -l 0 0 -s 160
+showplant -l 29 30
+cheat advance date 10d
+register -u Parsa -p Parsa1234* Parsa1234* -n Parsa -e Parsapak84@gmail.com -g Male
+register -u Mmd -p Parsa1234* Parsa1234* -n Parsa -e Parsapak84@gmail.com -g Female
+register -u Ali -p Parsa1234* Parsa1234* -n Parsa -e Parsapak84@gmail.com -g Male
+register -u Reza -p Parsa1234* Parsa1234* -n Parsa -e Parsapak84@gmail.com -g Male
+login -u Parsa -p Parsa1234*
+menu enter game
+game new -u Mmd Ali Reza
+
+
+energy set -v 150
+energy set -v 250
+energy unlimited
+energy show
+print map -l 0 0 -s 160
+cheat add 200000 dollars
+cheat add item -n Wood -c 1000
+greenhouse build
+inventory how
+inventory show
+inventory trash -i Wood -n 100
+tools equip Hoe
+print map -l 0 0 -s 150
+walk -l 30 30
+tools show current
+tools show available
+tools use -d l
+tools use -d left
+print map -l 0 0 -s 60
+print map -l 0 0 -s 160
+walk -l 90 90
+walk -l 60 60
+walk -l 80 90
+cheat add item -n Copper_Bar -c 100
+show balance
+tools upgrade Hoe
+walk -l 10 60
+walk -l 30 30
+tools use Pickax
+tools use Pickaxe
+tools equip Pickaxe
+tools use up
+tools use -d up
+print map -l 0 0 -s 160
+walk -l 30 15
+walk -l 34 15
+tools equip Axe
+tools use -d down
+print map -l 0 0 -s 160
+walk -l 30 30
+tools equip Watering_Can
+tools equip WateringCan
+tools use -d left
+print map -l 0 0 -s 160
+walk -l 30 34
+Craftinfo -n Carrot
+craftinto -n Carrot
+craftinfo -n Carrot
+walk -l 30 30
+cheat add item -n Carrot_Seeds -c 10
+plant -s Carrot_Seeds -d left
+show plant -l 29 30
+showplant -n 29 30
+showplant -l 29 30
+cheat add item -n Deluxe_Retaining_Soil -c 10
+show inventory
+inventory show
+inventory trash -i Grass
+inventory show
+inventory trash -i Sap
+cheat add item -n Deluxe_Retaining_Soil -c 10
+fertilize -f Deluxe_Retaining_Soil -d left
+print map -l 0 0 -s 160
+howmuch water
+cheat advance date 1d
+print map -l 0 0 -s 160
+showplant -l 29 30
+cheat advance date 10dwalk -l 30 30
+walk -l 30 30
+print map -l 0 0 -s 160
+tools equip Hoe
+tools use -d left
+cheat add item -n Carrot_Seeds -c 10
+plant -s Carrot_Seed -d left
+plant -s Carrot_Seeds -d left
+tools equip Watering_Can
+tools use -d left
+print map -l 0 0 -s 160
+cheat advance date 1d
+print map -l 0 0 -s 160
+walk -l 30 30
+tools equip Watering_Can
+tools use -d left
+print map -l 0 0 -s 160
+cheat advance date 1d
+walk -l 30 30
+print map -l 0 0 -s 160
+tools equip
+tools equip Watering_Can
+tools use -d left
+cheat advance date 1d
+print map -l 0 0 -s 160
+craftinfo -n Carrot_Seeds
+showplant -l 29 30
+walk -l 30 30
+tools equip Watering_Can
+tools use -d left
+print map -l 0 0 -s 160
+cheat advance date 1d
+print map -l 0 0 -s 160
+walk -l 30 30
+tools equip Scythe
+tools use -d left
+
+
+register -u Parsa -p Parsa1234* Parsa1234* -n Parsa -e Parsapak84@gmail.com -g Male
+register -u Mmd -p Parsa1234* Parsa1234* -n Parsa -e Parsapak84@gmail.com -g Female
+register -u Ali -p Parsa1234* Parsa1234* -n Parsa -e Parsapak84@gmail.com -g Male
+register -u Reza -p Parsa1234* Parsa1234* -n Parsa -e Parsapak84@gmail.com -g Male
+login -u Parsa -p Parsa1234*
+menu enter game
+game new -u Mmd Ali Reza
+energy set -v 150
+energy set -v 250
+energy unlimited
+energy show
+print map -l 0 0 -s 160
+cheat add 200000 dollars
+cheat add item -n Wood -c 1000
+greenhouse build
+inventory how
+inventory show
+inventory trash -i Wood -n 100
+tools equip Hoe
+print map -l 0 0 -s 150
+walk -l 30 30
+tools show available
+tools use -d l
+tools use -d left
+print map -l 0 0 -s 60
+print map -l 0 0 -s 160
+walk -l 90 90
+walk -l 80 90
+show balance
+tools upgrade Hoe
+walk -l 10 60
+tools use Pickax
+tools use Pickaxe
+tools equip Pickaxe
+tools use up
+tools use -d up
+print map -l 0 0 -s 160
+walk -l 30 15
+tools equip Axe
+tools use -d down
+print map -l 0 0 -s 160
+walk -l 30 30
+tools equip WateringCan
+tools use -d left
+print map -l 0 0 -s 160
+walk -l 30 34
+craftinto -n Carrot
+craftinfo -n Carrot
+walk -l 30 30
+plant -s Carrot_Seeds -d left
+show plant -l 29 30
+showplant -n 29 30
+showplant -l 29 30
+cheat add item -n Deluxe_Retaining_Soil -c 10
+show inventory
+inventory show
+inventory trash -i Grass
+inventory show
+inventory trash -i Sap
+cheat add item -n Deluxe_Retaining_Soil -c 10
+fertilize -f Deluxe_Retaining_Soil -d left
+print map -l 0 0 -s 160
+howmuch water
+cheat advance date 1d
+print map -l 0 0 -s 160
+showplant -l 29 30
+cheat advance date 10dwalk -l 30 30
+walk -l 30 30
+tools equip Hoe
+tools use -d left
+cheat add item -n Carrot_Seeds -c 10
+plant -s Carrot_Seed -d left
+plant -s Carrot_Seeds -d left
+tools equip Watering_Can
+tools use -d left
+print map -l 0 0 -s 160
+cheat advance date 1d
+print map -l 0 0 -s 160
+walk -l 30 30
+tools use -d left
+print map -l 0 0 -s 160
+cheat advance date 1d
+walk -l 30 30
+tools equip
+tools equip Watering_Can
+tools use -d left
+cheat advance date 1d
+print map -l 0 0 -s 160
+craftinfo -n Carrot_Seeds
+showplant -l 29 30
+walk -l 30 30
+tools use -d left
+print map -l 0 0 -s 160
+cheat advance date 1d
+print map -l 0 0 -s 160
+walk -l 30 30
+tools use -d left
+print map -l 0 0 -s 160
+
+register -u Parsa -p Parsa1234* Parsa1234* -n Parsa -e Parsapak84@gmail.com -g Male
+register -u Mmd -p Parsa1234* Parsa1234* -n Parsa -e Parsapak84@gmail.com -g Female
+register -u Ali -p Parsa1234* Parsa1234* -n Parsa -e Parsapak84@gmail.com -g Male
+register -u Reza -p Parsa1234* Parsa1234* -n Parsa -e Parsapak84@gmail.com -g Male
+login -u Parsa -p Parsa1234*
+menu enter game
+game new -u Mmd Ali Reza
+pri
 
 print map -l 0 0 -s 160
+walk -l 0 0 -s 160
+walk -l 30 30
+cheat add item -n Carrot_Seeds -c 10
+plant -s Carrot_Seeds -d left
+tools equip Hoe
+tools use -d left
+plant -s Carrot_Seeds -d left
+cheat advance date 1d
+print map -l 0 0 -s 160
+walk -l 30 30 
+tools equip Watering_Can
+tools use -d left
+showplant -n 29 30
+showplant -l 29 30
+walk -l 30 30 
+tools equip Watering_Can
+tools use -d left
+showplant -l 29 30
+cheat advance date 1d
+walk -l 30 30 
+tools equip Watering_Can
+tools use -d left
+showplant -l 29 30
+cheat advance date 1d
+showplant -l 29 30
+walk -l 30 30 
+tools equip Watering_Can
+tools use -d left
+showplant -l 29 30
+cheat advance date 1d
+walk -l 30 30 
+tools equip Watering_Can
+tools use -d left
+showplant -l 29 30
+cheat advance date 1d
+
+
+
 register -u Parsa -p Parsa1234* Parsa1234* -n Parsa -e Parsapak84@gmail.com -g Male
 register -u Mmd -p Parsa1234* Parsa1234* -n Parsa -e Parsapak84@gmail.com -g Female
 register -u Ali -p Parsa1234* Parsa1234* -n Parsa -e Parsapak84@gmail.com -g Male
@@ -307,10 +593,33 @@ register -u Reza -p Parsa1234* Parsa1234* -n Parsa -e Parsapak84@gmail.com -g Ma
 login -u Parsa -p Parsa1234*
 menu enter game
 game new -u Mmd Ali Reza
-cheat add item -n Triple Shot Espresso -c 10
-cheat add item -n Triple_Shot_Espresso -c 10
-eat Triple_Shot_Espresso
-energy show
+print map -l 0 0 -s 160
+walk -l 30 30
+print map -l 0 0 -s 60
+tools equip Hoe
+tools use -d right
+tools equip Watering_Can
+tools use -d right
+cheat add item -n Carrot_Seeds -c 10
+plant -s Carrot_Seeds -d right
+cheat advance date 1d
+print map -l 0 0 -s 60
+walk -l 30 30
+tools equip Watering_Can
+tools use -d right
+cheat advance date 1d
+print map -l 0 0 -s 60
+walk -l 30 30
+tools equip Watering_Can
+tools use -d right
+print map -l 0 0 -s 60
+cheat advance date 1d
+print map -l 0 0 -s 60
+walk -l 30 30
+tools equip Watering_Can
+tools use -d right
+cheat advance date 1d
+
 register -u Parsa -p Parsa1234* Parsa1234* -n Parsa -e Parsapak84@gmail.com -g Male
 register -u Mmd -p Parsa1234* Parsa1234* -n Parsa -e Parsapak84@gmail.com -g Female
 register -u Ali -p Parsa1234* Parsa1234* -n Parsa -e Parsapak84@gmail.com -g Male
@@ -318,9 +627,45 @@ register -u Reza -p Parsa1234* Parsa1234* -n Parsa -e Parsapak84@gmail.com -g Ma
 login -u Parsa -p Parsa1234*
 menu enter game
 game new -u Mmd Ali Reza
-cheat add item -n Triple_Shot_Espresso -c 10
-eat Triple_Shot_Espresso
-energy show
+
+print map -l 0 0 -s 60
+walk -l 30 30
+walk -l 30 30
+walk -l 29 30
+print map -l 0 0 -s 60
+tools equip Hoe
+tools use -d dow
+tools use -d down
+cheat add item -n Carrot_Seeds -c 10
+plant -s Carrot_Seeds -d down
+tools equip Watering_Can
+tools use -d down
+cheat advance date 1d
+print map -l 0 0 -s 160
+print map -l 0 0 -s 60
+walk -l 29 30
+cheat add item -n Deluxe_Retaining_Soil -c 10
+fertilize -f Deluxe_Retaining_Soil -d down
+tools equip Watering_Can
+tools use -d down
+print map -l 0 0 -s 6
+print map -l 0 0 -s 60
+cheat advance date 1d
+print map -l 0 0 -s 60
+cheat advance date 1d
+print map -l 0 0 -s 60
+walk -l 29 30
+tools equip Watering_Can
+tools use -d down
+cheat advance date 1d
+print map -l 0 0 -s 60
+walk -l 29 30
+tools equip Scythe
+tools use -d down
+print map -l 0 0 -s 60
+tools use -d down
+inventory show
+
 register -u Parsa -p Parsa1234* Parsa1234* -n Parsa -e Parsapak84@gmail.com -g Male
 register -u Mmd -p Parsa1234* Parsa1234* -n Parsa -e Parsapak84@gmail.com -g Female
 register -u Ali -p Parsa1234* Parsa1234* -n Parsa -e Parsapak84@gmail.com -g Male
@@ -328,9 +673,22 @@ register -u Reza -p Parsa1234* Parsa1234* -n Parsa -e Parsapak84@gmail.com -g Ma
 login -u Parsa -p Parsa1234*
 menu enter game
 game new -u Mmd Ali Reza
-cheat add item -n Triple_Shot_Espresso -c 10
-eat Triple_Shot_Espresso
-energy show
+
+
+print map -l 0 0 -s 60
+walk -l 30 30
+print map -l 0 0 -s 60
+cheat add item -n Carrot_Seeds -c 10
+tools equip HOe
+tools equip Hoe
+tools use -d up
+plant -s Carrot_Seeds -d up
+tools equip Watering_Can
+tools use -d up
+print map -l 0 0 -s 6
+print map -l 0 0 -s 60
+
+
 register -u Parsa -p Parsa1234* Parsa1234* -n Parsa -e Parsapak84@gmail.com -g Male
 register -u Mmd -p Parsa1234* Parsa1234* -n Parsa -e Parsapak84@gmail.com -g Female
 register -u Ali -p Parsa1234* Parsa1234* -n Parsa -e Parsapak84@gmail.com -g Male
@@ -338,6 +696,1008 @@ register -u Reza -p Parsa1234* Parsa1234* -n Parsa -e Parsapak84@gmail.com -g Ma
 login -u Parsa -p Parsa1234*
 menu enter game
 game new -u Mmd Ali Reza
-cheat add item -n Triple_Shot_Espresso -c 10
-eat Triple_Shot_Espresso
-energy show
+
+print
+print map -l 0 0 -s 60
+walk -l 30 30
+print map -l 0 0 -s 60
+cheat add item -n Carrot_Seeds -c 10
+tools equip Hoe
+tools use -d left
+tools equip Watering_Can
+tools use -d left
+plant -s Carrot_Seeds -d left
+print map -l 0 0 -s 60
+
+register -u Parsa -p Parsa1234* Parsa1234* -n Parsa -e Parsapak84@gmail.com -g Male
+register -u Mmd -p Parsa1234* Parsa1234* -n Parsa -e Parsapak84@gmail.com -g Female
+register -u Ali -p Parsa1234* Parsa1234* -n Parsa -e Parsapak84@gmail.com -g Male
+register -u Reza -p Parsa1234* Parsa1234* -n Parsa -e Parsapak84@gmail.com -g Male
+login -u Parsa -p Parsa1234*
+menu enter game
+game new -u Mmd Ali Reza
+
+ح
+walk -l 30 3
+walk -l 30 30
+print map -l 0 0 -s 60
+tools equip Hoe
+tools use -d up
+tools equip Watering_Can
+tool use -d up
+tools use -d up
+cheat add item -n Carrot_Seeds -c 10
+plant -s Carrot_Seeds -d up
+print map -l 0 0 -s 60
+
+
+
+register -u Parsa -p Parsa1234* Parsa1234* -n Parsa -e Parsapak84@gmail.com -g Male
+register -u Mmd -p Parsa1234* Parsa1234* -n Parsa -e Parsapak84@gmail.com -g Female
+register -u Ali -p Parsa1234* Parsa1234* -n Parsa -e Parsapak84@gmail.com -g Male
+register -u Reza -p Parsa1234* Parsa1234* -n Parsa -e Parsapak84@gmail.com -g Male
+login -u Parsa -p Parsa1234*
+menu enter game
+game new -u Mmd Ali Reza
+
+walk -l 30 30
+print map -l 0 0 -s 60
+tools equip Hoe
+tools use -d up
+tools equip Watering_Can
+tools use -d up
+print map -l 0 0 -s 60
+cheat add item -n Carrot_Seeds -c 10
+plant -s Carrot_Seeds -d up
+print map -l 0 0 -s 60
+cheat add item -n Deluxe_Retaining_Soil -c 10
+fertilize -f Deluxe_Retaining_Soil -d up
+cheat advance date 1d
+print map -l 0 0 -s 60
+cheat advance date 1d
+print map -l 0 0 -s 60
+walk -l 30 30
+print map -l 0 0 -s 60
+tools equip Watering_Can
+tools use -d up
+cheat advance date 1d
+print map -l  0 0 -s 60
+walk -l 30 30
+tools equip Watering_Can
+tools use -d up
+cheat advance date 1d
+print 
+
+print map -l 0 0 -s 60
+
+register -u Parsa -p Parsa1234* Parsa1234* -n Parsa -e Parsapak84@gmail.com -g Male
+register -u Mmd -p Parsa1234* Parsa1234* -n Parsa -e Parsapak84@gmail.com -g Female
+register -u Ali -p Parsa1234* Parsa1234* -n Parsa -e Parsapak84@gmail.com -g Male
+register -u Reza -p Parsa1234* Parsa1234* -n Parsa -e Parsapak84@gmail.com -g Male
+login -u Parsa -p Parsa1234*
+menu enter game
+game new -u Mmd Ali Reza
+
+print map -l 0 0 -s 60
+walk -l 30 30
+print map -l 0 0 -s 60
+tools equip Hoe
+tools use -d up
+cheat add item -n Carrot_Seeds -c 10
+plant -s Carrot_Seeds -d up
+tools equip Watering_Can
+tools use -d up
+cheat advance date 1d
+
+
+register -u Parsa -p Parsa1234* Parsa1234* -n Parsa -e Parsapak84@gmail.com -g Male
+register -u Mmd -p Parsa1234* Parsa1234* -n Parsa -e Parsapak84@gmail.com -g Female
+register -u Ali -p Parsa1234* Parsa1234* -n Parsa -e Parsapak84@gmail.com -g Male
+register -u Reza -p Parsa1234* Parsa1234* -n Parsa -e Parsapak84@gmail.com -g Male
+login -u Parsa -p Parsa1234*
+menu enter game
+game new -u Mmd Ali Reza
+
+print map -l 0 0 -s 60
+walk -l 30 30
+print map -l 0 0 -s 60
+tools equip Hoe
+tools use -d up
+cheat add item -n Carrot_Seeds -c 10
+plant -s Carrot_Seeds -d up
+tools equip Watering_Can
+tools use -d up
+print map -l 0 0 -s 60
+cheat advance date 1d
+walk -l 30 30
+tools use -d up
+print map -l 0 0 -s 60
+cheat advance date 1d
+walk -l 30 30
+tools use -d up
+print map -l 0 0 -s 60
+cheat advance date 1d
+walk -l 30 30
+tools use -d up
+print map -l 0 0 -s 60
+cheat advance date 1d
+walk -l 30 30
+tools use -d up
+print map -l 0 0 -s 60
+cheat advance date 1d
+register -u Parsa -p Parsa1234* Parsa1234* -n Parsa -e Parsapak84@gmail.com -g Male
+register -u Mmd -p Parsa1234* Parsa1234* -n Parsa -e Parsapak84@gmail.com -g Female
+register -u Ali -p Parsa1234* Parsa1234* -n Parsa -e Parsapak84@gmail.com -g Male
+register -u Reza -p Parsa1234* Parsa1234* -n Parsa -e Parsapak84@gmail.com -g Male
+login -u Parsa -p Parsa1234*
+menu enter game
+game new -u Mmd Ali Reza
+
+print map -l 0 0 -s 60
+walk -l 30 30
+print map -l 0 0 -s 60
+tools equip Hoe
+tools use -d left
+cheat add item -n Carrot_Seeds -c 10
+plant -s Carrot_Seeds -d left
+tools equip Watering_Can
+tools use -d left
+print map -l 0 0 -s 60
+cheat advance date 1d
+walk -l 30 30
+tools use -d up
+print map -l 0 0 -s 60
+cheat advance date 1d
+
+walk -l 30 30
+tools use -d up
+print map -l 0 0 -s 60
+cheat advance date 1d
+walk -l 30 30
+tools use -d up
+print map -l 0 0 -s 60
+cheat advance date 1d
+
+register -u Parsa -p Parsa1234* Parsa1234* -n Parsa -e Parsapak84@gmail.com -g Male
+register -u Mmd -p Parsa1234* Parsa1234* -n Parsa -e Parsapak84@gmail.com -g Female
+register -u Ali -p Parsa1234* Parsa1234* -n Parsa -e Parsapak84@gmail.com -g Male
+register -u Reza -p Parsa1234* Parsa1234* -n Parsa -e Parsapak84@gmail.com -g Male
+login -u Parsa -p Parsa1234*
+menu enter game
+game new -u Mmd Ali Reza
+
+print map -l 0 0 -s 60
+walk -l 30 30
+print map -l 0 0 -s 60
+tools equip Hoe
+tools use -d up
+cheat add item -n Carrot_Seeds -c 10
+plant -s Carrot_Seeds -d up
+tools equip Watering_Can
+tools use -d up
+print map -l 0 0 -s 60
+cheat advance date 1d
+walk -l 30 30
+tools use -d up
+print map -l 0 0 -s 60
+cheat advance date 1d
+walk -l 30 30
+tools use -d up
+print map -l 0 0 -s 60
+cheat advance date 1d
+walk -l 30 30
+tools use -d up
+print map -l 0 0 -s 60
+cheat advance date 1d
+walk -l 30 30
+tools use -d up
+print map -l 0 0 -s 60
+cheat advance date 1d
+
+walk -l 30 30
+tools use -d up
+print map -l 0 0 -s 60
+cheat advance date 1d
+walk -l 30 30
+tools use -d up
+print map -l 0 0 -s 60
+cheat advance date 1d
+
+
+
+register -u Parsa -p Parsa1234* Parsa1234* -n Parsa -e Parsapak84@gmail.com -g Male
+register -u Mmd -p Parsa1234* Parsa1234* -n Parsa -e Parsapak84@gmail.com -g Female
+register -u Ali -p Parsa1234* Parsa1234* -n Parsa -e Parsapak84@gmail.com -g Male
+register -u Reza -p Parsa1234* Parsa1234* -n Parsa -e Parsapak84@gmail.com -g Male
+login -u Parsa -p Parsa1234*
+menu enter game
+game new -u Mmd Ali Reza
+
+walk -l 30 30
+print map -l 0 0 -s 60
+tools equip Pickaxe
+tools use -d up
+inventory show
+print map -l 0 0 -s 60
+tools equip Hoe
+tools use -d up
+tools equip Watering_Can
+tools use -d up
+cheat add item -n Carrot_Seeds -c 10
+plant -s Carrot_Seeds -d up
+cheat advance date 1d
+walk -l 30 30
+tools equip Watering_Can
+tools use -d up
+print map -l 0 0 -s 60
+cheat advance date 1d
+walk -l 30 30
+tools equip Watering_Can
+tools use -d up
+print map -l 0 0 -s 60
+cheat advance date 1d
+walk -l 30 30
+tools equip Watering_Can
+tools use -d up
+print map -l 0 0 -s 60
+cheat advance date 1d
+walk -l 30 30
+tools equip Watering_Can
+tools use -d up
+print map -l 0 0 -s 60
+cheat advance date 1d
+
+walk -l 30 30
+tools equip Watering_Can
+tools use -d up
+print map -l 0 0 -s 60
+cheat advance date 1d
+
+walk -l 30 30
+tools equip Watering_Can
+tools use -d up
+print map -l 0 0 -s 60
+cheat advance date 1d
+
+
+register -u Parsa -p Parsa1234* Parsa1234* -n Parsa -e Parsapak84@gmail.com -g Male
+register -u Mmd -p Parsa1234* Parsa1234* -n Parsa -e Parsapak84@gmail.com -g Female
+register -u Ali -p Parsa1234* Parsa1234* -n Parsa -e Parsapak84@gmail.com -g Male
+register -u Reza -p Parsa1234* Parsa1234* -n Parsa -e Parsapak84@gmail.com -g Male
+login -u Parsa -p Parsa1234*
+menu enter game
+game new -u Mmd Ali Reza
+
+walk -l 30 30
+print map -l 0 0 -s 60
+tools equip Hoe
+tools use -d up
+tools equip Watering_Can
+tools use -d up
+cheat add item -n Carrot_Seeds -c 10
+plant -s Carrot_Seeds -d up
+cheat advance date 1d
+
+print map -l 0 0 -s 60
+walk -l 30 30
+tools equip Watering_Can
+tools use -d up
+print map -l 0 0 -s 60
+cheat advance date 1d
+
+
+walk -l 30 30
+tools equip Watering_Can
+tools use -d up
+print map -l 0 0 -s 60
+cheat advance date 1d
+
+walk -l 30 30
+tools equip Watering_Can
+tools use -d up
+print map -l 0 0 -s 60
+cheat advance date 1d
+
+
+
+
+walk -l 30 30
+tools equip Watering_Can
+tools use -d up
+print map -l 0 0 -s 60
+cheat advance date 1d
+tools equip Scythe
+tools use -d up
+walk -l 30 30
+print map -l 0 0 -s 60
+
+
+register -u Parsa -p Parsa1234* Parsa1234* -n Parsa -e Parsapak84@gmail.com -g Male
+register -u Mmd -p Parsa1234* Parsa1234* -n Parsa -e Parsapak84@gmail.com -g Female
+register -u Ali -p Parsa1234* Parsa1234* -n Parsa -e Parsapak84@gmail.com -g Male
+register -u Reza -p Parsa1234* Parsa1234* -n Parsa -e Parsapak84@gmail.com -g Male
+login -u Parsa -p Parsa1234*
+menu enter game
+game new -u Mmd Ali Reza
+walk -l 30 30
+print map -l 0 0 -s 60
+tools equip Hoe
+tools use -d up
+tools equip Watering_Can
+tools use -d up
+cheat add item -n Carrot_seeds -c 10
+plant -s Carrot_Seeds -d up
+cheat advance date 1d
+
+register -u Parsa -p Parsa1234* Parsa1234* -n Parsa -e Parsapak84@gmail.com -g Male
+register -u Mmd -p Parsa1234* Parsa1234* -n Parsa -e Parsapak84@gmail.com -g Female
+register -u Ali -p Parsa1234* Parsa1234* -n Parsa -e Parsapak84@gmail.com -g Male
+register -u Reza -p Parsa1234* Parsa1234* -n Parsa -e Parsapak84@gmail.com -g Male
+login -u Parsa -p Parsa1234*
+menu enter game
+game new -u Mmd Ali Reza
+
+walk -l 30 30
+y
+print map -l 0 0 -s 60
+tools equip Hoe
+tools use -d up
+tools equip Watering_Can
+tools use -d up
+cheat add item -n Carrot_Seeds -c 10
+plant -s Carrot_Seeds -d up
+cheat advance date 1d
+register -u Parsa -p Parsa1234* Parsa1234* -n Parsa -e Parsapak84@gmail.com -g Male
+register -u Mmd -p Parsa1234* Parsa1234* -n Parsa -e Parsapak84@gmail.com -g Female
+register -u Ali -p Parsa1234* Parsa1234* -n Parsa -e Parsapak84@gmail.com -g Male
+register -u Reza -p Parsa1234* Parsa1234* -n Parsa -e Parsapak84@gmail.com -g Male
+login -u Parsa -p Parsa1234*
+menu enter game
+game new -u Mmd Ali Reza
+walk -l 30 30
+print map -l 0 0 -s 60
+tools equip Hoe
+tools use -d up
+tools equip Watering_Can
+tools use -d up
+cheat add item -n Carrot_Seeds -c 10
+plant -s Carrot_Seeds -d up
+cheat advance date 1d
+walk -l 30 30
+tools equip Watering_Can
+tools use -d up
+print map -l 0 0 -s 60
+cheat advance date 1d
+
+walk -l 30 30
+tools equip Watering_Can
+tools use -d up
+print map -l 0 0 -s 60
+cheat advance date 1d
+
+walk -l 30 30
+tools equip Watering_Can
+tools use -d up
+print map -l 0 0 -s 60
+cheat advance date 1d
+
+
+walk -l 30 30
+tools equip Watering_Can
+tools use -d up
+print map -l 0 0 -s 60
+cheat advance date 1d
+
+
+print map -l 0 0 -s 60
+walk -l 30 30
+tools equip Scythe
+tools use -d u
+tools use -d up
+inentory show
+inventory show
+
+
+register -u Parsa -p Parsa1234* Parsa1234* -n Parsa -e Parsapak84@gmail.com -g Male
+register -u Mmd -p Parsa1234* Parsa1234* -n Parsa -e Parsapak84@gmail.com -g Female
+register -u Ali -p Parsa1234* Parsa1234* -n Parsa -e Parsapak84@gmail.com -g Male
+register -u Reza -p Parsa1234* Parsa1234* -n Parsa -e Parsapak84@gmail.com -g Male
+login -u Parsa -p Parsa1234*
+menu enter game
+game new -u Mmd Ali Reza
+walk -l 30 30
+print map -l 0 0 -s 60
+tools equip Hoe
+tools use -d up
+tools equip Watering_Can
+tools use -d up
+cheat add item -n Carrot_Seeds -c 10
+plant -s Carrot_Seeds -d up
+cheat advance date 1d
+
+walk -l 30 30
+tools equip Watering_Can
+tools use -d up
+print map -l 0 0 -s 60
+cheat advance date 1d
+walk -l 30 30
+tools equip Watering_Can
+tools use -d up
+print map -l 0 0 -s 60
+cheat advance date 1d
+walk -l 30 30
+tools equip Watering_Can
+tools use -d up
+print map -l 0 0 -s 60
+cheat advance date 1d
+walk -l 30 30
+tools equip Watering_Can
+tools use -d up
+print map -l 0 0 -s 60
+cheat advance date 1d
+walk -l 30 30
+tools equip Scythe
+tool use -d up
+tools use -d up
+inventory show
+cheat advance date 1d
+print map -l 0 0 -s 60
+
+register -u Parsa -p Parsa1234* Parsa1234* -n Parsa -e Parsapak84@gmail.com -g Male
+register -u Mmd -p Parsa1234* Parsa1234* -n Parsa -e Parsapak84@gmail.com -g Female
+register -u Ali -p Parsa1234* Parsa1234* -n Parsa -e Parsapak84@gmail.com -g Male
+register -u Reza -p Parsa1234* Parsa1234* -n Parsa -e Parsapak84@gmail.com -g Male
+login -u Parsa -p Parsa1234*
+menu enter game
+game new -u Mmd Ali Reza
+walk -l 30 30
+print map -l 0 0 -s 60
+tools equip Hoe
+tools use -d up
+tools equip Watering_Can
+tools use -d up
+cheat add item -n Carrot_Seeds -c 10
+plant -s Carrot_Seeds -d up
+cheat advance date 1d
+
+walk -l 30 30
+tools equip Watering_Can
+tools use -d up
+print map -l 0 0 -s 60
+cheat advance date 1d
+
+walk -l 30 30
+tools equip Watering_Can
+tools use -d up
+print map -l 0 0 -s 60
+cheat advance date 1d
+walk -l 30 30
+tools equip Watering_Can
+tools use -d up
+print map -l 0 0 -s 60
+cheat advance date 1d
+
+walk -l 30 30
+y
+tools equip Watering_Can
+tools use -d up
+print map -l 0 0 -s 60
+cheat advance date 1d
+
+register -u Parsa -p Parsa1234* Parsa1234* -n Parsa -e Parsapak84@gmail.com -g Male
+register -u Mmd -p Parsa1234* Parsa1234* -n Parsa -e Parsapak84@gmail.com -g Female
+register -u Ali -p Parsa1234* Parsa1234* -n Parsa -e Parsapak84@gmail.com -g Male
+register -u Reza -p Parsa1234* Parsa1234* -n Parsa -e Parsapak84@gmail.com -g Male
+login -u Parsa -p Parsa1234*
+menu enter game
+game new -u Mmd Ali Reza
+walk -l 30 30
+print map -l 0 0 -s 60
+tools equip Hoe
+tools use -d up
+tools equip Watering_Can
+tools use -d up
+cheat add item -n Carrot_Seeds -c 10
+plant -s Carrot_Seeds -d up
+cheat advance date 1d
+
+
+walk -l 30 30
+tools equip Watering_Can
+tools use -d up
+print map -l 0 0 -s 60
+cheat advance date 1d
+
+
+walk -l 30 30
+tools equip Watering_Can
+tools use -d up
+print map -l 0 0 -s 60
+cheat advance date 1d
+walk -l 30 30
+tools equip Watering_Can
+tools use -d up
+print map -l 0 0 -s 60
+cheat advance date 1d
+
+
+register -u Parsa -p Parsa1234* Parsa1234* -n Parsa -e Parsapak84@gmail.com -g Male
+register -u Mmd -p Parsa1234* Parsa1234* -n Parsa -e Parsapak84@gmail.com -g Female
+register -u Ali -p Parsa1234* Parsa1234* -n Parsa -e Parsapak84@gmail.com -g Male
+register -u Reza -p Parsa1234* Parsa1234* -n Parsa -e Parsapak84@gmail.com -g Male
+login -u Parsa -p Parsa1234*
+menu enter game
+game new -u Mmd Ali Reza
+walk -l 30 30
+print map -l 0 0 -s 60
+tools equip Hoe
+tools use -d up
+tools equip Watering_Can
+tools use -d up
+cheat add item -n Carrot_Seeds -c 10
+plant -s Carrot_Seeds -d up
+cheat advance date 1d
+
+
+walk -l 30 30
+tools equip Watering_Can
+tools use -d up
+print map -l 0 0 -s 60
+cheat advance date 1d
+walk -l 30 30
+tools equip Watering_Can
+tools use -d up
+print map -l 0 0 -s 60
+cheat advance date 1d
+walk -l 30 30
+tools equip Watering_Can
+tools use -d up
+print map -l 0 0 -s 60
+cheat advance date 1d
+
+register -u Parsa -p Parsa1234* Parsa1234* -n Parsa -e Parsapak84@gmail.com -g Male
+register -u Mmd -p Parsa1234* Parsa1234* -n Parsa -e Parsapak84@gmail.com -g Female
+register -u Ali -p Parsa1234* Parsa1234* -n Parsa -e Parsapak84@gmail.com -g Male
+register -u Reza -p Parsa1234* Parsa1234* -n Parsa -e Parsapak84@gmail.com -g Male
+login -u Parsa -p Parsa1234*
+menu enter game
+game new -u Mmd Ali Reza
+walk -l 30 30
+print map -l 0 0 -s 60
+tools equip Hoe
+tools use -d up
+tools equip Watering_Can
+tools use -d up
+cheat add item -n Carrot_Seeds -c 10
+plant -s Carrot_Seeds -d up
+cheat advance date 1d
+
+
+walk -l 30 30
+tools equip Watering_Can
+tools use -d up
+print map -l 0 0 -s 60
+cheat advance date 1d
+walk -l 30 30
+tools equip Watering_Can
+tools use -d up
+print map -l 0 0 -s 60
+cheat advance date 1d
+walk -l 30 30
+tools equip Watering_Can
+tools use -d up
+print map -l 0 0 -s 60
+cheat advance date 1d
+
+register -u Parsa -p Parsa1234* Parsa1234* -n Parsa -e Parsapak84@gmail.com -g Male
+register -u Mmd -p Parsa1234* Parsa1234* -n Parsa -e Parsapak84@gmail.com -g Female
+register -u Ali -p Parsa1234* Parsa1234* -n Parsa -e Parsapak84@gmail.com -g Male
+register -u Reza -p Parsa1234* Parsa1234* -n Parsa -e Parsapak84@gmail.com -g Male
+login -u Parsa -p Parsa1234*
+menu enter game
+game new -u Mmd Ali Reza
+walk -l 30 30
+print map -l 0 0 -s 60
+tools equip Hoe
+tools use -d up
+tools equip Watering_Can
+tools use -d up
+cheat add item -n Carrot_Seeds -c 10
+plant -s Carrot_Seeds -d up
+cheat advance date 1d
+walk -l 30 30
+tools equip Watering_Can
+tools use -d up
+print map -l 0 0 -s 60
+cheat advance date 1d
+walk -l 30 30
+tools equip Watering_Can
+tools use -d up
+print map -l 0 0 -s 60
+cheat advance date 1d
+walk -l 30 30
+tools equip Watering_Can
+tools use -d up
+print map -l 0 0 -s 60
+cheat advance date 1d
+
+register -u Parsa -p Parsa1234* Parsa1234* -n Parsa -e Parsapak84@gmail.com -g Male
+register -u Mmd -p Parsa1234* Parsa1234* -n Parsa -e Parsapak84@gmail.com -g Female
+register -u Ali -p Parsa1234* Parsa1234* -n Parsa -e Parsapak84@gmail.com -g Male
+register -u Reza -p Parsa1234* Parsa1234* -n Parsa -e Parsapak84@gmail.com -g Male
+login -u Parsa -p Parsa1234*
+menu enter game
+game new -u Mmd Ali Reza
+walk -l 30 30
+print map -l 0 0 -s 60
+tools equip Hoe
+tools use -d up
+tools equip Watering_Can
+tools use -d up
+cheat add item -n Carrot_Seeds -c 10
+plant -s Carrot_Seeds -d up
+cheat advance date 1d
+
+walk -l 30 30
+tools equip Watering_Can
+tools use -d up
+print map -l 0 0 -s 60
+cheat advance date 1d
+walk -l 30 30
+tools equip Watering_Can
+tools use -d up
+print map -l 0 0 -s 60
+cheat advance date 1d
+walk -l 30 30
+tools equip Watering_Can
+tools use -d up
+print map -l 0 0 -s 60
+cheat advance date 1d
+
+
+register -u Parsa -p Parsa1234* Parsa1234* -n Parsa -e Parsapak84@gmail.com -g Male
+register -u Mmd -p Parsa1234* Parsa1234* -n Parsa -e Parsapak84@gmail.com -g Female
+register -u Ali -p Parsa1234* Parsa1234* -n Parsa -e Parsapak84@gmail.com -g Male
+register -u Reza -p Parsa1234* Parsa1234* -n Parsa -e Parsapak84@gmail.com -g Male
+login -u Parsa -p Parsa1234*
+menu enter game
+game new -u Mmd Ali Reza
+walk -l 30 30
+print map -l 0 0 -s 60
+tools equip Hoe
+tools use -d up
+tools equip Watering_Can
+tools use -d up
+cheat add item -n Carrot_Seeds -c 10
+plant -s Carrot_Seeds -d up
+cheat advance date 1d
+walk -l 30 30
+tools equip Watering_Can
+tools use -d up
+print map -l 0 0 -s 60
+cheat advance date 1d
+walk -l 30 30
+tools equip Watering_Can
+tools use -d up
+print map -l 0 0 -s 60
+cheat advance date 1d
+walk -l 30 30
+tools equip Watering_Can
+tools use -d up
+print map -l 0 0 -s 60
+cheat advance date 1d
+
+register -u Parsa -p Parsa1234* Parsa1234* -n Parsa -e Parsapak84@gmail.com -g Male
+register -u Mmd -p Parsa1234* Parsa1234* -n Parsa -e Parsapak84@gmail.com -g Female
+register -u Ali -p Parsa1234* Parsa1234* -n Parsa -e Parsapak84@gmail.com -g Male
+register -u Reza -p Parsa1234* Parsa1234* -n Parsa -e Parsapak84@gmail.com -g Male
+login -u Parsa -p Parsa1234*
+menu enter game
+game new -u Mmd Ali Reza
+walk -l 30 30
+print map -l 0 0 -s 60
+tools equip Hoe
+tools use -d up
+tools equip Watering_Can
+tools use -d up
+cheat add item -n Carrot_Seeds -c 10
+plant -s Carrot_Seeds -d up
+cheat advance date 1d
+
+walk -l 30 30
+tools equip Watering_Can
+tools use -d up
+print map -l 0 0 -s 60
+cheat advance date 1d
+walk -l 30 30
+tools equip Watering_Can
+tools use -d up
+print map -l 0 0 -s 60
+cheat advance date 1d
+
+register -u Parsa -p Parsa1234* Parsa1234* -n Parsa -e Parsapak84@gmail.com -g Male
+register -u Mmd -p Parsa1234* Parsa1234* -n Parsa -e Parsapak84@gmail.com -g Female
+register -u Ali -p Parsa1234* Parsa1234* -n Parsa -e Parsapak84@gmail.com -g Male
+register -u Reza -p Parsa1234* Parsa1234* -n Parsa -e Parsapak84@gmail.com -g Male
+login -u Parsa -p Parsa1234*
+menu enter game
+game new -u Mmd Ali Reza
+walk -l 30 30
+print map -l 0 0 -s 60
+tools equip Hoe
+tools use -d up
+tools equip Watering_Can
+tools use -d up
+cheat add item -n Carrot_Seeds -c 10
+plant -s Carrot_Seeds -d up
+cheat advance date 1d
+
+
+register -u Parsa -p Parsa1234* Parsa1234* -n Parsa -e Parsapak84@gmail.com -g Male
+register -u Mmd -p Parsa1234* Parsa1234* -n Parsa -e Parsapak84@gmail.com -g Female
+register -u Ali -p Parsa1234* Parsa1234* -n Parsa -e Parsapak84@gmail.com -g Male
+register -u Reza -p Parsa1234* Parsa1234* -n Parsa -e Parsapak84@gmail.com -g Male
+login -u Parsa -p Parsa1234*
+menu enter game
+game new -u Mmd Ali Reza
+walk -l 30 30
+print map -l 0 0 -s 60
+tools equip Hoe
+tools use -d up
+tools equip Watering_Can
+tools use -d up
+cheat add item -n Carrot_Seeds -c 10
+plant -s Carrot_Seeds -d up
+cheat advance date 1d
+walk -l 30 30
+tools equip Watering_Can
+tools use -d up
+print map -l 0 0 -s 60
+cheat advance date 1d
+walk -l 30 30
+tools equip Watering_Can
+tools use -d up
+print map -l 0 0 -s 60
+cheat advance date 1d
+
+register -u Parsa -p Parsa1234* Parsa1234* -n Parsa -e Parsapak84@gmail.com -g Male
+register -u Mmd -p Parsa1234* Parsa1234* -n Parsa -e Parsapak84@gmail.com -g Female
+register -u Ali -p Parsa1234* Parsa1234* -n Parsa -e Parsapak84@gmail.com -g Male
+register -u Reza -p Parsa1234* Parsa1234* -n Parsa -e Parsapak84@gmail.com -g Male
+login -u Parsa -p Parsa1234*
+menu enter game
+game new -u Mmd Ali Reza
+walk -l 30 30
+print map -l 0 0 -s 60
+tools equip Hoe
+tools use -d up
+tools equip Watering_Can
+tools use -d up
+cheat add item -n Carrot_Seeds -c 10
+plant -s Carrot_Seeds -d up
+cheat advance date 1d
+
+register -u Parsa -p Parsa1234* Parsa1234* -n Parsa -e Parsapak84@gmail.com -g Male
+register -u Mmd -p Parsa1234* Parsa1234* -n Parsa -e Parsapak84@gmail.com -g Female
+register -u Ali -p Parsa1234* Parsa1234* -n Parsa -e Parsapak84@gmail.com -g Male
+register -u Reza -p Parsa1234* Parsa1234* -n Parsa -e Parsapak84@gmail.com -g Male
+login -u Parsa -p Parsa1234*
+menu enter game
+game new -u Mmd Ali Reza
+walk -l 30 30
+print map -l 0 0 -s 60
+tools equip Hoe
+tools use -d up
+tools equip Watering_Can
+tools use -d up
+cheat add item -n Carrot_Seeds -c 10
+plant -s Carrot_Seeds -d up
+cheat advance date 1d
+
+register -u Parsa -p Parsa1234* Parsa1234* -n Parsa -e Parsapak84@gmail.com -g Male
+register -u Mmd -p Parsa1234* Parsa1234* -n Parsa -e Parsapak84@gmail.com -g Female
+register -u Ali -p Parsa1234* Parsa1234* -n Parsa -e Parsapak84@gmail.com -g Male
+register -u Reza -p Parsa1234* Parsa1234* -n Parsa -e Parsapak84@gmail.com -g Male
+login -u Parsa -p Parsa1234*
+menu enter game
+game new -u Mmd Ali Reza
+walk -l 30 30
+print map -l 0 0 -s 60
+tools equip Hoe
+tools use -d up
+tools equip Watering_Can
+tools use -d up
+cheat add item -n Carrot_Seeds -c 10
+plant -s Carrot_Seeds -d up
+cheat advance date 1d
+walk -l 30 30
+tools equip Watering_Can
+tools use -d up
+print map -l 0 0 -s 60
+cheat advance date 1d
+walk -l 30 30
+tools equip Watering_Can
+tools use -d up
+print map -l 0 0 -s 60
+cheat advance date 1d
+walk -l 30 30
+tools equip Watering_Can
+tools use -d up
+print map -l 0 0 -s 60
+cheat advance date 1d
+walk -l 30 30
+tools equip Watering_Can
+tools use -d up
+print map -l 0 0 -s 60
+cheat advance date 1d
+
+register -u Parsa -p Parsa1234* Parsa1234* -n Parsa -e Parsapak84@gmail.com -g Male
+register -u Mmd -p Parsa1234* Parsa1234* -n Parsa -e Parsapak84@gmail.com -g Female
+register -u Ali -p Parsa1234* Parsa1234* -n Parsa -e Parsapak84@gmail.com -g Male
+register -u Reza -p Parsa1234* Parsa1234* -n Parsa -e Parsapak84@gmail.com -g Male
+login -u Parsa -p Parsa1234*
+menu enter game
+game new -u Mmd Ali Reza
+walk -l 30 30
+print map -l 0 0 -s 60
+tools equip Hoe
+tools use -d up
+tools equip Watering_Can
+tools use -d up
+cheat add item -n Carrot_Seeds -c 10
+plant -s Carrot_Seeds -d up
+cheat advance date 1d
+walk -l 30 30
+tools equip Watering_Can
+tools use -d up
+print map -l 0 0 -s 60
+cheat advance date 1d
+walk -l 30 30
+tools equip Watering_Can
+tools use -d up
+print map -l 0 0 -s 60
+cheat advance date 1d
+walk -l 30 30
+tools equip Watering_Can
+tools use -d up
+print map -l 0 0 -s 60
+cheat advance date 1d
+register -u Parsa -p Parsa1234* Parsa1234* -n Parsa -e Parsapak84@gmail.com -g Male
+register -u Mmd -p Parsa1234* Parsa1234* -n Parsa -e Parsapak84@gmail.com -g Female
+register -u Ali -p Parsa1234* Parsa1234* -n Parsa -e Parsapak84@gmail.com -g Male
+register -u Reza -p Parsa1234* Parsa1234* -n Parsa -e Parsapak84@gmail.com -g Male
+login -u Parsa -p Parsa1234*
+menu enter game
+game new -u Mmd Ali Reza
+walk -l 30 30
+print map -l 0 0 -s 60
+tools equip Hoe
+tools use -d up
+tools equip Watering_Can
+tools use -d up
+cheat add item -n Carrot_Seeds -c 10
+plant -s Carrot_Seeds -d up
+cheat advance date 1d
+
+
+walk -l 30 30
+tools equip Watering_Can
+tools use -d up
+print map -l 0 0 -s 60
+cheat advance date 1d
+walk -l 30 30
+tools equip Watering_Can
+tools use -d up
+print map -l 0 0 -s 60
+cheat advance date 1d
+walk -l 30 30
+tools equip Watering_Can
+tools use -d up
+print map -l 0 0 -s 60
+cheat advance date 1d
+register -u Parsa -p Parsa1234* Parsa1234* -n Parsa -e Parsapak84@gmail.com -g Male
+register -u Mmd -p Parsa1234* Parsa1234* -n Parsa -e Parsapak84@gmail.com -g Female
+register -u Ali -p Parsa1234* Parsa1234* -n Parsa -e Parsapak84@gmail.com -g Male
+register -u Reza -p Parsa1234* Parsa1234* -n Parsa -e Parsapak84@gmail.com -g Male
+login -u Parsa -p Parsa1234*
+menu enter game
+game new -u Mmd Ali Reza
+walk -l 30 30
+print map -l 0 0 -s 60
+tools equip Hoe
+tools use -d up
+tools equip Watering_Can
+tools use -d up
+cheat add item -n Carrot_Seeds -c 10
+plant -s Carrot_Seeds -d up
+cheat advance date 1d
+walk -l 30 30
+tools equip Watering_Can
+tools use -d up
+print map -l 0 0 -s 60
+cheat advance date 1d
+walk -l 30 30
+tools equip Watering_Can
+tools use -d up
+print map -l 0 0 -s 60
+cheat advance date 1d
+walk -l 30 30
+tools equip Watering_Can
+tools use -d up
+print map -l 0 0 -s 60
+cheat advance date 1d
+
+register -u Parsa -p Parsa1234* Parsa1234* -n Parsa -e Parsapak84@gmail.com -g Male
+register -u Mmd -p Parsa1234* Parsa1234* -n Parsa -e Parsapak84@gmail.com -g Female
+register -u Ali -p Parsa1234* Parsa1234* -n Parsa -e Parsapak84@gmail.com -g Male
+register -u Reza -p Parsa1234* Parsa1234* -n Parsa -e Parsapak84@gmail.com -g Male
+login -u Parsa -p Parsa1234*
+menu enter game
+game new -u Mmd Ali Reza
+walk -l 30 30
+print map -l 0 0 -s 60
+tools equip Hoe
+tools use -d up
+tools equip Watering_Can
+tools use -d up
+cheat add item -n Carrot_Seeds -c 10
+plant -s Carrot_Seeds -d up
+cheat advance date 1d
+walk -l 30 30
+tools equip Watering_Can
+tools use -d up
+print map -l 0 0 -s 60
+cheat advance date 1d
+walk -l 30 30
+tools equip Watering_Can
+tools use -d up
+print map -l 0 0 -s 60
+cheat advance date 1d
+walk -l 30 30
+tools equip Watering_Can
+tools use -d up
+print map -l 0 0 -s 60
+cheat advance date 1d
+
+register -u Parsa -p Parsa1234* Parsa1234* -n Parsa -e Parsapak84@gmail.com -g Male
+register -u Mmd -p Parsa1234* Parsa1234* -n Parsa -e Parsapak84@gmail.com -g Female
+register -u Ali -p Parsa1234* Parsa1234* -n Parsa -e Parsapak84@gmail.com -g Male
+register -u Reza -p Parsa1234* Parsa1234* -n Parsa -e Parsapak84@gmail.com -g Male
+login -u Parsa -p Parsa1234*
+menu enter game
+game new -u Mmd Ali Reza
+walk -l 30 30
+print map -l 0 0 -s 60
+tools equip Hoe
+tools use -d up
+tools equip Watering_Can
+tools use -d up
+cheat add item -n Carrot_Seeds -c 10
+plant -s Carrot_Seeds -d up
+cheat advance date 1d
+walk -l 30 30
+tools equip Watering_Can
+tools use -d up
+print map -l 0 0 -s 60
+cheat advance date 1d
+walk -l 30 30
+tools equip Watering_Can
+tools use -d up
+print map -l 0 0 -s 60
+cheat advance date 1d
+walk -l 30 30
+tools equip Watering_Can
+tools use -d up
+print map -l 0 0 -s 60
+cheat advance date 1d
+walk -l 30 30
+tools equip Watering_Can
+tools use -d up
+print map -l 0 0 -s 60
+cheat advance date 1d
+walk -l 30 30
+print map -l 0 0 -s 60
+tools equip Scythe
+tools use -d up
+inventory show
+print map -l 0 0 -s 60

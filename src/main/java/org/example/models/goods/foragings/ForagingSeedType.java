@@ -105,16 +105,16 @@ public enum ForagingSeedType implements GoodType {
 
     //TODO: Mixed seed left
 
-    private String name;
-    private FarmingCropType farmingCropType;
-    private ArrayList<Integer> stages;
-    private int totalHarvestTime;
-    private boolean oneTime;
-    private int regrowthTime;
-    private int seasonPrice;
-    private int otherSeasonPrice;
-    private ArrayList<Season> seasons;
-    private boolean canBecomeGiant;
+    private final String name;
+    public final FarmingCropType farmingCropType;
+    private final ArrayList<Integer> stages;
+    private final int totalHarvestTime;
+    private final boolean oneTime;
+    private final int regrowthTime;
+    private final int seasonPrice;
+    private final int otherSeasonPrice;
+    private final ArrayList<Season> seasons;
+    private final boolean canBecomeGiant;
 
     ForagingSeedType(String name, FarmingCropType farmingCropType, ArrayList<Integer> stages, int totalHarvestTime, boolean oneTime, int regrowthTime, int seasonPrice, int otherSeasonPrice, ArrayList<Season> seasons, boolean canBecomeGiant) {
         this.name = name;

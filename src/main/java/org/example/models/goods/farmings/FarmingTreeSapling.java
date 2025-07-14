@@ -48,4 +48,13 @@ public class FarmingTreeSapling extends Farming {
     public FarmingTreeType getTreeType() {
         return type.getFarmingTreeType();
     }
+
+    @Override
+    public String toString() {
+        return "FarmingTreeSapling: \n" +
+                "type: " + type +
+                "\nstate: " + state +
+                "\nisTree: " + isTree +
+                "\nlevel: " + level + "\n";
+    }
 }

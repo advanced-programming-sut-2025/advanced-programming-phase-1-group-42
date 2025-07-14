@@ -1,5 +1,18 @@
 package org.example.controllers;
 
+import com.mongodb.ConnectionString;
+import com.mongodb.MongoClientSettings;
+import com.mongodb.ServerApi;
+import com.mongodb.ServerApiVersion;
+import com.mongodb.client.MongoClient;
+import com.mongodb.client.MongoClients;
+import com.mongodb.client.MongoCollection;
+import com.mongodb.client.MongoDatabase;
+import com.mongodb.client.model.Filters;
+import com.mongodb.client.model.Updates;
+import com.mongodb.client.result.UpdateResult;
+import org.bson.Document;
+import org.bson.conversions.Bson;
 import org.example.models.App;
 import org.example.models.Pair;
 import org.example.models.Result;
@@ -16,10 +29,7 @@ import org.example.models.goods.Good;
 import org.example.models.goods.GoodType;
 import org.example.models.goods.artisans.Artisan;
 import org.example.models.goods.artisans.ArtisanFunctions;
-import org.example.models.goods.farmings.FarmingCrop;
-import org.example.models.goods.farmings.FarmingCropType;
-import org.example.models.goods.farmings.FarmingTree;
-import org.example.models.goods.farmings.FarmingTreeSapling;
+import org.example.models.goods.farmings.*;
 import org.example.models.goods.foods.Food;
 import org.example.models.goods.foods.FoodType;
 import org.example.models.goods.foragings.*;
@@ -106,6 +116,14 @@ public class GameMenuController extends Controller {
                 return value;
             }
         }
+
+        for (FarmingTreeSaplingType value : FarmingTreeSaplingType.values()) {
+            if (value.getName().equals(craftName)) {
+                return value;
+            }
+        }
+
+
         return null;
     }
 
@@ -228,7 +246,7 @@ public class GameMenuController extends Controller {
             return new Result(false, "Just game admin can exit the game!");
         } else {
             App.setCurrentGame(null);
-            App.setCurrentMenu(Menu.MainMenu);
+            App.setCurrentMenu(Menu.GameMenu);
             return new Result(true, "You have successfully exited the game!");
         }
     }
@@ -261,6 +279,31 @@ public class GameMenuController extends Controller {
         }
 
         App.getGames().remove(App.getCurrentGame());
+        String connectionString = "mongodb+srv://namoder123:passme@cluster01.unmuffl.mongodb.net/?retryWrites=true&w=majority&appName=Cluster01";
+
+        ServerApi serverApi = ServerApi.builder()
+                .version(ServerApiVersion.V1)
+                .build();
+
+        MongoClientSettings settings = MongoClientSettings.builder()
+                .applyConnectionString(new ConnectionString(connectionString))
+                .serverApi(serverApi)
+                .build();
+
+        try (MongoClient mongoClient = MongoClients.create(settings)) {
+            MongoDatabase database = mongoClient.getDatabase("Game");
+            MongoCollection<Document> collection = database.getCollection("USERS");
+
+            Bson filter ;
+            for (Player player : App.getCurrentGame().getPlayers()) {
+                filter = Filters.eq("username",player.getUser().getUsername());
+                Bson update = Updates.set("setPlaying", false);
+                UpdateResult result = collection.updateOne(filter, update);
+
+            }
+        } catch (Exception e) {
+            System.out.println("Error while setting is Playing  user.");
+        }
         App.setCurrentGame(null);
         return new Result(true, "Game terminated successfully!");
 
@@ -558,7 +601,7 @@ public class GameMenuController extends Controller {
             }
         }
         if (!flag)
-            return new Result(false, "You don't have " + toolName + "to use!");
+            return new Result(false, "You don't have " + toolName + " to use!");
 
         return new Result(true, "Now you can use " + toolName);
     }
@@ -1059,9 +1102,7 @@ public class GameMenuController extends Controller {
                     for (int sX = 0; sX < targetType.getSize().first(); sX++) {
                         for (int sY = 0; sY < targetType.getSize().second(); sY++) {
                             Tile tempTile = App.getCurrentGame().getMap().findTileByXY(sX + startCoordinate.getX(), sY + startCoordinate.getY());
-                            if (tempTile.getTileType().equals(TileType.GAME_BUILDING) ||
-                                    tempTile.getTileType().equals(TileType.BEACH) ||
-                                    tempTile.getTileType().equals(TileType.PLAYER_BUILDING)) {
+                            if (!tempTile.getTileType().equals(TileType.FARM)) {
                                 validSpace = false;
                             }
                         }
@@ -1456,12 +1497,12 @@ public class GameMenuController extends Controller {
 
         player.getTalkHistory().add(new Pair<>(
                 App.getCurrentGame().getCurrentPlayer(),
-                dateTime().message() + ": " + message
+                "\t<"+App.getCurrentGame().getCurrentPlayer().getPlayerUsername() + "> " + dateTime().message() + ": " + message
         ));
 
         App.getCurrentGame().getCurrentPlayer().getTalkHistory().add(new Pair<>(
                 player,
-                dateTime().message() + ": " + message
+                "\t<"+App.getCurrentGame().getCurrentPlayer().getPlayerUsername() + "> " + dateTime().message() + ": " + message
         ));
 
         try {
@@ -1506,8 +1547,7 @@ public class GameMenuController extends Controller {
         list.append("Talk History:\n");
         for (Pair<Player, String> talk : App.getCurrentGame().getCurrentPlayer().getTalkHistory()) {
             if (talk.first().getPlayerUsername().equals(username)) {
-                list.append("\t<").append(talk.first().getUser().getUsername()).append("> ")
-                        .append(talk.second()).append("\n");
+                list.append(talk.second()).append("\n");
             }
         }
 

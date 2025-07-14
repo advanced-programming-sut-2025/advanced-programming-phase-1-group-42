@@ -188,4 +188,35 @@ public class DBInteractor {
             System.out.println("Error while updating user.");
         }
     }
+
+    public static void setStayLogin() {
+
+        String connectionString = "mongodb+srv://namoder123:passme@cluster01.unmuffl.mongodb.net/?retryWrites=true&w=majority&appName=Cluster01";
+
+        ServerApi serverApi = ServerApi.builder()
+                .version(ServerApiVersion.V1)
+                .build();
+
+        MongoClientSettings settings = MongoClientSettings.builder()
+                .applyConnectionString(new ConnectionString(connectionString))
+                .serverApi(serverApi)
+                .build();
+
+        try (MongoClient mongoClient = MongoClients.create(settings)) {
+            MongoDatabase database = mongoClient.getDatabase("Game");
+            MongoCollection<Document> collection = database.getCollection("USERS");
+
+            Bson filter = Filters.eq("username", App.getCurrentUser().getUsername());
+
+            Bson update = Updates.set("stayLogin", true);
+
+            UpdateResult result = collection.updateOne(filter, update);
+
+            if (result.getModifiedCount() <= 0) {
+                System.out.println("User not found or no changes made.");
+            }
+        } catch (Exception e) {
+            System.out.println("Error while updating user.");
+        }
+    }
 }

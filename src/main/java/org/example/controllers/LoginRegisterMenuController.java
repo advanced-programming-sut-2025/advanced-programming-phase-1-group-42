@@ -19,7 +19,7 @@ public class LoginRegisterMenuController extends Controller {
 
 
     public Result exit() {
-        DBInteractor.saveUsers();
+//        DBInteractor.saveUsers();
         App.setCurrentMenu(Menu.ExitMenu);
         return new Result(true, "Goodbye!");
     }
@@ -69,6 +69,7 @@ public class LoginRegisterMenuController extends Controller {
             while(true) {
                 String rPassword = generateRandomPassword();
                 System.out.println("Use this Random Password for your Password? (y/n/quit)");
+                System.out.println(rPassword);
                 String input = scanner.nextLine();
                 if(input.equals("y")) {
                     password = rPassword;
@@ -173,7 +174,8 @@ public class LoginRegisterMenuController extends Controller {
         System.out.println(App.getSecurityQuestions().get(user.getQuestionNumber()));
         String answer = scanner.nextLine();
         Matcher matcher = LoginRegisterCommands.AnswerQuestion.matcher(answer);
-        if(matcher == null || !matcher.group("answer").trim().equals(user.getAnswer()))
+        System.out.println(user.getAnswer());
+        if(matcher == null || !matcher.group("answer").equals(user.getAnswer()))
             return new Result(false, "Wrong answer to security question!");
 
         System.out.println("Choose how to you want to reset your password? (1/2)\n1. Random Password\n2. Entering Password");

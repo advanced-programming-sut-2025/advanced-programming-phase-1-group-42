@@ -7,8 +7,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class ForagingSeed extends Foraging {
-    private ForagingSeedType type;
-    private ArrayList<Integer> state = new ArrayList<>(List.of(0, 0, 0, 0, 0));
+    private final ForagingSeedType type;
+    private final ArrayList<Integer> state = new ArrayList<>(List.of(0, 0, 0, 0, 0));
     private boolean isCrop = false;
 
     public ForagingSeed(ForagingSeedType type) {
@@ -45,8 +45,16 @@ public class ForagingSeed extends Foraging {
     }
 
     public FarmingCropType getCropType() {
-        return type.getFarmingCropType();
+            return type.getFarmingCropType();
     }
 
+    @Override
+    public String toString() {
+        return "ForagingSeed:" +
+                "\ntype: " + type +
+                "\nstate: " + state +
+                "\nisCrop: " + isCrop +
+                "\nlevel: " + level + "\n";
+    }
 
 }
