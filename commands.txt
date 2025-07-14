@@ -1,0 +1,343 @@
+register -u Parsa -p Parsa1234* Parsa1234* -n Parsa -e Parsapak84@gmail.com -g Male
+register -u Parsakhar -p Parsa1234* Parsa1234* -n Parsa -e Parsapak84@gmail.com -g Male
+register -u ParsaGov -p Parsa1234* Parsa1234* -n Parsa -e Parsapak84@gmail.com -g Male
+register -u ParsaMoew -p Parsa1234* Parsa1234* -n Parsa -e Parsapak84@gmail.com -g Male
+login -u Parsa -p Parsa1234* –stay-logged-in
+menu enter game
+game new -u Parsakhar ParsaGov ParsaMoew
+cheat add item -n Coal -c 2
+Triple Shot Espresso
+cheat add item -n Wood -c 200000
+cheat add item -n Stone -c 200000
+cheat add 300000 dollars
+cheat add item -n Triple_Shot_Espresso -c 200000
+inventory show
+eat Triple_Shot_Espresso
+show energy
+energy show
+register -u Parsa -p Parsa1234* Parsa1234* -n Parsa -e Parsapak84@gmail.com -g Male
+register -u Parsakhar -p Parsa1234* Parsa1234* -n Parsa -e Parsapak84@gmail.com -g Male
+register -u ParsaGov -p Parsa1234* Parsa1234* -n Parsa -e Parsapak84@gmail.com -g Male
+register -u ParsaMoew -p Parsa1234* Parsa1234* -n Parsa -e Parsapak84@gmail.com -g Male
+login -u Parsa -p Parsa1234* –stay-logged-in
+menu enter game
+game new -u Parsakhar ParsaGov ParsaMoew
+cheat add item -n Coal -c 2
+Triple Shot Espresso
+cheat add item -n Wood -c 200000
+cheat add item -n Stone -c 200000
+cheat add 300000 dollars
+cheat add item -n Triple_Shot_Espresso -c 200000
+eat Triple_Shot_Espresso
+register -u Parsa -p Parsa1234* Parsa1234* -n Parsa -e Parsapak84@gmail.com -g Male
+register -u Parsakhar -p Parsa1234* Parsa1234* -n Parsa -e Parsapak84@gmail.com -g Male
+register -u ParsaGov -p Parsa1234* Parsa1234* -n Parsa -e Parsapak84@gmail.com -g Male
+register -u ParsaMoew -p Parsa1234* Parsa1234* -n Parsa -e Parsapak84@gmail.com -g Male
+login -u Parsa -p Parsa1234* –stay-logged-in
+menu enter game
+game new -u Parsakhar ParsaGov ParsaMoew
+cheat add item -n Coal -c 2
+Triple Shot Espresso
+cheat add item -n Wood -c 200000
+cheat add item -n Stone -c 200000
+cheat add 300000 dollars
+cheat add item -n Triple_Shot_Espresso -c 200000
+eat Triple_Shot_Espresso
+energy show
+register -u Parsa -p Parsa1234* Parsa1234* -n Parsa -e Parsapak84@gmail.com -g Male
+register -u Parsakhar -p Parsa1234* Parsa1234* -n Parsa -e Parsapak84@gmail.com -g Male
+register -u ParsaGov -p Parsa1234* Parsa1234* -n Parsa -e Parsapak84@gmail.com -g Male
+register -u ParsaMoew -p Parsa1234* Parsa1234* -n Parsa -e Parsapak84@gmail.com -g Male
+login -u Parsa -p Parsa1234* –stay-logged-in
+menu enter game
+game new -u Parsakhar ParsaGov ParsaMoew
+game map 1
+game map 2
+game map 1
+game map 2
+cheat add item -n Coal -c 2
+Triple Shot Espresso
+cheat add item -n Wood -c 200000
+cheat add item -n Stone -c 200000
+cheat add 300000 dollars
+cheat add item -n Triple_Shot_Espresso -c 200000
+eat Triple_Shot_Espresso
+register -u Parsa -p Parsa1234* Parsa1234* -n Parsa -e Parsapak84@gmail.com -g Male
+register -u Parsakhar -p Parsa1234* Parsa1234* -n Parsa -e Parsapak84@gmail.com -g Male
+register -u ParsaGov -p Parsa1234* Parsa1234* -n Parsa -e Parsapak84@gmail.com -g Male
+register -u ParsaMoew -p Parsa1234* Parsa1234* -n Parsa -e Parsapak84@gmail.com -g Male
+login -u Parsa -p Parsa1234* –stay-logged-in
+menu enter game
+game new -u Parsakhar ParsaGov ParsaMoew
+cheat add item -n Coal -c 2
+Triple Shot Espresso
+cheat add item -n Wood -c 200000
+cheat add item -n Stone -c 200000
+cheat add 300000 dollars
+cheat add item -n Triple_Shot_Espresso -c 200000
+eat Triple_Shot_Espresso
+cooking refrigerator put Triple_Shot_Espresso
+show fridge
+cooking refrigerator put Triple_Shot_Espresso
+show fridge
+inventory show
+cheat add item -n Carrot -c 200000
+cooking refrigerator put Carrot
+inventory show
+cooking refrigerator put Carrot
+inventory show
+inventory show
+cooking refrigerator pick Carrot
+inventory show
+print map -l 0 0 -s 100
+walk -l 100 100
+walk -l 120 100
+print map -l 0 0 -s 100
+walk -l 109 100
+meet NPC
+meet Abgial
+
+meet NPC Abgail
+print map -l 0 0 -s 600
+register -u Parsa -p Parsa1234* Parsa1234* -n Parsa -e Parsapak84@gmail.com -g Male
+register -u Parsakhar -p Parsa1234* Parsa1234* -n Parsa -e Parsapak84@gmail.com -g Male
+register -u ParsaGov -p Parsa1234* Parsa1234* -n Parsa -e Parsapak84@gmail.com -g Male
+register -u ParsaMoew -p Parsa1234* Parsa1234* -n Parsa -e Parsapak84@gmail.com -g Male
+login -u Parsa -p Parsa1234* –stay-logged-in
+menu enter game
+game new -u Parsakhar ParsaGov ParsaMoew
+cheat add item -n Coal -c 2
+Triple Shot Espresso
+cheat add item -n Wood -c 200000
+cheat add item -n Stone -c 200000
+cheat add 300000 dollars
+cheat add item -n Triple_Shot_Espresso -c 200000
+eat Triple_Shot_Espresso
+cheat add item -n Carrot -c 200000
+cooking refrigerator put Carrot
+walk -l 119 80
+meet NPC Leah
+print map -l 0 0 -s 200
+meet NPC Leah
+register -u Parsa -p Parsa1234* Parsa1234* -n Parsa -e Parsapak84@gmail.com -g Male
+register -u Parsakhar -p Parsa1234* Parsa1234* -n Parsa -e Parsapak84@gmail.com -g Male
+register -u ParsaGov -p Parsa1234* Parsa1234* -n Parsa -e Parsapak84@gmail.com -g Male
+register -u ParsaMoew -p Parsa1234* Parsa1234* -n Parsa -e Parsapak84@gmail.com -g Male
+login -u Parsa -p Parsa1234* –stay-logged-in
+menu enter game
+game new -u Parsakhar ParsaGov ParsaMoew
+cheat add item -n Coal -c 2
+Triple Shot Espresso
+cheat add item -n Wood -c 200000
+cheat add item -n Stone -c 200000
+cheat add 300000 dollars
+cheat add item -n Triple_Shot_Espresso -c 200000
+eat Triple_Shot_Espresso
+cheat add item -n Carrot -c 200000
+cooking refrigerator put Carrot
+walk -l 119 80
+energy show
+meet NPC Leah
+gift NPC Leah -i Carrot
+inventory show
+friendship NPC list
+register -u Parsa -p Parsa1234* Parsa1234* -n Parsa -e Parsapak84@gmail.com -g Male
+register -u Parsakhar -p Parsa1234* Parsa1234* -n Parsa -e Parsapak84@gmail.com -g Male
+register -u ParsaGov -p Parsa1234* Parsa1234* -n Parsa -e Parsapak84@gmail.com -g Male
+register -u ParsaMoew -p Parsa1234* Parsa1234* -n Parsa -e Parsapak84@gmail.com -g Male
+login -u Parsa -p Parsa1234* –stay-logged-in
+menu enter game
+game new -u Parsakhar ParsaGov ParsaMoew
+cheat add item -n Coal -c 2
+Triple Shot Espresso
+cheat add item -n Wood -c 200000
+cheat add item -n Stone -c 200000
+cheat add 300000 dollars
+cheat add item -n Triple_Shot_Espresso -c 200000
+eat Triple_Shot_Espresso
+cheat add item -n Carrot -c 200000
+cooking refrigerator put Carrot
+walk -l 109 80
+y
+walk -l 109 80
+gift NPC Leah -I Carrot
+gift NPC Leah -i Carrot
+friendship NPC list
+quests list
+cheat add item -n Hard_Wood -c 200000
+cheat add item -n Hard_Wood -c 200000
+register -u Parsa -p Parsa1234* Parsa1234* -n Parsa -e Parsapak84@gmail.com -g Male
+register -u Parsakhar -p Parsa1234* Parsa1234* -n Parsa -e Parsapak84@gmail.com -g Male
+register -u ParsaGov -p Parsa1234* Parsa1234* -n Parsa -e Parsapak84@gmail.com -g Male
+register -u ParsaMoew -p Parsa1234* Parsa1234* -n Parsa -e Parsapak84@gmail.com -g Male
+login -u Parsa -p Parsa1234* –stay-logged-in
+menu enter game
+game new -u Parsakhar ParsaGov ParsaMoew
+cheat add item -n Coal -c 2
+Triple Shot Espresso
+cheat add item -n Wood -c 200000
+cheat add item -n Stone -c 200000
+cheat add item -n Hard_Wood -c 200000
+cheat add 300000 dollars
+cheat add item -n Triple_Shot_Espresso -c 200000
+eat Triple_Shot_Espresso
+cheat add item -n Carrot -c 200000
+cooking refrigerator put Carrot
+walk -l 109 80
+quests finish -i 0
+register -u Parsa -p Parsa1234* Parsa1234* -n Parsa -e Parsapak84@gmail.com -g Male
+register -u Parsakhar -p Parsa1234* Parsa1234* -n Parsa -e Parsapak84@gmail.com -g Male
+register -u ParsaGov -p Parsa1234* Parsa1234* -n Parsa -e Parsapak84@gmail.com -g Male
+register -u ParsaMoew -p Parsa1234* Parsa1234* -n Parsa -e Parsapak84@gmail.com -g Male
+login -u Parsa -p Parsa1234* –stay-logged-in
+menu enter game
+game new -u Parsakhar ParsaGov ParsaMoew
+cheat add item -n Coal -c 2
+Triple Shot Espresso
+cheat add item -n Wood -c 200000
+cheat add item -n Stone -c 200000
+cheat add item -n Hard_Wood -c 200000
+cheat add 300000 dollars
+cheat add item -n Triple_Shot_Espresso -c 200000
+eat Triple_Shot_Espresso
+cheat add item -n Carrot -c 200000
+cooking refrigerator put Carrot
+walk -l 109 80
+quests finish -i 1
+meet NPC Leah
+walk -l 119 80
+quests finish -i 1
+register -u Parsa -p Parsa1234* Parsa1234* -n Parsa -e Parsapak84@gmail.com -g Male
+register -u Parsakhar -p Parsa1234* Parsa1234* -n Parsa -e Parsapak84@gmail.com -g Male
+register -u ParsaGov -p Parsa1234* Parsa1234* -n Parsa -e Parsapak84@gmail.com -g Male
+register -u ParsaMoew -p Parsa1234* Parsa1234* -n Parsa -e Parsapak84@gmail.com -g Male
+login -u Parsa -p Parsa1234* –stay-logged-in
+menu enter game
+game new -u Parsakhar ParsaGov ParsaMoew
+cheat add item -n Coal -c 2
+Triple Shot Espresso
+cheat add item -n Wood -c 200000
+cheat add item -n Stone -c 200000
+cheat add item -n Hard_Wood -c 200000
+cheat add 300000 dollars
+cheat add item -n Triple_Shot_Espresso -c 200000
+eat Triple_Shot_Espresso
+cheat add item -n Carrot -c 200000
+cooking refrigerator put Carrot
+walk -l 119 80
+friendship NPC list
+quests finish -i 1
+quests list
+friendship NPC list
+register -u Parsa -p Parsa1234* Parsa1234* -n Parsa -e Parsapak84@gmail.com -g Male
+register -u Parsakhar -p Parsa1234* Parsa1234* -n Parsa -e Parsapak84@gmail.com -g Male
+register -u ParsaGov -p Parsa1234* Parsa1234* -n Parsa -e Parsapak84@gmail.com -g Male
+register -u ParsaMoew -p Parsa1234* Parsa1234* -n Parsa -e Parsapak84@gmail.com -g Male
+login -u Parsa -p Parsa1234* –stay-logged-in
+menu enter game
+game new -u Parsakhar ParsaGov ParsaMoew
+cheat add item -n Coal -c 2
+Triple Shot Espresso
+cheat add item -n Wood -c 200000
+cheat add item -n Stone -c 200000
+cheat add item -n Hard_Wood -c 200000
+cheat add 300000 dollars
+cheat add item -n Triple_Shot_Espresso -c 200000
+eat Triple_Shot_Espresso
+cheat add item -n Carrot -c 200000
+cooking refrigerator put Carrot
+walk -l 119 80
+quests finish -i 1
+inventory show
+register -u Parsa -p Parsa1234* Parsa1234* -n Parsa -e Parsapak84@gmail.com -g Male
+register -u Parsakhar -p Parsa1234* Parsa1234* -n Parsa -e Parsapak84@gmail.com -g Male
+register -u ParsaGov -p Parsa1234* Parsa1234* -n Parsa -e Parsapak84@gmail.com -g Male
+register -u ParsaMoew -p Parsa1234* Parsa1234* -n Parsa -e Parsapak84@gmail.com -g Male
+login -u Parsa -p Parsa1234* –stay-logged-in
+menu enter game
+game new -u Parsakhar ParsaGov ParsaMoew
+game map 1
+game map 2
+game map 1
+game map 2
+cheat add item -n Coal -c 2
+Triple Shot Espresso
+cheat add item -n Wood -c 200000
+cheat add item -n Stone -c 200000
+cheat add item -n Hard_Wood -c 200000
+cheat add 300000 dollars
+cheat add item -n Triple_Shot_Espresso -c 200000
+eat Triple_Shot_Espresso
+cheat add item -n Carrot -c 200000
+cooking refrigerator put Carrot
+walk -l 119 80
+register -u Parsa -p Parsa1234* Parsa1234* -n Parsa -e Parsapak84@gmail.com -g Male
+register -u Parsakhar -p Parsa1234* Parsa1234* -n Parsa -e Parsapak84@gmail.com -g Male
+register -u ParsaGov -p Parsa1234* Parsa1234* -n Parsa -e Parsapak84@gmail.com -g Male
+register -u ParsaMoew -p Parsa1234* Parsa1234* -n Parsa -e Parsapak84@gmail.com -g Male
+login -u Parsa -p Parsa1234* –stay-logged-in
+menu enter game
+game new -u Parsakhar ParsaGov ParsaMoew
+cheat add item -n Coal -c 2
+Triple Shot Espresso
+cheat add item -n Wood -c 200000
+cheat add item -n Stone -c 200000
+cheat add item -n Hard_Wood -c 200000
+cheat add 300000 dollars
+cheat add item -n Triple_Shot_Espresso -c 200000
+eat Triple_Shot_Espresso
+cheat add item -n Carrot -c 200000
+cooking refrigerator put Carrot
+walk -l 119 80
+quests finish -i 1
+inventory show
+register -u Parsa -p Parsa1234* Parsa1234* -n Parsa -e Parsapak84@gmail.com -g Male
+register -u Mmd -p Parsa1234* Parsa1234* -n Parsa -e Parsapak84@gmail.com -g Female
+register -u Ali -p Parsa1234* Parsa1234* -n Parsa -e Parsapak84@gmail.com -g Male
+register -u Reza -p Parsa1234* Parsa1234* -n Parsa -e Parsapak84@gmail.com -g Male
+login -u Parsa -p Parsa1234*
+menu enter game
+game new -u Mmd Ali Reza
+
+print map -l 0 0 -s 160
+register -u Parsa -p Parsa1234* Parsa1234* -n Parsa -e Parsapak84@gmail.com -g Male
+register -u Mmd -p Parsa1234* Parsa1234* -n Parsa -e Parsapak84@gmail.com -g Female
+register -u Ali -p Parsa1234* Parsa1234* -n Parsa -e Parsapak84@gmail.com -g Male
+register -u Reza -p Parsa1234* Parsa1234* -n Parsa -e Parsapak84@gmail.com -g Male
+login -u Parsa -p Parsa1234*
+menu enter game
+game new -u Mmd Ali Reza
+cheat add item -n Triple Shot Espresso -c 10
+cheat add item -n Triple_Shot_Espresso -c 10
+eat Triple_Shot_Espresso
+energy show
+register -u Parsa -p Parsa1234* Parsa1234* -n Parsa -e Parsapak84@gmail.com -g Male
+register -u Mmd -p Parsa1234* Parsa1234* -n Parsa -e Parsapak84@gmail.com -g Female
+register -u Ali -p Parsa1234* Parsa1234* -n Parsa -e Parsapak84@gmail.com -g Male
+register -u Reza -p Parsa1234* Parsa1234* -n Parsa -e Parsapak84@gmail.com -g Male
+login -u Parsa -p Parsa1234*
+menu enter game
+game new -u Mmd Ali Reza
+cheat add item -n Triple_Shot_Espresso -c 10
+eat Triple_Shot_Espresso
+energy show
+register -u Parsa -p Parsa1234* Parsa1234* -n Parsa -e Parsapak84@gmail.com -g Male
+register -u Mmd -p Parsa1234* Parsa1234* -n Parsa -e Parsapak84@gmail.com -g Female
+register -u Ali -p Parsa1234* Parsa1234* -n Parsa -e Parsapak84@gmail.com -g Male
+register -u Reza -p Parsa1234* Parsa1234* -n Parsa -e Parsapak84@gmail.com -g Male
+login -u Parsa -p Parsa1234*
+menu enter game
+game new -u Mmd Ali Reza
+cheat add item -n Triple_Shot_Espresso -c 10
+eat Triple_Shot_Espresso
+energy show
+register -u Parsa -p Parsa1234* Parsa1234* -n Parsa -e Parsapak84@gmail.com -g Male
+register -u Mmd -p Parsa1234* Parsa1234* -n Parsa -e Parsapak84@gmail.com -g Female
+register -u Ali -p Parsa1234* Parsa1234* -n Parsa -e Parsapak84@gmail.com -g Male
+register -u Reza -p Parsa1234* Parsa1234* -n Parsa -e Parsapak84@gmail.com -g Male
+login -u Parsa -p Parsa1234*
+menu enter game
+game new -u Mmd Ali Reza
+cheat add item -n Triple_Shot_Espresso -c 10
+eat Triple_Shot_Espresso
+energy show
