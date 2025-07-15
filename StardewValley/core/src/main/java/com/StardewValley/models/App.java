@@ -4,6 +4,10 @@ import com.StardewValley.models.enums.Menu;
 import com.StardewValley.models.game_structure.Game;
 import com.StardewValley.models.interactions.Player;
 import com.StardewValley.models.interactions.User;
+import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.audio.Music;
+import com.badlogic.gdx.graphics.Cursor;
+import com.badlogic.gdx.graphics.Pixmap;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -16,6 +20,11 @@ public class App {
     private static User currentUser = null;
 
     private static Game currentGame = null;
+
+//    Game Graphics Fields
+    private static Music backgroundMusic;
+
+    private static Cursor cursor;
 
     private static ArrayList<String> securityQuestions = new ArrayList<>(Arrays.asList(
             "What was the make and model of your first car?",
@@ -91,4 +100,26 @@ public class App {
         }
         return null;
     }
+
+    public static Music getBackgroundMusic() {
+        return backgroundMusic;
+    }
+
+    public static void setBackgroundMusic(Music backgroundMusic) {
+        App.backgroundMusic = backgroundMusic;
+        App.getBackgroundMusic().setLooping(true);
+        App.getBackgroundMusic().setVolume(0.5f);
+        App.getBackgroundMusic().play();
+    }
+
+    public static void setCursor() {
+        Pixmap pixmap = new Pixmap(Gdx.files.internal("game_cursor_32.png"));
+        int xHotspot = 16;
+        int yHotspot = 16;
+
+        cursor = Gdx.graphics.newCursor(pixmap, xHotspot, yHotspot);
+        Gdx.graphics.setCursor(cursor);
+        pixmap.dispose();
+    }
+
 }
