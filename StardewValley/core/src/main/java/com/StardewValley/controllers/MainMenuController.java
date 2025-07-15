@@ -31,7 +31,6 @@ public class MainMenuController extends Controller {
     }
 
     public Result logout() {
-        App.setCurrentMenu(Menu.LoginRegisterMenu);
         if (App.getCurrentUser().isStayLogin()) {
 //            DBInteractor.resetStayLogin();
         }

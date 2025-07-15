@@ -1,7 +1,9 @@
 package com.StardewValley;
 
+import com.StardewValley.controllers.LoginRegisterMenuController;
 import com.StardewValley.models.App;
 import com.StardewValley.models.Assets;
+import com.StardewValley.views.RegisterMenuView;
 import com.badlogic.gdx.ApplicationAdapter;
 import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
@@ -13,7 +15,7 @@ import com.badlogic.gdx.utils.ScreenUtils;
 /** {@link com.badlogic.gdx.ApplicationListener} implementation shared by all platforms. */
 public class Main extends Game {
     private static Main main;
-    private SpriteBatch batch;
+    private static SpriteBatch batch;
 
 
     @Override
@@ -21,22 +23,22 @@ public class Main extends Game {
         main = this;
         batch = new SpriteBatch();
 
-        App.setBackgroundMusic(Assets.getStardewMusic());
+        App.setBackgroundMusic(Assets.getInstance().getStardewMusic());
         App.setCursor();
 
-
+        main.setScreen(new RegisterMenuView(new LoginRegisterMenuController(), Assets.getInstance().getSkin()));
     }
 
     @Override
     public void render() {
-        ScreenUtils.clear(0.15f, 0.15f, 0.2f, 1f);
-        batch.begin();
-
-        batch.end();
+        super.render();
     }
 
     @Override
     public void dispose() {
+        if(App.getBackgroundMusic() != null)
+            App.getBackgroundMusic().dispose();
+
         batch.dispose();
     }
 
@@ -48,7 +50,9 @@ public class Main extends Game {
         Main.main = main;
     }
 
-    public SpriteBatch getBatch() {
+    public static SpriteBatch getBatch() {
         return batch;
     }
+
+
 }

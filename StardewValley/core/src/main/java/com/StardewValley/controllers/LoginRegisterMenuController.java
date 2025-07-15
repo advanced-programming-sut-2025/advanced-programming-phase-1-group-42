@@ -1,11 +1,16 @@
 package com.StardewValley.controllers;
 
+import com.StardewValley.Main;
 import com.StardewValley.models.App;
+import com.StardewValley.models.Assets;
 import com.StardewValley.models.Result;
 import com.StardewValley.models.enums.LoginRegisterCommands;
 import com.StardewValley.models.enums.Menu;
 import com.StardewValley.models.interactions.Gender;
 import com.StardewValley.models.interactions.User;
+import com.StardewValley.views.LoginMenuView;
+import com.StardewValley.views.RegisterMenuView;
+import com.badlogic.gdx.Screen;
 
 import java.util.Random;
 import java.util.Scanner;
@@ -13,13 +18,78 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 public class LoginRegisterMenuController extends Controller {
+    private Screen view;
 
 
+    public void setView(Screen view) {
+        this.view = view;
+    }
 
+    public void handleRegister() {
+        if (view == null)
+            return;
+
+        RegisterMenuView registerView = (RegisterMenuView) view;
+        if (registerView.getRandomPasswordButton().isChecked()) {
+            registerView.getRandomPasswordButton().setChecked(false);
+            String randomPassword = generateRandomPassword();
+            registerView.getPasswordField().setText(randomPassword);
+            registerView.getConfirmPasswordField().setText(randomPassword);
+        }
+        else if (registerView.getExitButton().isChecked()) {
+            registerView.getExitButton().setChecked(false);
+            Main.getBatch().dispose();
+        }
+        else if (registerView.getLoginButton().isChecked()) {
+            registerView.getLoginButton().setChecked(false);
+            Main.getMain().getScreen().dispose();
+            Main.getMain().setScreen(new LoginMenuView(new LoginRegisterMenuController(), Assets.getInstance().getSkin()));
+        }
+        else if (registerView.getRegisterButton().isChecked()) {
+            registerView.getRegisterButton().setChecked(false);
+
+            Result res = register(
+                registerView.getUsernameField().getText(),
+                registerView.getPasswordField().getText(),
+                registerView.getConfirmPasswordField().getText(),
+                registerView.getNicknameField().getText(),
+                registerView.getEmailField().getText(),
+                registerView.getGenderBox().getSelected()
+            );
+
+            if(!res.success()) {
+                registerView.getMessageLabel().setText(res.message());
+                return;
+            }
+
+            registerView.getSecurityQuestionWindow().setVisible(true);
+            registerView.getSecurityQuestionBox().setSelectedIndex(0);
+            registerView.getSecurityQuestionField().setText("example: yes i was.");
+        }
+        else if (registerView.getBackButton().isChecked()) {
+            registerView.getBackButton().setChecked(false);
+            registerView.getSecurityQuestionWindow().setVisible(false);
+        }
+        else if (registerView.getSubmitAnswerButton().isChecked()) {
+            registerView.getSubmitAnswerButton().setChecked(false);
+
+            App.getUsers().add(new User(
+                registerView.getUsernameField().getText(),
+                getSHA256(registerView.getPasswordField().getText()),
+                registerView.getNicknameField().getText(),
+                registerView.getEmailField().getText(),
+                Gender.findGender(registerView.getGenderBox().getSelected()),
+                registerView.getSecurityQuestionBox().getSelectedIndex(),
+                registerView.getSecurityQuestionField().getText())
+            );
+
+            registerView.getMessageLabel().setText("Your account has been successfully registered!");
+            registerView.getSecurityQuestionWindow().setVisible(false);
+        }
+
+    }
 
     public Result exit() {
-//        DBInteractor.saveUsers();
-        App.setCurrentMenu(Menu.ExitMenu);
         return new Result(true, "Goodbye!");
     }
 
@@ -27,8 +97,8 @@ public class LoginRegisterMenuController extends Controller {
         return new Result(true, "Current Menu : Login/Register Menu");
     }
 
-    public Result register(String username, String password, String nickname, String email,
-                           String gender, Scanner scanner) {
+    public Result register(String username, String password, String confirmPassword, String nickname, String email,
+                           String gender) {
         username = username.trim();
         password = password.trim();
         nickname = nickname.trim();
@@ -39,18 +109,7 @@ public class LoginRegisterMenuController extends Controller {
 
         // Check Username Existence
         if(user != null) {
-            System.out.println("User already exists");
-            username += "-";
-            Random random = new Random();
-            for (int i = 0; i < 3; i++) {
-                username += Integer.toString(random.nextInt(10));
-            }
-
-            System.out.println("Do you confirm this username to continue? (y/n)");
-            String confirm = scanner.nextLine();
-            if(!confirm.equals("n")) {
-                return  new Result(false, "Ok, Try again later!");
-            }
+            return new Result(false, "User already exists");
         }
 
         // Checking Username format
@@ -63,78 +122,16 @@ public class LoginRegisterMenuController extends Controller {
             return new Result(false, "Invalid email format!");
         }
 
-        // Checking Password Format
-        if(password.matches("RANDOM_PASSWORD")) {
-            while(true) {
-                String rPassword = generateRandomPassword();
-                System.out.println("Use this Random Password for your Password? (y/n/quit)");
-                System.out.println(rPassword);
-                String input = scanner.nextLine();
-                if(input.equals("y")) {
-                    password = rPassword;
-                    break;
-                }
-                else if(input.equals("quit")) {
-                    return new Result(false, "Redirecting to Login/Register Menu...");
-                }
-            }
-        }
-        else {
-            Matcher matcher = Pattern.compile("(?<password>\\S+)\\s+(?<confirmPassword>\\S+)").matcher(password);
-            matcher.matches();
-            password = matcher.group("password");
-            String confirmPassword = matcher.group("confirmPassword");
+        if(!password.matches("[a-zA-Z0-9?><,\"'\\\\;:/|\\]\\[}{+=)(*&^%$#!]+"))
+            return new Result(false, "Invalid password format!");
+        if(!checkPasswordStrength(password).success())
+            return new Result(false, checkPasswordStrength(password).toString());
 
-            if(!password.matches("[a-zA-Z0-9?><,\"'\\\\;:/|\\]\\[}{+=)(*&^%$#!]+"))
-                return new Result(false, "Invalid password format!");
-            if(!checkPasswordStrength(password).success())
-                return new Result(false, checkPasswordStrength(password).toString());
-
-            if(!password.equals(confirmPassword)) {
-                String input = "";
-                while(true) {
-                    System.out.println("Re-Enter your password : (Enter 'quit' to back to Login/Register Menu)");
-                    input = scanner.nextLine();
-                    if(input.equals(password)) {
-                        confirmPassword = input;
-                        break;
-                    }
-                    if(input.equals("quit")) {
-                        return new Result(false, "Redirecting to Login/Register Menu...");
-                    }
-                }
-            }
+        if(!password.equals(confirmPassword)) {
+            return new Result(false, "Passwords does not match!");
         }
 
-
-        System.out.println("Select the number of security_question you want to be asked :");
-        for (int i = 0; i < App.getSecurityQuestions().size(); i++) {
-            System.out.println((i + 1) + ". " + App.getSecurityQuestions().get(i));
-        }
-
-        Matcher matcher = LoginRegisterCommands.PickQuestion.matcher(scanner.nextLine());
-        if(matcher == null)
-            return new Result(false, "Invalid pick question format!");
-
-        String number = matcher.group("questionNumber").trim();
-        int num = 0;
-        try {
-            num = Integer.parseInt(number);
-            if(num > 3 || num < 1)
-                throw new NumberFormatException();
-        } catch (NumberFormatException e) {
-            return new Result(false, "Security question number is invalid!");
-        }
-
-        String answer = matcher.group("answer").trim();
-        String answerConfirm = matcher.group("answerConfirm").trim();
-
-        if (!answer.equals(answerConfirm)) {
-            return new Result(false, "Answer and confirm are not same!");
-        }
-
-        App.getUsers().add(new User(username, getSHA256(password), nickname, email, Gender.findGender(gender), num, answer));
-        return new Result(true, "Your account has been successfully registered!");
+        return new Result(true, "Redirecting to Security Question Window");
     }
 
     public Result login(String username, String password, String stayLoggedIn) {
@@ -170,7 +167,7 @@ public class LoginRegisterMenuController extends Controller {
             return new Result(false, "User not found!");
         }
 
-        System.out.println(App.getSecurityQuestions().get(user.getQuestionNumber()));
+//        System.out.println(App.getSecurityQuestions().get(user.getQuestionNumber()));
         String answer = scanner.nextLine();
         Matcher matcher = LoginRegisterCommands.AnswerQuestion.matcher(answer);
         System.out.println(user.getAnswer());

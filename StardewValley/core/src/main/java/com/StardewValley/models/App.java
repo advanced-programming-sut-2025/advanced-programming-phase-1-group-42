@@ -15,7 +15,7 @@ import java.util.Arrays;
 public class App {
     private final static ArrayList<User> users = new ArrayList<>();
 
-    private static Menu currentMenu = Menu.LoginRegisterMenu;
+    private static Menu currentMenu = null;
 
     private static User currentUser = null;
 
@@ -114,8 +114,8 @@ public class App {
 
     public static void setCursor() {
         Pixmap pixmap = new Pixmap(Gdx.files.internal("game_cursor_32.png"));
-        int xHotspot = 16;
-        int yHotspot = 16;
+        int xHotspot = 0;
+        int yHotspot = 0;
 
         cursor = Gdx.graphics.newCursor(pixmap, xHotspot, yHotspot);
         Gdx.graphics.setCursor(cursor);
