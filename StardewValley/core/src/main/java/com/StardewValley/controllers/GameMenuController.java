@@ -1,57 +1,58 @@
-package com.StardewValley.controllers;
+package org.example.controllers;
 
-import com.StardewValley.models.App;
-import com.StardewValley.models.Pair;
-import com.StardewValley.models.Result;
-import com.StardewValley.models.builders.Director;
-import com.StardewValley.models.builders.concrete_builders.WholeGameBuilder;
-import com.StardewValley.models.builders.concrete_builders.WholeMapBuilder;
-import com.StardewValley.models.enums.*;
-import com.StardewValley.models.game_structure.*;
-import com.StardewValley.models.game_structure.weathers.Weather;
-import com.StardewValley.models.goods.Good;
-import com.StardewValley.models.goods.GoodType;
-import com.StardewValley.models.goods.artisans.Artisan;
-import com.StardewValley.models.goods.artisans.ArtisanFunctions;
-import com.StardewValley.models.goods.farmings.*;
-import com.StardewValley.models.goods.foods.Food;
-import com.StardewValley.models.goods.foragings.*;
-import com.StardewValley.models.goods.products.ProductType;
-import com.StardewValley.models.goods.recipes.*;
-import com.StardewValley.models.goods.tools.Tool;
-import com.StardewValley.models.goods.tools.ToolFunctions;
-import com.StardewValley.models.goods.tools.ToolType;
-import com.StardewValley.models.interactions.Animals.Animal;
-import com.StardewValley.models.interactions.Animals.AnimalProduct;
-import com.StardewValley.models.interactions.Animals.AnimalTypes;
-import com.StardewValley.models.interactions.Gender;
-import com.StardewValley.models.interactions.NPCs.NPC;
-import com.StardewValley.models.interactions.Player;
-import com.StardewValley.models.interactions.PlayerBuildings.FarmBuilding;
-import com.StardewValley.models.interactions.PlayerBuildings.FarmBuildingTypes;
-import com.StardewValley.models.interactions.User;
-import com.StardewValley.models.interactions.game_buildings.Blacksmith;
-import com.StardewValley.models.interactions.game_buildings.CarpenterShop;
-import com.StardewValley.models.interactions.game_buildings.GameBuilding;
-import com.StardewValley.models.interactions.game_buildings.MarnieRanch;
-//import com.mongodb.ConnectionString;
-//import com.mongodb.MongoClientSettings;
-//import com.mongodb.ServerApi;
-//import com.mongodb.ServerApiVersion;
-//import com.mongodb.client.MongoClient;
-//import com.mongodb.client.MongoClients;
-//import com.mongodb.client.MongoCollection;
-//import com.mongodb.client.MongoDatabase;
-//import com.mongodb.client.model.Filters;
-//import com.mongodb.client.model.Updates;
-//import com.mongodb.client.result.UpdateResult;
-//import org.bson.Document;
-//import org.bson.conversions.Bson;
+import org.example.models.App;
+import org.example.models.Pair;
+import org.example.models.Result;
+import org.example.models.builders.*;
+import org.example.models.builders.concrete_builders.WholeGameBuilder;
+import org.example.models.builders.concrete_builders.WholeMapBuilder;
+import org.example.models.enums.*;
+import org.example.models.game_structure.Game;
+import org.example.models.game_structure.Tile;
 
+import org.example.models.game_structure.*;
+import org.example.models.game_structure.weathers.Weather;
+import org.example.models.goods.Good;
+import org.example.models.goods.GoodType;
+import org.example.models.goods.artisans.Artisan;
+import org.example.models.goods.artisans.ArtisanFunctions;
+import org.example.models.goods.farmings.FarmingCrop;
+import org.example.models.goods.farmings.FarmingCropType;
+import org.example.models.goods.farmings.FarmingTree;
+import org.example.models.goods.farmings.FarmingTreeSapling;
+import org.example.models.goods.foods.Food;
+import org.example.models.goods.foods.FoodType;
+import org.example.models.goods.foragings.*;
+import org.example.models.goods.products.ProductType;
+import org.example.models.goods.recipes.*;
+import org.example.models.goods.recipes.CraftingFunctions;
+import org.example.models.goods.recipes.CraftingRecipe;
+import org.example.models.interactions.Animals.Animal;
+import org.example.models.interactions.Animals.AnimalProduct;
+import org.example.models.interactions.Animals.AnimalProductsType;
+import org.example.models.interactions.Animals.AnimalTypes;
+import org.example.models.interactions.Gender;
+import org.example.models.interactions.NPCs.NPC;
+import org.example.models.goods.tools.Tool;
+import org.example.models.goods.tools.ToolFunctions;
+import org.example.models.goods.tools.ToolType;
+import org.example.models.interactions.Player;
+import org.example.models.interactions.PlayerBuildings.FarmBuilding;
+import org.example.models.interactions.PlayerBuildings.FarmBuildingTypes;
+import org.example.models.interactions.User;
+import org.example.models.interactions.game_buildings.Blacksmith;
+import org.example.models.interactions.game_buildings.CarpenterShop;
+import org.example.models.interactions.game_buildings.GameBuilding;
+import org.example.models.interactions.game_buildings.MarnieRanch;
+
+
+import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.*;
 import java.util.regex.Matcher;
 
 import static java.lang.Math.abs;
+import static java.lang.Math.min;
 
 public class GameMenuController extends Controller {
 
@@ -105,14 +106,6 @@ public class GameMenuController extends Controller {
                 return value;
             }
         }
-
-        for (FarmingTreeSaplingType value : FarmingTreeSaplingType.values()) {
-            if (value.getName().equals(craftName)) {
-                return value;
-            }
-        }
-
-
         return null;
     }
 
@@ -235,7 +228,6 @@ public class GameMenuController extends Controller {
             return new Result(false, "Just game admin can exit the game!");
         } else {
             App.setCurrentGame(null);
-            App.setCurrentMenu(Menu.GameMenu);
             return new Result(true, "You have successfully exited the game!");
         }
     }
@@ -268,31 +260,6 @@ public class GameMenuController extends Controller {
         }
 
         App.getGames().remove(App.getCurrentGame());
-//        String connectionString = "mongodb+srv://namoder123:passme@cluster01.unmuffl.mongodb.net/?retryWrites=true&w=majority&appName=Cluster01";
-//
-//        ServerApi serverApi = ServerApi.builder()
-//                .version(ServerApiVersion.V1)
-//                .build();
-//
-//        MongoClientSettings settings = MongoClientSettings.builder()
-//                .applyConnectionString(new ConnectionString(connectionString))
-//                .serverApi(serverApi)
-//                .build();
-//
-//        try (MongoClient mongoClient = MongoClients.create(settings)) {
-//            MongoDatabase database = mongoClient.getDatabase("Game");
-//            MongoCollection<Document> collection = database.getCollection("USERS");
-//
-//            Bson filter ;
-//            for (Player player : App.getCurrentGame().getPlayers()) {
-//                filter = Filters.eq("username",player.getUser().getUsername());
-//                Bson update = Updates.set("setPlaying", false);
-//                UpdateResult result = collection.updateOne(filter, update);
-//
-//            }
-//        } catch (Exception e) {
-//            System.out.println("Error while setting is Playing  user.");
-//        }
         App.setCurrentGame(null);
         return new Result(true, "Game terminated successfully!");
 
@@ -579,18 +546,14 @@ public class GameMenuController extends Controller {
 
         boolean flag = false;
         for (ArrayList<Good> goods : App.getCurrentGame().getCurrentPlayer().getInventory().getList()) {
-            if (!goods.isEmpty() && goods.getFirst().getName().equals(toolName) && goods.size() >= 1) {
+            if (!goods.isEmpty() && goods.getFirst().getName().equals(toolName) && goods.size() == 1) {
                 App.getCurrentGame().getCurrentPlayer().setInHandGood((Tool) goods.getFirst());
                 flag = true;
                 break;
             }
-            if (!flag && toolName.equals("Trash_Can")) {
-                App.getCurrentGame().getCurrentPlayer().setInHandGood(App.getCurrentGame().getCurrentPlayer().getTrashCan());
-                flag = true;
-            }
         }
         if (!flag)
-            return new Result(false, "You don't have " + toolName + " to use!");
+            return new Result(false, "You don't have " + toolName + "to use!");
 
         return new Result(true, "Now you can use " + toolName);
     }
@@ -760,7 +723,7 @@ public class GameMenuController extends Controller {
         if (plant == null)
             return new Result(false, "There is no plant in this location!");
 
-        return new Result(true, "Plant Info:\n" + plant.toString());
+        return new Result(true, "Plant Info:\n" + plant.getType().toString());
     }
 
     public Result fertilize(String fertilizerName, String direction) {
@@ -782,42 +745,41 @@ public class GameMenuController extends Controller {
         tile.getGoods().add(fertilizer.getLast());
         fertilizer.removeLast();
 
+
         boolean isThereAPlant = false;
         for (Good good : tile.getGoods()) {
             if (good instanceof FarmingTreeSapling) {
                 isThereAPlant = true;
-            } else if (good instanceof FarmingTree) {
+            }   else if (good instanceof FarmingTree) {
                 isThereAPlant = true;
-            } else if (good instanceof ForagingSeed) {
+            }   else if (good instanceof ForagingSeed) {
                 isThereAPlant = true;
-            } else if (good instanceof ForagingTree) {
+            }   else if (good instanceof ForagingTree) {
                 isThereAPlant = true;
-            } else if (good instanceof ForagingMixedSeed) {
+            }   else if (good instanceof ForagingMixedSeed) {
                 isThereAPlant = true;
             }
         }
-        if (!isThereAPlant) {
+        if(!isThereAPlant){
             return new Result(false, "There is no plant in this location!");
         }
-        return new Result(true, "You have fertilized tile in location " + coordinate + " with " + fertilizer.getFirst().getName() + "!");
+
+        return new Result(true, "You have fertilized tile in location " + coordinate + " with " +
+                tile.getGoods().getLast().getName() + " !");
     }
 
     public Result howMuchWater() {
         Tool tool = (Tool) App.getCurrentGame().getCurrentPlayer().getInventory().isInInventory(ToolType.WATERING_CAN.getName()).getFirst();
-        return new Result(true, "Your watering can have capacity:" + tool.capacity);
+        return new Result(true, "Your watering can have capacity: " + tool.capacity);
     }
 
 
     // Nader
     // crafting methods
     public Result showCraftingRecipes() {
-
         for (CraftingRecipe craftingRecipe : App.getCurrentGame().getCurrentPlayer().getCraftingRecipes()) {
             System.out.println(craftingRecipe.getName());
-            System.out.println("\t" + ((CraftingRecipeType) craftingRecipe.getType()).getIngredients());
-            if (((CraftingRecipeType) craftingRecipe.getType()).getSource() != null) {
-                System.out.println("\t" + ((CraftingRecipeType) craftingRecipe.getType()).getSource());
-            }
+            System.out.println(((CraftingRecipeType) craftingRecipe.getType()).getIngredients());
             System.out.println("-------------------------------------------");
         }
         return new Result(true, "");
@@ -825,6 +787,7 @@ public class GameMenuController extends Controller {
 
     public Result craftingCraft(String itemName) {
         itemName = itemName.trim();
+
         for (CraftingRecipe craftingRecipe : App.getCurrentGame().getCurrentPlayer().getCraftingRecipes()) {
             if (craftingRecipe.getName().equals(itemName)) {
                 CraftingFunctions craftingFunctions = new CraftingFunctions();
@@ -832,7 +795,7 @@ public class GameMenuController extends Controller {
                 return new Result(true, "");
             }
         }
-        return new Result(false, "You don't have " + itemName + " recipe!");
+        return new Result(false, "");
     }
 
     public Result placeItem(String itemName, String direction) {
@@ -881,6 +844,7 @@ public class GameMenuController extends Controller {
 
 
     public Result cheatAddItem(String itemName, String count) {
+
         itemName = itemName.trim();
         count = count.trim();
 
@@ -909,47 +873,59 @@ public class GameMenuController extends Controller {
         status = status.trim();
         itemName = itemName.trim();
 
-        TileType tileType = App.getCurrentGame().getMap().findTileType(App.getCurrentGame().getCurrentPlayer().getCoordinate());
-        if (!tileType.equals(TileType.PLAYER_BUILDING)) {
-            return new Result(false, "You are not in Home!");
-        }
-
         Fridge fridge = App.getCurrentGame().getCurrentPlayer().getFridge();
         Inventory inventory = App.getCurrentGame().getCurrentPlayer().getInventory();
-        GoodType type = Good.newGoodType(itemName);
-        Good good = Good.newGood(type);
-
-        if (type == null) {
-            return new Result(false, "This item is invalid!");
-        }
-
-        if (!(good instanceof Food || good instanceof Artisan || good instanceof AnimalProduct
-                || good instanceof FarmingCrop)) {
-            return new Result(false, "Hey! You can't add this item to your fridge!");
-        }
+        Food item = null;
+        boolean found = false;
 
         if (status.equals("pick")) {
-            int count = fridge.howManyInFridge(type);
-            if (count == 0) {
-                return new Result(false, "There is no " + itemName + " in the fridge!");
-            } else {
-                fridge.removeItemsFromFridge(type, 1);
-                boolean added = inventory.addGood(good, 1);
-                if (added) {
-                    return new Result(true, "You have added " + itemName + " to the inventory!");
+
+            for (ArrayList<Food> fridgeList : fridge.getInFridgeItems()) {
+                Iterator<Food> iterator = fridgeList.iterator();
+                while (iterator.hasNext()) {
+                    Food food = iterator.next();
+                    if (food.getName().equalsIgnoreCase(itemName)) {
+                        item = food;
+                        iterator.remove();
+                        found = true;
+                        break;
+                    }
                 }
+                if (found) break;
+            }
+
+            if (!found) {
+                return new Result(false, "Item is not available in the fridge");
+            }
+
+            if (App.getCurrentGame().getCurrentPlayer().getInventory().addGood(new ArrayList<>(Arrays.asList(item)))) {
+                return new Result(true, item.getName() + " added to the inventory");
             }
             return new Result(false, "Inventory is full");
 
         } else if (status.equals("put")) {
-            int count = inventory.howManyInInventory(good);
-            if (count == 0) {
-                return new Result(false, "There is no " + itemName + " in the inventory!");
-            } else {
-                inventory.removeItemsFromInventory(type, 1);
-                fridge.addItemToFridge(good);
-                return new Result(true, "You have added " + itemName + " to the fridge!");
+            for (ArrayList<Good> inventoryList : inventory.getList()) {
+                Iterator<Good> iterator = inventoryList.iterator();
+                while (iterator.hasNext()) {
+                    Good good = iterator.next();
+                    if (good instanceof Food && good.getName().equalsIgnoreCase(itemName)) {
+                        item = (Food) good;
+                        iterator.remove();
+                        found = true;
+                        break;
+                    }
+                }
+                if (found) break;
             }
+
+            if (!found) {
+                return new Result(false, "Item is not available in the Inventory");
+            }
+
+            if (App.getCurrentGame().getCurrentPlayer().getFridge().addItemToFridge(item)) {
+                return new Result(true, item.getName() + " added to the fridge");
+            }
+            return new Result(false, "Fridge is full");
 
         }
 
@@ -1055,14 +1031,6 @@ public class GameMenuController extends Controller {
     // Parsa
     // Animals & Fishing methods
     public Result buildBuilding(String buildingName, String x, String y) {
-        Coordinate coordinate = App.getCurrentGame().getCurrentPlayer().getCoordinate();
-        Tile tile = App.getCurrentGame().getMap().findTile(coordinate);
-        if (tile.getTileType() != TileType.GAME_BUILDING)
-            return new Result(false, "You should be in a game building to show all products!");
-        if (!App.getCurrentGame().getMap().findGameBuilding(coordinate).isInWorkingHours()) {
-            return new Result(false, App.getCurrentGame().getMap().findGameBuilding(coordinate).getName() + " hours have ended for today!");
-        }
-
         buildingName = buildingName.trim();
         x = x.trim();
         y = y.trim();
@@ -1084,6 +1052,7 @@ public class GameMenuController extends Controller {
                         .howManyInInventoryByType(ProductType.WOOD) &&
                         targetType.getStone() < App.getCurrentGame().getCurrentPlayer().getInventory()
                                 .howManyInInventoryByType(ProductType.STONE)) {
+                    Coordinate coordinate = new Coordinate(Integer.parseInt(x), Integer.parseInt(y));
                     Coordinate startCoordinate = new Coordinate((int) Integer.parseInt(x) - targetType.getSize().first() / 2,
                             (int) Integer.parseInt(y) - targetType.getSize().second() / 2);
 
@@ -1091,7 +1060,9 @@ public class GameMenuController extends Controller {
                     for (int sX = 0; sX < targetType.getSize().first(); sX++) {
                         for (int sY = 0; sY < targetType.getSize().second(); sY++) {
                             Tile tempTile = App.getCurrentGame().getMap().findTileByXY(sX + startCoordinate.getX(), sY + startCoordinate.getY());
-                            if (!tempTile.getTileType().equals(TileType.FARM)) {
+                            if (tempTile.getTileType().equals(TileType.GAME_BUILDING) ||
+                                    tempTile.getTileType().equals(TileType.BEACH) ||
+                                    tempTile.getTileType().equals(TileType.PLAYER_BUILDING)) {
                                 validSpace = false;
                             }
                         }
@@ -1127,15 +1098,6 @@ public class GameMenuController extends Controller {
     }
 
     public Result buyAnimal(String animalType, String animalName) {
-        Coordinate coordinate = App.getCurrentGame().getCurrentPlayer().getCoordinate();
-        Tile tile = App.getCurrentGame().getMap().findTile(coordinate);
-        if (tile.getTileType() != TileType.GAME_BUILDING)
-            return new Result(false, "You should be in a game building to show all products!");
-        if (!App.getCurrentGame().getMap().findGameBuilding(coordinate).isInWorkingHours()) {
-            return new Result(false, App.getCurrentGame().getMap().findGameBuilding(coordinate).getName() + " hours have ended for today!");
-        }
-
-
         if (animalType == null || animalName == null || animalType.trim().isEmpty() || animalName.trim().isEmpty()) {
             return new Result(false, "Invalid animal type or name");
         }
@@ -1359,6 +1321,7 @@ public class GameMenuController extends Controller {
 
     public Result artisanGet(String artisanName) {
         artisanName = artisanName.trim();
+        //TODO
         return new Result(true, "");
     }
 
@@ -1486,21 +1449,13 @@ public class GameMenuController extends Controller {
 
         player.getTalkHistory().add(new Pair<>(
                 App.getCurrentGame().getCurrentPlayer(),
-                "\t<"+App.getCurrentGame().getCurrentPlayer().getPlayerUsername() + "> " + dateTime().message() + ": " + message
+                dateTime().message() + ": " + message
         ));
 
         App.getCurrentGame().getCurrentPlayer().getTalkHistory().add(new Pair<>(
                 player,
-                "\t<"+App.getCurrentGame().getCurrentPlayer().getPlayerUsername() + "> " + dateTime().message() + ": " + message
+                dateTime().message() + ": " + message
         ));
-
-        try {
-            if (App.getCurrentGame().getCurrentPlayer().getIsInteracted().get(player).equals(true)) {
-
-            }
-        } catch (Exception e) {
-            return new Result(false, "You are not interacted!");
-        }
 
         if (App.getCurrentGame().getCurrentPlayer().getIsInteracted().get(player).equals(false)) {
 
@@ -1536,7 +1491,8 @@ public class GameMenuController extends Controller {
         list.append("Talk History:\n");
         for (Pair<Player, String> talk : App.getCurrentGame().getCurrentPlayer().getTalkHistory()) {
             if (talk.first().getPlayerUsername().equals(username)) {
-                list.append(talk.second()).append("\n");
+                list.append("\t<").append(talk.first().getUser().getUsername()).append("> ")
+                        .append(talk.second()).append("\n");
             }
         }
 
@@ -1849,7 +1805,7 @@ public class GameMenuController extends Controller {
 
             player.updateFriendShips(App.getCurrentGame().getCurrentPlayer());
             App.getCurrentGame().getCurrentPlayer().updateFriendShips(player);
-            player.setRejectionBuff(new Buff(BuffType.REJECT_BUFF, 7, 100));
+            player.setBuff(new Buff(BuffType.REJECT_BUFF, 7, 100));
             player.getInventory().addGood(new ArrayList<>(Arrays.asList(mainPlayer.getMarriageList().get(player))));
             player.getNews().add(mainPlayer.getUser().getUsername() + " has rejected your marriage!");
             mainPlayer.getFriendShips().remove(player);
@@ -1899,15 +1855,10 @@ public class GameMenuController extends Controller {
 
         for (NPC npc : App.getCurrentGame().getNPCs()) {
             if (npc.getType().getName().equals(npcName)) {
-                if ((abs(npc.getType().getCoordinate().getX() -
-                        App.getCurrentGame().getCurrentPlayer().getCoordinate().getX()) == 1 ||
-                        (abs(npc.getType().getCoordinate().getX() -
-                                App.getCurrentGame().getCurrentPlayer().getCoordinate().getX()) == 0))
-                        &&
-                        (abs(npc.getType().getCoordinate().getY() -
-                                App.getCurrentGame().getCurrentPlayer().getCoordinate().getY()) == 1 ||
-                                abs(npc.getType().getCoordinate().getY() -
-                                        App.getCurrentGame().getCurrentPlayer().getCoordinate().getY()) == 0)) {
+                if (abs(npc.getType().getCoordinate().getX() -
+                        App.getCurrentGame().getCurrentPlayer().getCoordinate().getX()) == 1 &&
+                        abs(npc.getType().getCoordinate().getY() -
+                                App.getCurrentGame().getCurrentPlayer().getCoordinate().getY()) == 1) {
                     npc.getFriendship();
                     npc.npcDialogs();
                     return new Result(true, "");
@@ -1993,18 +1944,11 @@ public class GameMenuController extends Controller {
         NPC targetNPC = null;
         boolean found = false;
         for (NPC npc : App.getCurrentGame().getNPCs()) {
-            if ((abs(npc.getType().getCoordinate().getX() -
-                    App.getCurrentGame().getCurrentPlayer().getCoordinate().getX()) == 1 ||
-                    (abs(npc.getType().getCoordinate().getX() -
-                            App.getCurrentGame().getCurrentPlayer().getCoordinate().getX()) == 0))
-                    &&
-                    (abs(npc.getType().getCoordinate().getY() -
-                            App.getCurrentGame().getCurrentPlayer().getCoordinate().getY()) == 1 ||
-                            abs(npc.getType().getCoordinate().getY() -
-                                    App.getCurrentGame().getCurrentPlayer().getCoordinate().getY()) == 0)) {
-                targetNPC = npc;
-                found = true;
-                break;
+            if (abs(npc.getType().getCoordinate().getX() -
+                    App.getCurrentGame().getCurrentPlayer().getCoordinate().getX()) == 1 &&
+                    abs(npc.getType().getCoordinate().getY() -
+                            App.getCurrentGame().getCurrentPlayer().getCoordinate().getY()) == 1) {
+
             }
         }
         if (!found) {
