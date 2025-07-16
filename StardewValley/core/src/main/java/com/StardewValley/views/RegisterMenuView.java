@@ -186,6 +186,7 @@ public class RegisterMenuView implements Screen {
         stage.addActor(securityQuestionWindow);
         securityQuestionWindow.setVisible(false);
 
+
     }
 
     @Override

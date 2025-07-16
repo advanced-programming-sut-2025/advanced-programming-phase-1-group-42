@@ -99,7 +99,7 @@ public class ProfileMenuController extends Controller {
     }
 
     public Result exit() {
-        App.setCurrentMenu(Menu.MainMenu);
+//        App.setCurrentMenu(Menu.MainMenu);
 
         return new Result(true, "Redirecting to main menu!");
     }

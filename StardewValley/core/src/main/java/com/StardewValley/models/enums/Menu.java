@@ -5,7 +5,6 @@ import com.StardewValley.views.*;
 import java.util.Scanner;
 
 public enum Menu {
-    MainMenu(new MainMenu()),
     GameMenu(new GameMenu()),
     TradeMenu(new TradeMenu()),
     ProfileMenu(new ProfileMenu()),

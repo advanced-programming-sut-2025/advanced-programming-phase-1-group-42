@@ -82,7 +82,7 @@ public class App {
             System.out.println("Oh-No! Something went wrong while loading users!");
         }
         if (App.getCurrentUser() != null) {
-            App.setCurrentMenu(Menu.MainMenu);
+//            App.setCurrentMenu(Menu.MainMenu);
         }
     }
 
