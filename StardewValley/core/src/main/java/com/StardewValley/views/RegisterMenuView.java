@@ -41,7 +41,6 @@ public class RegisterMenuView implements Screen {
     private Label securityQuestionLabel;
     private SelectBox<String> securityQuestionBox;
     private TextField securityQuestionField;
-    private Label securityErrorLabel;
     private TextButton submitAnswerButton;
     private TextButton backButton;
 
@@ -52,16 +51,16 @@ public class RegisterMenuView implements Screen {
         this.titleLabel = new Label("Register Menu", skin);
         this.titleLabel.setFontScale(2.0f);
         this.usernameLabel = new Label("Username", skin);
-        this.usernameField = new TextField("example: Parsa-374", skin);
+        this.usernameField = new TextField("Parsa-374", skin);
         this.passwordLabel = new Label("Password", skin);
-        this.passwordField = new TextField("example: Passw0rd##", skin);
+        this.passwordField = new TextField("Passw0rd##", skin);
         this.confirmPasswordLabel = new Label("Confirm Password", skin);
-        this.confirmPasswordField = new TextField("example: Passw0rd##", skin);
+        this.confirmPasswordField = new TextField("Passw0rd##", skin);
         this.randomPasswordButton = new TextButton("Generating Random Password", skin);
         this.nicknameLabel = new Label("Nickname", skin);
-        this.nicknameField = new TextField("example: Parsa", skin);
+        this.nicknameField = new TextField("Parsa", skin);
         this.emailLabel = new Label("Email", skin);
-        this.emailField = new TextField("example: Em.ail8@org.eu", skin);
+        this.emailField = new TextField("Em.ail8@org.eu", skin);
         this.genderLabel = new Label("Gender", skin);
         this.genderBox = new SelectBox<>(skin);
         this.genderBox.setItems("Male", "Female");
@@ -81,7 +80,7 @@ public class RegisterMenuView implements Screen {
             "What is your favorite movie of all time?"
         );
         this.securityQuestionBox.setSelectedIndex(0);
-        this.securityQuestionField = new TextField("example: yes i was.", skin);
+        this.securityQuestionField = new TextField("yes i was.", skin);
         this.submitAnswerButton = new TextButton("Submit", skin);
         this.backButton = new TextButton("Back", skin);
 
@@ -95,7 +94,6 @@ public class RegisterMenuView implements Screen {
         Gdx.input.setInputProcessor(stage);
 
         table = new Table(skin);
-        Table table = new Table();
         table.setFillParent(true);
         stage.addActor(table);
 

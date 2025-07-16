@@ -9,8 +9,10 @@ import com.StardewValley.models.enums.Menu;
 import com.StardewValley.models.interactions.Gender;
 import com.StardewValley.models.interactions.User;
 import com.StardewValley.views.LoginMenuView;
+import com.StardewValley.views.MainMenuView;
 import com.StardewValley.views.RegisterMenuView;
 import com.badlogic.gdx.Screen;
+import com.badlogic.gdx.scenes.scene2d.ui.TextField;
 
 import java.util.Random;
 import java.util.Scanner;
@@ -64,7 +66,7 @@ public class LoginRegisterMenuController extends Controller {
 
             registerView.getSecurityQuestionWindow().setVisible(true);
             registerView.getSecurityQuestionBox().setSelectedIndex(0);
-            registerView.getSecurityQuestionField().setText("example: yes i was.");
+            registerView.getSecurityQuestionField().setText("yes i was");
         }
         else if (registerView.getBackButton().isChecked()) {
             registerView.getBackButton().setChecked(false);
@@ -89,12 +91,113 @@ public class LoginRegisterMenuController extends Controller {
 
     }
 
-    public Result exit() {
-        return new Result(true, "Goodbye!");
+    public void handleLogin() {
+        if (view == null)
+            return;
+
+        LoginMenuView loginMenuView = (LoginMenuView) view;
+        if (loginMenuView.getBackButton().isChecked()) {
+            loginMenuView.getBackButton().setChecked(false);
+
+            Main.getMain().getScreen().dispose();
+            Main.getMain().setScreen(new RegisterMenuView(new LoginRegisterMenuController(), Assets.getInstance().getSkin()));
+        }
+        else if (loginMenuView.getForgetPasswordButton().isChecked()) {
+            loginMenuView.getForgetPasswordButton().setChecked(false);
+
+            loginMenuView.initForgetPasswordWindow();
+        }
+        else if (loginMenuView.getLoginButton().isChecked()) {
+            loginMenuView.getLoginButton().setChecked(false);
+            login(loginMenuView);
+        }
+        else if (loginMenuView.getUsernameFindButton().isChecked()) {
+            loginMenuView.getUsernameFindButton().setChecked(false);
+
+            User user = getUser(loginMenuView);
+            if (user == null) return;
+
+
+            loginMenuView.getSecurityQuestionLabel().setText("Question: " + App.getSecurityQuestions().
+                get(user.getQuestionNumber()));
+            loginMenuView.getForgetErrorLabel().setText("Welcome " + user.getUsername());
+        }
+        else if (loginMenuView.getSecurityQuestionSubmitButton().isChecked()) {
+            loginMenuView.getSecurityQuestionSubmitButton().setChecked(false);
+
+            User user = getUser(loginMenuView);
+            if (user == null) return;
+
+            if (!loginMenuView.getSecurityQuestionField().getText().equals(user.getAnswer())) {
+                loginMenuView.getForgetErrorLabel().setText("Wrong answer to security question!");
+                return;
+            }
+
+            loginMenuView.getForgetErrorLabel().setText("Please enter your new password!");
+        }
+        else if (loginMenuView.getRandomNewPasswordButton().isChecked()) {
+            loginMenuView.getRandomNewPasswordButton().setChecked(false);
+
+            String randomPassword = generateRandomPassword();
+            loginMenuView.getNewPasswordField().setText(randomPassword);
+            loginMenuView.getConfirmNewPasswordField().setText(randomPassword);
+        }
+        else if (loginMenuView.getNewPasswordConfirmButton().isChecked()) {
+            loginMenuView.getNewPasswordConfirmButton().setChecked(false);
+
+            changePassword(loginMenuView);
+        }
+        else if (loginMenuView.getForgetBackButton().isChecked()) {
+            loginMenuView.getForgetBackButton().setChecked(false);
+
+            loginMenuView.getForgetPasswordWindow().setVisible(false);
+        }
     }
 
-    public Result showCurrentMenu() {
-        return new Result(true, "Current Menu : Login/Register Menu");
+    private void changePassword(LoginMenuView loginMenuView) {
+        User user = getUser(loginMenuView);
+        if (user == null) return;
+
+        if (!loginMenuView.getNewPasswordField().getText().equals(loginMenuView.getConfirmNewPasswordField().getText())) {
+            loginMenuView.getForgetErrorLabel().setText("Password and confirm password do not match!");
+        }
+
+        user.setPassword(loginMenuView.getNewPasswordField().getText());
+        loginMenuView.getErrorLabel().setText("Password has been successfully changed!");
+        loginMenuView.getForgetPasswordWindow().setVisible(false);
+    }
+
+    private void login(LoginMenuView loginMenuView) {
+        User user = findAppUser(loginMenuView.getUsernameField().getText());
+        if (user == null) {
+            loginMenuView.getErrorLabel().setText("User not found!");
+        }
+
+        if (!user.getPassword().equals(loginMenuView.getPasswordField().getText())) {
+            loginMenuView.getErrorLabel().setText("Wrong password!");
+        }
+
+        if (loginMenuView.getStayOnLoginCheckBox().isChecked()) {
+            user.setStayLogin(true);
+        }
+        //TODO: STAY LOGIN should be fixed
+
+        App.setCurrentUser(user);
+        Main.getMain().getScreen().dispose();
+        Main.getMain().setScreen(new MainMenuView(new MainMenuController(), Assets.getInstance().getSkin()));
+    }
+
+    private User getUser(LoginMenuView loginMenuView) {
+        User user = findAppUser(loginMenuView.getUsernameForgetField().getText());
+        if(user == null) {
+            loginMenuView.getForgetErrorLabel().setText("User not found!");
+            return null;
+        }
+        return user;
+    }
+
+    public Result exit() {
+        return new Result(true, "Goodbye!");
     }
 
     public Result register(String username, String password, String confirmPassword, String nickname, String email,
@@ -128,80 +231,9 @@ public class LoginRegisterMenuController extends Controller {
             return new Result(false, checkPasswordStrength(password).toString());
 
         if(!password.equals(confirmPassword)) {
-            return new Result(false, "Passwords does not match!");
+            return new Result(false, "Password and confirm password do not match!");
         }
 
         return new Result(true, "Redirecting to Security Question Window");
-    }
-
-    public Result login(String username, String password, String stayLoggedIn) {
-        username = username.trim();
-        password = password.trim();
-
-        User user = findAppUser(username);
-        if(user == null) {
-            return new Result(false, "User not found!");
-        }
-
-        if(!user.getPassword().equals(getSHA256(password))) {
-            return new Result(false, "Wrong password!");
-        }
-
-
-        if (stayLoggedIn!= null) {
-            if (stayLoggedIn.equals("–stay-logged-in")) {
-                user.setStayLogin(true);
-            }
-        }
-
-        App.setCurrentUser(user);
-        App.setCurrentMenu(Menu.MainMenu);
-        return new Result(true, "You logged in successfully! Redirecting to Main Menu...");
-    }
-
-    public Result forgetPassword(String username, Scanner scanner) {
-        username = username.trim();
-
-        User user = findAppUser(username);
-        if(user == null) {
-            return new Result(false, "User not found!");
-        }
-
-//        System.out.println(App.getSecurityQuestions().get(user.getQuestionNumber()));
-        String answer = scanner.nextLine();
-        Matcher matcher = LoginRegisterCommands.AnswerQuestion.matcher(answer);
-        System.out.println(user.getAnswer());
-        if(matcher == null || !matcher.group("answer").equals(user.getAnswer()))
-            return new Result(false, "Wrong answer to security question!");
-
-        System.out.println("Choose how to you want to reset your password? (1/2)\n1. Random Password\n2. Entering Password");
-        int number = 2;
-        try {
-            number = Integer.parseInt(scanner.nextLine());
-            if(number >= 3 || number < 1)
-                throw new NumberFormatException();
-        } catch (NumberFormatException e) {
-            return new Result(false, "Wrong number format!");
-        }
-
-        String newPassword = "";
-        if(number == 1) {
-            while(true) {
-                String rPassword = generateRandomPassword();
-                System.out.println("Use this Random Password for your Password? (y/n)");
-                String input = scanner.nextLine();
-                if(input.equals("y")) {
-                    newPassword = rPassword;
-                    break;
-                }
-            }
-        }
-        else {
-            System.out.println("Enter your new password:");
-            newPassword = scanner.nextLine();
-        }
-
-        user.setPassword(newPassword);
-        return new Result(true, "Your Password has been successfully changed!");
     }
 }
