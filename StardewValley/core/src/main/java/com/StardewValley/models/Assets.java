@@ -11,6 +11,7 @@ public class Assets {
     private final Skin skin = new Skin(Gdx.files.internal("Theme/skin/clean-crispy-ui.json"));
     private final Music stardewMusic = Gdx.audio.newMusic(Gdx.files.internal("Audio/stardewMusic.wav"));
     private final Sprite menuBackground = new Sprite(new Texture("menu_background.png"));
+    private final Sprite menuBackground2 = new Sprite(new Texture("menu_background_2.png"));
 
     public static Assets getInstance() {
         return instance;
@@ -25,5 +26,9 @@ public class Assets {
 
     public Sprite getMenuBackground() {
         return menuBackground;
+    }
+
+    public Sprite getMenuBackground2() {
+        return menuBackground2;
     }
 }

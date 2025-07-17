@@ -5,7 +5,6 @@ import com.StardewValley.models.game_structure.Game;
 
 public class User {
     private Game game;
-    private int earnedPoints;
     private String username;
     private String password;
     private String nickname;
@@ -14,6 +13,7 @@ public class User {
     private int questionNumber;
     private String answer;
     private boolean isPlaying;
+    private int earnedPoints;
     private int maxPoints;
     private int gamePlay;
     private boolean stayLogin;
