@@ -128,7 +128,7 @@ public class ProfileMenuView implements Screen {
         table.row();
 
 // Row 6 – Error Label
-        table.add(errorLabel).colspan(5).center().fillX().expandX().padTop(10);
+        table.add(errorLabel).colspan(5).center()   .fillX().expandX().padTop(10);
         table.row();
 
         window = new Window("Profile Menu", skin);
