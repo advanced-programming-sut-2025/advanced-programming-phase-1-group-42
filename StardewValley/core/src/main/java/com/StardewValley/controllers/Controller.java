@@ -18,7 +18,6 @@ public class Controller {
                 return user;
             }
         }
-
         return null;
     }
 

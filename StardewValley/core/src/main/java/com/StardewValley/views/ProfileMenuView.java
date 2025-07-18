@@ -131,7 +131,7 @@ public class ProfileMenuView implements Screen {
         table.add(errorLabel).colspan(5).center()   .fillX().expandX().padTop(10);
         table.row();
 
-        window = new Window("Profile Menu", skin);
+        window = new Window("Pr ofile Menu", skin);
         window.setModal(true);
         window.setMovable(true);
         window.setResizable(false);

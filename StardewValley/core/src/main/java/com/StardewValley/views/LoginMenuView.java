@@ -145,19 +145,7 @@ public class LoginMenuView implements Screen {
         forgetPasswordTable.row();
 
         forgetPasswordWindow = new Window("Forgot Password", skin);
-        forgetPasswordWindow.setModal(true);
-        forgetPasswordWindow.setMovable(true);
-        forgetPasswordWindow.setResizable(false);
-
-        forgetPasswordWindow.add(forgetPasswordTable).grow().pad(10);
-        forgetPasswordWindow.pack();
-        forgetPasswordWindow.setPosition(
-            Gdx.graphics.getWidth() / 2f - forgetPasswordWindow.getWidth() / 2f,
-            Gdx.graphics.getHeight() / 2f - forgetPasswordWindow.getHeight() / 2f
-        );
-
-        stage.addActor(forgetPasswordWindow);
-        forgetPasswordWindow.setVisible(false);
+        GameMenuView.setWindowForTable(forgetPasswordWindow, forgetPasswordTable, stage);
     }
 
     @Override

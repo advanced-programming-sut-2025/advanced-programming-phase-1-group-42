@@ -171,22 +171,7 @@ public class RegisterMenuView implements Screen {
         securityQuestionTable.row();
 
         securityQuestionWindow = new Window("Security Question", skin);
-        securityQuestionWindow.setModal(true);
-        securityQuestionWindow.setMovable(true);
-        securityQuestionWindow.setResizable(false);
-
-        securityQuestionWindow.add(securityQuestionTable).grow().pad(10);
-        securityQuestionWindow.pack();
-        securityQuestionWindow.setPosition(
-            Gdx.graphics.getWidth() / 2f - securityQuestionWindow.getWidth() / 2f,
-            Gdx.graphics.getHeight() / 2f - securityQuestionWindow.getHeight() / 2f
-        );
-
-// Add to stage when needed
-        stage.addActor(securityQuestionWindow);
-        securityQuestionWindow.setVisible(false);
-
-
+        GameMenuView.setWindowForTable(securityQuestionWindow, securityQuestionTable, stage);
     }
 
     @Override

@@ -108,7 +108,7 @@ public class App {
     public static void setBackgroundMusic(Music backgroundMusic) {
         App.backgroundMusic = backgroundMusic;
         App.getBackgroundMusic().setLooping(true);
-        App.getBackgroundMusic().setVolume(0.5f);
+        App.getBackgroundMusic().setVolume(0.0f);
         App.getBackgroundMusic().play();
     }
 
