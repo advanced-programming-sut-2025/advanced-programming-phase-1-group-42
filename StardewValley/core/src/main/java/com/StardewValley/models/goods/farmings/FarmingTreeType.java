@@ -143,6 +143,11 @@ public enum FarmingTreeType implements GoodType {
         return this.name;
     }
 
+    @Override
+    public String imagePath() {
+        return "";
+    }
+
     public ArrayList<Pair<GoodType, Integer>> getProducts() {
         return products;
     }

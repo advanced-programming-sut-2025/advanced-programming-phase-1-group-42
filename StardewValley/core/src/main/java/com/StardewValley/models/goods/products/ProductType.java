@@ -86,4 +86,9 @@ public enum ProductType implements GoodType {
     public String getName() {
         return name;
     }
+
+    @Override
+    public String imagePath() {
+        return "";
+    }
 }

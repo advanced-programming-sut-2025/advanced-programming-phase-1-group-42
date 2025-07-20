@@ -7,6 +7,4 @@ public enum BuffType {
     FISHING_BUFF,
     MINING_BUFF,
     REJECT_BUFF;
-
-
 }
