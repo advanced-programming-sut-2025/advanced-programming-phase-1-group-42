@@ -117,7 +117,7 @@ public class GameMenuView implements Screen {
             @Override
             public void clicked(InputEvent event, float x, float y) {
                 choiceFarmWindow.setVisible(false);
-                if (controller.ptr == 4) {
+                if (controller.ptr == 3) {
                     controller.newGamePhase2();
                     return;
                 }
@@ -134,7 +134,7 @@ public class GameMenuView implements Screen {
             @Override
             public void clicked(InputEvent event, float x, float y) {
                 choiceFarmWindow.setVisible(false);
-                if (controller.ptr == 4) {
+                if (controller.ptr == 3) {
                     controller.newGamePhase2();
                     return;
                 }
