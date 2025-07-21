@@ -117,14 +117,17 @@ public class GameMenuView implements Screen {
             @Override
             public void clicked(InputEvent event, float x, float y) {
                 choiceFarmWindow.setVisible(false);
-                if (controller.ptr == 4) {
-                    controller.newGamePhase2();
-                    return;
-                }
+
 
                 Farm farm = new Farm(0, controller.ptr, controller.tiles);
                 controller.players.get(controller.ptr).setFarm(farm);
                 controller.farms.add(farm);
+
+                if (controller.ptr == 3) {
+                    controller.newGamePhase2();
+                    return;
+                }
+
                 controller.ptr++;
                 initChoiceFarmWindow(controller.players.get(controller.ptr).getPlayerUsername());
             }
@@ -134,14 +137,16 @@ public class GameMenuView implements Screen {
             @Override
             public void clicked(InputEvent event, float x, float y) {
                 choiceFarmWindow.setVisible(false);
-                if (controller.ptr == 4) {
-                    controller.newGamePhase2();
-                    return;
-                }
+
 
                 Farm farm = new Farm(1, controller.ptr, controller.tiles);
                 controller.players.get(controller.ptr).setFarm(farm);
                 controller.farms.add(farm);
+
+                if (controller.ptr == 3) {
+                    controller.newGamePhase2();
+                    return;
+                }
                 controller.ptr++;
                 initChoiceFarmWindow(controller.players.get(controller.ptr).getPlayerUsername());
             }

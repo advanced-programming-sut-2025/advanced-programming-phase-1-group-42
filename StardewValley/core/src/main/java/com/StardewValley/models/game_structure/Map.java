@@ -345,8 +345,8 @@ public class Map {
         return tiles;
     }
 
-    public Tile findTile(Coordinate coordinate) {
-        for (Tile tile : this.tiles) {
+    public static Tile findTile(Coordinate coordinate) {
+        for (Tile tile : App.getCurrentGame().getMap().getTiles()) {
             if(tile.getCordinate().equals(coordinate))
                 return tile;
         }
