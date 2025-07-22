@@ -69,11 +69,12 @@ public class GameView implements Screen, InputProcessor {
         renderWorld();
         Main.getBatch().end();
 
+        controller.handleGame();
+
         stage.act(Math.min(Gdx.graphics.getDeltaTime(), 1 / 30f));
         stage.draw();
 
-        controller.handleInput();
-        controller.handleGame();
+
     }
 
     @Override
@@ -245,6 +246,12 @@ public class GameView implements Screen, InputProcessor {
                     }
                 }
             }
+        }
+
+        for (Player player : App.getCurrentGame().getPlayers()) {
+            player.getSprite().setPosition(player.getCoordinate().getX() * scaledSize,
+                    player.getCoordinate().getY() * scaledSize);
+            player.getSprite().draw(Main.getBatch());
         }
     }
 

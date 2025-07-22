@@ -1,6 +1,7 @@
 package com.StardewValley.models.interactions;
 
 import com.StardewValley.models.App;
+import com.StardewValley.models.Assets;
 import com.StardewValley.models.Pair;
 import com.StardewValley.models.game_structure.*;
 import com.StardewValley.models.goods.Good;
@@ -14,6 +15,7 @@ import com.StardewValley.models.goods.tools.Tool;
 import com.StardewValley.models.goods.tools.ToolType;
 import com.StardewValley.models.interactions.Animals.Animal;
 import com.StardewValley.models.interactions.PlayerBuildings.FarmBuilding;
+import com.badlogic.gdx.graphics.g2d.Sprite;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -33,6 +35,9 @@ public class Player {
     private Energy energy;
     private Tool trashCan;
     private Skill skill;
+    private int playerDirection;
+    private Sprite sprite;
+    private float time;
 
     private Buff buff;
     private Buff rejectionBuff;
@@ -87,6 +92,9 @@ public class Player {
         this.farm = null;
         this.isInteracted = new HashMap<>();
         this.coordinate = new Coordinate(0, 0);
+        this.playerDirection = -1;
+        this.sprite = new Sprite(Assets.getInstance().getPlayerTextures().get(0).get(0));
+        this.sprite.setPosition(coordinate.getX(), coordinate.getY());
     }
 
     public void iniFriendships(ArrayList<Player> players) {
@@ -294,5 +302,29 @@ public class Player {
 
     public void setArtisansGoodTime(ArrayList<Pair<Integer, Good>> artisansGoodTime) {
         this.artisansGoodTime = artisansGoodTime;
+    }
+
+    public int getPlayerDirection() {
+        return playerDirection;
+    }
+
+    public void setPlayerDirection(int playerDirection) {
+        this.playerDirection = playerDirection;
+    }
+
+    public Sprite getSprite() {
+        return sprite;
+    }
+
+    public void setSprite(Sprite sprite) {
+        this.sprite = sprite;
+    }
+
+    public float getTime() {
+        return time;
+    }
+
+    public void setTime(float time) {
+        this.time = time;
     }
 }

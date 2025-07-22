@@ -137,10 +137,8 @@ public class GameMenuController extends Controller {
     }
 
     public void handleGame() {
-        if (view == null)
-            return;
 
-
+        handleInput();
         worldController.updateWorld();
         playerController.updatePlayer();
         inventoryController.updateInventory();
@@ -148,15 +146,24 @@ public class GameMenuController extends Controller {
 
     public void handleInput() {
         Player player = App.getCurrentGame().getCurrentPlayer();
+        player.setPlayerDirection(-1);
 
-        if (Gdx.input.isKeyPressed(Input.Keys.W))
+        if (Gdx.input.isKeyPressed(Input.Keys.W)) {
             player.setCoordinate(new Coordinate(player.getCoordinate().getX(), player.getCoordinate().getY() + 1));
-        if (Gdx.input.isKeyPressed(Input.Keys.A))
+            player.setPlayerDirection(0);
+        }
+        if (Gdx.input.isKeyPressed(Input.Keys.A)) {
             player.setCoordinate(new Coordinate(player.getCoordinate().getX() - 1, player.getCoordinate().getY()));
-        if (Gdx.input.isKeyPressed(Input.Keys.S))
+            player.setPlayerDirection(1);
+        }
+        if (Gdx.input.isKeyPressed(Input.Keys.S)) {
             player.setCoordinate(new Coordinate(player.getCoordinate().getX(), player.getCoordinate().getY() - 1));
-        if (Gdx.input.isKeyPressed(Input.Keys.D))
+            player.setPlayerDirection(2);
+        }
+        if (Gdx.input.isKeyPressed(Input.Keys.D)) {
             player.setCoordinate(new Coordinate(player.getCoordinate().getX() + 1, player.getCoordinate().getY()));
+            player.setPlayerDirection(3);
+        }
         if (Gdx.input.isKeyPressed(Input.Keys.C)) {
 
         }
