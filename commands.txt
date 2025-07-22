@@ -38,3 +38,53 @@ menu enter game
 game new -u Mmd Ali Reza
 load game
 cheat advance date 1d
+cheat advance date 1d
+register -u Parsa -p Parsa1234* Parsa1234* -n Parsa -e Parsapak84@gmail.com -g Male
+register -u Mmd -p Parsa1234* Parsa1234* -n Parsa -e Parsapak84@gmail.com -g Male
+register -u Ali -p Parsa1234* Parsa1234* -n Parsa -e Parsapak84@gmail.com -g Male
+register -u Reza -p Parsa1234* Parsa1234* -n Parsa -e Parsapak84@gmail.com -g Male
+login -u Parsa -p Parsa1234*
+menu enter game
+game new -u Mmd Ali Reza
+load game
+cheat advance date 1d
+walk -l 4 4
+print map -l 0 0 -s 10
+register -u Parsa -p Parsa1234* Parsa1234* -n Parsa -e Parsapak84@gmail.com -g Male
+register -u Mmd -p Parsa1234* Parsa1234* -n Parsa -e Parsapak84@gmail.com -g Male
+register -u Ali -p Parsa1234* Parsa1234* -n Parsa -e Parsapak84@gmail.com -g Male
+register -u Reza -p Parsa1234* Parsa1234* -n Parsa -e Parsapak84@gmail.com -g Male
+login -u Parsa -p Parsa1234*
+menu enter game
+game new -u Mmd Ali Reza
+load game
+start trade
+cheat add item -n Wood -c 500
+cheat add 1000 dollars
+start trade
+trade -u Ali -t Offer -i Wood -a 100 -p 100
+register -u Parsa -p Parsa1234* Parsa1234* -n Parsa -e Parsapak84@gmail.com -g Male
+register -u Mmd -p Parsa1234* Parsa1234* -n Parsa -e Parsapak84@gmail.com -g Male
+register -u Ali -p Parsa1234* Parsa1234* -n Parsa -e Parsapak84@gmail.com -g Male
+register -u Reza -p Parsa1234* Parsa1234* -n Parsa -e Parsapak84@gmail.com -g Male
+login -u Parsa -p Parsa1234*
+menu enter game
+game new -u Mmd Ali Reza
+load game
+cheat add item -n Wood -c 500
+cheat add 1000 dollars
+start trade
+trade -u Ali -t Offer -i Wood -a 100 -p 100
+register -u Parsa -p Parsa1234* Parsa1234* -n Parsa -e Parsapak84@gmail.com -g Male
+register -u Mmd -p Parsa1234* Parsa1234* -n Parsa -e Parsapak84@gmail.com -g Male
+register -u Ali -p Parsa1234* Parsa1234* -n Parsa -e Parsapak84@gmail.com -g Male
+register -u Reza -p Parsa1234* Parsa1234* -n Parsa -e Parsapak84@gmail.com -g Male
+login -u Parsa -p Parsa1234*
+menu enter game
+game new -u Mmd Ali Reza
+load game
+cheat add item -n Wood -c 500
+cheat add 1000 dollars
+start trade
+trade -u Ali -t OFFER -i Wood -a 100 -p 100
+
