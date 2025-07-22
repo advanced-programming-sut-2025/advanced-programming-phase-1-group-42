@@ -16,31 +16,36 @@ public enum ForagingTreeType implements GoodType {
             new Pair<>(FoodType.COMMON_MUSHROOM, 2),
             new Pair<>(ProductType.WOOD, 16),
             new Pair<>(FoodType.SAP, 2))),
-            new ArrayList<>(Arrays.asList(Season.SPRING, Season.SUMMER, Season.FALL, Season.WINTER)), -1),
+            new ArrayList<>(Arrays.asList(Season.SPRING, Season.SUMMER, Season.FALL, Season.WINTER)), -1,
+        "\\assets\\GameAssets\\Trees\\Acorn.png"),
 
     MAPLE_SEEDS("Maple_Seeds", FarmingTreeType.MAPLE_TREE, new ArrayList<>(Arrays.asList(
             new Pair<>(FarmingCropType.MAPLE_SYRUP, 2),
             new Pair<>(ProductType.WOOD, 16),
             new Pair<>(FoodType.SAP, 2))),
-            new ArrayList<>(Arrays.asList(Season.SPRING, Season.SUMMER, Season.FALL, Season.WINTER)), -1),
+            new ArrayList<>(Arrays.asList(Season.SPRING, Season.SUMMER, Season.FALL, Season.WINTER)), -1,
+        "\\assets\\GameAssets\\Trees\\Maple_Seed.png"),
 
     PINE_CONES("Pine_Cones", FarmingTreeType.PINE_TREE, new ArrayList<>(Arrays.asList(
             new Pair<>(FarmingCropType.PINE_TAR, 2),
             new Pair<>(ProductType.WOOD, 16),
             new Pair<>(FoodType.SAP, 2))),
-            new ArrayList<>(Arrays.asList(Season.SPRING, Season.SUMMER, Season.FALL, Season.WINTER)), -1),
+            new ArrayList<>(Arrays.asList(Season.SPRING, Season.SUMMER, Season.FALL, Season.WINTER)), -1,
+        "\\assets\\GameAssets\\Trees\\Pine_Cone.png"),
 
     MAHOGANY_SEEDS("Mahogany_Seeds", FarmingTreeType.MAHOGANY_TREE, new ArrayList<>(Arrays.asList(
             new Pair<>(FoodType.SAP, 2),
             new Pair<>(ProductType.WOOD, 16),
             new Pair<>(FoodType.SAP, 2))),
-            new ArrayList<>(Arrays.asList(Season.SPRING, Season.SUMMER, Season.FALL, Season.WINTER)), -1),
+            new ArrayList<>(Arrays.asList(Season.SPRING, Season.SUMMER, Season.FALL, Season.WINTER)), -1,
+        "\\assets\\GameAssets\\Trees\\Mahogany_Seed.png"),
 
     MUSHROOM_TREE_SEEDS("Mushroom_Tree_Seeds", FarmingTreeType.MUSHROOM_TREE, new ArrayList<>(Arrays.asList(
             new Pair<>(FoodType.COMMON_MUSHROOM, 2),
             new Pair<>(ProductType.WOOD, 16),
             new Pair<>(FoodType.SAP, 2))),
-            new ArrayList<>(Arrays.asList(Season.SPRING, Season.SUMMER, Season.FALL, Season.WINTER)), -1);
+            new ArrayList<>(Arrays.asList(Season.SPRING, Season.SUMMER, Season.FALL, Season.WINTER)), -1,
+        "\\assets\\GameAssets\\Trees\\Mushroom_Tree_Seed.png"),;
 
     private String name;
     private FarmingTreeType farmingTreeType;
@@ -49,9 +54,9 @@ public enum ForagingTreeType implements GoodType {
     private final ArrayList<Pair<GoodType, Integer>> products;
     private ArrayList<Season> seasons;
     private int price;
-
+    private String imagePath;
     ForagingTreeType(String name, FarmingTreeType farmingTreeType, ArrayList<Pair<GoodType, Integer>> products,
-                     ArrayList<Season> seasons, int price) {
+                     ArrayList<Season> seasons, int price, String imagePath) {
         this.name = name;
         this.farmingTreeType = farmingTreeType;
         this.stages = new ArrayList<>(Arrays.asList(7, 7, 7, 7));
@@ -59,6 +64,7 @@ public enum ForagingTreeType implements GoodType {
         this.products = products;
         this.seasons = seasons;
         this.price = price;
+        this.imagePath = imagePath;
     }
 
 
