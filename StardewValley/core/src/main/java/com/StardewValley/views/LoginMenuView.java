@@ -46,8 +46,7 @@ public class LoginMenuView implements Screen {
         this.controller = controller;
         this.skin = skin;
         this.stage = new Stage();
-        this.titleLabel = new Label("Login Menu", skin);
-        this.titleLabel.setFontScale(1.2f);
+        this.titleLabel = new Label("Login Menu", skin, "Bold");
         this.usernameLabel = new Label("Username", skin);
         this.usernameLabel.setFontScale(0.7f);
         this.usernameField = new TextField("Parsa-374", skin);
@@ -88,8 +87,8 @@ public class LoginMenuView implements Screen {
 
         table = new Table(skin);
         table.setFillParent(true);
-        table.pad(300).defaults().expandX().padBottom(15);
-        table.row().padTop(150);
+        table.pad(320).defaults().expandX().padBottom(15);
+        table.row().padTop(200);
 
 // Title label (centered across 3 columns)
         table.add(titleLabel).colspan(3).center();

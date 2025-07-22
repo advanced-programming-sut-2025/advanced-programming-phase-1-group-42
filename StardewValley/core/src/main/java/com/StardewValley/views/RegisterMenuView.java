@@ -6,8 +6,10 @@ import com.StardewValley.models.App;
 import com.StardewValley.models.Assets;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
+import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.*;
+import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
 import org.w3c.dom.Text;
@@ -45,12 +47,28 @@ public class RegisterMenuView implements Screen {
     private TextButton submitAnswerButton;
     private TextButton backButton;
 
+    /*
+    	"default": {
+		"font": "Text"
+	},
+	"WhiteText": {
+		"font": "WhiteText"
+	},
+	"Impact": {
+		"font": "Impact"
+	},
+	"BoldImpact": {
+		"font": "BoldImpact"
+	},
+	"Bold": {
+		"font": "Bold"
+	}
+     */
 
     public RegisterMenuView(LoginRegisterMenuController controller, Skin skin) {
         this.controller = controller;
         this.skin = skin;
-        this.titleLabel = new Label("Register Menu", skin);
-        this.titleLabel.setFontScale(1.2f);
+        this.titleLabel = new Label("Register Menu", skin, "Bold");
         this.usernameLabel = new Label("Username", skin);
         this.usernameLabel.setFontScale(0.7f);
         this.usernameField = new TextField("Parsa-374", skin);

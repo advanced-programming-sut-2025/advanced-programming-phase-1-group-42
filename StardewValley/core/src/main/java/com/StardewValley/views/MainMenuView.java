@@ -29,12 +29,11 @@ public class MainMenuView implements Screen {
     public MainMenuView(MainMenuController controller, Skin skin) {
         this.controller = controller;
         this.skin = skin;
-        this.titleLabel = new Label("Main Menu", skin);
-        this.titleLabel.setFontScale(1.2f);
+        this.titleLabel = new Label("Main Menu", skin, "Bold");
 
-        this.logoutButton = new TextButton("Logout", skin);
-        this.profileButton = new TextButton("Profile Menu", skin);
-        this.gameButton = new TextButton("Game Menu", skin);
+        this.logoutButton = new TextButton("Logout", skin, "Earth");
+        this.profileButton = new TextButton("Profile Menu", skin, "Earth");
+        this.gameButton = new TextButton("Game Menu", skin, "Earth");
         this.usernameLabel = new Label("Username: " + App.getCurrentUser().getUsername(), skin);
         this.usernameLabel.setFontScale(0.7f);
         this.earnedPointsLabel = new Label("Earned Points: " + App.getCurrentUser().getEarnedPoints(), skin);
@@ -57,26 +56,24 @@ public class MainMenuView implements Screen {
 
         Table table = new Table();
         table.setFillParent(true);
-        table.pad(200).defaults().expandX().padBottom(15);
+        table.pad(220).defaults().expandX().padBottom(15);
 
 // Title (centered across 2 columns)
-        table.add(titleLabel).colspan(2).center().padBottom(50).padTop(150);
+        table.add(titleLabel).colspan(3).center().padBottom(50).padTop(200);
         table.row();
 
 // Username
-        table.add(gameButton).fillX().uniform().width(300).padRight(50).right().height(70);
-        table.add(usernameLabel).left();
+        table.add(usernameLabel).center();
+        table.add(earnedPointsLabel).center();
+        table.add(isPlayingLabel).center();
         table.row();
 
 // Earned Points
-        table.add(profileButton).fillX().uniform().width(300).padRight(50).right().height(70);
-        table.add(earnedPointsLabel).left();
+        table.add(gameButton).fillX().uniform().padRight(50).padTop(30).right();
+        table.add(profileButton).fillX().uniform().padRight(50).padTop(30).right();
+        table.add(logoutButton).fillX().uniform().padRight(50).padTop(30).right();
         table.row();
 
-// Is Playing
-        table.add(logoutButton).fillX().uniform().width(300).padRight(50).right().height(70);
-        table.add(isPlayingLabel).left();
-        table.row();
 
         stage.addActor(table);
     }
