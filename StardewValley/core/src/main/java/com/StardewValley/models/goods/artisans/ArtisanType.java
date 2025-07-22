@@ -20,60 +20,63 @@ public enum ArtisanType implements GoodType {
 
     HONEY("Honey", "It's a sweet syrup produced by bees.", new Pair<>(0.0, 75), 4 * 24, new ArrayList<>(
             Arrays.asList(new Quadruple<>(null, 1, 0.0, 350.0))),
-            CraftingType.BEE_HOUSE),
+            CraftingType.BEE_HOUSE , "\\assets\\GameAssets\\Artisan_good\\Honey.png"),
 
     CLOTH("Cloth", "A bolt of fine wool cloth.", new Pair<>(0.0, 0), 4, new ArrayList<>(
             Arrays.asList(new Quadruple<>(AnimalProductsType.RABBIT_WOOL, 1, 0.0, 470.0),
                     new Quadruple<>(AnimalProductsType.SHEEP_WOOL, 1, 0.0, 470.0)))
-            , CraftingType.LOOM),
+            , CraftingType.LOOM, "\\assets\\GameAssets\\Artisan_good\\Cloth.png"),
 
     CHEESE("Cheese", "It's your basic cheese.", new Pair<>(0.0, 100), 3, new ArrayList<>(
             Arrays.asList(
                     new Quadruple<>(AnimalProductsType.COW_MILK, 1, 0.0, 230.0),
                     new Quadruple<>(AnimalProductsType.BIG_COW_MILK, 1, 0.0, 345.0)
-            )), CraftingType.CHEESE_PRESS),
+            )), CraftingType.CHEESE_PRESS, "\\assets\\GameAssets\\Artisan_good\\Cheese.png"),
 
     GOAT_CHEESE("Goat_Cheese", "Soft cheese made from goat's milk.", new Pair<>(0.0, 100), 3, new ArrayList<>(
             Arrays.asList(
                     new Quadruple<>(AnimalProductsType.GOAT_MILK, 1, 0.0, 400.0),
                     new Quadruple<>(AnimalProductsType.BIG_GOAT_MILK, 1, 0.0, 600.0)
-            )), CraftingType.CHEESE_PRESS),
+            )), CraftingType.CHEESE_PRESS, "\\assets\\GameAssets\\Artisan_good\\Goat_Cheese.png"),
 
     MAYONNAISE("Mayonnaise", "It looks spreadable.", new Pair<>(0.0, 50), 3, new ArrayList<>(
             Arrays.asList(
                     new Quadruple<>(AnimalProductsType.CHICKEN_EGG, 1, 0.0, 190.0),
                     new Quadruple<>(AnimalProductsType.BIG_CHICKEN_EGG, 1, 0.0, 237.0)
-            )), CraftingType.MAYONNAISE_MACHINE),
+            )), CraftingType.MAYONNAISE_MACHINE,"\\assets\\GameAssets\\Artisan_good\\Mayonnaise.png"),
 
     DUCK_MAYONNAISE("Duck_Mayonnaise", "It's a rich, yellow mayonnaise.", new Pair<>(0.0, 75), 3, new ArrayList<>(
             Arrays.asList(new Quadruple<>(AnimalProductsType.DUCK_EGG, 1, 0.0, 190.0),
                     new Quadruple<>(AnimalProductsType.DINOSAUR_EGG, 1, 0.0, 237.0)))
-            , CraftingType.MAYONNAISE_MACHINE),
+            , CraftingType.MAYONNAISE_MACHINE,"\\assets\\GameAssets\\Artisan_good\\Duck_Mayonnaise.png"),
 
     DINOSAUR_MAYONNAISE("Dinosaur_Mayonnaise", "It's thick and creamy, with a vivid green hue. It smells like grass and leather.", new Pair<>(0.0, 125), 3, new ArrayList<>(
             Arrays.asList(new Quadruple<>(AnimalProductsType.DINOSAUR_EGG, 1, 0.0, 800.0)))
-            , CraftingType.MAYONNAISE_MACHINE),
+            , CraftingType.MAYONNAISE_MACHINE,"\\assets\\GameAssets\\Artisan_good\\Dinosaur_Mayonnaise.png"),
 
     TRUFFLE_OIL("Truffle_Oil", "A gourmet cooking ingredient.", new Pair<>(0.0, 38), 6, new ArrayList<>(
             Arrays.asList(new Quadruple<>(AnimalProductsType.TRUFFLE, 1, 0.0, 1065.0)))
-            , CraftingType.OIL_MAKER),
+            , CraftingType.OIL_MAKER,"\\assets\\GameAssets\\Artisan_good\\Truffle_Oil.png"),
 
     OIL("Oil", "All purpose cooking oil.", new Pair<>(0.0, 13), 6, new ArrayList<>(Arrays.asList(new Quadruple<>(FarmingCropType.CORN, 1, 1.0, 100.0),
             new Quadruple<>(ForagingSeedType.SUNFLOWER_SEEDS, 1, 0.0, 100.0),
-            new Quadruple<>(FarmingCropType.SUNFLOWER, 1, 0.0, 100.0))), CraftingType.OIL_MAKER),
+            new Quadruple<>(FarmingCropType.SUNFLOWER, 1, 0.0, 100.0))), CraftingType.OIL_MAKER,
+        "\\assets\\GameAssets\\Artisan_good\\Oil.png"),
 
 
     BEER("Beer", "Drink in moderation.", new Pair<>(0.0, 50), 24, new ArrayList<>(
             Arrays.asList(new Quadruple<>(FarmingCropType.WHEAT, 1, 0.0, 200.0))
-    ), CraftingType.KEG),
+    ), CraftingType.KEG,
+        "\\assets\\GameAssets\\Artisan_good\\Beer.png"),
 
     VINEGAR("Vinegar", "An aged fermented liquid used in many cooking recipes.", new Pair<>(0.0, 13), 10, new ArrayList<>(
             Arrays.asList(new Quadruple<>(FoodType.RICE, 1, 0.0, 100.0))
-    ), CraftingType.KEG),
+    ), CraftingType.KEG, "GameAssets/Ingredient/Vinegar.png"),
 
     COFFEE("Coffee", "It smells delicious. This is sure to give you a boost.", new Pair<>(0.0, 75), 2, new ArrayList<>(
             Arrays.asList(new Quadruple<>(FarmingCropType.COFFEE_BEAN, 5, 0.0, 150.0))
-    ), CraftingType.KEG),
+    ), CraftingType.KEG,
+        "\\assets\\GameAssets\\Artisan_good\\Coffee.png"),
 
     JUICE("Juice", "A sweet, nutritious beverage.", new Pair<>(2.0, 0), 4 * 24, new ArrayList<>(
             Arrays.asList(new Quadruple<>(FarmingCropType.ARTICHOKE, 1, 2.25, 0.0),
@@ -103,15 +106,18 @@ public enum ArtisanType implements GoodType {
                     new Quadruple<>(FarmingCropType.TOMATO, 1, 2.25, 0.0), // Technically a fruit
                     new Quadruple<>(FarmingCropType.WHEAT, 1, 2.25, 0.0), // Grain, not a vegetable
                     new Quadruple<>(FarmingCropType.YAM, 1, 2.25, 0.0))),
-            CraftingType.KEG),
+            CraftingType.KEG,
+        "\\assets\\GameAssets\\Artisan_good\\Juice.png"),
 
     MEAD("Mead", "A fermented beverage made from honey. Drink in moderation.", new Pair<>(0.0, 100), 10, new ArrayList<>(
             Arrays.asList(new Quadruple<>(ArtisanType.HONEY, 1, 0.0, 300.0)))
-            , CraftingType.KEG),
+            , CraftingType.KEG,
+        "\\assets\\GameAssets\\Artisan_good\\Mead.png"),
 
     PALE_ALE("Pale_Ale", "Drink in moderation.", new Pair<>(0.0, 50), 3 * 24, new ArrayList<>(
             Arrays.asList(new Quadruple<>(FarmingCropType.HOPS, 1, 0.0, 300.0))
-    ), CraftingType.KEG),
+    ), CraftingType.KEG,
+        "\\assets\\GameAssets\\Artisan_good\\Pale_Ale.png"),
 
     WINE("Wine", "Drink in moderation.", new Pair<>(1.75, 0), 7 * 24,
             new ArrayList<>(// Tree Fruits (Year-round after maturity)
@@ -143,7 +149,8 @@ public enum ArtisanType implements GoodType {
 //                    new Quadruple<>(FarmingCropType.GIANT_PUMPKIN, 1, 3.0, 0.0),
 //                    new Quadruple<>(FarmingCropType.GIANT_CAULIFLOWER, 1, 3.0, 0.0))
                     ))
-            , CraftingType.KEG),
+            , CraftingType.KEG,
+        "\\assets\\GameAssets\\Artisan_good\\Wine.png"),
 
     PICKLES("Pickles", "A jar of your home-made pickles.", new Pair<>(1.75, 0), 6,
             new ArrayList<>(Arrays.asList(
@@ -174,7 +181,8 @@ public enum ArtisanType implements GoodType {
                     new Quadruple<>(FarmingCropType.TOMATO, 1, 2.0, 50.0),
                     new Quadruple<>(FarmingCropType.WHEAT, 1, 2.0, 50.0),
                     new Quadruple<>(FarmingCropType.YAM, 1, 2.0, 50.0)
-            )), CraftingType.PRESERVES_JAR),
+            )), CraftingType.PRESERVES_JAR,
+        "\\assets\\GameAssets\\Artisan_good\\Pickles.png"),
 
     JELLY("Jelly", "Gooey.", new Pair<>(2.0, 0), 3 * 24,
             new ArrayList<>(// Tree Fruits (FoodType)
@@ -204,7 +212,8 @@ public enum ArtisanType implements GoodType {
 //                    new Quadruple<>(FarmingCropType.GIANT_MELON, 1, 2.0, 50.0),
 //                    new Quadruple<>(FarmingCropType.GIANT_PUMPKIN, 1, 2.0, 50.0),
 //                    new Quadruple<>(FarmingCropType.GIANT_CAULIFLOWER, 1, 2.0, 50.0))
-                    )), CraftingType.PRESERVES_JAR),
+                    )), CraftingType.PRESERVES_JAR,
+        "\\assets\\GameAssets\\Artisan_good\\Jelly.png"),
 
     DRIED_MUSHROOMS("Dried_Mushrooms", "A package of gourmet mushrooms.", new Pair<>(0.0, 50), 24, new ArrayList<>(
             Arrays.asList(new Quadruple<>(FoodType.COMMON_MUSHROOM, 5, 7.5, 25.0),
@@ -212,7 +221,8 @@ public enum ArtisanType implements GoodType {
                     new Quadruple<>(ForagingCropType.PURPLE_MUSHROOM, 5, 7.5, 25.0),
                     new Quadruple<>(ForagingCropType.MOREL, 5, 7.5, 25.0),
                     new Quadruple<>(ForagingCropType.CHANTERELLE, 5, 7.5, 25.0))
-    ), CraftingType.DEHYDRATOR),
+    ), CraftingType.DEHYDRATOR,
+        "\\assets\\GameAssets\\Artisan_good\\Dried_Mushrooms.png"),
 
     DRIED_FRUIT("Dried_Fruit", "Chewy pieces of dried fruit.", new Pair<>(0.0, 75), 24, new ArrayList<>(
             Arrays.asList(// Tree Fruits (FoodType → Adjusted to FarmingCropType if needed)
@@ -242,15 +252,18 @@ public enum ArtisanType implements GoodType {
 //                    new Quadruple<>(FarmingCropType.GIANT_MELON, 5, 7.5, 25.0),
 //                    new Quadruple<>(FarmingCropType.GIANT_PUMPKIN, 5, 7.5, 25.0),
 //                    new Quadruple<>(FarmingCropType.GIANT_CAULIFLOWER, 5, 7.5, 25.0))
-            )), CraftingType.DEHYDRATOR),
+            )), CraftingType.DEHYDRATOR,
+        "\\assets\\GameAssets\\Artisan_good\\Red_Dried_Fruit.png"),
 
     RAISINS("Raisins", "It's said to be the Junimos' favorite food.", new Pair<>(0.0, 125), 24, new ArrayList<>(
             Arrays.asList(new Quadruple<>(FarmingCropType.GRAPE, 5, 0.0, 600.0)))
-            , CraftingType.DEHYDRATOR),
+            , CraftingType.DEHYDRATOR,
+        "\\assets\\GameAssets\\Artisan_good\\Raisins.png"),
 
     COAL("Coal", "Turns 10 pieces of wood into one piece of coal.", new Pair<>(0.0, 0), 1, new ArrayList<>(
             Arrays.asList(new Quadruple<>(ProductType.WOOD, 10, 0.0, 50.0)))
-            , CraftingType.CHARCOAL_KILN),
+            , CraftingType.CHARCOAL_KILN,
+        "\\assets\\GameAssets\\Resource\\Coal.png"),
 
     SMOKED_FISH("Smoked_Fish", "A whole fish, smoked to perfection.", new Pair<>(1.5, 0), 1, new ArrayList<>(
             Arrays.asList(
@@ -288,7 +301,8 @@ public enum ArtisanType implements GoodType {
                     new Quadruple<>(ForagingMineralType.COAL, 1, 0.0, 0.0),
                     new Quadruple<>(ProductType.COAL, 1, 0.0, 0.0),
                     new Quadruple<>(ArtisanType.COAL, 1, 0.0, 0.0)
-            )), CraftingType.FISH_SMOKER),
+            )), CraftingType.FISH_SMOKER,
+        "\\assets\\GameAssets\\Fish\\Smoked_Fish.png"),
 
     METAL_BAR("Metal_Bar", "Turns ore and coal into metal bars.", new Pair<>(0.0, 0), 4, new ArrayList<>(
             Arrays.asList(
@@ -301,9 +315,10 @@ public enum ArtisanType implements GoodType {
                     new Quadruple<>(ForagingMineralType.COAL, 1, 0.0, 0.0),
                     new Quadruple<>(ProductType.COAL, 1, 0.0, 0.0),
                     new Quadruple<>(ArtisanType.COAL, 1, 0.0, 0.0)
-            )), CraftingType.FURNACE),
+            )), CraftingType.FURNACE, "GameAssets/Resource/Iron_Bar.png"),
 
-    DEHYDRATOR_RECIPE("", "", new Pair<>(0.0, 0), 0, new ArrayList<>(), null);
+    DEHYDRATOR_RECIPE("", "", new Pair<>(0.0, 0), 0, new ArrayList<>(), null,
+        "GameAssets/Crafting/Dehydrator.png");
 
     private final String name;
     private final String description;
@@ -311,15 +326,16 @@ public enum ArtisanType implements GoodType {
     private final int processingHour;
     private final ArrayList<Quadruple<GoodType, Integer, Double, Double>> ingredients;
     private final CraftingType craftingType;
-
+    private final String imagePath;
     ArtisanType(String name, String description, Pair<Double, Integer> energyEquation, int processingHour,
-                ArrayList<Quadruple<GoodType, Integer, Double, Double>> ingredients, CraftingType craftingType) {
+                ArrayList<Quadruple<GoodType, Integer, Double, Double>> ingredients, CraftingType craftingType , String imagePath) {
         this.name = name;
         this.description = description;
         this.energyEquation = energyEquation;
         this.processingHour = processingHour;
         this.ingredients = ingredients;
         this.craftingType = craftingType;
+        this.imagePath = imagePath;
     }
 
     @Override
@@ -335,6 +351,11 @@ public enum ArtisanType implements GoodType {
     @Override
     public String getName() {
         return name;
+    }
+
+    @Override
+    public String imagePath() {
+        return imagePath;
     }
 
     public int getEnergy(GoodType goodType) {

@@ -2,6 +2,7 @@ package com.StardewValley.models.interactions.game_buildings;
 
 import com.StardewValley.models.Pair;
 import com.StardewValley.models.Result;
+import com.StardewValley.models.enums.TileAssets;
 import com.StardewValley.models.game_structure.Coordinate;
 import com.StardewValley.models.game_structure.Tile;
 import com.StardewValley.models.goods.GoodType;
@@ -26,7 +27,8 @@ public class TheStarDropSaloon extends GameBuilding {
                 new NPC(NPCTypes.GUS),
                 new Pair<>(12, 24),
                 new Coordinate(80, 90),
-                new Coordinate(90, 100));
+                new Coordinate(90, 100),
+                TileAssets.THE_STARDROP_SALOON.getTexture());
 
         // Permanent Products
         this.products = new ArrayList<>(Arrays.asList(

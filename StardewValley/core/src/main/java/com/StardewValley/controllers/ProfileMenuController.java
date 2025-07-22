@@ -1,16 +1,75 @@
 package com.StardewValley.controllers;
 
+import com.StardewValley.Main;
 import com.StardewValley.models.App;
+import com.StardewValley.models.Assets;
 import com.StardewValley.models.Result;
 import com.StardewValley.models.enums.Menu;
 import com.StardewValley.models.interactions.User;
+import com.StardewValley.views.MainMenuView;
+import com.StardewValley.views.ProfileMenuView;
 
 import java.util.Random;
 import java.util.Scanner;
 
 public class ProfileMenuController extends Controller {
+    private ProfileMenuView view;
 
-    public Result changeUsername(String username, Scanner scanner) {
+
+    public void setView(ProfileMenuView view) {
+        this.view = view;
+    }
+
+    public void handleProfile() {
+        if (view == null) {
+            return;
+        }
+
+        if (view.getSaveButton().isChecked()) {
+            view.getSaveButton().setChecked(false);
+
+            if (view.getUsernameField().getText().equals(App.getCurrentUser().getUsername())) {
+                Result res = changeUsername(view.getUsernameField().getText());
+                if (!res.success()) {
+                    view.getErrorLabel().setText(res.message());
+                    return;
+                }
+            }
+            if (view.getPasswordField().getText().equals(App.getCurrentUser().getPassword())) {
+                Result res = changePassword(view.getPasswordField().getText());
+
+                if (!res.success()) {
+                    view.getErrorLabel().setText(res.message());
+                    return;
+                }
+            }
+            if (view.getEmailField().getText().equals(App.getCurrentUser().getEmail())) {
+                Result res = changeEmail(view.getEmailField().getText());
+
+                if (!res.success()) {
+                    view.getErrorLabel().setText(res.message());
+                    return;
+                }
+            }
+            if (view.getNicknameField().getText().equals(App.getCurrentUser().getNickname())) {
+                Result res = changeNickname(view.getNicknameField().getText());
+
+                if (!res.success()) {
+                    view.getErrorLabel().setText(res.message());
+                    return;
+                }
+            }
+
+        }
+        else if (view.getBackButton().isChecked()) {
+            view.getBackButton().setChecked(false);
+
+            Main.getMain().getScreen().dispose();
+            Main.getMain().setScreen(new MainMenuView(new MainMenuController(), Assets.getInstance().getSkin()));
+        }
+    }
+
+    public Result changeUsername(String username) {
         // Check Username is new
         if(App.getCurrentUser().getUsername().equals(username)) {
             return new Result(false, "Your new username should be different from the current one.");
@@ -24,18 +83,7 @@ public class ProfileMenuController extends Controller {
 
         // Check Username Existence
         if(user != null) {
-            System.out.println("Username already exists");
-            username += "-";
-            Random random = new Random();
-            for (int i = 0; i < 3; i++) {
-                username += Integer.toString(random.nextInt(10));
-            }
-
-            System.out.println("Do you confirm this username to continue? (y/n)");
-            String confirm = scanner.nextLine();
-            if(!confirm.equals("n")) {
-                return new Result(true, "Ok, Try again later!");
-            }
+            return new Result(false, "Username already exists");
         }
 
         App.getCurrentUser().setUsername(username);
@@ -70,17 +118,7 @@ public class ProfileMenuController extends Controller {
         return new Result(true, "Your email was successfully changed to " + email + ".");
     }
 
-    public Result changePassword(String newPassword, String oldPassword) {
-        // Check old Password equals user password
-        if(!App.getCurrentUser().getPassword().equals(oldPassword)) {
-            return new Result(false, "Your old password does not match!");
-        }
-
-        // Check Password is new
-        if(newPassword.equals(oldPassword)) {
-            return new Result(false, "Your password should be different from the current one.");
-        }
-
+    public Result changePassword(String newPassword) {
         // Check Password format
         if(!newPassword.matches("[a-zA-Z0-9?><,\"'\\\\;:/|\\]\\[}{+=)(*&^%$#!]+"))
             return new Result(false, "Invalid newPassword format!");
@@ -99,7 +137,7 @@ public class ProfileMenuController extends Controller {
     }
 
     public Result exit() {
-        App.setCurrentMenu(Menu.MainMenu);
+//        App.setCurrentMenu(Menu.MainMenu);
 
         return new Result(true, "Redirecting to main menu!");
     }

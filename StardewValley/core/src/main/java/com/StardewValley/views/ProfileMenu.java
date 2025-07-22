@@ -21,8 +21,7 @@ public class ProfileMenu implements AppMenu {
         Matcher matcher;
         if((matcher = ProfileMenuCommands.ChangeUsername.matcher(input)) != null) {
             System.out.println(controller.changeUsername(
-                    matcher.group("username"),
-                    scanner
+                    matcher.group("username")
             ));
         }
         else if((matcher = ProfileMenuCommands.ChangeNickname.matcher(input)) != null) {
@@ -32,9 +31,7 @@ public class ProfileMenu implements AppMenu {
         }
         else if((matcher = ProfileMenuCommands.ChangePassword.matcher(input)) != null) {
             System.out.println(controller.changePassword(
-                    matcher.group("password"),
-                    matcher.group("oldPassword")
-            ));
+                    matcher.group("password")));
         }
         else if((matcher = ProfileMenuCommands.ChangeEmail.matcher(input)) != null) {
             System.out.println(controller.changeEmail(

@@ -43,7 +43,7 @@ public class GameMenu implements AppMenu {
                 System.out.println("meow");
             }
 
-            System.out.println(controller.newGame(usernames, scanner));
+//            System.out.println(controller.newGame(usernames));
         } else if ((matcher = GameMenuCommands.LOAD_GAME.matcher(input)) != null) {
             System.out.println(controller.loadGame());
         }

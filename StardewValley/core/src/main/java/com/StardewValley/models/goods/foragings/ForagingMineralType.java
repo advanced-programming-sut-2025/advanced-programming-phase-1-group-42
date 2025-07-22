@@ -5,46 +5,49 @@ import com.StardewValley.models.goods.GoodType;
 public enum ForagingMineralType implements GoodType {
 
     // Minerals from Foraging Minerals tab
-    QUARTZ("Quartz", 25),
+    QUARTZ("Quartz", 25, "/assets/GameAssets/Mineral/Quartz.png"),
 
-    EARTH_CRYSTAL("Earth_Crystal", 50),
+    EARTH_CRYSTAL("Earth_Crystal", 50, "/assets/GameAssets/Mineral/Earth_Crystal.png"),
 
-    FROZEN_TEAR("Frozen_Tear", 75),
+    FROZEN_TEAR("Frozen_Tear", 75, "/assets/GameAssets/Mineral/Frozen_Tear.png"),
 
-    FIRE_QUARTZ("Fire_Quartz", 100),
+    FIRE_QUARTZ("Fire_Quartz", 100, "/assets/GameAssets/Mineral/Fire_Quartz.png"),
 
-    EMERALD("Emerald", 250),
+    EMERALD("Emerald", 250, "/assets/GameAssets/Mineral/Emerald.png"),
 
-    AQUAMARINE("Aquamarine", 180),
+    AQUAMARINE("Aquamarine", 180, "/assets/GameAssets/Mineral/Aquamarine.png"),
 
-    RUBY("Ruby", 250),
+    RUBY("Ruby", 250, "/assets/GameAssets/Mineral/Ruby.png"),
 
-    AMETHYST("Amethyst", 100),
+    AMETHYST("Amethyst", 100, "/assets/GameAssets/Mineral/Amethyst.png"),
 
-    TOPAZ("Topaz", 80),
+    TOPAZ("Topaz", 80, "/assets/GameAssets/Mineral/Topaz.png"),
 
-    JADE("Jade", 200),
+    JADE("Jade", 200, "/assets/GameAssets/Mineral/Jade.png"),
 
-    DIAMOND("Diamond", 750),
+    DIAMOND("Diamond", 750, "/assets/GameAssets/Mineral/Diamond.png"),
 
-    PRISMATIC_SHARD("Prismatic_Shard", 2000),
+    PRISMATIC_SHARD("Prismatic_Shard", 2000, "/assets/GameAssets/Mineral/Prismatic_Shard.png"),
 
-    COPPER_ORE("Copper_Ore", 5),
+    COPPER_ORE("Copper_Ore", 5, "/assets/GameAssets/Mineral/Copper_Ore.png"),
 
-    IRON_ORE("Iron_Ore", 10),
+    IRON_ORE("Iron_Ore", 10, "/assets/GameAssets/Mineral/Iron_Ore.png"),
 
-    GOLD_ORE("Gold_Ore", 25),
+    GOLD_ORE("Gold_Ore", 25, "/assets/GameAssets/Mineral/Gold_Ore.png"),
 
-    IRIDIUM_ORE("Iridium_Ore", 100),
+    IRIDIUM_ORE("Iridium_Ore", 100, "/assets/GameAssets/Mineral/Iridium_Ore.png"),
 
-    COAL("Coal", 15);
+    COAL("Coal", 15, "/assets/GameAssets/Mineral/Coal.png");
+
 
     private String name;
     private int sellPrice;
+    private final String imagePath;
 
-    ForagingMineralType(String name, int sellPrice) {
+    ForagingMineralType(String name, int sellPrice , String imagePath) {
         this.name = name;
         this.sellPrice = sellPrice;
+        this.imagePath = imagePath;
     }
 
 
@@ -60,6 +63,11 @@ public enum ForagingMineralType implements GoodType {
 
     public String getName() {
         return this.name;
+    }
+
+    @Override
+    public String imagePath() {
+        return imagePath;
     }
 
     @Override

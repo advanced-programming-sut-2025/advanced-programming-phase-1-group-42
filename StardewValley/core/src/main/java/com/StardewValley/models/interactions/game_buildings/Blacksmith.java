@@ -3,6 +3,7 @@ package com.StardewValley.models.interactions.game_buildings;
 import com.StardewValley.models.App;
 import com.StardewValley.models.Pair;
 import com.StardewValley.models.Result;
+import com.StardewValley.models.enums.TileAssets;
 import com.StardewValley.models.game_structure.Coordinate;
 import com.StardewValley.models.game_structure.Inventory;
 import com.StardewValley.models.game_structure.Tile;
@@ -38,7 +39,8 @@ public class Blacksmith extends GameBuilding {
                 new NPC(NPCTypes.CLINT),
                 new Pair<>(9, 16),
                 new Coordinate(10, 60),
-                new Coordinate(20, 70));
+                new Coordinate(20, 70),
+                TileAssets.BLACKSMITH.getTexture());
 
         upgradeToolCost.addAll(Arrays.asList(2000, 5000, 10000, 25000));
         upgradeTrashCanCost.addAll(Arrays.asList(1000, 2500, 5000, 12500));

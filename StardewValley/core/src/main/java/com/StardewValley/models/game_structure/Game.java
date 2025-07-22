@@ -36,10 +36,8 @@ public class Game {
     private Player currentPlayer;
     private Player gameAdmin;
     private Map map = null;
-    private Player currentPlayingPlayer;
     private final ArrayList<NPC> NPCs = new ArrayList<>();
     private int counter = 0;
-    private static FileWriter myWriter;
 
     public static void writeIntoFile(String string) {
         try (FileWriter myWriter = new FileWriter("commands.txt", true)) {
