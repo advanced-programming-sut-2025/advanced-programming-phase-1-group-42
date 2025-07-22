@@ -39,6 +39,8 @@ import com.StardewValley.models.interactions.game_buildings.MarnieRanch;
 import com.StardewValley.views.GameMenuView;
 import com.StardewValley.views.GameView;
 import com.StardewValley.views.MainMenuView;
+import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.Input;
 //import com.mongodb.ConnectionString;
 //import com.mongodb.MongoClientSettings;
 //import com.mongodb.ServerApi;
@@ -66,10 +68,20 @@ public class GameMenuController extends Controller {
     public Game game;
     private Director director;
 
+    private WorldController worldController;
+    private PlayerController playerController;
+    private InventoryController inventoryController;
+
     private GameMenuView view;
 
     public void setView(GameMenuView view) {
         this.view = view;
+    }
+
+    public void initGameControllers() {
+        worldController = new WorldController();
+        playerController = new PlayerController();
+        inventoryController = new InventoryController();
     }
 
     public void handleGameMenu() {
@@ -122,6 +134,65 @@ public class GameMenuController extends Controller {
             view.getNewGameWindow().setVisible(false);
             newGame(view.getPlayerUsernames());
         }
+    }
+
+    public void handleGame() {
+        if (view == null)
+            return;
+
+
+        worldController.updateWorld();
+        playerController.updatePlayer();
+        inventoryController.updateInventory();
+    }
+
+    public void handleInput() {
+        Player player = App.getCurrentGame().getCurrentPlayer();
+
+        if (Gdx.input.isKeyPressed(Input.Keys.W))
+            player.setCoordinate(new Coordinate(player.getCoordinate().getX(), player.getCoordinate().getY() + 1));
+        if (Gdx.input.isKeyPressed(Input.Keys.A))
+            player.setCoordinate(new Coordinate(player.getCoordinate().getX() - 1, player.getCoordinate().getY()));
+        if (Gdx.input.isKeyPressed(Input.Keys.S))
+            player.setCoordinate(new Coordinate(player.getCoordinate().getX(), player.getCoordinate().getY() - 1));
+        if (Gdx.input.isKeyPressed(Input.Keys.D))
+            player.setCoordinate(new Coordinate(player.getCoordinate().getX() + 1, player.getCoordinate().getY()));
+        if (Gdx.input.isKeyPressed(Input.Keys.C)) {
+
+        }
+        if (Gdx.input.isKeyPressed(Input.Keys.X)) {
+
+        }
+        if (Gdx.input.isKeyPressed(Input.Keys.E) || Gdx.input.isKeyPressed(Input.Keys.ESCAPE)) {
+
+        }
+        if (Gdx.input.isKeyPressed(Input.Keys.F)) {
+
+        }
+        if (Gdx.input.isKeyPressed(Input.Keys.M)) {
+
+        }
+        if (Gdx.input.isKeyPressed(Input.Keys.TAB)) {
+
+        }
+        if (Gdx.input.isKeyPressed(Input.Keys.T)) {
+
+        }
+        if (Gdx.input.isKeyPressed(Input.Keys.F4)) {
+
+        }
+        ArrayList<Integer> arr = new ArrayList<>(Arrays.asList(
+            7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 69, 81
+        ));
+        for (int i = 0; i < arr.size(); i++) {
+            if (Gdx.input.isKeyPressed(arr.get(i))) {
+                App.getCurrentGame().getCurrentPlayer().setInHandGood(
+                    App.getCurrentGame().getCurrentPlayer().getInventory().getList().get(i));
+                break;
+            }
+        }
+
+
     }
 
     private void addPlayerToNewGame() {
@@ -627,16 +698,20 @@ public class GameMenuController extends Controller {
         toolName = toolName.trim();
 
         boolean flag = false;
+        int ptr = 0;
         for (ArrayList<Good> goods : App.getCurrentGame().getCurrentPlayer().getInventory().getList()) {
             if (!goods.isEmpty() && goods.getFirst().getName().equals(toolName) && goods.size() >= 1) {
-                App.getCurrentGame().getCurrentPlayer().setInHandGood((Tool) goods.getFirst());
+                App.getCurrentGame().getCurrentPlayer().setInHandGood(goods);
                 flag = true;
                 break;
             }
             if (!flag && toolName.equals("Trash_Can")) {
-                App.getCurrentGame().getCurrentPlayer().setInHandGood(App.getCurrentGame().getCurrentPlayer().getTrashCan());
+                App.getCurrentGame().getCurrentPlayer().setInHandGood(new ArrayList<>(Arrays.asList(
+                    App.getCurrentGame().getCurrentPlayer().getTrashCan()
+                )));
                 flag = true;
             }
+            ptr++;
         }
         if (!flag)
             return new Result(false, "You don't have " + toolName + " to use!");
@@ -645,8 +720,8 @@ public class GameMenuController extends Controller {
     }
 
     public Result toolsShowCurrent() {
-        if (App.getCurrentGame().getCurrentPlayer().getInHandGood() instanceof Tool) {
-            return new Result(true, "Your current tool: " + App.getCurrentGame().getCurrentPlayer().getInHandGood().getName());
+        if (App.getCurrentGame().getCurrentPlayer().getInHandGood().getLast() instanceof Tool) {
+            return new Result(true, "Your current tool: " + App.getCurrentGame().getCurrentPlayer().getInHandGood().getLast().getName());
         } else {
             return new Result(true, "You don't have tool in your hand!");
         }
@@ -670,16 +745,16 @@ public class GameMenuController extends Controller {
         Game game = App.getCurrentGame();
         if (!game.getMap().getBlackSmith().isInsideBuilding(game.getCurrentPlayer().getCoordinate()))
             return new Result(false, "You are not inside the BlackSmith Shop!");
-        if (game.getCurrentPlayer().getInHandGood() instanceof Tool) {
+        if (game.getCurrentPlayer().getInHandGood().getLast() instanceof Tool) {
             Blacksmith blacksmith = (Blacksmith) game.getMap().getBlackSmith();
-            if (((ToolType) game.getCurrentPlayer().getInHandGood().getType()).getLevel().getLevelNumber() == 4)
+            if (((ToolType) game.getCurrentPlayer().getInHandGood().getLast().getType()).getLevel().getLevelNumber() == 4)
                 return new Result(true, "Your tool is already in the highest level!");
 
-            if (blacksmith.upgradeTool((Tool) game.getCurrentPlayer().getInHandGood())) {
+            if (blacksmith.upgradeTool((Tool) game.getCurrentPlayer().getInHandGood().getLast())) {
                 return new Result(false, "Your tool has successfully upgraded!");
             } else
                 return new Result(false, "You don't have enough money & ingredients to upgrade "
-                    + game.getCurrentPlayer().getInHandGood().getName() + "!");
+                    + game.getCurrentPlayer().getInHandGood().getLast().getName() + "!");
         } else
             return new Result(false, "You don't have tool in your hand!");
     }
@@ -687,8 +762,8 @@ public class GameMenuController extends Controller {
     public Result toolsUse(String direction) {
         direction = direction.trim();
 
-        if (App.getCurrentGame().getCurrentPlayer().getInHandGood() instanceof Tool) {
-            Tool tool = (Tool) App.getCurrentGame().getCurrentPlayer().getInHandGood();
+        if (App.getCurrentGame().getCurrentPlayer().getInHandGood().getLast() instanceof Tool) {
+            Tool tool = (Tool) App.getCurrentGame().getCurrentPlayer().getInHandGood().getLast();
             Coordinate coordinate = Coordinate.getDirection(direction);
             if (coordinate == null)
                 return new Result(false, "Direction not recognized");

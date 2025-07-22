@@ -23,7 +23,7 @@ import java.util.List;
 public class Player {
     private Coordinate coordinate ;
     private Inventory inventory ;
-    private Good inHandGood;
+    private ArrayList<Good> inHandGood;
     private final ArrayList<CookingRecipe> cookingRecipes = new ArrayList<>(Arrays.asList(new CookingRecipe(CookingRecipeType.BREAD)));
     private final ArrayList<CraftingRecipe> craftingRecipes = new ArrayList<>(Arrays.asList(new CraftingRecipe(CraftingRecipeType.BOMB)));
     private User user;
@@ -62,15 +62,14 @@ public class Player {
         this.farm = farm;
         this.coordinate = new Coordinate(farm.getFarmBuildings().getFirst().getStartCordinate().getX() + 5,
                 farm.getFarmBuildings().getFirst().getStartCordinate().getY() + 5);
-        System.out.println(this.coordinate);
-
+        this.inHandGood = inventory.getList().getFirst();
     }
 
     public Farm getFarm() {
         return farm;
     }
 
-    public void setInHandGood(Good inHandGood) {
+    public void setInHandGood(ArrayList<Good> inHandGood) {
         this.inHandGood = inHandGood;
     }
 
@@ -154,7 +153,7 @@ public class Player {
         return buff;
     }
 
-    public Good getInHandGood() {
+    public ArrayList<Good> getInHandGood() {
         return this.inHandGood;
     }
 

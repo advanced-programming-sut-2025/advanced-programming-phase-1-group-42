@@ -12,6 +12,7 @@ import com.StardewValley.models.game_structure.Tile;
 import com.StardewValley.models.goods.Good;
 import com.StardewValley.models.goods.farmings.FarmingTree;
 import com.StardewValley.models.goods.foragings.ForagingTree;
+import com.StardewValley.models.interactions.Player;
 import com.StardewValley.models.interactions.game_buildings.GameBuilding;
 import com.badlogic.gdx.*;
 import com.badlogic.gdx.graphics.GL20;
@@ -34,28 +35,26 @@ public class GameView implements Screen, InputProcessor {
     private Table table;
     private final OrthographicCamera camera;
     private final Viewport viewport;
-    private Coordinate coordinate;
     private int scaledSize;
 
     public GameView(GameMenuController controller, Skin skin) {
         this.controller = controller;
+        this.controller.initGameControllers();
         this.skin = skin;
         stage = new Stage();
         table = new Table(skin);
         camera = new OrthographicCamera();
         viewport = new FitViewport(Gdx.graphics.getWidth(), Gdx.graphics.getHeight(), camera);
-        coordinate = new Coordinate(0, 0);
         scaledSize = 40;
     }
 
     @Override
     public void show() {
-//        InputMultiplexer multiplexer = new InputMultiplexer();
-//        multiplexer.addProcessor(stage);
-//        multiplexer.addProcessor(this);
+        InputMultiplexer multiplexer = new InputMultiplexer();
+        multiplexer.addProcessor(stage);
+        multiplexer.addProcessor(this);
+        Gdx.input.setInputProcessor(multiplexer);
         viewport.apply();
-        Gdx.input.setInputProcessor(this);
-
     }
 
     @Override
@@ -67,24 +66,14 @@ public class GameView implements Screen, InputProcessor {
         Main.getBatch().setProjectionMatrix(camera.combined);
 
         Main.getBatch().begin();
-
-
         renderWorld();
-
         Main.getBatch().end();
 
-        if (Gdx.input.isKeyPressed(Input.Keys.W))
-            coordinate = new Coordinate(coordinate.getX(), coordinate.getY() + 1);
-        if (Gdx.input.isKeyPressed(Input.Keys.A))
-            coordinate = new Coordinate(coordinate.getX() - 1, coordinate.getY());
-        if (Gdx.input.isKeyPressed(Input.Keys.S))
-            coordinate = new Coordinate(coordinate.getX(), coordinate.getY() - 1);
-        if (Gdx.input.isKeyPressed(Input.Keys.D))
-            coordinate = new Coordinate(coordinate.getX() + 1, coordinate.getY());
+        stage.act(Math.min(Gdx.graphics.getDeltaTime(), 1 / 30f));
+        stage.draw();
 
-//        stage.act(Math.min(Gdx.graphics.getDeltaTime(), 1 / 30f));
-//        stage.draw();
-
+        controller.handleInput();
+        controller.handleGame();
     }
 
     @Override
@@ -158,13 +147,14 @@ public class GameView implements Screen, InputProcessor {
     }
 
     private void updateCamera() {
-        camera.position.set(1600 + coordinate.getX() * scaledSize, 1600 + coordinate.getY() * scaledSize, 0);
+        camera.position.set((App.getCurrentGame().getCurrentPlayer().getCoordinate().getX()) * scaledSize,
+                (App.getCurrentGame().getCurrentPlayer().getCoordinate().getY()) * scaledSize, 0);
         camera.update();
     }
 
     private void renderWorld() {
-        int midX = 1600 + coordinate.getX() * scaledSize;
-        int midY = 1600 + coordinate.getY() * scaledSize;
+        int midX = App.getCurrentGame().getCurrentPlayer().getCoordinate().getX() * scaledSize;
+        int midY = App.getCurrentGame().getCurrentPlayer().getCoordinate().getY() * scaledSize;
 
         for (int x = max((midX - Gdx.graphics.getWidth() / 2) / scaledSize - 5, 0); x < min((midX + Gdx.graphics.getWidth() / 2) / scaledSize + 1, 150); x++) {
             for (int y = max((midY - Gdx.graphics.getHeight() / 2) / scaledSize - 5, 0); y < min((midY + Gdx.graphics.getHeight() / 2) / scaledSize + 1, 160); y++) {
