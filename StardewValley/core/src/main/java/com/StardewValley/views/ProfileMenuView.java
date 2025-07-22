@@ -18,16 +18,12 @@ public class ProfileMenuView implements Screen {
     private Table table;
     private Label usernameLabel;
     private TextField usernameField;
-    private TextButton usernameChangeButton;
     private Label passwordLabel;
     private TextField passwordField;
-    private TextButton passwordChangeButton;
     private Label nicknameLabel;
     private TextField nicknameField;
-    private TextButton nicknameChangeButton;
     private Label emailLabel;
     private TextField emailField;
-    private TextButton emailChangeButton;
     private Label genderLabel;
     private TextField genderField;  // should be disabled
     private Label earnedPointsLabel;
@@ -36,6 +32,7 @@ public class ProfileMenuView implements Screen {
     private TextField maxPointsField;
     private Label gamePlayLabel;
     private TextField gamePlayField;
+    private TextButton saveButton;
     private TextButton backButton;
     private Label errorLabel;
 
@@ -44,41 +41,47 @@ public class ProfileMenuView implements Screen {
         this.skin = skin;
 
         this.usernameLabel = new Label("Username", skin);
+        this.usernameLabel.setFontScale(0.7f);
         this.usernameField = new TextField(App.getCurrentUser().getUsername(), skin);
-        this.usernameChangeButton = new TextButton("Change Username", skin);
 
         this.passwordLabel = new Label("Password", skin);
+        this.passwordLabel.setFontScale(0.7f);
         this.passwordField = new TextField(App.getCurrentUser().getPassword(), skin);
-        this.passwordChangeButton = new TextButton("Change Password", skin);
 
         this.nicknameLabel = new Label("Nickname", skin);
+        this.nicknameLabel.setFontScale(0.7f);
         this.nicknameField = new TextField(App.getCurrentUser().getNickname(), skin);
-        this.nicknameChangeButton = new TextButton("Change Nickname", skin);
 
         this.emailLabel = new Label("Email", skin);
+        this.emailLabel.setFontScale(0.7f);
         this.emailField = new TextField(App.getCurrentUser().getEmail(), skin);
-        this.emailChangeButton = new TextButton("Change Email", skin);
 
 
 
         this.genderLabel = new Label("Gender", skin);
+        this.genderLabel.setFontScale(0.7f);
         this.genderField = new TextField(App.getCurrentUser().getGender().getName(), skin);
         this.genderField.setDisabled(true);
 
         this.earnedPointsLabel = new Label("Earned Points", skin);
+        this.earnedPointsLabel.setFontScale(0.7f);
         this.earnedPointsField = new TextField(String.valueOf(App.getCurrentUser().getEarnedPoints()), skin);
         this.earnedPointsField.setDisabled(true);
 
         this.maxPointsLabel = new Label("Max Points", skin);
+        this.maxPointsLabel.setFontScale(0.7f);
         this.maxPointsField = new TextField(String.valueOf(App.getCurrentUser().getMaxPoints()), skin);
         this.maxPointsField.setDisabled(true);
 
         this.gamePlayLabel = new Label("Game Play", skin);
+        this.gamePlayLabel.setFontScale(0.7f);
         this.gamePlayField = new TextField(String.valueOf(App.getCurrentUser().getGamePlay()), skin);
         this.gamePlayField.setDisabled(true);
 
+        this.saveButton = new TextButton("Save", skin);
         this.backButton = new TextButton("Back", skin);
         this.errorLabel = new Label("", skin);
+        this.errorLabel.setFontScale(0.7f);
 
         this.controller.setView(this);
     }
@@ -93,45 +96,43 @@ public class ProfileMenuView implements Screen {
 
 // Row 1
         table.add(usernameLabel).left().padRight(30);
-        table.add(usernameField).padRight(30).width(200);
-        table.add(usernameChangeButton).expandX().fillX().padRight(30);
+        table.add(usernameField).padRight(30).width(500).height(50);
         table.add(genderLabel).left().padRight(30);
-        table.add(genderField).width(200);
+        table.add(genderField).width(200).height(50);
         table.row();
 
 // Row 2
         table.add(passwordLabel).left().padRight(30);
-        table.add(passwordField).padRight(30).width(200);
-        table.add(passwordChangeButton).expandX().fillX().padRight(30);
+        table.add(passwordField).padRight(30).width(500).height(50);
         table.add(earnedPointsLabel).left().padRight(30);
-        table.add(earnedPointsField).width(200);
+        table.add(earnedPointsField).width(200).height(50);
         table.row();
 
 // Row 3
         table.add(nicknameLabel).left().padRight(30);
-        table.add(nicknameField).padRight(30).width(200);
-        table.add(nicknameChangeButton).expandX().fillX().padRight(30);
+        table.add(nicknameField).padRight(30).width(500).height(50);
         table.add(maxPointsLabel).left().padRight(30);
-        table.add(maxPointsField).width(200);
+        table.add(maxPointsField).width(200).height(50);
         table.row();
 
 // Row 4
         table.add(emailLabel).left().padRight(30);
-        table.add(emailField).padRight(30).width(200);
-        table.add(emailChangeButton).expandX().fillX().padRight(30);
+        table.add(emailField).padRight(30).width(500).height(50);
         table.add(gamePlayLabel).left().padRight(30);
-        table.add(gamePlayField).width(200);
+        table.add(gamePlayField).width(200).height(50);
         table.row();
 
 // Row 5 – Back Button (centered across all columns)
-        table.add(backButton).colspan(5).center().fillX().expandX().padTop(20);
+        table.add(saveButton).colspan(4).center().fillX().expandX().padTop(20).height(70);
+        table.row();
+        table.add(backButton).colspan(4).center().fillX().expandX().height(70);
         table.row();
 
 // Row 6 – Error Label
-        table.add(errorLabel).colspan(5).center()   .fillX().expandX().padTop(10);
+        table.add(errorLabel).colspan(4).center().fillX().expandX().padTop(10);
         table.row();
 
-        window = new Window("Pr ofile Menu", skin);
+        window = new Window("Profile Menu", skin);
         window.setModal(true);
         window.setMovable(true);
         window.setResizable(false);
@@ -189,32 +190,23 @@ public class ProfileMenuView implements Screen {
         return usernameField;
     }
 
-    public TextButton getUsernameChangeButton() {
-        return usernameChangeButton;
-    }
 
     public TextField getPasswordField() {
         return passwordField;
     }
 
-    public TextButton getPasswordChangeButton() {
-        return passwordChangeButton;
-    }
 
     public TextField getNicknameField() {
         return nicknameField;
     }
 
-    public TextButton getNicknameChangeButton() {
-        return nicknameChangeButton;
-    }
 
     public TextField getEmailField() {
         return emailField;
     }
 
-    public TextButton getEmailChangeButton() {
-        return emailChangeButton;
+    public TextButton getSaveButton() {
+        return saveButton;
     }
 
     public TextButton getBackButton() {

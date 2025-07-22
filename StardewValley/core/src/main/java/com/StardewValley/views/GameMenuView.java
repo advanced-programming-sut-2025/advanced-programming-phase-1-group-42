@@ -59,7 +59,7 @@ public class GameMenuView implements Screen {
         this.loadGameButton = new TextButton("Load Game", skin);
         this.backButton = new TextButton("Back", skin);
         this.titleSavedGameLabel = new Label("Saved Game: " + App.getCurrentUser().getPlaying(), skin);
-        this.titleSavedGameLabel.setFontScale(1.5f);
+        this.titleSavedGameLabel.setFontScale(1.0f);
         this.detailsSavedGameLabel = new Label("", skin);
         if(App.getCurrentUser().getPlaying()) {
             this.detailsSavedGameLabel.setText("Details:\nDays: " + App.getCurrentUser().getGame().getDateTime().getDays() +
@@ -71,32 +71,43 @@ public class GameMenuView implements Screen {
             "\nSeason: " +
             "\nYear: " +
             "\nPoints: ");
+        this.detailsSavedGameLabel.setFontScale(0.7f);
         this.errorLabel = new Label("", skin);
+        this.errorLabel.setFontScale(0.7f);
 
 
         this.newGameWindow = new Window("New Game", skin);
         this.addPlayerLabel = new Label("Add Player(Username): ", skin);
+        this.addPlayerLabel.setFontScale(0.7f);
         this.addPlayerField = new TextField("example: Parsa-374", skin);
         this.addPlayerButton = new TextButton("Add Player", skin);
         this.playerLabels = new ArrayList();
-        this.playerLabels.add(new Label("Player 1:\n" + App.getCurrentUser().getUsername(), skin));
+        Label tempLabel = new Label("Player 1:\n" + App.getCurrentUser().getUsername(), skin);
+        tempLabel.setFontScale(0.7f);
+        this.playerLabels.add(tempLabel);
         this.playerUsernames = new ArrayList<>();
         this.playerUsernames.add(App.getCurrentUser().getUsername());
         for (int i = 2; i < 5; i++) {
-            this.playerLabels.add(new Label("Player " + i + ":\nGuest " + (i - 1), skin));
+            tempLabel = new Label("Player " + i + ":\nGuest " + (i - 1), skin);
+            tempLabel.setFontScale(0.7f);
+            this.playerLabels.add(tempLabel);
             this.playerUsernames.add("Guest " + (i - 1));
         }
         this.playersPtr = 1;
         this.startNewGameButton = new TextButton("Start New Game", skin);
         this.backNewGameButton = new TextButton("Back", skin);
         this.newGameErrorLabel = new Label("", skin);
+        this.newGameErrorLabel.setFontScale(0.7f);
 
 
         this.choiceFarmWindow = new Window("Choice Farm", skin);
         this.playerUsernameLabel = new Label("", skin);
+        this.playerUsernameLabel.setFontScale(0.7f);
         this.farmButtons = new ArrayList();
         this.farmButtons.add(new Table(skin));
-        this.farmButtons.getLast().add(new Label("Normal Farm", skin));
+        tempLabel = new Label("Normal Farm", skin);
+        tempLabel.setFontScale(0.7f);
+        this.farmButtons.getLast().add(tempLabel);
         this.farmButtons.getLast().row();
         this.imageButton1 = new ImageButton(new TextureRegionDrawable(new TextureRegion(new Texture("Farm_1.png"))),
             new TextureRegionDrawable(new TextureRegion(new Texture("Farm_1_Checked.png"))));
@@ -104,7 +115,9 @@ public class GameMenuView implements Screen {
         this.farmButtons.getLast().setWidth(140);
         this.farmButtons.getLast().row();
         this.farmButtons.add(new Table(skin));
-        this.farmButtons.getLast().add(new Label("Aquatic Farm", skin));
+        tempLabel = new Label("Aquatic Farm", skin);
+        tempLabel.setFontScale(0.7f);
+        this.farmButtons.getLast().add(tempLabel);
         this.farmButtons.getLast().row();
         this.imageButton2 = new ImageButton(new TextureRegionDrawable(new TextureRegion(new Texture("Farm_2.png"))),
             new TextureRegionDrawable(new TextureRegion(new Texture("Farm_2_Checked.png"))));
@@ -117,14 +130,17 @@ public class GameMenuView implements Screen {
             @Override
             public void clicked(InputEvent event, float x, float y) {
                 choiceFarmWindow.setVisible(false);
+
+
+                Farm farm = new Farm(0, controller.ptr, controller.tiles);
+                controller.players.get(controller.ptr).setFarm(farm);
+                controller.farms.add(farm);
+
                 if (controller.ptr == 3) {
                     controller.newGamePhase2();
                     return;
                 }
 
-                Farm farm = new Farm(0, controller.ptr, controller.tiles);
-                controller.players.get(controller.ptr).setFarm(farm);
-                controller.farms.add(farm);
                 controller.ptr++;
                 initChoiceFarmWindow(controller.players.get(controller.ptr).getPlayerUsername());
             }
@@ -134,14 +150,16 @@ public class GameMenuView implements Screen {
             @Override
             public void clicked(InputEvent event, float x, float y) {
                 choiceFarmWindow.setVisible(false);
-                if (controller.ptr == 3) {
-                    controller.newGamePhase2();
-                    return;
-                }
+
 
                 Farm farm = new Farm(1, controller.ptr, controller.tiles);
                 controller.players.get(controller.ptr).setFarm(farm);
                 controller.farms.add(farm);
+
+                if (controller.ptr == 3) {
+                    controller.newGamePhase2();
+                    return;
+                }
                 controller.ptr++;
                 initChoiceFarmWindow(controller.players.get(controller.ptr).getPlayerUsername());
             }
@@ -172,19 +190,17 @@ public class GameMenuView implements Screen {
 
         this.table = new Table(skin);
         table.setFillParent(true);
-        table.pad(120).defaults().expandX().padBottom(15);
+        table.pad(70).defaults().expandX().padBottom(15);
 
         Table leftTable = new Table(skin);
         leftTable.setFillParent(true);
-        leftTable.setHeight(300);
-        table.add(newGameButton).width(250).expandX().fillX().row();
-        table.add(loadGameButton).width(250).expandX().fillX().row();
-        table.add(backButton).width(250).expandX().fillX().row();
+        table.add(newGameButton).width(250).height(70).expandX().fillX().row();
+        table.add(loadGameButton).width(250).height(70).expandX().fillX().row();
+        table.add(backButton).width(250).height(70).expandX().fillX().row();
 
         Table rightTable = new Table(skin);
         rightTable.setFillParent(true);
-        rightTable.setHeight(300);
-        rightTable.add(titleSavedGameLabel).expandX().fillX().padTop(70).row();
+        rightTable.add(titleSavedGameLabel).expandX().fillX().row();
         rightTable.add(detailsSavedGameLabel).expandX().fillX().row();
 
 // Row 1
@@ -206,8 +222,8 @@ public class GameMenuView implements Screen {
 
 // Row 1: Add player input row
         newGameTable.add(addPlayerLabel).left().padRight(30);
-        newGameTable.add(addPlayerField).fillX().width(200).left().padRight(30);
-        newGameTable.add(addPlayerButton).fillX().width(200).left().padRight(30);
+        newGameTable.add(addPlayerField).fillX().width(420).left().height(50).padRight(30).row();
+        newGameTable.add(addPlayerButton).colspan(2).fillX().left().height(70).padRight(30);
         newGameTable.row();
 
 // Row 2: Player labels (0 and 2)
@@ -221,28 +237,28 @@ public class GameMenuView implements Screen {
         newGameTable.row();
 
 // Row 4: Start / Back buttons
-        newGameTable.add(startNewGameButton).width(200).left().padRight(30).padTop(20);
-        newGameTable.add(backNewGameButton).width(200).left().padRight(30).padTop(20);
+        newGameTable.add(startNewGameButton).expandX().left().padRight(30).padTop(20).height(70);
+        newGameTable.add(backNewGameButton).expandX().left().padRight(30).padTop(20).height(70);
         newGameTable.row();
 
 // Row 5: Error label (full width)
-        newGameTable.add(newGameErrorLabel).colspan(3).center().padTop(30);
+        newGameTable.add(newGameErrorLabel).colspan(2).center().padTop(30);
         newGameTable.row();
 
         setWindowForTable(newGameWindow, newGameTable, stage);
 
         choiceFarmTable = new Table(skin);
         choiceFarmTable.setFillParent(true);
-        choiceFarmTable.pad(80).defaults().expandX().fillX().row();
+        choiceFarmTable.pad(100).defaults().expandX().fillX().padLeft(-60).row();
 
         choiceFarmTable.add(playerUsernameLabel).colspan(2).left().fillX().padBottom(20);
         choiceFarmTable.row();
 
-        choiceFarmTable.add(farmButtons.get(0)).left();
+        choiceFarmTable.add(farmButtons.get(0)).left().padLeft(-60).padRight(20);
         choiceFarmTable.add(farmButtons.get(1)).right();
         choiceFarmTable.row();
 
-        choiceFarmTable.add(choiceFarmBackButton).colspan(2).center().expandX().fillX().padTop(20).row();
+        choiceFarmTable.add(choiceFarmBackButton).colspan(2).height(70).center().expandX().fillX().padTop(20).padLeft(-60).row();
 
         setWindowForTable(choiceFarmWindow, choiceFarmTable, stage);
     }

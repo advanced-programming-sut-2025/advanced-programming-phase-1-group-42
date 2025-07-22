@@ -8,7 +8,7 @@ import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 
 public class Assets {
     private static Assets instance = new Assets();
-    private final Skin skin = new Skin(Gdx.files.internal("Theme/skin/clean-crispy-ui.json"));
+    private final Skin skin = new Skin(Gdx.files.internal("Theme2/LibGdx-Skin-main/NzSkin.json"));
     private final Music stardewMusic = Gdx.audio.newMusic(Gdx.files.internal("Audio/stardewMusic.wav"));
     private final Sprite menuBackground = new Sprite(new Texture("menu_background.png"));
     private final Sprite menuBackground2 = new Sprite(new Texture("menu_background_2.png"));

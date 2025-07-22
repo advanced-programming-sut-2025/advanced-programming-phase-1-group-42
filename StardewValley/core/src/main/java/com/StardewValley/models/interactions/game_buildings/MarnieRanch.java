@@ -3,6 +3,7 @@ package com.StardewValley.models.interactions.game_buildings;
 import com.StardewValley.models.App;
 import com.StardewValley.models.Pair;
 import com.StardewValley.models.Result;
+import com.StardewValley.models.enums.TileAssets;
 import com.StardewValley.models.game_structure.Coordinate;
 import com.StardewValley.models.game_structure.Tile;
 import com.StardewValley.models.goods.Good;
@@ -40,7 +41,8 @@ public class MarnieRanch extends GameBuilding {
                 new NPC(NPCTypes.MARNIE),
                 new Pair<>(9, 16),
                 new Coordinate(50, 90),
-                new Coordinate(60, 100));
+                new Coordinate(60, 100),
+            TileAssets.MARNIE_RANCH.getTexture());
     }
 
 

@@ -25,29 +25,41 @@ public class ProfileMenuController extends Controller {
             return;
         }
 
-        if (view.getUsernameChangeButton().isChecked()) {
-            view.getUsernameChangeButton().setChecked(false);
+        if (view.getSaveButton().isChecked()) {
+            view.getSaveButton().setChecked(false);
 
-            Result res = changeUsername(view.getUsernameField().getText());
-            view.getErrorLabel().setText(res.message());
-        }
-        else if (view.getPasswordChangeButton().isChecked()) {
-            view.getPasswordChangeButton().setChecked(false);
+            if (view.getUsernameField().getText().equals(App.getCurrentUser().getUsername())) {
+                Result res = changeUsername(view.getUsernameField().getText());
+                if (!res.success()) {
+                    view.getErrorLabel().setText(res.message());
+                    return;
+                }
+            }
+            if (view.getPasswordField().getText().equals(App.getCurrentUser().getPassword())) {
+                Result res = changePassword(view.getPasswordField().getText());
 
-            Result res = changePassword(view.getPasswordField().getText());
-            view.getErrorLabel().setText(res.message());
-        }
-        else if (view.getEmailChangeButton().isChecked()) {
-            view.getEmailChangeButton().setChecked(false);
+                if (!res.success()) {
+                    view.getErrorLabel().setText(res.message());
+                    return;
+                }
+            }
+            if (view.getEmailField().getText().equals(App.getCurrentUser().getEmail())) {
+                Result res = changeEmail(view.getEmailField().getText());
 
-            Result res = changeEmail(view.getEmailField().getText());
-            view.getErrorLabel().setText(res.message());
-        }
-        else if (view.getNicknameChangeButton().isChecked()) {
-            view.getNicknameChangeButton().setChecked(false);
+                if (!res.success()) {
+                    view.getErrorLabel().setText(res.message());
+                    return;
+                }
+            }
+            if (view.getNicknameField().getText().equals(App.getCurrentUser().getNickname())) {
+                Result res = changeNickname(view.getNicknameField().getText());
 
-            Result res = changeNickname(view.getNicknameField().getText());
-            view.getErrorLabel().setText(res.message());
+                if (!res.success()) {
+                    view.getErrorLabel().setText(res.message());
+                    return;
+                }
+            }
+
         }
         else if (view.getBackButton().isChecked()) {
             view.getBackButton().setChecked(false);

@@ -3,6 +3,7 @@ package com.StardewValley.models.interactions.game_buildings;
 import com.StardewValley.models.App;
 import com.StardewValley.models.Pair;
 import com.StardewValley.models.Result;
+import com.StardewValley.models.enums.TileAssets;
 import com.StardewValley.models.game_structure.Coordinate;
 import com.StardewValley.models.game_structure.Tile;
 import com.StardewValley.models.goods.GoodType;
@@ -29,7 +30,8 @@ public class FishShop extends GameBuilding {
                 new NPC(NPCTypes.WILLY),
                 new Pair<>(9, 17),
                 new Coordinate(120, 60),
-                new Coordinate(130, 70));
+                new Coordinate(130, 70),
+                TileAssets.FISH_SHOP.getTexture());
 
         this.products = new ArrayList<>(Arrays.asList(
                 new Pair<>(CraftingRecipeType.FISH_SMOKER, 1),

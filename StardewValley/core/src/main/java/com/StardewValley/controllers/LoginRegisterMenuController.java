@@ -160,6 +160,7 @@ public class LoginRegisterMenuController extends Controller {
 
         if (!loginMenuView.getNewPasswordField().getText().equals(loginMenuView.getConfirmNewPasswordField().getText())) {
             loginMenuView.getForgetErrorLabel().setText("Password and confirm password do not match!");
+            return;
         }
 
         user.setPassword(loginMenuView.getNewPasswordField().getText());
@@ -171,10 +172,12 @@ public class LoginRegisterMenuController extends Controller {
         User user = findAppUser(loginMenuView.getUsernameField().getText());
         if (user == null) {
             loginMenuView.getErrorLabel().setText("User not found!");
+            return;
         }
 
-        if (!user.getPassword().equals(loginMenuView.getPasswordField().getText())) {
+        if (!user.getPassword().equals(getSHA256(loginMenuView.getPasswordField().getText()))) {
             loginMenuView.getErrorLabel().setText("Wrong password!");
+            return;
         }
 
         if (loginMenuView.getStayOnLoginCheckBox().isChecked()) {
