@@ -47,10 +47,12 @@ public class LoginMenuView implements Screen {
         this.skin = skin;
         this.stage = new Stage();
         this.titleLabel = new Label("Login Menu", skin);
-        this.titleLabel.setFontScale(2.0f);
+        this.titleLabel.setFontScale(1.2f);
         this.usernameLabel = new Label("Username", skin);
+        this.usernameLabel.setFontScale(0.7f);
         this.usernameField = new TextField("Parsa-374", skin);
         this.passwordLabel = new Label("Password", skin);
+        this.passwordLabel.setFontScale(0.7f);
         this.passwordField = new TextField("Passw0rd##", skin);
         this.stayOnLoginCheckBox = new CheckBox("Stay Logged in", skin);
         this.loginButton = new TextButton("Login", skin);
@@ -59,18 +61,22 @@ public class LoginMenuView implements Screen {
         this.errorLabel = new Label("", skin);
 
         this.usernameForgetLabel = new Label("Username", skin);
+        this.usernameForgetLabel.setFontScale(0.7f);
         this.usernameForgetField = new TextField("Parsa-374", skin);
         this.usernameFindButton = new TextButton("Find Username", skin);
         this.securityQuestionLabel = new Label("Question: ", skin);
+        this.securityQuestionLabel.setFontScale(0.7f);
         this.securityQuestionField = new TextField("", skin);
         this.securityQuestionSubmitButton = new TextButton("Submit Answer", skin);
         this.newPasswordLabel = new Label("New Password", skin);
+        this.newPasswordLabel.setFontScale(0.7f);
         this.newPasswordField = new TextField("Passw0rd##", skin);
         this.confirmNewPasswordField = new TextField("Passw0rd##", skin);
         this.randomNewPasswordButton = new TextButton("Generating Random Password", skin);
         this.newPasswordConfirmButton = new TextButton("Confirm New Password", skin);
         this.forgetBackButton = new TextButton("Back", skin);
         this.forgetErrorLabel = new Label("", skin);
+        this.forgetErrorLabel.setFontScale(0.7f);
 
         this.controller.setView(this);
     }
@@ -91,19 +97,19 @@ public class LoginMenuView implements Screen {
 
 // Username
         table.add(usernameLabel).left();
-        table.add(usernameField).fillX();
+        table.add(usernameField).fillX().height(50);
         table.row();
 
 // Password
         table.add(passwordLabel).left();
-        table.add(passwordField).fillX();
-        table.add(stayOnLoginCheckBox).center();
+        table.add(passwordField).fillX().height(50);
+        table.add(stayOnLoginCheckBox).center().height(50);
         table.row();
 
 // Buttons: Login | Forgot Password | Back
-        table.add(loginButton).padTop(20).expandX().fillX();
-        table.add(forgetPasswordButton).padTop(20).expandX().fillX();
-        table.add(backButton).padTop(20).expandX().fillX();
+        table.add(loginButton).padTop(20).expandX().fillX().size(350, 70);
+        table.add(forgetPasswordButton).padTop(20).expandX().fillX().size(350, 70);
+        table.add(backButton).padTop(20).expandX().fillX().size(350, 70);
         table.row();
 
         table.add(errorLabel).colspan(3).center();
@@ -116,28 +122,28 @@ public class LoginMenuView implements Screen {
 
 // Username field with Find button
         forgetPasswordTable.add(usernameForgetLabel).left();
-        forgetPasswordTable.add(usernameForgetField).fillX();
-        forgetPasswordTable.add(usernameFindButton).expandX().fillX();
+        forgetPasswordTable.add(usernameForgetField).fillX().height(50);
+        forgetPasswordTable.add(usernameFindButton).expandX().fillX().height(70);
         forgetPasswordTable.row();
 
 // Security question field with Submit button
         forgetPasswordTable.add(securityQuestionLabel).colspan(3).center();
         forgetPasswordTable.row();
 
-        forgetPasswordTable.add(securityQuestionField).fillX();
-        forgetPasswordTable.add(securityQuestionSubmitButton).fillX().expandX();
+        forgetPasswordTable.add(securityQuestionField).fillX().height(50);
+        forgetPasswordTable.add(securityQuestionSubmitButton).fillX().expandX().height(70);
         forgetPasswordTable.row();
 
 // New password field
         forgetPasswordTable.add(newPasswordLabel).left();
-        forgetPasswordTable.add(newPasswordField).fillX();
-        forgetPasswordTable.add(confirmNewPasswordField).fillX().expandX();
+        forgetPasswordTable.add(newPasswordField).fillX().height(50);
+        forgetPasswordTable.add(confirmNewPasswordField).fillX().expandX().height(50);
         forgetPasswordTable.row();
 
 // Confirm new password field + Confirm button
-        forgetPasswordTable.add(randomNewPasswordButton).fillX();
-        forgetPasswordTable.add(newPasswordConfirmButton).fillX();
-        forgetPasswordTable.add(forgetBackButton).right().fillX();
+        forgetPasswordTable.add(randomNewPasswordButton).fillX().height(70);
+        forgetPasswordTable.add(newPasswordConfirmButton).fillX().height(70);
+        forgetPasswordTable.add(forgetBackButton).right().fillX().height(70);
         forgetPasswordTable.row();
 
 // Error label (centered)
@@ -145,6 +151,7 @@ public class LoginMenuView implements Screen {
         forgetPasswordTable.row();
 
         forgetPasswordWindow = new Window("Forgot Password", skin);
+        forgetPasswordWindow.getTitleLabel().setFontScale(0.8f);
         GameMenuView.setWindowForTable(forgetPasswordWindow, forgetPasswordTable, stage);
     }
 

@@ -40,6 +40,7 @@ public class RegisterMenuView implements Screen {
     private Table securityQuestionTable;
     private Label securityQuestionLabel;
     private SelectBox<String> securityQuestionBox;
+    private Label securityQuestionAnswerLabel;
     private TextField securityQuestionField;
     private TextButton submitAnswerButton;
     private TextButton backButton;
@@ -49,19 +50,25 @@ public class RegisterMenuView implements Screen {
         this.controller = controller;
         this.skin = skin;
         this.titleLabel = new Label("Register Menu", skin);
-        this.titleLabel.setFontScale(2.0f);
+        this.titleLabel.setFontScale(1.2f);
         this.usernameLabel = new Label("Username", skin);
+        this.usernameLabel.setFontScale(0.7f);
         this.usernameField = new TextField("Parsa-374", skin);
         this.passwordLabel = new Label("Password", skin);
+        this.passwordLabel.setFontScale(0.7f);
         this.passwordField = new TextField("Passw0rd##", skin);
         this.confirmPasswordLabel = new Label("Confirm Password", skin);
+        this.confirmPasswordLabel.setFontScale(0.7f);
         this.confirmPasswordField = new TextField("Passw0rd##", skin);
         this.randomPasswordButton = new TextButton("Generating Random Password", skin);
         this.nicknameLabel = new Label("Nickname", skin);
+        this.nicknameLabel.setFontScale(0.7f);
         this.nicknameField = new TextField("Parsa", skin);
         this.emailLabel = new Label("Email", skin);
+        this.emailLabel.setFontScale(0.7f);
         this.emailField = new TextField("Em.ail8@org.eu", skin);
         this.genderLabel = new Label("Gender", skin);
+        this.genderLabel.setFontScale(0.7f);
         this.genderBox = new SelectBox<>(skin);
         this.genderBox.setItems("Male", "Female");
         this.genderBox.setSelectedIndex(0);
@@ -69,10 +76,12 @@ public class RegisterMenuView implements Screen {
         this.exitButton = new TextButton("Exit", skin);
         this.loginButton = new TextButton("Login", skin);
         this.messageLabel = new Label("", skin);
+        this.messageLabel.setFontScale(0.7f);
 
         this.securityQuestionWindow = new Window("", skin);
         this.securityQuestionTable = new Table(skin);
         this.securityQuestionLabel = new Label("Security Question Window", skin);
+        this.securityQuestionLabel.setFontScale(0.7f);
         this.securityQuestionBox = new SelectBox<>(skin);
         this.securityQuestionBox.setItems(
             "What was the make and model of your first car?",
@@ -80,10 +89,11 @@ public class RegisterMenuView implements Screen {
             "What is your favorite movie of all time?"
         );
         this.securityQuestionBox.setSelectedIndex(0);
+        this.securityQuestionAnswerLabel = new Label("Your Answer:", skin);
+        this.securityQuestionAnswerLabel.setFontScale(0.7f);
         this.securityQuestionField = new TextField("yes i was.", skin);
         this.submitAnswerButton = new TextButton("Submit", skin);
         this.backButton = new TextButton("Back", skin);
-
         this.controller.setView(this);
     }
 
@@ -98,55 +108,52 @@ public class RegisterMenuView implements Screen {
         stage.addActor(table);
 
         table.pad(200).defaults().expandX().center();
-        table.row().padTop(250);
+        table.row().padTop(320);
 // Title
-        table.add().center().colspan(3).fillX().padRight(200);
-        table.add(titleLabel).colspan(3).padBottom(30).center();
+        table.add(titleLabel).colspan(3).padBottom(20).center();
 
         table.row();
 
 // Username
-        table.add(usernameLabel).left().colspan(3).padRight(30);
-        table.add(usernameField).colspan(3).fillX();
+        table.add(usernameLabel).left().padRight(30);
+        table.add(usernameField).fillX().height(50);
         table.row();
 
 // Password
-        table.add(passwordLabel).left().colspan(3).padRight(30);
-        table.add(passwordField).colspan(3).fillX();
+        table.add(passwordLabel).left().padRight(30);
+        table.add(passwordField).fillX().height(50);
         table.row();
 
 // Confirm Password
-        table.add(confirmPasswordLabel).left().colspan(3).padRight(30);
-        table.add(confirmPasswordField).colspan(3).fillX();
-        table.add(randomPasswordButton).colspan(3).fillX();
+        table.add(confirmPasswordLabel).left().padRight(30);
+        table.add(confirmPasswordField).fillX().height(50);
+        table.add(randomPasswordButton).fillX().size(500, 70);
         table.row();
 
 // Nickname
-        table.add(nicknameLabel).left().colspan(3).padRight(30);
-        table.add(nicknameField).colspan(3).fillX();
+        table.add(nicknameLabel).left().padRight(30);
+        table.add(nicknameField).fillX().height(50);
         table.row();
 
 // Email
-        table.add(emailLabel).left().colspan(3).padRight(30);
-        table.add(emailField).colspan(3).fillX();
+        table.add(emailLabel).left().padRight(30);
+        table.add(emailField).fillX().height(50);
         table.row();
 
 // Gender
-        table.add(genderLabel).left().colspan(3).padRight(30);
-        table.add(genderBox).colspan(3).fillX();
+        table.add(genderLabel).left().padRight(30);
+        table.add(genderBox).fillX().height(50);
         table.row();
 
 // Buttons: Register | Login | Exit
-        table.add(registerButton).padTop(20).expandX().colspan(3).fillX();
-        table.add(loginButton).padTop(20).expandX().colspan(3).fillX();
-        table.add(exitButton).padTop(20).expandX().colspan(3).fillX();
+        table.add(registerButton).padTop(10).expandX().fillX().size(450, 70);
+        table.add(loginButton).padTop(10).expandX().fillX().size(450, 70);
+        table.add(exitButton).padTop(10).expandX().fillX().size(450, 70);
         table.add();
         table.row();
 
 // Message Label
-        table.add().left().colspan(3);
-        table.add(messageLabel).colspan(3).center().padTop(20);
-        table.add();
+        table.add(messageLabel).colspan(3).center().padTop(5);
         table.center();
 
         stage.addActor(table);
@@ -157,20 +164,21 @@ public class RegisterMenuView implements Screen {
 
 // Add Security Question Label + SelectBox
         securityQuestionTable.add(securityQuestionLabel).left().padRight(30);
-        securityQuestionTable.add(securityQuestionBox).fillX().colspan(2);
+        securityQuestionTable.add(securityQuestionBox).fillX().colspan(2).height(50);
         securityQuestionTable.row();
 
 // Add TextField for Answer
-        securityQuestionTable.add(new Label("Your Answer:", skin)).left();
-        securityQuestionTable.add(securityQuestionField).fillX().colspan(2);
+        securityQuestionTable.add(securityQuestionAnswerLabel).left();
+        securityQuestionTable.add(securityQuestionField).fillX().colspan(2).height(50);
         securityQuestionTable.row();
 
 // Buttons: Submit + Back
-        securityQuestionTable.add(backButton).colspan(1).center().padTop(20).fillX();
-        securityQuestionTable.add(submitAnswerButton).colspan(1).padTop(20).center().fillX();
+        securityQuestionTable.add(backButton).colspan(1).center().padTop(20).fillX().height(70);
+        securityQuestionTable.add(submitAnswerButton).colspan(1).padTop(20).center().fillX().height(70);
         securityQuestionTable.row();
 
         securityQuestionWindow = new Window("Security Question", skin);
+        securityQuestionWindow.getTitleLabel().setFontScale(0.8f);
         GameMenuView.setWindowForTable(securityQuestionWindow, securityQuestionTable, stage);
     }
 

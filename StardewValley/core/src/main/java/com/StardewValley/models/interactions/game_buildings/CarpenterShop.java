@@ -3,6 +3,7 @@ package com.StardewValley.models.interactions.game_buildings;
 import com.StardewValley.models.App;
 import com.StardewValley.models.Pair;
 import com.StardewValley.models.Result;
+import com.StardewValley.models.enums.TileAssets;
 import com.StardewValley.models.game_structure.Coordinate;
 import com.StardewValley.models.game_structure.Tile;
 import com.StardewValley.models.goods.Good;
@@ -32,7 +33,8 @@ public class CarpenterShop extends GameBuilding {
                 new NPC(NPCTypes.ROBIN),
                 new Pair<>(9, 20),
                 new Coordinate(10, 90),
-                new Coordinate(20, 100));
+                new Coordinate(20, 100),
+                TileAssets.CARPENTER_SHOP.getTexture());
     }
 
     @Override

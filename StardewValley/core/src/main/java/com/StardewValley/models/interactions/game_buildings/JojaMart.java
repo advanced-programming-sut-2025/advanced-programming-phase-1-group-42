@@ -3,6 +3,7 @@ package com.StardewValley.models.interactions.game_buildings;
 import com.StardewValley.models.App;
 import com.StardewValley.models.Pair;
 import com.StardewValley.models.Result;
+import com.StardewValley.models.enums.TileAssets;
 import com.StardewValley.models.game_structure.Coordinate;
 import com.StardewValley.models.game_structure.Tile;
 import com.StardewValley.models.goods.GoodType;
@@ -30,7 +31,8 @@ public class JojaMart extends GameBuilding {
                 new NPC(NPCTypes.MORRIS),
                 new Pair<>(9, 23),
                 new Coordinate(50, 60),
-                new Coordinate(60, 70));
+                new Coordinate(60, 70),
+                TileAssets.JOJAMART.getTexture());
 
         this.products = new ArrayList<>();
         //Permanent Stock

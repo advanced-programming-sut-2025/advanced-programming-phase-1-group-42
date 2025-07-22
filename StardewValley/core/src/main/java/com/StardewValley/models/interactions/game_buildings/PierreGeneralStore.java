@@ -3,6 +3,7 @@ package com.StardewValley.models.interactions.game_buildings;
 import com.StardewValley.models.App;
 import com.StardewValley.models.Pair;
 import com.StardewValley.models.Result;
+import com.StardewValley.models.enums.TileAssets;
 import com.StardewValley.models.game_structure.Coordinate;
 import com.StardewValley.models.game_structure.Tile;
 import com.StardewValley.models.goods.GoodType;
@@ -33,7 +34,8 @@ public class PierreGeneralStore extends GameBuilding {
                 new NPC(NPCTypes.PIERRE),
                 new Pair<>(9, 17),
                 new Coordinate(80, 60),
-                new Coordinate(90, 70));
+                new Coordinate(90, 70),
+                TileAssets.PIERRE_SHOP.getTexture());
 
         stockParts = new ArrayList<>(Arrays.asList(
                 "Year-Round Stock", "Spring", "Summer", "Fall", "Winter", "BackPacks"
