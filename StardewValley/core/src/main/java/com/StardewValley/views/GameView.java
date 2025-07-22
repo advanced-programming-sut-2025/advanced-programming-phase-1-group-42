@@ -9,6 +9,9 @@ import com.StardewValley.models.enums.TileType;
 import com.StardewValley.models.game_structure.Coordinate;
 import com.StardewValley.models.game_structure.Map;
 import com.StardewValley.models.game_structure.Tile;
+import com.StardewValley.models.goods.Good;
+import com.StardewValley.models.goods.farmings.FarmingTree;
+import com.StardewValley.models.goods.foragings.ForagingTree;
 import com.StardewValley.models.interactions.game_buildings.GameBuilding;
 import com.badlogic.gdx.*;
 import com.badlogic.gdx.graphics.GL20;
@@ -204,6 +207,11 @@ public class GameView implements Screen, InputProcessor {
                     case TileType.SHIPPING_BIN -> {
                         Main.getBatch().draw(TileAssets.SHIPPING_BIN.getTexture(), x * scaledSize, y * scaledSize, scaledSize, scaledSize);
                     }
+                    default -> {
+                        if (tile.isWatered()) {
+                            Main.getBatch().draw(TileAssets.FARM_WET.getTexture(), x * scaledSize, y * scaledSize, scaledSize, scaledSize);
+                        }
+                    }
                 }
             }
         }
@@ -237,8 +245,23 @@ public class GameView implements Screen, InputProcessor {
                             Main.getBatch().draw(TileAssets.GREEN_HOUSE.getTexture(), (x - 1) * scaledSize, (y) * scaledSize, 8 * scaledSize, 7 * scaledSize);
                         Main.getBatch().draw(TileAssets.FARM_ORDINARY.getTexture(), x * scaledSize, (y + 1) * scaledSize, scaledSize, scaledSize);
                     }
-
+                    case TileType.FARM, TileType.PLOWED_FARM, TileType.PLAIN -> {
+                        drawForaging(tile);
+                    }
+                    default -> {
+                        if (tile.isWatered()) {
+                            drawForaging(tile);
+                        }
+                    }
                 }
+            }
+        }
+    }
+
+    private void drawForaging(Tile tile) {
+        for (Good good : tile.getGoods()) {
+            if (good instanceof ForagingTree || good instanceof FarmingTree) {
+
             }
         }
     }
