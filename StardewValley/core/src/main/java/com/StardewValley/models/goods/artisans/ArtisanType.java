@@ -71,7 +71,7 @@ public enum ArtisanType implements GoodType {
 
     VINEGAR("Vinegar", "An aged fermented liquid used in many cooking recipes.", new Pair<>(0.0, 13), 10, new ArrayList<>(
             Arrays.asList(new Quadruple<>(FoodType.RICE, 1, 0.0, 100.0))
-    ), CraftingType.KEG),
+    ), CraftingType.KEG, "GameAssets/Ingredient/Vinegar.png"),
 
     COFFEE("Coffee", "It smells delicious. This is sure to give you a boost.", new Pair<>(0.0, 75), 2, new ArrayList<>(
             Arrays.asList(new Quadruple<>(FarmingCropType.COFFEE_BEAN, 5, 0.0, 150.0))
@@ -315,9 +315,10 @@ public enum ArtisanType implements GoodType {
                     new Quadruple<>(ForagingMineralType.COAL, 1, 0.0, 0.0),
                     new Quadruple<>(ProductType.COAL, 1, 0.0, 0.0),
                     new Quadruple<>(ArtisanType.COAL, 1, 0.0, 0.0)
-            )), CraftingType.FURNACE),
+            )), CraftingType.FURNACE, "GameAssets/Resource/Iron_Bar.png"),
 
-    DEHYDRATOR_RECIPE("", "", new Pair<>(0.0, 0), 0, new ArrayList<>(), null);
+    DEHYDRATOR_RECIPE("", "", new Pair<>(0.0, 0), 0, new ArrayList<>(), null,
+        "GameAssets/Crafting/Dehydrator.png");
 
     private final String name;
     private final String description;
@@ -350,6 +351,11 @@ public enum ArtisanType implements GoodType {
     @Override
     public String getName() {
         return name;
+    }
+
+    @Override
+    public String imagePath() {
+        return imagePath;
     }
 
     public int getEnergy(GoodType goodType) {

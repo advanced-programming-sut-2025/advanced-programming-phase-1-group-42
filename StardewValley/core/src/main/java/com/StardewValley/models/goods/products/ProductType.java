@@ -25,10 +25,10 @@ public enum ProductType implements GoodType {
 
     STONE("Stone", -1, 20,"/assets/GameAssets/Resource/Stone.png"),
 
-    GRASS("Grass", -1, -1),
+    GRASS("Grass", -1, -1, "GameAssets/sprites/Grass pic.png"),
 
     //Marnie's Ranch
-    HAY("Hay", -1, 50),
+    HAY("Hay", -1, 50, "GameAssets/Tools/Hay_Hopper.png"),
     MILK_PAIL("Milk_Pail", -1, 1000,"/assets/GameAssets/Tools/Milk_Pail.png"),
     SHEARS("Shears", -1, 1000,"/assets/GameAssets/Tools/Shears.png"),
 
@@ -36,7 +36,7 @@ public enum ProductType implements GoodType {
     // All year
     WEDDING_RING("Wedding_Ring", -1, 10000,"/assets/GameAssets/Crafting/Wedding_Ring.png"),
 
-    BOUQUET("Bouquet", -1, 1000."\\assets\\GameAssets\\Special_item/Bouquet.png"),
+    BOUQUET("Bouquet", -1, 1000,"\\assets\\GameAssets\\Special_item/Bouquet.png"),
 
     SPEED_GRO("Speed_Gro", -1, 100,"\\assets\\GameAssets\\Fertilizer/Speed_Gro.png"),
 
@@ -49,8 +49,6 @@ public enum ProductType implements GoodType {
     OIL("Oil", -1, 1200,"\\assets\\GameAssets\\Crafting\\Oil.png"),
 
     FIBER("Fiber", -1, -1,"/assets/GameAssets/Resource/Fiber.png"),
-
-    // BackPacks
 
     //Fish Shop
     TROUT_SOUP("Trout_Soup", -1, 250,"\\assets\\GameAssets\\Recipe\\Trout_Soup.png"),
@@ -90,6 +88,6 @@ public enum ProductType implements GoodType {
 
     @Override
     public String imagePath() {
-        return "";
+        return imagePath;
     }
 }

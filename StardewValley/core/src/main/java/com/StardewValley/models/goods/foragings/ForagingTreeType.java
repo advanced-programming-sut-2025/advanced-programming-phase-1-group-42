@@ -84,6 +84,11 @@ public enum ForagingTreeType implements GoodType {
     }
 
     @Override
+    public String imagePath() {
+        return imagePath;
+    }
+
+    @Override
     public String toString() {
         StringBuilder list = new StringBuilder();
         list.append("Source: ").append(name).append("\n");
