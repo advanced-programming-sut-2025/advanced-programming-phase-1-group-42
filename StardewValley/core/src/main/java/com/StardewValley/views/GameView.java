@@ -3,6 +3,7 @@ package com.StardewValley.views;
 import com.StardewValley.Main;
 import com.StardewValley.controllers.GameMenuController;
 import com.StardewValley.models.App;
+import com.StardewValley.models.Assets;
 import com.StardewValley.models.Pair;
 import com.StardewValley.models.Result;
 import com.StardewValley.models.enums.Season;
@@ -14,6 +15,8 @@ import com.StardewValley.models.game_structure.Tile;
 import com.StardewValley.models.goods.Good;
 import com.StardewValley.models.goods.farmings.FarmingTree;
 import com.StardewValley.models.goods.foragings.ForagingTree;
+import com.StardewValley.models.interactions.NPCs.NPC;
+import com.StardewValley.models.interactions.Player;
 import com.StardewValley.models.goods.products.ProductType;
 import com.StardewValley.models.interactions.Animals.AnimalTypes;
 import com.StardewValley.models.interactions.Player;
@@ -27,12 +30,23 @@ import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.g2d.Sprite;
+import com.badlogic.gdx.graphics.g2d.TextureRegion;
+import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
+import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.math.Vector2;
+import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.Stage;
+import com.badlogic.gdx.scenes.scene2d.ui.Image;
+import com.badlogic.gdx.scenes.scene2d.ui.ImageButton;
+import com.badlogic.gdx.scenes.scene2d.ui.Skin;
+import com.badlogic.gdx.scenes.scene2d.ui.Table;
+import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
+import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 import com.badlogic.gdx.scenes.scene2d.ui.*;
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 import com.badlogic.gdx.scenes.scene2d.utils.Drawable;
@@ -40,6 +54,9 @@ import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 import com.badlogic.gdx.utils.Align;
 import com.badlogic.gdx.utils.viewport.FitViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
+
+import java.util.ArrayList;
+import java.util.Arrays;
 
 import java.util.ArrayList;
 
@@ -54,25 +71,34 @@ public class GameView implements Screen, InputProcessor {
     private Table table;
     private final OrthographicCamera camera;
     private final Viewport viewport;
-    private Coordinate coordinate;
     private int scaledSize;
     InputMultiplexer multiplexer = new InputMultiplexer();
-    private final Pair<Boolean,FarmBuildingTypes> isCarpenterShopOn = new Pair<>(false,null);
+    private final Pair<Boolean, FarmBuildingTypes> isCarpenterShopOn = new Pair<>(false, null);
 
+    private Table inventoryTable;
 
     public GameView(GameMenuController controller, Skin skin) {
         this.controller = controller;
+        this.controller.initGameControllers();
         this.skin = skin;
-        stage = new Stage();
         table = new Table(skin);
         camera = new OrthographicCamera();
         viewport = new FitViewport(Gdx.graphics.getWidth(), Gdx.graphics.getHeight(), camera);
-        coordinate = new Coordinate(0, 0);
         scaledSize = 40;
+        this.inventoryTable = new Table(skin);
+        this.inventoryTable.setFillParent(true);
+        this.inventoryTable.padTop(750);
+        drawInventory();
     }
 
     @Override
     public void show() {
+        stage = new Stage();
+
+        InputMultiplexer multiplexer = new InputMultiplexer();
+        multiplexer.addProcessor(stage);
+        multiplexer.addProcessor(this);
+        Gdx.input.setInputProcessor(multiplexer);
 
         viewport.apply();
         Gdx.input.setInputProcessor(this);
@@ -80,6 +106,8 @@ public class GameView implements Screen, InputProcessor {
         multiplexer.addProcessor(this);
         Gdx.input.setInputProcessor(multiplexer);
 
+
+        stage.addActor(inventoryTable);
 
     }
 
@@ -92,21 +120,14 @@ public class GameView implements Screen, InputProcessor {
         Main.getBatch().setProjectionMatrix(camera.combined);
 
         Main.getBatch().begin();
-
-
         renderWorld();
-
         Main.getBatch().end();
 
-        if (Gdx.input.isKeyPressed(Input.Keys.W))
-            coordinate = new Coordinate(coordinate.getX(), coordinate.getY() + 1);
-        if (Gdx.input.isKeyPressed(Input.Keys.A))
-            coordinate = new Coordinate(coordinate.getX() - 1, coordinate.getY());
-        if (Gdx.input.isKeyPressed(Input.Keys.S))
-            coordinate = new Coordinate(coordinate.getX(), coordinate.getY() - 1);
-        if (Gdx.input.isKeyPressed(Input.Keys.D))
-            coordinate = new Coordinate(coordinate.getX() + 1, coordinate.getY());
+        Assets.getInstance().setColorFunction();
+        controller.handleGame();
 
+        stage.act(Math.min(Gdx.graphics.getDeltaTime(), 1 / 30f));
+        stage.draw();
         stage.act(min(Gdx.graphics.getDeltaTime(), 1 / 30f));
         stage.draw();
         stage.act(Gdx.graphics.getDeltaTime());
@@ -123,7 +144,6 @@ public class GameView implements Screen, InputProcessor {
 //            shapeRenderer.end();
 //
 //        }
-
 
 
     }
@@ -288,7 +308,6 @@ public class GameView implements Screen, InputProcessor {
             info.setWidth(250);
             info.setFontScale(0.7f);
             info.setAlignment(Align.center);
-
 
 
             // MarnieRanch
@@ -492,7 +511,7 @@ public class GameView implements Screen, InputProcessor {
                         public void changed(ChangeEvent event, Actor actor) {
                             selectedBuilding[0] = farmBuildingType;
                             selectedNameLabel.setText(farmBuildingType.getName() + " - " + farmBuildingType.getCost() + "G" + "\n" +
-                                "required stone: " + farmBuildingType.getStone() + "\n" + "required wood: " +farmBuildingType.getWood());
+                                "required stone: " + farmBuildingType.getStone() + "\n" + "required wood: " + farmBuildingType.getWood());
                             selectedNameLabel.setFontScale(0.7f);
                             purchaseButton.setVisible(true);
 
@@ -582,13 +601,14 @@ public class GameView implements Screen, InputProcessor {
     }
 
     private void updateCamera() {
-        camera.position.set(1600 + coordinate.getX() * scaledSize, 1600 + coordinate.getY() * scaledSize, 0);
+        camera.position.set((App.getCurrentGame().getCurrentPlayer().getCoordinate().getX()) * scaledSize,
+            (App.getCurrentGame().getCurrentPlayer().getCoordinate().getY()) * scaledSize, 0);
         camera.update();
     }
 
     private void renderWorld() {
-        int midX = 1600 + coordinate.getX() * scaledSize;
-        int midY = 1600 + coordinate.getY() * scaledSize;
+        int midX = App.getCurrentGame().getCurrentPlayer().getCoordinate().getX() * scaledSize;
+        int midY = App.getCurrentGame().getCurrentPlayer().getCoordinate().getY() * scaledSize;
 
         for (int x = max((midX - Gdx.graphics.getWidth() / 2) / scaledSize - 5, 0); x < min((midX + Gdx.graphics.getWidth() / 2) / scaledSize + 1, 150); x++) {
             for (int y = max((midY - Gdx.graphics.getHeight() / 2) / scaledSize - 5, 0); y < min((midY + Gdx.graphics.getHeight() / 2) / scaledSize + 1, 160); y++) {
@@ -680,13 +700,34 @@ public class GameView implements Screen, InputProcessor {
                 }
             }
         }
+
+        drawPlayers();
+        drawNPCs();
+        drawInventory();
+    }
+
+    private void drawNPCs() {
+        for (NPC npc : App.getCurrentGame().getNPCs()) {
+            Sprite sprite = new Sprite(new Texture(npc.getType().getImagePath()));
+            sprite.setPosition(npc.getType().getCoordinate().getX() * scaledSize,
+                npc.getType().getCoordinate().getY() * scaledSize);
+            sprite.draw(Main.getBatch());
+        }
+    }
+
+    private void drawPlayers() {
+        for (Player player : App.getCurrentGame().getPlayers()) {
+            player.getSprite().setPosition(player.getCoordinate().getX() * scaledSize,
+                player.getCoordinate().getY() * scaledSize);
+            player.getSprite().draw(Main.getBatch());
+        }
         drawFarmingBuilding();
     }
 
     private void drawForaging(Tile tile) {
         for (Good good : tile.getGoods()) {
             if (good instanceof ForagingTree || good instanceof FarmingTree) {
-
+                //TODO
             }
         }
     }
@@ -700,6 +741,37 @@ public class GameView implements Screen, InputProcessor {
                         farmBuilding.getType().getSize().second() * scaledSize, farmBuilding.getType().getSize().first() * scaledSize);
                 }
             }
+        }
+    }
+
+    private void drawInventory() {
+        inventoryTable.clear();
+
+        TextureRegionDrawable drawableSlot = new TextureRegionDrawable(new Texture("GameAssets/Inventory_Table/slot.png"));
+        TextureRegionDrawable drawableHighlight = new TextureRegionDrawable(new Texture("GameAssets/Inventory_Table/highlight.png"));
+        for (ArrayList<Good> goods : App.getCurrentGame().getCurrentPlayer().getInventory().getList()) {
+            Table table = new Table();
+            ImageButton imageButtonBackground;
+            if (goods == App.getCurrentGame().getCurrentPlayer().getInHandGood())
+                imageButtonBackground = new ImageButton(drawableHighlight, drawableHighlight, drawableHighlight);
+            else
+                imageButtonBackground = new ImageButton(drawableSlot, drawableHighlight, drawableHighlight);
+
+            imageButtonBackground.addListener(new ClickListener() {
+                @Override
+                public void clicked(InputEvent event, float x, float y) {
+
+                }
+            });
+            Image image = new Image();
+            if (!goods.isEmpty())
+                image = new Image(new TextureRegion(new Texture(goods.getFirst().getType().imagePath())));
+
+
+            table.add(imageButtonBackground);
+            table.add(image).padLeft(-48);
+
+            inventoryTable.add(table);
         }
     }
 }

@@ -41,7 +41,7 @@ public enum NPCTypes {
             )),
             "Home",
             new Pair<>(Season.FALL,12),
-            new Coordinate(10, 80)),
+            new Coordinate(10, 75), "GameAssets/NPCs/SEBASTIAN.png"),
     ABIGAIL("Abigail",
             new ArrayList<>(List.of(ArtisanType.COFFEE, FoodType.PUMPKIN_PIE)),
             new ArrayList<>(List.of(
@@ -68,7 +68,7 @@ public enum NPCTypes {
             )),
             "Home",
             new Pair<>(Season.SPRING,2),
-            new Coordinate(110, 100)),
+            new Coordinate(110, 95), "GameAssets/NPCs/ABIGAIL.png"),
 
     HARVEY("Harvey",
             new ArrayList<>(List.of(ArtisanType.COFFEE, ArtisanType.WINE)),
@@ -97,7 +97,7 @@ public enum NPCTypes {
             )),
             "Home",
             new Pair<>(Season.SUMMER,21),
-            new Coordinate(40, 80)
+            new Coordinate(40, 75), "GameAssets/NPCs/HARVEY.png"
     ),
 
     LEAH("Leah",
@@ -126,7 +126,7 @@ public enum NPCTypes {
             )),
             "Home",
             new Pair<>(Season.FALL,19),
-            new Coordinate(120, 80)
+            new Coordinate(120, 75), "GameAssets/NPCs/LEAH.png"
     ),
 
     ROBIN("Robin",
@@ -155,7 +155,7 @@ public enum NPCTypes {
             )),
             "Home",
             new Pair<>(Season.WINTER, 27),
-            new Coordinate(15, 95)
+            new Coordinate(15, 90), "GameAssets/NPCs/ROBIN.png"
     ),
 
     CLINT("Clint",
@@ -164,7 +164,7 @@ public enum NPCTypes {
             new ArrayList<>(),
             "Blacksmith",
             null,
-            new Coordinate(15, 65)),
+            new Coordinate(15, 60), "GameAssets/NPCs/CLINT.png"),
 
     MORRIS("Morris",
             new ArrayList<>(),
@@ -172,7 +172,7 @@ public enum NPCTypes {
             new ArrayList<>(),
             "JojaMart",
             null,
-            new Coordinate(55, 65)),
+            new Coordinate(55, 60), "GameAssets/NPCs/MORRIS.png"),
 
     PIERRE("Pierre",
             new ArrayList<>(),
@@ -180,7 +180,7 @@ public enum NPCTypes {
             new ArrayList<>(),
             "Pierre_General_Store",
             null,
-            new Coordinate(85, 65)),
+            new Coordinate(85, 60), "GameAssets/NPCs/PIERRE.png"),
 
     WILLY("Willy",
             new ArrayList<>(),
@@ -188,7 +188,7 @@ public enum NPCTypes {
             new ArrayList<>(),
             "Fish_Shop",
             null,
-            new Coordinate(125, 65)),
+            new Coordinate(125, 60), "GameAssets/NPCs/WILLY.png"),
 
     MARNIE("Marnie",
             new ArrayList<>(),
@@ -196,7 +196,7 @@ public enum NPCTypes {
             new ArrayList<>(),
             "Marnie_Ranch",
             null,
-            new Coordinate(55, 95)),
+            new Coordinate(55, 90), "GameAssets/NPCs/MARNIE.png"),
 
     GUS("Gus",
             null,
@@ -204,7 +204,7 @@ public enum NPCTypes {
             new ArrayList<>(),
             "The_Stardrop_Saloon",
             null,
-            new Coordinate(85, 95));
+            new Coordinate(85, 90), "GameAssets/NPCs/GUS.png"),;
 
 
 
@@ -215,6 +215,7 @@ public enum NPCTypes {
     private final String place;
     private Pair<Season, Integer> birthday;
     private final Coordinate coordinate;
+    private final String imagePath;
 
     NPCTypes(String name,
              ArrayList<GoodType> favorites,
@@ -222,7 +223,8 @@ public enum NPCTypes {
              ArrayList<Pair<GoodType, Integer>>requests,
              String place,
              Pair<Season, Integer> birthday,
-             Coordinate coordinate) {
+             Coordinate coordinate,
+             String imagePath) {
         this.name = name;
         this.favorites = favorites;
         this.dialogs = dialogs;
@@ -230,6 +232,7 @@ public enum NPCTypes {
         this.place = place;
         this.birthday = birthday;
         this.coordinate = coordinate;
+        this.imagePath = imagePath;
     }
 
     public String getName() {
@@ -258,5 +261,9 @@ public enum NPCTypes {
 
     public Coordinate getCoordinate() {
         return coordinate;
+    }
+
+    public String getImagePath() {
+        return imagePath;
     }
 }

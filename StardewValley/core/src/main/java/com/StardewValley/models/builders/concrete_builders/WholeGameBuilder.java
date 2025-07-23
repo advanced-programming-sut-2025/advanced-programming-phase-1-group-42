@@ -40,8 +40,8 @@ public class WholeGameBuilder implements GameInterface {
             player.getInventory().addGoodByObject(Good.newGood(ToolType.AXE));
             player.getInventory().addGoodByObject(Good.newGood(ToolType.WATERING_CAN));
             player.getInventory().addGoodByObject(Good.newGood(ToolType.SCYTHE));
-            player.getInventory().addGoodByObject(Good.newGood(CraftingRecipeType.BOMB));
-            player.getInventory().addGoodByObject(Good.newGood(CookingRecipeType.BREAD));
+//            player.getInventory().addGoodByObject(Good.newGood(CraftingRecipeType.BOMB));
+//            player.getInventory().addGoodByObject(Good.newGood(CookingRecipeType.BREAD));
         }
     }
 
