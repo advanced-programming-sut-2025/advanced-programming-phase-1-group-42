@@ -292,7 +292,7 @@ public class Game {
         // players come back to their home
         for (Player player : players) {
             player.setCoordinate(new Coordinate(player.getFarm().getFarmBuildings().getFirst().getStartCordinate().getX() + 5,
-                    player.getFarm().getFarmBuildings().getFirst().getStartCordinate().getY() + 5));
+                    player.getFarm().getFarmBuildings().getFirst().getStartCordinate().getY() + 2));
         }
 
         // Check weather

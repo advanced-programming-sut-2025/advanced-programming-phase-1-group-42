@@ -92,49 +92,49 @@ public enum CookingRecipeType implements GoodType {
     RED_PLATE(new ArrayList<>(Arrays.asList(
         new Pair<>(FarmingCropType.RED_CABBAGE, 1),
         new Pair<>(FarmingCropType.RADISH, 1)
-    )), FoodType.RED_PLATE,"/assets/GameAssets/Recipe/Red_Plate.png"),
+    )), FoodType.RED_PLATE,"/GameAssets/Recipe/Red_Plate.png"),
 
     BREAD(new ArrayList<>(Arrays.asList(
         new Pair<>(FoodType.WHEAT_FLOUR, 1)
-    )), FoodType.BREAD,"/assets/GameAssets/Recipe/Bread.png"),
+    )), FoodType.BREAD,"/GameAssets/Recipe/Bread.png"),
 
     SALMON_DINNER(new ArrayList<>(Arrays.asList(
         new Pair<>(FishType.SALMON, 1),
         new Pair<>(FarmingCropType.AMARANTH, 1),
         new Pair<>(FarmingCropType.KALE, 1)
-    )), FoodType.SALMON_DINNER,"/assets/GameAssets/Recipe/Salmon_Dinner.png"),
+    )), FoodType.SALMON_DINNER,"/GameAssets/Recipe/Salmon_Dinner.png"),
 
     VEGETABLE_MEDLEY(new ArrayList<>(Arrays.asList(
         new Pair<>(FarmingCropType.TOMATO, 1),
         new Pair<>(FarmingCropType.BEET, 1)
-    )), FoodType.VEGETABLE_MEDLEY,"/assets/GameAssets/Recipe/Vegetable_Medley.png"),
+    )), FoodType.VEGETABLE_MEDLEY,"/GameAssets/Recipe/Vegetable_Medley.png"),
 
     FARMERS_LUNCH(new ArrayList<>(Arrays.asList(
         new Pair<>(FoodType.OMELET, 1),
         new Pair<>(FarmingCropType.PARSNIP, 1)
-    )), FoodType.FARMERS_LUNCH,"/assets/GameAssets/Recipe/Farmers_Lunch.png"),
+    )), FoodType.FARMERS_LUNCH,"/GameAssets/Recipe/Farmers_Lunch.png"),
 
     SURVIVAL_BURGER(new ArrayList<>(Arrays.asList(
         new Pair<>(FoodType.BREAD, 1),
         new Pair<>(FarmingCropType.CARROT, 1),
         new Pair<>(FarmingCropType.EGGPLANT, 1)
-    )), FoodType.SURVIVAL_BURGER,"/assets/GameAssets/Recipe/Survival_Burger.png"),
+    )), FoodType.SURVIVAL_BURGER,"/GameAssets/Recipe/Survival_Burger.png"),
 
     DISH_O_THE_SEA(new ArrayList<>(Arrays.asList(
         new Pair<>(FishType.SARDINE, 2),
         new Pair<>(FoodType.HASH_BROWNS, 1)
-    )), FoodType.DISH_O_THE_SEA,"/assets/GameAssets/Recipe/Dish_O_The_Sea.png"),
+    )), FoodType.DISH_O_THE_SEA,"/GameAssets/Recipe/Dish_O_The_Sea.png"),
 
     SEAFOAM_PUDDING(new ArrayList<>(Arrays.asList(
         new Pair<>(FishType.FLOUNDER, 1),
         new Pair<>(FishType.MIDNIGHT_CARP, 1)
-    )), FoodType.SEAFORM_PUDDING,"/assets/GameAssets/Recipe/Seafoam_Pudding.png"),
+    )), FoodType.SEAFORM_PUDDING,"/GameAssets/Recipe/Seafoam_Pudding.png"),
 
     MINERS_TREAT(new ArrayList<>(Arrays.asList(
         new Pair<>(FarmingCropType.CARROT, 2),
         new Pair<>(FoodType.SUGAR, 1),
         new Pair<>(AnimalProductsType.COW_MILK, 1)
-    )), FoodType.MINERS_TREAT,"/assets/GameAssets/Recipe/Miners_Treat.png");
+    )), FoodType.MINERS_TREAT,"/GameAssets/Recipe/Miners_Treat.png");
 
     private final ArrayList<Pair<GoodType, Integer>> ingredients;
     private final GoodType goodType;

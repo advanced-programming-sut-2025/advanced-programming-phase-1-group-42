@@ -149,20 +149,31 @@ public class GameMenuController extends Controller {
         player.setPlayerDirection(-1);
 
         if (Gdx.input.isKeyPressed(Input.Keys.W)) {
-            player.setCoordinate(new Coordinate(player.getCoordinate().getX(), player.getCoordinate().getY() + 1));
-            player.setPlayerDirection(0);
+            if (tileValidity(App.getCurrentGame().getMap().findTileByXY(player.getCoordinate().getX(), player.getCoordinate().getY() + 1))) {
+                player.setCoordinate(new Coordinate(player.getCoordinate().getX(), player.getCoordinate().getY() + 1));
+                player.setPlayerDirection(0);
+            }
         }
         if (Gdx.input.isKeyPressed(Input.Keys.A)) {
-            player.setCoordinate(new Coordinate(player.getCoordinate().getX() - 1, player.getCoordinate().getY()));
-            player.setPlayerDirection(1);
+            if (tileValidity(App.getCurrentGame().getMap().findTileByXY(player.getCoordinate().getX() - 1, player.getCoordinate().getY()))) {
+                player.setCoordinate(new Coordinate(player.getCoordinate().getX() - 1, player.getCoordinate().getY()));
+                player.setPlayerDirection(1);
+            }
         }
         if (Gdx.input.isKeyPressed(Input.Keys.S)) {
-            player.setCoordinate(new Coordinate(player.getCoordinate().getX(), player.getCoordinate().getY() - 1));
-            player.setPlayerDirection(2);
+            if (tileValidity(App.getCurrentGame().getMap().findTileByXY(player.getCoordinate().getX(), player.getCoordinate().getY() - 1))) {
+                player.setCoordinate(new Coordinate(player.getCoordinate().getX(), player.getCoordinate().getY() - 1));
+                player.setPlayerDirection(2);
+            }
         }
         if (Gdx.input.isKeyPressed(Input.Keys.D)) {
-            player.setCoordinate(new Coordinate(player.getCoordinate().getX() + 1, player.getCoordinate().getY()));
-            player.setPlayerDirection(3);
+            if (tileValidity(App.getCurrentGame().getMap().findTileByXY(player.getCoordinate().getX() + 1, player.getCoordinate().getY()))) {
+                player.setCoordinate(new Coordinate(player.getCoordinate().getX() + 1, player.getCoordinate().getY()));
+                player.setPlayerDirection(3);
+            }
+        }
+        if (Gdx.input.isKeyJustPressed(Input.Keys.P)) {
+            nextTurn();
         }
         if (Gdx.input.isKeyPressed(Input.Keys.C)) {
 
@@ -189,7 +200,7 @@ public class GameMenuController extends Controller {
 
         }
         ArrayList<Integer> arr = new ArrayList<>(Arrays.asList(
-            7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 69, 81
+            8, 9, 10, 11, 12, 13, 14, 15, 16, 7, 69, 70
         ));
         for (int i = 0; i < arr.size(); i++) {
             if (Gdx.input.isKeyPressed(arr.get(i))) {
@@ -198,8 +209,14 @@ public class GameMenuController extends Controller {
                 break;
             }
         }
+    }
 
-
+    private boolean tileValidity(Tile tile) {
+        if (tile.getTileType() == TileType.STONE_WALL ||
+        tile.getTileType() == TileType.WATER ||
+        tile.getTileType() == TileType.GAME_BUILDING)
+            return false;
+        return true;
     }
 
     private void addPlayerToNewGame() {

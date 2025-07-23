@@ -2,8 +2,11 @@ package com.StardewValley.models;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.audio.Music;
+import com.badlogic.gdx.graphics.Color;
+import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Sprite;
+import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 
 import java.util.ArrayList;
@@ -38,6 +41,8 @@ public class Assets {
         ))
     ));
 
+    private final ShapeRenderer shapeRenderer = new ShapeRenderer();
+
     public static Assets getInstance() {
         return instance;
     }
@@ -59,5 +64,17 @@ public class Assets {
 
     public ArrayList<ArrayList<Texture>> getPlayerTextures() {
         return playerTextures;
+    }
+
+    public void setColorFunction() {
+        int time = App.getCurrentGame().getDateTime().getTime();
+        if(time >= 19) {
+            Gdx.gl.glEnable(GL20.GL_BLEND);
+            shapeRenderer.begin(ShapeRenderer.ShapeType.Filled);
+            shapeRenderer.setColor(0, 0, 0, 0.5f);
+            shapeRenderer.rect(0, 0, Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
+            shapeRenderer.end();
+            Gdx.gl.glDisable(GL20.GL_BLEND);
+        }
     }
 }

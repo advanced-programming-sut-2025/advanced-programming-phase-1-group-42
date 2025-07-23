@@ -66,7 +66,7 @@ public class Player {
     public void setFarm(Farm farm) {
         this.farm = farm;
         this.coordinate = new Coordinate(farm.getFarmBuildings().getFirst().getStartCordinate().getX() + 5,
-                farm.getFarmBuildings().getFirst().getStartCordinate().getY() + 5);
+                farm.getFarmBuildings().getFirst().getStartCordinate().getY() + 2);
         this.inHandGood = inventory.getList().getFirst();
     }
 
@@ -93,7 +93,7 @@ public class Player {
         this.isInteracted = new HashMap<>();
         this.coordinate = new Coordinate(0, 0);
         this.playerDirection = -1;
-        this.sprite = new Sprite(Assets.getInstance().getPlayerTextures().get(0).get(0));
+        this.sprite = new Sprite(Assets.getInstance().getPlayerTextures().get(2).get(0));
         this.sprite.setPosition(coordinate.getX(), coordinate.getY());
     }
 
@@ -157,6 +157,7 @@ public class Player {
     public void setBuff(Buff buff) {
         this.buff = buff;
     }
+
     public Buff getBuff() {
         return buff;
     }
