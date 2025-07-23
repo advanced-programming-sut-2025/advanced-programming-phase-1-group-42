@@ -57,6 +57,9 @@ public class Farm {
             }
         }
 
+        //TODO
+        farmBuildings.add(new FarmBuilding(FarmBuildingTypes.BARN,new Coordinate(50,30)));
+
         farmBuildings.add(getHome(playerNumber));
         iniGreenHouse(playerNumber);
         lakes = getLakes(playerNumber, tiles);
@@ -124,6 +127,9 @@ public class Farm {
         }
         this.greenHouse = new GreenHouse(startCoordinate, endCoordinate, greenHouseTile);
     }
+
+
+    //TODO
 
     private FarmBuilding getHome(int playerNumber) {
         Coordinate startCoordinate = null;

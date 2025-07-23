@@ -1175,6 +1175,23 @@ public class GameMenuController extends Controller {
             + " ~ " + (carpenterShop.getHours().second()));
     }
 
+    public boolean isValidBuilding(Coordinate coordinate,FarmBuildingTypes targetType) {
+        boolean validSpace = true;
+        for (int sX = 0; sX < targetType.getSize().first(); sX++) {
+            for (int sY = 0; sY < targetType.getSize().second(); sY++) {
+                Tile tempTile = App.getCurrentGame().getMap().findTileByXY(sX + coordinate.getX(), sY + coordinate.getY());
+                if (!tempTile.getTileType().equals(TileType.FARM)) {
+                    validSpace = false;
+                }
+            }
+        }
+        if (!validSpace) {
+            return false;
+        }
+
+        return true;
+    }
+
     public Result buyAnimal(String animalType, String animalName) {
         Coordinate coordinate = App.getCurrentGame().getCurrentPlayer().getCoordinate();
         Tile tile = App.getCurrentGame().getMap().findTile(coordinate);
