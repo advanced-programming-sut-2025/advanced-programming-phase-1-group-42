@@ -48,6 +48,8 @@ public class GameView implements Screen, InputProcessor {
         this.controller = controller;
         this.skin = skin;
         table = new Table(skin);
+        table.setFillParent(true);
+
         camera = new OrthographicCamera();
         viewport = new FitViewport(Gdx.graphics.getWidth(), Gdx.graphics.getHeight(), camera);
         scaledSize = 40;
@@ -57,6 +59,11 @@ public class GameView implements Screen, InputProcessor {
         this.inventoryTable.setFillParent(true);
         this.inventoryTable.padTop(750);
         drawInventory();
+
+        this.table.add(inventoryTable).padLeft(-50);
+        this.table.add(controller.getInventoryController().getProgressBar()).padTop(600).padLeft(800);
+        this.table.row();
+
     }
 
     @Override
@@ -69,8 +76,7 @@ public class GameView implements Screen, InputProcessor {
         Gdx.input.setInputProcessor(multiplexer);
         viewport.apply();
 
-        stage.addActor(inventoryTable);
-
+        stage.addActor(table);
     }
 
     @Override
@@ -293,6 +299,9 @@ public class GameView implements Screen, InputProcessor {
             inventoryTable.add(table);
         }
 
+        controller.getInventoryController().getProgressBar().setValue(
+                App.getCurrentGame().getCurrentPlayer().getEnergy().getDayEnergyLeft()
+        );
     }
 
     public int getScaledSize() {

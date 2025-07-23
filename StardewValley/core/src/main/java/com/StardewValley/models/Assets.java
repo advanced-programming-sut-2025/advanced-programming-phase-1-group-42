@@ -44,7 +44,9 @@ public class Assets {
 
     private final ShapeRenderer shapeRenderer = new ShapeRenderer();
     private final TextureRegionDrawable drawableSlot = new TextureRegionDrawable(new Texture("GameAssets/Inventory_Table/slot.png"));
+    private final TextureRegionDrawable drawableSlotHover = new TextureRegionDrawable(new Texture("GameAssets/Inventory_Table/slotHover.png"));
     private final TextureRegionDrawable drawableHighlight = new TextureRegionDrawable(new Texture("GameAssets/Inventory_Table/highlight.png"));
+
     private final String nullPNGPath = "GameAssets/null.png";
 
 
@@ -93,5 +95,9 @@ public class Assets {
 
     public String getNullPNGPath() {
         return nullPNGPath;
+    }
+
+    public TextureRegionDrawable getDrawableSlotHover() {
+        return drawableSlotHover;
     }
 }

@@ -162,6 +162,7 @@ public class GameMenuController extends Controller {
         Player player = App.getCurrentGame().getCurrentPlayer();
         player.setPlayerDirection(-1);
 
+        boolean flag = false;
         if (Gdx.input.isKeyPressed(Input.Keys.W)) {
             if (tileValidity(App.getCurrentGame().getMap().findTileByXY(player.getCoordinate().getX(), player.getCoordinate().getY() + 1))) {
                 player.setCoordinate(new Coordinate(player.getCoordinate().getX(), player.getCoordinate().getY() + 1));
@@ -169,6 +170,7 @@ public class GameMenuController extends Controller {
                 player.getInHandGoodSprite().setPosition(player.getCoordinate().getX() * gameView.getScaledSize(),
                     player.getCoordinate().getY() * gameView.getScaledSize() + 23);
             }
+            flag = true;
         }
         if (Gdx.input.isKeyPressed(Input.Keys.A)) {
             if (tileValidity(App.getCurrentGame().getMap().findTileByXY(player.getCoordinate().getX() - 1, player.getCoordinate().getY()))) {
@@ -179,6 +181,7 @@ public class GameMenuController extends Controller {
                 if (!player.getInHandGoodSprite().isFlipX())
                     player.getInHandGoodSprite().flip(true, false);
             }
+            flag = true;
         }
         if (Gdx.input.isKeyPressed(Input.Keys.S)) {
             if (tileValidity(App.getCurrentGame().getMap().findTileByXY(player.getCoordinate().getX(), player.getCoordinate().getY() - 1))) {
@@ -187,6 +190,7 @@ public class GameMenuController extends Controller {
                 player.getInHandGoodSprite().setPosition(player.getCoordinate().getX() * gameView.getScaledSize(),
                     player.getCoordinate().getY() * gameView.getScaledSize() + 23);
             }
+            flag = true;
         }
         if (Gdx.input.isKeyPressed(Input.Keys.D)) {
             if (tileValidity(App.getCurrentGame().getMap().findTileByXY(player.getCoordinate().getX() + 1, player.getCoordinate().getY()))) {
@@ -197,6 +201,7 @@ public class GameMenuController extends Controller {
                 if (player.getInHandGoodSprite().isFlipX())
                     player.getInHandGoodSprite().flip(true, false);
             }
+            flag = true;
         }
         if (Gdx.input.isKeyJustPressed(Input.Keys.P)) {
             nextTurn();
@@ -236,6 +241,9 @@ public class GameMenuController extends Controller {
                 break;
             }
         }
+
+            if (flag)
+                App.getCurrentGame().getCurrentPlayer().getEnergy().decreaseTurnEnergyLeft(1);
     }
 
     private boolean tileValidity(Tile tile) {

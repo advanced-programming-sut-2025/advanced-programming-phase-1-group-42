@@ -9,6 +9,7 @@ import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.scenes.scene2d.ui.ImageButton;
+import com.badlogic.gdx.scenes.scene2d.ui.ProgressBar;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 
@@ -16,6 +17,7 @@ import java.util.ArrayList;
 
 public class InventoryController {
     private final ArrayList<Pair<ImageButton, Image>> inventoryElements;
+    private final ProgressBar progressBar;
 
     public InventoryController() {
         inventoryElements = new ArrayList<>();
@@ -23,7 +25,7 @@ public class InventoryController {
         TextureRegionDrawable drawableHighlight = Assets.getInstance().getDrawableHighlight();
 
         for (ArrayList<Good> goods : App.getCurrentGame().getCurrentPlayer().getInventory().getList()) {
-            ImageButton imageButtonBackground = new ImageButton(drawableSlot, drawableHighlight, drawableHighlight);
+            ImageButton imageButtonBackground = new ImageButton(drawableSlot, drawableSlot, drawableHighlight);
             Image image = new Image(new TextureRegion(new Texture("GameAssets/null.png")));
             if (!goods.isEmpty())
                 image = new Image(new TextureRegion(new Texture(goods.getFirst().getType().imagePath())));
@@ -48,6 +50,9 @@ public class InventoryController {
 
             inventoryElements.add(new Pair<>(imageButtonBackground, image));
         }
+
+        progressBar = new ProgressBar(0, 200, 1, true, Assets.getInstance().getSkin());
+        progressBar.setValue(App.getCurrentGame().getCurrentPlayer().getEnergy().getDayEnergyLeft());
     }
 
     public void updateInventory() {
@@ -68,6 +73,8 @@ public class InventoryController {
             else
                 pair.first().setChecked(false);
         }
+
+        progressBar.setValue(App.getCurrentGame().getCurrentPlayer().getEnergy().getDayEnergyLeft());
     }
 
     public void playerChangedInventory() {
@@ -84,5 +91,9 @@ public class InventoryController {
 
     public ArrayList<Pair<ImageButton, Image>> getInventoryElements() {
         return inventoryElements;
+    }
+
+    public ProgressBar getProgressBar() {
+        return progressBar;
     }
 }
