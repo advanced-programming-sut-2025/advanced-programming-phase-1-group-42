@@ -1,5 +1,6 @@
 package com.StardewValley.models.builders.concrete_builders;
 
+import com.StardewValley.models.Assets;
 import com.StardewValley.models.builders.builder_interfaces.GameInterface;
 import com.StardewValley.models.enums.WeatherType;
 import com.StardewValley.models.game_structure.DateTime;
@@ -13,6 +14,8 @@ import com.StardewValley.models.goods.tools.ToolType;
 import com.StardewValley.models.interactions.NPCs.NPC;
 import com.StardewValley.models.interactions.NPCs.NPCTypes;
 import com.StardewValley.models.interactions.Player;
+import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.g2d.Sprite;
 
 import java.util.ArrayList;
 
@@ -42,6 +45,7 @@ public class WholeGameBuilder implements GameInterface {
             player.getInventory().addGoodByObject(Good.newGood(ToolType.SCYTHE));
 //            player.getInventory().addGoodByObject(Good.newGood(CraftingRecipeType.BOMB));
 //            player.getInventory().addGoodByObject(Good.newGood(CookingRecipeType.BREAD));
+            player.setInHandGood(player.getInventory().getList().getFirst());
         }
     }
 

@@ -4,6 +4,7 @@ import com.StardewValley.Main;
 import com.StardewValley.controllers.GameMenuController;
 import com.StardewValley.models.App;
 import com.StardewValley.models.Assets;
+import com.StardewValley.models.Pair;
 import com.StardewValley.models.enums.Season;
 import com.StardewValley.models.enums.TileAssets;
 import com.StardewValley.models.enums.TileType;
@@ -17,27 +18,17 @@ import com.StardewValley.models.interactions.NPCs.NPC;
 import com.StardewValley.models.interactions.Player;
 import com.StardewValley.models.interactions.game_buildings.GameBuilding;
 import com.badlogic.gdx.*;
-import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Sprite;
-import com.badlogic.gdx.graphics.g2d.TextureRegion;
-import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
-import com.badlogic.gdx.math.Vector2;
-import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.scenes.scene2d.ui.ImageButton;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
-import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
-import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 import com.badlogic.gdx.utils.viewport.FitViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
-
-import java.util.ArrayList;
-import java.util.Arrays;
 
 import static java.lang.Math.max;
 import static java.lang.Math.min;
@@ -55,12 +46,13 @@ public class GameView implements Screen, InputProcessor {
 
     public GameView(GameMenuController controller, Skin skin) {
         this.controller = controller;
-        this.controller.initGameControllers();
         this.skin = skin;
         table = new Table(skin);
         camera = new OrthographicCamera();
         viewport = new FitViewport(Gdx.graphics.getWidth(), Gdx.graphics.getHeight(), camera);
         scaledSize = 40;
+        controller.setGameView(this);
+
         this.inventoryTable = new Table(skin);
         this.inventoryTable.setFillParent(true);
         this.inventoryTable.padTop(750);
@@ -91,10 +83,11 @@ public class GameView implements Screen, InputProcessor {
 
         Main.getBatch().begin();
         renderWorld();
-        Main.getBatch().end();
+
 
         Assets.getInstance().setColorFunction();
         controller.handleGame();
+        Main.getBatch().end();
 
         stage.act(Math.min(Gdx.graphics.getDeltaTime(), 1 / 30f));
         stage.draw();
@@ -271,9 +264,7 @@ public class GameView implements Screen, InputProcessor {
             }
         }
 
-        drawPlayers();
         drawNPCs();
-        drawInventory();
     }
 
     private void drawNPCs() {
@@ -285,13 +276,6 @@ public class GameView implements Screen, InputProcessor {
         }
     }
 
-    private void drawPlayers() {
-        for (Player player : App.getCurrentGame().getPlayers()) {
-            player.getSprite().setPosition(player.getCoordinate().getX() * scaledSize,
-                    player.getCoordinate().getY() * scaledSize);
-            player.getSprite().draw(Main.getBatch());
-        }
-    }
 
     private void drawForaging(Tile tile) {
         for (Good good : tile.getGoods()) {
@@ -301,34 +285,17 @@ public class GameView implements Screen, InputProcessor {
         }
     }
 
-    private void drawInventory() {
-        inventoryTable.clear();
-
-        TextureRegionDrawable drawableSlot = new TextureRegionDrawable(new Texture("GameAssets/Inventory_Table/slot.png"));
-        TextureRegionDrawable drawableHighlight = new TextureRegionDrawable(new Texture("GameAssets/Inventory_Table/highlight.png"));
-        for (ArrayList<Good> goods : App.getCurrentGame().getCurrentPlayer().getInventory().getList()) {
+    public void drawInventory() {
+        for (Pair<ImageButton, Image> inventoryElement : controller.getInventoryController().getInventoryElements()) {
             Table table = new Table();
-            ImageButton imageButtonBackground;
-            if (goods == App.getCurrentGame().getCurrentPlayer().getInHandGood())
-                imageButtonBackground = new ImageButton(drawableHighlight, drawableHighlight, drawableHighlight);
-            else
-                imageButtonBackground = new ImageButton(drawableSlot, drawableHighlight, drawableHighlight);
-
-            imageButtonBackground.addListener(new ClickListener() {
-                @Override
-                public void clicked(InputEvent event, float x, float y) {
-                    
-                }
-            });
-            Image image = new Image();
-            if (!goods.isEmpty())
-                image = new Image(new TextureRegion(new Texture(goods.getFirst().getType().imagePath())));
-
-
-            table.add(imageButtonBackground);
-            table.add(image).padLeft(-48);
-
+            table.add(inventoryElement.first());
+            table.add(inventoryElement.second()).padLeft(-48);
             inventoryTable.add(table);
         }
+
+    }
+
+    public int getScaledSize() {
+        return scaledSize;
     }
 }

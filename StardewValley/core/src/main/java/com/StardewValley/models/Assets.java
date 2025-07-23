@@ -8,6 +8,7 @@ import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
+import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -42,6 +43,10 @@ public class Assets {
     ));
 
     private final ShapeRenderer shapeRenderer = new ShapeRenderer();
+    private final TextureRegionDrawable drawableSlot = new TextureRegionDrawable(new Texture("GameAssets/Inventory_Table/slot.png"));
+    private final TextureRegionDrawable drawableHighlight = new TextureRegionDrawable(new Texture("GameAssets/Inventory_Table/highlight.png"));
+    private final String nullPNGPath = "GameAssets/null.png";
+
 
     public static Assets getInstance() {
         return instance;
@@ -76,5 +81,17 @@ public class Assets {
             shapeRenderer.end();
             Gdx.gl.glDisable(GL20.GL_BLEND);
         }
+    }
+
+    public TextureRegionDrawable getDrawableSlot() {
+        return drawableSlot;
+    }
+
+    public TextureRegionDrawable getDrawableHighlight() {
+        return drawableHighlight;
+    }
+
+    public String getNullPNGPath() {
+        return nullPNGPath;
     }
 }
