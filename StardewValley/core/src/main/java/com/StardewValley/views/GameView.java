@@ -132,18 +132,6 @@ public class GameView implements Screen, InputProcessor {
         stage.draw();
         stage.act(Gdx.graphics.getDeltaTime());
 
-//        if (isCarpenterShopOn.first().equals(true)) {
-//            shapeRenderer.begin(ShapeRenderer.ShapeType.Filled);
-//            if (!controller.isValidBuilding(new Coordinate((int) mousePos.x, (int) mousePos.y),isCarpenterShopOn.second())){
-//                shapeRenderer.setColor(Color.RED);
-//            }else{
-//                shapeRenderer.setColor(Color.GREEN);
-//            }
-//            shapeRenderer.rect(mousePos.x, mousePos.y,isCarpenterShopOn.second().getSize().first() ,
-//                isCarpenterShopOn.second().getSize().second());
-//            shapeRenderer.end();
-//
-//        }
 
 
     }
@@ -463,42 +451,9 @@ public class GameView implements Screen, InputProcessor {
                 purchaseButton.addListener(new ChangeListener() {
                     @Override
                     public void changed(ChangeEvent changeEvent, Actor actor) {
-//                        isCarpenterShopOn.setFirst(true);
-//                        isCarpenterShopOn.setSecond(selectedBuilding[0]);
-//                        final Window window = new Window("choose where to build", skin);
-//
-//                        String number = String.valueOf(App.getCurrentGame().getCurrentPlayer().getFarm().getFarmNumber() + 1);
-//                        Texture backgroundTexture = new Texture(Gdx.files.internal("Farm_" + number + ".png"));
-//                        Drawable backgroundDrawable = new TextureRegionDrawable(new TextureRegion(backgroundTexture));
-//                        window.setBackground(backgroundDrawable);
-//
-//                        window.setSize(940, 600);
-//                        window.setPosition(
-//                            (stage.getWidth() - window.getWidth()) / 2,
-//                            (stage.getHeight() - window.getHeight()) / 2
-//                        );
-//
-//                        window.setMovable(true);
-//                        window.setResizable(false);
-//
-//
-//
-//                        window.row();
-//                        stage.addActor(window);
-//
-//                        multiplexer.addProcessor(mouseProcessor);
-//                        multiplexer.addProcessor(stage);
-//                        Gdx.input.setInputProcessor(multiplexer);
-//
-//                        window.addListener(new ChangeListener() {
-//                            @Override
-//                            public void changed(ChangeEvent changeEvent, Actor actor) {
-//                                isCarpenterShopOn.setFirst(false);
-//                                Result result = controller.buildBuilding(selectedBuilding[0].getName(),  String.valueOf(screenX),
-//                                    String.valueOf(screenY));
-//                                info.setText(result.message());
-//                            }
-//                        });
+
+                        //TODO
+                        //window
 
                     }
                 });
