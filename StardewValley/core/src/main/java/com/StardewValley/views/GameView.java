@@ -50,18 +50,10 @@ import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 import com.badlogic.gdx.scenes.scene2d.ui.*;
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 import com.badlogic.gdx.scenes.scene2d.utils.Drawable;
-import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 import com.badlogic.gdx.utils.Align;
-import com.badlogic.gdx.scenes.scene2d.ui.*;
 import com.badlogic.gdx.utils.viewport.FitViewport;
+import com.badlogic.gdx.utils.viewport.ScreenViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
-import org.w3c.dom.ls.LSOutput;
-
-import java.util.ArrayList;
-import java.util.Arrays;
-
-import java.util.ArrayList;
-
 import static java.lang.Math.max;
 import static java.lang.Math.min;
 
@@ -76,7 +68,7 @@ public class GameView implements Screen, InputProcessor {
     private int scaledSize;
     private Table inventoryTable;
     private InputMultiplexer multiplexer;
-
+    private Stage staticStage;
     private Window toolsWindow;
     private ScrollPane toolsScrollPane;
     private Table toolsTable;
@@ -108,14 +100,16 @@ public class GameView implements Screen, InputProcessor {
     @Override
     public void show() {
         stage = new Stage(viewport);
+        staticStage = new Stage(new ScreenViewport());
 
         multiplexer = new InputMultiplexer();
+        InputMultiplexer multiplexer = new InputMultiplexer();
+        multiplexer.addProcessor(staticStage);
         multiplexer.addProcessor(stage);
         multiplexer.addProcessor(this);
         Gdx.input.setInputProcessor(multiplexer);
         viewport.apply();
-
-        stage.addActor(table);
+        staticStage.addActor(table);
 
     }
 
@@ -138,6 +132,8 @@ public class GameView implements Screen, InputProcessor {
 
         stage.act(Math.min(Gdx.graphics.getDeltaTime(), 1 / 30f));
         stage.draw();
+        staticStage.act(Math.min(Gdx.graphics.getDeltaTime(), 1 / 30f));
+        staticStage.draw();
     }
 
 
@@ -696,8 +692,7 @@ public class GameView implements Screen, InputProcessor {
                         10f
                     );
 
-                    stage.addActor(textArea);
-
+                    staticStage.addActor(textArea);
 
                 }
             });
