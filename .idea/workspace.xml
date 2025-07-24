@@ -6,7 +6,7 @@
   <component name="ChangeListManager">
     <list default="true" id="d65d21e1-fb61-4c45-bcbf-686d1d1a7205" name="Changes" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/StardewValley/core/src/main/java/com/StardewValley/controllers/ClockController.java" beforeDir="false" afterPath="$PROJECT_DIR$/StardewValley/core/src/main/java/com/StardewValley/controllers/ClockController.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/StardewValley/core/src/main/java/com/StardewValley/views/GameView.java" beforeDir="false" afterPath="$PROJECT_DIR$/StardewValley/core/src/main/java/com/StardewValley/views/GameView.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />

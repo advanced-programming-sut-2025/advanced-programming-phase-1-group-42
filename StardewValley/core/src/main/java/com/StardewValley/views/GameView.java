@@ -676,7 +676,7 @@ public class GameView implements Screen, InputProcessor {
 
                 //creating talk button style
                 Pixmap normal = new Pixmap(1, 1, Pixmap.Format.RGBA8888);
-                normal.setColor(Color.LIGHT_GRAY);
+                normal.setColor(Color.YELLOW);
                 normal.fill();
                 Pixmap hover = new Pixmap(1, 1, Pixmap.Format.RGBA8888);
                 hover.setColor(Color.SKY);
@@ -696,6 +696,14 @@ public class GameView implements Screen, InputProcessor {
                 talk.getLabel().setFontScale(0.6f);
                 talk.setPosition(x + scaledSize + 10, y);
                 stage.addActor(talk);
+
+                TextButton info = new TextButton("info", style);
+                info.getLabel().setColor(Color.BLACK);
+                info.setSize((float) scaledSize, (float) (0.5 * scaledSize));
+                info.getLabel().setFontScale(0.6f);
+                info.setPosition(x + scaledSize + 10, y + 22);
+                stage.addActor(info);
+
 
                 talk.addListener(new ClickListener() {
                     public void clicked(InputEvent event, float x, float y) {
@@ -720,19 +728,48 @@ public class GameView implements Screen, InputProcessor {
                     }
                 });
 
+                info.addListener(new ClickListener() {
+                    public void clicked(InputEvent event, float x, float y) {
+                        Label label = new Label("Name: " + npc.getType().getName(), skin);
+
+                        Window infoWindow = new Window("NPC Info", skin);
+
+                        Label friendShip = new Label("Friendship: " + npc.getFriendship().getFriendshipLevel(), skin);
+
+                        infoWindow.pad(10);
+                        infoWindow.add(label).row();
+                        infoWindow.add(friendShip).left().padTop(5).row();
+                        label.setFontScale(0.4f);
+                        friendShip.setFontScale(0.5f);
+
+                        infoWindow.setSize(6*scaledSize, 4*scaledSize);
+                        infoWindow.setPosition(info.getX(), info.getY() + info.getHeight() + 10);
+
+                        infoWindow.addListener(new ClickListener() {
+                            public void clicked(InputEvent event, float x, float y) {
+                                infoWindow.remove();
+                            }
+                        });
+
+                        stage.addActor(infoWindow);
+                    }
+                });
+
+
+
 
             }
         }
 
     }
 
-    private void isPlayerMoved(){
-        if (lastCoordinate!=null) {
-           if ( App.getCurrentGame().getCurrentPlayer().getCoordinate().getX() != lastCoordinate.getX() ||
+    private void isPlayerMoved() {
+        if (lastCoordinate != null) {
+            if (App.getCurrentGame().getCurrentPlayer().getCoordinate().getX() != lastCoordinate.getX() ||
                 App.getCurrentGame().getCurrentPlayer().getCoordinate().getY() != lastCoordinate.getY()) {
-               npcTextField.remove();
-               npcImage.remove();
-           }
+                npcTextField.remove();
+                npcImage.remove();
+            }
         }
     }
 
