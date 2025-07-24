@@ -76,6 +76,7 @@ public class GameView implements Screen, InputProcessor {
     private final Viewport viewport;
     private int scaledSize;
     private Table inventoryTable;
+    private InputMultiplexer multiplexer;
 
     private Window toolsWindow;
     private ScrollPane toolsScrollPane;
@@ -84,7 +85,7 @@ public class GameView implements Screen, InputProcessor {
 
     public GameView(GameMenuController controller, Skin skin) {
         this.controller = controller;
-        this.controller.initGameControllers();
+//        this.controller.initGameControllers();
         this.skin = skin;
         table = new Table(skin);
         table.setFillParent(true);
@@ -109,7 +110,7 @@ public class GameView implements Screen, InputProcessor {
     public void show() {
         stage = new Stage();
 
-        InputMultiplexer multiplexer = new InputMultiplexer();
+        multiplexer = new InputMultiplexer();
         multiplexer.addProcessor(stage);
         multiplexer.addProcessor(this);
         Gdx.input.setInputProcessor(multiplexer);
