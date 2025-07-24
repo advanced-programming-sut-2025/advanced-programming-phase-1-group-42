@@ -5,7 +5,6 @@ import com.StardewValley.controllers.GameMenuController;
 import com.StardewValley.models.App;
 import com.StardewValley.models.Assets;
 import com.StardewValley.models.Pair;
-import com.StardewValley.models.Pair;
 import com.StardewValley.models.Result;
 import com.StardewValley.models.enums.Season;
 import com.StardewValley.models.enums.TileAssets;
@@ -18,10 +17,10 @@ import com.StardewValley.models.goods.farmings.FarmingTree;
 import com.StardewValley.models.goods.foragings.ForagingTree;
 import com.StardewValley.models.goods.tools.Tool;
 import com.StardewValley.models.interactions.NPCs.NPC;
+import com.StardewValley.models.interactions.NPCs.NPCTypes;
 import com.StardewValley.models.interactions.Player;
 import com.StardewValley.models.goods.products.ProductType;
 import com.StardewValley.models.interactions.Animals.AnimalTypes;
-import com.StardewValley.models.interactions.Player;
 import com.StardewValley.models.interactions.PlayerBuildings.FarmBuilding;
 import com.StardewValley.models.interactions.PlayerBuildings.FarmBuildingTypes;
 import com.StardewValley.models.interactions.game_buildings.CarpenterShop;
@@ -32,11 +31,7 @@ import com.badlogic.gdx.graphics.*;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
-import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.graphics.Texture;
-import com.badlogic.gdx.graphics.g2d.TextureRegion;
-import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
-import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.scenes.scene2d.Actor;
@@ -54,6 +49,9 @@ import com.badlogic.gdx.utils.Align;
 import com.badlogic.gdx.utils.viewport.FitViewport;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
+
+import java.util.Arrays;
+
 import static java.lang.Math.max;
 import static java.lang.Math.min;
 
@@ -72,7 +70,9 @@ public class GameView implements Screen, InputProcessor {
     private Window toolsWindow;
     private ScrollPane toolsScrollPane;
     private Table toolsTable;
-
+    private Coordinate lastCoordinate;
+    private TextField npcTextField;
+    private Image npcImage;
 
     public GameView(GameMenuController controller, Skin skin) {
         this.controller = controller;
@@ -645,10 +645,19 @@ public class GameView implements Screen, InputProcessor {
         drawPlayers();
         drawInventory();
         drawNPCs();
+        isPlayerMoved();
         drawFarmingBuilding();
     }
 
     private void drawNPCs() {
+        NPCTypes[] validNPC = new NPCTypes[]{
+            NPCTypes.ABIGAIL,
+            NPCTypes.HARVEY,
+            NPCTypes.ROBIN,
+            NPCTypes.SEBASTIAN,
+            NPCTypes.LEAH
+        };
+
         for (NPC npc : App.getCurrentGame().getNPCs()) {
             Sprite sprite = new Sprite(new Texture(npc.getType().getImagePath()));
             float x = npc.getType().getCoordinate().getX() * scaledSize;
@@ -657,54 +666,74 @@ public class GameView implements Screen, InputProcessor {
             sprite.setPosition(x, y);
             sprite.draw(Main.getBatch());
 
-            //creating talk button style
-            Pixmap normal = new Pixmap(1, 1, Pixmap.Format.RGBA8888);
-            normal.setColor(Color.LIGHT_GRAY);
-            normal.fill();
-            Pixmap hover = new Pixmap(1, 1, Pixmap.Format.RGBA8888);
-            hover.setColor(Color.SKY);
-            hover.fill();
-            TextureRegionDrawable normalDrawable = new TextureRegionDrawable(new TextureRegion(new Texture(normal)));
-            TextureRegionDrawable hoverDrawable = new TextureRegionDrawable(new TextureRegion(new Texture(hover)));
-            BitmapFont font = new BitmapFont();
-            TextButton.TextButtonStyle style = new TextButton.TextButtonStyle();
-            style.up = normalDrawable;
-            style.over = hoverDrawable;
-            style.down = normalDrawable.tint(Color.GRAY);
-            style.font = font;
+            if (Arrays.asList(validNPC).contains(npc.getType())) {
 
-            TextButton talk = new TextButton("Talk", style);
-            talk.getLabel().setColor(Color.BLACK);
-            talk.setSize((float) scaledSize, (float) (0.5 * scaledSize));
-            talk.getLabel().setFontScale(0.6f);
-            talk.setPosition(x + scaledSize + 10, y);
-            stage.addActor(talk);
+                //creating talk button style
+                Pixmap normal = new Pixmap(1, 1, Pixmap.Format.RGBA8888);
+                normal.setColor(Color.LIGHT_GRAY);
+                normal.fill();
+                Pixmap hover = new Pixmap(1, 1, Pixmap.Format.RGBA8888);
+                hover.setColor(Color.SKY);
+                hover.fill();
+                TextureRegionDrawable normalDrawable = new TextureRegionDrawable(new TextureRegion(new Texture(normal)));
+                TextureRegionDrawable hoverDrawable = new TextureRegionDrawable(new TextureRegion(new Texture(hover)));
+                BitmapFont font = new BitmapFont();
+                TextButton.TextButtonStyle style = new TextButton.TextButtonStyle();
+                style.up = normalDrawable;
+                style.over = hoverDrawable;
+                style.down = normalDrawable.tint(Color.GRAY);
+                style.font = font;
 
-            talk.addListener(new ClickListener() {
-                public void clicked(InputEvent event, float x, float y) {
-                    float screenWidth = stage.getViewport().getWorldWidth();
-                    float screenHeight = stage.getViewport().getWorldHeight();
+                TextButton talk = new TextButton("Talk", style);
+                talk.getLabel().setColor(Color.BLACK);
+                talk.setSize((float) scaledSize, (float) (0.5 * scaledSize));
+                talk.getLabel().setFontScale(0.6f);
+                talk.setPosition(x + scaledSize + 10, y);
+                stage.addActor(talk);
 
-                    TextArea textArea = new TextArea("hi", skin);
-                    textArea.setSize(400, 100);
-                    textArea.setPosition(
-                        screenWidth / 2 - textArea.getWidth() / 2,
-                        10f
-                    );
+                talk.addListener(new ClickListener() {
+                    public void clicked(InputEvent event, float x, float y) {
+                        lastCoordinate = App.getCurrentGame().getCurrentPlayer().getCoordinate();
 
-                    staticStage.addActor(textArea);
+                        lastCoordinate = App.getCurrentGame().getCurrentPlayer().getCoordinate();
+                        float screenWidth = stage.getViewport().getWorldWidth();
+                        npcTextField = new TextArea("hi", skin);
+                        npcTextField.setSize(800, 150);
+                        float textFieldX = screenWidth / 2 - npcTextField.getWidth() / 2;
+                        float textFieldY = 10f;
+                        npcTextField.setPosition(textFieldX, textFieldY);
+                        npcTextField.setText(controller.meetNPC(npc.getType().getName()).message());
 
-                }
-            });
+                        Texture texture = new Texture(Gdx.files.internal(npc.getType().getAvatarPath())); // مسیر تصویر
+                        npcImage = new Image(texture);
+                        npcImage.setSize(150, 150);
+                        npcImage.setPosition(textFieldX - npcImage.getWidth() - 10, textFieldY);
 
+                        staticStage.addActor(npcTextField);
+                        staticStage.addActor(npcImage);
+                    }
+                });
+
+
+            }
         }
 
+    }
+
+    private void isPlayerMoved(){
+        if (lastCoordinate!=null) {
+           if ( App.getCurrentGame().getCurrentPlayer().getCoordinate().getX() != lastCoordinate.getX() ||
+                App.getCurrentGame().getCurrentPlayer().getCoordinate().getY() != lastCoordinate.getY()) {
+               npcTextField.remove();
+               npcImage.remove();
+           }
+        }
     }
 
     private void drawPlayers() {
         for (Player player : App.getCurrentGame().getPlayers()) {
             player.getSprite().setPosition(player.getCoordinate().getX() * scaledSize,
-                    player.getCoordinate().getY() * scaledSize);
+                player.getCoordinate().getY() * scaledSize);
             player.getSprite().draw(Main.getBatch());
         }
     }
@@ -722,8 +751,8 @@ public class GameView implements Screen, InputProcessor {
             for (FarmBuilding farmBuilding : player.getFarm().getFarmBuildings()) {
                 if (farmBuilding.getType() != FarmBuildingTypes.HOME) {
                     Main.getBatch().draw(farmBuilding.getType().getTexture(), (float) (farmBuilding.getStartCordinate().getX() + farmBuilding.getEndCordinate().getX()) / 2 * scaledSize,
-                            (float) (farmBuilding.getStartCordinate().getY() + farmBuilding.getEndCordinate().getY()) / 2 * scaledSize,
-                            farmBuilding.getType().getSize().second() * scaledSize, farmBuilding.getType().getSize().first() * scaledSize);
+                        (float) (farmBuilding.getStartCordinate().getY() + farmBuilding.getEndCordinate().getY()) / 2 * scaledSize,
+                        farmBuilding.getType().getSize().second() * scaledSize, farmBuilding.getType().getSize().first() * scaledSize);
                 }
             }
         }
@@ -738,7 +767,7 @@ public class GameView implements Screen, InputProcessor {
         }
 
         controller.getInventoryController().getProgressBar().setValue(
-                App.getCurrentGame().getCurrentPlayer().getEnergy().getDayEnergyLeft()
+            App.getCurrentGame().getCurrentPlayer().getEnergy().getDayEnergyLeft()
         );
     }
 
@@ -755,15 +784,15 @@ public class GameView implements Screen, InputProcessor {
         toolsWindow.add(toolsScrollPane);
         toolsWindow.pack();
         toolsWindow.setPosition(
-                (Gdx.graphics.getWidth()  - toolsWindow.getWidth())  / 2,
-                (Gdx.graphics.getHeight() - toolsWindow.getHeight()) / 2
+            (Gdx.graphics.getWidth() - toolsWindow.getWidth()) / 2,
+            (Gdx.graphics.getHeight() - toolsWindow.getHeight()) / 2
         );
 //        stage.addActor(toolsWindow);
 
 
         for (int i = 0; i < controller.getInventoryController().getInventoryElements().size(); i++) {
             if (!App.getCurrentGame().getCurrentPlayer().getInventory().getList().get(i).isEmpty() &&
-                    App.getCurrentGame().getCurrentPlayer().getInventory().getList().get(i).getLast() instanceof Tool) {
+                App.getCurrentGame().getCurrentPlayer().getInventory().getList().get(i).getLast() instanceof Tool) {
                 Pair<ImageButton, Image> inventoryElement = controller.getInventoryController().getInventoryElements().get(i);
                 toolsTable.add(inventoryElement.first());
                 toolsTable.add(inventoryElement.second()).padLeft(-48);

@@ -269,4 +269,8 @@ public enum NPCTypes {
     public String getImagePath() {
         return imagePath;
     }
+
+    public String getAvatarPath() {
+        return avatarPath;
+    }
 }

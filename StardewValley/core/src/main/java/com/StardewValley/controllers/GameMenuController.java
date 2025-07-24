@@ -107,8 +107,7 @@ public class GameMenuController extends Controller {
 
             Main.getMain().getScreen().dispose();
             Main.getMain().setScreen(new MainMenuView(new MainMenuController(), Assets.getInstance().getSkin()));
-        }
-        else if (view.getLoadGameButton().isChecked()) {
+        } else if (view.getLoadGameButton().isChecked()) {
             view.getLoadGameButton().setChecked(false);
 
             Result res = loadGame();
@@ -119,20 +118,17 @@ public class GameMenuController extends Controller {
 
             Main.getMain().getScreen().dispose();
             Main.getMain().setScreen(new GameView(new GameMenuController(), Assets.getInstance().getSkin()));
-        }
-        else if (view.getNewGameButton().isChecked()) {
+        } else if (view.getNewGameButton().isChecked()) {
             view.getNewGameButton().setChecked(false);
 
             view.getMenuWindow().setVisible(false);
             view.initNewGameWindow();
-        }
-        else if (view.getBackNewGameButton().isChecked()) {
+        } else if (view.getBackNewGameButton().isChecked()) {
             view.getBackNewGameButton().setChecked(false);
 
             view.getMenuWindow().setVisible(true);
             view.getNewGameWindow().setVisible(false);
-        }
-        else if (view.getAddPlayerButton().isChecked()) {
+        } else if (view.getAddPlayerButton().isChecked()) {
             view.getAddPlayerButton().setChecked(false);
 
             if (view.getPlayersPtr() >= 4) {
@@ -141,8 +137,7 @@ public class GameMenuController extends Controller {
             }
 
             addPlayerToNewGame();
-        }
-        else if (view.getStartNewGameButton().isChecked()) {
+        } else if (view.getStartNewGameButton().isChecked()) {
             view.getStartNewGameButton().setChecked(false);
 
             view.getNewGameWindow().setVisible(false);
@@ -250,8 +245,8 @@ public class GameMenuController extends Controller {
 
     private boolean tileValidity(Tile tile) {
         if (tile.getTileType() == TileType.STONE_WALL ||
-        tile.getTileType() == TileType.WATER ||
-        tile.getTileType() == TileType.GAME_BUILDING)
+            tile.getTileType() == TileType.WATER ||
+            tile.getTileType() == TileType.GAME_BUILDING)
             return false;
         return true;
     }
@@ -352,8 +347,7 @@ public class GameMenuController extends Controller {
             if (user == null) {
                 players.add(new Player(new User(username, null, username,
                     null, null, 0, null)));
-            }
-            else {
+            } else {
                 players.add(new Player(user));
             }
         }
@@ -1311,7 +1305,7 @@ public class GameMenuController extends Controller {
             + " ~ " + (carpenterShop.getHours().second()));
     }
 
-    public boolean isValidBuilding(Coordinate coordinate,FarmBuildingTypes targetType) {
+    public boolean isValidBuilding(Coordinate coordinate, FarmBuildingTypes targetType) {
         boolean validSpace = true;
         for (int sX = 0; sX < targetType.getSize().first(); sX++) {
             for (int sY = 0; sY < targetType.getSize().second(); sY++) {
@@ -1688,12 +1682,12 @@ public class GameMenuController extends Controller {
 
         player.getTalkHistory().add(new Pair<>(
             App.getCurrentGame().getCurrentPlayer(),
-            "\t<"+App.getCurrentGame().getCurrentPlayer().getPlayerUsername() + "> " + dateTime().message() + ": " + message
+            "\t<" + App.getCurrentGame().getCurrentPlayer().getPlayerUsername() + "> " + dateTime().message() + ": " + message
         ));
 
         App.getCurrentGame().getCurrentPlayer().getTalkHistory().add(new Pair<>(
             player,
-            "\t<"+App.getCurrentGame().getCurrentPlayer().getPlayerUsername() + "> " + dateTime().message() + ": " + message
+            "\t<" + App.getCurrentGame().getCurrentPlayer().getPlayerUsername() + "> " + dateTime().message() + ": " + message
         ));
 
         try {
@@ -2111,8 +2105,8 @@ public class GameMenuController extends Controller {
                         abs(npc.getType().getCoordinate().getY() -
                             App.getCurrentGame().getCurrentPlayer().getCoordinate().getY()) == 0)) {
                     npc.getFriendship();
-                    npc.npcDialogs();
-                    return new Result(true, "");
+                    String talk = npc.npcDialogs();
+                    return new Result(true, talk );
                 }
             }
         }
