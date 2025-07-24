@@ -1,6 +1,8 @@
 package com.StardewValley.views;
 
 import com.StardewValley.Main;
+import com.StardewValley.controllers.ClockController;
+import com.StardewValley.controllers.Controller;
 import com.StardewValley.controllers.GameMenuController;
 import com.StardewValley.models.App;
 import com.StardewValley.models.Assets;
@@ -83,6 +85,8 @@ public class GameView implements Screen, InputProcessor {
     private Table toolsTable;
 
 
+    private ClockController clockController = new ClockController();
+
     public GameView(GameMenuController controller, Skin skin) {
         this.controller = controller;
 //        this.controller.initGameControllers();
@@ -128,6 +132,8 @@ public class GameView implements Screen, InputProcessor {
         Main.getBatch().begin();
         renderWorld();
 
+
+        clockController.update();
 
         Assets.getInstance().setColorFunction();
         controller.handleGame();
