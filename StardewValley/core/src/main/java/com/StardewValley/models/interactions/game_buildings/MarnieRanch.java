@@ -30,6 +30,14 @@ public class MarnieRanch extends GameBuilding {
                     AnimalTypes.PIG)
     );
 
+    public ArrayList<ProductType> products = new ArrayList<>(
+        List.of(
+            ProductType.HAY,
+            ProductType.SHEARS,
+            ProductType.MILK_PAIL
+        )
+    );
+
     public static ArrayList<Tile> getExpectedTiles(ArrayList<Tile> tiles) {
         return getTiles(tiles, new Coordinate(50, 90));
     }

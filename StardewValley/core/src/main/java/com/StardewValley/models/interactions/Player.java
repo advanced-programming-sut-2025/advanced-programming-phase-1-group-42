@@ -1,6 +1,7 @@
 package com.StardewValley.models.interactions;
 
 import com.StardewValley.models.App;
+import com.StardewValley.models.Assets;
 import com.StardewValley.models.Pair;
 import com.StardewValley.models.game_structure.*;
 import com.StardewValley.models.goods.Good;
@@ -14,6 +15,7 @@ import com.StardewValley.models.goods.tools.Tool;
 import com.StardewValley.models.goods.tools.ToolType;
 import com.StardewValley.models.interactions.Animals.Animal;
 import com.StardewValley.models.interactions.PlayerBuildings.FarmBuilding;
+import com.badlogic.gdx.graphics.g2d.Sprite;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -23,7 +25,7 @@ import java.util.List;
 public class Player {
     private Coordinate coordinate ;
     private Inventory inventory ;
-    private Good inHandGood;
+    private ArrayList<Good> inHandGood;
     private final ArrayList<CookingRecipe> cookingRecipes = new ArrayList<>(Arrays.asList(new CookingRecipe(CookingRecipeType.BREAD)));
     private final ArrayList<CraftingRecipe> craftingRecipes = new ArrayList<>(Arrays.asList(new CraftingRecipe(CraftingRecipeType.BOMB)));
     private User user;
@@ -33,6 +35,9 @@ public class Player {
     private Energy energy;
     private Tool trashCan;
     private Skill skill;
+    private int playerDirection;
+    private Sprite sprite;
+    private float time;
 
     private Buff buff;
     private Buff rejectionBuff;
@@ -61,16 +66,15 @@ public class Player {
     public void setFarm(Farm farm) {
         this.farm = farm;
         this.coordinate = new Coordinate(farm.getFarmBuildings().getFirst().getStartCordinate().getX() + 5,
-                farm.getFarmBuildings().getFirst().getStartCordinate().getY() + 5);
-        System.out.println(this.coordinate);
-
+                farm.getFarmBuildings().getFirst().getStartCordinate().getY() + 2);
+        this.inHandGood = inventory.getList().getFirst();
     }
 
     public Farm getFarm() {
         return farm;
     }
 
-    public void setInHandGood(Good inHandGood) {
+    public void setInHandGood(ArrayList<Good> inHandGood) {
         this.inHandGood = inHandGood;
     }
 
@@ -88,6 +92,9 @@ public class Player {
         this.farm = null;
         this.isInteracted = new HashMap<>();
         this.coordinate = new Coordinate(0, 0);
+        this.playerDirection = -1;
+        this.sprite = new Sprite(Assets.getInstance().getPlayerTextures().get(2).get(0));
+        this.sprite.setPosition(coordinate.getX(), coordinate.getY());
     }
 
     public void iniFriendships(ArrayList<Player> players) {
@@ -150,11 +157,12 @@ public class Player {
     public void setBuff(Buff buff) {
         this.buff = buff;
     }
+
     public Buff getBuff() {
         return buff;
     }
 
-    public Good getInHandGood() {
+    public ArrayList<Good> getInHandGood() {
         return this.inHandGood;
     }
 
@@ -295,5 +303,29 @@ public class Player {
 
     public void setArtisansGoodTime(ArrayList<Pair<Integer, Good>> artisansGoodTime) {
         this.artisansGoodTime = artisansGoodTime;
+    }
+
+    public int getPlayerDirection() {
+        return playerDirection;
+    }
+
+    public void setPlayerDirection(int playerDirection) {
+        this.playerDirection = playerDirection;
+    }
+
+    public Sprite getSprite() {
+        return sprite;
+    }
+
+    public void setSprite(Sprite sprite) {
+        this.sprite = sprite;
+    }
+
+    public float getTime() {
+        return time;
+    }
+
+    public void setTime(float time) {
+        this.time = time;
     }
 }
