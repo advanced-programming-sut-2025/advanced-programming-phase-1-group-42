@@ -73,14 +73,14 @@ public class ClockController extends Controller {
 
 
         lastNetWorth = currentWallet.getBalance();
-        a = new Texture(Gdx.files.internal("assets\\GameAssets\\Clock/Nan.png"));
-        b = new Texture(Gdx.files.internal("assets\\GameAssets\\Clock/Nan.png"));
-        c = new Texture(Gdx.files.internal("assets\\GameAssets\\Clock/Nan.png"));
-        d = new Texture(Gdx.files.internal("assets\\GameAssets\\Clock/Nan.png"));
-        e = new Texture(Gdx.files.internal("assets\\GameAssets\\Clock/Nan.png"));
-        f = new Texture(Gdx.files.internal("assets\\GameAssets\\Clock/Nan.png"));
-        g = new Texture(Gdx.files.internal("assets\\GameAssets\\Clock/Nan.png"));
-        h = new Texture(Gdx.files.internal("assets\\GameAssets\\Clock/0.png"));
+        a = new Texture(Gdx.files.internal("GameAssets/Clock/Nan.png"));
+        b = new Texture(Gdx.files.internal("GameAssets/Clock/Nan.png"));
+        c = new Texture(Gdx.files.internal("GameAssets/Clock/Nan.png"));
+        d = new Texture(Gdx.files.internal("GameAssets/Clock/Nan.png"));
+        e = new Texture(Gdx.files.internal("GameAssets/Clock/Nan.png"));
+        f = new Texture(Gdx.files.internal("GameAssets/Clock/Nan.png"));
+        g = new Texture(Gdx.files.internal("GameAssets/Clock/Nan.png"));
+        h = new Texture(Gdx.files.internal("GameAssets/Clock/0.png"));
         A = new Image(new TextureRegionDrawable(a));
         B = new Image(new TextureRegionDrawable(b));
         C = new Image(new TextureRegionDrawable(c));
@@ -291,7 +291,7 @@ public class ClockController extends Controller {
             lastTimeOfDayName = currentTimeOfDay;
             timeOfDayLabel.setText(currentTimeOfDay + ":00");
         }
-        
+
         stage.act(Gdx.graphics.getDeltaTime());
         stage.draw();
     }
@@ -304,8 +304,8 @@ public class ClockController extends Controller {
 
 
     public void setWeatherAndSeason(){
-        seasonTexture = new Texture("assets\\GameAssets\\Clock/" + currentTime.getSeason().getName() + ".png");
-        weatherTexture = new Texture("assets\\GameAssets\\Clock/" + currentWeather.getName() + ".png");
+        seasonTexture = new Texture("GameAssets/Clock/" + currentTime.getSeason().getName() + ".png");
+        weatherTexture = new Texture("GameAssets/Clock/" + currentWeather.getName() + ".png");
         lastWeatherName = currentWeather.getName();
         lastSeasonName = currentTime.getSeason().getName();
         seasonImage = new Image(new TextureRegionDrawable(new TextureRegion(seasonTexture)));
@@ -318,8 +318,8 @@ public class ClockController extends Controller {
         stage.addActor(seasonImage);
     }
     public void setClockFace(){
-        clockTexture = new Texture("assets\\GameAssets\\Clock/Clock.png");
-        handTexture = new Texture("assets\\GameAssets\\Clock/Handle.png");
+        clockTexture = new Texture("GameAssets/Clock/Clock.png");
+        handTexture = new Texture("GameAssets/Clock/Handle.png");
         clockFaceImage = new Image(new TextureRegionDrawable(new TextureRegion(clockTexture)));
         clockHandImage = new Image(new TextureRegionDrawable(new TextureRegion(handTexture)));
         clockFaceImage.setSize(clockFaceImage.getWidth() * 3, clockFaceImage.getHeight() * 3);
