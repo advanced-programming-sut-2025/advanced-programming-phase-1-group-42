@@ -151,7 +151,6 @@ public class GameMenuController extends Controller {
     }
 
     public void handleGame() {
-
         handleInput();
         worldController.updateWorld();
         playerController.updatePlayer();
@@ -226,7 +225,10 @@ public class GameMenuController extends Controller {
 
         }
         if (Gdx.input.isKeyPressed(Input.Keys.T)) {
-
+//            if(gameView.getToolsWindow() == null || !gameView.getToolsWindow().isVisible())
+//                gameView.initToolsWindow();
+//            else
+//                gameView.getToolsWindow().setVisible(false);
         }
         if (Gdx.input.isKeyPressed(Input.Keys.F4)) {
 
@@ -242,8 +244,8 @@ public class GameMenuController extends Controller {
             }
         }
 
-            if (flag)
-                App.getCurrentGame().getCurrentPlayer().getEnergy().decreaseTurnEnergyLeft(1);
+//        if (flag)
+//            App.getCurrentGame().getCurrentPlayer().getEnergy().decreaseTurnEnergyLeft(1);
     }
 
     private boolean tileValidity(Tile tile) {

@@ -14,6 +14,7 @@ import com.StardewValley.models.game_structure.Tile;
 import com.StardewValley.models.goods.Good;
 import com.StardewValley.models.goods.farmings.FarmingTree;
 import com.StardewValley.models.goods.foragings.ForagingTree;
+import com.StardewValley.models.goods.tools.Tool;
 import com.StardewValley.models.interactions.NPCs.NPC;
 import com.StardewValley.models.interactions.Player;
 import com.StardewValley.models.interactions.game_buildings.GameBuilding;
@@ -23,12 +24,11 @@ import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.scenes.scene2d.Stage;
-import com.badlogic.gdx.scenes.scene2d.ui.Image;
-import com.badlogic.gdx.scenes.scene2d.ui.ImageButton;
-import com.badlogic.gdx.scenes.scene2d.ui.Skin;
-import com.badlogic.gdx.scenes.scene2d.ui.Table;
+import com.badlogic.gdx.scenes.scene2d.ui.*;
 import com.badlogic.gdx.utils.viewport.FitViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
+
+import java.util.ArrayList;
 
 import static java.lang.Math.max;
 import static java.lang.Math.min;
@@ -44,11 +44,17 @@ public class GameView implements Screen, InputProcessor {
     private int scaledSize;
     private Table inventoryTable;
 
+    private Window toolsWindow;
+    private ScrollPane toolsScrollPane;
+    private Table toolsTable;
+
+
     public GameView(GameMenuController controller, Skin skin) {
         this.controller = controller;
         this.skin = skin;
         table = new Table(skin);
         table.setFillParent(true);
+        table.defaults().pad(10);
 
         camera = new OrthographicCamera();
         viewport = new FitViewport(Gdx.graphics.getWidth(), Gdx.graphics.getHeight(), camera);
@@ -57,10 +63,9 @@ public class GameView implements Screen, InputProcessor {
 
         this.inventoryTable = new Table(skin);
         this.inventoryTable.setFillParent(true);
-        this.inventoryTable.padTop(750);
         drawInventory();
 
-        this.table.add(inventoryTable).padLeft(-50);
+        this.table.add(inventoryTable).padTop(1500).padLeft(-50);
         this.table.add(controller.getInventoryController().getProgressBar()).padTop(600).padLeft(800);
         this.table.row();
 
@@ -77,6 +82,7 @@ public class GameView implements Screen, InputProcessor {
         viewport.apply();
 
         stage.addActor(table);
+
     }
 
     @Override
@@ -306,5 +312,37 @@ public class GameView implements Screen, InputProcessor {
 
     public int getScaledSize() {
         return scaledSize;
+    }
+
+    public void initToolsWindow() {
+        this.toolsWindow = new Window("Tools", skin, "Letter");
+        this.toolsTable = new Table(skin);
+        this.toolsTable.setFillParent(true);
+        this.toolsScrollPane = new ScrollPane(toolsTable, skin);
+
+        toolsWindow.add(toolsScrollPane);
+        toolsWindow.pack();
+        toolsWindow.setPosition(
+                (Gdx.graphics.getWidth()  - toolsWindow.getWidth())  / 2,
+                (Gdx.graphics.getHeight() - toolsWindow.getHeight()) / 2
+        );
+//        stage.addActor(toolsWindow);
+
+
+        for (int i = 0; i < controller.getInventoryController().getInventoryElements().size(); i++) {
+            if (!App.getCurrentGame().getCurrentPlayer().getInventory().getList().get(i).isEmpty() &&
+                    App.getCurrentGame().getCurrentPlayer().getInventory().getList().get(i).getLast() instanceof Tool) {
+                Pair<ImageButton, Image> inventoryElement = controller.getInventoryController().getInventoryElements().get(i);
+                toolsTable.add(inventoryElement.first());
+                toolsTable.add(inventoryElement.second()).padLeft(-48);
+            }
+        }
+
+        toolsWindow.draw(Main.getBatch(), 10);
+
+    }
+
+    public Window getToolsWindow() {
+        return toolsWindow;
     }
 }
