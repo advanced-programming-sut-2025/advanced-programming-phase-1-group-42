@@ -1,6 +1,8 @@
 package com.StardewValley.views;
 
 import com.StardewValley.Main;
+import com.StardewValley.controllers.ClockController;
+import com.StardewValley.controllers.Controller;
 import com.StardewValley.controllers.GameMenuController;
 import com.StardewValley.models.App;
 import com.StardewValley.models.enums.Season;
@@ -37,6 +39,8 @@ public class GameView implements Screen, InputProcessor {
     private Coordinate coordinate;
     private int scaledSize;
 
+    private ClockController clockController = new ClockController();
+
     public GameView(GameMenuController controller, Skin skin) {
         this.controller = controller;
         this.skin = skin;
@@ -72,6 +76,8 @@ public class GameView implements Screen, InputProcessor {
         renderWorld();
 
         Main.getBatch().end();
+
+        clockController.update();
 
         if (Gdx.input.isKeyPressed(Input.Keys.W))
             coordinate = new Coordinate(coordinate.getX(), coordinate.getY() + 1);
