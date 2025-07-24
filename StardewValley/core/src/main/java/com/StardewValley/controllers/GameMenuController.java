@@ -228,8 +228,8 @@ public class GameMenuController extends Controller {
         if (Gdx.input.isKeyJustPressed(Input.Keys.T)) {
             if(gameView.getToolsWindow() == null)
                 gameView.initToolsWindow();
-//            else
-//                gameView.closeToolsWindow();
+                else
+                    gameView.closeToolsWindow();
         }
         if (Gdx.input.isKeyJustPressed(Input.Keys.F4)) {
 

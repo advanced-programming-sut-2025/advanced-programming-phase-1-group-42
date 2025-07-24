@@ -78,6 +78,7 @@ public class GameView implements Screen, InputProcessor {
     private int scaledSize;
     private Table inventoryTable;
     private InputMultiplexer multiplexer;
+    private InputMultiplexer menuMultiplexer;
     private Stage staticStage;
     private Window toolsWindow;
     private ScrollPane toolsScrollPane;
@@ -85,8 +86,6 @@ public class GameView implements Screen, InputProcessor {
     private Coordinate lastCoordinate;
     private TextField npcTextField;
     private Image npcImage;
-
-    private ClockController clockController = new ClockController();
 
     private Table mainTable;
     private Window mainWindow;
@@ -122,9 +121,9 @@ public class GameView implements Screen, InputProcessor {
         staticStage = new Stage(new ScreenViewport());
 
         multiplexer = new InputMultiplexer();
-        InputMultiplexer multiplexer = new InputMultiplexer();
-        multiplexer.addProcessor(staticStage);
+//        InputMultiplexer multiplexer = new InputMultiplexer();
         multiplexer.addProcessor(stage);
+        multiplexer.addProcessor(staticStage);
         multiplexer.addProcessor(this);
         Gdx.input.setInputProcessor(multiplexer);
         viewport.apply();
@@ -142,9 +141,6 @@ public class GameView implements Screen, InputProcessor {
 
         Main.getBatch().begin();
         renderWorld();
-
-
-        clockController.update();
 
         Assets.getInstance().setColorFunction();
 
@@ -210,330 +206,7 @@ public class GameView implements Screen, InputProcessor {
 
         GameBuilding building = App.getCurrentGame().getMap().findGameBuilding(new Coordinate(tileX, tileY));
 
-        if (building != null) {
-
-            Texture backgroundTexture = new Texture(Gdx.files.internal("shop-menu.png"));
-            Drawable backgroundDrawable = new TextureRegionDrawable(new TextureRegion(backgroundTexture));
-
-            final Window window = new Window("SHOP", skin);
-            window.setBackground(backgroundDrawable);
-            window.setSize(940, 600);
-            window.setPosition(
-                (stage.getWidth() - window.getWidth()) / 2,
-                (stage.getHeight() - window.getHeight()) / 2
-            );
-
-            Table header = new Table(skin);
-            Label title = new Label(String.valueOf(App.getCurrentGame().getCurrentPlayer().getWallet().getBalance()), skin);
-            TextButton closeButton = new TextButton("X", skin);
-            closeButton.pad(4);
-            closeButton.addListener(new ChangeListener() {
-                @Override
-                public void changed(ChangeEvent event, Actor actor) {
-                    window.remove();
-                    backgroundTexture.dispose();
-                }
-            });
-
-            header.add().expandX();
-            header.add(title).center().expandX().padRight(95).padBottom(30);
-            header.add(closeButton).top().right();
-
-            window.add(header).expandX().fillX().padTop(5).row();
-
-            Table content = new Table(skin);
-            window.add(content).expand().fill().pad(10);
-
-            Table itemsTable = new Table();
-            ScrollPane scrollPane = new ScrollPane(itemsTable, skin);
-            scrollPane.setFadeScrollBars(false);
-            scrollPane.setScrollingDisabled(false, false);
-            scrollPane.setForceScroll(false, true);
-            scrollPane.setSmoothScrolling(true);
-
-            Table selectedPanel = new Table(skin);
-            Label selectedNameLabel = new Label("", skin);
-            Label countLabel = new Label("0", skin);
-            TextButton addButton = new TextButton("+", skin);
-            TextButton removeButton = new TextButton("-", skin);
-            TextButton purchaseButton = new TextButton("Purchase", skin);
-            Label info = new Label("", skin);
-            addButton.setDisabled(false);
-            removeButton.setDisabled(false);
-            purchaseButton.setDisabled(false);
-            addButton.setVisible(false);
-            removeButton.setVisible(false);
-            purchaseButton.setVisible(false);
-            countLabel.setVisible(false);
-            Table counterPanel = new Table();
-            counterPanel.center();
-            selectedNameLabel.setAlignment(Align.center);
-            counterPanel.add(selectedNameLabel)
-                .colspan(3)
-                .fillX()
-                .center()
-                .padLeft(5)
-                .row();
-
-
-            counterPanel.add(removeButton)
-                .size(100, 70)
-                .padLeft(0);
-
-            counterPanel.add(countLabel)
-                .width(30)
-                .padLeft(5)
-                .center();
-
-            counterPanel.add(addButton)
-                .size(100, 70)
-                .padLeft(5)
-                .row();
-
-
-            counterPanel.add(purchaseButton)
-                .size(150, 70)
-                .pad(5)
-                .padLeft(10)
-                .colspan(3)
-                .center()
-                .row();
-
-            info.setWrap(true);
-            info.setWidth(250);
-            info.setFontScale(0.7f);
-            info.setAlignment(Align.center);
-
-
-            // MarnieRanch
-            if (building instanceof MarnieRanch) {
-
-                final AnimalTypes[] selectedAnimal = {null};
-                final ProductType[] selectedProductType = {null};
-                final int[] selectedCount = {0};
-
-                TextField animalName = new TextField("", skin);
-
-                animalName.setDisabled(false);
-                animalName.setVisible(false);
-
-                addButton.addListener(new ChangeListener() {
-                    @Override
-                    public void changed(ChangeEvent event, Actor actor) {
-                        if (selectedProductType[0] != null) {
-                            selectedCount[0]++;
-                            countLabel.setText(String.valueOf(selectedCount[0]));
-                        }
-                    }
-                });
-
-                removeButton.addListener(new ChangeListener() {
-                    @Override
-                    public void changed(ChangeEvent event, Actor actor) {
-                        if (selectedProductType[0] != null && selectedCount[0] > 0) {
-                            selectedCount[0]--;
-                            countLabel.setText(String.valueOf(selectedCount[0]));
-                        }
-                    }
-                });
-
-                purchaseButton.addListener(new ChangeListener() {
-                    @Override
-                    public void changed(ChangeEvent changeEvent, Actor actor) {
-                        if (selectedAnimal[0] != null && !animalName.getText().isEmpty()) {
-                            Result result = controller.buyAnimal(String.valueOf(selectedAnimal[0]), animalName.getText());
-                            System.out.println(result.message());
-                            info.setText(result.toString());
-                        } else {
-                            Result result = controller.purchase(String.valueOf(selectedProductType[0]),
-                                String.valueOf(selectedCount[0]));
-                            System.out.println(result.message());
-                            info.setText(result.toString());
-                        }
-
-                    }
-                });
-
-
-                for (AnimalTypes animalType : ((MarnieRanch) building).animals) {
-                    TextButton productButton = new TextButton(animalType.getName() + " - " + animalType.getPrice() + "G", skin);
-
-                    productButton.addListener(new ChangeListener() {
-                        @Override
-                        public void changed(ChangeEvent event, Actor actor) {
-                            selectedProductType[0] = null;
-                            addButton.setVisible(false);
-                            removeButton.setVisible(false);
-                            countLabel.setVisible(false);
-                            animalName.setVisible(true);
-                            selectedAnimal[0] = animalType;
-                            selectedCount[0] = 0;
-                            selectedNameLabel.setText(animalType.getName());
-                            purchaseButton.setVisible(true);
-                        }
-                    });
-
-                    itemsTable.add(productButton)
-                        .fillX()
-                        .pad(5)
-                        .row();
-                }
-
-                for (ProductType productType : ((MarnieRanch) building).products) {
-                    TextButton productButton = new TextButton(productType.getName() + " - " + productType.getSellPrice() + "G", skin);
-
-                    productButton.addListener(new ChangeListener() {
-                        @Override
-                        public void changed(ChangeEvent event, Actor actor) {
-                            selectedAnimal[0] = null;
-                            addButton.setVisible(true);
-                            removeButton.setVisible(true);
-                            countLabel.setVisible(true);
-                            animalName.setVisible(false);
-                            selectedProductType[0] = productType;
-                            selectedCount[0] = 0;
-                            selectedNameLabel.setText(productType.getName());
-                            purchaseButton.setVisible(true);
-                        }
-                    });
-
-                    itemsTable.add(productButton)
-                        .fillX()
-                        .pad(5)
-                        .row();
-                }
-
-
-                counterPanel.add(animalName)
-                    .size(180, 70)
-                    .colspan(3)
-                    .center()
-                    .row();
-
-                info.setWrap(true);
-                info.setWidth(250);
-                info.setFontScale(0.7f);
-                info.setAlignment(Align.center);
-
-                counterPanel.add(info)
-                    .width(250)
-                    .pad(5)
-                    .colspan(3)
-                    .center()
-                    .row();
-
-                selectedPanel.add(counterPanel)
-                    .colspan(3)
-                    .center()
-                    .padBottom(40)
-                    .row();
-
-
-                Table mainTable = new Table();
-                mainTable.setFillParent(true);
-                mainTable.clear();
-
-                mainTable.add(scrollPane)
-                    .width(380)
-                    .expandY()
-                    .fillY()
-                    .pad(20)
-                    .padRight(30)
-                    .padLeft(170);
-
-                mainTable.add(selectedPanel)
-                    .width(200)
-                    .expandY()
-                    .fillY()
-                    .pad(30)
-                    .padLeft(50)
-                    .bottom();
-
-                content.add(mainTable)
-                    .expand()
-                    .fill();
-            } else if (building instanceof CarpenterShop) {
-                final FarmBuildingTypes[] selectedBuilding = {null};
-
-                purchaseButton.addListener(new ChangeListener() {
-                    @Override
-                    public void changed(ChangeEvent changeEvent, Actor actor) {
-
-                        //TODO
-                        //window
-
-                    }
-                });
-
-                for (FarmBuildingTypes farmBuildingType : ((CarpenterShop) building).getProducts()) {
-                    TextButton productButton = new TextButton(farmBuildingType.getName() + " - " + farmBuildingType.getCost() + "G", skin);
-
-                    productButton.addListener(new ChangeListener() {
-                        @Override
-                        public void changed(ChangeEvent event, Actor actor) {
-                            selectedBuilding[0] = farmBuildingType;
-                            selectedNameLabel.setText(farmBuildingType.getName() + " - " + farmBuildingType.getCost() + "G" + "\n" +
-                                "required stone: " + farmBuildingType.getStone() + "\n" + "required wood: " + farmBuildingType.getWood());
-                            selectedNameLabel.setFontScale(0.7f);
-                            purchaseButton.setVisible(true);
-
-                        }
-                    });
-
-                    itemsTable.add(productButton)
-                        .fillX()
-                        .pad(5)
-                        .row();
-                }
-                counterPanel.add(info)
-                    .width(250)
-                    .pad(5)
-                    .colspan(3)
-                    .center()
-                    .row();
-
-                selectedPanel.add(counterPanel)
-                    .colspan(3)
-                    .center()
-                    .padBottom(40)
-                    .row();
-
-
-                Table mainTable = new Table();
-                mainTable.setFillParent(true);
-                mainTable.clear();
-
-                mainTable.add(scrollPane)
-                    .width(380)
-                    .expandY()
-                    .fillY()
-                    .pad(20)
-                    .padRight(30)
-                    .padLeft(170);
-
-                mainTable.add(selectedPanel)
-                    .width(200)
-                    .expandY()
-                    .fillY()
-                    .pad(30)
-                    .padLeft(50)
-                    .bottom();
-
-                content.add(mainTable)
-                    .expand()
-                    .fill();
-            }
-
-
-            stage.addActor(window);
-
-            multiplexer.addProcessor(stage);
-            multiplexer.addProcessor(this);
-            Gdx.input.setInputProcessor(multiplexer);
-
-            return true;
-        }
-        return false;
+        return gameBuildingShop(building);
     }
 
 
@@ -663,7 +336,6 @@ public class GameView implements Screen, InputProcessor {
             }
         }
 
-        drawPlayers();
         drawInventory();
         drawNPCs();
         isPlayerMoved();
@@ -858,14 +530,6 @@ public class GameView implements Screen, InputProcessor {
         }
     }
 
-    private void drawPlayers() {
-        for (Player player : App.getCurrentGame().getPlayers()) {
-            player.getSprite().setPosition(player.getCoordinate().getX() * scaledSize,
-                player.getCoordinate().getY() * scaledSize);
-            player.getSprite().draw(Main.getBatch());
-        }
-    }
-
     private void drawForaging(Tile tile) {
         for (Good good : tile.getGoods()) {
             if (good instanceof ForagingTree || good instanceof FarmingTree) {
@@ -927,7 +591,8 @@ public class GameView implements Screen, InputProcessor {
             }
         }
 
-        toolsWindow.draw(Main.getBatch(), 10);
+        staticStage.addActor(toolsWindow);
+        setInputProcessor();
 
     }
 
@@ -957,7 +622,22 @@ public class GameView implements Screen, InputProcessor {
         mainTable.row();
         mainTable.add(mainWindow).colspan(7);
 
-        stage.addActor(mainTable);
+        staticStage.addActor(mainTable);
+        setInputProcessor();
+    }
+
+    private void setInputProcessor() {
+        multiplexer.clear();
+        multiplexer.addProcessor(stage);
+        multiplexer.addProcessor(staticStage);
+        multiplexer.addProcessor(this);
+        Gdx.input.setInputProcessor(multiplexer);
+    }
+
+    public void closeToolsWindow() {
+        toolsWindow.remove();
+        toolsTable.remove();
+        toolsWindow = null;
         setInputProcessor();
     }
 
@@ -969,6 +649,330 @@ public class GameView implements Screen, InputProcessor {
 
     public Table getMainTable() {
         return mainTable;
+    }
+
+    private boolean gameBuildingShop(GameBuilding building) {
+        if (building != null) {
+
+            Texture backgroundTexture = new Texture(Gdx.files.internal("shop-menu.png"));
+            Drawable backgroundDrawable = new TextureRegionDrawable(new TextureRegion(backgroundTexture));
+
+            final Window window = new Window("SHOP", skin);
+            window.setBackground(backgroundDrawable);
+            window.setSize(940, 600);
+            window.setPosition(
+                    (stage.getWidth() - window.getWidth()) / 2,
+                    (stage.getHeight() - window.getHeight()) / 2
+            );
+
+            Table header = new Table(skin);
+            Label title = new Label(String.valueOf(App.getCurrentGame().getCurrentPlayer().getWallet().getBalance()), skin);
+            TextButton closeButton = new TextButton("X", skin);
+            closeButton.pad(4);
+            closeButton.addListener(new ChangeListener() {
+                @Override
+                public void changed(ChangeEvent event, Actor actor) {
+                    window.remove();
+                    backgroundTexture.dispose();
+                }
+            });
+
+            header.add().expandX();
+            header.add(title).center().expandX().padRight(95).padBottom(30);
+            header.add(closeButton).top().right();
+
+            window.add(header).expandX().fillX().padTop(5).row();
+
+            Table content = new Table(skin);
+            window.add(content).expand().fill().pad(10);
+
+            Table itemsTable = new Table();
+            ScrollPane scrollPane = new ScrollPane(itemsTable, skin);
+            scrollPane.setFadeScrollBars(false);
+            scrollPane.setScrollingDisabled(false, false);
+            scrollPane.setForceScroll(false, true);
+            scrollPane.setSmoothScrolling(true);
+
+            Table selectedPanel = new Table(skin);
+            Label selectedNameLabel = new Label("", skin);
+            Label countLabel = new Label("0", skin);
+            TextButton addButton = new TextButton("+", skin);
+            TextButton removeButton = new TextButton("-", skin);
+            TextButton purchaseButton = new TextButton("Purchase", skin);
+            Label info = new Label("", skin);
+            addButton.setDisabled(false);
+            removeButton.setDisabled(false);
+            purchaseButton.setDisabled(false);
+            addButton.setVisible(false);
+            removeButton.setVisible(false);
+            purchaseButton.setVisible(false);
+            countLabel.setVisible(false);
+            Table counterPanel = new Table();
+            counterPanel.center();
+            selectedNameLabel.setAlignment(Align.center);
+            counterPanel.add(selectedNameLabel)
+                    .colspan(3)
+                    .fillX()
+                    .center()
+                    .padLeft(5)
+                    .row();
+
+
+            counterPanel.add(removeButton)
+                    .size(100, 70)
+                    .padLeft(0);
+
+            counterPanel.add(countLabel)
+                    .width(30)
+                    .padLeft(5)
+                    .center();
+
+            counterPanel.add(addButton)
+                    .size(100, 70)
+                    .padLeft(5)
+                    .row();
+
+
+            counterPanel.add(purchaseButton)
+                    .size(150, 70)
+                    .pad(5)
+                    .padLeft(10)
+                    .colspan(3)
+                    .center()
+                    .row();
+
+            info.setWrap(true);
+            info.setWidth(250);
+            info.setFontScale(0.7f);
+            info.setAlignment(Align.center);
+
+
+            // MarnieRanch
+            if (building instanceof MarnieRanch) {
+
+                final AnimalTypes[] selectedAnimal = {null};
+                final ProductType[] selectedProductType = {null};
+                final int[] selectedCount = {0};
+
+                TextField animalName = new TextField("", skin);
+
+                animalName.setDisabled(false);
+                animalName.setVisible(false);
+
+                addButton.addListener(new ChangeListener() {
+                    @Override
+                    public void changed(ChangeEvent event, Actor actor) {
+                        if (selectedProductType[0] != null) {
+                            selectedCount[0]++;
+                            countLabel.setText(String.valueOf(selectedCount[0]));
+                        }
+                    }
+                });
+
+                removeButton.addListener(new ChangeListener() {
+                    @Override
+                    public void changed(ChangeEvent event, Actor actor) {
+                        if (selectedProductType[0] != null && selectedCount[0] > 0) {
+                            selectedCount[0]--;
+                            countLabel.setText(String.valueOf(selectedCount[0]));
+                        }
+                    }
+                });
+
+                purchaseButton.addListener(new ChangeListener() {
+                    @Override
+                    public void changed(ChangeEvent changeEvent, Actor actor) {
+                        if (selectedAnimal[0] != null && !animalName.getText().isEmpty()) {
+                            Result result = controller.buyAnimal(String.valueOf(selectedAnimal[0]), animalName.getText());
+                            System.out.println(result.message());
+                            info.setText(result.toString());
+                        } else {
+                            Result result = controller.purchase(String.valueOf(selectedProductType[0]),
+                                    String.valueOf(selectedCount[0]));
+                            System.out.println(result.message());
+                            info.setText(result.toString());
+                        }
+
+                    }
+                });
+
+
+                for (AnimalTypes animalType : ((MarnieRanch) building).animals) {
+                    TextButton productButton = new TextButton(animalType.getName() + " - " + animalType.getPrice() + "G", skin);
+
+                    productButton.addListener(new ChangeListener() {
+                        @Override
+                        public void changed(ChangeEvent event, Actor actor) {
+                            selectedProductType[0] = null;
+                            addButton.setVisible(false);
+                            removeButton.setVisible(false);
+                            countLabel.setVisible(false);
+                            animalName.setVisible(true);
+                            selectedAnimal[0] = animalType;
+                            selectedCount[0] = 0;
+                            selectedNameLabel.setText(animalType.getName());
+                            purchaseButton.setVisible(true);
+                        }
+                    });
+
+                    itemsTable.add(productButton)
+                            .fillX()
+                            .pad(5)
+                            .row();
+                }
+
+                for (ProductType productType : ((MarnieRanch) building).products) {
+                    TextButton productButton = new TextButton(productType.getName() + " - " + productType.getSellPrice() + "G", skin);
+
+                    productButton.addListener(new ChangeListener() {
+                        @Override
+                        public void changed(ChangeEvent event, Actor actor) {
+                            selectedAnimal[0] = null;
+                            addButton.setVisible(true);
+                            removeButton.setVisible(true);
+                            countLabel.setVisible(true);
+                            animalName.setVisible(false);
+                            selectedProductType[0] = productType;
+                            selectedCount[0] = 0;
+                            selectedNameLabel.setText(productType.getName());
+                            purchaseButton.setVisible(true);
+                        }
+                    });
+
+                    itemsTable.add(productButton)
+                            .fillX()
+                            .pad(5)
+                            .row();
+                }
+
+
+                counterPanel.add(animalName)
+                        .size(180, 70)
+                        .colspan(3)
+                        .center()
+                        .row();
+
+                info.setWrap(true);
+                info.setWidth(250);
+                info.setFontScale(0.7f);
+                info.setAlignment(Align.center);
+
+                counterPanel.add(info)
+                        .width(250)
+                        .pad(5)
+                        .colspan(3)
+                        .center()
+                        .row();
+
+                selectedPanel.add(counterPanel)
+                        .colspan(3)
+                        .center()
+                        .padBottom(40)
+                        .row();
+
+
+                Table mainTable = new Table();
+                mainTable.setFillParent(true);
+                mainTable.clear();
+
+                mainTable.add(scrollPane)
+                        .width(380)
+                        .expandY()
+                        .fillY()
+                        .pad(20)
+                        .padRight(30)
+                        .padLeft(170);
+
+                mainTable.add(selectedPanel)
+                        .width(200)
+                        .expandY()
+                        .fillY()
+                        .pad(30)
+                        .padLeft(50)
+                        .bottom();
+
+                content.add(mainTable)
+                        .expand()
+                        .fill();
+            } else if (building instanceof CarpenterShop) {
+                final FarmBuildingTypes[] selectedBuilding = {null};
+
+                purchaseButton.addListener(new ChangeListener() {
+                    @Override
+                    public void changed(ChangeEvent changeEvent, Actor actor) {
+
+                        //TODO
+                        //window
+
+                    }
+                });
+
+                for (FarmBuildingTypes farmBuildingType : ((CarpenterShop) building).getProducts()) {
+                    TextButton productButton = new TextButton(farmBuildingType.getName() + " - " + farmBuildingType.getCost() + "G", skin);
+
+                    productButton.addListener(new ChangeListener() {
+                        @Override
+                        public void changed(ChangeEvent event, Actor actor) {
+                            selectedBuilding[0] = farmBuildingType;
+                            selectedNameLabel.setText(farmBuildingType.getName() + " - " + farmBuildingType.getCost() + "G" + "\n" +
+                                    "required stone: " + farmBuildingType.getStone() + "\n" + "required wood: " + farmBuildingType.getWood());
+                            selectedNameLabel.setFontScale(0.7f);
+                            purchaseButton.setVisible(true);
+
+                        }
+                    });
+
+                    itemsTable.add(productButton)
+                            .fillX()
+                            .pad(5)
+                            .row();
+                }
+                counterPanel.add(info)
+                        .width(250)
+                        .pad(5)
+                        .colspan(3)
+                        .center()
+                        .row();
+
+                selectedPanel.add(counterPanel)
+                        .colspan(3)
+                        .center()
+                        .padBottom(40)
+                        .row();
+
+
+                Table mainTable = new Table();
+                mainTable.setFillParent(true);
+                mainTable.clear();
+
+                mainTable.add(scrollPane)
+                        .width(380)
+                        .expandY()
+                        .fillY()
+                        .pad(20)
+                        .padRight(30)
+                        .padLeft(170);
+
+                mainTable.add(selectedPanel)
+                        .width(200)
+                        .expandY()
+                        .fillY()
+                        .pad(30)
+                        .padLeft(50)
+                        .bottom();
+
+                content.add(mainTable)
+                        .expand()
+                        .fill();
+            }
+
+
+            staticStage.addActor(window);
+            setInputProcessor();
+
+            return true;
+        }
+        return false;
     }
 }
 
