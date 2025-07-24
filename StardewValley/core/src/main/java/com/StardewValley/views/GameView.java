@@ -84,6 +84,11 @@ public class GameView implements Screen, InputProcessor {
     private ScrollPane toolsScrollPane;
     private Table toolsTable;
 
+    private Table mainTable;
+    private Window mainWindow;
+    private ArrayList<ImageButton> mainMenuButtons;
+
+
     public GameView(GameMenuController controller, Skin skin) {
         this.controller = controller;
 //        this.controller.initGameControllers();
@@ -800,4 +805,42 @@ public class GameView implements Screen, InputProcessor {
     public Stage getStage() {
         return stage;
     }
+
+    public void initMainTable() {
+        mainTable = new Table(skin);
+        mainTable.setFillParent(true);
+        mainWindow = new Window("", skin);
+        mainWindow.setSize(800, 600);
+
+        for (int i = 0; i < 8; i++) {
+            ImageButton imageButton = controller.getInventoryController().getMainInventoryElements().get(i);
+            if (i == 0)
+                imageButton.setDisabled(true);
+            else if (i == 7)
+                mainTable.add(imageButton).padLeft(100);
+            else
+                mainTable.add(imageButton);
+        }
+        mainTable.row();
+        mainTable.add(mainWindow).colspan(7);
+
+        stage.addActor(mainTable);
+        setInputProcessor();
+    }
+
+    public void closeMainTable() {
+        mainTable.remove();
+        mainTable = null;
+        mainWindow.remove();
+    }
+
+    public Table getMainTable() {
+        return mainTable;
+    }
 }
+
+
+
+
+
+

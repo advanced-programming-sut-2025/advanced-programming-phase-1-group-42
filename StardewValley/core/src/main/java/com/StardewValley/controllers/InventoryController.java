@@ -10,6 +10,7 @@ import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.scenes.scene2d.ui.ImageButton;
 import com.badlogic.gdx.scenes.scene2d.ui.ProgressBar;
+import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 
@@ -18,6 +19,7 @@ import java.util.ArrayList;
 public class InventoryController {
     private final ArrayList<Pair<ImageButton, Image>> inventoryElements;
     private final ArrayList<Pair<Pair<ImageButton, Image>, Integer>> toolsElements;
+    private final ArrayList<ImageButton> mainInventoryElements;
     private final ProgressBar progressBar;
 
     public InventoryController() {
@@ -45,7 +47,6 @@ public class InventoryController {
                             );
                         }
                     }
-
                 }
             });
 
@@ -56,6 +57,27 @@ public class InventoryController {
         progressBar.setValue(App.getCurrentGame().getCurrentPlayer().getEnergy().getDayEnergyLeft());
 
         toolsElements = new ArrayList<>();
+        mainInventoryElements = new ArrayList<>();
+        for (int i = 0; i < 8; i++) {
+            TextureRegionDrawable tabDrawable = new TextureRegionDrawable(new Texture("GameAssets/Main_Inventory/MainTable" + (i + 1) + ".png"));
+            TextureRegionDrawable tabDrawableClicked = new TextureRegionDrawable(new Texture("GameAssets/Main_Inventory/MainTable" + (i + 1) + "Clicked.png"));
+            ImageButton tabButton = new ImageButton(tabDrawable, tabDrawableClicked, tabDrawableClicked);
+            tabButton.addListener(new ClickListener() {
+                @Override
+                public void clicked(InputEvent event, float x, float y) {
+                    for (int i = 0; i < mainInventoryElements.size(); i++) {
+                        ImageButton imageButton = mainInventoryElements.get(i);
+                        imageButton.setChecked(false);
+                        if (imageButton == tabButton) {
+                            imageButton.setChecked(true);
+                            //TODO
+                        }
+                    }
+                }
+            });
+
+            mainInventoryElements.add(tabButton);
+        }
     }
 
     public void updateInventory() {
@@ -102,5 +124,9 @@ public class InventoryController {
 
     public ArrayList<Pair<Pair<ImageButton, Image>, Integer>> getToolsElements() {
         return toolsElements;
+    }
+
+    public ArrayList<ImageButton> getMainInventoryElements() {
+        return mainInventoryElements;
     }
 }
