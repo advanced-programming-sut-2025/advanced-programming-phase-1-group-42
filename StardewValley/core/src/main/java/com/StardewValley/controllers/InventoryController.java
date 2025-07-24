@@ -17,6 +17,7 @@ import java.util.ArrayList;
 
 public class InventoryController {
     private final ArrayList<Pair<ImageButton, Image>> inventoryElements;
+    private final ArrayList<Pair<Pair<ImageButton, Image>, Integer>> toolsElements;
     private final ProgressBar progressBar;
 
     public InventoryController() {
@@ -53,6 +54,8 @@ public class InventoryController {
 
         progressBar = new ProgressBar(0, 200, 1, true, Assets.getInstance().getSkin());
         progressBar.setValue(App.getCurrentGame().getCurrentPlayer().getEnergy().getDayEnergyLeft());
+
+        toolsElements = new ArrayList<>();
     }
 
     public void updateInventory() {
@@ -95,5 +98,9 @@ public class InventoryController {
 
     public ProgressBar getProgressBar() {
         return progressBar;
+    }
+
+    public ArrayList<Pair<Pair<ImageButton, Image>, Integer>> getToolsElements() {
+        return toolsElements;
     }
 }

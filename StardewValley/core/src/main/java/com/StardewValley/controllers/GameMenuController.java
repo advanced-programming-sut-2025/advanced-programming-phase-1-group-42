@@ -206,38 +206,38 @@ public class GameMenuController extends Controller {
             nextTurn();
             inventoryController.playerChangedInventory();
         }
-        if (Gdx.input.isKeyPressed(Input.Keys.C)) {
+        if (Gdx.input.isKeyJustPressed(Input.Keys.C)) {
 
         }
-        if (Gdx.input.isKeyPressed(Input.Keys.X)) {
+        if (Gdx.input.isKeyJustPressed(Input.Keys.X)) {
 
         }
-        if (Gdx.input.isKeyPressed(Input.Keys.E) || Gdx.input.isKeyPressed(Input.Keys.ESCAPE)) {
+        if (Gdx.input.isKeyJustPressed(Input.Keys.E) || Gdx.input.isKeyJustPressed(Input.Keys.ESCAPE)) {
 
         }
-        if (Gdx.input.isKeyPressed(Input.Keys.F)) {
+        if (Gdx.input.isKeyJustPressed(Input.Keys.F)) {
 
         }
-        if (Gdx.input.isKeyPressed(Input.Keys.M)) {
+        if (Gdx.input.isKeyJustPressed(Input.Keys.M)) {
 
         }
-        if (Gdx.input.isKeyPressed(Input.Keys.TAB)) {
+        if (Gdx.input.isKeyJustPressed(Input.Keys.TAB)) {
 
         }
-        if (Gdx.input.isKeyPressed(Input.Keys.T)) {
-//            if(gameView.getToolsWindow() == null || !gameView.getToolsWindow().isVisible())
-//                gameView.initToolsWindow();
-//            else
-//                gameView.getToolsWindow().setVisible(false);
+        if (Gdx.input.isKeyJustPressed(Input.Keys.T)) {
+            if(gameView.getToolsWindow() == null)
+                gameView.initToolsWindow();
+            else
+                gameView.closeToolsWindow();
         }
-        if (Gdx.input.isKeyPressed(Input.Keys.F4)) {
+        if (Gdx.input.isKeyJustPressed(Input.Keys.F4)) {
 
         }
         ArrayList<Integer> arr = new ArrayList<>(Arrays.asList(
             8, 9, 10, 11, 12, 13, 14, 15, 16, 7, 69, 70
         ));
         for (int i = 0; i < arr.size(); i++) {
-            if (Gdx.input.isKeyPressed(arr.get(i))) {
+            if (Gdx.input.isKeyJustPressed(arr.get(i))) {
                 App.getCurrentGame().getCurrentPlayer().setInHandGood(
                     App.getCurrentGame().getCurrentPlayer().getInventory().getList().get(i));
                 break;
