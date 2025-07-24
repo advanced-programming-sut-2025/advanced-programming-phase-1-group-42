@@ -216,7 +216,10 @@ public class GameMenuController extends Controller {
 
         }
         if (Gdx.input.isKeyJustPressed(Input.Keys.E) || Gdx.input.isKeyJustPressed(Input.Keys.ESCAPE)) {
-
+            if (gameView.getMainTable() == null)
+                gameView.initMainTable();
+            else
+                gameView.closeMainTable();
         }
         if (Gdx.input.isKeyJustPressed(Input.Keys.F)) {
 
