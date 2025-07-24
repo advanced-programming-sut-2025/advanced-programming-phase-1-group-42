@@ -15,7 +15,9 @@ import com.StardewValley.models.goods.tools.Tool;
 import com.StardewValley.models.goods.tools.ToolType;
 import com.StardewValley.models.interactions.Animals.Animal;
 import com.StardewValley.models.interactions.PlayerBuildings.FarmBuilding;
+import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Sprite;
+import com.badlogic.gdx.graphics.g2d.TextureRegion;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -37,6 +39,7 @@ public class Player {
     private Skill skill;
     private int playerDirection;
     private Sprite sprite;
+    private Sprite inHandGoodSprite;
     private float time;
 
     private Buff buff;
@@ -76,6 +79,10 @@ public class Player {
 
     public void setInHandGood(ArrayList<Good> inHandGood) {
         this.inHandGood = inHandGood;
+        if (!inHandGood.isEmpty())
+            inHandGoodSprite.setRegion(new Texture(inHandGood.getFirst().getType().imagePath()));
+        else
+            inHandGoodSprite.setRegion(new Texture(Assets.getInstance().getNullPNGPath()));
     }
 
     public Player(User user) {
@@ -93,8 +100,12 @@ public class Player {
         this.isInteracted = new HashMap<>();
         this.coordinate = new Coordinate(0, 0);
         this.playerDirection = -1;
-        this.sprite = new Sprite(Assets.getInstance().getPlayerTextures().get(2).get(0));
+        this.sprite = new Sprite(Assets.getInstance().getPlayerTextures().get(2).getFirst());
         this.sprite.setPosition(coordinate.getX(), coordinate.getY());
+        this.inHandGoodSprite = new Sprite(new Texture(Assets.getInstance().getNullPNGPath()));
+        this.inHandGoodSprite.setPosition(coordinate.getX() * 40,
+            coordinate.getY() * 40);
+
     }
 
     public void iniFriendships(ArrayList<Player> players) {
@@ -327,5 +338,13 @@ public class Player {
 
     public void setTime(float time) {
         this.time = time;
+    }
+
+    public Sprite getInHandGoodSprite() {
+        return inHandGoodSprite;
+    }
+
+    public void setInHandGoodSprite(Sprite inHandGoodSprite) {
+        this.inHandGoodSprite = inHandGoodSprite;
     }
 }

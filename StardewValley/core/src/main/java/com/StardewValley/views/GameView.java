@@ -5,6 +5,7 @@ import com.StardewValley.controllers.GameMenuController;
 import com.StardewValley.models.App;
 import com.StardewValley.models.Assets;
 import com.StardewValley.models.Pair;
+import com.StardewValley.models.Pair;
 import com.StardewValley.models.Result;
 import com.StardewValley.models.enums.Season;
 import com.StardewValley.models.enums.TileAssets;
@@ -15,6 +16,7 @@ import com.StardewValley.models.game_structure.Tile;
 import com.StardewValley.models.goods.Good;
 import com.StardewValley.models.goods.farmings.FarmingTree;
 import com.StardewValley.models.goods.foragings.ForagingTree;
+import com.StardewValley.models.goods.tools.Tool;
 import com.StardewValley.models.interactions.NPCs.NPC;
 import com.StardewValley.models.interactions.Player;
 import com.StardewValley.models.goods.products.ProductType;
@@ -50,6 +52,7 @@ import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 import com.badlogic.gdx.scenes.scene2d.utils.Drawable;
 import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 import com.badlogic.gdx.utils.Align;
+import com.badlogic.gdx.scenes.scene2d.ui.*;
 import com.badlogic.gdx.utils.viewport.FitViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
 import org.w3c.dom.ls.LSOutput;
@@ -67,47 +70,52 @@ public class GameView implements Screen, InputProcessor {
     private Skin skin;
     private GameMenuController controller;
     private Stage stage;
-    private Stage staticStage;
     private Table table;
     private final OrthographicCamera camera;
     private final Viewport viewport;
     private int scaledSize;
-    InputMultiplexer multiplexer = new InputMultiplexer();
-    private final Pair<Boolean, FarmBuildingTypes> isCarpenterShopOn = new Pair<>(false, null);
-
     private Table inventoryTable;
+    private InputMultiplexer multiplexer;
+
+    private Window toolsWindow;
+    private ScrollPane toolsScrollPane;
+    private Table toolsTable;
+
 
     public GameView(GameMenuController controller, Skin skin) {
         this.controller = controller;
-        this.controller.initGameControllers();
+//        this.controller.initGameControllers();
         this.skin = skin;
         table = new Table(skin);
+        table.setFillParent(true);
+        table.defaults().pad(10);
+
         camera = new OrthographicCamera();
         viewport = new FitViewport(Gdx.graphics.getWidth(), Gdx.graphics.getHeight(), camera);
         scaledSize = 40;
+        controller.setGameView(this);
+
         this.inventoryTable = new Table(skin);
         this.inventoryTable.setFillParent(true);
-        this.inventoryTable.padTop(750);
         drawInventory();
+
+        this.table.add(inventoryTable).padTop(1500).padLeft(-50);
+        this.table.add(controller.getInventoryController().getProgressBar()).padTop(600).padLeft(800);
+        this.table.row();
+
     }
 
     @Override
     public void show() {
         stage = new Stage(viewport);
 
-        InputMultiplexer multiplexer = new InputMultiplexer();
+        multiplexer = new InputMultiplexer();
         multiplexer.addProcessor(stage);
         multiplexer.addProcessor(this);
         Gdx.input.setInputProcessor(multiplexer);
-
         viewport.apply();
-        Gdx.input.setInputProcessor(this);
-        multiplexer.addProcessor(stage);
-        multiplexer.addProcessor(this);
-        Gdx.input.setInputProcessor(multiplexer);
 
-
-        stage.addActor(inventoryTable);
+        stage.addActor(table);
 
     }
 
@@ -121,13 +129,14 @@ public class GameView implements Screen, InputProcessor {
 
         Main.getBatch().begin();
         renderWorld();
-        Main.getBatch().end();
+
 
         Assets.getInstance().setColorFunction();
 
         controller.handleGame();
+        Main.getBatch().end();
 
-        stage.act(delta);
+        stage.act(Math.min(Gdx.graphics.getDeltaTime(), 1 / 30f));
         stage.draw();
     }
 
@@ -640,7 +649,7 @@ public class GameView implements Screen, InputProcessor {
         drawPlayers();
         drawInventory();
         drawNPCs();
-
+        drawFarmingBuilding();
     }
 
     private void drawNPCs() {
@@ -700,10 +709,9 @@ public class GameView implements Screen, InputProcessor {
     private void drawPlayers() {
         for (Player player : App.getCurrentGame().getPlayers()) {
             player.getSprite().setPosition(player.getCoordinate().getX() * scaledSize,
-                player.getCoordinate().getY() * scaledSize);
+                    player.getCoordinate().getY() * scaledSize);
             player.getSprite().draw(Main.getBatch());
         }
-        drawFarmingBuilding();
     }
 
     private void drawForaging(Tile tile) {
@@ -719,41 +727,59 @@ public class GameView implements Screen, InputProcessor {
             for (FarmBuilding farmBuilding : player.getFarm().getFarmBuildings()) {
                 if (farmBuilding.getType() != FarmBuildingTypes.HOME) {
                     Main.getBatch().draw(farmBuilding.getType().getTexture(), (float) (farmBuilding.getStartCordinate().getX() + farmBuilding.getEndCordinate().getX()) / 2 * scaledSize,
-                        (float) (farmBuilding.getStartCordinate().getY() + farmBuilding.getEndCordinate().getY()) / 2 * scaledSize,
-                        farmBuilding.getType().getSize().second() * scaledSize, farmBuilding.getType().getSize().first() * scaledSize);
+                            (float) (farmBuilding.getStartCordinate().getY() + farmBuilding.getEndCordinate().getY()) / 2 * scaledSize,
+                            farmBuilding.getType().getSize().second() * scaledSize, farmBuilding.getType().getSize().first() * scaledSize);
                 }
             }
         }
     }
 
-    private void drawInventory() {
-        inventoryTable.clear();
-
-        TextureRegionDrawable drawableSlot = new TextureRegionDrawable(new Texture("GameAssets/Inventory_Table/slot.png"));
-        TextureRegionDrawable drawableHighlight = new TextureRegionDrawable(new Texture("GameAssets/Inventory_Table/highlight.png"));
-        for (ArrayList<Good> goods : App.getCurrentGame().getCurrentPlayer().getInventory().getList()) {
+    public void drawInventory() {
+        for (Pair<ImageButton, Image> inventoryElement : controller.getInventoryController().getInventoryElements()) {
             Table table = new Table();
-            ImageButton imageButtonBackground;
-            if (goods == App.getCurrentGame().getCurrentPlayer().getInHandGood())
-                imageButtonBackground = new ImageButton(drawableHighlight, drawableHighlight, drawableHighlight);
-            else
-                imageButtonBackground = new ImageButton(drawableSlot, drawableHighlight, drawableHighlight);
-
-            imageButtonBackground.addListener(new ClickListener() {
-                @Override
-                public void clicked(InputEvent event, float x, float y) {
-
-                }
-            });
-            Image image = new Image();
-            if (!goods.isEmpty())
-                image = new Image(new TextureRegion(new Texture(goods.getFirst().getType().imagePath())));
-
-
-            table.add(imageButtonBackground);
-            table.add(image).padLeft(-48);
-
+            table.add(inventoryElement.first());
+            table.add(inventoryElement.second()).padLeft(-48);
             inventoryTable.add(table);
         }
+
+        controller.getInventoryController().getProgressBar().setValue(
+                App.getCurrentGame().getCurrentPlayer().getEnergy().getDayEnergyLeft()
+        );
+    }
+
+    public int getScaledSize() {
+        return scaledSize;
+    }
+
+    public void initToolsWindow() {
+        this.toolsWindow = new Window("Tools", skin, "Letter");
+        this.toolsTable = new Table(skin);
+        this.toolsTable.setFillParent(true);
+        this.toolsScrollPane = new ScrollPane(toolsTable, skin);
+
+        toolsWindow.add(toolsScrollPane);
+        toolsWindow.pack();
+        toolsWindow.setPosition(
+                (Gdx.graphics.getWidth()  - toolsWindow.getWidth())  / 2,
+                (Gdx.graphics.getHeight() - toolsWindow.getHeight()) / 2
+        );
+//        stage.addActor(toolsWindow);
+
+
+        for (int i = 0; i < controller.getInventoryController().getInventoryElements().size(); i++) {
+            if (!App.getCurrentGame().getCurrentPlayer().getInventory().getList().get(i).isEmpty() &&
+                    App.getCurrentGame().getCurrentPlayer().getInventory().getList().get(i).getLast() instanceof Tool) {
+                Pair<ImageButton, Image> inventoryElement = controller.getInventoryController().getInventoryElements().get(i);
+                toolsTable.add(inventoryElement.first());
+                toolsTable.add(inventoryElement.second()).padLeft(-48);
+            }
+        }
+
+        toolsWindow.draw(Main.getBatch(), 10);
+
+    }
+
+    public Window getToolsWindow() {
+        return toolsWindow;
     }
 }

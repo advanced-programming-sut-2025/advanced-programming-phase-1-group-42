@@ -2,6 +2,8 @@ package com.StardewValley.models.game_structure;
 
 import com.StardewValley.models.App;
 
+import static java.lang.Math.min;
+
 public class Energy {
     private int dayEnergyLeft = 200;
     private int maxDayEnergy = 200;
@@ -36,6 +38,7 @@ public class Energy {
         }
         if(this.turnValueLeft <= 0){
             App.getCurrentGame().nextPlayer();
+            this.turnValueLeft = min(50, dayEnergyLeft);
         }
     }
 

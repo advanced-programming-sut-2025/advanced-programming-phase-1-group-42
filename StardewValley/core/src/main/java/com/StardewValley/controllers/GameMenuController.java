@@ -73,15 +73,29 @@ public class GameMenuController extends Controller {
     private InventoryController inventoryController;
 
     private GameMenuView view;
+    private GameView gameView;
 
     public void setView(GameMenuView view) {
         this.view = view;
     }
 
-    public void initGameControllers() {
+    public void setGameView(GameView gameView) {
+        this.gameView = gameView;
         worldController = new WorldController();
         playerController = new PlayerController();
         inventoryController = new InventoryController();
+    }
+
+    public WorldController getWorldController() {
+        return worldController;
+    }
+
+    public PlayerController getPlayerController() {
+        return playerController;
+    }
+
+    public InventoryController getInventoryController() {
+        return inventoryController;
     }
 
     public void handleGameMenu() {
@@ -137,7 +151,6 @@ public class GameMenuController extends Controller {
     }
 
     public void handleGame() {
-
         handleInput();
         worldController.updateWorld();
         playerController.updatePlayer();
@@ -148,32 +161,50 @@ public class GameMenuController extends Controller {
         Player player = App.getCurrentGame().getCurrentPlayer();
         player.setPlayerDirection(-1);
 
+        boolean flag = false;
         if (Gdx.input.isKeyPressed(Input.Keys.W)) {
             if (tileValidity(App.getCurrentGame().getMap().findTileByXY(player.getCoordinate().getX(), player.getCoordinate().getY() + 1))) {
                 player.setCoordinate(new Coordinate(player.getCoordinate().getX(), player.getCoordinate().getY() + 1));
                 player.setPlayerDirection(0);
+                player.getInHandGoodSprite().setPosition(player.getCoordinate().getX() * gameView.getScaledSize(),
+                    player.getCoordinate().getY() * gameView.getScaledSize() + 23);
             }
+            flag = true;
         }
         if (Gdx.input.isKeyPressed(Input.Keys.A)) {
             if (tileValidity(App.getCurrentGame().getMap().findTileByXY(player.getCoordinate().getX() - 1, player.getCoordinate().getY()))) {
                 player.setCoordinate(new Coordinate(player.getCoordinate().getX() - 1, player.getCoordinate().getY()));
                 player.setPlayerDirection(1);
+                player.getInHandGoodSprite().setPosition(player.getCoordinate().getX() * gameView.getScaledSize() - 20,
+                    player.getCoordinate().getY() * gameView.getScaledSize() + 23);
+                if (!player.getInHandGoodSprite().isFlipX())
+                    player.getInHandGoodSprite().flip(true, false);
             }
+            flag = true;
         }
         if (Gdx.input.isKeyPressed(Input.Keys.S)) {
             if (tileValidity(App.getCurrentGame().getMap().findTileByXY(player.getCoordinate().getX(), player.getCoordinate().getY() - 1))) {
                 player.setCoordinate(new Coordinate(player.getCoordinate().getX(), player.getCoordinate().getY() - 1));
                 player.setPlayerDirection(2);
+                player.getInHandGoodSprite().setPosition(player.getCoordinate().getX() * gameView.getScaledSize(),
+                    player.getCoordinate().getY() * gameView.getScaledSize() + 23);
             }
+            flag = true;
         }
         if (Gdx.input.isKeyPressed(Input.Keys.D)) {
             if (tileValidity(App.getCurrentGame().getMap().findTileByXY(player.getCoordinate().getX() + 1, player.getCoordinate().getY()))) {
                 player.setCoordinate(new Coordinate(player.getCoordinate().getX() + 1, player.getCoordinate().getY()));
                 player.setPlayerDirection(3);
+                player.getInHandGoodSprite().setPosition(player.getCoordinate().getX() * gameView.getScaledSize() + 20,
+                    player.getCoordinate().getY() * gameView.getScaledSize() + 23);
+                if (player.getInHandGoodSprite().isFlipX())
+                    player.getInHandGoodSprite().flip(true, false);
             }
+            flag = true;
         }
         if (Gdx.input.isKeyJustPressed(Input.Keys.P)) {
             nextTurn();
+            inventoryController.playerChangedInventory();
         }
         if (Gdx.input.isKeyPressed(Input.Keys.C)) {
 
@@ -194,7 +225,10 @@ public class GameMenuController extends Controller {
 
         }
         if (Gdx.input.isKeyPressed(Input.Keys.T)) {
-
+//            if(gameView.getToolsWindow() == null || !gameView.getToolsWindow().isVisible())
+//                gameView.initToolsWindow();
+//            else
+//                gameView.getToolsWindow().setVisible(false);
         }
         if (Gdx.input.isKeyPressed(Input.Keys.F4)) {
 
@@ -209,6 +243,9 @@ public class GameMenuController extends Controller {
                 break;
             }
         }
+
+//        if (flag)
+//            App.getCurrentGame().getCurrentPlayer().getEnergy().decreaseTurnEnergyLeft(1);
     }
 
     private boolean tileValidity(Tile tile) {

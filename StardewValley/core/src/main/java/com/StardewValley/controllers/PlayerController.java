@@ -12,8 +12,15 @@ import com.badlogic.gdx.utils.Array;
 public class PlayerController {
     public void updatePlayer() {
         for (Player player : App.getCurrentGame().getPlayers()) {
+            player.getSprite().setPosition(player.getCoordinate().getX() * 40,
+                    player.getCoordinate().getY() * 40);
+            player.getSprite().draw(Main.getBatch());
+
             if (player.getPlayerDirection() != -1)
                 animation(player, player.getPlayerDirection());
+
+            player.getInHandGoodSprite().setSize(40, 40);
+            player.getInHandGoodSprite().draw(Main.getBatch());
         }
     }
 

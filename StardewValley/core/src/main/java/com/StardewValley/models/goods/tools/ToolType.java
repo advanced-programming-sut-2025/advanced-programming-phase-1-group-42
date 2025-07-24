@@ -4,7 +4,7 @@ import com.StardewValley.models.App;
 import com.StardewValley.models.goods.GoodType;
 
 public enum ToolType implements GoodType {
-    HOE("Hoe", -1, 5,"GameAssets/Tools/Pickaxe/Pickaxe.png"),
+    HOE("Hoe", -1, 5,"GameAssets/Hoe/Hoe.png"),
     PICKAXE("Pickaxe", -1,5,"GameAssets/Tools/Pickaxe/Pickaxe.png"),
     AXE("Axe", -1, 5,"GameAssets/Tools/Axe/Axe.png"),
     WATERING_CAN("Watering_Can", -1, 5,"GameAssets/Watering_Can/Watering_Can.png"), //?
