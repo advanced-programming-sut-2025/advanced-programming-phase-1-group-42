@@ -836,7 +836,6 @@ public class GameView implements Screen, InputProcessor {
             npcImage.setSize(150, 150);
             npcImage.setPosition(textFieldX - npcImage.getWidth() - 10, textFieldY);
             staticStage.addActor(npcImage);
-
         }
     }
 
