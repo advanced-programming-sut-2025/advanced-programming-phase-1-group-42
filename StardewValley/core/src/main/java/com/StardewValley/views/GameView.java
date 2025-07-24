@@ -84,9 +84,6 @@ public class GameView implements Screen, InputProcessor {
     private ScrollPane toolsScrollPane;
     private Table toolsTable;
 
-
-    private ClockController clockController = new ClockController();
-
     public GameView(GameMenuController controller, Skin skin) {
         this.controller = controller;
 //        this.controller.initGameControllers();
@@ -131,9 +128,6 @@ public class GameView implements Screen, InputProcessor {
 
         Main.getBatch().begin();
         renderWorld();
-
-
-        clockController.update();
 
         Assets.getInstance().setColorFunction();
         controller.handleGame();

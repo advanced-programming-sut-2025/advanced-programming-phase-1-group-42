@@ -69,7 +69,7 @@ public class ClockController extends Controller {
         currentWeather = App.getCurrentGame().getWeather();
         currentWallet = App.getCurrentGame().getCurrentPlayer().getWallet();
         skin = Assets.getInstance().getSkin();
-        stage = new Stage(new ScreenViewport());
+        stage = new Stage();
 
 
         lastNetWorth = currentWallet.getBalance();

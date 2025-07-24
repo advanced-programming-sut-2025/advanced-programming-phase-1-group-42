@@ -71,6 +71,7 @@ public class GameMenuController extends Controller {
     private WorldController worldController;
     private PlayerController playerController;
     private InventoryController inventoryController;
+    private ClockController clockController;
 
     private GameMenuView view;
     private GameView gameView;
@@ -84,6 +85,7 @@ public class GameMenuController extends Controller {
         worldController = new WorldController();
         playerController = new PlayerController();
         inventoryController = new InventoryController();
+        clockController = new ClockController();
     }
 
     public WorldController getWorldController() {
@@ -155,6 +157,7 @@ public class GameMenuController extends Controller {
         worldController.updateWorld();
         playerController.updatePlayer();
         inventoryController.updateInventory();
+        clockController.update();
     }
 
     public void handleInput() {
