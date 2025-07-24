@@ -26,10 +26,8 @@ import com.StardewValley.models.interactions.game_buildings.CarpenterShop;
 import com.StardewValley.models.interactions.game_buildings.GameBuilding;
 import com.StardewValley.models.interactions.game_buildings.MarnieRanch;
 import com.badlogic.gdx.*;
-import com.badlogic.gdx.graphics.Color;
-import com.badlogic.gdx.graphics.GL20;
-import com.badlogic.gdx.graphics.OrthographicCamera;
-import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.*;
+import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
@@ -54,6 +52,7 @@ import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 import com.badlogic.gdx.utils.Align;
 import com.badlogic.gdx.utils.viewport.FitViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
+import org.w3c.dom.ls.LSOutput;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -68,6 +67,7 @@ public class GameView implements Screen, InputProcessor {
     private Skin skin;
     private GameMenuController controller;
     private Stage stage;
+    private Stage staticStage;
     private Table table;
     private final OrthographicCamera camera;
     private final Viewport viewport;
@@ -93,7 +93,7 @@ public class GameView implements Screen, InputProcessor {
 
     @Override
     public void show() {
-        stage = new Stage();
+        stage = new Stage(viewport);
 
         InputMultiplexer multiplexer = new InputMultiplexer();
         multiplexer.addProcessor(stage);
@@ -112,7 +112,7 @@ public class GameView implements Screen, InputProcessor {
     }
 
     @Override
-    public void render(float v) {
+    public void render(float delta) {
         Gdx.gl.glClearColor(0, 0, 0, 1);
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 
@@ -124,17 +124,13 @@ public class GameView implements Screen, InputProcessor {
         Main.getBatch().end();
 
         Assets.getInstance().setColorFunction();
+
         controller.handleGame();
 
-        stage.act(Math.min(Gdx.graphics.getDeltaTime(), 1 / 30f));
+        stage.act(delta);
         stage.draw();
-        stage.act(min(Gdx.graphics.getDeltaTime(), 1 / 30f));
-        stage.draw();
-        stage.act(Gdx.graphics.getDeltaTime());
-
-
-
     }
+
 
     @Override
     public void resize(int i, int i1) {
@@ -175,21 +171,6 @@ public class GameView implements Screen, InputProcessor {
     public boolean keyTyped(char c) {
         return false;
     }
-
-//
-//    //for carpenter shop
-//    Vector2 mousePos = new Vector2(0, 0);
-//    ShapeRenderer shapeRenderer = new ShapeRenderer();
-//
-//    InputProcessor mouseProcessor = new InputAdapter() {
-//        @Override
-//        public boolean mouseMoved(int screenX, int screenY) {
-//            Vector2 stageCoords = stage.screenToStageCoordinates(new Vector2(screenX, screenY));
-//            mousePos.set(stageCoords.x, stageCoords.y);
-//            return true;
-//        }
-//    };
-//    ///
 
 
     @Override
@@ -657,17 +638,63 @@ public class GameView implements Screen, InputProcessor {
         }
 
         drawPlayers();
-        drawNPCs();
         drawInventory();
+        drawNPCs();
+
     }
 
     private void drawNPCs() {
         for (NPC npc : App.getCurrentGame().getNPCs()) {
             Sprite sprite = new Sprite(new Texture(npc.getType().getImagePath()));
-            sprite.setPosition(npc.getType().getCoordinate().getX() * scaledSize,
-                npc.getType().getCoordinate().getY() * scaledSize);
+            float x = npc.getType().getCoordinate().getX() * scaledSize;
+            float y = npc.getType().getCoordinate().getY() * scaledSize;
+
+            sprite.setPosition(x, y);
             sprite.draw(Main.getBatch());
+
+            //creating talk button style
+            Pixmap normal = new Pixmap(1, 1, Pixmap.Format.RGBA8888);
+            normal.setColor(Color.LIGHT_GRAY);
+            normal.fill();
+            Pixmap hover = new Pixmap(1, 1, Pixmap.Format.RGBA8888);
+            hover.setColor(Color.SKY);
+            hover.fill();
+            TextureRegionDrawable normalDrawable = new TextureRegionDrawable(new TextureRegion(new Texture(normal)));
+            TextureRegionDrawable hoverDrawable = new TextureRegionDrawable(new TextureRegion(new Texture(hover)));
+            BitmapFont font = new BitmapFont();
+            TextButton.TextButtonStyle style = new TextButton.TextButtonStyle();
+            style.up = normalDrawable;
+            style.over = hoverDrawable;
+            style.down = normalDrawable.tint(Color.GRAY);
+            style.font = font;
+
+            TextButton talk = new TextButton("Talk", style);
+            talk.getLabel().setColor(Color.BLACK);
+            talk.setSize((float) scaledSize, (float) (0.5 * scaledSize));
+            talk.getLabel().setFontScale(0.6f);
+            talk.setPosition(x + scaledSize + 10, y);
+            stage.addActor(talk);
+
+            talk.addListener(new ClickListener() {
+                public void clicked(InputEvent event, float x, float y) {
+                    float screenWidth = stage.getViewport().getWorldWidth();
+                    float screenHeight = stage.getViewport().getWorldHeight();
+
+                    TextArea textArea = new TextArea("hi", skin);
+                    textArea.setSize(400, 100);
+                    textArea.setPosition(
+                        screenWidth / 2 - textArea.getWidth() / 2,
+                        10f
+                    );
+
+                    stage.addActor(textArea);
+
+
+                }
+            });
+
         }
+
     }
 
     private void drawPlayers() {
