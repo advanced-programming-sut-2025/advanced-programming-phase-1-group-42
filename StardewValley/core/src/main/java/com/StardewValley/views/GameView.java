@@ -732,6 +732,26 @@ public class GameView implements Screen, InputProcessor {
                         infoWindow.setPosition(info.getX(), info.getY() + info.getHeight() + 10);
                         infoWindow.pad(6);
 
+                        TextButton closeButton = new TextButton("X", style);
+                        closeButton.setWidth(scaledSize);
+                        closeButton.setHeight(scaledSize);
+                        closeButton.getLabel().setFontScale(1f);
+                        closeButton.setColor(Color.YELLOW);
+                        closeButton.getLabel().setColor(Color.BLACK);
+                        closeButton.addListener(new ClickListener() {
+                            public void clicked(InputEvent event, float x, float y) {
+                                infoWindow.remove();
+                                if (questsWindow[0] != null) {
+                                    questsWindow[0].remove();
+                                    questsWindow[0] = null;
+                                }
+                            }
+                        });
+
+                        closeButton.setPosition(infoWindow.getWidth() - closeButton.getWidth(),
+                            infoWindow.getHeight() - closeButton.getHeight());
+                        infoWindow.addActor(closeButton);
+
                         TextButton gift = new TextButton("send gift", style);
                         gift.getLabel().setColor(Color.BLACK);
                         gift.setSize((float) 2 * scaledSize, (float) (0.7 * scaledSize));
@@ -770,26 +790,17 @@ public class GameView implements Screen, InputProcessor {
                                 questsWindow[0].setSize(6 * scaledSize, 4 * scaledSize);
                                 questsWindow[0].setPosition(infoWindow.getX() + infoWindow.getWidth() + 10, infoWindow.getY());
                                 String result = controller.getQuests(npc.getType().getName());
-                                Label labelQuest = new Label(result,skin);
+                                Label labelQuest = new Label(result, skin);
                                 labelQuest.setFontScale(0.5f);
                                 questsWindow[0].add(labelQuest);
                                 stage.addActor(questsWindow[0]);
                             }
                         });
 
-                        infoWindow.getTitleLabel().addListener(new ClickListener() {
-                            public void clicked(InputEvent event, float x, float y) {
-                                infoWindow.remove();
-                                if (questsWindow[0] != null) {
-                                    questsWindow[0].remove();
-                                    questsWindow[0] = null;
-                                }
-                            }
-                        });
-
                         stage.addActor(infoWindow);
                     }
                 });
+
 
 
             }
@@ -799,6 +810,12 @@ public class GameView implements Screen, InputProcessor {
     private void buildMessageNPC() {
         lastCoordinate = App.getCurrentGame().getCurrentPlayer().getCoordinate();
         float screenWidth = stage.getViewport().getWorldWidth();
+        if (npcTextField!=null) {
+            npcTextField.remove();
+        }
+        if (npcImage!=null) {
+            npcImage.remove();
+        }
         npcTextField = new TextArea("", skin);
         npcTextField.setSize(800, 150);
         float textFieldX = screenWidth / 2 - npcTextField.getWidth() / 2;
