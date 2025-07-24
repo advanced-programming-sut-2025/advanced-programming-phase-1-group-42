@@ -2095,6 +2095,19 @@ public class GameMenuController extends Controller {
 
         for (NPC npc : App.getCurrentGame().getNPCs()) {
             if (npc.getType().getName().equals(npcName)) {
+                if (isCloseEnough(npcName)) {
+                    npc.getFriendship();
+                    String talk = npc.npcDialogs();
+                    return new Result(true, talk);
+                }
+            }
+        }
+        return new Result(true, "Too far away. Approach the NPC to speak.");
+    }
+
+    public Boolean isCloseEnough(String npcName) {
+        for (NPC npc : App.getCurrentGame().getNPCs()) {
+            if (npc.getType().getName().equals(npcName)) {
                 if ((abs(npc.getType().getCoordinate().getX() -
                     App.getCurrentGame().getCurrentPlayer().getCoordinate().getX()) == 1 ||
                     (abs(npc.getType().getCoordinate().getX() -
@@ -2104,13 +2117,11 @@ public class GameMenuController extends Controller {
                         App.getCurrentGame().getCurrentPlayer().getCoordinate().getY()) == 1 ||
                         abs(npc.getType().getCoordinate().getY() -
                             App.getCurrentGame().getCurrentPlayer().getCoordinate().getY()) == 0)) {
-                    npc.getFriendship();
-                    String talk = npc.npcDialogs();
-                    return new Result(true, talk );
+                    return true;
                 }
             }
         }
-        return new Result(true, "Too far away. Approach the NPC to speak.");
+        return false;
     }
 
     public Result giftNPC(String npcName, String itemName) {
@@ -2133,7 +2144,7 @@ public class GameMenuController extends Controller {
         for (NPC npc : App.getCurrentGame().getNPCs()) {
             if (npc.getType().getName().equals(npcName)) {
                 npc.getGift(good);
-                return new Result(true, "You sent a gift to " + npcName);
+                return new Result(true, "You sent a " + itemName + " to " + npcName);
 
             }
         }
@@ -2182,6 +2193,29 @@ public class GameMenuController extends Controller {
         return new Result(true, "------------------------------");
     }
 
+    public String getQuests(String npcName) {
+        for (NPC npc : App.getCurrentGame().getNPCs()) {
+            if (npc.getType().getName().equals(npcName)) {
+                if (npc.getFriendship().getAvailableQuests().contains(1)) {
+                    return (npc.getType().getRequests().getFirst().first().getName() + " Count: " +
+                        npc.getType().getRequests().getFirst().second());
+                }
+                if (npc.getFriendship().getAvailableQuests().contains(2)) {
+                    return (npc.getType().getRequests().get(1).first().getName() + " " +
+                        npc.getType().getRequests().get(1).second());
+                }
+                if (npc.getFriendship().getAvailableQuests().contains(3)) {
+                    return (npc.getType().getRequests().get(2).first().getName() + " " +
+                        npc.getType().getRequests().get(2).second());
+                }
+
+            }
+        }
+        return "";
+    }
+
+
+
     public Result questsFinish(String index) {
         index = index.trim();
 
@@ -2189,15 +2223,7 @@ public class GameMenuController extends Controller {
         NPC targetNPC = null;
         boolean found = false;
         for (NPC npc : App.getCurrentGame().getNPCs()) {
-            if ((abs(npc.getType().getCoordinate().getX() -
-                App.getCurrentGame().getCurrentPlayer().getCoordinate().getX()) == 1 ||
-                (abs(npc.getType().getCoordinate().getX() -
-                    App.getCurrentGame().getCurrentPlayer().getCoordinate().getX()) == 0))
-                &&
-                (abs(npc.getType().getCoordinate().getY() -
-                    App.getCurrentGame().getCurrentPlayer().getCoordinate().getY()) == 1 ||
-                    abs(npc.getType().getCoordinate().getY() -
-                        App.getCurrentGame().getCurrentPlayer().getCoordinate().getY()) == 0)) {
+            if (isCloseEnough(npc.getType().getName())) {
                 targetNPC = npc;
                 found = true;
                 break;

@@ -136,9 +136,9 @@ public class GameView implements Screen, InputProcessor {
         controller.handleGame();
         Main.getBatch().end();
 
-        stage.act(Math.min(Gdx.graphics.getDeltaTime(), 1 / 30f));
+        stage.act(min(Gdx.graphics.getDeltaTime(), 1 / 30f));
         stage.draw();
-        staticStage.act(Math.min(Gdx.graphics.getDeltaTime(), 1 / 30f));
+        staticStage.act(min(Gdx.graphics.getDeltaTime(), 1 / 30f));
         staticStage.draw();
     }
 
@@ -674,7 +674,6 @@ public class GameView implements Screen, InputProcessor {
 
             if (Arrays.asList(validNPC).contains(npc.getType())) {
 
-                //creating talk button style
                 Pixmap normal = new Pixmap(1, 1, Pixmap.Format.RGBA8888);
                 normal.setColor(Color.YELLOW);
                 normal.fill();
@@ -707,47 +706,84 @@ public class GameView implements Screen, InputProcessor {
 
                 talk.addListener(new ClickListener() {
                     public void clicked(InputEvent event, float x, float y) {
-                        lastCoordinate = App.getCurrentGame().getCurrentPlayer().getCoordinate();
-
-                        lastCoordinate = App.getCurrentGame().getCurrentPlayer().getCoordinate();
-                        float screenWidth = stage.getViewport().getWorldWidth();
-                        npcTextField = new TextArea("hi", skin);
-                        npcTextField.setSize(800, 150);
-                        float textFieldX = screenWidth / 2 - npcTextField.getWidth() / 2;
-                        float textFieldY = 10f;
-                        npcTextField.setPosition(textFieldX, textFieldY);
-                        npcTextField.setText(controller.meetNPC(npc.getType().getName()).message());
-
-                        Texture texture = new Texture(Gdx.files.internal(npc.getType().getAvatarPath())); // مسیر تصویر
+                        Texture texture = new Texture(Gdx.files.internal(npc.getType().getAvatarPath()));
                         npcImage = new Image(texture);
-                        npcImage.setSize(150, 150);
-                        npcImage.setPosition(textFieldX - npcImage.getWidth() - 10, textFieldY);
-
-                        staticStage.addActor(npcTextField);
-                        staticStage.addActor(npcImage);
+                        buildMessageNPC();
+                        npcTextField.setText(controller.meetNPC(npc.getType().getName()).message());
                     }
                 });
+                final Window[] questsWindow = {null};
 
                 info.addListener(new ClickListener() {
                     public void clicked(InputEvent event, float x, float y) {
-                        Label label = new Label("Name: " + npc.getType().getName(), skin);
-
+                        Label label = new Label(npc.getType().getName(), skin);
                         Window infoWindow = new Window("NPC Info", skin);
+                        infoWindow.getTitleLabel().setFontScale(0.7f);
 
-                        Label friendShip = new Label("Friendship: " + npc.getFriendship().getFriendshipLevel(), skin);
-
+                        Label friendShip = new Label("Friendship: " + npc.getFriendship().getFriendshipLevel() + "\n" +
+                            "Points: " + npc.getFriendship().getFriendshipPoints(), skin);
                         infoWindow.pad(10);
                         infoWindow.add(label).row();
                         infoWindow.add(friendShip).left().padTop(5).row();
-                        label.setFontScale(0.4f);
+                        label.setFontScale(0.5f);
                         friendShip.setFontScale(0.5f);
 
-                        infoWindow.setSize(6*scaledSize, 4*scaledSize);
+                        infoWindow.setSize(6 * scaledSize, 5 * scaledSize);
                         infoWindow.setPosition(info.getX(), info.getY() + info.getHeight() + 10);
+                        infoWindow.pad(6);
 
-                        infoWindow.addListener(new ClickListener() {
+                        TextButton gift = new TextButton("send gift", style);
+                        gift.getLabel().setColor(Color.BLACK);
+                        gift.setSize((float) 2 * scaledSize, (float) (0.7 * scaledSize));
+                        gift.pad(7);
+                        infoWindow.add(gift).center().padTop(7).padBottom(5).row();
+
+                        TextButton quest = new TextButton("quests", style);
+                        quest.getLabel().setColor(Color.BLACK);
+                        quest.setSize((float) 2 * scaledSize, (float) (0.7 * scaledSize));
+                        quest.pad(7);
+                        infoWindow.add(quest).center().padTop(7).row();
+
+                        gift.addListener(new ClickListener() {
+                            public void clicked(InputEvent event, float x, float y) {
+                                if (controller.isCloseEnough(npc.getType().getName())) {
+                                    Result result = controller.giftNPC(npc.getType().getName(),
+                                        App.getCurrentGame().getCurrentPlayer().getInHandGood().getFirst().getName());
+                                    buildMessageNPC();
+                                    npcTextField.setText(result.message());
+                                } else {
+                                    buildMessageNPC();
+                                    npcTextField.setText("Too far away. Approach the NPC to send a gift.");
+                                }
+                            }
+                        });
+
+                        quest.addListener(new ClickListener() {
+                            public void clicked(InputEvent event, float x, float y) {
+                                if (questsWindow[0] != null) {
+                                    questsWindow[0].remove();
+                                    questsWindow[0] = null;
+                                }
+                                questsWindow[0] = new Window("Quests", skin);
+                                questsWindow[0].getTitleLabel().setFontScale(0.5f);
+                                questsWindow[0].pad(10);
+                                questsWindow[0].setSize(6 * scaledSize, 4 * scaledSize);
+                                questsWindow[0].setPosition(infoWindow.getX() + infoWindow.getWidth() + 10, infoWindow.getY());
+                                String result = controller.getQuests(npc.getType().getName());
+                                Label labelQuest = new Label(result,skin);
+                                labelQuest.setFontScale(0.5f);
+                                questsWindow[0].add(labelQuest);
+                                stage.addActor(questsWindow[0]);
+                            }
+                        });
+
+                        infoWindow.getTitleLabel().addListener(new ClickListener() {
                             public void clicked(InputEvent event, float x, float y) {
                                 infoWindow.remove();
+                                if (questsWindow[0] != null) {
+                                    questsWindow[0].remove();
+                                    questsWindow[0] = null;
+                                }
                             }
                         });
 
@@ -756,11 +792,26 @@ public class GameView implements Screen, InputProcessor {
                 });
 
 
-
-
             }
         }
+    }
 
+    private void buildMessageNPC() {
+        lastCoordinate = App.getCurrentGame().getCurrentPlayer().getCoordinate();
+        float screenWidth = stage.getViewport().getWorldWidth();
+        npcTextField = new TextArea("", skin);
+        npcTextField.setSize(800, 150);
+        float textFieldX = screenWidth / 2 - npcTextField.getWidth() / 2;
+        float textFieldY = 10f;
+        npcTextField.setPosition(textFieldX, textFieldY);
+        staticStage.addActor(npcTextField);
+
+        if (npcImage != null) {
+            npcImage.setSize(150, 150);
+            npcImage.setPosition(textFieldX - npcImage.getWidth() - 10, textFieldY);
+            staticStage.addActor(npcImage);
+
+        }
     }
 
     private void isPlayerMoved() {
@@ -768,7 +819,11 @@ public class GameView implements Screen, InputProcessor {
             if (App.getCurrentGame().getCurrentPlayer().getCoordinate().getX() != lastCoordinate.getX() ||
                 App.getCurrentGame().getCurrentPlayer().getCoordinate().getY() != lastCoordinate.getY()) {
                 npcTextField.remove();
-                npcImage.remove();
+                if (npcImage != null) {
+                    npcImage.clear();
+                    npcImage.remove();
+                }
+
             }
         }
     }
