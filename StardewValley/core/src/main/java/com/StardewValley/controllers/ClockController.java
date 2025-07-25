@@ -123,7 +123,7 @@ public class ClockController extends Controller {
 
     public void update() {
 
-        clockHandImage.setRotation((currentTime.getTime() - 9) * 14);
+        clockHandImage.setRotation(180 - ((currentTime.getTime() - 9) * 14));
 
         String currentWeatherName = App.getCurrentGame().getWeather().getName();
         String currentSeasonName = App.getCurrentGame().getDateTime().getSeason().getName();
@@ -291,7 +291,7 @@ public class ClockController extends Controller {
             lastTimeOfDayName = currentTimeOfDay;
             timeOfDayLabel.setText(currentTimeOfDay + ":00");
         }
-        
+
         stage.act(Gdx.graphics.getDeltaTime());
         stage.draw();
     }
