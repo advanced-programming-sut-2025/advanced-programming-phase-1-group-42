@@ -58,7 +58,7 @@ public class Farm {
         }
 
         //TODO
-        farmBuildings.add(new FarmBuilding(FarmBuildingTypes.BARN,new Coordinate(50,30)));
+//        farmBuildings.add(new FarmBuilding(FarmBuildingTypes.BARN,new Coordinate(50,30)));
 
         farmBuildings.add(getHome(playerNumber));
         iniGreenHouse(playerNumber);

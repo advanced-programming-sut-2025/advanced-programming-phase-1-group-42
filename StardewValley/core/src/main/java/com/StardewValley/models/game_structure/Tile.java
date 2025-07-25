@@ -4,7 +4,21 @@ import com.StardewValley.models.App;
 import com.StardewValley.models.enums.TileType;
 import com.StardewValley.models.goods.Good;
 import com.StardewValley.models.goods.GoodType;
+import com.StardewValley.models.goods.craftings.Crafting;
 import com.StardewValley.models.goods.craftings.CraftingType;
+import com.StardewValley.models.goods.farmings.FarmingTree;
+import com.StardewValley.models.goods.farmings.FarmingTreeSapling;
+import com.StardewValley.models.goods.fishs.Fish;
+import com.StardewValley.models.goods.foods.Food;
+import com.StardewValley.models.goods.foragings.ForagingMineral;
+import com.StardewValley.models.goods.foragings.ForagingMixedSeed;
+import com.StardewValley.models.goods.foragings.ForagingSeed;
+import com.StardewValley.models.goods.foragings.ForagingTree;
+import com.StardewValley.models.goods.products.Product;
+import com.StardewValley.models.goods.recipes.CookingRecipe;
+import com.StardewValley.models.goods.recipes.CookingRecipeType;
+import com.StardewValley.models.goods.recipes.CraftingRecipe;
+import com.StardewValley.models.goods.tools.Tool;
 
 import java.util.ArrayList;
 
@@ -78,7 +92,6 @@ public class Tile {
         isWatered = watered;
     }
 
-
     public boolean checkAroundForScarCrow(){
         for(int i = -1 ; i < 1 ; i++) {
             for(int j = -1 ; j < 1 ; j++) {
@@ -91,5 +104,85 @@ public class Tile {
             }
         }
         return false;
+    }
+
+    public Good doesHasTree() {
+        for (Good good : this.goods) {
+            if (good instanceof ForagingTree || good instanceof FarmingTree)
+                return good;
+        }
+        return null;
+    }
+
+    public Good doesHasTreeSapling() {
+        for (Good good : this.goods) {
+            if (good instanceof FarmingTreeSapling)
+                return good;
+        }
+        return null;
+    }
+
+    public Good doesHasFish() {
+        for (Good good : this.goods) {
+            if (good instanceof Fish)
+                return good;
+        }
+        return null;
+    }
+
+    public Good doesHasFood() {
+        for (Good good : this.goods) {
+            if (good instanceof Food)
+                return good;
+        }
+        return null;
+    }
+
+    public Good doesHasSeed() {
+        for (Good good : this.goods) {
+            if (good instanceof ForagingSeed || good instanceof ForagingMixedSeed)
+                return good;
+        }
+        return null;
+    }
+
+    public Good doesHasMineral() {
+        for (Good good : this.goods) {
+            if (good instanceof ForagingMineral)
+                return good;
+        }
+        return null;
+    }
+
+    public Good doesHasProduct() {
+        for (Good good : this.goods) {
+            if (good instanceof Product)
+                return good;
+        }
+        return null;
+    }
+
+    public Good doesHasCrafting() {
+        for (Good good : this.goods) {
+            if (good instanceof Crafting)
+                return good;
+        }
+        return null;
+    }
+
+    public Good doesHasRecipe() {
+        for (Good good : this.goods) {
+            if (good instanceof CookingRecipe || good instanceof CraftingRecipe)
+                return good;
+        }
+        return null;
+    }
+
+    public Good doesHasTool() {
+        for (Good good : this.goods) {
+            if (good instanceof Tool)
+                return good;
+        }
+        return null;
     }
 }

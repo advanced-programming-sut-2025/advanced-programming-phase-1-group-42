@@ -9,70 +9,70 @@ import java.util.Arrays;
 public enum ForagingCropType implements GoodType {
     // Foraging Crops
     DAFFODIL("Daffodil", 0, 30,
-        new ArrayList<>(Arrays.asList(Season.SPRING)), "/assets/GameAssets/Foraging/Daffodil.png"),
+        new ArrayList<>(Arrays.asList(Season.SPRING)), "GameAssets/Foraging/Daffodil.png"),
 
     DANDELION("Dandelion", 25, 40,
-        new ArrayList<>(Arrays.asList(Season.SPRING)), "/assets/GameAssets/Foraging/Dandelion.png"),
+        new ArrayList<>(Arrays.asList(Season.SPRING)), "GameAssets/Foraging/Dandelion.png"),
 
     LEEK("Leek", 40, 60,
-        new ArrayList<>(Arrays.asList(Season.SPRING)), "/assets/GameAssets/Foraging/Leek.png"),
+        new ArrayList<>(Arrays.asList(Season.SPRING)), "GameAssets/Foraging/Leek.png"),
 
     MOREL("Morel", 20, 150,
-        new ArrayList<>(Arrays.asList(Season.SPRING)), "/assets/GameAssets/Foraging/Morel.png"),
+        new ArrayList<>(Arrays.asList(Season.SPRING)), "GameAssets/Foraging/Morel.png"),
 
     SALMONBERRY("Salmonberry", 25, 5,
-        new ArrayList<>(Arrays.asList(Season.SPRING)), "/assets/GameAssets/Foraging/Salmonberry.png"),
+        new ArrayList<>(Arrays.asList(Season.SPRING)), "GameAssets/Foraging/Salmonberry.png"),
 
     SPRING_ONION("Spring_Onion", 13, 8,
-        new ArrayList<>(Arrays.asList(Season.SPRING)), "/assets/GameAssets/Foraging/Spring_Onion.png"),
+        new ArrayList<>(Arrays.asList(Season.SPRING)), "GameAssets/Foraging/Spring_Onion.png"),
 
     WILD_HORSERADISH("Wild_Horseradish", 13, 50,
-        new ArrayList<>(Arrays.asList(Season.SPRING)), "/assets/GameAssets/Foraging/Wild_Horseradish.png"),
+        new ArrayList<>(Arrays.asList(Season.SPRING)), "GameAssets/Foraging/Wild_Horseradish.png"),
 
     FIDDLEHEAD_FERN("Fiddlehead_Fern", 25, 90,
-        new ArrayList<>(Arrays.asList(Season.SUMMER)), "/assets/GameAssets/Foraging/Fiddlehead_Fern.png"),
+        new ArrayList<>(Arrays.asList(Season.SUMMER)), "GameAssets/Foraging/Fiddlehead_Fern.png"),
 
     GRAPE("Grape", 38, 80,
-        new ArrayList<>(Arrays.asList(Season.SUMMER)), "/assets/GameAssets/Foraging/Grape.png"),
+        new ArrayList<>(Arrays.asList(Season.SUMMER)), "GameAssets/Foraging/Grape.png"),
 
     RED_MUSHROOM("Red_Mushroom", -50, 75,
-        new ArrayList<>(Arrays.asList(Season.SUMMER)), "/assets/GameAssets/Foraging/Red_Mushroom.png"),
+        new ArrayList<>(Arrays.asList(Season.SUMMER)), "GameAssets/Foraging/Red_Mushroom.png"),
 
     SPICE_BERRY("Spice_Berry", 25, 80,
-        new ArrayList<>(Arrays.asList(Season.SUMMER)), "/assets/GameAssets/Foraging/Spice_Berry.png"),
+        new ArrayList<>(Arrays.asList(Season.SUMMER)), "GameAssets/Foraging/Spice_Berry.png"),
 
     SWEET_PEA("Sweet_Pea", 0, 50,
-        new ArrayList<>(Arrays.asList(Season.SUMMER)), "/assets/GameAssets/Foraging/Sweet_Pea.png"),
+        new ArrayList<>(Arrays.asList(Season.SUMMER)), "GameAssets/Foraging/Sweet_Pea.png"),
 
     BLACKBERRY("Blackberry", 25, 25,
-        new ArrayList<>(Arrays.asList(Season.FALL)), "/assets/GameAssets/Foraging/Blackberry.png"),
+        new ArrayList<>(Arrays.asList(Season.FALL)), "GameAssets/Foraging/Blackberry.png"),
 
     CHANTERELLE("Chanterelle", 75, 160,
-        new ArrayList<>(Arrays.asList(Season.FALL)), "/assets/GameAssets/Foraging/Chanterelle.png"),
+        new ArrayList<>(Arrays.asList(Season.FALL)), "GameAssets/Foraging/Chanterelle.png"),
 
     HAZELNUT("Hazelnut", 38, 40,
-        new ArrayList<>(Arrays.asList(Season.FALL)), "/assets/GameAssets/Foraging/Hazelnut.png"),
+        new ArrayList<>(Arrays.asList(Season.FALL)), "GameAssets/Foraging/Hazelnut.png"),
 
     PURPLE_MUSHROOM("Purple_Mushroom", 30, 90,
-        new ArrayList<>(Arrays.asList(Season.FALL)), "/assets/GameAssets/Foraging/Purple_Mushroom.png"),
+        new ArrayList<>(Arrays.asList(Season.FALL)), "GameAssets/Foraging/Purple_Mushroom.png"),
 
     WILD_PLUM("Wild_Plum", 25, 80,
-        new ArrayList<>(Arrays.asList(Season.FALL)), "/assets/GameAssets/Foraging/Wild_Plum.png"),
+        new ArrayList<>(Arrays.asList(Season.FALL)), "GameAssets/Foraging/Wild_Plum.png"),
 
     CROCUS("Crocus", 0, 60,
-        new ArrayList<>(Arrays.asList(Season.WINTER)), "/assets/GameAssets/Foraging/Crocus.png"),
+        new ArrayList<>(Arrays.asList(Season.WINTER)), "GameAssets/Foraging/Crocus.png"),
 
     CRYSTAL_FRUIT("Crystal_Fruit", 63, 150,
-        new ArrayList<>(Arrays.asList(Season.WINTER)), "/assets/GameAssets/Foraging/Crystal_Fruit.png"),
+        new ArrayList<>(Arrays.asList(Season.WINTER)), "GameAssets/Foraging/Crystal_Fruit.png"),
 
     HOLLY("Holly", -37, 80,
-        new ArrayList<>(Arrays.asList(Season.WINTER)), "/assets/GameAssets/Foraging/Holly.png"),
+        new ArrayList<>(Arrays.asList(Season.WINTER)), "GameAssets/Foraging/Holly.png"),
 
     SNOW_YAM("Snow_Yam", 30, 100,
-        new ArrayList<>(Arrays.asList(Season.WINTER)), "/assets/GameAssets/Foraging/Snow_Yam.png"),
+        new ArrayList<>(Arrays.asList(Season.WINTER)), "GameAssets/Foraging/Snow_Yam.png"),
 
     WINTER_ROOT("Winter_Root", 25, 70,
-        new ArrayList<>(Arrays.asList(Season.WINTER)), "/assets/GameAssets/Foraging/Winter_Root.png");
+        new ArrayList<>(Arrays.asList(Season.WINTER)), "GameAssets/Foraging/Winter_Root.png");
 
     private String name;
     private int energy;

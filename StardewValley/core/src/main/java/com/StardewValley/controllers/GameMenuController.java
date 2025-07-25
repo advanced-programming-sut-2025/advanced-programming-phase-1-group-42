@@ -84,7 +84,7 @@ public class GameMenuController extends Controller {
         this.gameView = gameView;
         worldController = new WorldController();
         playerController = new PlayerController();
-        inventoryController = new InventoryController();
+        inventoryController = new InventoryController(gameView);
         clockController = new ClockController();
     }
 
@@ -156,6 +156,9 @@ public class GameMenuController extends Controller {
     }
 
     public void handleInput() {
+        if (gameView.getCheatWindow() != null)
+            return;
+
         Player player = App.getCurrentGame().getCurrentPlayer();
         player.setPlayerDirection(-1);
 
@@ -228,11 +231,17 @@ public class GameMenuController extends Controller {
         if (Gdx.input.isKeyJustPressed(Input.Keys.T)) {
             if(gameView.getToolsWindow() == null)
                 gameView.initToolsWindow();
-                else
-                    gameView.closeToolsWindow();
+            else
+                gameView.closeToolsWindow();
         }
         if (Gdx.input.isKeyJustPressed(Input.Keys.F4)) {
 
+        }
+        if (Gdx.input.isKeyJustPressed(Input.Keys.SPACE)) {
+            if (gameView.getCheatWindow() == null)
+                gameView.initCheatWindow();
+            else
+                gameView.closeCheatWindow();
         }
         ArrayList<Integer> arr = new ArrayList<>(Arrays.asList(
             8, 9, 10, 11, 12, 13, 14, 15, 16, 7, 69, 70
@@ -252,7 +261,8 @@ public class GameMenuController extends Controller {
     private boolean tileValidity(Tile tile) {
         if (tile.getTileType() == TileType.STONE_WALL ||
             tile.getTileType() == TileType.WATER ||
-            tile.getTileType() == TileType.GAME_BUILDING)
+            tile.getTileType() == TileType.GAME_BUILDING ||
+            (tile.getTileType() == TileType.GREEN_HOUSE && !App.getCurrentGame().getCurrentPlayer().getFarm().getGreenHouse().isAvailable()))
             return false;
         return true;
     }
@@ -421,7 +431,8 @@ public class GameMenuController extends Controller {
         }
     }
 
-    public Result forceTerminate(Scanner scanner) {
+    public Result forceTerminate() {
+        Scanner scanner = new Scanner(System.in);
         ArrayList<Boolean> poll = new ArrayList<>();
         poll.add(true);
         for (int i = 1; i < App.getCurrentGame().getPlayers().size(); i++) {
@@ -608,7 +619,8 @@ public class GameMenuController extends Controller {
 
     //Parsa
     //Map methods
-    public Result walk(String x, String y, Scanner scanner) {
+    public Result walk(String x, String y) {
+        Scanner scanner = new Scanner(System.in);
         x = x.trim();
         y = y.trim();
 
@@ -820,12 +832,11 @@ public class GameMenuController extends Controller {
             return new Result(false, "You don't have tool in your hand!");
     }
 
-    public Result toolsUse(String direction) {
-        direction = direction.trim();
-
+    public Result toolsUse(Coordinate coordinate) {
         if (App.getCurrentGame().getCurrentPlayer().getInHandGood().getLast() instanceof Tool) {
             Tool tool = (Tool) App.getCurrentGame().getCurrentPlayer().getInHandGood().getLast();
-            Coordinate coordinate = Coordinate.getDirection(direction);
+            coordinate = new Coordinate(coordinate.getX() + App.getCurrentGame().getCurrentPlayer().getCoordinate().getX(),
+                coordinate.getY() + App.getCurrentGame().getCurrentPlayer().getCoordinate().getY());
             if (coordinate == null)
                 return new Result(false, "Direction not recognized");
 
@@ -834,7 +845,6 @@ public class GameMenuController extends Controller {
             if (App.getCurrentGame().getMap().findTile(coordinate) == null)
                 return new Result(false, "Tile not found");
 
-            App.getCurrentGame().getCurrentPlayer().getEnergy().decreaseTurnEnergyLeft(tool.getType().getEnergy());
             App.getCurrentGame().getCurrentPlayer().getEnergy().decreaseTurnEnergyLeft(tool.getType().getEnergy());
 
             return ToolFunctions.tooluse(tool, coordinate);

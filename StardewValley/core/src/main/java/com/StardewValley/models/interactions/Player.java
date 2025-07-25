@@ -71,6 +71,8 @@ public class Player {
         this.coordinate = new Coordinate(farm.getFarmBuildings().getFirst().getStartCordinate().getX() + 5,
                 farm.getFarmBuildings().getFirst().getStartCordinate().getY() + 2);
         this.inHandGood = inventory.getList().getFirst();
+        this.inHandGoodSprite.setPosition((this.coordinate.getX()) * 40,
+            (this.coordinate.getY()) * 40);
     }
 
     public Farm getFarm() {

@@ -46,6 +46,7 @@ public class Assets {
     private final TextureRegionDrawable drawableSlot = new TextureRegionDrawable(new Texture("GameAssets/Inventory_Table/slot.png"));
     private final TextureRegionDrawable drawableSlotHover = new TextureRegionDrawable(new Texture("GameAssets/Inventory_Table/slotHover.png"));
     private final TextureRegionDrawable drawableHighlight = new TextureRegionDrawable(new Texture("GameAssets/Inventory_Table/highlight.png"));
+    private final Texture night_background = new Texture("night.png");
 
     private final String nullPNGPath = "GameAssets/null.png";
 
@@ -73,18 +74,6 @@ public class Assets {
         return playerTextures;
     }
 
-    public void setColorFunction() {
-        int time = App.getCurrentGame().getDateTime().getTime();
-        if(time >= 19) {
-            Gdx.gl.glEnable(GL20.GL_BLEND);
-            shapeRenderer.begin(ShapeRenderer.ShapeType.Filled);
-            shapeRenderer.setColor(0, 0, 0, 0.5f);
-            shapeRenderer.rect(0, 0, Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
-            shapeRenderer.end();
-            Gdx.gl.glDisable(GL20.GL_BLEND);
-        }
-    }
-
     public TextureRegionDrawable getDrawableSlot() {
         return drawableSlot;
     }
@@ -99,5 +88,9 @@ public class Assets {
 
     public TextureRegionDrawable getDrawableSlotHover() {
         return drawableSlotHover;
+    }
+
+    public Texture getNight_background() {
+        return night_background;
     }
 }

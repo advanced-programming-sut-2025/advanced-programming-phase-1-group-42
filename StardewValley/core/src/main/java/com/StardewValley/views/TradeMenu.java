@@ -12,8 +12,7 @@ public class TradeMenu implements AppMenu {
     private final TradeMenuController controller = new TradeMenuController();
 
     @Override
-    public void check(Scanner scanner) {
-        String input = scanner.nextLine();
+    public void check(String input) {
         if (input != null) {
             Game.writeIntoFile(input);
         }
