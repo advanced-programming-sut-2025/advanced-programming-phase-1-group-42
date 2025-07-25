@@ -77,6 +77,7 @@ public class GameView implements Screen, InputProcessor {
     private Image npcImage;
     float timeAccumulator = 0;
     private Animal selectedAnimal = null;
+    TextButton.TextButtonStyle style;
 
 
     private ClockController clockController = new ClockController();
@@ -106,6 +107,21 @@ public class GameView implements Screen, InputProcessor {
         Animal animal = new Animal(AnimalTypes.COW, "meow");
         animal.setCoordinate(new Coordinate(54, 34));
         farmBuilding.addAnimal(animal);
+
+        Pixmap normal = new Pixmap(1, 1, Pixmap.Format.RGBA8888);
+        normal.setColor(Color.YELLOW);
+        normal.fill();
+        Pixmap hover = new Pixmap(1, 1, Pixmap.Format.RGBA8888);
+        hover.setColor(Color.SKY);
+        hover.fill();
+        TextureRegionDrawable normalDrawable = new TextureRegionDrawable(new TextureRegion(new Texture(normal)));
+        TextureRegionDrawable hoverDrawable = new TextureRegionDrawable(new TextureRegion(new Texture(hover)));
+        BitmapFont font = new BitmapFont();
+        style = new TextButton.TextButtonStyle();
+        style.up = normalDrawable;
+        style.over = hoverDrawable;
+        style.down = normalDrawable.tint(Color.GRAY);
+        style.font = font;
 
     }
 
@@ -263,8 +279,8 @@ public class GameView implements Screen, InputProcessor {
                 animalWindow.add(nameTable).expandX().fillX().padTop(2).row();
 
                 Label friendship = new Label("friendship: " + animal.getFriendship(), skin);
-                friendship.setFontScale(0.5f);
-                nameLabel.setFontScale(0,5f);
+                friendship.setFontScale(0.6f);
+                nameLabel.setFontScale(0.6f);
                 animalWindow.add(friendship).pad(3).padTop(1).row();
 
                 animalWindow.pack();
@@ -793,20 +809,7 @@ public class GameView implements Screen, InputProcessor {
 
             if (Arrays.asList(validNPC).contains(npc.getType())) {
 
-                Pixmap normal = new Pixmap(1, 1, Pixmap.Format.RGBA8888);
-                normal.setColor(Color.YELLOW);
-                normal.fill();
-                Pixmap hover = new Pixmap(1, 1, Pixmap.Format.RGBA8888);
-                hover.setColor(Color.SKY);
-                hover.fill();
-                TextureRegionDrawable normalDrawable = new TextureRegionDrawable(new TextureRegion(new Texture(normal)));
-                TextureRegionDrawable hoverDrawable = new TextureRegionDrawable(new TextureRegion(new Texture(hover)));
-                BitmapFont font = new BitmapFont();
-                TextButton.TextButtonStyle style = new TextButton.TextButtonStyle();
-                style.up = normalDrawable;
-                style.over = hoverDrawable;
-                style.down = normalDrawable.tint(Color.GRAY);
-                style.font = font;
+
 
                 TextButton talk = new TextButton("Talk", style);
                 talk.getLabel().setColor(Color.BLACK);

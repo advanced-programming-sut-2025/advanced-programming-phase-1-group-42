@@ -5,7 +5,6 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="d65d21e1-fb61-4c45-bcbf-686d1d1a7205" name="Changes" comment="">
-      <change afterPath="$PROJECT_DIR$/StardewValley/assets/petWindow.png" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/StardewValley/core/src/main/java/com/StardewValley/views/GameView.java" beforeDir="false" afterPath="$PROJECT_DIR$/StardewValley/core/src/main/java/com/StardewValley/views/GameView.java" afterDir="false" />
     </list>
@@ -130,7 +129,7 @@
       <workItem from="1752569225581" duration="16000" />
       <workItem from="1752569248425" duration="8000" />
       <workItem from="1753377664993" duration="782000" />
-      <workItem from="1753417482062" duration="14879000" />
+      <workItem from="1753417482062" duration="15272000" />
     </task>
     <servers />
   </component>
