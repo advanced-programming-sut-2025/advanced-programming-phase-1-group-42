@@ -1,6 +1,9 @@
 package com.StardewValley.models.game_structure;
 
+import com.StardewValley.models.App;
 import com.StardewValley.models.enums.TileType;
+import com.StardewValley.models.interactions.Animals.Animal;
+import com.StardewValley.models.interactions.Animals.AnimalTypes;
 import com.StardewValley.models.interactions.GreenHouse;
 import com.StardewValley.models.interactions.Player;
 import com.StardewValley.models.interactions.PlayerBuildings.FarmBuilding;
@@ -57,8 +60,6 @@ public class Farm {
             }
         }
 
-        //TODO
-        farmBuildings.add(new FarmBuilding(FarmBuildingTypes.BARN,new Coordinate(50,30)));
 
         farmBuildings.add(getHome(playerNumber));
         iniGreenHouse(playerNumber);

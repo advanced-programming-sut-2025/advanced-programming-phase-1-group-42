@@ -223,7 +223,7 @@ public class GameMenuController extends Controller {
 
         }
         if (Gdx.input.isKeyJustPressed(Input.Keys.T)) {
-            if(gameView.getToolsWindow() == null)
+            if (gameView.getToolsWindow() == null)
                 gameView.initToolsWindow();
 //            else
 //                gameView.closeToolsWindow();
@@ -1388,18 +1388,27 @@ public class GameMenuController extends Controller {
 
     public Result petAnimal(String animalName) {
         animalName = animalName.trim();
-
-        Animal animal = App.getCurrentGame().getMap().findAnimalByName(animalName);
-        if (animal == null) {
-            return new Result(false, "Animal not found: " + animalName);
+        Animal animal = null;
+        for (FarmBuilding b : App.getCurrentGame().getCurrentPlayer().getFarm().getFarmBuildings()) {
+            for (Animal a : b.getAnimals()) {
+                if (a.getName().equals(animalName)) {
+                    animal = a;
+                }
+            }
         }
-        if (abs(App.getCurrentGame().getCurrentPlayer().getCoordinate().getX() - animal.getCoordinate().getX()) <= 1 &&
-            abs(App.getCurrentGame().getCurrentPlayer().getCoordinate().getY() - animal.getCoordinate().getY()) <= 1) {
-            animal.petAnimal();
-            return new Result(true, "You petted " + animalName);
-        }
-        return new Result(false, "You are not close enough to this animal to pet");
+        animal.petAnimal();
+        return new Result(true, "You petted " + animalName);
 
+
+    }
+
+    public String isStoreOpen(GameBuilding gameBuilding) {
+        if (!gameBuilding.isInWorkingHours()) {
+            return "Store is not Open!\nWorking Time: " + gameBuilding.getHours().first()
+                + " ~ " + (gameBuilding.getHours().second());
+        } else {
+            return "yes";
+        }
     }
 
     public Result animalList() {
@@ -2216,7 +2225,6 @@ public class GameMenuController extends Controller {
         }
         return "";
     }
-
 
 
     public Result questsFinish(String index) {

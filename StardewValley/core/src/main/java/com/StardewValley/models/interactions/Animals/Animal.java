@@ -15,6 +15,7 @@ public class Animal {
     private ArrayList<AnimalProduct> products = new ArrayList<>();
     private int friendShip = 0;
     private boolean isPetted = false;
+    private int petCounter = -1;
     private boolean isFed = false;
     private AnimalTypes type = null;
     private boolean isOutside = false;
@@ -43,7 +44,7 @@ public class Animal {
         if (animalType.equals(AnimalTypes.COW)) {
             if (App.getCurrentGame().getCurrentPlayer().getInventory().isInInventoryBoolean(ProductType.MILK_PAIL)) {
                 friendShip += 5;
-                App.getCurrentGame().getCurrentPlayer().getInventory().removeItemsFromInventory(ProductType.MILK_PAIL,1);
+                App.getCurrentGame().getCurrentPlayer().getInventory().removeItemsFromInventory(ProductType.MILK_PAIL, 1);
                 App.getCurrentGame().getCurrentPlayer().getEnergy().decreaseTurnEnergyLeft(7);
                 return products;
             } else {
@@ -53,7 +54,7 @@ public class Animal {
         } else if (animalType.equals(AnimalTypes.GOAT)) {
             if (App.getCurrentGame().getCurrentPlayer().getInventory().isInInventoryBoolean(ProductType.MILK_PAIL)) {
                 friendShip += 5;
-                App.getCurrentGame().getCurrentPlayer().getInventory().removeItemsFromInventory(ProductType.MILK_PAIL,1);
+                App.getCurrentGame().getCurrentPlayer().getInventory().removeItemsFromInventory(ProductType.MILK_PAIL, 1);
                 App.getCurrentGame().getCurrentPlayer().getEnergy().decreaseTurnEnergyLeft(7);
                 return products;
             } else {
@@ -63,7 +64,7 @@ public class Animal {
         } else if (animalType.equals(AnimalTypes.SHEEP)) {
             if (App.getCurrentGame().getCurrentPlayer().getInventory().isInInventoryBoolean(ProductType.SHEARS)) {
                 friendShip += 5;
-                App.getCurrentGame().getCurrentPlayer().getInventory().removeItemsFromInventory(ProductType.SHEARS,1);
+                App.getCurrentGame().getCurrentPlayer().getInventory().removeItemsFromInventory(ProductType.SHEARS, 1);
                 App.getCurrentGame().getCurrentPlayer().getEnergy().decreaseTurnEnergyLeft(7);
                 return products;
             } else {
@@ -71,10 +72,10 @@ public class Animal {
                 return null;
             }
         } else if (animalType.equals(AnimalTypes.PIG)) {
-                if (!isOutside) {
-                    System.out.println("You need to bring Pig outSide to get Products");
-                } else {
-                    return products;
+            if (!isOutside) {
+                System.out.println("You need to bring Pig outSide to get Products");
+            } else {
+                return products;
             }
         }
         return products;
@@ -147,6 +148,7 @@ public class Animal {
 
     public void petAnimal() {
         isPetted = true;
+        petCounter = 0;
         friendShip += 15;
     }
 
@@ -196,6 +198,19 @@ public class Animal {
 
     public AnimalTypes getAnimalType() {
         return animalType;
+    }
+
+    public void updateCounter() {
+        if (petCounter >= 0) {
+            petCounter++;
+            if (petCounter >= 3) {
+                petCounter = -1;
+            }
+        }
+    }
+
+    public int getPetCounter() {
+        return petCounter;
     }
 
 

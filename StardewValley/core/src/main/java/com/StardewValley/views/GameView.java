@@ -2,7 +2,6 @@ package com.StardewValley.views;
 
 import com.StardewValley.Main;
 import com.StardewValley.controllers.ClockController;
-import com.StardewValley.controllers.Controller;
 import com.StardewValley.controllers.GameMenuController;
 import com.StardewValley.models.App;
 import com.StardewValley.models.Assets;
@@ -18,12 +17,12 @@ import com.StardewValley.models.goods.Good;
 import com.StardewValley.models.goods.farmings.FarmingTree;
 import com.StardewValley.models.goods.foragings.ForagingTree;
 import com.StardewValley.models.goods.tools.Tool;
+import com.StardewValley.models.interactions.Animals.Animal;
 import com.StardewValley.models.interactions.NPCs.NPC;
 import com.StardewValley.models.interactions.NPCs.NPCTypes;
 import com.StardewValley.models.interactions.Player;
 import com.StardewValley.models.goods.products.ProductType;
 import com.StardewValley.models.interactions.Animals.AnimalTypes;
-import com.StardewValley.models.interactions.Player;
 import com.StardewValley.models.interactions.PlayerBuildings.FarmBuilding;
 import com.StardewValley.models.interactions.PlayerBuildings.FarmBuildingTypes;
 import com.StardewValley.models.interactions.game_buildings.CarpenterShop;
@@ -34,11 +33,7 @@ import com.badlogic.gdx.graphics.*;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
-import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.graphics.Texture;
-import com.badlogic.gdx.graphics.g2d.TextureRegion;
-import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
-import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.scenes.scene2d.Actor;
@@ -52,20 +47,15 @@ import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 import com.badlogic.gdx.scenes.scene2d.ui.*;
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 import com.badlogic.gdx.scenes.scene2d.utils.Drawable;
-import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 import com.badlogic.gdx.utils.Align;
-import com.badlogic.gdx.scenes.scene2d.ui.*;
 import com.badlogic.gdx.utils.viewport.FitViewport;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
 
-import java.util.ArrayList;
 import java.util.Arrays;
 
-import java.util.ArrayList;
-
-import static java.lang.Math.max;
-import static java.lang.Math.min;
+import static java.lang.Math.*;
+import static java.lang.Math.abs;
 
 
 public class GameView implements Screen, InputProcessor {
@@ -83,8 +73,10 @@ public class GameView implements Screen, InputProcessor {
     private ScrollPane toolsScrollPane;
     private Table toolsTable;
     private Coordinate lastCoordinate;
-    private TextField npcTextField;
+    private TextField textFieldMessage;
     private Image npcImage;
+    float timeAccumulator = 0;
+
 
     private ClockController clockController = new ClockController();
 
@@ -108,6 +100,11 @@ public class GameView implements Screen, InputProcessor {
         this.table.add(inventoryTable).padTop(1500).padLeft(-50);
         this.table.add(controller.getInventoryController().getProgressBar()).padTop(600).padLeft(800);
         this.table.row();
+//        FarmBuilding farmBuilding = new FarmBuilding(FarmBuildingTypes.BARN,new Coordinate(50,30));
+//        App.getCurrentGame().getCurrentPlayer().getFarm().getFarmBuildings().add(farmBuilding);
+//        Animal animal =  new Animal(AnimalTypes.COW,"meow");
+//        animal.setCoordinate(new Coordinate(54,34));
+//        farmBuilding.addAnimal(animal);
 
     }
 
@@ -146,10 +143,27 @@ public class GameView implements Screen, InputProcessor {
         controller.handleGame();
         Main.getBatch().end();
 
+        timeAccumulator += delta;
+
+        if (timeAccumulator >= 1f) {
+            for (Animal animal : App.getCurrentGame().getMap().allAnimals()) {
+                animal.updateCounter();
+            }
+
+//            for (FarmBuilding farmBuilding : App.getCurrentGame().getCurrentPlayer().getFarm().getFarmBuildings()) {
+//                for (Animal animal : farmBuilding.getAnimals()) {
+//                    animal.updateCounter();
+//                }
+//            }
+            timeAccumulator = 0;
+        }
+
         stage.act(min(Gdx.graphics.getDeltaTime(), 1 / 30f));
         stage.draw();
         staticStage.act(min(Gdx.graphics.getDeltaTime(), 1 / 30f));
         staticStage.draw();
+
+
     }
 
 
@@ -180,6 +194,24 @@ public class GameView implements Screen, InputProcessor {
 
     @Override
     public boolean keyDown(int i) {
+        if (i == Input.Keys.O) {
+            for (FarmBuilding building:App.getCurrentGame().getCurrentPlayer().getFarm().getFarmBuildings()){
+                for (Animal animal:building.getAnimals()){
+                    if ((Math.abs(animal.getCoordinate().getX() -
+                        App.getCurrentGame().getCurrentPlayer().getCoordinate().getX()) <= 2) &&
+                        (Math.abs(animal.getCoordinate().getY() -
+                            App.getCurrentGame().getCurrentPlayer().getCoordinate().getY()) <= 2)) {
+                        animal.petAnimal();
+                        buildMessage();
+                        textFieldMessage.setText("You petted " + animal.getName());
+                        return true;
+                    }
+                }
+            }
+            buildMessage();
+            textFieldMessage.setText("Please approach an animal to pet");
+            return true;
+        }
         return false;
     }
 
@@ -658,11 +690,14 @@ public class GameView implements Screen, InputProcessor {
             }
         }
 
-        drawPlayers();
         drawInventory();
         drawNPCs();
         isPlayerMoved();
         drawFarmingBuilding();
+        drawAnimals();
+        drawPlayers();
+
+
     }
 
     private void drawNPCs() {
@@ -718,8 +753,8 @@ public class GameView implements Screen, InputProcessor {
                     public void clicked(InputEvent event, float x, float y) {
                         Texture texture = new Texture(Gdx.files.internal(npc.getType().getAvatarPath()));
                         npcImage = new Image(texture);
-                        buildMessageNPC();
-                        npcTextField.setText(controller.meetNPC(npc.getType().getName()).message());
+                        buildMessage();
+                        textFieldMessage.setText(controller.meetNPC(npc.getType().getName()).message());
                     }
                 });
                 final Window[] questsWindow = {null};
@@ -779,11 +814,11 @@ public class GameView implements Screen, InputProcessor {
                                 if (controller.isCloseEnough(npc.getType().getName())) {
                                     Result result = controller.giftNPC(npc.getType().getName(),
                                         App.getCurrentGame().getCurrentPlayer().getInHandGood().getFirst().getName());
-                                    buildMessageNPC();
-                                    npcTextField.setText(result.message());
+                                    buildMessage();
+                                    textFieldMessage.setText(result.message());
                                 } else {
-                                    buildMessageNPC();
-                                    npcTextField.setText("Too far away. Approach the NPC to send a gift.");
+                                    buildMessage();
+                                    textFieldMessage.setText("Too far away. Approach the NPC to send a gift.");
                                 }
                             }
                         });
@@ -816,21 +851,21 @@ public class GameView implements Screen, InputProcessor {
         }
     }
 
-    private void buildMessageNPC() {
+    private void buildMessage() {
         lastCoordinate = App.getCurrentGame().getCurrentPlayer().getCoordinate();
         float screenWidth = stage.getViewport().getWorldWidth();
-        if (npcTextField != null) {
-            npcTextField.remove();
+        if (textFieldMessage != null) {
+            textFieldMessage.remove();
         }
         if (npcImage != null) {
             npcImage.remove();
         }
-        npcTextField = new TextArea("", skin);
-        npcTextField.setSize(800, 150);
-        float textFieldX = screenWidth / 2 - npcTextField.getWidth() / 2;
+        textFieldMessage = new TextArea("", skin);
+        textFieldMessage.setSize(800, 150);
+        float textFieldX = screenWidth / 2 - textFieldMessage.getWidth() / 2;
         float textFieldY = 10f;
-        npcTextField.setPosition(textFieldX, textFieldY);
-        staticStage.addActor(npcTextField);
+        textFieldMessage.setPosition(textFieldX, textFieldY);
+        staticStage.addActor(textFieldMessage);
 
         if (npcImage != null) {
             npcImage.setSize(150, 150);
@@ -843,7 +878,7 @@ public class GameView implements Screen, InputProcessor {
         if (lastCoordinate != null) {
             if (App.getCurrentGame().getCurrentPlayer().getCoordinate().getX() != lastCoordinate.getX() ||
                 App.getCurrentGame().getCurrentPlayer().getCoordinate().getY() != lastCoordinate.getY()) {
-                npcTextField.remove();
+                textFieldMessage.remove();
                 if (npcImage != null) {
                     npcImage.clear();
                     npcImage.remove();
@@ -869,13 +904,34 @@ public class GameView implements Screen, InputProcessor {
         }
     }
 
+    private void drawAnimals() {
+        for (Player player : App.getCurrentGame().getPlayers()) {
+            for (FarmBuilding farmBuilding : player.getFarm().getFarmBuildings()) {
+                for (Animal animal : farmBuilding.getAnimals()) {
+                    if (animal.getPetCounter() >= 0) {
+                        Texture texture = new Texture(animal.getAnimalType().getPettedPath());
+                        Main.getBatch().draw(texture, (float) (animal.getCoordinate().getX() * scaledSize), (float) (animal.getCoordinate().getY() * scaledSize),
+                            (float) (0.6 * scaledSize), (float) (0.6 * scaledSize));
+                        break;
+                    } else {
+                        Texture texture = new Texture(animal.getAnimalType().getImagePath());
+                        Main.getBatch().draw(texture, (float) (animal.getCoordinate().getX() * scaledSize), (float) (animal.getCoordinate().getY() * scaledSize),
+                            (float) (0.6 * scaledSize), (float) (0.6 * scaledSize));
+                        break;
+                    }
+
+                }
+            }
+        }
+    }
+
     private void drawFarmingBuilding() {
         for (Player player : App.getCurrentGame().getPlayers()) {
             for (FarmBuilding farmBuilding : player.getFarm().getFarmBuildings()) {
                 if (farmBuilding.getType() != FarmBuildingTypes.HOME) {
-                    Main.getBatch().draw(farmBuilding.getType().getTexture(), (float) (farmBuilding.getStartCordinate().getX() + farmBuilding.getEndCordinate().getX()) / 2 * scaledSize,
+                    Main.getBatch().draw(farmBuilding.getType().getInteriorTexture(), (float) (farmBuilding.getStartCordinate().getX() + farmBuilding.getEndCordinate().getX()) / 2 * scaledSize,
                         (float) (farmBuilding.getStartCordinate().getY() + farmBuilding.getEndCordinate().getY()) / 2 * scaledSize,
-                        farmBuilding.getType().getSize().second() * scaledSize, farmBuilding.getType().getSize().first() * scaledSize);
+                        (float) (1.2 * farmBuilding.getType().getSize().second() * scaledSize), (float) (1.2 * farmBuilding.getType().getSize().first() * scaledSize));
                 }
             }
         }
