@@ -230,6 +230,7 @@ public class GameView implements Screen, InputProcessor {
     @Override
     public boolean touchDown(int screenX, int screenY, int pointer, int button) {
 
+
         Vector3 touchPos = new Vector3(screenX, screenY, 0);
         camera.unproject(touchPos);
 
@@ -237,28 +238,75 @@ public class GameView implements Screen, InputProcessor {
         int tileY = (int) (touchPos.y / scaledSize);
 
 
-        // change animal place
-        if (selectedAnimal != null) {
-            if (abs(selectedAnimal.getCoordinate().getX() - tileX) <= 2 &&
-                abs(selectedAnimal.getCoordinate().getY() - tileY) <= 2) {
-                selectedAnimal.setCoordinate(new Coordinate(tileX, tileY));
-                selectedAnimal = null;
-                return true;
-            } else {
-                buildMessage();
-                textFieldMessage.setText("Oops! You can only move the animal to nearby tiles (within 2 blocks).");
-            }
-
-        } else {
+        // right click for pets
+        if (button == Input.Buttons.RIGHT) {
+            Animal animal = null;
             for (FarmBuilding building : App.getCurrentGame().getCurrentPlayer().getFarm().getFarmBuildings()) {
                 for (Animal animal2 : building.getAnimals()) {
                     if (animal2.getCoordinate().getX() == tileX && animal2.getCoordinate().getY() == tileY) {
-                        selectedAnimal = animal2;
+                        animal = animal2;
                         break;
                     }
                 }
             }
+            if (animal != null) {
+//                Texture backgroundTexture = new Texture(Gdx.files.internal("petWindow.png"));
+//                Drawable backgroundDrawable = new TextureRegionDrawable(new TextureRegion(backgroundTexture));
+//
+//                Window.WindowStyle style = new Window.WindowStyle(new BitmapFont(), Color.WHITE, backgroundDrawable);
+                Window animalWindow = new Window("", skin);
+
+                Table nameTable = new Table();
+                Label nameLabel = new Label(animal.getName(), skin);
+                nameTable.top().left();
+                nameTable.add(nameLabel).pad(4);
+                animalWindow.add(nameTable).expandX().fillX().padTop(2).row();
+
+                Label friendship = new Label("friendship: " + animal.getFriendship(), skin);
+                friendship.setFontScale(0.5f);
+                nameLabel.setFontScale(0,5f);
+                animalWindow.add(friendship).pad(3).padTop(1).row();
+
+                animalWindow.pack();
+                animalWindow.setSize(scaledSize * 5, scaledSize * 5);
+
+                animalWindow.setPosition(
+                    animal.getCoordinate().getX() * scaledSize + 30,
+                    animal.getCoordinate().getY() * scaledSize + 30
+                );
+
+                stage.addActor(animalWindow);
+            }
+
+
         }
+
+
+        if (button == Input.Buttons.LEFT) {
+            // change animal place
+            if (selectedAnimal != null) {
+                if (abs(selectedAnimal.getCoordinate().getX() - tileX) <= 2 &&
+                    abs(selectedAnimal.getCoordinate().getY() - tileY) <= 2) {
+                    selectedAnimal.setCoordinate(new Coordinate(tileX, tileY));
+                    selectedAnimal = null;
+                    return true;
+                } else {
+                    buildMessage();
+                    textFieldMessage.setText("Oops! You can only move the animal to nearby tiles (within 2 blocks).");
+                }
+
+            } else {
+                for (FarmBuilding building : App.getCurrentGame().getCurrentPlayer().getFarm().getFarmBuildings()) {
+                    for (Animal animal2 : building.getAnimals()) {
+                        if (animal2.getCoordinate().getX() == tileX && animal2.getCoordinate().getY() == tileY) {
+                            selectedAnimal = animal2;
+                            break;
+                        }
+                    }
+                }
+            }
+        }
+
         //
 
         GameBuilding building = App.getCurrentGame().getMap().findGameBuilding(new Coordinate(tileX, tileY));
