@@ -76,6 +76,7 @@ public class GameView implements Screen, InputProcessor {
     private TextField textFieldMessage;
     private Image npcImage;
     float timeAccumulator = 0;
+    private Animal selectedAnimal = null;
 
 
     private ClockController clockController = new ClockController();
@@ -100,11 +101,11 @@ public class GameView implements Screen, InputProcessor {
         this.table.add(inventoryTable).padTop(1500).padLeft(-50);
         this.table.add(controller.getInventoryController().getProgressBar()).padTop(600).padLeft(800);
         this.table.row();
-//        FarmBuilding farmBuilding = new FarmBuilding(FarmBuildingTypes.BARN,new Coordinate(50,30));
-//        App.getCurrentGame().getCurrentPlayer().getFarm().getFarmBuildings().add(farmBuilding);
-//        Animal animal =  new Animal(AnimalTypes.COW,"meow");
-//        animal.setCoordinate(new Coordinate(54,34));
-//        farmBuilding.addAnimal(animal);
+        FarmBuilding farmBuilding = new FarmBuilding(FarmBuildingTypes.BARN, new Coordinate(50, 30));
+        App.getCurrentGame().getCurrentPlayer().getFarm().getFarmBuildings().add(farmBuilding);
+        Animal animal = new Animal(AnimalTypes.COW, "meow");
+        animal.setCoordinate(new Coordinate(54, 34));
+        farmBuilding.addAnimal(animal);
 
     }
 
@@ -150,11 +151,11 @@ public class GameView implements Screen, InputProcessor {
                 animal.updateCounter();
             }
 
-//            for (FarmBuilding farmBuilding : App.getCurrentGame().getCurrentPlayer().getFarm().getFarmBuildings()) {
-//                for (Animal animal : farmBuilding.getAnimals()) {
-//                    animal.updateCounter();
-//                }
-//            }
+            for (FarmBuilding farmBuilding : App.getCurrentGame().getCurrentPlayer().getFarm().getFarmBuildings()) {
+                for (Animal animal : farmBuilding.getAnimals()) {
+                    animal.updateCounter();
+                }
+            }
             timeAccumulator = 0;
         }
 
@@ -195,8 +196,8 @@ public class GameView implements Screen, InputProcessor {
     @Override
     public boolean keyDown(int i) {
         if (i == Input.Keys.O) {
-            for (FarmBuilding building:App.getCurrentGame().getCurrentPlayer().getFarm().getFarmBuildings()){
-                for (Animal animal:building.getAnimals()){
+            for (FarmBuilding building : App.getCurrentGame().getCurrentPlayer().getFarm().getFarmBuildings()) {
+                for (Animal animal : building.getAnimals()) {
                     if ((Math.abs(animal.getCoordinate().getX() -
                         App.getCurrentGame().getCurrentPlayer().getCoordinate().getX()) <= 2) &&
                         (Math.abs(animal.getCoordinate().getY() -
@@ -234,6 +235,31 @@ public class GameView implements Screen, InputProcessor {
 
         int tileX = (int) (touchPos.x / scaledSize);
         int tileY = (int) (touchPos.y / scaledSize);
+
+
+        // change animal place
+        if (selectedAnimal != null) {
+            if (abs(selectedAnimal.getCoordinate().getX() - tileX) <= 2 &&
+                abs(selectedAnimal.getCoordinate().getY() - tileY) <= 2) {
+                selectedAnimal.setCoordinate(new Coordinate(tileX, tileY));
+                selectedAnimal = null;
+                return true;
+            } else {
+                buildMessage();
+                textFieldMessage.setText("Oops! You can only move the animal to nearby tiles (within 2 blocks).");
+            }
+
+        } else {
+            for (FarmBuilding building : App.getCurrentGame().getCurrentPlayer().getFarm().getFarmBuildings()) {
+                for (Animal animal2 : building.getAnimals()) {
+                    if (animal2.getCoordinate().getX() == tileX && animal2.getCoordinate().getY() == tileY) {
+                        selectedAnimal = animal2;
+                        break;
+                    }
+                }
+            }
+        }
+        //
 
         GameBuilding building = App.getCurrentGame().getMap().findGameBuilding(new Coordinate(tileX, tileY));
 
@@ -911,12 +937,12 @@ public class GameView implements Screen, InputProcessor {
                     if (animal.getPetCounter() >= 0) {
                         Texture texture = new Texture(animal.getAnimalType().getPettedPath());
                         Main.getBatch().draw(texture, (float) (animal.getCoordinate().getX() * scaledSize), (float) (animal.getCoordinate().getY() * scaledSize),
-                            (float) (0.6 * scaledSize), (float) (0.6 * scaledSize));
+                            (float) (0.8 * scaledSize), (float) (0.8 * scaledSize));
                         break;
                     } else {
                         Texture texture = new Texture(animal.getAnimalType().getImagePath());
                         Main.getBatch().draw(texture, (float) (animal.getCoordinate().getX() * scaledSize), (float) (animal.getCoordinate().getY() * scaledSize),
-                            (float) (0.6 * scaledSize), (float) (0.6 * scaledSize));
+                            (float) (0.8 * scaledSize), (float) (0.8 * scaledSize));
                         break;
                     }
 
