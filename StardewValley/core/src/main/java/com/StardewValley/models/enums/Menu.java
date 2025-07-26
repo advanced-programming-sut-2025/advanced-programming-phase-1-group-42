@@ -16,7 +16,7 @@ public enum Menu {
         this.appMenu = appMenu;
     }
 
-    public void checkCommand(Scanner scanner) {
-        this.appMenu.check(scanner);
+    public void checkCommand() {
+        this.appMenu.check("");
     }
 }

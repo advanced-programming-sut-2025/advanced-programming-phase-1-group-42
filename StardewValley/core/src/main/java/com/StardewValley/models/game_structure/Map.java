@@ -712,19 +712,19 @@ public class Map {
 
                             switch (randomForaging) {
                                 case 0:
-                                    tile.addGood(Good.newGood(ForagingTreeType.ACORNS));
+                                    tile.addGood(Good.newGood(ForagingTreeType.ACORNS.getFarmingTreeType()));
                                     break;
                                 case 1:
-                                    tile.addGood(Good.newGood(ForagingTreeType.MAHOGANY_SEEDS));
+                                    tile.addGood(Good.newGood(ForagingTreeType.MAHOGANY_SEEDS.getFarmingTreeType()));
                                     break;
                                 case 2:
-                                    tile.addGood(Good.newGood(ForagingTreeType.MUSHROOM_TREE_SEEDS));
+                                    tile.addGood(Good.newGood(ForagingTreeType.MUSHROOM_TREE_SEEDS.getFarmingTreeType()));
                                     break;
                                 case 3:
-                                    tile.addGood(Good.newGood(ForagingTreeType.MAPLE_SEEDS));
+                                    tile.addGood(Good.newGood(ForagingTreeType.MAPLE_SEEDS.getFarmingTreeType()));
                                     break;
                                 case 4:
-                                    tile.addGood(Good.newGood(ForagingTreeType.PINE_CONES));
+                                    tile.addGood(Good.newGood(ForagingTreeType.PINE_CONES.getFarmingTreeType()));
                                     break;
                             }
                         }

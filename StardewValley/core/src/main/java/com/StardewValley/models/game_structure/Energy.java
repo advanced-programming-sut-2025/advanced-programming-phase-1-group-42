@@ -30,7 +30,7 @@ public class Energy {
     }
 
     public void decreaseTurnEnergyLeft(int value) {
-
+        System.out.println(value);
         this.dayEnergyLeft -= (int) (App.getCurrentGame().getWeather().getWeatherEffectingEnergy() * value);
         this.turnValueLeft -= (int) (App.getCurrentGame().getWeather().getWeatherEffectingEnergy() * value);
         if(this.dayEnergyLeft <= 0){

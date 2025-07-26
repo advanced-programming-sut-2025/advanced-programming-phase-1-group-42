@@ -5,39 +5,39 @@ import com.StardewValley.models.goods.GoodType;
 public enum ForagingMineralType implements GoodType {
 
     // Minerals from Foraging Minerals tab
-    QUARTZ("Quartz", 25, "/assets/GameAssets/Mineral/Quartz.png"),
+    QUARTZ("Quartz", 25, "GameAssets/Mineral/Quartz.png"),
 
-    EARTH_CRYSTAL("Earth_Crystal", 50, "/assets/GameAssets/Mineral/Earth_Crystal.png"),
+    EARTH_CRYSTAL("Earth_Crystal", 50, "GameAssets/Mineral/Earth_Crystal.png"),
 
-    FROZEN_TEAR("Frozen_Tear", 75, "/assets/GameAssets/Mineral/Frozen_Tear.png"),
+    FROZEN_TEAR("Frozen_Tear", 75, "GameAssets/Mineral/Frozen_Tear.png"),
 
-    FIRE_QUARTZ("Fire_Quartz", 100, "/assets/GameAssets/Mineral/Fire_Quartz.png"),
+    FIRE_QUARTZ("Fire_Quartz", 100, "GameAssets/Mineral/Fire_Quartz.png"),
 
-    EMERALD("Emerald", 250, "/assets/GameAssets/Mineral/Emerald.png"),
+    EMERALD("Emerald", 250, "GameAssets/Gem/Emerald.png"),
 
-    AQUAMARINE("Aquamarine", 180, "/assets/GameAssets/Mineral/Aquamarine.png"),
+    AQUAMARINE("Aquamarine", 180, "GameAssets/Gem/Aquamarine.png"),
 
-    RUBY("Ruby", 250, "/assets/GameAssets/Mineral/Ruby.png"),
+    RUBY("Ruby", 250, "GameAssets/Gem/Ruby.png"),
 
-    AMETHYST("Amethyst", 100, "/assets/GameAssets/Mineral/Amethyst.png"),
+    AMETHYST("Amethyst", 100, "GameAssets/Gem/Amethyst.png"),
 
-    TOPAZ("Topaz", 80, "/assets/GameAssets/Mineral/Topaz.png"),
+    TOPAZ("Topaz", 80, "GameAssets/Gem/Topaz.png"),
 
-    JADE("Jade", 200, "/assets/GameAssets/Mineral/Jade.png"),
+    JADE("Jade", 200, "GameAssets/Gem/Jade.png"),
 
-    DIAMOND("Diamond", 750, "/assets/GameAssets/Mineral/Diamond.png"),
+    DIAMOND("Diamond", 750, "GameAssets/Gem/Diamond.png"),
 
-    PRISMATIC_SHARD("Prismatic_Shard", 2000, "/assets/GameAssets/Mineral/Prismatic_Shard.png"),
+    PRISMATIC_SHARD("Prismatic_Shard", 2000, "GameAssets/Gem/Prismatic_Shard.png"),
 
-    COPPER_ORE("Copper_Ore", 5, "/assets/GameAssets/Mineral/Copper_Ore.png"),
+    COPPER_ORE("Copper_Ore", 5, "GameAssets/Crafting/Copper_Ore.png"),
 
-    IRON_ORE("Iron_Ore", 10, "/assets/GameAssets/Mineral/Iron_Ore.png"),
+    IRON_ORE("Iron_Ore", 10, "GameAssets/Crafting/Iron_Ore.png"),
 
-    GOLD_ORE("Gold_Ore", 25, "/assets/GameAssets/Mineral/Gold_Ore.png"),
+    GOLD_ORE("Gold_Ore", 25, "GameAssets/Crafting/Gold_Ore.png"),
 
-    IRIDIUM_ORE("Iridium_Ore", 100, "/assets/GameAssets/Mineral/Iridium_Ore.png"),
+    IRIDIUM_ORE("Iridium_Ore", 100, "GameAssets/Crafting/Iridium_Ore.png"),
 
-    COAL("Coal", 15, "/assets/GameAssets/Mineral/Coal.png");
+    COAL("Coal", 15, "GameAssets/Crafting/Coal.png");
 
 
     private String name;

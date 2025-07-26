@@ -7,10 +7,10 @@ import java.util.Scanner;
 
 public class AppView {
     public void run() {
-        Scanner scanner = new Scanner(System.in);
+//        Scanner scanner = new Scanner(System.in);
 
         do {
-            App.getCurrentMenu().checkCommand(scanner);
+            App.getCurrentMenu().checkCommand();
         } while (App.getCurrentMenu() != Menu.ExitMenu);
 
     }

@@ -131,7 +131,6 @@ public class GameMenuView implements Screen {
             public void clicked(InputEvent event, float x, float y) {
                 choiceFarmWindow.setVisible(false);
 
-
                 Farm farm = new Farm(0, controller.ptr, controller.tiles);
                 controller.players.get(controller.ptr).setFarm(farm);
                 controller.farms.add(farm);
@@ -150,7 +149,6 @@ public class GameMenuView implements Screen {
             @Override
             public void clicked(InputEvent event, float x, float y) {
                 choiceFarmWindow.setVisible(false);
-
 
                 Farm farm = new Farm(1, controller.ptr, controller.tiles);
                 controller.players.get(controller.ptr).setFarm(farm);

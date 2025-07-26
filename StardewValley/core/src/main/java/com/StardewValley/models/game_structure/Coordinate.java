@@ -16,14 +16,15 @@ public class Coordinate {
             new Coordinate(0, 1),    // Down
             new Coordinate(-1, 1),   // Down-Left
             new Coordinate(-1, 0),   // Left
-            new Coordinate(-1, -1)   // Up-Left
+            new Coordinate(-1, -1),   // Up-Left
+            new Coordinate(0, 0)     // here
     ));
+
 
     public Coordinate(int x, int y) {
         this.x = x;
         this.y = y;
     }
-
 
     public static Coordinate getDirection(String direction) {
         int newX = App.getCurrentGame().getCurrentPlayer().getCoordinate().getX();
@@ -83,6 +84,15 @@ public class Coordinate {
         }
         else
             return false;
+    }
+
+    public static Coordinate getDirection(Coordinate start, Coordinate end) {
+        int newX = end.getX() - start.getX();
+        int newY = end.getY() - start.getY();
+
+        int x = Integer.compare(newX, 0);
+        int y = Integer.compare(newY, 0);
+        return new Coordinate(x, y);
     }
 
     @Override

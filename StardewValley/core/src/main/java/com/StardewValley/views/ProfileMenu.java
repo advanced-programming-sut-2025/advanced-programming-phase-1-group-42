@@ -12,8 +12,7 @@ public class ProfileMenu implements AppMenu {
     private final ProfileMenuController controller = new ProfileMenuController();
 
     @Override
-    public void check(Scanner scanner) {
-        String input = scanner.nextLine();
+    public void check(String input) {
         if (input != null) {
             Game.writeIntoFile(input);
         }
