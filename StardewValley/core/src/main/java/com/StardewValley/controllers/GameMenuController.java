@@ -71,17 +71,33 @@ public class GameMenuController extends Controller {
     private WorldController worldController;
     private PlayerController playerController;
     private InventoryController inventoryController;
+    private ClockController clockController;
 
     private GameMenuView view;
+    private GameView gameView;
 
     public void setView(GameMenuView view) {
         this.view = view;
     }
 
-    public void initGameControllers() {
+    public void setGameView(GameView gameView) {
+        this.gameView = gameView;
         worldController = new WorldController();
         playerController = new PlayerController();
         inventoryController = new InventoryController();
+        clockController = new ClockController();
+    }
+
+    public WorldController getWorldController() {
+        return worldController;
+    }
+
+    public PlayerController getPlayerController() {
+        return playerController;
+    }
+
+    public InventoryController getInventoryController() {
+        return inventoryController;
     }
 
     public void handleGameMenu() {
@@ -93,8 +109,7 @@ public class GameMenuController extends Controller {
 
             Main.getMain().getScreen().dispose();
             Main.getMain().setScreen(new MainMenuView(new MainMenuController(), Assets.getInstance().getSkin()));
-        }
-        else if (view.getLoadGameButton().isChecked()) {
+        } else if (view.getLoadGameButton().isChecked()) {
             view.getLoadGameButton().setChecked(false);
 
             Result res = loadGame();
@@ -105,20 +120,17 @@ public class GameMenuController extends Controller {
 
             Main.getMain().getScreen().dispose();
             Main.getMain().setScreen(new GameView(new GameMenuController(), Assets.getInstance().getSkin()));
-        }
-        else if (view.getNewGameButton().isChecked()) {
+        } else if (view.getNewGameButton().isChecked()) {
             view.getNewGameButton().setChecked(false);
 
             view.getMenuWindow().setVisible(false);
             view.initNewGameWindow();
-        }
-        else if (view.getBackNewGameButton().isChecked()) {
+        } else if (view.getBackNewGameButton().isChecked()) {
             view.getBackNewGameButton().setChecked(false);
 
             view.getMenuWindow().setVisible(true);
             view.getNewGameWindow().setVisible(false);
-        }
-        else if (view.getAddPlayerButton().isChecked()) {
+        } else if (view.getAddPlayerButton().isChecked()) {
             view.getAddPlayerButton().setChecked(false);
 
             if (view.getPlayersPtr() >= 4) {
@@ -127,8 +139,7 @@ public class GameMenuController extends Controller {
             }
 
             addPlayerToNewGame();
-        }
-        else if (view.getStartNewGameButton().isChecked()) {
+        } else if (view.getStartNewGameButton().isChecked()) {
             view.getStartNewGameButton().setChecked(false);
 
             view.getNewGameWindow().setVisible(false);
@@ -137,84 +148,111 @@ public class GameMenuController extends Controller {
     }
 
     public void handleGame() {
-
         handleInput();
         worldController.updateWorld();
         playerController.updatePlayer();
         inventoryController.updateInventory();
+        clockController.update();
     }
 
     public void handleInput() {
         Player player = App.getCurrentGame().getCurrentPlayer();
         player.setPlayerDirection(-1);
 
+        boolean flag = false;
         if (Gdx.input.isKeyPressed(Input.Keys.W)) {
             if (tileValidity(App.getCurrentGame().getMap().findTileByXY(player.getCoordinate().getX(), player.getCoordinate().getY() + 1))) {
                 player.setCoordinate(new Coordinate(player.getCoordinate().getX(), player.getCoordinate().getY() + 1));
                 player.setPlayerDirection(0);
+                player.getInHandGoodSprite().setPosition(player.getCoordinate().getX() * gameView.getScaledSize(),
+                    player.getCoordinate().getY() * gameView.getScaledSize() + 23);
             }
+            flag = true;
         }
         if (Gdx.input.isKeyPressed(Input.Keys.A)) {
             if (tileValidity(App.getCurrentGame().getMap().findTileByXY(player.getCoordinate().getX() - 1, player.getCoordinate().getY()))) {
                 player.setCoordinate(new Coordinate(player.getCoordinate().getX() - 1, player.getCoordinate().getY()));
                 player.setPlayerDirection(1);
+                player.getInHandGoodSprite().setPosition(player.getCoordinate().getX() * gameView.getScaledSize() - 20,
+                    player.getCoordinate().getY() * gameView.getScaledSize() + 23);
+                if (!player.getInHandGoodSprite().isFlipX())
+                    player.getInHandGoodSprite().flip(true, false);
             }
+            flag = true;
         }
         if (Gdx.input.isKeyPressed(Input.Keys.S)) {
             if (tileValidity(App.getCurrentGame().getMap().findTileByXY(player.getCoordinate().getX(), player.getCoordinate().getY() - 1))) {
                 player.setCoordinate(new Coordinate(player.getCoordinate().getX(), player.getCoordinate().getY() - 1));
                 player.setPlayerDirection(2);
+                player.getInHandGoodSprite().setPosition(player.getCoordinate().getX() * gameView.getScaledSize(),
+                    player.getCoordinate().getY() * gameView.getScaledSize() + 23);
             }
+            flag = true;
         }
         if (Gdx.input.isKeyPressed(Input.Keys.D)) {
             if (tileValidity(App.getCurrentGame().getMap().findTileByXY(player.getCoordinate().getX() + 1, player.getCoordinate().getY()))) {
                 player.setCoordinate(new Coordinate(player.getCoordinate().getX() + 1, player.getCoordinate().getY()));
                 player.setPlayerDirection(3);
+                player.getInHandGoodSprite().setPosition(player.getCoordinate().getX() * gameView.getScaledSize() + 20,
+                    player.getCoordinate().getY() * gameView.getScaledSize() + 23);
+                if (player.getInHandGoodSprite().isFlipX())
+                    player.getInHandGoodSprite().flip(true, false);
             }
+            flag = true;
         }
         if (Gdx.input.isKeyJustPressed(Input.Keys.P)) {
             nextTurn();
+            inventoryController.playerChangedInventory();
         }
-        if (Gdx.input.isKeyPressed(Input.Keys.C)) {
+        if (Gdx.input.isKeyJustPressed(Input.Keys.C)) {
 
         }
-        if (Gdx.input.isKeyPressed(Input.Keys.X)) {
+        if (Gdx.input.isKeyJustPressed(Input.Keys.X)) {
 
         }
-        if (Gdx.input.isKeyPressed(Input.Keys.E) || Gdx.input.isKeyPressed(Input.Keys.ESCAPE)) {
+        if (Gdx.input.isKeyJustPressed(Input.Keys.E) || Gdx.input.isKeyJustPressed(Input.Keys.ESCAPE)) {
+            if (gameView.getMainTable() == null)
+                gameView.initMainTable();
+            else
+                gameView.closeMainTable();
+        }
+        if (Gdx.input.isKeyJustPressed(Input.Keys.F)) {
 
         }
-        if (Gdx.input.isKeyPressed(Input.Keys.F)) {
+        if (Gdx.input.isKeyJustPressed(Input.Keys.M)) {
 
         }
-        if (Gdx.input.isKeyPressed(Input.Keys.M)) {
+        if (Gdx.input.isKeyJustPressed(Input.Keys.TAB)) {
 
         }
-        if (Gdx.input.isKeyPressed(Input.Keys.TAB)) {
-
+        if (Gdx.input.isKeyJustPressed(Input.Keys.T)) {
+            if(gameView.getToolsWindow() == null)
+                gameView.initToolsWindow();
+//            else
+//                gameView.closeToolsWindow();
         }
-        if (Gdx.input.isKeyPressed(Input.Keys.T)) {
-
-        }
-        if (Gdx.input.isKeyPressed(Input.Keys.F4)) {
+        if (Gdx.input.isKeyJustPressed(Input.Keys.F4)) {
 
         }
         ArrayList<Integer> arr = new ArrayList<>(Arrays.asList(
             8, 9, 10, 11, 12, 13, 14, 15, 16, 7, 69, 70
         ));
         for (int i = 0; i < arr.size(); i++) {
-            if (Gdx.input.isKeyPressed(arr.get(i))) {
+            if (Gdx.input.isKeyJustPressed(arr.get(i))) {
                 App.getCurrentGame().getCurrentPlayer().setInHandGood(
                     App.getCurrentGame().getCurrentPlayer().getInventory().getList().get(i));
                 break;
             }
         }
+
+//        if (flag)
+//            App.getCurrentGame().getCurrentPlayer().getEnergy().decreaseTurnEnergyLeft(1);
     }
 
     private boolean tileValidity(Tile tile) {
         if (tile.getTileType() == TileType.STONE_WALL ||
-        tile.getTileType() == TileType.WATER ||
-        tile.getTileType() == TileType.GAME_BUILDING)
+            tile.getTileType() == TileType.WATER ||
+            tile.getTileType() == TileType.GAME_BUILDING)
             return false;
         return true;
     }
@@ -315,8 +353,7 @@ public class GameMenuController extends Controller {
             if (user == null) {
                 players.add(new Player(new User(username, null, username,
                     null, null, 0, null)));
-            }
-            else {
+            } else {
                 players.add(new Player(user));
             }
         }
@@ -1274,7 +1311,7 @@ public class GameMenuController extends Controller {
             + " ~ " + (carpenterShop.getHours().second()));
     }
 
-    public boolean isValidBuilding(Coordinate coordinate,FarmBuildingTypes targetType) {
+    public boolean isValidBuilding(Coordinate coordinate, FarmBuildingTypes targetType) {
         boolean validSpace = true;
         for (int sX = 0; sX < targetType.getSize().first(); sX++) {
             for (int sY = 0; sY < targetType.getSize().second(); sY++) {
@@ -1651,12 +1688,12 @@ public class GameMenuController extends Controller {
 
         player.getTalkHistory().add(new Pair<>(
             App.getCurrentGame().getCurrentPlayer(),
-            "\t<"+App.getCurrentGame().getCurrentPlayer().getPlayerUsername() + "> " + dateTime().message() + ": " + message
+            "\t<" + App.getCurrentGame().getCurrentPlayer().getPlayerUsername() + "> " + dateTime().message() + ": " + message
         ));
 
         App.getCurrentGame().getCurrentPlayer().getTalkHistory().add(new Pair<>(
             player,
-            "\t<"+App.getCurrentGame().getCurrentPlayer().getPlayerUsername() + "> " + dateTime().message() + ": " + message
+            "\t<" + App.getCurrentGame().getCurrentPlayer().getPlayerUsername() + "> " + dateTime().message() + ": " + message
         ));
 
         try {
@@ -2064,6 +2101,19 @@ public class GameMenuController extends Controller {
 
         for (NPC npc : App.getCurrentGame().getNPCs()) {
             if (npc.getType().getName().equals(npcName)) {
+                if (isCloseEnough(npcName)) {
+                    npc.getFriendship();
+                    String talk = npc.npcDialogs();
+                    return new Result(true, talk);
+                }
+            }
+        }
+        return new Result(true, "Too far away. Approach the NPC to speak.");
+    }
+
+    public Boolean isCloseEnough(String npcName) {
+        for (NPC npc : App.getCurrentGame().getNPCs()) {
+            if (npc.getType().getName().equals(npcName)) {
                 if ((abs(npc.getType().getCoordinate().getX() -
                     App.getCurrentGame().getCurrentPlayer().getCoordinate().getX()) == 1 ||
                     (abs(npc.getType().getCoordinate().getX() -
@@ -2073,13 +2123,11 @@ public class GameMenuController extends Controller {
                         App.getCurrentGame().getCurrentPlayer().getCoordinate().getY()) == 1 ||
                         abs(npc.getType().getCoordinate().getY() -
                             App.getCurrentGame().getCurrentPlayer().getCoordinate().getY()) == 0)) {
-                    npc.getFriendship();
-                    npc.npcDialogs();
-                    return new Result(true, "");
+                    return true;
                 }
             }
         }
-        return new Result(true, "Too far away. Approach the NPC to speak.");
+        return false;
     }
 
     public Result giftNPC(String npcName, String itemName) {
@@ -2102,7 +2150,7 @@ public class GameMenuController extends Controller {
         for (NPC npc : App.getCurrentGame().getNPCs()) {
             if (npc.getType().getName().equals(npcName)) {
                 npc.getGift(good);
-                return new Result(true, "You sent a gift to " + npcName);
+                return new Result(true, "You sent a " + itemName + " to " + npcName);
 
             }
         }
@@ -2151,6 +2199,29 @@ public class GameMenuController extends Controller {
         return new Result(true, "------------------------------");
     }
 
+    public String getQuests(String npcName) {
+        for (NPC npc : App.getCurrentGame().getNPCs()) {
+            if (npc.getType().getName().equals(npcName)) {
+                if (npc.getFriendship().getAvailableQuests().contains(1)) {
+                    return (npc.getType().getRequests().getFirst().first().getName() + " Count: " +
+                        npc.getType().getRequests().getFirst().second());
+                }
+                if (npc.getFriendship().getAvailableQuests().contains(2)) {
+                    return (npc.getType().getRequests().get(1).first().getName() + " " +
+                        npc.getType().getRequests().get(1).second());
+                }
+                if (npc.getFriendship().getAvailableQuests().contains(3)) {
+                    return (npc.getType().getRequests().get(2).first().getName() + " " +
+                        npc.getType().getRequests().get(2).second());
+                }
+
+            }
+        }
+        return "";
+    }
+
+
+
     public Result questsFinish(String index) {
         index = index.trim();
 
@@ -2158,15 +2229,7 @@ public class GameMenuController extends Controller {
         NPC targetNPC = null;
         boolean found = false;
         for (NPC npc : App.getCurrentGame().getNPCs()) {
-            if ((abs(npc.getType().getCoordinate().getX() -
-                App.getCurrentGame().getCurrentPlayer().getCoordinate().getX()) == 1 ||
-                (abs(npc.getType().getCoordinate().getX() -
-                    App.getCurrentGame().getCurrentPlayer().getCoordinate().getX()) == 0))
-                &&
-                (abs(npc.getType().getCoordinate().getY() -
-                    App.getCurrentGame().getCurrentPlayer().getCoordinate().getY()) == 1 ||
-                    abs(npc.getType().getCoordinate().getY() -
-                        App.getCurrentGame().getCurrentPlayer().getCoordinate().getY()) == 0)) {
+            if (isCloseEnough(npc.getType().getName())) {
                 targetNPC = npc;
                 found = true;
                 break;

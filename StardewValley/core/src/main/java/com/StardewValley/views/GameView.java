@@ -17,7 +17,9 @@ import com.StardewValley.models.game_structure.Tile;
 import com.StardewValley.models.goods.Good;
 import com.StardewValley.models.goods.farmings.FarmingTree;
 import com.StardewValley.models.goods.foragings.ForagingTree;
+import com.StardewValley.models.goods.tools.Tool;
 import com.StardewValley.models.interactions.NPCs.NPC;
+import com.StardewValley.models.interactions.NPCs.NPCTypes;
 import com.StardewValley.models.interactions.Player;
 import com.StardewValley.models.goods.products.ProductType;
 import com.StardewValley.models.interactions.Animals.AnimalTypes;
@@ -28,10 +30,8 @@ import com.StardewValley.models.interactions.game_buildings.CarpenterShop;
 import com.StardewValley.models.interactions.game_buildings.GameBuilding;
 import com.StardewValley.models.interactions.game_buildings.MarnieRanch;
 import com.badlogic.gdx.*;
-import com.badlogic.gdx.graphics.Color;
-import com.badlogic.gdx.graphics.GL20;
-import com.badlogic.gdx.graphics.OrthographicCamera;
-import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.*;
+import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
@@ -54,7 +54,9 @@ import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 import com.badlogic.gdx.scenes.scene2d.utils.Drawable;
 import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 import com.badlogic.gdx.utils.Align;
+import com.badlogic.gdx.scenes.scene2d.ui.*;
 import com.badlogic.gdx.utils.viewport.FitViewport;
+import com.badlogic.gdx.utils.viewport.ScreenViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
 
 import java.util.ArrayList;
@@ -74,49 +76,64 @@ public class GameView implements Screen, InputProcessor {
     private final OrthographicCamera camera;
     private final Viewport viewport;
     private int scaledSize;
-    InputMultiplexer multiplexer = new InputMultiplexer();
-    private final Pair<Boolean, FarmBuildingTypes> isCarpenterShopOn = new Pair<>(false, null);
-
     private Table inventoryTable;
+    private InputMultiplexer multiplexer;
+    private Stage staticStage;
+    private Window toolsWindow;
+    private ScrollPane toolsScrollPane;
+    private Table toolsTable;
+    private Coordinate lastCoordinate;
+    private TextField npcTextField;
+    private Image npcImage;
 
     private ClockController clockController = new ClockController();
 
+    private Table mainTable;
+    private Window mainWindow;
+    private ArrayList<ImageButton> mainMenuButtons;
+
+
     public GameView(GameMenuController controller, Skin skin) {
         this.controller = controller;
-        this.controller.initGameControllers();
+//        this.controller.initGameControllers();
         this.skin = skin;
         table = new Table(skin);
+        table.setFillParent(true);
+        table.defaults().pad(10);
+
         camera = new OrthographicCamera();
         viewport = new FitViewport(Gdx.graphics.getWidth(), Gdx.graphics.getHeight(), camera);
         scaledSize = 40;
+        controller.setGameView(this);
+
         this.inventoryTable = new Table(skin);
         this.inventoryTable.setFillParent(true);
-        this.inventoryTable.padTop(750);
         drawInventory();
+
+        this.table.add(inventoryTable).padTop(1500).padLeft(-50);
+        this.table.add(controller.getInventoryController().getProgressBar()).padTop(600).padLeft(800);
+        this.table.row();
+
     }
 
     @Override
     public void show() {
-        stage = new Stage();
+        stage = new Stage(viewport);
+        staticStage = new Stage(new ScreenViewport());
 
+        multiplexer = new InputMultiplexer();
         InputMultiplexer multiplexer = new InputMultiplexer();
+        multiplexer.addProcessor(staticStage);
         multiplexer.addProcessor(stage);
         multiplexer.addProcessor(this);
         Gdx.input.setInputProcessor(multiplexer);
-
         viewport.apply();
-        Gdx.input.setInputProcessor(this);
-        multiplexer.addProcessor(stage);
-        multiplexer.addProcessor(this);
-        Gdx.input.setInputProcessor(multiplexer);
-
-
-        stage.addActor(inventoryTable);
+        staticStage.addActor(table);
 
     }
 
     @Override
-    public void render(float v) {
+    public void render(float delta) {
         Gdx.gl.glClearColor(0, 0, 0, 1);
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 
@@ -125,22 +142,21 @@ public class GameView implements Screen, InputProcessor {
 
         Main.getBatch().begin();
         renderWorld();
-        Main.getBatch().end();
+
 
         clockController.update();
 
         Assets.getInstance().setColorFunction();
-        controller.handleGame();
 
-        stage.act(Math.min(Gdx.graphics.getDeltaTime(), 1 / 30f));
-        stage.draw();
+        controller.handleGame();
+        Main.getBatch().end();
+
         stage.act(min(Gdx.graphics.getDeltaTime(), 1 / 30f));
         stage.draw();
-        stage.act(Gdx.graphics.getDeltaTime());
-
-
-
+        staticStage.act(min(Gdx.graphics.getDeltaTime(), 1 / 30f));
+        staticStage.draw();
     }
+
 
     @Override
     public void resize(int i, int i1) {
@@ -181,21 +197,6 @@ public class GameView implements Screen, InputProcessor {
     public boolean keyTyped(char c) {
         return false;
     }
-
-//
-//    //for carpenter shop
-//    Vector2 mousePos = new Vector2(0, 0);
-//    ShapeRenderer shapeRenderer = new ShapeRenderer();
-//
-//    InputProcessor mouseProcessor = new InputAdapter() {
-//        @Override
-//        public boolean mouseMoved(int screenX, int screenY) {
-//            Vector2 stageCoords = stage.screenToStageCoordinates(new Vector2(screenX, screenY));
-//            mousePos.set(stageCoords.x, stageCoords.y);
-//            return true;
-//        }
-//    };
-//    ///
 
 
     @Override
@@ -663,16 +664,197 @@ public class GameView implements Screen, InputProcessor {
         }
 
         drawPlayers();
-        drawNPCs();
         drawInventory();
+        drawNPCs();
+        isPlayerMoved();
+        drawFarmingBuilding();
     }
 
     private void drawNPCs() {
+        NPCTypes[] validNPC = new NPCTypes[]{
+            NPCTypes.ABIGAIL,
+            NPCTypes.HARVEY,
+            NPCTypes.ROBIN,
+            NPCTypes.SEBASTIAN,
+            NPCTypes.LEAH
+        };
+
         for (NPC npc : App.getCurrentGame().getNPCs()) {
             Sprite sprite = new Sprite(new Texture(npc.getType().getImagePath()));
-            sprite.setPosition(npc.getType().getCoordinate().getX() * scaledSize,
-                npc.getType().getCoordinate().getY() * scaledSize);
+            float x = npc.getType().getCoordinate().getX() * scaledSize;
+            float y = npc.getType().getCoordinate().getY() * scaledSize;
+
+            sprite.setPosition(x, y);
             sprite.draw(Main.getBatch());
+
+            if (Arrays.asList(validNPC).contains(npc.getType())) {
+
+                Pixmap normal = new Pixmap(1, 1, Pixmap.Format.RGBA8888);
+                normal.setColor(Color.YELLOW);
+                normal.fill();
+                Pixmap hover = new Pixmap(1, 1, Pixmap.Format.RGBA8888);
+                hover.setColor(Color.SKY);
+                hover.fill();
+                TextureRegionDrawable normalDrawable = new TextureRegionDrawable(new TextureRegion(new Texture(normal)));
+                TextureRegionDrawable hoverDrawable = new TextureRegionDrawable(new TextureRegion(new Texture(hover)));
+                BitmapFont font = new BitmapFont();
+                TextButton.TextButtonStyle style = new TextButton.TextButtonStyle();
+                style.up = normalDrawable;
+                style.over = hoverDrawable;
+                style.down = normalDrawable.tint(Color.GRAY);
+                style.font = font;
+
+                TextButton talk = new TextButton("Talk", style);
+                talk.getLabel().setColor(Color.BLACK);
+                talk.setSize((float) scaledSize, (float) (0.5 * scaledSize));
+                talk.getLabel().setFontScale(0.6f);
+                talk.setPosition(x + scaledSize + 10, y);
+                stage.addActor(talk);
+
+                TextButton info = new TextButton("info", style);
+                info.getLabel().setColor(Color.BLACK);
+                info.setSize((float) scaledSize, (float) (0.5 * scaledSize));
+                info.getLabel().setFontScale(0.6f);
+                info.setPosition(x + scaledSize + 10, y + 22);
+                stage.addActor(info);
+
+
+                talk.addListener(new ClickListener() {
+                    public void clicked(InputEvent event, float x, float y) {
+                        Texture texture = new Texture(Gdx.files.internal(npc.getType().getAvatarPath()));
+                        npcImage = new Image(texture);
+                        buildMessageNPC();
+                        npcTextField.setText(controller.meetNPC(npc.getType().getName()).message());
+                    }
+                });
+                final Window[] questsWindow = {null};
+
+                info.addListener(new ClickListener() {
+                    public void clicked(InputEvent event, float x, float y) {
+                        Label label = new Label(npc.getType().getName(), skin);
+                        Window infoWindow = new Window("NPC Info", skin);
+                        infoWindow.getTitleLabel().setFontScale(0.7f);
+
+                        Label friendShip = new Label("Friendship: " + npc.getFriendship().getFriendshipLevel() + "\n" +
+                            "Points: " + npc.getFriendship().getFriendshipPoints(), skin);
+                        infoWindow.pad(10);
+                        infoWindow.add(label).row();
+                        infoWindow.add(friendShip).left().padTop(5).row();
+                        label.setFontScale(0.5f);
+                        friendShip.setFontScale(0.5f);
+
+                        infoWindow.setSize(6 * scaledSize, 5 * scaledSize);
+                        infoWindow.setPosition(info.getX(), info.getY() + info.getHeight() + 10);
+                        infoWindow.pad(6);
+
+                        TextButton closeButton = new TextButton("X", style);
+                        closeButton.setWidth(scaledSize);
+                        closeButton.setHeight(scaledSize);
+                        closeButton.getLabel().setFontScale(1f);
+                        closeButton.setColor(Color.YELLOW);
+                        closeButton.getLabel().setColor(Color.BLACK);
+                        closeButton.addListener(new ClickListener() {
+                            public void clicked(InputEvent event, float x, float y) {
+                                infoWindow.remove();
+                                if (questsWindow[0] != null) {
+                                    questsWindow[0].remove();
+                                    questsWindow[0] = null;
+                                }
+                            }
+                        });
+
+                        closeButton.setPosition(infoWindow.getWidth() - closeButton.getWidth(),
+                            infoWindow.getHeight() - closeButton.getHeight());
+                        infoWindow.addActor(closeButton);
+
+                        TextButton gift = new TextButton("send gift", style);
+                        gift.getLabel().setColor(Color.BLACK);
+                        gift.setSize((float) 2 * scaledSize, (float) (0.7 * scaledSize));
+                        gift.pad(7);
+                        infoWindow.add(gift).center().padTop(7).padBottom(5).row();
+
+                        TextButton quest = new TextButton("quests", style);
+                        quest.getLabel().setColor(Color.BLACK);
+                        quest.setSize((float) 2 * scaledSize, (float) (0.7 * scaledSize));
+                        quest.pad(7);
+                        infoWindow.add(quest).center().padTop(7).row();
+
+                        gift.addListener(new ClickListener() {
+                            public void clicked(InputEvent event, float x, float y) {
+                                if (controller.isCloseEnough(npc.getType().getName())) {
+                                    Result result = controller.giftNPC(npc.getType().getName(),
+                                        App.getCurrentGame().getCurrentPlayer().getInHandGood().getFirst().getName());
+                                    buildMessageNPC();
+                                    npcTextField.setText(result.message());
+                                } else {
+                                    buildMessageNPC();
+                                    npcTextField.setText("Too far away. Approach the NPC to send a gift.");
+                                }
+                            }
+                        });
+
+                        quest.addListener(new ClickListener() {
+                            public void clicked(InputEvent event, float x, float y) {
+                                if (questsWindow[0] != null) {
+                                    questsWindow[0].remove();
+                                    questsWindow[0] = null;
+                                }
+                                questsWindow[0] = new Window("Quests", skin);
+                                questsWindow[0].getTitleLabel().setFontScale(0.5f);
+                                questsWindow[0].pad(10);
+                                questsWindow[0].setSize(6 * scaledSize, 4 * scaledSize);
+                                questsWindow[0].setPosition(infoWindow.getX() + infoWindow.getWidth() + 10, infoWindow.getY());
+                                String result = controller.getQuests(npc.getType().getName());
+                                Label labelQuest = new Label(result, skin);
+                                labelQuest.setFontScale(0.5f);
+                                questsWindow[0].add(labelQuest);
+                                stage.addActor(questsWindow[0]);
+                            }
+                        });
+
+                        stage.addActor(infoWindow);
+                    }
+                });
+
+
+            }
+        }
+    }
+
+    private void buildMessageNPC() {
+        lastCoordinate = App.getCurrentGame().getCurrentPlayer().getCoordinate();
+        float screenWidth = stage.getViewport().getWorldWidth();
+        if (npcTextField != null) {
+            npcTextField.remove();
+        }
+        if (npcImage != null) {
+            npcImage.remove();
+        }
+        npcTextField = new TextArea("", skin);
+        npcTextField.setSize(800, 150);
+        float textFieldX = screenWidth / 2 - npcTextField.getWidth() / 2;
+        float textFieldY = 10f;
+        npcTextField.setPosition(textFieldX, textFieldY);
+        staticStage.addActor(npcTextField);
+
+        if (npcImage != null) {
+            npcImage.setSize(150, 150);
+            npcImage.setPosition(textFieldX - npcImage.getWidth() - 10, textFieldY);
+            staticStage.addActor(npcImage);
+        }
+    }
+
+    private void isPlayerMoved() {
+        if (lastCoordinate != null) {
+            if (App.getCurrentGame().getCurrentPlayer().getCoordinate().getX() != lastCoordinate.getX() ||
+                App.getCurrentGame().getCurrentPlayer().getCoordinate().getY() != lastCoordinate.getY()) {
+                npcTextField.remove();
+                if (npcImage != null) {
+                    npcImage.clear();
+                    npcImage.remove();
+                }
+
+            }
         }
     }
 
@@ -682,7 +864,6 @@ public class GameView implements Screen, InputProcessor {
                 player.getCoordinate().getY() * scaledSize);
             player.getSprite().draw(Main.getBatch());
         }
-        drawFarmingBuilding();
     }
 
     private void drawForaging(Tile tile) {
@@ -705,34 +886,94 @@ public class GameView implements Screen, InputProcessor {
         }
     }
 
-    private void drawInventory() {
-        inventoryTable.clear();
-
-        TextureRegionDrawable drawableSlot = new TextureRegionDrawable(new Texture("GameAssets/Inventory_Table/slot.png"));
-        TextureRegionDrawable drawableHighlight = new TextureRegionDrawable(new Texture("GameAssets/Inventory_Table/highlight.png"));
-        for (ArrayList<Good> goods : App.getCurrentGame().getCurrentPlayer().getInventory().getList()) {
+    public void drawInventory() {
+        for (Pair<ImageButton, Image> inventoryElement : controller.getInventoryController().getInventoryElements()) {
             Table table = new Table();
-            ImageButton imageButtonBackground;
-            if (goods == App.getCurrentGame().getCurrentPlayer().getInHandGood())
-                imageButtonBackground = new ImageButton(drawableHighlight, drawableHighlight, drawableHighlight);
-            else
-                imageButtonBackground = new ImageButton(drawableSlot, drawableHighlight, drawableHighlight);
-
-            imageButtonBackground.addListener(new ClickListener() {
-                @Override
-                public void clicked(InputEvent event, float x, float y) {
-
-                }
-            });
-            Image image = new Image();
-            if (!goods.isEmpty())
-                image = new Image(new TextureRegion(new Texture(goods.getFirst().getType().imagePath())));
-
-
-            table.add(imageButtonBackground);
-            table.add(image).padLeft(-48);
-
+            table.add(inventoryElement.first());
+            table.add(inventoryElement.second()).padLeft(-48);
             inventoryTable.add(table);
         }
+
+        controller.getInventoryController().getProgressBar().setValue(
+            App.getCurrentGame().getCurrentPlayer().getEnergy().getDayEnergyLeft()
+        );
+    }
+
+    public int getScaledSize() {
+        return scaledSize;
+    }
+
+    public void initToolsWindow() {
+        this.toolsWindow = new Window("Tools", skin, "Letter");
+        this.toolsTable = new Table(skin);
+        this.toolsTable.setFillParent(true);
+        this.toolsScrollPane = new ScrollPane(toolsTable, skin);
+
+        toolsWindow.add(toolsScrollPane);
+        toolsWindow.pack();
+        toolsWindow.setPosition(
+            (Gdx.graphics.getWidth() - toolsWindow.getWidth()) / 2,
+            (Gdx.graphics.getHeight() - toolsWindow.getHeight()) / 2
+        );
+//        stage.addActor(toolsWindow);
+
+
+        for (int i = 0; i < controller.getInventoryController().getInventoryElements().size(); i++) {
+            if (!App.getCurrentGame().getCurrentPlayer().getInventory().getList().get(i).isEmpty() &&
+                App.getCurrentGame().getCurrentPlayer().getInventory().getList().get(i).getLast() instanceof Tool) {
+                Pair<ImageButton, Image> inventoryElement = controller.getInventoryController().getInventoryElements().get(i);
+                toolsTable.add(inventoryElement.first());
+                toolsTable.add(inventoryElement.second()).padLeft(-48);
+            }
+        }
+
+        toolsWindow.draw(Main.getBatch(), 10);
+
+    }
+
+    public Window getToolsWindow() {
+        return toolsWindow;
+    }
+
+    public Stage getStage() {
+        return stage;
+    }
+
+    public void initMainTable() {
+        mainTable = new Table(skin);
+        mainTable.setFillParent(true);
+        mainWindow = new Window("", skin);
+        mainWindow.setSize(800, 600);
+
+        for (int i = 0; i < 8; i++) {
+            ImageButton imageButton = controller.getInventoryController().getMainInventoryElements().get(i);
+            if (i == 0)
+                imageButton.setDisabled(true);
+            else if (i == 7)
+                mainTable.add(imageButton).padLeft(100);
+            else
+                mainTable.add(imageButton);
+        }
+        mainTable.row();
+        mainTable.add(mainWindow).colspan(7);
+
+        stage.addActor(mainTable);
+        setInputProcessor();
+    }
+
+    public void closeMainTable() {
+        mainTable.remove();
+        mainTable = null;
+        mainWindow.remove();
+    }
+
+    public Table getMainTable() {
+        return mainTable;
     }
 }
+
+
+
+
+
+

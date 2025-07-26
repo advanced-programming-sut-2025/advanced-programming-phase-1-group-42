@@ -69,18 +69,18 @@ public class ClockController extends Controller {
         currentWeather = App.getCurrentGame().getWeather();
         currentWallet = App.getCurrentGame().getCurrentPlayer().getWallet();
         skin = Assets.getInstance().getSkin();
-        stage = new Stage(new ScreenViewport());
+        stage = new Stage();
 
 
         lastNetWorth = currentWallet.getBalance();
-        a = new Texture(Gdx.files.internal("assets\\GameAssets\\Clock/Nan.png"));
-        b = new Texture(Gdx.files.internal("assets\\GameAssets\\Clock/Nan.png"));
-        c = new Texture(Gdx.files.internal("assets\\GameAssets\\Clock/Nan.png"));
-        d = new Texture(Gdx.files.internal("assets\\GameAssets\\Clock/Nan.png"));
-        e = new Texture(Gdx.files.internal("assets\\GameAssets\\Clock/Nan.png"));
-        f = new Texture(Gdx.files.internal("assets\\GameAssets\\Clock/Nan.png"));
-        g = new Texture(Gdx.files.internal("assets\\GameAssets\\Clock/Nan.png"));
-        h = new Texture(Gdx.files.internal("assets\\GameAssets\\Clock/0.png"));
+        a = new Texture(Gdx.files.internal("GameAssets/Clock/Nan.png"));
+        b = new Texture(Gdx.files.internal("GameAssets/Clock/Nan.png"));
+        c = new Texture(Gdx.files.internal("GameAssets/Clock/Nan.png"));
+        d = new Texture(Gdx.files.internal("GameAssets/Clock/Nan.png"));
+        e = new Texture(Gdx.files.internal("GameAssets/Clock/Nan.png"));
+        f = new Texture(Gdx.files.internal("GameAssets/Clock/Nan.png"));
+        g = new Texture(Gdx.files.internal("GameAssets/Clock/Nan.png"));
+        h = new Texture(Gdx.files.internal("GameAssets/Clock/0.png"));
         A = new Image(new TextureRegionDrawable(a));
         B = new Image(new TextureRegionDrawable(b));
         C = new Image(new TextureRegionDrawable(c));
@@ -144,47 +144,47 @@ public class ClockController extends Controller {
                 switch (count) {
                     case 0:
                         h.dispose();
-                        h = new Texture("assets\\GameAssets\\Clock/" + num + ".png");
+                        h = new Texture("GameAssets/Clock/" + num + ".png");
                         H.setDrawable(new TextureRegionDrawable(h));
                         break;
                     case 1:
                         g.dispose();
-                        g = new Texture("assets\\GameAssets\\Clock/" + num + ".png");
+                        g = new Texture("GameAssets/Clock/" + num + ".png");
                         G.setDrawable(new TextureRegionDrawable(g));
                         break;
                     case 2:
                         f.dispose();
-                        f = new Texture("assets\\GameAssets\\Clock/" + num + ".png");
+                        f = new Texture("GameAssets/Clock/" + num + ".png");
                         F.setDrawable(new TextureRegionDrawable(f));
                         break;
                     case 3:
                         e.dispose();
-                        e = new Texture("assets\\GameAssets\\Clock/" + num + ".png");
+                        e = new Texture("GameAssets/Clock/" + num + ".png");
                         E.setDrawable(new TextureRegionDrawable(e));
                         break;
                     case 4:
                         d.dispose();
-                        d = new Texture("assets\\GameAssets\\Clock/" + num + ".png");
+                        d = new Texture("GameAssets/Clock/" + num + ".png");
                         D.setDrawable(new TextureRegionDrawable(d));
                         break;
                     case 5:
                         c.dispose();
-                        c = new Texture("assets\\GameAssets\\Clock/" + num + ".png");
+                        c = new Texture("GameAssets/Clock/" + num + ".png");
                         C.setDrawable(new TextureRegionDrawable(c));
                         break;
                     case 6:
                         b.dispose();
-                        b = new Texture("assets\\GameAssets\\Clock/" + num + ".png");
+                        b = new Texture("GameAssets/Clock/" + num + ".png");
                         B.setDrawable(new TextureRegionDrawable(b));
                         break;
                     case 7:
                         a.dispose();
-                        a = new Texture("assets\\GameAssets\\Clock/" + num + ".png");
+                        a = new Texture("GameAssets/Clock/" + num + ".png");
                         A.setDrawable(new TextureRegionDrawable(a));
                         break;
                     default:
                         a.dispose();
-                        a = new Texture("assets\\GameAssets\\Clock/" + num + ".png");
+                        a = new Texture("GameAssets/Clock/" + num + ".png");
                         A.setDrawable(new TextureRegionDrawable(a));
                         break;
                 }
@@ -195,47 +195,47 @@ public class ClockController extends Controller {
                     case 0:
                         h.dispose();
                         weatherTexture.dispose();
-                        h = new Texture("assets\\GameAssets\\Clock/" + "Nan" + ".png");
+                        h = new Texture("GameAssets/Clock/" + "Nan" + ".png");
                         H.setDrawable(new TextureRegionDrawable(h));
                         break;
                     case 1:
                         g.dispose();
-                        g = new Texture("assets\\GameAssets\\Clock/" + "Nan" + ".png");
+                        g = new Texture("GameAssets/Clock/" + "Nan" + ".png");
                         G.setDrawable(new TextureRegionDrawable(g));
                         break;
                     case 2:
                         f.dispose();
-                        f = new Texture("assets\\GameAssets\\Clock/" + "Nan" + ".png");
+                        f = new Texture("GameAssets/Clock/" + "Nan" + ".png");
                         F.setDrawable(new TextureRegionDrawable(f));
                         break;
                     case 3:
                         e.dispose();
-                        e = new Texture("assets\\GameAssets\\Clock/" + "Nan" + ".png");
+                        e = new Texture("GameAssets/Clock/" + "Nan" + ".png");
                         E.setDrawable(new TextureRegionDrawable(e));
                         break;
                     case 4:
                         d.dispose();
-                        d = new Texture("assets\\GameAssets\\Clock/" + "Nan" + ".png");
+                        d = new Texture("GameAssets/Clock/" + "Nan" + ".png");
                         D.setDrawable(new TextureRegionDrawable(d));
                         break;
                     case 5:
                         c.dispose();
-                        c = new Texture("assets\\GameAssets\\Clock/" + "Nan" + ".png");
+                        c = new Texture("GameAssets/Clock/" + "Nan" + ".png");
                         C.setDrawable(new TextureRegionDrawable(c));
                         break;
                     case 6:
                         b.dispose();
-                        b = new Texture("assets\\GameAssets\\Clock/" + "Nan" + ".png");
+                        b = new Texture("GameAssets/Clock/" + "Nan" + ".png");
                         B.setDrawable(new TextureRegionDrawable(b));
                         break;
                     case 7:
                         a.dispose();
-                        a = new Texture("assets\\GameAssets\\Clock/" + "Nan" + ".png");
+                        a = new Texture("GameAssets/Clock/" + "Nan" + ".png");
                         A.setDrawable(new TextureRegionDrawable(a));
                         break;
                     default:
                         a.dispose();
-                        a = new Texture("assets\\GameAssets\\Clock/" + "Nan" + ".png");
+                        a = new Texture("GameAssets/Clock/" + "Nan" + ".png");
                         A.setDrawable(new TextureRegionDrawable(a));
                         break;
                 }
@@ -245,13 +245,13 @@ public class ClockController extends Controller {
         else if (!currentWeatherName.equals(lastWeatherName)) {
             lastWeatherName = currentWeatherName;
             weatherTexture.dispose();
-            weatherTexture = new Texture("assets\\GameAssets\\Clock/" + currentWeatherName + ".png");
+            weatherTexture = new Texture("GameAssets/Clock/" + currentWeatherName + ".png");
             weatherImage.setDrawable(new TextureRegionDrawable(new TextureRegion(weatherTexture)));
         }
         else if (!currentSeasonName.equals(lastSeasonName)) {
             lastSeasonName = currentSeasonName;
             seasonTexture.dispose();
-            seasonTexture = new Texture("assets\\GameAssets\\Clock/" + currentSeasonName + ".png");
+            seasonTexture = new Texture("GameAssets/Clock/" + currentSeasonName + ".png");
             seasonImage.setDrawable(new TextureRegionDrawable(new TextureRegion(seasonTexture)));
         }
         else if (!currentDayOfWeek.equals(lastDayOfWeekName)) {
@@ -297,15 +297,9 @@ public class ClockController extends Controller {
     }
 
 
-
-
-
-
-
-
     public void setWeatherAndSeason(){
-        seasonTexture = new Texture("assets\\GameAssets\\Clock/" + currentTime.getSeason().getName() + ".png");
-        weatherTexture = new Texture("assets\\GameAssets\\Clock/" + currentWeather.getName() + ".png");
+        seasonTexture = new Texture("GameAssets/Clock/" + currentTime.getSeason().getName() + ".png");
+        weatherTexture = new Texture("GameAssets/Clock/" + currentWeather.getName() + ".png");
         lastWeatherName = currentWeather.getName();
         lastSeasonName = currentTime.getSeason().getName();
         seasonImage = new Image(new TextureRegionDrawable(new TextureRegion(seasonTexture)));
@@ -318,8 +312,8 @@ public class ClockController extends Controller {
         stage.addActor(seasonImage);
     }
     public void setClockFace(){
-        clockTexture = new Texture("assets\\GameAssets\\Clock/Clock.png");
-        handTexture = new Texture("assets\\GameAssets\\Clock/Handle.png");
+        clockTexture = new Texture("GameAssets/Clock/Clock.png");
+        handTexture = new Texture("GameAssets/Clock/Handle.png");
         clockFaceImage = new Image(new TextureRegionDrawable(new TextureRegion(clockTexture)));
         clockHandImage = new Image(new TextureRegionDrawable(new TextureRegion(handTexture)));
         clockFaceImage.setSize(clockFaceImage.getWidth() * 3, clockFaceImage.getHeight() * 3);

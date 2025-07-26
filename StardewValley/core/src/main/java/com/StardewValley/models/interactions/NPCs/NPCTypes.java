@@ -41,7 +41,7 @@ public enum NPCTypes {
             )),
             "Home",
             new Pair<>(Season.FALL,12),
-            new Coordinate(10, 75), "GameAssets/NPCs/SEBASTIAN.png"),
+            new Coordinate(10, 75), "GameAssets/NPCs/SEBASTIAN.png","GameAssets/Villagers/Sebastian.png"),
     ABIGAIL("Abigail",
             new ArrayList<>(List.of(ArtisanType.COFFEE, FoodType.PUMPKIN_PIE)),
             new ArrayList<>(List.of(
@@ -68,7 +68,7 @@ public enum NPCTypes {
             )),
             "Home",
             new Pair<>(Season.SPRING,2),
-            new Coordinate(110, 95), "GameAssets/NPCs/ABIGAIL.png"),
+            new Coordinate(110, 95), "GameAssets/NPCs/ABIGAIL.png" , "GameAssets/Villagers/Abigail.png"),
 
     HARVEY("Harvey",
             new ArrayList<>(List.of(ArtisanType.COFFEE, ArtisanType.WINE)),
@@ -97,7 +97,7 @@ public enum NPCTypes {
             )),
             "Home",
             new Pair<>(Season.SUMMER,21),
-            new Coordinate(40, 75), "GameAssets/NPCs/HARVEY.png"
+            new Coordinate(40, 75), "GameAssets/NPCs/HARVEY.png" , "GameAssets/Villagers/Harvey.png"
     ),
 
     LEAH("Leah",
@@ -126,7 +126,7 @@ public enum NPCTypes {
             )),
             "Home",
             new Pair<>(Season.FALL,19),
-            new Coordinate(120, 75), "GameAssets/NPCs/LEAH.png"
+            new Coordinate(120, 75), "GameAssets/NPCs/LEAH.png", "GameAssets/Villagers/Leah.png"
     ),
 
     ROBIN("Robin",
@@ -155,7 +155,7 @@ public enum NPCTypes {
             )),
             "Home",
             new Pair<>(Season.WINTER, 27),
-            new Coordinate(15, 90), "GameAssets/NPCs/ROBIN.png"
+            new Coordinate(15, 90), "GameAssets/NPCs/ROBIN.png", "GameAssets/Villagers/Robin.png"
     ),
 
     CLINT("Clint",
@@ -164,7 +164,7 @@ public enum NPCTypes {
             new ArrayList<>(),
             "Blacksmith",
             null,
-            new Coordinate(15, 60), "GameAssets/NPCs/CLINT.png"),
+            new Coordinate(15, 60), "GameAssets/NPCs/CLINT.png" , "GameAssets/Villagers/Clint.png"),
 
     MORRIS("Morris",
             new ArrayList<>(),
@@ -172,7 +172,7 @@ public enum NPCTypes {
             new ArrayList<>(),
             "JojaMart",
             null,
-            new Coordinate(55, 60), "GameAssets/NPCs/MORRIS.png"),
+            new Coordinate(55, 60), "GameAssets/NPCs/MORRIS.png", "GameAssets/Villagers/Morris.png"),
 
     PIERRE("Pierre",
             new ArrayList<>(),
@@ -180,7 +180,7 @@ public enum NPCTypes {
             new ArrayList<>(),
             "Pierre_General_Store",
             null,
-            new Coordinate(85, 60), "GameAssets/NPCs/PIERRE.png"),
+            new Coordinate(85, 60), "GameAssets/NPCs/PIERRE.png", "GameAssets/Villagers/Pierre.png"),
 
     WILLY("Willy",
             new ArrayList<>(),
@@ -188,7 +188,7 @@ public enum NPCTypes {
             new ArrayList<>(),
             "Fish_Shop",
             null,
-            new Coordinate(125, 60), "GameAssets/NPCs/WILLY.png"),
+            new Coordinate(125, 60), "GameAssets/NPCs/WILLY.png", "GameAssets/Villagers/Willy.png"),
 
     MARNIE("Marnie",
             new ArrayList<>(),
@@ -196,7 +196,7 @@ public enum NPCTypes {
             new ArrayList<>(),
             "Marnie_Ranch",
             null,
-            new Coordinate(55, 90), "GameAssets/NPCs/MARNIE.png"),
+            new Coordinate(55, 90), "GameAssets/NPCs/MARNIE.png", "GameAssets/Villagers/Marnie.png"),
 
     GUS("Gus",
             null,
@@ -204,7 +204,7 @@ public enum NPCTypes {
             new ArrayList<>(),
             "The_Stardrop_Saloon",
             null,
-            new Coordinate(85, 90), "GameAssets/NPCs/GUS.png"),;
+            new Coordinate(85, 90), "GameAssets/NPCs/GUS.png", "GameAssets/Villagers/Gus.png"),;
 
 
 
@@ -216,6 +216,7 @@ public enum NPCTypes {
     private Pair<Season, Integer> birthday;
     private final Coordinate coordinate;
     private final String imagePath;
+    private final String avatarPath;
 
     NPCTypes(String name,
              ArrayList<GoodType> favorites,
@@ -224,7 +225,8 @@ public enum NPCTypes {
              String place,
              Pair<Season, Integer> birthday,
              Coordinate coordinate,
-             String imagePath) {
+             String imagePath ,
+             String avatarPath ) {
         this.name = name;
         this.favorites = favorites;
         this.dialogs = dialogs;
@@ -233,6 +235,7 @@ public enum NPCTypes {
         this.birthday = birthday;
         this.coordinate = coordinate;
         this.imagePath = imagePath;
+        this.avatarPath = avatarPath;
     }
 
     public String getName() {
@@ -265,5 +268,9 @@ public enum NPCTypes {
 
     public String getImagePath() {
         return imagePath;
+    }
+
+    public String getAvatarPath() {
+        return avatarPath;
     }
 }
