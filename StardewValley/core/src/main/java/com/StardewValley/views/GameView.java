@@ -1177,8 +1177,6 @@ public class GameView implements Screen, InputProcessor {
         setInputProcessor();
     }
 
-
-
     public int getScaledSize() {
         return scaledSize;
     }
