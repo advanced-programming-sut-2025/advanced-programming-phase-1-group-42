@@ -3,6 +3,7 @@ package com.StardewValley.models.game_structure;
 
 
 import com.StardewValley.models.App;
+import com.StardewValley.models.Assets;
 import com.StardewValley.models.enums.TileType;
 import com.StardewValley.models.goods.Good;
 import com.StardewValley.models.goods.farmings.FarmingCrop;
@@ -14,6 +15,20 @@ import com.StardewValley.models.interactions.Animals.Animal;
 import com.StardewValley.models.interactions.NPCs.NPC;
 import com.StardewValley.models.interactions.Player;
 import com.StardewValley.models.interactions.game_buildings.GameBuilding;
+import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.graphics.Color;
+import com.badlogic.gdx.graphics.Pixmap;
+import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.g2d.TextureRegion;
+import com.badlogic.gdx.scenes.scene2d.Actor;
+import com.badlogic.gdx.scenes.scene2d.Stage;
+import com.badlogic.gdx.scenes.scene2d.ui.Label;
+import com.badlogic.gdx.scenes.scene2d.ui.Table;
+import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
+import com.badlogic.gdx.scenes.scene2d.ui.Window;
+import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
+import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
+import com.badlogic.gdx.utils.Align;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -303,9 +318,144 @@ public class Map {
                 System.out.print(map[i][j]);
             }
         }
+
+    }
+    private Window mapWindow;
+    boolean printMapFlag = false;
+    public void printGraphicalMap(int x, int y, int size, Stage stage) {
+        if (!printMapFlag) {
+            mapWindow = new Window("Map", Assets.getInstance().getSkin());
+            mapWindow.setSize(500, 500);
+            mapWindow.setPosition(
+                (Gdx.graphics.getWidth() - mapWindow.getWidth()) / 2f,
+                (Gdx.graphics.getHeight() - mapWindow.getHeight()) / 2f
+            );
+
+            Table mapTable = new Table();
+            mapTable.defaults().width(16).height(16);
+
+            for (int j = 0; j < size; j++) {
+                mapTable.row();
+                for (int i = 0; i < size; i++) {
+                    Coordinate coordinate = new Coordinate(x + i, y + j);
+                    Tile tile = findTile(coordinate);
+
+                    String symbol = " ";
+                    Color bgColor = Color.GRAY;
+                    Color fgColor = Color.BLACK;
+
+                    if (tile == null) {
+                        symbol = "N";
+                        bgColor = Color.PURPLE;
+                    } else {
+                        // tile type logic...
+                        switch (tile.getTileType()) {
+                            case FARM -> bgColor = Color.FOREST;
+                            case WATER -> bgColor = Color.BLUE;
+                            case GREEN_HOUSE -> bgColor = Color.WHITE;
+                            case PLAYER_BUILDING -> {
+                                symbol = "H";
+                                bgColor = Color.YELLOW;
+                            }
+                            case ROAD -> {
+                                symbol = "-";
+                                bgColor = Color.DARK_GRAY;
+                            }
+                            case QUARRY -> bgColor = Color.LIGHT_GRAY;
+                            case BEACH -> {
+                                symbol = "B";
+                                bgColor = Color.YELLOW;
+                            }
+                            case SQUARE -> {
+                                symbol = "O";
+                                bgColor = Color.RED;
+                            }
+                            case STONE_WALL -> {
+                                symbol = "|";
+                                bgColor = Color.DARK_GRAY;
+                            }
+                            default -> bgColor = Color.GREEN;
+                        }
+
+                        if (tile.isWatered()) {
+                            bgColor = Color.TEAL;
+                        }
+
+                        for (Good good : tile.getGoods()) {
+                            if (good instanceof ForagingCrop) {
+                                symbol = "c";
+                                fgColor = Color.MAROON;
+                            } else if (good instanceof ForagingSeed) {
+                                symbol = "s";
+                                fgColor = Color.PINK;
+                            } else if ("Grass".equals(good.getName())) {
+                                symbol = "g";
+                                fgColor = Color.LIME;
+                            }
+                        }
+
+                        for (Player player : App.getCurrentGame().getPlayers()) {
+                            if (player.getCoordinate().equals(coordinate)) {
+                                symbol = String.valueOf(App.getCurrentGame().getPlayers().indexOf(player) + 1);
+                                fgColor = Color.WHITE;
+                            }
+                        }
+
+                        for (NPC npc : App.getCurrentGame().getNPCs()) {
+                            if (npc.getType().getCoordinate().equals(coordinate)) {
+                                symbol = npc.getType().getName().substring(0, 1).toUpperCase();
+                                fgColor = Color.RED;
+                            }
+                        }
+
+                        for (Animal animal : App.getCurrentGame().getMap().allAnimals()) {
+                            if (animal.getCoordinate().equals(coordinate)) {
+                                symbol = animal.getName().substring(0, 1).toUpperCase();
+                                fgColor = Color.RED;
+                            }
+                        }
+                    }
+
+                    Label label = new Label(symbol, Assets.getInstance().getSkin());
+                    label.setAlignment(Align.center);
+                    label.setColor(fgColor);
+
+                    Table cellTable = new Table();
+                    cellTable.setBackground(new TextureRegionDrawable(new TextureRegion(createColoredTexture(bgColor))));
+                    cellTable.add(label).expand().fill();
+
+                    mapTable.add(cellTable);
+                }
+            }
+
+            mapWindow.add(mapTable).expand().fill();
+            mapWindow.row();
+            TextButton close = new TextButton("Close", Assets.getInstance().getSkin());
+            close.addListener(new ChangeListener() {
+                @Override
+                public void changed(ChangeEvent event, Actor actor) {
+                    mapWindow.remove();
+                    printMapFlag = false; // 🟢 Allow reopening
+                }
+            });
+            mapWindow.add(close).padTop(10);
+            stage.addActor(mapWindow);
+
+            printMapFlag = true;
+        } else {
+            mapWindow.remove();
+            printMapFlag = false;
+        }
     }
 
-
+    private Texture createColoredTexture(Color color) {
+        Pixmap pixmap = new Pixmap(1, 1, Pixmap.Format.RGBA8888);
+        pixmap.setColor(color);
+        pixmap.fill();
+        Texture texture = new Texture(pixmap);
+        pixmap.dispose();
+        return texture;
+    }
 
 
 

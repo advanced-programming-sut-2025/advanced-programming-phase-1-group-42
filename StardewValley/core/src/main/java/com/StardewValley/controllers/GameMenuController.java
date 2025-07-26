@@ -58,6 +58,7 @@ import com.badlogic.gdx.Input;
 import java.util.*;
 import java.util.regex.Matcher;
 
+import static java.awt.SystemColor.window;
 import static java.lang.Math.abs;
 
 public class GameMenuController extends Controller {
@@ -155,6 +156,7 @@ public class GameMenuController extends Controller {
         clockController.update();
     }
 
+
     public void handleInput() {
         Player player = App.getCurrentGame().getCurrentPlayer();
         player.setPlayerDirection(-1);
@@ -219,8 +221,9 @@ public class GameMenuController extends Controller {
         if (Gdx.input.isKeyJustPressed(Input.Keys.F)) {
 
         }
-        if (Gdx.input.isKeyJustPressed(Input.Keys.M)) {
 
+        if (Gdx.input.isKeyJustPressed(Input.Keys.M)) {
+                App.getCurrentGame().getMap().printGraphicalMap(0, 0, 100, gameView.getStage());
         }
         if (Gdx.input.isKeyJustPressed(Input.Keys.TAB)) {
 

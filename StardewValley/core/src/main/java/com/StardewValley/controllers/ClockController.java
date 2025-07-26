@@ -63,7 +63,7 @@ public class ClockController extends Controller {
     private Image G;
     private Image H;
 
-
+    int x = 1920 - 72*3;
     public ClockController() {
         currentTime = App.getCurrentGame().getDateTime();
         currentWeather = App.getCurrentGame().getWeather();
@@ -99,14 +99,14 @@ public class ClockController extends Controller {
         G.setSize(G.getWidth() * 3, G.getHeight() * 3);
         H.setSize(H.getWidth() * 3, H.getHeight() * 3);
 
-        A.setPosition(17*3, Gdx.graphics.getHeight() - 56*3);
-        B.setPosition(A.getX() + 3 + B.getWidth(), Gdx.graphics.getHeight() - 56*3);
-        C.setPosition(B.getX() + 3 + C.getWidth(), Gdx.graphics.getHeight() - 56*3);
-        D.setPosition(C.getX() + 3 + D.getWidth(), Gdx.graphics.getHeight() - 56*3);
-        E.setPosition(D.getX() + 3 + E.getWidth(), Gdx.graphics.getHeight() - 56*3);
-        F.setPosition(E.getX() + 3 + F.getWidth(), Gdx.graphics.getHeight() - 56*3);
-        G.setPosition(F.getX() + 3 + G.getWidth(), Gdx.graphics.getHeight() - 56*3);
-        H.setPosition(G.getX() + 3 + H.getWidth(), Gdx.graphics.getHeight() - 56*3);
+        A.setPosition(17*3 + x, Gdx.graphics.getHeight() - 56*3);
+        B.setPosition(A.getX() + 3 + B.getWidth() + x, Gdx.graphics.getHeight() - 56*3);
+        C.setPosition(B.getX() + 3 + C.getWidth() + x, Gdx.graphics.getHeight() - 56*3);
+        D.setPosition(C.getX() + 3 + D.getWidth() + x, Gdx.graphics.getHeight() - 56*3);
+        E.setPosition(D.getX() + 3 + E.getWidth() + x, Gdx.graphics.getHeight() - 56*3);
+        F.setPosition(E.getX() + 3 + F.getWidth() + x, Gdx.graphics.getHeight() - 56*3);
+        G.setPosition(F.getX() + 3 + G.getWidth() + x, Gdx.graphics.getHeight() - 56*3);
+        H.setPosition(G.getX() + 3 + H.getWidth() + x, Gdx.graphics.getHeight() - 56*3);
         setClockFace();
         setWeatherAndSeason();
         setDays();
@@ -305,12 +305,13 @@ public class ClockController extends Controller {
         seasonImage = new Image(new TextureRegionDrawable(new TextureRegion(seasonTexture)));
         weatherImage = new Image(new TextureRegionDrawable(new TextureRegion(weatherTexture)));
         seasonImage.setSize(seasonImage.getWidth() * 3, seasonImage.getHeight() * 3);
-        seasonImage.setPosition(29*3, Gdx.graphics.getHeight() - 24*3);
+        seasonImage.setPosition(29*3 + x, Gdx.graphics.getHeight() - 24*3);
         weatherImage.setSize(weatherImage.getWidth() * 3, weatherImage.getHeight() * 3);
-        weatherImage.setPosition(53*3, Gdx.graphics.getHeight() - 24*3);
+        weatherImage.setPosition(53*3 + x, Gdx.graphics.getHeight() - 24*3);
         stage.addActor(weatherImage);
         stage.addActor(seasonImage);
     }
+
     public void setClockFace(){
         clockTexture = new Texture("GameAssets/Clock/Clock.png");
         handTexture = new Texture("GameAssets/Clock/Handle.png");
@@ -318,8 +319,8 @@ public class ClockController extends Controller {
         clockHandImage = new Image(new TextureRegionDrawable(new TextureRegion(handTexture)));
         clockFaceImage.setSize(clockFaceImage.getWidth() * 3, clockFaceImage.getHeight() * 3);
         clockHandImage.setSize(clockHandImage.getWidth() * 3, clockHandImage.getHeight() * 3);
-        clockFaceImage.setPosition(0, Gdx.graphics.getHeight()-clockFaceImage.getHeight()); // base position (or center it if needed)
-        clockHandImage.setPosition(19 * 3, 39 * 3 + Gdx.graphics.getHeight()-clockFaceImage.getHeight()); // adjust these if needed
+        clockFaceImage.setPosition(0 + x, Gdx.graphics.getHeight()-clockFaceImage.getHeight()); // base position (or center it if needed)
+        clockHandImage.setPosition(19 * 3 + x , 39 * 3 + Gdx.graphics.getHeight()-clockFaceImage.getHeight()); // adjust these if needed
         clockHandImage.setOrigin(clockHandImage.getWidth() / 2f, 0f);
         stage.addActor(clockFaceImage);
         stage.addActor(clockHandImage);
@@ -330,11 +331,11 @@ public class ClockController extends Controller {
         lastTimeOfDayName = currentTime.getTime();
 
         dayOfWeekLabel = new Label("Sun.", skin);
-        dayOfWeekLabel.setPosition(84 , Gdx.graphics.getHeight()- dayOfWeekLabel.getHeight() - 6);
+        dayOfWeekLabel.setPosition(84 + x , Gdx.graphics.getHeight()- dayOfWeekLabel.getHeight() - 6);
         dayOfMonthLabel = new Label("1", skin);
-        dayOfMonthLabel.setPosition(84 + dayOfWeekLabel.getWidth() + 8  , Gdx.graphics.getHeight()- dayOfWeekLabel.getHeight() - 6);
+        dayOfMonthLabel.setPosition(84 + dayOfWeekLabel.getWidth() + 8  + x, Gdx.graphics.getHeight()- dayOfWeekLabel.getHeight() - 6);
         timeOfDayLabel = new Label("9:00", skin);
-        timeOfDayLabel.setPosition(45*3 - timeOfDayLabel.getWidth()/2 , Gdx.graphics.getHeight()- timeOfDayLabel.getHeight() - 74);
+        timeOfDayLabel.setPosition(45*3 - timeOfDayLabel.getWidth()/2 + x, Gdx.graphics.getHeight()- timeOfDayLabel.getHeight() - 74);
 
         stage.addActor(dayOfWeekLabel);
         stage.addActor(dayOfMonthLabel);

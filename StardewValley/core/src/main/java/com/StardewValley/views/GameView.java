@@ -143,9 +143,6 @@ public class GameView implements Screen, InputProcessor {
         Main.getBatch().begin();
         renderWorld();
 
-
-        clockController.update();
-
         Assets.getInstance().setColorFunction();
 
         controller.handleGame();
@@ -958,7 +955,7 @@ public class GameView implements Screen, InputProcessor {
         mainTable.add(mainWindow).colspan(7);
 
         stage.addActor(mainTable);
-        setInputProcessor();
+        //setInputProcessor();
     }
 
     public void closeMainTable() {
