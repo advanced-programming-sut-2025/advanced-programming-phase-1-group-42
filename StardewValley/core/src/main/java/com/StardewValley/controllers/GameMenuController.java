@@ -75,6 +75,8 @@ public class GameMenuController extends Controller {
 
     private GameMenuView view;
     private GameView gameView;
+    private FridgeController fridgeController;
+
 
     public void setView(GameMenuView view) {
         this.view = view;
@@ -86,6 +88,8 @@ public class GameMenuController extends Controller {
         playerController = new PlayerController();
         inventoryController = new InventoryController(gameView);
         clockController = new ClockController();
+        fridgeController = new FridgeController(gameView);
+
     }
 
     public WorldController getWorldController() {
@@ -98,6 +102,10 @@ public class GameMenuController extends Controller {
 
     public InventoryController getInventoryController() {
         return inventoryController;
+    }
+
+    public FridgeController getFridgeController() {
+        return fridgeController;
     }
 
     public void handleGameMenu() {
@@ -153,6 +161,7 @@ public class GameMenuController extends Controller {
         playerController.updatePlayer();
         inventoryController.updateInventory();
         clockController.update();
+        fridgeController.updateFridge();
     }
 
     public void handleInput() {

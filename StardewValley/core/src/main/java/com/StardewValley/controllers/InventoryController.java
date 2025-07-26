@@ -25,7 +25,6 @@ public class InventoryController {
     private final ArrayList<ImageButton> mainInventoryElements;
     private final ProgressBar progressBar;
 
-
     public InventoryController(GameView gameView) {
         this.gameView = gameView;
         inventoryElements = new ArrayList<>();

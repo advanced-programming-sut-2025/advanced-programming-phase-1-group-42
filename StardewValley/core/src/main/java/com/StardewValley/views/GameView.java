@@ -13,6 +13,7 @@ import com.StardewValley.models.game_structure.Coordinate;
 import com.StardewValley.models.game_structure.Map;
 import com.StardewValley.models.game_structure.Tile;
 import com.StardewValley.models.goods.Good;
+import com.StardewValley.models.goods.foods.FoodType;
 import com.StardewValley.models.goods.tools.Tool;
 import com.StardewValley.models.interactions.Animals.Animal;
 import com.StardewValley.models.interactions.NPCs.NPC;
@@ -32,10 +33,8 @@ import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.graphics.Texture;
-import com.badlogic.gdx.scenes.scene2d.InputEvent;
+import com.badlogic.gdx.scenes.scene2d.*;
 import com.badlogic.gdx.math.Vector3;
-import com.badlogic.gdx.scenes.scene2d.Actor;
-import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.scenes.scene2d.ui.ImageButton;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
@@ -67,17 +66,21 @@ public class GameView implements Screen, InputProcessor {
     private final Viewport viewport;
     private int scaledSize;
     private Table inventoryTable;
+    private Table fridgeTable;
     private InputMultiplexer multiplexer;
     private Stage staticStage;
     private Window toolsWindow;
     private ScrollPane toolsScrollPane;
     private Table toolsTable;
+    private Window fridgeWindow;
+    private ScrollPane fridgeScrollPane;
     private Coordinate lastCoordinate;
     private TextField textFieldMessage;
     private Image npcImage;
     float timeAccumulator = 0;
     private Animal selectedAnimal = null;
     TextButton.TextButtonStyle style;
+    private Boolean isFridgeOpen = false;
 
 
     private Table mainTable;
@@ -110,6 +113,8 @@ public class GameView implements Screen, InputProcessor {
         this.table.add(controller.getInventoryController().getProgressBar()).padTop(600).padLeft(800);
         this.table.row();
 
+        fridgeWindow = new Window("Fridge", Assets.getInstance().getSkin());
+
 
         //TODO testing animals
 //        FarmBuilding farmBuilding = new FarmBuilding(FarmBuildingTypes.BARN, new Coordinate(50, 30));
@@ -117,6 +122,9 @@ public class GameView implements Screen, InputProcessor {
 //        Animal animal = new Animal(AnimalTypes.COW, "meow");
 //        animal.setCoordinate(new Coordinate(54, 34));
 //        farmBuilding.addAnimal(animal);
+//
+//        App.getCurrentGame().getCurrentPlayer().getFridge().addItemToFridge(Good.newGood(FoodType.APPLE));
+//        App.getCurrentGame().getCurrentPlayer().getFridge().addItemToFridge(Good.newGood(FoodType.BEER));
 
 
 
@@ -245,6 +253,20 @@ public class GameView implements Screen, InputProcessor {
             buildMessage();
             textFieldMessage.setText("Please approach an animal to pet");
             return true;
+        }
+
+        if (i == Input.Keys.F) {
+            Tile selectedTile = App.getCurrentGame().getMap().findTileByXY(App.getCurrentGame().getCurrentPlayer().getCoordinate().getX()
+                , App.getCurrentGame().getCurrentPlayer().getCoordinate().getY());
+            if (selectedTile.getTileType() == TileType.PLAYER_BUILDING) {
+                if (!isFridgeOpen) {
+                    initFridgeWindow();
+                } else {
+                    fridgeWindow.remove();
+                }
+                isFridgeOpen = !isFridgeOpen;
+                return true;
+            }
         }
         return false;
     }
@@ -393,6 +415,7 @@ public class GameView implements Screen, InputProcessor {
         //
         GameBuilding building = App.getCurrentGame().getMap().findGameBuilding(new Coordinate(tileX, tileY));
 
+
         if (building != null) {
 
             Texture backgroundTexture = new Texture(Gdx.files.internal("shop-menu.png"));
@@ -536,7 +559,6 @@ public class GameView implements Screen, InputProcessor {
                         }
                     }
                 });
-
 
 
                 for (AnimalTypes animalType : ((MarnieRanch) building).animals) {
@@ -707,7 +729,6 @@ public class GameView implements Screen, InputProcessor {
                     .expand()
                     .fill();
             }
-
 
             staticStage.addActor(window);
 
@@ -1098,6 +1119,66 @@ public class GameView implements Screen, InputProcessor {
         );
     }
 
+    public void initFridgeWindow() {
+        if (fridgeWindow != null) {
+            fridgeWindow.remove();
+        }
+        this.fridgeTable = new Table(skin);
+        this.fridgeTable.setFillParent(true);
+
+        controller.getFridgeController().refreshFridgeElements();
+        controller.getFridgeController().updateFridge();
+
+        fridgeTable.clearChildren();
+
+        int columns = 4;
+        int count = 0;
+
+        ArrayList<ArrayList<Good>> fridgeItems = App.getCurrentGame().getCurrentPlayer().getFridge().getInFridgeItems();
+
+        for (Pair<Pair<ImageButton, Image>, Integer> pair : controller.getFridgeController().getFridgeElements()) {
+            ImageButton imageButtonBackground = pair.first().first();
+            Image image = pair.first().second();
+            int index = pair.second();
+
+            int quantity = 0;
+            ArrayList<Good> goods = fridgeItems.get(index);
+            if (!goods.isEmpty()) {
+                quantity = goods.size();
+            }
+
+            Label countLabel = new Label(String.valueOf(quantity), skin);
+            countLabel.setFontScale(0.7f);
+
+            Table itemTable = new Table();
+            itemTable.add(imageButtonBackground);
+            itemTable.add(image).padLeft(-48);
+            itemTable.add(countLabel).padLeft(5);
+
+            fridgeTable.add(itemTable).pad(5);
+
+            count++;
+            if (count % columns == 0) {
+                fridgeTable.row();
+            }
+        }
+
+        this.fridgeWindow = new Window("Fridge", skin, "Letter");
+        this.fridgeScrollPane = new ScrollPane(fridgeTable, skin);
+
+        fridgeWindow.add(fridgeScrollPane);
+        fridgeWindow.setSize(scaledSize * 12, scaledSize * 12);
+        fridgeWindow.setPosition(
+            (Gdx.graphics.getWidth() - fridgeWindow.getWidth()) / 2,
+            (Gdx.graphics.getHeight() - fridgeWindow.getHeight()) / 2
+        );
+
+        staticStage.addActor(fridgeWindow);
+        setInputProcessor();
+    }
+
+
+
     public int getScaledSize() {
         return scaledSize;
     }
@@ -1122,12 +1203,12 @@ public class GameView implements Screen, InputProcessor {
                     public void clicked(InputEvent event, float x, float y) {
                         for (int j = 0; j < controller.getInventoryController().getToolsElements().size(); j++) {
                             Pair<Pair<ImageButton, Image>, Integer> pair =
-                                    controller.getInventoryController().getToolsElements().get(j);
+                                controller.getInventoryController().getToolsElements().get(j);
                             pair.first().first().setChecked(false);
                             if (pair.first().second() == finalImage) {
                                 pair.first().first().setChecked(true);
                                 App.getCurrentGame().getCurrentPlayer().setInHandGood(
-                                        App.getCurrentGame().getCurrentPlayer().getInventory().getList().get(pair.second())
+                                    App.getCurrentGame().getCurrentPlayer().getInventory().getList().get(pair.second())
                                 );
                                 closeToolsWindow();
                             }
@@ -1137,7 +1218,7 @@ public class GameView implements Screen, InputProcessor {
                 });
 
                 controller.getInventoryController().getToolsElements().add(
-                        new Pair<>(new Pair<>(imageButtonBackground, image), i)
+                    new Pair<>(new Pair<>(imageButtonBackground, image), i)
                 );
 
                 Table table = new Table();
@@ -1153,8 +1234,8 @@ public class GameView implements Screen, InputProcessor {
         toolsWindow.add(toolsScrollPane);
         toolsWindow.setSize(350, 120);
         toolsWindow.setPosition(
-                (Gdx.graphics.getWidth()  - toolsWindow.getWidth())  / 2,
-                (Gdx.graphics.getHeight() - toolsWindow.getHeight()) / 2
+            (Gdx.graphics.getWidth() - toolsWindow.getWidth()) / 2,
+            (Gdx.graphics.getHeight() - toolsWindow.getHeight()) / 2
         );
 
         staticStage.addActor(toolsWindow);
@@ -1180,8 +1261,7 @@ public class GameView implements Screen, InputProcessor {
             if (i == 0) {
                 mainTable.add(imageButton);
                 imageButton.setChecked(true);
-            }
-            else if (i == 7)
+            } else if (i == 7)
                 mainTable.add(imageButton).padLeft(100);
             else
                 mainTable.add(imageButton);
@@ -1224,7 +1304,7 @@ public class GameView implements Screen, InputProcessor {
         this.cheatTable = new Table(skin);
         cheatTable.setFillParent(true);
 
-        this.cheatTextField  = new TextField("", skin);
+        this.cheatTextField = new TextField("", skin);
         this.cheatButton = new TextButton("Submit", skin);
         this.cheatButton.addListener(new ClickListener() {
             @Override
@@ -1240,7 +1320,7 @@ public class GameView implements Screen, InputProcessor {
         this.cheatWindow.addActor(cheatTable);
         this.cheatWindow.setSize(600, 300);
         this.cheatWindow.setPosition(
-            (Gdx.graphics.getWidth()  - cheatWindow.getWidth())  / 2,
+            (Gdx.graphics.getWidth() - cheatWindow.getWidth()) / 2,
             (Gdx.graphics.getHeight() - cheatWindow.getHeight()) / 2
         );
 
