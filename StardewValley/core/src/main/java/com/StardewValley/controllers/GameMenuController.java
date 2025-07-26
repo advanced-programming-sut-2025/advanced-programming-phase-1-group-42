@@ -1470,10 +1470,7 @@ public class GameMenuController extends Controller {
     public Result collectProduct(String animalName) {
         animalName = animalName.trim();
 
-        Animal animal = App.getCurrentGame().getMap().findAnimalByName(animalName);
-        if (animal == null) {
-            return new Result(false, "Animal not found");
-        }
+        Animal animal = findAnimal(animalName);
 
         if (animal.getProducts() != null) {
             for (AnimalProduct product : animal.getProducts()) {
@@ -1482,18 +1479,26 @@ public class GameMenuController extends Controller {
             System.out.println("You collected animal Products.");
             animal.getProducts().clear();
         }
-        return new Result(true, "");
+        return new Result(true, "No product found");
     }
 
     public Result sellAnimal(String animalName) {
         animalName = animalName.trim();
 
-        Animal animal = App.getCurrentGame().getMap().findAnimalByName(animalName);
-        if (animal == null) {
-            return new Result(false, "Animal not found");
+        FarmBuilding place = null;
+        Animal animal = null;
+        for (FarmBuilding building : App.getCurrentGame().getCurrentPlayer().getFarm().getFarmBuildings()) {
+            for (Animal a : building.getAnimals()) {
+                if (a.getName().equals(animalName)) {
+                    animal = a;
+                    place = building;
+                    break;
+                }
+            }
         }
-        FarmBuilding building = animal.getLocatedPLace();
-        building.getAnimals().remove(animal);
+
+        assert place != null;
+        place.getAnimals().remove(animal);
 
         //remove from animals
         App.getCurrentGame().getMap().allAnimals().remove(animal);
@@ -1501,6 +1506,19 @@ public class GameMenuController extends Controller {
         App.getCurrentGame().getCurrentPlayer().getWallet().increaseBalance(animal.getAnimalSellPrice());
 
         return new Result(true, "You sold " + animal.getAnimalSellPrice());
+    }
+
+    public Animal findAnimal(String animalName) {
+        Animal animal;
+        for (FarmBuilding building : App.getCurrentGame().getCurrentPlayer().getFarm().getFarmBuildings()) {
+            for (Animal a : building.getAnimals()) {
+                if (a.getName().equals(animalName)) {
+                    animal = a;
+                    return animal;
+                }
+            }
+        }
+        return null;
     }
 
     public Result fishing(String fishingPole) {

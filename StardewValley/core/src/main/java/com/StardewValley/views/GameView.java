@@ -264,27 +264,79 @@ public class GameView implements Screen, InputProcessor {
                         break;
                     }
                 }
+                if (animal != null) break;
             }
             if (animal != null) {
-//                Texture backgroundTexture = new Texture(Gdx.files.internal("petWindow.png"));
-//                Drawable backgroundDrawable = new TextureRegionDrawable(new TextureRegion(backgroundTexture));
-//
-//                Window.WindowStyle style = new Window.WindowStyle(new BitmapFont(), Color.WHITE, backgroundDrawable);
                 Window animalWindow = new Window("", skin);
 
                 Table nameTable = new Table();
                 Label nameLabel = new Label(animal.getName(), skin);
+                nameLabel.setFontScale(0.6f);
+
+                TextButton closeButton = new TextButton("X", style);
+                closeButton.getLabel().setFontScale(1.2f);
+                closeButton.pad(5);
+                closeButton.addListener(new ChangeListener() {
+                    @Override
+                    public void changed(ChangeEvent event, Actor actor) {
+                        animalWindow.remove();
+                    }
+                });
+
                 nameTable.top().left();
-                nameTable.add(nameLabel).pad(4);
+                nameTable.add(nameLabel).expandX().left();
+                nameTable.add(closeButton).right().padRight(5);
                 animalWindow.add(nameTable).expandX().fillX().padTop(2).row();
 
                 Label friendship = new Label("friendship: " + animal.getFriendship(), skin);
-                friendship.setFontScale(0.6f);
-                nameLabel.setFontScale(0.6f);
+                friendship.setFontScale(0.5f);
                 animalWindow.add(friendship).pad(3).padTop(1).row();
 
                 animalWindow.pack();
-                animalWindow.setSize(scaledSize * 5, scaledSize * 5);
+                animalWindow.setSize(scaledSize * 6, scaledSize * 6);
+
+                TextButton sellButton = new TextButton("Sell", style);
+                sellButton.setHeight(scaledSize);
+                sellButton.pad(5);
+                animalWindow.add(sellButton).expandX().fillX().pad(3).padTop(1).row();
+
+                String name = animal.getName();
+                sellButton.addListener(new ChangeListener() {
+                    @Override
+                    public void changed(ChangeEvent event, Actor actor) {
+                        Result result = controller.sellAnimal(name);
+                        buildMessage();
+                        textFieldMessage.setText(result.message());
+                    }
+                });
+
+                TextButton feedButton = new TextButton("Feed", style);
+                feedButton.setHeight(scaledSize);
+                feedButton.pad(5);
+                animalWindow.add(feedButton).expandX().fillX().pad(3).padTop(1).row();
+
+                feedButton.addListener(new ChangeListener() {
+                    @Override
+                    public void changed(ChangeEvent event, Actor actor) {
+                        Result result = controller.feedHay(name);
+                        buildMessage();
+                        textFieldMessage.setText(result.message());
+                    }
+                });
+
+                TextButton productsButton = new TextButton("Products", style);
+                productsButton.setHeight(scaledSize);
+                productsButton.pad(5);
+                animalWindow.add(productsButton).expandX().fillX().pad(3).padTop(1).row();
+
+                productsButton.addListener(new ChangeListener() {
+                    @Override
+                    public void changed(ChangeEvent event, Actor actor) {
+                        Result result = controller.collectProduct(name);
+                        buildMessage();
+                        textFieldMessage.setText(result.message());
+                    }
+                });
 
                 animalWindow.setPosition(
                     animal.getCoordinate().getX() * scaledSize + 30,
@@ -293,9 +345,9 @@ public class GameView implements Screen, InputProcessor {
 
                 stage.addActor(animalWindow);
             }
-
-
         }
+
+
 
 
         if (button == Input.Buttons.LEFT) {
@@ -454,6 +506,7 @@ public class GameView implements Screen, InputProcessor {
                     }
                 });
 
+
                 purchaseButton.addListener(new ChangeListener() {
                     @Override
                     public void changed(ChangeEvent changeEvent, Actor actor) {
@@ -467,9 +520,9 @@ public class GameView implements Screen, InputProcessor {
                             System.out.println(result.message());
                             info.setText(result.toString());
                         }
-
                     }
                 });
+
 
 
                 for (AnimalTypes animalType : ((MarnieRanch) building).animals) {
@@ -808,7 +861,6 @@ public class GameView implements Screen, InputProcessor {
             sprite.draw(Main.getBatch());
 
             if (Arrays.asList(validNPC).contains(npc.getType())) {
-
 
 
                 TextButton talk = new TextButton("Talk", style);
