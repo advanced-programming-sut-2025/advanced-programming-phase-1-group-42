@@ -292,6 +292,18 @@ public class GameView implements Screen, InputProcessor {
         int tileX = (int) (touchPos.x / scaledSize);
         int tileY = (int) (touchPos.y / scaledSize);
 
+        Tile playerTile = Map.findTile(App.getCurrentGame().getCurrentPlayer().getCoordinate());
+        Coordinate coordinate = new Coordinate(tileX, tileY);
+
+        if (!App.getCurrentGame().getCurrentPlayer().getInHandGood().isEmpty() &&
+            App.getCurrentGame().getCurrentPlayer().getInHandGood().getLast() instanceof Tool) {
+            Tile tile = Map.findTile(coordinate);
+
+            assert playerTile != null;
+            assert tile != null;
+            Result res =
+                controller.toolsUse(Coordinate.getDirection(playerTile.getCordinate(), tile.getCordinate()));
+        }
 
         // right click for pets
         if (button == Input.Buttons.RIGHT) {
