@@ -213,7 +213,7 @@ public class GameMenu implements AppMenu {
         } else if ((matcher = GameMenuCommands.SHOW_ALL_AVAILABLE_PRODUCTS.matcher(input)) != null) {
             System.out.println(controller.showAllAvailableProducts());
         } else if ((matcher = GameMenuCommands.PURCHASE.matcher(input)) != null) {
-            System.out.println(controller.purchase(matcher.group("productName"), matcher.group("count")));
+//            System.out.println(controller.purchase(matcher.group("productName"), matcher.group("count")));
         } else if ((matcher = GameMenuCommands.SELL.matcher(input)) != null) {
             System.out.println(controller.sell(matcher.group("productName"), matcher.group("count")));
         } else if ((matcher = GameMenuCommands.CHEAT_ADD_DOLLARS.matcher(input)) != null) {

@@ -58,6 +58,7 @@ import com.badlogic.gdx.Input;
 import java.util.*;
 import java.util.regex.Matcher;
 
+import static java.awt.SystemColor.window;
 import static java.lang.Math.abs;
 
 public class GameMenuController extends Controller {
@@ -176,6 +177,7 @@ public class GameMenuController extends Controller {
         fridgeController.updateFridge();
     }
 
+
     public void handleInput() {
         if (gameView.getCheatWindow() != null)
             return;
@@ -243,8 +245,9 @@ public class GameMenuController extends Controller {
         if (Gdx.input.isKeyJustPressed(Input.Keys.F)) {
 
         }
-        if (Gdx.input.isKeyJustPressed(Input.Keys.M)) {
 
+        if (Gdx.input.isKeyJustPressed(Input.Keys.M)) {
+                App.getCurrentGame().getMap().printGraphicalMap( gameView.getStage());
         }
         if (Gdx.input.isKeyJustPressed(Input.Keys.TAB)) {
 
@@ -264,6 +267,48 @@ public class GameMenuController extends Controller {
             else
                 gameView.closeCheatWindow();
         }
+        if (Gdx.input.isKeyJustPressed(Input.Keys.O)) {
+            for (FarmBuilding building : App.getCurrentGame().getCurrentPlayer().getFarm().getFarmBuildings()) {
+                for (Animal animal : building.getAnimals()) {
+                    if ((abs(animal.getCoordinate().getX() -
+                        App.getCurrentGame().getCurrentPlayer().getCoordinate().getX()) <= 2) &&
+                        (abs(animal.getCoordinate().getY() -
+                            App.getCurrentGame().getCurrentPlayer().getCoordinate().getY()) <= 2)) {
+                        animal.petAnimal();
+                        gameView.buildMessage();
+                        gameView.getTextFieldMessage().setText("You petted " + animal.getName());
+                    }
+                }
+            }
+            gameView.buildMessage();
+            gameView.getTextFieldMessage().setText("Please approach an animal to pet");
+        }
+        if (Gdx.input.isKeyJustPressed(Input.Keys.G)) {
+            Tile selectedTile = App.getCurrentGame().getMap().findTileByXY(App.getCurrentGame().getCurrentPlayer().getCoordinate().getX()
+                , App.getCurrentGame().getCurrentPlayer().getCoordinate().getY());
+
+            if (selectedTile.getTileType() == TileType.PLAYER_BUILDING) {
+                if (!gameView.getFridgeOpen()) {
+                    gameView.initFridgeWindow();
+                } else {
+                    gameView.getFridgeWindow().remove();
+                }
+                gameView.setFridgeOpen(!gameView.getFridgeOpen());
+            }
+        }
+        if (Gdx.input.isKeyJustPressed(Input.Keys.K)) {
+            Tile selectedTile = App.getCurrentGame().getMap().findTileByXY(App.getCurrentGame().getCurrentPlayer().getCoordinate().getX()
+                , App.getCurrentGame().getCurrentPlayer().getCoordinate().getY());
+            if (selectedTile.getTileType() == TileType.PLAYER_BUILDING) {
+                if (!gameView.getCookingOpen()) {
+                    gameView.initCookingWindow();
+                } else {
+                    gameView.getCookingWindow().remove();
+                }
+                gameView.setCookingOpen(!gameView.getCookingOpen());
+            }
+        }
+
         ArrayList<Integer> arr = new ArrayList<>(Arrays.asList(
             8, 9, 10, 11, 12, 13, 14, 15, 16, 7, 69, 70
         ));
@@ -1651,14 +1696,11 @@ public class GameMenuController extends Controller {
         return new Result(true, building.showProducts());
     }
 
-    public Result purchase(String productName, String count) {
+    public Result purchase(String productName, String count, Coordinate coordinate) {
         productName = productName.trim();
         count = count.trim();
 
-        Coordinate coordinate = App.getCurrentGame().getCurrentPlayer().getCoordinate();
-        Tile tile = App.getCurrentGame().getMap().findTile(App.getCurrentGame().getCurrentPlayer().getCoordinate());
-        if (tile.getTileType() != TileType.GAME_BUILDING)
-            return new Result(false, "You should be in a game building to purchase a product!");
+
         if (!App.getCurrentGame().getMap().findGameBuilding(coordinate).isInWorkingHours()) {
             return new Result(false, App.getCurrentGame().getMap().findGameBuilding(coordinate).getName() + " hours have ended for today!");
         }
