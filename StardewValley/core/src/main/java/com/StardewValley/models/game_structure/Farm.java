@@ -253,6 +253,15 @@ public class Farm {
         return null;
     }
 
+    public boolean checkInGreenHouse(Coordinate coordinate) {
+        for (Tile tile : greenHouse.getTiles()) {
+            if (tile.getCordinate().equals(coordinate)) {
+                return true;
+            }
+        }
+        return false;
+    }
+
     public ArrayList<Tile> getTiles() {
         return tiles;
     }

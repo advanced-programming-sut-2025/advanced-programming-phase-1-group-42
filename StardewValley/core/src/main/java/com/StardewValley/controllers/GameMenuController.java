@@ -1670,7 +1670,7 @@ public class GameMenuController extends Controller {
         }
 
         GameBuilding building = App.getCurrentGame().getMap().findGameBuilding(coordinate);
-        return new Result(true, building.showAllProducts());
+        return new Result(true, "");
     }
 
     public Result showAllAvailableProducts() {
@@ -1683,7 +1683,7 @@ public class GameMenuController extends Controller {
         }
 
         GameBuilding building = App.getCurrentGame().getMap().findGameBuilding(coordinate);
-        return new Result(true, building.showProducts());
+        return new Result(true, "");
     }
 
     public Result purchase(String productName, String count, Coordinate coordinate) {

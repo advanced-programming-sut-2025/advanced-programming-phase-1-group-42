@@ -64,7 +64,7 @@ public class Blacksmith extends GameBuilding {
         int nextLevel = ((ToolType) tool.getType()).getLevel().getLevelNumber();
 
         ArrayList<Good> goods = player.getInventory().isInInventory(upgradeIngredients.get(nextLevel).first());
-        if(goods == null || goods.size() < (Integer) upgradeIngredients.get(nextLevel).second())
+        if(goods == null || goods.size() < upgradeIngredients.get(nextLevel).second())
             return false;
 
         if(tool.getType() == ToolType.TRASH_CAN) {
@@ -86,38 +86,35 @@ public class Blacksmith extends GameBuilding {
     }
 
     @Override
-    public String showAllProducts() {
-        StringBuilder list = new StringBuilder();
-        list.append("Blacksmith All Products:\n");
-        listPartStock(list, stock);
-        list.append("Blacksmith Tools Upgrade :\n");
-        for (int i = 0; i < 4; i++) {
-            list.append("\t>> ").append(ToolLevel.toolLevels.get(i + 1).getName()).append(" Tool, Cost : ").append(upgradeToolCost.get(i))
-                    .append(", Ingredients : ").append(upgradeIngredients.get(i).first().getName()).append(" ")
-                    .append(upgradeIngredients.get(i).second()).append("x ").append(", Daily Limit : ").
-                    append(dailyToolUpgradeLimit.get(i)).append("\n");
-        }
-
-        list.append("\n");
-        list.append("Blacksmith Trash_Can Upgrade :\n");
-        for (int i = 0; i < 4; i++) {
-            list.append("\t>> ").append(ToolLevel.toolLevels.get(i + 1).getName()).append(" Trash_Can , Cost : ").
-                    append(upgradeTrashCanCost.get(i))
-                    .append(", Ingredients : ").append(upgradeIngredients.get(i).first().getName()).append(" ")
-                    .append(upgradeIngredients.get(i).second()).append("x , Daily Limit : ").
-                    append(dailyTrashCanUpgradeLimit.get(i)).append("\n");
-        }
-
-        return list.toString();
+    public ArrayList<GoodType> showAllProducts() {
+        return getWholeGoodType(stock);
+//        StringBuilder list = new StringBuilder();
+//        list.append("Blacksmith All Products:\n");
+//        listPartStock(list, stock);
+//        list.append("Blacksmith Tools Upgrade :\n");
+//        for (int i = 0; i < 4; i++) {
+//            list.append("\t>> ").append(ToolLevel.toolLevels.get(i + 1).getName()).append(" Tool, Cost : ").append(upgradeToolCost.get(i))
+//                    .append(", Ingredients : ").append(upgradeIngredients.get(i).first().getName()).append(" ")
+//                    .append(upgradeIngredients.get(i).second()).append("x ").append(", Daily Limit : ").
+//                    append(dailyToolUpgradeLimit.get(i)).append("\n");
+//        }
+//
+//        list.append("\n");
+//        list.append("Blacksmith Trash_Can Upgrade :\n");
+//        for (int i = 0; i < 4; i++) {
+//            list.append("\t>> ").append(ToolLevel.toolLevels.get(i + 1).getName()).append(" Trash_Can , Cost : ").
+//                    append(upgradeTrashCanCost.get(i))
+//                    .append(", Ingredients : ").append(upgradeIngredients.get(i).first().getName()).append(" ")
+//                    .append(upgradeIngredients.get(i).second()).append("x , Daily Limit : ").
+//                    append(dailyTrashCanUpgradeLimit.get(i)).append("\n");
+//        }
+//
+//        return new ArrayList<>();
     }
 
     @Override
-    public String showProducts() {
-        StringBuilder list = new StringBuilder();
-        list.append("Blacksmith Available Products:\n");
-        listAvailablePartStock(list, stock);
-
-        return list.toString();
+    public ArrayList<GoodType> showProducts() {
+        return getWholeGoodType(stock);
     }
 
     @Override
@@ -135,5 +132,13 @@ public class Blacksmith extends GameBuilding {
         return purchaseProduct(productName, count, productPair);
     }
 
-
+    @Override
+    public Pair<GoodType, Integer> findProduct(GoodType goodType) {
+        for (Pair<GoodType, Integer> goodTypeIntegerPair : stock) {
+            if (goodTypeIntegerPair.first().equals(goodType)) {
+                return goodTypeIntegerPair;
+            }
+        }
+        return null;
+    }
 }

@@ -18,7 +18,9 @@ import com.StardewValley.models.goods.fishs.Fish;
 import com.StardewValley.models.goods.foods.FoodType;
 import com.StardewValley.models.goods.recipes.CookingRecipeType;
 import com.StardewValley.models.goods.tools.Tool;
+import com.StardewValley.models.goods.tools.ToolLevel;
 import com.StardewValley.models.interactions.Animals.Animal;
+import com.StardewValley.models.interactions.Building;
 import com.StardewValley.models.interactions.NPCs.NPC;
 import com.StardewValley.models.interactions.NPCs.NPCTypes;
 import com.StardewValley.models.interactions.Player;
@@ -27,10 +29,7 @@ import com.StardewValley.models.interactions.Animals.AnimalTypes;
 import com.StardewValley.models.interactions.Player;
 import com.StardewValley.models.interactions.PlayerBuildings.FarmBuilding;
 import com.StardewValley.models.interactions.PlayerBuildings.FarmBuildingTypes;
-import com.StardewValley.models.interactions.game_buildings.CarpenterShop;
-import com.StardewValley.models.interactions.game_buildings.FishShop;
-import com.StardewValley.models.interactions.game_buildings.GameBuilding;
-import com.StardewValley.models.interactions.game_buildings.MarnieRanch;
+import com.StardewValley.models.interactions.game_buildings.*;
 import com.badlogic.gdx.*;
 import com.badlogic.gdx.graphics.*;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
@@ -260,8 +259,6 @@ public class GameView implements Screen, InputProcessor {
 
     @Override
     public boolean touchDown(int screenX, int screenY, int pointer, int button) {
-
-
         Vector3 touchPos = new Vector3(screenX, screenY, 0);
         camera.unproject(touchPos);
 
@@ -270,19 +267,163 @@ public class GameView implements Screen, InputProcessor {
 
         Tile playerTile = Map.findTile(App.getCurrentGame().getCurrentPlayer().getCoordinate());
         Coordinate coordinate = new Coordinate(tileX, tileY);
+        Tile selectedTile = Map.findTile(coordinate);
+        if (selectedTile == null || playerTile == null)
+            return false;
 
         if (!App.getCurrentGame().getCurrentPlayer().getInHandGood().isEmpty() &&
             App.getCurrentGame().getCurrentPlayer().getInHandGood().getLast() instanceof Tool &&
-            (playerTile.getTileType() != TileType.PLAIN)) {
+            playerTile.getTileType() != TileType.PLAIN && selectedTile.getTileType() != TileType.GREEN_HOUSE &&
+            playerTile.getTileType() != TileType.PLAYER_BUILDING) {
 
             Tile tile = Map.findTile(coordinate);
 
-            assert playerTile != null;
             assert tile != null;
-            Result res =
-                controller.toolsUse(Coordinate.getDirection(playerTile.getCordinate(), tile.getCordinate()));
+            controller.toolsUse(Coordinate.getDirection(playerTile.getCordinate(), tile.getCordinate()));
+        }
+        if (petsClicking(button, tileX, tileY)) return true;
+        if (selectedTile.getTileType() == TileType.GREEN_HOUSE &&
+            !App.getCurrentGame().getCurrentPlayer().getFarm().getGreenHouse().isAvailable()) {
+
+            initGreenHouseWindow();
         }
 
+        GameBuilding building = App.getCurrentGame().getMap().findGameBuilding(new Coordinate(tileX, tileY));
+        if (building != null) {
+
+            Texture backgroundTexture = new Texture(Gdx.files.internal("shop-menu.png"));
+            Drawable backgroundDrawable = new TextureRegionDrawable(new TextureRegion(backgroundTexture));
+
+            final Window window = new Window("SHOP", skin);
+            window.setBackground(backgroundDrawable);
+            window.setSize(940, 600);
+            window.setPosition(
+                (staticStage.getWidth() - window.getWidth()) / 2,
+                (staticStage.getHeight() - window.getHeight()) / 2
+            );
+
+            Table header = new Table(skin);
+            Label title = new Label(String.valueOf(App.getCurrentGame().getCurrentPlayer().getWallet().getBalance()), skin);
+            TextButton closeButton = new TextButton("X", skin);
+            closeButton.pad(4);
+            closeButton.addListener(new ChangeListener() {
+                @Override
+                public void changed(ChangeEvent event, Actor actor) {
+                    window.remove();
+                    backgroundTexture.dispose();
+                }
+            });
+
+            header.add().expandX();
+            header.add(title).center().expandX().padRight(95).padBottom(30);
+            header.add(closeButton).top().right();
+
+            window.add(header).expandX().fillX().padTop(5).row();
+
+            Table content = new Table(skin);
+            window.add(content).expand().fill().pad(10);
+
+            Table itemsTable = new Table();
+            ScrollPane scrollPane = new ScrollPane(itemsTable, skin);
+            scrollPane.setFadeScrollBars(false);
+            scrollPane.setScrollingDisabled(false, false);
+            scrollPane.setForceScroll(false, true);
+            scrollPane.setSmoothScrolling(true);
+
+            Table selectedPanel = new Table(skin);
+            Label selectedNameLabel = new Label("", skin);
+            Label countLabel = new Label("0", skin);
+            TextButton addButton = new TextButton("+", skin);
+            TextButton removeButton = new TextButton("-", skin);
+            TextButton purchaseButton = new TextButton("Purchase", skin);
+            Label info = new Label("", skin);
+            addButton.setDisabled(false);
+            removeButton.setDisabled(false);
+            purchaseButton.setDisabled(false);
+            addButton.setVisible(false);
+            removeButton.setVisible(false);
+            purchaseButton.setVisible(false);
+            countLabel.setVisible(false);
+            Table counterPanel = new Table();
+            counterPanel.center();
+            selectedNameLabel.setAlignment(Align.center);
+            counterPanel.add(selectedNameLabel)
+                .colspan(3)
+                .fillX()
+                .center()
+                .padLeft(5)
+                .row();
+
+
+            counterPanel.add(removeButton)
+                .size(100, 70)
+                .padLeft(0);
+
+            counterPanel.add(countLabel)
+                .width(30)
+                .padLeft(5)
+                .center();
+
+            counterPanel.add(addButton)
+                .size(100, 70)
+                .padLeft(5)
+                .row();
+
+
+            counterPanel.add(purchaseButton)
+                .size(150, 70)
+                .pad(5)
+                .padLeft(10)
+                .colspan(3)
+                .center()
+                .row();
+
+            info.setWrap(true);
+            info.setWidth(250);
+            info.setFontScale(0.7f);
+            info.setAlignment(Align.center);
+
+
+            // MarnieRanch
+            if (building instanceof MarnieRanch) {
+                marnieRanchShop(addButton, countLabel, removeButton, purchaseButton, info, tileX, tileY,
+                    (MarnieRanch) building, selectedNameLabel, itemsTable, counterPanel, selectedPanel, scrollPane, content);
+            } else if (building instanceof CarpenterShop) {
+                carpenterShop(purchaseButton, (CarpenterShop) building, selectedNameLabel, itemsTable, counterPanel,
+                    info, selectedPanel, scrollPane, content);
+            }
+            else if (building instanceof FishShop) {
+                fishShop(addButton, countLabel, removeButton, purchaseButton, info, tileX, tileY, (FishShop) building,
+                    selectedNameLabel, itemsTable, counterPanel, selectedPanel, scrollPane, content);
+            }
+            else if (building instanceof PierreGeneralStore) {
+                pierreShop(addButton, countLabel, removeButton, purchaseButton, info, tileX, tileY, (PierreGeneralStore) building,
+                    selectedNameLabel, itemsTable, counterPanel, selectedPanel, scrollPane, content);
+            }
+            else if (building instanceof JojaMart) {
+                jojaShop(addButton, countLabel, removeButton, purchaseButton, info, tileX, tileY, (JojaMart) building,
+                    selectedNameLabel, itemsTable, counterPanel, selectedPanel, scrollPane, content);;
+            }
+            else if (building instanceof TheStarDropSaloon) {
+                stardropShop(addButton, countLabel, removeButton, purchaseButton, info, tileX, tileY, (TheStarDropSaloon) building,
+                    selectedNameLabel, itemsTable, counterPanel, selectedPanel, scrollPane, content);
+            }
+            else if (building instanceof Blacksmith) {
+                blacksmithShop(addButton, countLabel, removeButton, purchaseButton, info, tileX, tileY, (Blacksmith) building,
+                    selectedNameLabel, itemsTable, counterPanel, selectedPanel, scrollPane, content);
+            }
+            staticStage.addActor(window);
+
+//            multiplexer.addProcessor(stage);
+//            multiplexer.addProcessor(this);
+//            Gdx.input.setInputProcessor(multiplexer);
+
+            return true;
+        }
+        return false;
+    }
+
+    private boolean petsClicking(int button, int tileX, int tileY) {
         // right click for pets
         if (button == Input.Buttons.RIGHT) {
             Animal animal = null;
@@ -401,127 +542,561 @@ public class GameView implements Screen, InputProcessor {
                 }
             }
         }
-
-        //
-        GameBuilding building = App.getCurrentGame().getMap().findGameBuilding(new Coordinate(tileX, tileY));
-
-
-        if (building != null) {
-
-            Texture backgroundTexture = new Texture(Gdx.files.internal("shop-menu.png"));
-            Drawable backgroundDrawable = new TextureRegionDrawable(new TextureRegion(backgroundTexture));
-
-            final Window window = new Window("SHOP", skin);
-            window.setBackground(backgroundDrawable);
-            window.setSize(940, 600);
-            window.setPosition(
-                (staticStage.getWidth() - window.getWidth()) / 2,
-                (staticStage.getHeight() - window.getHeight()) / 2
-            );
-
-            Table header = new Table(skin);
-            Label title = new Label(String.valueOf(App.getCurrentGame().getCurrentPlayer().getWallet().getBalance()), skin);
-            TextButton closeButton = new TextButton("X", skin);
-            closeButton.pad(4);
-            closeButton.addListener(new ChangeListener() {
-                @Override
-                public void changed(ChangeEvent event, Actor actor) {
-                    window.remove();
-                    backgroundTexture.dispose();
-                }
-            });
-
-            header.add().expandX();
-            header.add(title).center().expandX().padRight(95).padBottom(30);
-            header.add(closeButton).top().right();
-
-            window.add(header).expandX().fillX().padTop(5).row();
-
-            Table content = new Table(skin);
-            window.add(content).expand().fill().pad(10);
-
-            Table itemsTable = new Table();
-            ScrollPane scrollPane = new ScrollPane(itemsTable, skin);
-            scrollPane.setFadeScrollBars(false);
-            scrollPane.setScrollingDisabled(false, false);
-            scrollPane.setForceScroll(false, true);
-            scrollPane.setSmoothScrolling(true);
-
-            Table selectedPanel = new Table(skin);
-            Label selectedNameLabel = new Label("", skin);
-            Label countLabel = new Label("0", skin);
-            TextButton addButton = new TextButton("+", skin);
-            TextButton removeButton = new TextButton("-", skin);
-            TextButton purchaseButton = new TextButton("Purchase", skin);
-            Label info = new Label("", skin);
-            addButton.setDisabled(false);
-            removeButton.setDisabled(false);
-            purchaseButton.setDisabled(false);
-            addButton.setVisible(false);
-            removeButton.setVisible(false);
-            purchaseButton.setVisible(false);
-            countLabel.setVisible(false);
-            Table counterPanel = new Table();
-            counterPanel.center();
-            selectedNameLabel.setAlignment(Align.center);
-            counterPanel.add(selectedNameLabel)
-                .colspan(3)
-                .fillX()
-                .center()
-                .padLeft(5)
-                .row();
-
-
-            counterPanel.add(removeButton)
-                .size(100, 70)
-                .padLeft(0);
-
-            counterPanel.add(countLabel)
-                .width(30)
-                .padLeft(5)
-                .center();
-
-            counterPanel.add(addButton)
-                .size(100, 70)
-                .padLeft(5)
-                .row();
-
-
-            counterPanel.add(purchaseButton)
-                .size(150, 70)
-                .pad(5)
-                .padLeft(10)
-                .colspan(3)
-                .center()
-                .row();
-
-            info.setWrap(true);
-            info.setWidth(250);
-            info.setFontScale(0.7f);
-            info.setAlignment(Align.center);
-
-
-            // MarnieRanch
-            if (building instanceof MarnieRanch) {
-                marnieRanchShop(addButton, countLabel, removeButton, purchaseButton, info, tileX, tileY, (MarnieRanch) building, selectedNameLabel, itemsTable, counterPanel, selectedPanel, scrollPane, content);
-            } else if (building instanceof CarpenterShop) {
-                carpenterShop(purchaseButton, (CarpenterShop) building, selectedNameLabel, itemsTable, counterPanel, info, selectedPanel, scrollPane, content);
-            }
-            else if (building instanceof FishShop) {
-                fishShop(addButton, countLabel, removeButton, purchaseButton, info, tileX, tileY, (FishShop) building, selectedNameLabel, itemsTable, counterPanel, selectedPanel, scrollPane, content);
-            }
-
-            staticStage.addActor(window);
-
-//            multiplexer.addProcessor(stage);
-//            multiplexer.addProcessor(this);
-//            Gdx.input.setInputProcessor(multiplexer);
-
-            return true;
-        }
         return false;
     }
 
+    private void carpenterShop(TextButton purchaseButton, CarpenterShop building, Label selectedNameLabel, Table itemsTable,
+                               Table counterPanel, Label info, Table selectedPanel, ScrollPane scrollPane, Table content) {
+        final FarmBuildingTypes[] selectedBuilding = {null};
+
+        purchaseButton.addListener(new ChangeListener() {
+            @Override
+            public void changed(ChangeEvent changeEvent, Actor actor) {
+
+                //TODO
+                //window
+
+            }
+        });
+
+        for (FarmBuildingTypes farmBuildingType : building.getProducts()) {
+            TextButton productButton = new TextButton(farmBuildingType.getName() + " - " + farmBuildingType.getCost() + "G", skin);
+
+            productButton.addListener(new ChangeListener() {
+                @Override
+                public void changed(ChangeEvent event, Actor actor) {
+                    selectedBuilding[0] = farmBuildingType;
+                    selectedNameLabel.setText(farmBuildingType.getName() + " - " + farmBuildingType.getCost() + "G" + "\n" +
+                        "required stone: " + farmBuildingType.getStone() + "\n" + "required wood: " + farmBuildingType.getWood());
+                    selectedNameLabel.setFontScale(0.7f);
+                    purchaseButton.setVisible(true);
+
+                }
+            });
+
+            itemsTable.add(productButton)
+                .fillX()
+                .pad(5)
+                .row();
+        }
+        counterPanel.add(info)
+            .width(250)
+            .pad(5)
+            .colspan(3)
+            .center()
+            .row();
+
+        selectedPanel.add(counterPanel)
+            .colspan(3)
+            .center()
+            .padBottom(40)
+            .row();
+
+
+        Table mainTable = new Table();
+        mainTable.setFillParent(true);
+        mainTable.clear();
+
+        mainTable.add(scrollPane)
+            .width(380)
+            .expandY()
+            .fillY()
+            .pad(20)
+            .padRight(30)
+            .padLeft(170);
+
+        mainTable.add(selectedPanel)
+            .width(200)
+            .expandY()
+            .fillY()
+            .pad(30)
+            .padLeft(50)
+            .bottom();
+
+        content.add(mainTable)
+            .expand()
+            .fill();
+    }
+
+    private void marnieRanchShop(TextButton addButton, Label countLabel, TextButton removeButton, TextButton purchaseButton,
+                                 Label info, int tileX, int tileY, MarnieRanch building, Label selectedNameLabel,
+                                 Table itemsTable, Table counterPanel, Table selectedPanel, ScrollPane scrollPane, Table content) {
+        final AnimalTypes[] selectedAnimal = {null};
+        final ProductType[] selectedProductType = {null};
+        final int[] selectedCount = {0};
+
+        TextField animalName = new TextField("", skin);
+
+        animalName.setDisabled(false);
+        animalName.setVisible(false);
+
+        addButton.addListener(new ChangeListener() {
+            @Override
+            public void changed(ChangeEvent event, Actor actor) {
+                if (selectedProductType[0] != null) {
+                    selectedCount[0]++;
+                    countLabel.setText(String.valueOf(selectedCount[0]));
+                }
+            }
+        });
+
+        removeButton.addListener(new ChangeListener() {
+            @Override
+            public void changed(ChangeEvent event, Actor actor) {
+                if (selectedProductType[0] != null && selectedCount[0] > 0) {
+                    selectedCount[0]--;
+                    countLabel.setText(String.valueOf(selectedCount[0]));
+                }
+            }
+        });
+
+
+        purchaseButton.addListener(new ChangeListener() {
+            @Override
+            public void changed(ChangeEvent changeEvent, Actor actor) {
+                if (selectedAnimal[0] != null && !animalName.getText().isEmpty()) {
+                    Result result = controller.buyAnimal(String.valueOf(selectedAnimal[0]), animalName.getText());
+                    System.out.println(result.message());
+                    info.setText(result.toString());
+                } else {
+                    Result result = controller.purchase(String.valueOf(selectedProductType[0]),
+                        String.valueOf(selectedCount[0]), new Coordinate(tileX, tileY));
+                    System.out.println(result.message());
+                    info.setText(result.toString());
+                }
+            }
+        });
+
+
+        for (AnimalTypes animalType : building.animals) {
+            TextButton productButton = new TextButton(animalType.getName() + " - " + animalType.getPrice() + "G", skin);
+
+            productButton.addListener(new ChangeListener() {
+                @Override
+                public void changed(ChangeEvent event, Actor actor) {
+                    selectedProductType[0] = null;
+                    addButton.setVisible(false);
+                    removeButton.setVisible(false);
+                    countLabel.setVisible(false);
+                    animalName.setVisible(true);
+                    selectedAnimal[0] = animalType;
+                    selectedCount[0] = 0;
+                    selectedNameLabel.setText(animalType.getName());
+                    purchaseButton.setVisible(true);
+                }
+            });
+
+            itemsTable.add(productButton)
+                .fillX()
+                .pad(5)
+                .row();
+        }
+
+        for (ProductType productType : building.products) {
+            TextButton productButton = new TextButton(productType.getName() + " - " + productType.getSellPrice() + "G", skin);
+
+            productButton.addListener(new ChangeListener() {
+                @Override
+                public void changed(ChangeEvent event, Actor actor) {
+                    selectedAnimal[0] = null;
+                    addButton.setVisible(true);
+                    removeButton.setVisible(true);
+                    countLabel.setVisible(true);
+                    animalName.setVisible(false);
+                    selectedProductType[0] = productType;
+                    selectedCount[0] = 0;
+                    selectedNameLabel.setText(productType.getName());
+                    purchaseButton.setVisible(true);
+                }
+            });
+
+            itemsTable.add(productButton)
+                .fillX()
+                .pad(5)
+                .row();
+        }
+
+
+        counterPanel.add(animalName)
+            .size(180, 70)
+            .colspan(3)
+            .center()
+            .row();
+
+        lastConstructionsForShop(info, counterPanel, selectedPanel, scrollPane, content);
+    }
+
+    private void fishShop(TextButton addButton, Label countLabel, TextButton removeButton, TextButton purchaseButton,
+                          Label info, int tileX, int tileY, FishShop fishShop, Label selectedNameLabel, Table itemsTable,
+                          Table counterPanel, Table selectedPanel, ScrollPane scrollPane, Table content) {
+
+//        final AnimalTypes[] selectedAnimal = {null};
+//        final ProductType[] selectedProductType = {null};
+        final GoodType[] selectedGoodType = {null};
+        final int[] selectedCount = {0};
+        final boolean[] filterAvailable = {false};
+
+        TextButton filterButton = new TextButton("Filter Availables", skin, "Earth");
+
+        addButton.addListener(new ChangeListener() {
+            @Override
+            public void changed(ChangeEvent event, Actor actor) {
+                if (selectedGoodType[0] != null) {
+                    selectedCount[0]++;
+                    countLabel.setText(String.valueOf(selectedCount[0]));
+                }
+            }
+        });
+
+        removeButton.addListener(new ChangeListener() {
+            @Override
+            public void changed(ChangeEvent event, Actor actor) {
+                if (selectedGoodType[0] != null && selectedCount[0] > 0) {
+                    selectedCount[0]--;
+                    countLabel.setText(String.valueOf(selectedCount[0]));
+                }
+            }
+        });
+
+
+        purchaseButton.addListener(new ChangeListener() {
+            @Override
+            public void changed(ChangeEvent changeEvent, Actor actor) {
+                if (selectedGoodType[0] != null) {
+                    Result result = controller.purchase(selectedGoodType[0].getName(), String.valueOf(selectedCount[0]),
+                        new Coordinate(tileX, tileY));
+                    System.out.println(result.message());
+                    info.setText(result.toString());
+                    info.setVisible(true);
+                }
+            }
+        });
+
+        filterButton.addListener(new ClickListener() {
+            @Override
+            public void clicked(InputEvent event, float x, float y) {
+                if (!filterAvailable[0]) {
+                    filterButton.setText("Filter All");
+                    filterAvailable[0] = true;
+                }
+                else {
+                    filterButton.setText("Filter Availables");
+                    filterAvailable[0] = false;
+                }
+                goodsListInit(addButton, countLabel, removeButton, purchaseButton, fishShop, selectedNameLabel, itemsTable,
+                    selectedGoodType, selectedCount, filterAvailable, filterButton, info);
+
+            }
+        });
+
+        itemsTable.add(filterButton)
+            .fillX()
+            .pad(5)
+            .row();
+
+
+        goodsListInit(addButton, countLabel, removeButton, purchaseButton, fishShop, selectedNameLabel, itemsTable,
+            selectedGoodType, selectedCount, filterAvailable, filterButton, info);
+
+
+        lastConstructionsForShop(info, counterPanel, selectedPanel, scrollPane, content);
+    }
+
+    private void pierreShop(TextButton addButton, Label countLabel, TextButton removeButton, TextButton purchaseButton,
+                            Label info, int tileX, int tileY, PierreGeneralStore pierreGeneralStore, Label selectedNameLabel, Table itemsTable,
+                            Table counterPanel, Table selectedPanel, ScrollPane scrollPane, Table content) {
+
+        final GoodType[] selectedGoodType = {null};
+        final int[] selectedCount = {0};
+        final boolean[] filterAvailable = {false};
+
+        TextButton filterButton = new TextButton("Filter Availables", skin, "Earth");
+
+        addButton.addListener(new ChangeListener() {
+            @Override
+            public void changed(ChangeEvent event, Actor actor) {
+                if (selectedGoodType[0] != null) {
+                    selectedCount[0]++;
+                    countLabel.setText(String.valueOf(selectedCount[0]));
+                }
+            }
+        });
+
+        removeButton.addListener(new ChangeListener() {
+            @Override
+            public void changed(ChangeEvent event, Actor actor) {
+                if (selectedGoodType[0] != null && selectedCount[0] > 0) {
+                    selectedCount[0]--;
+                    countLabel.setText(String.valueOf(selectedCount[0]));
+                }
+            }
+        });
+
+
+        purchaseButton.addListener(new ChangeListener() {
+            @Override
+            public void changed(ChangeEvent changeEvent, Actor actor) {
+                if (selectedGoodType[0] != null) {
+                    Result result = controller.purchase(selectedGoodType[0].getName(), String.valueOf(selectedCount[0]),
+                        new Coordinate(tileX, tileY));
+                    System.out.println(result.message());
+                    info.setText(result.toString());
+                    info.setVisible(true);
+                }
+            }
+        });
+
+        filterButton.addListener(new ClickListener() {
+            @Override
+            public void clicked(InputEvent event, float x, float y) {
+                if (!filterAvailable[0]) {
+                    filterButton.setText("Filter All");
+                    filterAvailable[0] = true;
+                }
+                else {
+                    filterButton.setText("Filter Availables");
+                    filterAvailable[0] = false;
+                }
+                goodsListInit(addButton, countLabel, removeButton, purchaseButton, pierreGeneralStore, selectedNameLabel, itemsTable,
+                    selectedGoodType, selectedCount, filterAvailable, filterButton, info);
+
+            }
+        });
+
+        itemsTable.add(filterButton)
+            .fillX()
+            .pad(5)
+            .row();
+
+
+        goodsListInit(addButton, countLabel, removeButton, purchaseButton, pierreGeneralStore, selectedNameLabel, itemsTable,
+            selectedGoodType, selectedCount, filterAvailable, filterButton, info);
+
+        lastConstructionsForShop(info, counterPanel, selectedPanel, scrollPane, content);
+
+    }
+
+    private void jojaShop(TextButton addButton, Label countLabel, TextButton removeButton, TextButton purchaseButton,
+                            Label info, int tileX, int tileY, JojaMart jojaMart, Label selectedNameLabel, Table itemsTable,
+                            Table counterPanel, Table selectedPanel, ScrollPane scrollPane, Table content) {
+
+        final GoodType[] selectedGoodType = {null};
+        final int[] selectedCount = {0};
+        final boolean[] filterAvailable = {false};
+
+        TextButton filterButton = new TextButton("Filter Availables", skin, "Earth");
+
+        addButton.addListener(new ChangeListener() {
+            @Override
+            public void changed(ChangeEvent event, Actor actor) {
+                if (selectedGoodType[0] != null) {
+                    selectedCount[0]++;
+                    countLabel.setText(String.valueOf(selectedCount[0]));
+                }
+            }
+        });
+
+        removeButton.addListener(new ChangeListener() {
+            @Override
+            public void changed(ChangeEvent event, Actor actor) {
+                if (selectedGoodType[0] != null && selectedCount[0] > 0) {
+                    selectedCount[0]--;
+                    countLabel.setText(String.valueOf(selectedCount[0]));
+                }
+            }
+        });
+
+
+        purchaseButton.addListener(new ChangeListener() {
+            @Override
+            public void changed(ChangeEvent changeEvent, Actor actor) {
+                if (selectedGoodType[0] != null) {
+                    Result result = controller.purchase(selectedGoodType[0].getName(), String.valueOf(selectedCount[0]),
+                        new Coordinate(tileX, tileY));
+                    System.out.println(result.message());
+                    info.setText(result.toString());
+                    info.setVisible(true);
+                }
+            }
+        });
+
+        filterButton.addListener(new ClickListener() {
+            @Override
+            public void clicked(InputEvent event, float x, float y) {
+                if (!filterAvailable[0]) {
+                    filterButton.setText("Filter All");
+                    filterAvailable[0] = true;
+                }
+                else {
+                    filterButton.setText("Filter Availables");
+                    filterAvailable[0] = false;
+                }
+                goodsListInit(addButton, countLabel, removeButton, purchaseButton, jojaMart, selectedNameLabel, itemsTable,
+                    selectedGoodType, selectedCount, filterAvailable, filterButton, info);
+
+            }
+        });
+
+        itemsTable.add(filterButton)
+            .fillX()
+            .pad(5)
+            .row();
+
+
+        goodsListInit(addButton, countLabel, removeButton, purchaseButton, jojaMart, selectedNameLabel, itemsTable,
+            selectedGoodType, selectedCount, filterAvailable, filterButton, info);
+
+        lastConstructionsForShop(info, counterPanel, selectedPanel, scrollPane, content);
+    }
+
+    private void stardropShop(TextButton addButton, Label countLabel, TextButton removeButton, TextButton purchaseButton,
+                          Label info, int tileX, int tileY, TheStarDropSaloon theStarDropSaloon, Label selectedNameLabel, Table itemsTable,
+                          Table counterPanel, Table selectedPanel, ScrollPane scrollPane, Table content) {
+
+        final GoodType[] selectedGoodType = {null};
+        final int[] selectedCount = {0};
+        final boolean[] filterAvailable = {false};
+
+        TextButton filterButton = new TextButton("Filter Availables", skin, "Earth");
+
+        addButton.addListener(new ChangeListener() {
+            @Override
+            public void changed(ChangeEvent event, Actor actor) {
+                if (selectedGoodType[0] != null) {
+                    selectedCount[0]++;
+                    countLabel.setText(String.valueOf(selectedCount[0]));
+                }
+            }
+        });
+
+        removeButton.addListener(new ChangeListener() {
+            @Override
+            public void changed(ChangeEvent event, Actor actor) {
+                if (selectedGoodType[0] != null && selectedCount[0] > 0) {
+                    selectedCount[0]--;
+                    countLabel.setText(String.valueOf(selectedCount[0]));
+                }
+            }
+        });
+
+
+        purchaseButton.addListener(new ChangeListener() {
+            @Override
+            public void changed(ChangeEvent changeEvent, Actor actor) {
+                if (selectedGoodType[0] != null) {
+                    Result result = controller.purchase(selectedGoodType[0].getName(), String.valueOf(selectedCount[0]),
+                        new Coordinate(tileX, tileY));
+                    System.out.println(result.message());
+                    info.setText(result.toString());
+                    info.setVisible(true);
+                }
+            }
+        });
+
+        filterButton.addListener(new ClickListener() {
+            @Override
+            public void clicked(InputEvent event, float x, float y) {
+                if (!filterAvailable[0]) {
+                    filterButton.setText("Filter All");
+                    filterAvailable[0] = true;
+                }
+                else {
+                    filterButton.setText("Filter Availables");
+                    filterAvailable[0] = false;
+                }
+                goodsListInit(addButton, countLabel, removeButton, purchaseButton, theStarDropSaloon, selectedNameLabel,
+                    itemsTable, selectedGoodType, selectedCount, filterAvailable, filterButton, info);
+
+            }
+        });
+
+        itemsTable.add(filterButton)
+            .fillX()
+            .pad(5)
+            .row();
+
+
+        goodsListInit(addButton, countLabel, removeButton, purchaseButton, theStarDropSaloon, selectedNameLabel, itemsTable,
+            selectedGoodType, selectedCount, filterAvailable, filterButton, info);
+
+        lastConstructionsForShop(info, counterPanel, selectedPanel, scrollPane, content);
+    }
+
+    private void blacksmithShop(TextButton addButton, Label countLabel, TextButton removeButton, TextButton purchaseButton,
+                              Label info, int tileX, int tileY, Blacksmith blacksmith, Label selectedNameLabel, Table itemsTable,
+                              Table counterPanel, Table selectedPanel, ScrollPane scrollPane, Table content) {
+
+        final GoodType[] selectedGoodType = {null};
+        final int[] selectedCount = {0};
+        final boolean[] filterAvailable = {false};
+
+        TextButton filterButton = new TextButton("Filter Availables", skin, "Earth");
+
+        addButton.addListener(new ChangeListener() {
+            @Override
+            public void changed(ChangeEvent event, Actor actor) {
+                if (selectedGoodType[0] != null) {
+                    selectedCount[0]++;
+                    countLabel.setText(String.valueOf(selectedCount[0]));
+                }
+            }
+        });
+
+        removeButton.addListener(new ChangeListener() {
+            @Override
+            public void changed(ChangeEvent event, Actor actor) {
+                if (selectedGoodType[0] != null && selectedCount[0] > 0) {
+                    selectedCount[0]--;
+                    countLabel.setText(String.valueOf(selectedCount[0]));
+                }
+            }
+        });
+
+
+        purchaseButton.addListener(new ChangeListener() {
+            @Override
+            public void changed(ChangeEvent changeEvent, Actor actor) {
+                if (selectedGoodType[0] != null) {
+                    Result result = controller.purchase(selectedGoodType[0].getName(), String.valueOf(selectedCount[0]),
+                        new Coordinate(tileX, tileY));
+                    System.out.println(result.message());
+                    info.setText(result.toString());
+                    info.setVisible(true);
+                }
+            }
+        });
+
+        filterButton.addListener(new ClickListener() {
+            @Override
+            public void clicked(InputEvent event, float x, float y) {
+                if (!filterAvailable[0]) {
+                    filterButton.setText("Filter All");
+                    filterAvailable[0] = true;
+                }
+                else {
+                    filterButton.setText("Filter Availables");
+                    filterAvailable[0] = false;
+                }
+                goodsListInit(addButton, countLabel, removeButton, purchaseButton, blacksmith, selectedNameLabel,
+                    itemsTable, selectedGoodType, selectedCount, filterAvailable, filterButton, info);
+                toolsUpgradeInit(addButton, countLabel, removeButton, purchaseButton, blacksmith, selectedNameLabel,
+                    itemsTable, selectedGoodType, selectedCount, filterAvailable, filterButton, info);
+
+            }
+        });
+
+        itemsTable.add(filterButton)
+            .fillX()
+            .pad(5)
+            .row();
+
+        goodsListInit(addButton, countLabel, removeButton, purchaseButton, blacksmith, selectedNameLabel, itemsTable,
+            selectedGoodType, selectedCount, filterAvailable, filterButton, info);
+        toolsUpgradeInit(addButton, countLabel, removeButton, purchaseButton, blacksmith, selectedNameLabel,
+            itemsTable, selectedGoodType, selectedCount, filterAvailable, filterButton, info);
+
+        lastConstructionsForShop(info, counterPanel, selectedPanel, scrollPane, content);
+    }
 
     @Override
     public boolean touchUp(int i, int i1, int i2, int i3) {
@@ -545,6 +1120,24 @@ public class GameView implements Screen, InputProcessor {
 
     @Override
     public boolean scrolled(float v, float v1) {
+        int ptr = -1;
+        for (int i = 0; i < App.getCurrentGame().getCurrentPlayer().getInventory().getSize(); i++) {
+            ArrayList<Good> goods = App.getCurrentGame().getCurrentPlayer().getInventory().getList().get(i);
+            if (goods == App.getCurrentGame().getCurrentPlayer().getInHandGood())
+                ptr = i;
+        }
+
+        if (v1 > 0) {
+            ptr = (ptr + 1) % App.getCurrentGame().getCurrentPlayer().getInventory().getSize();
+        }
+        else if (v1 < 0){
+            ptr = (ptr - 1 + App.getCurrentGame().getCurrentPlayer().getInventory().getSize())
+            % App.getCurrentGame().getCurrentPlayer().getInventory().getSize();
+        }
+
+        App.getCurrentGame().getCurrentPlayer().setInHandGood(
+            App.getCurrentGame().getCurrentPlayer().getInventory().getList().get(ptr)
+        );
         return false;
     }
 
@@ -1082,13 +1675,11 @@ public class GameView implements Screen, InputProcessor {
 
         staticStage.addActor(recipeWindow);
 
-        multiplexer.clear();
-        multiplexer.addProcessor(recipeWindow.getStage());
-        multiplexer.addProcessor(staticStage);
-        Gdx.input.setInputProcessor(multiplexer);
+//        multiplexer.clear();
+//        multiplexer.addProcessor(recipeWindow.getStage());
+//        multiplexer.addProcessor(staticStage);
+//        Gdx.input.setInputProcessor(multiplexer);
     }
-
-
 
     public int getScaledSize() {
         return scaledSize;
@@ -1209,7 +1800,6 @@ public class GameView implements Screen, InputProcessor {
         return mainTable;
     }
 
-
     public void initCheatWindow() {
         this.cheatWindow = new Window("Cheat Window", skin, "Letter");
         this.cheatTable = new Table(skin);
@@ -1250,253 +1840,89 @@ public class GameView implements Screen, InputProcessor {
         return cheatWindow;
     }
 
-    private void carpenterShop(TextButton purchaseButton, CarpenterShop building, Label selectedNameLabel, Table itemsTable, Table counterPanel, Label info, Table selectedPanel, ScrollPane scrollPane, Table content) {
-        final FarmBuildingTypes[] selectedBuilding = {null};
 
-        purchaseButton.addListener(new ChangeListener() {
-            @Override
-            public void changed(ChangeEvent changeEvent, Actor actor) {
-
-                //TODO
-                //window
-
-            }
-        });
-
-        for (FarmBuildingTypes farmBuildingType : building.getProducts()) {
-            TextButton productButton = new TextButton(farmBuildingType.getName() + " - " + farmBuildingType.getCost() + "G", skin);
-
-            productButton.addListener(new ChangeListener() {
-                @Override
-                public void changed(ChangeEvent event, Actor actor) {
-                    selectedBuilding[0] = farmBuildingType;
-                    selectedNameLabel.setText(farmBuildingType.getName() + " - " + farmBuildingType.getCost() + "G" + "\n" +
-                        "required stone: " + farmBuildingType.getStone() + "\n" + "required wood: " + farmBuildingType.getWood());
-                    selectedNameLabel.setFontScale(0.7f);
-                    purchaseButton.setVisible(true);
-
-                }
-            });
-
-            itemsTable.add(productButton)
-                .fillX()
-                .pad(5)
-                .row();
-        }
-        counterPanel.add(info)
-            .width(250)
+    private void goodsListInit(TextButton addButton, Label countLabel, TextButton removeButton, TextButton purchaseButton,
+                               GameBuilding gameBuilding, Label selectedNameLabel, Table itemsTable, GoodType[] selectedGoodType,
+                               int[] selectedCount, boolean[] filterAvailable, TextButton filterButton, Label info) {
+        itemsTable.clear();
+        itemsTable.add(filterButton)
+            .fillX()
             .pad(5)
-            .colspan(3)
-            .center()
             .row();
 
-        selectedPanel.add(counterPanel)
-            .colspan(3)
-            .center()
-            .padBottom(40)
-            .row();
+        ArrayList<GoodType> goodTypes = (filterAvailable[0]) ? gameBuilding.showProducts() : gameBuilding.showAllProducts();
+        for (GoodType product : goodTypes) {
+            StringBuilder stringBuilder = new StringBuilder();
+            stringBuilder.append(product.getName());
+            stringBuilder.append(" - ");
+            if(product.getSellPrice() <= 0)
+                stringBuilder.append("Free");
+            else
+                stringBuilder.append(product.getSellPrice());
+            TextButton productButton = new TextButton(stringBuilder.toString(), skin);
 
+            productButton.addListener(new ChangeListener() {
+                @Override
+                public void changed(ChangeEvent event, Actor actor) {
+                    if (gameBuilding.findProduct(product).second() == 0) {
+                        info.setText("This product's daily quantity is 0");
+                        info.setVisible(true);
+                        addButton.setVisible(false);
+                        removeButton.setVisible(false);
+                        countLabel.setVisible(false);
+                        purchaseButton.setVisible(false);
+                    } else {
+                        selectedGoodType[0] = null;
+                        addButton.setVisible(true);
+                        removeButton.setVisible(true);
+                        countLabel.setVisible(true);
+                        selectedGoodType[0] = product;
+                        selectedCount[0] = 0;
+                        selectedNameLabel.setText(product.getName());
+                        countLabel.setText(String.valueOf(selectedCount[0]));
+                        purchaseButton.setVisible(true);
+                        info.setVisible(false);
+                    }
+                }
+            });
 
-        Table mainTable = new Table();
-        mainTable.setFillParent(true);
-        mainTable.clear();
-
-        mainTable.add(scrollPane)
-            .width(380)
-            .expandY()
-            .fillY()
-            .pad(20)
-            .padRight(30)
-            .padLeft(170);
-
-        mainTable.add(selectedPanel)
-            .width(200)
-            .expandY()
-            .fillY()
-            .pad(30)
-            .padLeft(50)
-            .bottom();
-
-        content.add(mainTable)
-            .expand()
-            .fill();
+            itemsTable.add(productButton)
+                .fillX()
+                .pad(5)
+                .row();
+        }
     }
 
-    private void marnieRanchShop(TextButton addButton, Label countLabel, TextButton removeButton, TextButton purchaseButton, Label info, int tileX, int tileY, MarnieRanch building, Label selectedNameLabel, Table itemsTable, Table counterPanel, Table selectedPanel, ScrollPane scrollPane, Table content) {
-        final AnimalTypes[] selectedAnimal = {null};
-        final ProductType[] selectedProductType = {null};
-        final int[] selectedCount = {0};
-
-        TextField animalName = new TextField("", skin);
-
-        animalName.setDisabled(false);
-        animalName.setVisible(false);
-
-        addButton.addListener(new ChangeListener() {
-            @Override
-            public void changed(ChangeEvent event, Actor actor) {
-                if (selectedProductType[0] != null) {
-                    selectedCount[0]++;
-                    countLabel.setText(String.valueOf(selectedCount[0]));
-                }
-            }
-        });
-
-        removeButton.addListener(new ChangeListener() {
-            @Override
-            public void changed(ChangeEvent event, Actor actor) {
-                if (selectedProductType[0] != null && selectedCount[0] > 0) {
-                    selectedCount[0]--;
-                    countLabel.setText(String.valueOf(selectedCount[0]));
-                }
-            }
-        });
-
-
-        purchaseButton.addListener(new ChangeListener() {
-            @Override
-            public void changed(ChangeEvent changeEvent, Actor actor) {
-                if (selectedAnimal[0] != null && !animalName.getText().isEmpty()) {
-                    Result result = controller.buyAnimal(String.valueOf(selectedAnimal[0]), animalName.getText());
-                    System.out.println(result.message());
-                    info.setText(result.toString());
-                } else {
-                    Result result = controller.purchase(String.valueOf(selectedProductType[0]),
-                        String.valueOf(selectedCount[0]), new Coordinate(tileX, tileY));
-                    System.out.println(result.message());
-                    info.setText(result.toString());
-                }
-            }
-        });
-
-
-        for (AnimalTypes animalType : building.animals) {
-            TextButton productButton = new TextButton(animalType.getName() + " - " + animalType.getPrice() + "G", skin);
-
-            productButton.addListener(new ChangeListener() {
-                @Override
-                public void changed(ChangeEvent event, Actor actor) {
-                    selectedProductType[0] = null;
-                    addButton.setVisible(false);
-                    removeButton.setVisible(false);
-                    countLabel.setVisible(false);
-                    animalName.setVisible(true);
-                    selectedAnimal[0] = animalType;
-                    selectedCount[0] = 0;
-                    selectedNameLabel.setText(animalType.getName());
-                    purchaseButton.setVisible(true);
-                }
-            });
-
-            itemsTable.add(productButton)
-                .fillX()
-                .pad(5)
-                .row();
+    private void toolsUpgradeInit(TextButton addButton, Label countLabel, TextButton removeButton, TextButton purchaseButton,
+                             Blacksmith blacksmith, Label selectedNameLabel, Table itemsTable, GoodType[] selectedGoodType,
+                             int[] selectedCount, boolean[] filterAvailable, TextButton filterButton, Label info) {
+        for (int i = 0; i < 4; i++) {
+            TextButton upgradeButton = new TextButton("Upgrade to " + ToolLevel.toolLevels.get(i + 1).getName(), skin);
+//            upgradeButton.addListener(new ChangeListener() {
+//                @Override
+//                public void changed(ChangeEvent event, Actor actor) {
+//                    if (gameBuilding.findProduct(product).second() == 0) {
+//                        info.setText("This product's daily quantity is 0");
+//                        info.setVisible(true);
+//                        addButton.setVisible(false);
+//                        removeButton.setVisible(false);
+//                        countLabel.setVisible(false);
+//                        purchaseButton.setVisible(false);
+//                    } else {
+//                        selectedGoodType[0] = null;
+//                        addButton.setVisible(true);
+//                        removeButton.setVisible(true);
+//                        countLabel.setVisible(true);
+//                        selectedGoodType[0] = product;
+//                        selectedCount[0] = 0;
+//                        selectedNameLabel.setText(product.getName());
+//                        countLabel.setText(String.valueOf(selectedCount[0]));
+//                        purchaseButton.setVisible(true);
+//                        info.setVisible(false);
+//                    }
+//                }
+//            });
         }
-
-        for (ProductType productType : building.products) {
-            TextButton productButton = new TextButton(productType.getName() + " - " + productType.getSellPrice() + "G", skin);
-
-            productButton.addListener(new ChangeListener() {
-                @Override
-                public void changed(ChangeEvent event, Actor actor) {
-                    selectedAnimal[0] = null;
-                    addButton.setVisible(true);
-                    removeButton.setVisible(true);
-                    countLabel.setVisible(true);
-                    animalName.setVisible(false);
-                    selectedProductType[0] = productType;
-                    selectedCount[0] = 0;
-                    selectedNameLabel.setText(productType.getName());
-                    purchaseButton.setVisible(true);
-                }
-            });
-
-            itemsTable.add(productButton)
-                .fillX()
-                .pad(5)
-                .row();
-        }
-
-
-        counterPanel.add(animalName)
-            .size(180, 70)
-            .colspan(3)
-            .center()
-            .row();
-
-        lastConstructionsForShop(info, counterPanel, selectedPanel, scrollPane, content);
-    }
-
-    private void fishShop(TextButton addButton, Label countLabel, TextButton removeButton, TextButton purchaseButton,
-                          Label info, int tileX, int tileY, FishShop fishShop, Label selectedNameLabel, Table itemsTable,
-                          Table counterPanel, Table selectedPanel, ScrollPane scrollPane, Table content) {
-
-//        final AnimalTypes[] selectedAnimal = {null};
-//        final ProductType[] selectedProductType = {null};
-        final GoodType[] selectedGoodType = {null};
-        final int[] selectedCount = {0};
-
-        addButton.addListener(new ChangeListener() {
-            @Override
-            public void changed(ChangeEvent event, Actor actor) {
-                if (selectedGoodType[0] != null) {
-                    selectedCount[0]++;
-                    countLabel.setText(String.valueOf(selectedCount[0]));
-                }
-            }
-        });
-
-        removeButton.addListener(new ChangeListener() {
-            @Override
-            public void changed(ChangeEvent event, Actor actor) {
-                if (selectedGoodType[0] != null && selectedCount[0] > 0) {
-                    selectedCount[0]--;
-                    countLabel.setText(String.valueOf(selectedCount[0]));
-                }
-            }
-        });
-
-
-        purchaseButton.addListener(new ChangeListener() {
-            @Override
-            public void changed(ChangeEvent changeEvent, Actor actor) {
-                if (selectedGoodType[0] != null) {
-                    Result result = controller.purchase(selectedGoodType[0].getName(), String.valueOf(selectedCount[0]),
-                        new Coordinate(tileX, tileY));
-                    System.out.println(result.message());
-                    info.setText(result.toString());
-                }
-            }
-        });
-
-
-        for (Pair<GoodType, Integer> product : fishShop.getProducts()) {
-            TextButton productButton = new TextButton(product.first().getName() + " - " + product.first().getSellPrice() + "G", skin);
-
-            productButton.addListener(new ChangeListener() {
-                @Override
-                public void changed(ChangeEvent event, Actor actor) {
-                    selectedGoodType[0] = null;
-                    addButton.setVisible(true);
-                    removeButton.setVisible(true);
-                    countLabel.setVisible(true);
-                    selectedGoodType[0] = product.first();
-                    selectedCount[0] = 0;
-                    selectedNameLabel.setText(product.first().getName());
-                    countLabel.setText(String.valueOf(selectedCount[0]));
-                    purchaseButton.setVisible(true);
-                }
-            });
-
-            itemsTable.add(productButton)
-                .fillX()
-                .pad(5)
-                .row();
-        }
-
-
-        lastConstructionsForShop(info, counterPanel, selectedPanel, scrollPane, content);
     }
 
     private void lastConstructionsForShop(Label info, Table counterPanel, Table selectedPanel, ScrollPane scrollPane, Table content) {
@@ -1570,6 +1996,40 @@ public class GameView implements Screen, InputProcessor {
 
     public Window getCookingWindow() {
         return cookingWindow;
+    }
+
+    private void initGreenHouseWindow() {
+        Window greenHouseWindow = new Window("Build GreenHouse", skin, "Letter");
+        greenHouseWindow.setSize(1200, 400);
+        greenHouseWindow.setResizable(false);
+        greenHouseWindow.setPosition(
+            (staticStage.getWidth() - greenHouseWindow.getWidth()) / 2,
+            (staticStage.getHeight() - greenHouseWindow.getHeight()) / 2
+        );
+
+        Label label = new Label("For Building greenhouse, you require 1000G & 500 Woods!", skin);
+        TextButton button = new TextButton("Build GreenHouse", skin);
+        button.addListener(new ClickListener() {
+            @Override
+            public void clicked(InputEvent event, float x, float y) {
+                Result res = controller.greenHouseBuild();
+                label.setText(res.message());
+                button.setText("Back");
+                button.removeListener(this);
+                button.addListener(new ClickListener() {
+                    @Override
+                    public void clicked(InputEvent event, float x, float y) {
+                        greenHouseWindow.remove();
+                    }
+                });
+            }
+        });
+
+        greenHouseWindow.add(label).fillX().row();
+        greenHouseWindow.add(button).fillX().row();
+
+        staticStage.addActor(greenHouseWindow);
+
     }
 }
 

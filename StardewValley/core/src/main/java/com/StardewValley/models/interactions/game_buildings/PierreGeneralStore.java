@@ -126,36 +126,13 @@ public class PierreGeneralStore extends GameBuilding {
     }
 
     @Override
-    public String showAllProducts() {
-        StringBuilder list = new StringBuilder();
-        list.append("Pierre's General Store All Products:\n");
-        int ptr = 0;
-        for (ArrayList<Pair<GoodType, Integer>> products : products) {
-            list.append(stockParts.get(ptr++)).append(" Stock:\n");
-            listPartStock(list, products);
-        }
-
-        return list.toString();
+    public ArrayList<GoodType> showAllProducts() {
+        return getGoodTypes(products);
     }
 
     @Override
-    public String showProducts() {
-        StringBuilder list = new StringBuilder();
-        list.append("Pierre's General Store Available Products:\n");
-        list.append(stockParts.get(0)).append(" Stock:\n");
-        listAvailablePartStock(list, products.get(0));
-
-        list.append(stockParts.get(
-                App.getCurrentGame().getDateTime().getSeasonOfYear().getValue()
-        )).append(" Stock:\n");
-        listAvailablePartStock(list, products.get(
-                App.getCurrentGame().getDateTime().getSeasonOfYear().getValue()
-        ));
-
-        list.append(stockParts.get(5));
-        listAvailablePartStock(list, products.get(5));
-
-        return list.toString();
+    public ArrayList<GoodType> showProducts() {
+        return getSeasonProducts(products);
     }
 
     @Override
@@ -212,5 +189,17 @@ public class PierreGeneralStore extends GameBuilding {
         else {
             return purchaseProduct(productName, count, productPair);
         }
+    }
+
+    @Override
+    public Pair<GoodType, Integer> findProduct(GoodType goodType) {
+        for (ArrayList<Pair<GoodType, Integer>> products : products) {
+            for (Pair<GoodType, Integer> product : products) {
+                if (product.first().getName().equals(goodType.getName())) {
+                    return product;
+                }
+            }
+        }
+        return null;
     }
 }

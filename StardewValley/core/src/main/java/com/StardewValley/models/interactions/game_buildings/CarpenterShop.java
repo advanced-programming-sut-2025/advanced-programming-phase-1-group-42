@@ -7,6 +7,7 @@ import com.StardewValley.models.enums.TileAssets;
 import com.StardewValley.models.game_structure.Coordinate;
 import com.StardewValley.models.game_structure.Tile;
 import com.StardewValley.models.goods.Good;
+import com.StardewValley.models.goods.GoodType;
 import com.StardewValley.models.goods.products.ProductType;
 import com.StardewValley.models.interactions.NPCs.NPC;
 import com.StardewValley.models.interactions.NPCs.NPCTypes;
@@ -38,7 +39,7 @@ public class CarpenterShop extends GameBuilding {
     }
 
     @Override
-    public String showAllProducts() {
+    public ArrayList<GoodType> showAllProducts() {
         StringBuilder result = new StringBuilder();
         for (FarmBuildingTypes farmBuildingType : products) {
             result.append(farmBuildingType.getName()).append(" ").append(farmBuildingType.getCost()).append("\n");
@@ -46,13 +47,13 @@ public class CarpenterShop extends GameBuilding {
         result.append(ProductType.WOOD.getName()).append(" ").append(ProductType.WOOD.getSellPrice()).append("\n");
         result.append(ProductType.STONE.getName()).append(" ").append(ProductType.STONE.getSellPrice()).append("\n");
 
-        return result.toString();
+        return null;
 
     }
 
     @Override
-    public String showProducts() {
-        return "";
+    public ArrayList<GoodType> showProducts() {
+        return null;
     }
 
     @Override
@@ -94,5 +95,10 @@ public class CarpenterShop extends GameBuilding {
 
     public FarmBuilding buildingFarmBuilding(FarmBuildingTypes farmBuildingType, Coordinate startCoordinate) {
         return new FarmBuilding(farmBuildingType, startCoordinate);
+    }
+
+    @Override
+    public Pair<GoodType, Integer> findProduct(GoodType goodType) {
+        return null;
     }
 }
