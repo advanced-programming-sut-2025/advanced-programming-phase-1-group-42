@@ -16,7 +16,9 @@ import com.StardewValley.models.goods.Good;
 import com.StardewValley.models.goods.GoodType;
 import com.StardewValley.models.goods.fishs.Fish;
 import com.StardewValley.models.goods.foods.FoodType;
+import com.StardewValley.models.goods.foragings.ForagingMineralType;
 import com.StardewValley.models.goods.recipes.CookingRecipeType;
+import com.StardewValley.models.goods.recipes.CraftingRecipeType;
 import com.StardewValley.models.goods.tools.Tool;
 import com.StardewValley.models.goods.tools.ToolLevel;
 import com.StardewValley.models.interactions.Animals.Animal;
@@ -81,6 +83,9 @@ public class GameView implements Screen, InputProcessor {
     private Window cookingWindow;
     private ScrollPane cookingScrollPane;
     private ScrollPane fridgeScrollPane;
+    private Table craftingTable;
+    private Window craftingWindow;
+    private ScrollPane craftingScrollPane;
     private Coordinate lastCoordinate;
     private TextField textFieldMessage;
     private Image npcImage;
@@ -89,7 +94,9 @@ public class GameView implements Screen, InputProcessor {
     TextButton.TextButtonStyle style;
     private Boolean isFridgeOpen = false;
     private Boolean isCookingOpen = false;
-    private Window recipeWindow;
+    public Boolean isCraftingOpen = false;
+    private Window cookingRecipeWindow;
+    private Window craftingRecipeWindow;
     private Table mainTable;
     private Window mainWindow;
 
@@ -133,6 +140,15 @@ public class GameView implements Screen, InputProcessor {
 //        App.getCurrentGame().getCurrentPlayer().getFridge().addItemToFridge(Good.newGood(FoodType.APPLE));
 //        App.getCurrentGame().getCurrentPlayer().getFridge().addItemToFridge(Good.newGood(FoodType.BEER));
 //        App.getCurrentGame().getCurrentPlayer().getInventory().addGoodByObject(Good.newGood(FoodType.WHEAT_FLOUR));
+
+//        new Pair<>(ForagingMineralType.IRON_ORE, 4),
+//            new Pair<>(ForagingMineralType.COAL, 1);
+//        App.getCurrentGame().getCurrentPlayer().getInventory().addGood(Good.newGood(ForagingMineralType.IRON_ORE),4);
+//        App.getCurrentGame().getCurrentPlayer().getInventory().addGood(Good.newGood(ForagingMineralType.COAL),1);
+//        App.getCurrentGame().getCurrentPlayer().getSkill().increaseMiningLevel();
+//        App.getCurrentGame().getCurrentPlayer().getSkill().increaseMiningLevel();
+
+
 
 
         Pixmap normal = new Pixmap(1, 1, Pixmap.Format.RGBA8888);
@@ -1098,6 +1114,7 @@ public class GameView implements Screen, InputProcessor {
         lastConstructionsForShop(info, counterPanel, selectedPanel, scrollPane, content);
     }
 
+
     @Override
     public boolean touchUp(int i, int i1, int i2, int i3) {
         return false;
@@ -1552,24 +1569,18 @@ public class GameView implements Screen, InputProcessor {
         setInputProcessor();
     }
 
+
+    // cooking
     public void initCookingWindow() {
         if (cookingWindow != null) {
             cookingWindow.remove();
         }
-
-        cookingWindow = new Window("Cooking Recipes", skin, "Letter");
-        cookingWindow.setSize(700, 550);
-        cookingWindow.setPosition(
-            (Gdx.graphics.getWidth() - cookingWindow.getWidth()) / 2,
-            (Gdx.graphics.getHeight() - cookingWindow.getHeight()) / 2
-        );
 
         cookingTable = new Table(skin);
         cookingTable.top().left();
         cookingTable.setFillParent(false);
 
         controller.getCookingController().refreshRecipes();
-
         ArrayList<Pair<Pair<ImageButton, Image>, Integer>> cookingRecipes = controller.getCookingController().getCookingRecipe();
 
         int columns = 5;
@@ -1595,26 +1606,35 @@ public class GameView implements Screen, InputProcessor {
         cookingScrollPane.setFadeScrollBars(false);
         cookingScrollPane.setForceScroll(false, true);
 
-        cookingWindow.add(cookingScrollPane).expand().fill();
+        cookingWindow = new Window("Cooking Recipes", skin, "Letter");
+        cookingWindow.setSize(700, 550);
+        cookingWindow.setPosition(
+            (Gdx.graphics.getWidth() - cookingWindow.getWidth()) / 2,
+            (Gdx.graphics.getHeight() - cookingWindow.getHeight()) / 2
+        );
+
+        cookingWindow.add(cookingScrollPane).padTop(12).expand().fill();
         staticStage.addActor(cookingWindow);
-        Gdx.input.setInputProcessor(staticStage);
+        setInputProcessor();
     }
 
+
+
     public void showRecipeDetails(CookingRecipeType recipeType) {
-        if (recipeWindow != null) {
-            recipeWindow.remove();
+        if (cookingRecipeWindow != null) {
+            cookingRecipeWindow.remove();
         }
 
-        recipeWindow = new Window("Recipe: " + recipeType.getName(), skin, "Letter");
-        recipeWindow.pad(10);
-        recipeWindow.getTitleLabel().setFontScale(0.7f);
-        recipeWindow.setMovable(true);
-        recipeWindow.setModal(true);
+        cookingRecipeWindow = new Window("Recipe: " + recipeType.getName(), skin, "Letter");
+        cookingRecipeWindow.pad(10);
+        cookingRecipeWindow.getTitleLabel().setFontScale(0.7f);
+        cookingRecipeWindow.setMovable(true);
+        cookingRecipeWindow.setModal(true);
 
-        recipeWindow.setSize(400, 300);
-        recipeWindow.setPosition(
-            (Gdx.graphics.getWidth() - recipeWindow.getWidth()) / 2 + scaledSize * 6,
-            (Gdx.graphics.getHeight() - recipeWindow.getHeight()) / 2
+        cookingRecipeWindow.setSize(400, 300);
+        cookingRecipeWindow.setPosition(
+            (Gdx.graphics.getWidth() - cookingRecipeWindow.getWidth()) / 2 + scaledSize * 6,
+            (Gdx.graphics.getHeight() - cookingRecipeWindow.getHeight()) / 2
         );
 
         Table contentTable = new Table(skin);
@@ -1654,8 +1674,7 @@ public class GameView implements Screen, InputProcessor {
         closeButton.addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y) {
-                recipeWindow.remove();
-                Gdx.input.setInputProcessor(staticStage);
+                cookingRecipeWindow.remove();
             }
         });
 
@@ -1671,15 +1690,141 @@ public class GameView implements Screen, InputProcessor {
         buttonTable.add(cookingButton).pad(5);
         contentTable.add(buttonTable).center().padTop(10).row();
 
-        recipeWindow.add(contentTable).expand().fill();
+        cookingRecipeWindow.add(contentTable).expand().fill();
 
-        staticStage.addActor(recipeWindow);
+        staticStage.addActor(cookingRecipeWindow);
+
+        setInputProcessor();
+    }
+
+
+    // crafting
+    public void initCraftingWindow() {
+        if (craftingWindow != null) {
+            craftingWindow.remove();
+        }
+
+        craftingWindow = new Window("Crafting Recipes", skin, "Letter");
+        craftingWindow.setSize(700, 550);
+        craftingWindow.setPosition(
+            (Gdx.graphics.getWidth() - craftingWindow.getWidth()) / 2,
+            (Gdx.graphics.getHeight() - craftingWindow.getHeight()) / 2
+        );
+
+        craftingTable = new Table(skin);
+        craftingTable.top().left();
+        craftingTable.setFillParent(false);
+
+        controller.getCraftingController().refreshRecipes();
+        ArrayList<Pair<Pair<ImageButton, Image>, Integer>> craftingRecipes = controller.getCraftingController().getCraftingRecipes();
+
+        int columns = 5;
+        int count = 0;
+
+        for (Pair<Pair<ImageButton, Image>, Integer> pair : craftingRecipes) {
+            ImageButton slotButton = pair.first().first();
+            Image itemImage = pair.first().second();
+
+            Table itemTable = new Table(skin);
+            itemTable.add(slotButton).size(64, 64).padRight(5);
+            itemTable.add(itemImage).size(48, 48).padLeft(-48);
+
+            craftingTable.add(itemTable).pad(5);
+
+            count++;
+            if (count % columns == 0) {
+                craftingTable.row();
+            }
+        }
+
+        ScrollPane craftingScrollPane = new ScrollPane(craftingTable, skin);
+        craftingScrollPane.setFadeScrollBars(false);
+        craftingScrollPane.setForceScroll(false, true);
+
+        craftingWindow.add(craftingScrollPane).padTop(12).expand().fill();
+        staticStage.addActor(craftingWindow);
+
+        setInputProcessor();
+    }
+
+
+    public void showCraftingRecipeDetails(CraftingRecipeType recipeType) {
+        if (craftingRecipeWindow != null) {
+            craftingRecipeWindow.remove();
+        }
+
+        craftingRecipeWindow = new Window("Recipe: " + recipeType.getName(), skin, "Letter");
+        craftingRecipeWindow.pad(10);
+        craftingRecipeWindow.getTitleLabel().setFontScale(0.7f);
+        craftingRecipeWindow.setMovable(true);
+        craftingRecipeWindow.setModal(true);
+
+        craftingRecipeWindow.setSize(400, 300);
+        craftingRecipeWindow.setPosition(
+            (Gdx.graphics.getWidth() - craftingRecipeWindow.getWidth()) / 2 + scaledSize * 6,
+            (Gdx.graphics.getHeight() - craftingRecipeWindow.getHeight()) / 2
+        );
+
+        Table contentTable = new Table(skin);
+        contentTable.pad(10);
+        contentTable.defaults().left().pad(4);
 
 //        multiplexer.clear();
 //        multiplexer.addProcessor(recipeWindow.getStage());
 //        multiplexer.addProcessor(staticStage);
 //        Gdx.input.setInputProcessor(multiplexer);
+        Label recipeLabel = new Label(recipeType.getName(), skin);
+        recipeLabel.setFontScale(0.6f);
+        contentTable.add(recipeLabel).left().row();
+
+        StringBuilder ingredientsText = new StringBuilder();
+        for (Pair<GoodType, Integer> pair : recipeType.getIngredients()) {
+            ingredientsText.append("- ").append(pair.first().getName())
+                .append(" × ").append(pair.second()).append("\n");
+        }
+
+        Label ingredientsLabel = new Label("Ingredients:\n\n" + ingredientsText.toString(), skin);
+        ingredientsLabel.setFontScale(0.5f);
+        contentTable.add(ingredientsLabel).left().row();
+
+        final Label buildingResult = new Label(" ", skin);
+        buildingResult.setFontScale(0.5f);
+        buildingResult.setAlignment(Align.center);
+        buildingResult.setWrap(true);
+        contentTable.add(buildingResult).center().minWidth(300).minHeight(40).row();
+
+        Table buttonTable = new Table();
+        TextButton closeButton = new TextButton("X", style);
+        closeButton.pad(5);
+        TextButton craftingButton = new TextButton("Build", style);
+        craftingButton.pad(5);
+
+        closeButton.addListener(new ClickListener() {
+            @Override
+            public void clicked(InputEvent event, float x, float y) {
+                craftingRecipeWindow.remove();
+            }
+        });
+
+        craftingButton.addListener(new ClickListener() {
+            @Override
+            public void clicked(InputEvent event, float x, float y) {
+                Result res = controller.craftingCraft(recipeType.getName());
+                buildingResult.setText(res.message());
+            }
+        });
+
+        buttonTable.add(closeButton).pad(5);
+        buttonTable.add(craftingButton).pad(5);
+        contentTable.add(buttonTable).center().padTop(10).row();
+
+        craftingRecipeWindow.add(contentTable).expand().fill();
+
+        staticStage.addActor(craftingRecipeWindow);
     }
+
+
+
 
     public int getScaledSize() {
         return scaledSize;
@@ -2030,6 +2175,18 @@ public class GameView implements Screen, InputProcessor {
 
         staticStage.addActor(greenHouseWindow);
 
+    }
+
+    public Window getCraftingWindow(){
+        return craftingWindow;
+    }
+
+    public void setIsCraftingOpen(boolean isCraftingOpen) {
+        this.isCraftingOpen = isCraftingOpen;
+    }
+
+    public Boolean getIsCraftingOpen() {
+        return isCraftingOpen;
     }
 }
 

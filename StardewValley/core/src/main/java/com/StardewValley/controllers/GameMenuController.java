@@ -58,6 +58,7 @@ import com.badlogic.gdx.Input;
 import java.util.*;
 import java.util.regex.Matcher;
 
+import static java.awt.SystemColor.window;
 import static java.lang.Math.abs;
 
 public class GameMenuController extends Controller {
@@ -77,6 +78,7 @@ public class GameMenuController extends Controller {
     private GameView gameView;
     private FridgeController fridgeController;
     private CookingController cookingController;
+    private CraftingController craftingController;
 
 
     public void setView(GameMenuView view) {
@@ -91,6 +93,7 @@ public class GameMenuController extends Controller {
         clockController = new ClockController();
         fridgeController = new FridgeController(gameView);
         cookingController = new CookingController(gameView);
+        craftingController = new CraftingController(gameView);
 
     }
 
@@ -112,6 +115,10 @@ public class GameMenuController extends Controller {
 
     public CookingController getCookingController() {
         return cookingController;
+    }
+
+    public CraftingController getCraftingController() {
+        return craftingController;
     }
 
     public void handleGameMenu() {
@@ -169,6 +176,7 @@ public class GameMenuController extends Controller {
         clockController.update();
         fridgeController.updateFridge();
     }
+
 
     public void handleInput() {
         if (gameView.getCheatWindow() != null)
@@ -237,8 +245,9 @@ public class GameMenuController extends Controller {
         if (Gdx.input.isKeyJustPressed(Input.Keys.F)) {
 
         }
-        if (Gdx.input.isKeyJustPressed(Input.Keys.M)) {
 
+        if (Gdx.input.isKeyJustPressed(Input.Keys.M)) {
+                App.getCurrentGame().getMap().printGraphicalMap( gameView.getStage());
         }
         if (Gdx.input.isKeyJustPressed(Input.Keys.TAB)) {
 
@@ -297,6 +306,19 @@ public class GameMenuController extends Controller {
                     gameView.getCookingWindow().remove();
                 }
                 gameView.setCookingOpen(!gameView.getCookingOpen());
+            }
+        }
+
+        if (Gdx.input.isKeyJustPressed(Input.Keys.B)) {
+            Tile selectedTile = App.getCurrentGame().getMap().findTileByXY(App.getCurrentGame().getCurrentPlayer().getCoordinate().getX()
+                , App.getCurrentGame().getCurrentPlayer().getCoordinate().getY());
+            if (selectedTile.getTileType() == TileType.PLAYER_BUILDING) {
+                if (!gameView.getIsCraftingOpen()) {
+                    gameView.initCraftingWindow();
+                } else {
+                    gameView.getCraftingWindow().remove();
+                }
+                gameView.setIsCraftingOpen(!gameView.getIsCraftingOpen());
             }
         }
 
@@ -1080,8 +1102,9 @@ public class GameMenuController extends Controller {
         for (CraftingRecipe craftingRecipe : App.getCurrentGame().getCurrentPlayer().getCraftingRecipes()) {
             if (craftingRecipe.getName().equals(itemName)) {
                 CraftingFunctions craftingFunctions = new CraftingFunctions();
-                craftingFunctions.checkCraftingFunctions((CraftingRecipeType) craftingRecipe.getType());
-                return new Result(true, "");
+                Result result;
+                result = craftingFunctions.checkCraftingFunctions((CraftingRecipeType) craftingRecipe.getType());
+                return new Result(true, result.message());
             }
         }
         return new Result(false, "You don't have " + itemName + " recipe!");
