@@ -241,7 +241,7 @@ public class GameMenuController extends Controller {
         }
 
         if (Gdx.input.isKeyJustPressed(Input.Keys.M)) {
-                App.getCurrentGame().getMap().printGraphicalMap(0, 0, 100, gameView.getStage());
+                App.getCurrentGame().getMap().printGraphicalMap( gameView.getStage());
         }
         if (Gdx.input.isKeyJustPressed(Input.Keys.TAB)) {
 

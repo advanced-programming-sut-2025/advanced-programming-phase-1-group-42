@@ -320,24 +320,26 @@ public class Map {
         }
 
     }
+
+
     private Window mapWindow;
     boolean printMapFlag = false;
-    public void printGraphicalMap(int x, int y, int size, Stage stage) {
+    public void printGraphicalMap(Stage stage) {
         if (!printMapFlag) {
             mapWindow = new Window("Map", Assets.getInstance().getSkin());
-            mapWindow.setSize(500, 500);
+            mapWindow.setSize(1000, 1000);
             mapWindow.setPosition(
                 (Gdx.graphics.getWidth() - mapWindow.getWidth()) / 2f,
                 (Gdx.graphics.getHeight() - mapWindow.getHeight()) / 2f
             );
 
             Table mapTable = new Table();
-            mapTable.defaults().width(16).height(16);
+            mapTable.defaults().width(6).height(6);
 
-            for (int j = 0; j < size; j++) {
+            for (int j = 0; j < 160; j++) {
                 mapTable.row();
-                for (int i = 0; i < size; i++) {
-                    Coordinate coordinate = new Coordinate(x + i, y + j);
+                for (int i = 0; i < 150; i++) {
+                    Coordinate coordinate = new Coordinate( i,  j);
                     Tile tile = findTile(coordinate);
 
                     String symbol = " ";
