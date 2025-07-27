@@ -14,8 +14,8 @@ public class GameMenu implements AppMenu {
     private final GameMenuController controller = new GameMenuController();
 
     @Override
-    public void check(Scanner scanner) {
-        String input = scanner.nextLine();
+    public void check(String input) {
+//        String input = scanner.nextLine();
         if (input != null) {
             Game.writeIntoFile(input);
         }
@@ -58,7 +58,7 @@ public class GameMenu implements AppMenu {
         } else if ((matcher = GameMenuCommands.NEXT_TURN.matcher(input)) != null) {
             System.out.println(controller.nextTurn());
         } else if(GameMenuCommands.FORCE_TERMINATE.matcher(input) != null) {
-            System.out.println(controller.forceTerminate(scanner));
+            System.out.println(controller.forceTerminate());
         }
 
         //  Date & Time Commands
@@ -95,7 +95,7 @@ public class GameMenu implements AppMenu {
         }
         //Map & Walk
         else if ((matcher = GameMenuCommands.WALK.matcher(input)) != null) {
-            System.out.println(controller.walk(matcher.group("x"), matcher.group("y"), scanner));
+            System.out.println(controller.walk(matcher.group("x"), matcher.group("y")));
         } else if ((matcher = GameMenuCommands.PRINT_MAP.matcher(input)) != null) {
             System.out.println(controller.printMap(matcher.group("x"), matcher.group("y"), matcher.group("size")));
         } else if ((matcher = GameMenuCommands.HELP_READING_MAP.matcher(input)) != null) {
@@ -129,7 +129,7 @@ public class GameMenu implements AppMenu {
         } else if ((matcher = GameMenuCommands.TOOLS_UPGRADE.matcher(input)) != null) {
             System.out.println(controller.toolsUpgrade(matcher.group("toolName")));
         } else if ((matcher = GameMenuCommands.TOOLS_USE.matcher(input)) != null) {
-            System.out.println(controller.toolsUse(matcher.group("direction")));
+//            System.out.println(controller.toolsUse(matcher.group("direction")));
         }
         // Craft Info
         else if ((matcher = GameMenuCommands.CRAFT_INFO.matcher(input)) != null) {
@@ -213,7 +213,7 @@ public class GameMenu implements AppMenu {
         } else if ((matcher = GameMenuCommands.SHOW_ALL_AVAILABLE_PRODUCTS.matcher(input)) != null) {
             System.out.println(controller.showAllAvailableProducts());
         } else if ((matcher = GameMenuCommands.PURCHASE.matcher(input)) != null) {
-            System.out.println(controller.purchase(matcher.group("productName"), matcher.group("count")));
+//            System.out.println(controller.purchase(matcher.group("productName"), matcher.group("count")));
         } else if ((matcher = GameMenuCommands.SELL.matcher(input)) != null) {
             System.out.println(controller.sell(matcher.group("productName"), matcher.group("count")));
         } else if ((matcher = GameMenuCommands.CHEAT_ADD_DOLLARS.matcher(input)) != null) {

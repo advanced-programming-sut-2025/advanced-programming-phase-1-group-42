@@ -17,35 +17,35 @@ public enum ForagingTreeType implements GoodType {
             new Pair<>(ProductType.WOOD, 16),
             new Pair<>(FoodType.SAP, 2))),
             new ArrayList<>(Arrays.asList(Season.SPRING, Season.SUMMER, Season.FALL, Season.WINTER)), -1,
-        "\\assets\\GameAssets\\Trees\\Acorn.png"),
+        "GameAssets/Trees/Acorn.png"),
 
     MAPLE_SEEDS("Maple_Seeds", FarmingTreeType.MAPLE_TREE, new ArrayList<>(Arrays.asList(
             new Pair<>(FarmingCropType.MAPLE_SYRUP, 2),
             new Pair<>(ProductType.WOOD, 16),
             new Pair<>(FoodType.SAP, 2))),
             new ArrayList<>(Arrays.asList(Season.SPRING, Season.SUMMER, Season.FALL, Season.WINTER)), -1,
-        "\\assets\\GameAssets\\Trees\\Maple_Seed.png"),
+        "GameAssets/Trees/Maple_Seed.png"),
 
     PINE_CONES("Pine_Cones", FarmingTreeType.PINE_TREE, new ArrayList<>(Arrays.asList(
             new Pair<>(FarmingCropType.PINE_TAR, 2),
             new Pair<>(ProductType.WOOD, 16),
             new Pair<>(FoodType.SAP, 2))),
             new ArrayList<>(Arrays.asList(Season.SPRING, Season.SUMMER, Season.FALL, Season.WINTER)), -1,
-        "\\assets\\GameAssets\\Trees\\Pine_Cone.png"),
+        "GameAssets/Trees/Pine_Cone.png"),
 
     MAHOGANY_SEEDS("Mahogany_Seeds", FarmingTreeType.MAHOGANY_TREE, new ArrayList<>(Arrays.asList(
             new Pair<>(FoodType.SAP, 2),
             new Pair<>(ProductType.WOOD, 16),
             new Pair<>(FoodType.SAP, 2))),
             new ArrayList<>(Arrays.asList(Season.SPRING, Season.SUMMER, Season.FALL, Season.WINTER)), -1,
-        "\\assets\\GameAssets\\Trees\\Mahogany_Seed.png"),
+        "GameAssets/Trees/Mahogany_Seed.png"),
 
     MUSHROOM_TREE_SEEDS("Mushroom_Tree_Seeds", FarmingTreeType.MUSHROOM_TREE, new ArrayList<>(Arrays.asList(
             new Pair<>(FoodType.COMMON_MUSHROOM, 2),
             new Pair<>(ProductType.WOOD, 16),
             new Pair<>(FoodType.SAP, 2))),
             new ArrayList<>(Arrays.asList(Season.SPRING, Season.SUMMER, Season.FALL, Season.WINTER)), -1,
-        "\\assets\\GameAssets\\Trees\\Mushroom_Tree_Seed.png"),;
+        "GameAssets/Trees/Mushroom_Tree_Seed.png"),;
 
     private String name;
     private FarmingTreeType farmingTreeType;
@@ -67,6 +67,9 @@ public enum ForagingTreeType implements GoodType {
         this.imagePath = imagePath;
     }
 
+    public FarmingTreeType getFarmingTreeType() {
+        return farmingTreeType;
+    }
 
     @Override
     public int getSellPrice() {
