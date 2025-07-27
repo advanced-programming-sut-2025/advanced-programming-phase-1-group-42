@@ -244,52 +244,6 @@ public class GameView implements Screen, InputProcessor {
 
     @Override
     public boolean keyDown(int i) {
-        if (i == Input.Keys.O) {
-            for (FarmBuilding building : App.getCurrentGame().getCurrentPlayer().getFarm().getFarmBuildings()) {
-                for (Animal animal : building.getAnimals()) {
-                    if ((abs(animal.getCoordinate().getX() -
-                        App.getCurrentGame().getCurrentPlayer().getCoordinate().getX()) <= 2) &&
-                        (abs(animal.getCoordinate().getY() -
-                            App.getCurrentGame().getCurrentPlayer().getCoordinate().getY()) <= 2)) {
-                        animal.petAnimal();
-                        buildMessage();
-                        textFieldMessage.setText("You petted " + animal.getName());
-                        return true;
-                    }
-                }
-            }
-            buildMessage();
-            textFieldMessage.setText("Please approach an animal to pet");
-            return true;
-        }
-
-        Tile selectedTile = App.getCurrentGame().getMap().findTileByXY(App.getCurrentGame().getCurrentPlayer().getCoordinate().getX()
-            , App.getCurrentGame().getCurrentPlayer().getCoordinate().getY());
-
-        if (i == Input.Keys.F) {
-            if (selectedTile.getTileType() == TileType.PLAYER_BUILDING) {
-                if (!isFridgeOpen) {
-                    initFridgeWindow();
-                } else {
-                    fridgeWindow.remove();
-                }
-                isFridgeOpen = !isFridgeOpen;
-                return true;
-            }
-        }
-
-
-        if (i == Input.Keys.C) {
-            if (selectedTile.getTileType() == TileType.PLAYER_BUILDING) {
-                if (!isCookingOpen) {
-                    initCookingWindow();
-                } else {
-                    cookingWindow.remove();
-                }
-                isCookingOpen = !isCookingOpen;
-                return true;
-            }
-        }
         return false;
     }
 
@@ -850,7 +804,7 @@ public class GameView implements Screen, InputProcessor {
         }
     }
 
-    private void buildMessage() {
+    public void buildMessage() {
         lastCoordinate = App.getCurrentGame().getCurrentPlayer().getCoordinate();
         float screenWidth = stage.getViewport().getWorldWidth();
         if (textFieldMessage != null) {
@@ -1628,7 +1582,33 @@ public class GameView implements Screen, InputProcessor {
             .fill();
     }
 
+    public TextField getTextFieldMessage() {
+        return textFieldMessage;
+    }
 
+    public Boolean getFridgeOpen() {
+        return isFridgeOpen;
+    }
+
+    public void setFridgeOpen(Boolean fridgeOpen) {
+        isFridgeOpen = fridgeOpen;
+    }
+
+    public Window getFridgeWindow() {
+        return fridgeWindow;
+    }
+
+    public Boolean getCookingOpen() {
+        return isCookingOpen;
+    }
+
+    public void setCookingOpen(Boolean cookingOpen) {
+        isCookingOpen = cookingOpen;
+    }
+
+    public Window getCookingWindow() {
+        return cookingWindow;
+    }
 }
 
 

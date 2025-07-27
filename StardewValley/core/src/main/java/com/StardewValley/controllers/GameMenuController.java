@@ -258,6 +258,48 @@ public class GameMenuController extends Controller {
             else
                 gameView.closeCheatWindow();
         }
+        if (Gdx.input.isKeyJustPressed(Input.Keys.O)) {
+            for (FarmBuilding building : App.getCurrentGame().getCurrentPlayer().getFarm().getFarmBuildings()) {
+                for (Animal animal : building.getAnimals()) {
+                    if ((abs(animal.getCoordinate().getX() -
+                        App.getCurrentGame().getCurrentPlayer().getCoordinate().getX()) <= 2) &&
+                        (abs(animal.getCoordinate().getY() -
+                            App.getCurrentGame().getCurrentPlayer().getCoordinate().getY()) <= 2)) {
+                        animal.petAnimal();
+                        gameView.buildMessage();
+                        gameView.getTextFieldMessage().setText("You petted " + animal.getName());
+                    }
+                }
+            }
+            gameView.buildMessage();
+            gameView.getTextFieldMessage().setText("Please approach an animal to pet");
+        }
+        if (Gdx.input.isKeyJustPressed(Input.Keys.G)) {
+            Tile selectedTile = App.getCurrentGame().getMap().findTileByXY(App.getCurrentGame().getCurrentPlayer().getCoordinate().getX()
+                , App.getCurrentGame().getCurrentPlayer().getCoordinate().getY());
+
+            if (selectedTile.getTileType() == TileType.PLAYER_BUILDING) {
+                if (!gameView.getFridgeOpen()) {
+                    gameView.initFridgeWindow();
+                } else {
+                    gameView.getFridgeWindow().remove();
+                }
+                gameView.setFridgeOpen(!gameView.getFridgeOpen());
+            }
+        }
+        if (Gdx.input.isKeyJustPressed(Input.Keys.K)) {
+            Tile selectedTile = App.getCurrentGame().getMap().findTileByXY(App.getCurrentGame().getCurrentPlayer().getCoordinate().getX()
+                , App.getCurrentGame().getCurrentPlayer().getCoordinate().getY());
+            if (selectedTile.getTileType() == TileType.PLAYER_BUILDING) {
+                if (!gameView.getCookingOpen()) {
+                    gameView.initCookingWindow();
+                } else {
+                    gameView.getCookingWindow().remove();
+                }
+                gameView.setCookingOpen(!gameView.getCookingOpen());
+            }
+        }
+
         ArrayList<Integer> arr = new ArrayList<>(Arrays.asList(
             8, 9, 10, 11, 12, 13, 14, 15, 16, 7, 69, 70
         ));
