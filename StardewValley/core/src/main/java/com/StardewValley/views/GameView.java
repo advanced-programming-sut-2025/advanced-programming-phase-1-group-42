@@ -13,6 +13,8 @@ import com.StardewValley.models.game_structure.Coordinate;
 import com.StardewValley.models.game_structure.Map;
 import com.StardewValley.models.game_structure.Tile;
 import com.StardewValley.models.goods.Good;
+import com.StardewValley.models.goods.GoodType;
+import com.StardewValley.models.goods.fishs.Fish;
 import com.StardewValley.models.goods.foods.FoodType;
 import com.StardewValley.models.goods.tools.Tool;
 import com.StardewValley.models.interactions.Animals.Animal;
@@ -25,6 +27,7 @@ import com.StardewValley.models.interactions.Player;
 import com.StardewValley.models.interactions.PlayerBuildings.FarmBuilding;
 import com.StardewValley.models.interactions.PlayerBuildings.FarmBuildingTypes;
 import com.StardewValley.models.interactions.game_buildings.CarpenterShop;
+import com.StardewValley.models.interactions.game_buildings.FishShop;
 import com.StardewValley.models.interactions.game_buildings.GameBuilding;
 import com.StardewValley.models.interactions.game_buildings.MarnieRanch;
 import com.badlogic.gdx.*;
@@ -117,14 +120,14 @@ public class GameView implements Screen, InputProcessor {
 
 
         //TODO testing animals
-//        FarmBuilding farmBuilding = new FarmBuilding(FarmBuildingTypes.BARN, new Coordinate(50, 30));
-//        App.getCurrentGame().getCurrentPlayer().getFarm().getFarmBuildings().add(farmBuilding);
-//        Animal animal = new Animal(AnimalTypes.COW, "meow");
-//        animal.setCoordinate(new Coordinate(54, 34));
-//        farmBuilding.addAnimal(animal);
-//
-//        App.getCurrentGame().getCurrentPlayer().getFridge().addItemToFridge(Good.newGood(FoodType.APPLE));
-//        App.getCurrentGame().getCurrentPlayer().getFridge().addItemToFridge(Good.newGood(FoodType.BEER));
+        FarmBuilding farmBuilding = new FarmBuilding(FarmBuildingTypes.BARN, new Coordinate(50, 30));
+        App.getCurrentGame().getCurrentPlayer().getFarm().getFarmBuildings().add(farmBuilding);
+        Animal animal = new Animal(AnimalTypes.COW, "meow");
+        animal.setCoordinate(new Coordinate(54, 34));
+        farmBuilding.addAnimal(animal);
+
+        App.getCurrentGame().getCurrentPlayer().getFridge().addItemToFridge(Good.newGood(FoodType.APPLE));
+        App.getCurrentGame().getCurrentPlayer().getFridge().addItemToFridge(Good.newGood(FoodType.BEER));
 
 
 
@@ -296,7 +299,9 @@ public class GameView implements Screen, InputProcessor {
         Coordinate coordinate = new Coordinate(tileX, tileY);
 
         if (!App.getCurrentGame().getCurrentPlayer().getInHandGood().isEmpty() &&
-            App.getCurrentGame().getCurrentPlayer().getInHandGood().getLast() instanceof Tool) {
+            App.getCurrentGame().getCurrentPlayer().getInHandGood().getLast() instanceof Tool &&
+            (playerTile.getTileType() != TileType.PLAIN)) {
+
             Tile tile = Map.findTile(coordinate);
 
             assert playerTile != null;
@@ -525,228 +530,19 @@ public class GameView implements Screen, InputProcessor {
 
             // MarnieRanch
             if (building instanceof MarnieRanch) {
-
-                final AnimalTypes[] selectedAnimal = {null};
-                final ProductType[] selectedProductType = {null};
-                final int[] selectedCount = {0};
-
-                TextField animalName = new TextField("", skin);
-
-                animalName.setDisabled(false);
-                animalName.setVisible(false);
-
-                addButton.addListener(new ChangeListener() {
-                    @Override
-                    public void changed(ChangeEvent event, Actor actor) {
-                        if (selectedProductType[0] != null) {
-                            selectedCount[0]++;
-                            countLabel.setText(String.valueOf(selectedCount[0]));
-                        }
-                    }
-                });
-
-                removeButton.addListener(new ChangeListener() {
-                    @Override
-                    public void changed(ChangeEvent event, Actor actor) {
-                        if (selectedProductType[0] != null && selectedCount[0] > 0) {
-                            selectedCount[0]--;
-                            countLabel.setText(String.valueOf(selectedCount[0]));
-                        }
-                    }
-                });
-
-
-                purchaseButton.addListener(new ChangeListener() {
-                    @Override
-                    public void changed(ChangeEvent changeEvent, Actor actor) {
-                        if (selectedAnimal[0] != null && !animalName.getText().isEmpty()) {
-                            Result result = controller.buyAnimal(String.valueOf(selectedAnimal[0]), animalName.getText());
-                            System.out.println(result.message());
-                            info.setText(result.toString());
-                        } else {
-                            Result result = controller.purchase(String.valueOf(selectedProductType[0]),
-                                String.valueOf(selectedCount[0]));
-                            System.out.println(result.message());
-                            info.setText(result.toString());
-                        }
-                    }
-                });
-
-
-                for (AnimalTypes animalType : ((MarnieRanch) building).animals) {
-                    TextButton productButton = new TextButton(animalType.getName() + " - " + animalType.getPrice() + "G", skin);
-
-                    productButton.addListener(new ChangeListener() {
-                        @Override
-                        public void changed(ChangeEvent event, Actor actor) {
-                            selectedProductType[0] = null;
-                            addButton.setVisible(false);
-                            removeButton.setVisible(false);
-                            countLabel.setVisible(false);
-                            animalName.setVisible(true);
-                            selectedAnimal[0] = animalType;
-                            selectedCount[0] = 0;
-                            selectedNameLabel.setText(animalType.getName());
-                            purchaseButton.setVisible(true);
-                        }
-                    });
-
-                    itemsTable.add(productButton)
-                        .fillX()
-                        .pad(5)
-                        .row();
-                }
-
-                for (ProductType productType : ((MarnieRanch) building).products) {
-                    TextButton productButton = new TextButton(productType.getName() + " - " + productType.getSellPrice() + "G", skin);
-
-                    productButton.addListener(new ChangeListener() {
-                        @Override
-                        public void changed(ChangeEvent event, Actor actor) {
-                            selectedAnimal[0] = null;
-                            addButton.setVisible(true);
-                            removeButton.setVisible(true);
-                            countLabel.setVisible(true);
-                            animalName.setVisible(false);
-                            selectedProductType[0] = productType;
-                            selectedCount[0] = 0;
-                            selectedNameLabel.setText(productType.getName());
-                            purchaseButton.setVisible(true);
-                        }
-                    });
-
-                    itemsTable.add(productButton)
-                        .fillX()
-                        .pad(5)
-                        .row();
-                }
-
-
-                counterPanel.add(animalName)
-                    .size(180, 70)
-                    .colspan(3)
-                    .center()
-                    .row();
-
-                info.setWrap(true);
-                info.setWidth(250);
-                info.setFontScale(0.7f);
-                info.setAlignment(Align.center);
-
-                counterPanel.add(info)
-                    .width(250)
-                    .pad(5)
-                    .colspan(3)
-                    .center()
-                    .row();
-
-                selectedPanel.add(counterPanel)
-                    .colspan(3)
-                    .center()
-                    .padBottom(40)
-                    .row();
-
-
-                Table mainTable = new Table();
-                mainTable.setFillParent(true);
-                mainTable.clear();
-
-                mainTable.add(scrollPane)
-                    .width(380)
-                    .expandY()
-                    .fillY()
-                    .pad(20)
-                    .padRight(30)
-                    .padLeft(170);
-
-                mainTable.add(selectedPanel)
-                    .width(200)
-                    .expandY()
-                    .fillY()
-                    .pad(30)
-                    .padLeft(50)
-                    .bottom();
-
-                content.add(mainTable)
-                    .expand()
-                    .fill();
+                marnieRanchShop(addButton, countLabel, removeButton, purchaseButton, info, tileX, tileY, (MarnieRanch) building, selectedNameLabel, itemsTable, counterPanel, selectedPanel, scrollPane, content);
             } else if (building instanceof CarpenterShop) {
-                final FarmBuildingTypes[] selectedBuilding = {null};
-
-                purchaseButton.addListener(new ChangeListener() {
-                    @Override
-                    public void changed(ChangeEvent changeEvent, Actor actor) {
-
-                        //TODO
-                        //window
-
-                    }
-                });
-
-                for (FarmBuildingTypes farmBuildingType : ((CarpenterShop) building).getProducts()) {
-                    TextButton productButton = new TextButton(farmBuildingType.getName() + " - " + farmBuildingType.getCost() + "G", skin);
-
-                    productButton.addListener(new ChangeListener() {
-                        @Override
-                        public void changed(ChangeEvent event, Actor actor) {
-                            selectedBuilding[0] = farmBuildingType;
-                            selectedNameLabel.setText(farmBuildingType.getName() + " - " + farmBuildingType.getCost() + "G" + "\n" +
-                                "required stone: " + farmBuildingType.getStone() + "\n" + "required wood: " + farmBuildingType.getWood());
-                            selectedNameLabel.setFontScale(0.7f);
-                            purchaseButton.setVisible(true);
-
-                        }
-                    });
-
-                    itemsTable.add(productButton)
-                        .fillX()
-                        .pad(5)
-                        .row();
-                }
-                counterPanel.add(info)
-                    .width(250)
-                    .pad(5)
-                    .colspan(3)
-                    .center()
-                    .row();
-
-                selectedPanel.add(counterPanel)
-                    .colspan(3)
-                    .center()
-                    .padBottom(40)
-                    .row();
-
-
-                Table mainTable = new Table();
-                mainTable.setFillParent(true);
-                mainTable.clear();
-
-                mainTable.add(scrollPane)
-                    .width(380)
-                    .expandY()
-                    .fillY()
-                    .pad(20)
-                    .padRight(30)
-                    .padLeft(170);
-
-                mainTable.add(selectedPanel)
-                    .width(200)
-                    .expandY()
-                    .fillY()
-                    .pad(30)
-                    .padLeft(50)
-                    .bottom();
-
-                content.add(mainTable)
-                    .expand()
-                    .fill();
+                carpenterShop(purchaseButton, (CarpenterShop) building, selectedNameLabel, itemsTable, counterPanel, info, selectedPanel, scrollPane, content);
+            }
+            else if (building instanceof FishShop) {
+                fishShop(addButton, countLabel, removeButton, purchaseButton, info, tileX, tileY, (FishShop) building, selectedNameLabel, itemsTable, counterPanel, selectedPanel, scrollPane, content);
             }
 
             staticStage.addActor(window);
 
-            multiplexer.addProcessor(stage);
-            multiplexer.addProcessor(this);
-            Gdx.input.setInputProcessor(multiplexer);
+//            multiplexer.addProcessor(stage);
+//            multiplexer.addProcessor(this);
+//            Gdx.input.setInputProcessor(multiplexer);
 
             return true;
         }
@@ -1284,11 +1080,11 @@ public class GameView implements Screen, InputProcessor {
     }
 
     private void setInputProcessor() {
-        multiplexer.clear();
-        multiplexer.addProcessor(stage);
-        multiplexer.addProcessor(staticStage);
-        multiplexer.addProcessor(this);
-        Gdx.input.setInputProcessor(multiplexer);
+//        multiplexer.clear();
+//        multiplexer.addProcessor(stage);
+//        multiplexer.addProcessor(staticStage);
+//        multiplexer.addProcessor(this);
+//        Gdx.input.setInputProcessor(multiplexer);
     }
 
     public void closeToolsWindow() {
@@ -1348,6 +1144,340 @@ public class GameView implements Screen, InputProcessor {
     public Window getCheatWindow() {
         return cheatWindow;
     }
+
+    private void carpenterShop(TextButton purchaseButton, CarpenterShop building, Label selectedNameLabel, Table itemsTable, Table counterPanel, Label info, Table selectedPanel, ScrollPane scrollPane, Table content) {
+        final FarmBuildingTypes[] selectedBuilding = {null};
+
+        purchaseButton.addListener(new ChangeListener() {
+            @Override
+            public void changed(ChangeEvent changeEvent, Actor actor) {
+
+                //TODO
+                //window
+
+            }
+        });
+
+        for (FarmBuildingTypes farmBuildingType : building.getProducts()) {
+            TextButton productButton = new TextButton(farmBuildingType.getName() + " - " + farmBuildingType.getCost() + "G", skin);
+
+            productButton.addListener(new ChangeListener() {
+                @Override
+                public void changed(ChangeEvent event, Actor actor) {
+                    selectedBuilding[0] = farmBuildingType;
+                    selectedNameLabel.setText(farmBuildingType.getName() + " - " + farmBuildingType.getCost() + "G" + "\n" +
+                        "required stone: " + farmBuildingType.getStone() + "\n" + "required wood: " + farmBuildingType.getWood());
+                    selectedNameLabel.setFontScale(0.7f);
+                    purchaseButton.setVisible(true);
+
+                }
+            });
+
+            itemsTable.add(productButton)
+                .fillX()
+                .pad(5)
+                .row();
+        }
+        counterPanel.add(info)
+            .width(250)
+            .pad(5)
+            .colspan(3)
+            .center()
+            .row();
+
+        selectedPanel.add(counterPanel)
+            .colspan(3)
+            .center()
+            .padBottom(40)
+            .row();
+
+
+        Table mainTable = new Table();
+        mainTable.setFillParent(true);
+        mainTable.clear();
+
+        mainTable.add(scrollPane)
+            .width(380)
+            .expandY()
+            .fillY()
+            .pad(20)
+            .padRight(30)
+            .padLeft(170);
+
+        mainTable.add(selectedPanel)
+            .width(200)
+            .expandY()
+            .fillY()
+            .pad(30)
+            .padLeft(50)
+            .bottom();
+
+        content.add(mainTable)
+            .expand()
+            .fill();
+    }
+
+    private void marnieRanchShop(TextButton addButton, Label countLabel, TextButton removeButton, TextButton purchaseButton, Label info, int tileX, int tileY, MarnieRanch building, Label selectedNameLabel, Table itemsTable, Table counterPanel, Table selectedPanel, ScrollPane scrollPane, Table content) {
+        final AnimalTypes[] selectedAnimal = {null};
+        final ProductType[] selectedProductType = {null};
+        final int[] selectedCount = {0};
+
+        TextField animalName = new TextField("", skin);
+
+        animalName.setDisabled(false);
+        animalName.setVisible(false);
+
+        addButton.addListener(new ChangeListener() {
+            @Override
+            public void changed(ChangeEvent event, Actor actor) {
+                if (selectedProductType[0] != null) {
+                    selectedCount[0]++;
+                    countLabel.setText(String.valueOf(selectedCount[0]));
+                }
+            }
+        });
+
+        removeButton.addListener(new ChangeListener() {
+            @Override
+            public void changed(ChangeEvent event, Actor actor) {
+                if (selectedProductType[0] != null && selectedCount[0] > 0) {
+                    selectedCount[0]--;
+                    countLabel.setText(String.valueOf(selectedCount[0]));
+                }
+            }
+        });
+
+
+        purchaseButton.addListener(new ChangeListener() {
+            @Override
+            public void changed(ChangeEvent changeEvent, Actor actor) {
+                if (selectedAnimal[0] != null && !animalName.getText().isEmpty()) {
+                    Result result = controller.buyAnimal(String.valueOf(selectedAnimal[0]), animalName.getText());
+                    System.out.println(result.message());
+                    info.setText(result.toString());
+                } else {
+                    Result result = controller.purchase(String.valueOf(selectedProductType[0]),
+                        String.valueOf(selectedCount[0]), new Coordinate(tileX, tileY));
+                    System.out.println(result.message());
+                    info.setText(result.toString());
+                }
+            }
+        });
+
+
+        for (AnimalTypes animalType : building.animals) {
+            TextButton productButton = new TextButton(animalType.getName() + " - " + animalType.getPrice() + "G", skin);
+
+            productButton.addListener(new ChangeListener() {
+                @Override
+                public void changed(ChangeEvent event, Actor actor) {
+                    selectedProductType[0] = null;
+                    addButton.setVisible(false);
+                    removeButton.setVisible(false);
+                    countLabel.setVisible(false);
+                    animalName.setVisible(true);
+                    selectedAnimal[0] = animalType;
+                    selectedCount[0] = 0;
+                    selectedNameLabel.setText(animalType.getName());
+                    purchaseButton.setVisible(true);
+                }
+            });
+
+            itemsTable.add(productButton)
+                .fillX()
+                .pad(5)
+                .row();
+        }
+
+        for (ProductType productType : building.products) {
+            TextButton productButton = new TextButton(productType.getName() + " - " + productType.getSellPrice() + "G", skin);
+
+            productButton.addListener(new ChangeListener() {
+                @Override
+                public void changed(ChangeEvent event, Actor actor) {
+                    selectedAnimal[0] = null;
+                    addButton.setVisible(true);
+                    removeButton.setVisible(true);
+                    countLabel.setVisible(true);
+                    animalName.setVisible(false);
+                    selectedProductType[0] = productType;
+                    selectedCount[0] = 0;
+                    selectedNameLabel.setText(productType.getName());
+                    purchaseButton.setVisible(true);
+                }
+            });
+
+            itemsTable.add(productButton)
+                .fillX()
+                .pad(5)
+                .row();
+        }
+
+
+        counterPanel.add(animalName)
+            .size(180, 70)
+            .colspan(3)
+            .center()
+            .row();
+
+        info.setWrap(true);
+        info.setWidth(250);
+        info.setFontScale(0.7f);
+        info.setAlignment(Align.center);
+
+        counterPanel.add(info)
+            .width(250)
+            .pad(5)
+            .colspan(3)
+            .center()
+            .row();
+
+        selectedPanel.add(counterPanel)
+            .colspan(3)
+            .center()
+            .padBottom(40)
+            .row();
+
+
+        Table mainTable = new Table();
+        mainTable.setFillParent(true);
+        mainTable.clear();
+
+        mainTable.add(scrollPane)
+            .width(380)
+            .expandY()
+            .fillY()
+            .pad(20)
+            .padRight(30)
+            .padLeft(170);
+
+        mainTable.add(selectedPanel)
+            .width(200)
+            .expandY()
+            .fillY()
+            .pad(30)
+            .padLeft(50)
+            .bottom();
+
+        content.add(mainTable)
+            .expand()
+            .fill();
+    }
+
+    private void fishShop(TextButton addButton, Label countLabel, TextButton removeButton, TextButton purchaseButton,
+                          Label info, int tileX, int tileY, FishShop fishShop, Label selectedNameLabel, Table itemsTable,
+                          Table counterPanel, Table selectedPanel, ScrollPane scrollPane, Table content) {
+
+//        final AnimalTypes[] selectedAnimal = {null};
+//        final ProductType[] selectedProductType = {null};
+        final GoodType[] selectedGoodType = {null};
+        final int[] selectedCount = {0};
+
+        addButton.addListener(new ChangeListener() {
+            @Override
+            public void changed(ChangeEvent event, Actor actor) {
+                if (selectedGoodType[0] != null) {
+                    selectedCount[0]++;
+                    countLabel.setText(String.valueOf(selectedCount[0]));
+                }
+            }
+        });
+
+        removeButton.addListener(new ChangeListener() {
+            @Override
+            public void changed(ChangeEvent event, Actor actor) {
+                if (selectedGoodType[0] != null && selectedCount[0] > 0) {
+                    selectedCount[0]--;
+                    countLabel.setText(String.valueOf(selectedCount[0]));
+                }
+            }
+        });
+
+
+        purchaseButton.addListener(new ChangeListener() {
+            @Override
+            public void changed(ChangeEvent changeEvent, Actor actor) {
+                if (selectedGoodType[0] != null) {
+                    Result result = controller.purchase(selectedGoodType[0].getName(), String.valueOf(selectedCount[0]),
+                        new Coordinate(tileX, tileY));
+                    System.out.println(result.message());
+                    info.setText(result.toString());
+                }
+            }
+        });
+
+
+        for (Pair<GoodType, Integer> product : fishShop.getProducts()) {
+            TextButton productButton = new TextButton(product.first().getName() + " - " + product.first().getSellPrice() + "G", skin);
+
+            productButton.addListener(new ChangeListener() {
+                @Override
+                public void changed(ChangeEvent event, Actor actor) {
+                    selectedGoodType[0] = null;
+                    addButton.setVisible(true);
+                    removeButton.setVisible(true);
+                    countLabel.setVisible(true);
+                    selectedGoodType[0] = product.first();
+                    selectedCount[0] = 0;
+                    selectedNameLabel.setText(product.first().getName());
+                    countLabel.setText(String.valueOf(selectedCount[0]));
+                    purchaseButton.setVisible(true);
+                }
+            });
+
+            itemsTable.add(productButton)
+                .fillX()
+                .pad(5)
+                .row();
+        }
+
+
+
+        info.setWrap(true);
+        info.setWidth(250);
+        info.setFontScale(0.7f);
+        info.setAlignment(Align.center);
+
+        counterPanel.add(info)
+            .width(250)
+            .pad(5)
+            .colspan(3)
+            .center()
+            .row();
+
+        selectedPanel.add(counterPanel)
+            .colspan(3)
+            .center()
+            .padBottom(40)
+            .row();
+
+
+        Table mainTable = new Table();
+        mainTable.setFillParent(true);
+        mainTable.clear();
+
+        mainTable.add(scrollPane)
+            .width(380)
+            .expandY()
+            .fillY()
+            .pad(20)
+            .padRight(30)
+            .padLeft(170);
+
+        mainTable.add(selectedPanel)
+            .width(200)
+            .expandY()
+            .fillY()
+            .pad(30)
+            .padLeft(50)
+            .bottom();
+
+        content.add(mainTable)
+            .expand()
+            .fill();
+    }
+
+
 }
 
 

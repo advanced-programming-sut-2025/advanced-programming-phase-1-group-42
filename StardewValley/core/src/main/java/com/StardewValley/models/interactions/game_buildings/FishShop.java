@@ -97,4 +97,8 @@ public class FishShop extends GameBuilding {
             return purchaseProduct(productName, count, productPair);
         }
     }
+
+    public ArrayList<Pair<GoodType, Integer>> getProducts() {
+        return products;
+    }
 }

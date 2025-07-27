@@ -1638,14 +1638,11 @@ public class GameMenuController extends Controller {
         return new Result(true, building.showProducts());
     }
 
-    public Result purchase(String productName, String count) {
+    public Result purchase(String productName, String count, Coordinate coordinate) {
         productName = productName.trim();
         count = count.trim();
 
-        Coordinate coordinate = App.getCurrentGame().getCurrentPlayer().getCoordinate();
-        Tile tile = App.getCurrentGame().getMap().findTile(App.getCurrentGame().getCurrentPlayer().getCoordinate());
-        if (tile.getTileType() != TileType.GAME_BUILDING)
-            return new Result(false, "You should be in a game building to purchase a product!");
+
         if (!App.getCurrentGame().getMap().findGameBuilding(coordinate).isInWorkingHours()) {
             return new Result(false, App.getCurrentGame().getMap().findGameBuilding(coordinate).getName() + " hours have ended for today!");
         }
