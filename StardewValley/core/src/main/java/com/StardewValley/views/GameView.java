@@ -1425,48 +1425,7 @@ public class GameView implements Screen, InputProcessor {
             .center()
             .row();
 
-        info.setWrap(true);
-        info.setWidth(250);
-        info.setFontScale(0.7f);
-        info.setAlignment(Align.center);
-
-        counterPanel.add(info)
-            .width(250)
-            .pad(5)
-            .colspan(3)
-            .center()
-            .row();
-
-        selectedPanel.add(counterPanel)
-            .colspan(3)
-            .center()
-            .padBottom(40)
-            .row();
-
-
-        Table mainTable = new Table();
-        mainTable.setFillParent(true);
-        mainTable.clear();
-
-        mainTable.add(scrollPane)
-            .width(380)
-            .expandY()
-            .fillY()
-            .pad(20)
-            .padRight(30)
-            .padLeft(170);
-
-        mainTable.add(selectedPanel)
-            .width(200)
-            .expandY()
-            .fillY()
-            .pad(30)
-            .padLeft(50)
-            .bottom();
-
-        content.add(mainTable)
-            .expand()
-            .fill();
+        lastConstructionsForShop(info, counterPanel, selectedPanel, scrollPane, content);
     }
 
     private void fishShop(TextButton addButton, Label countLabel, TextButton removeButton, TextButton purchaseButton,
@@ -1537,7 +1496,10 @@ public class GameView implements Screen, InputProcessor {
         }
 
 
+        lastConstructionsForShop(info, counterPanel, selectedPanel, scrollPane, content);
+    }
 
+    private void lastConstructionsForShop(Label info, Table counterPanel, Table selectedPanel, ScrollPane scrollPane, Table content) {
         info.setWrap(true);
         info.setWidth(250);
         info.setFontScale(0.7f);
