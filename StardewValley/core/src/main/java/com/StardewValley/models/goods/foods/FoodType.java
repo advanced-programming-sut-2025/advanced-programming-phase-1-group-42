@@ -40,7 +40,7 @@ public enum FoodType implements GoodType {
         "GameAssets/Recipe/Cookie.png"),
 
     HASH_BROWNS("Hash_Browns", 90, 120, new Buff(BuffType.FARMING_BUFF, 5, 1),
-        "GameAssets/Recipe/Hash_Browns.png"),
+        "GameAssets/Recipe/Hashbrowns.png"),
 
     PANCAKES("Pancakes", 90, 80, new Buff(BuffType.FORAGING_BUFF, 11, 1),
         "GameAssets/Recipe/Pancakes.png"),
@@ -69,8 +69,8 @@ public enum FoodType implements GoodType {
     DISH_O_THE_SEA("Dish_O_The_Sea", 150, 220, new Buff(BuffType.FISHING_BUFF, 5, 1),
         "GameAssets/Recipe/Dish_O_The_Sea.png"),
 
-    SEAFORM_PUDDING("Seaform_Pudding", 175, 300, new Buff(BuffType.FISHING_BUFF, 10, 1),
-        "GameAssets/Recipe/Seaform_Pudding.png"),
+    SEAFOAM_PUDDING("Seafoam_Pudding", 175, 300, new Buff(BuffType.FISHING_BUFF, 10, 1),
+        "GameAssets/Recipe/Seafoam_Pudding.png"),
 
     MINERS_TREAT("Miners_Treat", 125, 200, new Buff(BuffType.MINING_BUFF, 5, 1),
         "GameAssets/Recipe/Miners_Treat.png"),

@@ -13,7 +13,9 @@ import com.StardewValley.models.game_structure.Coordinate;
 import com.StardewValley.models.game_structure.Map;
 import com.StardewValley.models.game_structure.Tile;
 import com.StardewValley.models.goods.Good;
+import com.StardewValley.models.goods.GoodType;
 import com.StardewValley.models.goods.foods.FoodType;
+import com.StardewValley.models.goods.recipes.CookingRecipeType;
 import com.StardewValley.models.goods.tools.Tool;
 import com.StardewValley.models.interactions.Animals.Animal;
 import com.StardewValley.models.interactions.NPCs.NPC;
@@ -66,13 +68,17 @@ public class GameView implements Screen, InputProcessor {
     private final Viewport viewport;
     private int scaledSize;
     private Table inventoryTable;
-    private Table fridgeTable;
+
     private InputMultiplexer multiplexer;
     private Stage staticStage;
     private Window toolsWindow;
     private ScrollPane toolsScrollPane;
     private Table toolsTable;
     private Window fridgeWindow;
+    private Table fridgeTable;
+    private Table cookingTable;
+    private Window cookingWindow;
+    private ScrollPane cookingScrollPane;
     private ScrollPane fridgeScrollPane;
     private Coordinate lastCoordinate;
     private TextField textFieldMessage;
@@ -81,8 +87,8 @@ public class GameView implements Screen, InputProcessor {
     private Animal selectedAnimal = null;
     TextButton.TextButtonStyle style;
     private Boolean isFridgeOpen = false;
-
-
+    private Boolean isCookingOpen = false;
+    private Window recipeWindow;
     private Table mainTable;
     private Window mainWindow;
 
@@ -125,7 +131,7 @@ public class GameView implements Screen, InputProcessor {
 //
 //        App.getCurrentGame().getCurrentPlayer().getFridge().addItemToFridge(Good.newGood(FoodType.APPLE));
 //        App.getCurrentGame().getCurrentPlayer().getFridge().addItemToFridge(Good.newGood(FoodType.BEER));
-
+//        App.getCurrentGame().getCurrentPlayer().getInventory().addGoodByObject(Good.newGood(FoodType.WHEAT_FLOUR));
 
 
         Pixmap normal = new Pixmap(1, 1, Pixmap.Format.RGBA8888);
@@ -239,9 +245,9 @@ public class GameView implements Screen, InputProcessor {
         if (i == Input.Keys.O) {
             for (FarmBuilding building : App.getCurrentGame().getCurrentPlayer().getFarm().getFarmBuildings()) {
                 for (Animal animal : building.getAnimals()) {
-                    if ((Math.abs(animal.getCoordinate().getX() -
+                    if ((abs(animal.getCoordinate().getX() -
                         App.getCurrentGame().getCurrentPlayer().getCoordinate().getX()) <= 2) &&
-                        (Math.abs(animal.getCoordinate().getY() -
+                        (abs(animal.getCoordinate().getY() -
                             App.getCurrentGame().getCurrentPlayer().getCoordinate().getY()) <= 2)) {
                         animal.petAnimal();
                         buildMessage();
@@ -255,9 +261,10 @@ public class GameView implements Screen, InputProcessor {
             return true;
         }
 
+        Tile selectedTile = App.getCurrentGame().getMap().findTileByXY(App.getCurrentGame().getCurrentPlayer().getCoordinate().getX()
+            , App.getCurrentGame().getCurrentPlayer().getCoordinate().getY());
+
         if (i == Input.Keys.F) {
-            Tile selectedTile = App.getCurrentGame().getMap().findTileByXY(App.getCurrentGame().getCurrentPlayer().getCoordinate().getX()
-                , App.getCurrentGame().getCurrentPlayer().getCoordinate().getY());
             if (selectedTile.getTileType() == TileType.PLAYER_BUILDING) {
                 if (!isFridgeOpen) {
                     initFridgeWindow();
@@ -265,6 +272,19 @@ public class GameView implements Screen, InputProcessor {
                     fridgeWindow.remove();
                 }
                 isFridgeOpen = !isFridgeOpen;
+                return true;
+            }
+        }
+
+
+        if (i == Input.Keys.C) {
+            if (selectedTile.getTileType() == TileType.PLAYER_BUILDING) {
+                if (!isCookingOpen) {
+                    initCookingWindow();
+                } else {
+                    cookingWindow.remove();
+                }
+                isCookingOpen = !isCookingOpen;
                 return true;
             }
         }
@@ -1142,6 +1162,7 @@ public class GameView implements Screen, InputProcessor {
         controller.getFridgeController().updateFridge();
 
         fridgeTable.clearChildren();
+        fridgeTable.clear();
 
         int columns = 4;
         int count = 0;
@@ -1188,6 +1209,137 @@ public class GameView implements Screen, InputProcessor {
         staticStage.addActor(fridgeWindow);
         setInputProcessor();
     }
+
+    public void initCookingWindow() {
+        if (cookingWindow != null) {
+            cookingWindow.remove();
+        }
+
+        cookingWindow = new Window("Cooking Recipes", skin, "Letter");
+        cookingWindow.setSize(700, 550);
+        cookingWindow.setPosition(
+            (Gdx.graphics.getWidth() - cookingWindow.getWidth()) / 2,
+            (Gdx.graphics.getHeight() - cookingWindow.getHeight()) / 2
+        );
+
+        cookingTable = new Table(skin);
+        cookingTable.top().left();
+        cookingTable.setFillParent(false);
+
+        controller.getCookingController().refreshRecipes();
+
+        ArrayList<Pair<Pair<ImageButton, Image>, Integer>> cookingRecipes = controller.getCookingController().getCookingRecipe();
+
+        int columns = 5;
+        int count = 0;
+
+        for (Pair<Pair<ImageButton, Image>, Integer> pair : cookingRecipes) {
+            ImageButton slotButton = pair.first().first();
+            Image itemImage = pair.first().second();
+
+            Table itemTable = new Table(skin);
+            itemTable.add(slotButton).size(64, 64).padRight(5);
+            itemTable.add(itemImage).size(48, 48).padLeft(-48);
+
+            cookingTable.add(itemTable).pad(5);
+
+            count++;
+            if (count % columns == 0) {
+                cookingTable.row();
+            }
+        }
+
+        ScrollPane cookingScrollPane = new ScrollPane(cookingTable, skin);
+        cookingScrollPane.setFadeScrollBars(false);
+        cookingScrollPane.setForceScroll(false, true);
+
+        cookingWindow.add(cookingScrollPane).expand().fill();
+        staticStage.addActor(cookingWindow);
+        Gdx.input.setInputProcessor(staticStage);
+    }
+
+    public void showRecipeDetails(CookingRecipeType recipeType) {
+        if (recipeWindow != null) {
+            recipeWindow.remove();
+        }
+
+        recipeWindow = new Window("Recipe: " + recipeType.getName(), skin, "Letter");
+        recipeWindow.pad(10);
+        recipeWindow.getTitleLabel().setFontScale(0.7f);
+        recipeWindow.setMovable(true);
+        recipeWindow.setModal(true);
+
+        recipeWindow.setSize(400, 300);
+        recipeWindow.setPosition(
+            (Gdx.graphics.getWidth() - recipeWindow.getWidth()) / 2 + scaledSize * 6,
+            (Gdx.graphics.getHeight() - recipeWindow.getHeight()) / 2
+        );
+
+        Table contentTable = new Table(skin);
+        contentTable.pad(10);
+        contentTable.defaults().left().pad(4);
+
+        Label recipeLabel = new Label(recipeType.getName(), skin);
+        recipeLabel.setFontScale(0.6f);
+        contentTable.add(recipeLabel).left().row();
+
+        StringBuilder ingredientsText = new StringBuilder();
+        for (Pair<GoodType, Integer> pair : recipeType.getIngredients()) {
+            ingredientsText.append("- ").append(pair.first().getName())
+                .append(" × ").append(pair.second()).append("\n");
+        }
+
+        Label ingredientsLabel = new Label("Ingredients:\n\n" + ingredientsText.toString(), skin);
+        ingredientsLabel.setFontScale(0.5f);
+        contentTable.add(ingredientsLabel).left().row();
+
+        final Label cookingResult = new Label(" ", skin);
+        cookingResult.setFontScale(0.5f);
+        cookingResult.setAlignment(Align.center);
+        cookingResult.setWrap(true);
+        contentTable.add(cookingResult)
+            .center()
+            .minWidth(300)
+            .minHeight(40)
+            .row();
+
+        Table buttonTable = new Table();
+        TextButton closeButton = new TextButton("X", style);
+        closeButton.pad(5);
+        TextButton cookingButton = new TextButton("Cook", style);
+        cookingButton.pad(5);
+
+        closeButton.addListener(new ClickListener() {
+            @Override
+            public void clicked(InputEvent event, float x, float y) {
+                recipeWindow.remove();
+                Gdx.input.setInputProcessor(staticStage);
+            }
+        });
+
+        cookingButton.addListener(new ClickListener() {
+            @Override
+            public void clicked(InputEvent event, float x, float y) {
+                Result res = controller.cookingPrepare(recipeType.getName());
+                cookingResult.setText(res.message());
+            }
+        });
+
+        buttonTable.add(closeButton).pad(5);
+        buttonTable.add(cookingButton).pad(5);
+        contentTable.add(buttonTable).center().padTop(10).row();
+
+        recipeWindow.add(contentTable).expand().fill();
+
+        staticStage.addActor(recipeWindow);
+
+        multiplexer.clear();
+        multiplexer.addProcessor(recipeWindow.getStage());
+        multiplexer.addProcessor(staticStage);
+        Gdx.input.setInputProcessor(multiplexer);
+    }
+
+
 
     public int getScaledSize() {
         return scaledSize;

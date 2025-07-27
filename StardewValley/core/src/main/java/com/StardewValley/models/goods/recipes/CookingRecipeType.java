@@ -76,7 +76,7 @@ public enum CookingRecipeType implements GoodType {
     HASH_BROWNS(new ArrayList<>(Arrays.asList(
         new Pair<>(FarmingCropType.POTATO, 1),
         new Pair<>(ProductType.OIL, 1)
-    )), FoodType.HASH_BROWNS,"GameAssets/Recipe/Hash_Browns.png"),
+    )), FoodType.HASH_BROWNS,"GameAssets/Recipe/Hashbrowns.png"),
 
     PANCAKES(new ArrayList<>(Arrays.asList(
         new Pair<>(FoodType.WHEAT_FLOUR, 1),
@@ -128,7 +128,7 @@ public enum CookingRecipeType implements GoodType {
     SEAFOAM_PUDDING(new ArrayList<>(Arrays.asList(
         new Pair<>(FishType.FLOUNDER, 1),
         new Pair<>(FishType.MIDNIGHT_CARP, 1)
-    )), FoodType.SEAFORM_PUDDING,"GameAssets/Recipe/Seafoam_Pudding.png"),
+    )), FoodType.SEAFOAM_PUDDING,"GameAssets/Recipe/Seafoam_Pudding.png"),
 
     MINERS_TREAT(new ArrayList<>(Arrays.asList(
         new Pair<>(FarmingCropType.CARROT, 2),
