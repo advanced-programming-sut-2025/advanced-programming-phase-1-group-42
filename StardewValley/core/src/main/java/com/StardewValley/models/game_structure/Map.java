@@ -391,21 +391,22 @@ public class Map {
     boolean printMapFlag = false;
     public void printGraphicalMap(Stage stage) {
 
+        int k = 8;
         if (!printMapFlag) {
             mapWindow = new Window("Map", Assets.getInstance().getSkin());
-            mapWindow.setSize(1000, 1000);
+            mapWindow.setSize(1600, 1000);
             mapWindow.setPosition(
                 (Gdx.graphics.getWidth() - mapWindow.getWidth()) / 2f,
                 (Gdx.graphics.getHeight() - mapWindow.getHeight()) / 2f
             );
 
             Table mapTable = new Table();
-            mapTable.defaults().width(6).height(6);
+            mapTable.defaults().width(k).height(k);
 
             for (int j = 0; j < 160; j++) {
                 mapTable.row();
                 for (int i = 0; i < 150; i++) {
-                    Coordinate coordinate = new Coordinate(i, j);
+                    Coordinate coordinate = new Coordinate(i, 160 - j);
                     Tile tile = findTile(coordinate);
                     Image img = plain_img;
 
@@ -476,14 +477,14 @@ public class Map {
                     Image bg = new Image(determineTileBackground(tile).getDrawable()); // background image
                     Image fg = new Image(img.getDrawable()); // foreground image
 
-                    
-                    bg.setSize(6, 6);
-                    fg.setSize(6, 6);
+
+                    bg.setSize(k, k);
+                    fg.setSize(k, k);
 
                     cellStack.add(bg);
                     cellStack.add(fg);
 
-                    mapTable.add(cellStack).width(6).height(6);
+                    mapTable.add(cellStack).width(k).height(k);
 
                 }
             }
@@ -590,34 +591,35 @@ public class Map {
         willy_img = new Image(new TextureRegionDrawable(willy));
 
 // Set sizes for all images (6x6)
-        farm_Background_img.setSize(6, 6);
-        empty_img.setSize(6, 6);
-        wall_img.setSize(6, 6);
-        water_img.setSize(6, 6);
-        greenhouse_img.setSize(6, 6);
-        playerBuilding_img.setSize(6, 6);
-        quarry_img.setSize(6, 6);
-        road_img.setSize(6, 6);
-        beach_img.setSize(6, 6);
-        square_img.setSize(6, 6);
-        wateredFarm_img.setSize(6, 6);
-        tree_img.setSize(6, 6);
-        seed_img.setSize(6, 6);
-        Crop_img.setSize(6, 6);
-        player_img.setSize(6, 6);
-        mushroomTree_img.setSize(6, 6);
-        plain_img.setSize(6, 6);
-        abigail_img.setSize(6, 6);
-        clint_img.setSize(6, 6);
-        gus_img.setSize(6, 6);
-        harvey_img.setSize(6, 6);
-        leah_img.setSize(6, 6);
-        marnie_img.setSize(6, 6);
-        morris_img.setSize(6, 6);
-        pierre_img.setSize(6, 6);
-        robin_img.setSize(6, 6);
-        sebastian_img.setSize(6, 6);
-        willy_img.setSize(6, 6);
+        int n = 8;
+        farm_Background_img.setSize(n, n);
+        empty_img.setSize(n, n);
+        wall_img.setSize(n, n);
+        water_img.setSize(n, n);
+        greenhouse_img.setSize(n, n);
+        playerBuilding_img.setSize(n, n);
+        quarry_img.setSize(n, n);
+        road_img.setSize(n, n);
+        beach_img.setSize(n, n);
+        square_img.setSize(n, n);
+        wateredFarm_img.setSize(n, n);
+        tree_img.setSize(n, n);
+        seed_img.setSize(n, n);
+        Crop_img.setSize(n, n);
+        player_img.setSize(n, n);
+        mushroomTree_img.setSize(n, n);
+        plain_img.setSize(n, n);
+        abigail_img.setSize(n, n);
+        clint_img.setSize(n, n);
+        gus_img.setSize(n, n);
+        harvey_img.setSize(n, n);
+        leah_img.setSize(n, n);
+        marnie_img.setSize(n, n);
+        morris_img.setSize(n, n);
+        pierre_img.setSize(n, n);
+        robin_img.setSize(n, n);
+        sebastian_img.setSize(n ,n);
+        willy_img.setSize(n, n);
     }
 
 
