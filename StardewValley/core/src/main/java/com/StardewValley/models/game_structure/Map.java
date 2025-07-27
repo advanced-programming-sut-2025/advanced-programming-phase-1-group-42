@@ -41,12 +41,6 @@ public class Map {
 
 
 
-
-
-
-
-
-
     //Textures
     Texture farm_Background;
     Texture empty;
@@ -476,7 +470,7 @@ public class Map {
                     Image bg = new Image(determineTileBackground(tile).getDrawable()); // background image
                     Image fg = new Image(img.getDrawable()); // foreground image
 
-                    
+
                     bg.setSize(6, 6);
                     fg.setSize(6, 6);
 
@@ -530,34 +524,34 @@ public class Map {
         };
     }
     public void declareTextures(){
-        farm_Background = new Texture("assets\\GameAssets\\Map\\Farm.png");
-        empty = new Texture("assets\\GameAssets\\Map\\Border.png");
-        wall = new Texture("assets\\GameAssets\\Map\\Wall.png");
-        water = new Texture("assets\\GameAssets\\Map\\Water.png");
-        greenhouse = new Texture("assets\\GameAssets\\Map\\Greenhouse.png");
-        playerBuilding = new Texture("assets\\GameAssets\\Map\\House.png");
-        quarry = new Texture("assets\\GameAssets\\Map\\Quarry.png");
-        road = new Texture("assets\\GameAssets\\Map\\Road.png");
-        beach = new Texture("assets\\GameAssets\\Map\\Beach.png");
-        square = new Texture("assets\\GameAssets\\Map\\Square.png");
-        wateredFarm = new Texture("assets\\GameAssets\\Map\\WateredFarm.png");
-        tree = new Texture("assets\\GameAssets\\Map\\Tree.png");
-        seed = new Texture("assets\\GameAssets\\Map\\Seed.png");
-        Crop = new Texture("assets\\GameAssets\\Map\\Crop.png");
-        playerTexture = new Texture("assets\\GameAssets\\Map\\Player.png");
-        mushroomTree = new Texture("assets\\GameAssets\\Map\\MushroomTree.png");
-        plain = new Texture("assets\\GameAssets\\Map\\Plain.png");
-        abigail = new Texture("assets\\GameAssets\\Map\\Abigail.png");
-        clint = new Texture("assets\\GameAssets\\Map\\Clint.png");
-        gus = new Texture("assets\\GameAssets\\Map\\Gus.png");
-        harvey = new Texture("assets\\GameAssets\\Map\\Harvey.png");
-        leah = new Texture("assets\\GameAssets\\Map\\Leah.png");
-        marnie = new Texture("assets\\GameAssets\\Map\\Marnie.png");
-        morris = new Texture("assets\\GameAssets\\Map\\Morris.png");
-        pierre = new Texture("assets\\GameAssets\\Map\\Pierre.png");
-        robin = new Texture("assets\\GameAssets\\Map\\Robin.png");
-        sebastian = new Texture("assets\\GameAssets\\Map\\Sebastian.png");
-        willy = new Texture("assets\\GameAssets\\Map\\Willy.png");
+        farm_Background = new Texture("GameAssets/Map/Farm.png");
+        empty = new Texture("GameAssets/Map/Border.png");
+        wall = new Texture("GameAssets/Map/Wall.png");
+        water = new Texture("GameAssets/Map/Water.png");
+        greenhouse = new Texture("GameAssets/Map/Greenhouse.png");
+        playerBuilding = new Texture("GameAssets/Map/House.png");
+        quarry = new Texture("GameAssets/Map/Quarry.png");
+        road = new Texture("GameAssets/Map/Road.png");
+        beach = new Texture("GameAssets/Map/Beach.png");
+        square = new Texture("GameAssets/Map/Square.png");
+        wateredFarm = new Texture("GameAssets/Map/WateredFarm.png");
+        tree = new Texture("GameAssets/Map/Tree.png");
+        seed = new Texture("GameAssets/Map/Seed.png");
+        Crop = new Texture("GameAssets/Map/Crop.png");
+        playerTexture = new Texture("GameAssets/Map/Player.png");
+        mushroomTree = new Texture("GameAssets/Map/MushroomTree.png");
+        plain = new Texture("GameAssets/Map/Plain.png");
+        abigail = new Texture("GameAssets/Map/Abigail.png");
+        clint = new Texture("GameAssets/Map/Clint.png");
+        gus = new Texture("GameAssets/Map/Gus.png");
+        harvey = new Texture("GameAssets/Map/Harvey.png");
+        leah = new Texture("GameAssets/Map/Leah.png");
+        marnie = new Texture("GameAssets/Map/Marnie.png");
+        morris = new Texture("GameAssets/Map/Morris.png");
+        pierre = new Texture("GameAssets/Map/Pierre.png");
+        robin = new Texture("GameAssets/Map/Robin.png");
+        sebastian = new Texture("GameAssets/Map/Sebastian.png");
+        willy = new Texture("GameAssets/Map/Willy.png");
 
 // Create Image objects for all textures
         farm_Background_img = new Image(new TextureRegionDrawable(farm_Background));
