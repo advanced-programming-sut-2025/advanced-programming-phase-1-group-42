@@ -77,6 +77,7 @@ public class GameMenuController extends Controller {
     private GameView gameView;
     private FridgeController fridgeController;
     private CookingController cookingController;
+    private CraftingController craftingController;
 
 
     public void setView(GameMenuView view) {
@@ -91,6 +92,7 @@ public class GameMenuController extends Controller {
         clockController = new ClockController();
         fridgeController = new FridgeController(gameView);
         cookingController = new CookingController(gameView);
+        craftingController = new CraftingController(gameView);
 
     }
 
@@ -112,6 +114,10 @@ public class GameMenuController extends Controller {
 
     public CookingController getCookingController() {
         return cookingController;
+    }
+
+    public CraftingController getCraftingController() {
+        return craftingController;
     }
 
     public void handleGameMenu() {
@@ -1038,8 +1044,9 @@ public class GameMenuController extends Controller {
         for (CraftingRecipe craftingRecipe : App.getCurrentGame().getCurrentPlayer().getCraftingRecipes()) {
             if (craftingRecipe.getName().equals(itemName)) {
                 CraftingFunctions craftingFunctions = new CraftingFunctions();
-                craftingFunctions.checkCraftingFunctions((CraftingRecipeType) craftingRecipe.getType());
-                return new Result(true, "");
+                Result result;
+                result = craftingFunctions.checkCraftingFunctions((CraftingRecipeType) craftingRecipe.getType());
+                return new Result(true, result.message());
             }
         }
         return new Result(false, "You don't have " + itemName + " recipe!");
