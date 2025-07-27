@@ -95,7 +95,7 @@ public class GameView implements Screen, InputProcessor {
     TextButton.TextButtonStyle style;
     private Boolean isFridgeOpen = false;
     private Boolean isCookingOpen = false;
-    private Boolean isCraftingOpen = false;
+    public Boolean isCraftingOpen = false;
     private Window cookingRecipeWindow;
     private Window craftingRecipeWindow;
     private Table mainTable;
@@ -260,66 +260,6 @@ public class GameView implements Screen, InputProcessor {
 
     @Override
     public boolean keyDown(int i) {
-        if (i == Input.Keys.O) {
-            for (FarmBuilding building : App.getCurrentGame().getCurrentPlayer().getFarm().getFarmBuildings()) {
-                for (Animal animal : building.getAnimals()) {
-                    if ((abs(animal.getCoordinate().getX() -
-                        App.getCurrentGame().getCurrentPlayer().getCoordinate().getX()) <= 2) &&
-                        (abs(animal.getCoordinate().getY() -
-                            App.getCurrentGame().getCurrentPlayer().getCoordinate().getY()) <= 2)) {
-                        animal.petAnimal();
-                        buildMessage();
-                        textFieldMessage.setText("You petted " + animal.getName());
-                        return true;
-                    }
-                }
-            }
-            buildMessage();
-            textFieldMessage.setText("Please approach an animal to pet");
-            return true;
-        }
-
-        Tile selectedTile = App.getCurrentGame().getMap().findTileByXY(App.getCurrentGame().getCurrentPlayer().getCoordinate().getX()
-            , App.getCurrentGame().getCurrentPlayer().getCoordinate().getY());
-
-        if (i == Input.Keys.F) {
-            if (selectedTile.getTileType() == TileType.PLAYER_BUILDING) {
-                if (!isFridgeOpen) {
-                    initFridgeWindow();
-                } else {
-                    fridgeWindow.remove();
-                }
-                isFridgeOpen = !isFridgeOpen;
-                return true;
-            }
-        }
-
-
-        if (i == Input.Keys.C) {
-            if (selectedTile.getTileType() == TileType.PLAYER_BUILDING) {
-                if (!isCookingOpen) {
-                    initCookingWindow();
-                } else {
-                    cookingWindow.remove();
-                }
-                isCookingOpen = !isCookingOpen;
-                return true;
-            }
-        }
-
-
-        if (i == Input.Keys.B) {
-            if (selectedTile.getTileType() == TileType.PLAYER_BUILDING) {
-                if (!isCraftingOpen) {
-                    initCraftingWindow();
-                } else {
-                    craftingWindow.remove();
-                }
-                isCraftingOpen = !isCraftingOpen;
-                return true;
-            }
-        }
-
         return false;
     }
 
@@ -1768,6 +1708,18 @@ public class GameView implements Screen, InputProcessor {
 
     public Window getCookingWindow() {
         return cookingWindow;
+    }
+
+    public Window getCraftingWindow(){
+        return craftingWindow;
+    }
+
+    public void setIsCraftingOpen(boolean isCraftingOpen) {
+        this.isCraftingOpen = isCraftingOpen;
+    }
+
+    public Boolean getIsCraftingOpen() {
+        return isCraftingOpen;
     }
 }
 

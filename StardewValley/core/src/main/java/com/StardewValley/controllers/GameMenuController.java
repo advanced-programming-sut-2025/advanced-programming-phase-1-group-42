@@ -309,6 +309,19 @@ public class GameMenuController extends Controller {
             }
         }
 
+        if (Gdx.input.isKeyJustPressed(Input.Keys.B)) {
+            Tile selectedTile = App.getCurrentGame().getMap().findTileByXY(App.getCurrentGame().getCurrentPlayer().getCoordinate().getX()
+                , App.getCurrentGame().getCurrentPlayer().getCoordinate().getY());
+            if (selectedTile.getTileType() == TileType.PLAYER_BUILDING) {
+                if (!gameView.getIsCraftingOpen()) {
+                    gameView.initCraftingWindow();
+                } else {
+                    gameView.getCraftingWindow().remove();
+                }
+                gameView.setIsCraftingOpen(!gameView.getIsCraftingOpen());
+            }
+        }
+
         ArrayList<Integer> arr = new ArrayList<>(Arrays.asList(
             8, 9, 10, 11, 12, 13, 14, 15, 16, 7, 69, 70
         ));
