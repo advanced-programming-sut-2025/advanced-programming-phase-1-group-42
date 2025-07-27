@@ -76,6 +76,7 @@ public class GameMenuController extends Controller {
     private GameMenuView view;
     private GameView gameView;
     private FridgeController fridgeController;
+    private CookingController cookingController;
 
 
     public void setView(GameMenuView view) {
@@ -89,6 +90,7 @@ public class GameMenuController extends Controller {
         inventoryController = new InventoryController(gameView);
         clockController = new ClockController();
         fridgeController = new FridgeController(gameView);
+        cookingController = new CookingController(gameView);
 
     }
 
@@ -106,6 +108,10 @@ public class GameMenuController extends Controller {
 
     public FridgeController getFridgeController() {
         return fridgeController;
+    }
+
+    public CookingController getCookingController() {
+        return cookingController;
     }
 
     public void handleGameMenu() {
