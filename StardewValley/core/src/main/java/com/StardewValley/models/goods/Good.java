@@ -103,6 +103,12 @@ public abstract class Good {
 
         typeName = typeName.trim();
 
+
+        for (ForagingMineralType value : ForagingMineralType.values()) {
+            if(value.getName().equals(typeName))
+                return value;
+        }
+
         for (CraftingType value : CraftingType.values()) {
             if(value.getName().equals(typeName))
                 return value;
@@ -144,11 +150,6 @@ public abstract class Good {
         }
 
         for (ForagingMixedSeedType value : ForagingMixedSeedType.values()) {
-            if(value.getName().equals(typeName))
-                return value;
-        }
-
-        for (ForagingMineralType value : ForagingMineralType.values()) {
             if(value.getName().equals(typeName))
                 return value;
         }

@@ -4,18 +4,18 @@ import com.StardewValley.models.App;
 import com.StardewValley.models.goods.GoodType;
 
 public enum ToolType implements GoodType {
-    HOE("Hoe", -1, 5,"/assets/GameAssets/Tools/Pickaxe/Pickaxe.png"),
-    PICKAXE("Pickaxe", -1,5,"/assets/GameAssets/Tools/Pickaxe/Pickaxe.png"),
-    AXE("Axe", -1, 5,"/assets/GameAssets/Tools/Axe/Axe.png"),
-    WATERING_CAN("Watering_Can", -1, 5,"/assets/GameAssets/Tools/Watering_Can.png"), //?
-    SCYTHE("Scythe", -1, 2,"/assets/GameAssets/Tools/Scythe.png"),
-    MILK_PAIL("Milk_Pail", 1000, 4,"/assets/GameAssets/Tools/Milk_Pail.png"),
-    SHEAR("Shear", 1000, 4,"/assets/GameAssets/Tools/Shears.png"),
-    TRASH_CAN("Trash_Can", 0,0,"/assets/GameAssets/Tools/Trash_Can.png"), //??
-    TRAINING_FISHING_POLE("Training_Fishing_Pole", 25, 8,"/assets/GameAssets/Tools/Training_Rod.png"),
-    BAMBOO_FISHING_POLE("Bamboo_Fishing_Pole", 500, 8,"/assets/GameAssets/Fishing_Pole/Bamboo_Pole.png"),
-    FIBERGLASS_FISHING_POLE("Fiberglass_Fishing_Pole", 1800, 6,"/assets/GameAssets/Fishing_Pole/Fiberglass_Rod.png"),
-    IRIDIUM_FISHING_POLE("Iridium_Fishing_Pole", 7500, 4 , "/assets/GameAssets/Fishing_Pole/Iridium_Rod.png");
+    HOE("Hoe", -1, 5,"GameAssets/Hoe/Hoe.png"),
+    PICKAXE("Pickaxe", -1,5,"GameAssets/Tools/Pickaxe/Pickaxe.png"),
+    AXE("Axe", -1, 5,"GameAssets/Tools/Axe/Axe.png"),
+    WATERING_CAN("Watering_Can", -1, 5,"GameAssets/Watering_Can/Watering_Can.png"), //?
+    SCYTHE("Scythe", -1, 2,"GameAssets/Tools/Scythe.png"),
+    MILK_PAIL("Milk_Pail", 1000, 4,"GameAssets/Tools/Milk_Pail.png"),
+    SHEAR("Shear", 1000, 4,"GameAssets/Tools/Shears.png"),
+    TRASH_CAN("Trash_Can", 0,0,"GameAssets/Tools/Trash_Can.png"), //??
+    TRAINING_FISHING_POLE("Training_Fishing_Pole", 25, 8,"GameAssets/Tools/Training_Rod.png"),
+    BAMBOO_FISHING_POLE("Bamboo_Fishing_Pole", 500, 8,"GameAssets/Fishing_Pole/Bamboo_Pole.png"),
+    FIBERGLASS_FISHING_POLE("Fiberglass_Fishing_Pole", 1800, 6,"GameAssets/Fishing_Pole/Fiberglass_Rod.png"),
+    IRIDIUM_FISHING_POLE("Iridium_Fishing_Pole", 7500, 4 , "GameAssets/Fishing_Pole/Iridium_Rod.png");
 
     @Override
     public int getSellPrice() {
@@ -46,7 +46,7 @@ public enum ToolType implements GoodType {
 
     @Override
     public String imagePath() {
-        return "";
+        return imagePath;
     }
 
 

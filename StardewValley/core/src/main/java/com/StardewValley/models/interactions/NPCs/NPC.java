@@ -38,7 +38,7 @@ public class NPC {
     }
 
 
-    public void npcDialogs() {
+    public String  npcDialogs() {
         for (NPCFriendship friendship : friendships) {
             if (friendship.getPlayer().equals(App.getCurrentGame().getCurrentPlayer())) {
                 if (friendship.getFirstMeetToday()){
@@ -49,8 +49,7 @@ public class NPC {
         }
 
         if (isBirthdayToday()) {
-            System.out.print(type.getDialogs().getFirst());
-            return;
+            return type.getDialogs().getFirst();
         }
 
         Random random = new Random();
@@ -59,8 +58,7 @@ public class NPC {
         int randomInterest = random.nextInt(3);
         if (randomInterest == 0) {
             int randomInterestIndex = random.nextInt(2);
-            System.out.print(type.getDialogs().get(randomInterestIndex+10));
-            return;
+            return type.getDialogs().get(randomInterestIndex+10);
         }
 
 
@@ -89,12 +87,14 @@ public class NPC {
 
         if (seasonIndex != -1 && weatherIndex != -1) {
             int dialogIndex = random.nextBoolean() ? seasonIndex : weatherIndex;
-            System.out.print(type.getDialogs().get(dialogIndex));
+            return type.getDialogs().get(dialogIndex);
         } else if (seasonIndex != -1) {
-            System.out.print(type.getDialogs().get(seasonIndex));
+            return type.getDialogs().get(seasonIndex);
         } else if (weatherIndex != -1) {
-            System.out.print(type.getDialogs().get(weatherIndex));
+            return type.getDialogs().get(weatherIndex);
         }
+
+        return null;
 
     }
 
