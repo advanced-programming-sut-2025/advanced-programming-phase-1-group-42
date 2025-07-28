@@ -10,6 +10,7 @@ import com.StardewValley.models.enums.Season;
 import com.StardewValley.models.enums.TileAssets;
 import com.StardewValley.models.enums.TileType;
 import com.StardewValley.models.game_structure.Coordinate;
+import com.StardewValley.models.game_structure.Gift;
 import com.StardewValley.models.game_structure.Map;
 import com.StardewValley.models.game_structure.Tile;
 import com.StardewValley.models.goods.Good;
@@ -50,6 +51,7 @@ import com.badlogic.gdx.scenes.scene2d.ui.*;
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 import com.badlogic.gdx.scenes.scene2d.utils.Drawable;
 import com.badlogic.gdx.utils.Align;
+import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.viewport.FitViewport;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
@@ -105,6 +107,21 @@ public class GameView implements Screen, InputProcessor {
     private TextField cheatTextField;
     private TextButton cheatButton;
 
+    private TextButton friendsButton;
+    private Window friendsWindow;
+    private Table friendsTable;
+    private TextButton friendsBackButton;
+
+    private Window playerGiftWindow;
+    private Table playerGiftTable;
+    private Label playerGiftLabel;
+    private SelectBox<String> playerGiftSelectBox;
+    private SelectBox<Integer> playerCountGiftSelectBox;
+    private TextButton playerGiftButton;
+    private ScrollPane playerGiftScrollPane;
+    private Table giftTable;
+    private Label messageGiftLabel;
+    private TextButton playerGiftBackButton;
 
     public GameView(GameMenuController controller, Skin skin) {
         this.controller = controller;
@@ -122,10 +139,22 @@ public class GameView implements Screen, InputProcessor {
         this.inventoryTable = new Table(skin);
         this.inventoryTable.setFillParent(true);
         drawInventory();
+        friendsButton = new TextButton("Friendships", skin);
+        friendsButton.addListener(new ClickListener() {
+            @Override
+            public void clicked(InputEvent event, float x, float y) {
+                if (friendsWindow == null)
+                    initFriendshipsWindow();
+                else
+                    closeFriendshipsWindow();
+            }
+        });
 
-        this.table.add(inventoryTable).padTop(1500).padLeft(-50);
-        this.table.add(controller.getInventoryController().getProgressBar()).padTop(600).padLeft(800);
+        this.table.add(friendsButton).padTop(400).padLeft(-400).height(70).row();
+        this.table.add(inventoryTable).padTop(1100).padLeft(-50);
+        this.table.add(controller.getInventoryController().getProgressBar()).padTop(200).padLeft(800);
         this.table.row();
+
 
         fridgeWindow = new Window("Fridge", Assets.getInstance().getSkin());
 
@@ -165,6 +194,7 @@ public class GameView implements Screen, InputProcessor {
         style.over = hoverDrawable;
         style.down = normalDrawable.tint(Color.GRAY);
         style.font = font;
+
 
     }
 
@@ -1825,9 +1855,6 @@ public class GameView implements Screen, InputProcessor {
         staticStage.addActor(craftingRecipeWindow);
     }
 
-
-
-
     public int getScaledSize() {
         return scaledSize;
     }
@@ -2189,6 +2216,171 @@ public class GameView implements Screen, InputProcessor {
 
     public Boolean getIsCraftingOpen() {
         return isCraftingOpen;
+    }
+
+    private void initFriendshipsWindow() {
+        this.friendsWindow = new Window("Friendships", skin, "Letter");
+        this.friendsWindow.setSize(1000, 350);
+        this.friendsWindow.setResizable(false);
+        friendsWindow.setPosition(
+            (staticStage.getWidth() - friendsWindow.getWidth()) / 2,
+            (staticStage.getHeight() - friendsWindow.getHeight()) / 2
+        );
+        friendsTable = new Table(skin);
+        friendsTable.setFillParent(true);
+        friendsTable.pad(40).padRight(130);
+
+        for (Player player : App.getCurrentGame().getCurrentPlayer().getFriendShips().keySet()) {
+            Pair<Integer, Integer> pair = App.getCurrentGame().getCurrentPlayer().getFriendShips().get(player);
+            Label label = new Label(player.getPlayerUsername() + "> Level: " +
+                pair.first() + ", Value: " + pair.second(), skin);
+            TextButton button = new TextButton("Send Gift", skin);
+            button.addListener(new ClickListener() {
+                @Override
+                public void clicked(InputEvent event, float x, float y) {
+                    closeFriendshipsWindow();
+                    initPlayerGiftWindow(player);
+                }
+            });
+
+
+            friendsTable.add(label).height(50).padRight(50);
+            friendsTable.add(button).height(70);
+            friendsTable.row();
+        }
+
+        friendsBackButton = new TextButton("Back", skin);
+        friendsBackButton.addListener(new ClickListener() {
+            @Override
+            public void clicked(InputEvent event, float x, float y) {
+                closeFriendshipsWindow();
+            }
+        });
+        friendsTable.add(friendsBackButton).colspan(2).fillX().height(70).padTop(10).row();
+
+        friendsWindow.add(friendsTable);
+        staticStage.addActor(friendsWindow);
+    }
+
+    private void closeFriendshipsWindow() {
+        friendsWindow.remove();
+        friendsTable.remove();
+        friendsWindow = null;
+    }
+
+    private void initPlayerGiftWindow(Player player) {
+        playerGiftWindow = new Window(player.getPlayerUsername() + " Gift", skin);
+        playerGiftWindow.setSize(1300, 800);
+        this.playerGiftWindow.setResizable(false);
+        playerGiftWindow.setPosition(
+            (staticStage.getWidth() - playerGiftWindow.getWidth()) / 2,
+            (staticStage.getHeight() - playerGiftWindow.getHeight()) / 2
+        );
+        playerGiftTable = new Table(skin);
+        playerGiftTable.setFillParent(true);
+        playerGiftTable.pad(40).padRight(150);
+
+        playerGiftLabel = new Label("Select your gift: ", skin);
+        playerGiftTable.add(playerGiftLabel).padRight(10);
+        playerGiftSelectBox = new SelectBox<>(skin);
+        Array<String> inventoryNames = new Array<>();
+        for (ArrayList<Good> goods : App.getCurrentGame().getCurrentPlayer().getInventory().getList()) {
+            if (!goods.isEmpty())
+                inventoryNames.add(goods.getLast().getName());
+        }
+        playerGiftSelectBox.setItems(inventoryNames);
+        playerGiftSelectBox.setSelectedIndex(0);
+        playerGiftTable.add(playerGiftSelectBox).padRight(10);
+
+        playerCountGiftSelectBox = new SelectBox<>(skin);
+        Array<Integer> counters = new Array<>();
+        int ptr = App.getCurrentGame().getCurrentPlayer().getInventory().getFirstElementSize();
+        for (int i = 1; i <= ptr; i++) {
+            counters.add(i);
+        }
+        playerCountGiftSelectBox.setItems(counters);
+        playerGiftSelectBox.addListener(new ChangeListener() {
+            @Override
+            public void changed(ChangeEvent event, Actor actor) {
+                Array<Integer> counters = new Array<>();
+                String selected = playerGiftSelectBox.getSelected();
+                int ptr = App.getCurrentGame().getCurrentPlayer().getInventory().isInInventory(selected).size();
+                for (int i = 1; i <= ptr; i++) {
+                    counters.add(i);
+                }
+
+                playerCountGiftSelectBox.setItems(counters);
+            }
+        });
+        playerGiftTable.add(playerCountGiftSelectBox).padRight(10);
+
+        playerGiftButton = new TextButton("Send Gift", skin);
+        playerGiftTable.add(playerGiftButton).row();
+        messageGiftLabel = new Label("", skin);
+        playerGiftTable.add(messageGiftLabel).colspan(4).row();
+        playerGiftButton.addListener(new ClickListener() {
+            @Override
+            public void clicked(InputEvent event, float x, float y) {
+                Result res = controller.gift(player.getPlayerUsername(), playerGiftSelectBox.getSelected(),
+                    Integer.toString(playerCountGiftSelectBox.getSelected()));
+
+                messageGiftLabel.setText(res.message());
+            }
+        });
+
+        giftTable = new Table(skin);
+        int giftListPtr = 1;
+        for (Pair<Player, Gift> playerGiftPair : App.getCurrentGame().getCurrentPlayer().getGiftList()) {
+            if (!playerGiftPair.first().getPlayerUsername().equals(player.getPlayerUsername()))
+                continue;
+
+            Label label = new Label(giftListPtr++ + ". From <" + playerGiftPair.first().getPlayerUsername() + "> Good Name: " +
+                playerGiftPair.second().getList().getFirst().getName() + ", \nAmount : " + playerGiftPair.second().getList().size()
+                , skin);
+            TextField field = new TextField("", skin);
+            TextButton button = new TextButton("Rate", skin);
+            int finalGiftListPtr = giftListPtr;
+            button.addListener(new ClickListener() {
+                @Override
+                public void clicked(InputEvent event, float x, float y) {
+                    Result res = controller.giftRate(String.valueOf(finalGiftListPtr - 1), field.getText());
+                    messageGiftLabel.setText(res.message());
+                }
+            });
+            giftTable.add(label);
+            giftTable.add(field);
+            giftTable.add(button);
+            giftTable.row();
+        }
+
+        for (Pair<Player, String> playerStringPair : App.getCurrentGame().getCurrentPlayer().getGiftHistory()) {
+            if (player.getPlayerUsername().equals(playerStringPair.first().getPlayerUsername())) {
+                Label label = new Label(giftListPtr++ + ". " + playerStringPair.second(), skin);
+                giftTable.add(label).row();
+            }
+        }
+
+        playerGiftScrollPane = new ScrollPane(giftTable, skin);
+        playerGiftScrollPane.setSize(1000, 700);
+        playerGiftTable.add(playerGiftScrollPane).colspan(4).row();
+        playerGiftBackButton = new TextButton("Back", skin);
+        playerGiftBackButton.addListener(new ClickListener() {
+            @Override
+            public void clicked(InputEvent event, float x, float y) {
+                closePlayerGiftWindow();
+            }
+        });
+        playerGiftTable.add(playerGiftBackButton).colspan(4).row();
+        playerGiftWindow.add(playerGiftTable);
+
+        staticStage.addActor(playerGiftWindow);
+
+    }
+
+    private void closePlayerGiftWindow() {
+        playerGiftWindow.remove();
+        playerGiftWindow = null;
+        playerGiftTable.remove();
     }
 }
 

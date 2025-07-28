@@ -73,6 +73,7 @@ public class GameMenuController extends Controller {
     private PlayerController playerController;
     private InventoryController inventoryController;
     private ClockController clockController;
+    private FriendshipController friendshipController;
 
     private GameMenuView view;
     private GameView gameView;
@@ -94,7 +95,7 @@ public class GameMenuController extends Controller {
         fridgeController = new FridgeController(gameView);
         cookingController = new CookingController(gameView);
         craftingController = new CraftingController(gameView);
-
+        friendshipController = new FriendshipController(gameView);
     }
 
     public WorldController getWorldController() {
@@ -175,6 +176,7 @@ public class GameMenuController extends Controller {
         inventoryController.updateInventory();
         clockController.update();
         fridgeController.updateFridge();
+        friendshipController.update();
     }
 
 
@@ -1868,8 +1870,8 @@ public class GameMenuController extends Controller {
             return new Result(false, "Player not found!");
         }
 
-        if (App.getCurrentGame().getCurrentPlayer().getCoordinate().distance(player.getCoordinate()) > 1)
-            return new Result(false, "You should be neighbor to " + username + " for talking!");
+//        if (App.getCurrentGame().getCurrentPlayer().getCoordinate().distance(player.getCoordinate()) > 1)
+//            return new Result(false, "You should be neighbor to " + username + " for sending gift!");
 
         if (App.getCurrentGame().getCurrentPlayer().getFriendShips().get(player).first() < 1)
             return new Result(false, "Your friendship level with " + username + " should be more than 0");
@@ -1927,12 +1929,12 @@ public class GameMenuController extends Controller {
         App.getCurrentGame().getCurrentPlayer().getGiftHistory().add(new Pair<>(gift.first(),
             "A gift from " + gift.first().getUser().getUsername()
                 + " with " + gift.second().getList().size() + " amount of " + gift.second().getList().getFirst().getName() +
-                " have been given to you! Your rate : " + giftRate + " !"));
+                " \nhave been given to you! Your rate : " + giftRate + " !"));
 
         gift.first().getGiftHistory().add(new Pair<>(App.getCurrentGame().getCurrentPlayer(),
             "A gift with " + gift.second().getList().size() +
                 " amount of " + gift.second().getList().getFirst().getName() +
-                " have been given to " + App.getCurrentGame().getCurrentPlayer().getUser().getUsername() + " from you! " +
+                " \nhave been given to " + App.getCurrentGame().getCurrentPlayer().getUser().getUsername() + " from you! " +
                 App.getCurrentGame().getCurrentPlayer().getUser().getUsername() + "'s rate : " + giftRate + " !"));
         gift.first().getNews().add(App.getCurrentGame().getCurrentPlayer().getUser().getUsername() + " has rated your gift with amount " +
             giftRate + " !");

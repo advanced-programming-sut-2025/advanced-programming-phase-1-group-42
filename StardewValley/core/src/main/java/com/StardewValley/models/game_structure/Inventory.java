@@ -225,4 +225,12 @@ public class Inventory {
         size += 12;
     }
 
+    public int getFirstElementSize() {
+        for (ArrayList<Good> goods : list) {
+            if (!goods.isEmpty())
+                return goods.size();
+        }
+        return 0;
+    }
+
 }
