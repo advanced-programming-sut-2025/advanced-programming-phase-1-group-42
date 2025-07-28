@@ -123,6 +123,11 @@ public class GameView implements Screen, InputProcessor {
     private Label messageGiftLabel;
     private TextButton playerGiftBackButton;
 
+    private TextButton hugButton;
+    private TextButton flowerButton;
+    private TextButton marriageButton;
+    private Player selectedPlayer;
+
     public GameView(GameMenuController controller, Skin skin) {
         this.controller = controller;
 //        this.controller.initGameControllers();
@@ -195,6 +200,7 @@ public class GameView implements Screen, InputProcessor {
         style.down = normalDrawable.tint(Color.GRAY);
         style.font = font;
 
+        selectedPlayer = null;
 
     }
 
@@ -316,6 +322,15 @@ public class GameView implements Screen, InputProcessor {
         Tile selectedTile = Map.findTile(coordinate);
         if (selectedTile == null || playerTile == null)
             return false;
+
+        for (Player player : App.getCurrentGame().getPlayers()) {
+            if (player.getCoordinate().equals(coordinate) &&
+            player != App.getCurrentGame().getCurrentPlayer()) {
+                selectedPlayer = player;
+                initFriend();
+                return true;
+            }
+        }
 
         if (!App.getCurrentGame().getCurrentPlayer().getInHandGood().isEmpty() &&
             App.getCurrentGame().getCurrentPlayer().getInHandGood().getLast() instanceof Tool &&
@@ -1143,7 +1158,6 @@ public class GameView implements Screen, InputProcessor {
 
         lastConstructionsForShop(info, counterPanel, selectedPanel, scrollPane, content);
     }
-
 
     @Override
     public boolean touchUp(int i, int i1, int i2, int i3) {
@@ -2014,7 +2028,6 @@ public class GameView implements Screen, InputProcessor {
         return cheatWindow;
     }
 
-
     private void goodsListInit(TextButton addButton, Label countLabel, TextButton removeButton, TextButton purchaseButton,
                                GameBuilding gameBuilding, Label selectedNameLabel, Table itemsTable, GoodType[] selectedGoodType,
                                int[] selectedCount, boolean[] filterAvailable, TextButton filterButton, Label info) {
@@ -2381,6 +2394,111 @@ public class GameView implements Screen, InputProcessor {
         playerGiftWindow.remove();
         playerGiftWindow = null;
         playerGiftTable.remove();
+    }
+
+    private void initFriend() {
+        hugButton = new TextButton("Hug", style);
+        hugButton.addListener(new ClickListener() {
+            @Override
+            public void clicked(InputEvent event, float x, float y) {
+                Result res = controller.hug(selectedPlayer.getPlayerUsername());
+                buildMessage();
+                textFieldMessage.setText(res.message());
+                closeFriend();
+            }
+        });
+        hugButton.getLabel().setColor(Color.BLACK);
+        hugButton.setSize((float) scaledSize, (float) (0.5 * scaledSize));
+        hugButton.getLabel().setFontScale(0.6f);
+
+        flowerButton = new TextButton("Flower", style);
+        flowerButton.addListener(new ClickListener() {
+            @Override
+            public void clicked(InputEvent event, float x, float y) {
+                Result res = controller.flower(selectedPlayer.getPlayerUsername());
+                buildMessage();
+                textFieldMessage.setText(res.message());
+                closeFriend();
+            }
+        });
+        flowerButton.getLabel().setColor(Color.BLACK);
+        flowerButton.setSize((float) scaledSize, (float) (0.5 * scaledSize));
+        flowerButton.getLabel().setFontScale(0.6f);
+
+        marriageButton = new TextButton("Marriage", style);
+        marriageButton.addListener(new ClickListener() {
+            @Override
+            public void clicked(InputEvent event, float x, float y) {
+                Result res = controller.askMarriage(selectedPlayer.getPlayerUsername());
+                if (!res.success()) {
+                    buildMessage();
+                    textFieldMessage.setText(res.message());
+                }
+                else {
+                    intiRespondWindow(App.getCurrentGame().getCurrentPlayer());
+                }
+                closeFriend();
+            }
+        });
+        marriageButton.getLabel().setColor(Color.BLACK);
+        marriageButton.setSize((float) scaledSize, (float) (0.5 * scaledSize));
+        marriageButton.getLabel().setFontScale(0.6f);
+
+        hugButton.setPosition(selectedPlayer.getCoordinate().getX() * scaledSize + scaledSize + 10,
+            selectedPlayer.getCoordinate().getY() * scaledSize + 44);
+        flowerButton.setPosition(selectedPlayer.getCoordinate().getX() * scaledSize + scaledSize + 10,
+            selectedPlayer.getCoordinate().getY() * scaledSize + 22);
+        marriageButton.setPosition(selectedPlayer.getCoordinate().getX() * scaledSize + scaledSize + 10,
+            selectedPlayer.getCoordinate().getY() * scaledSize);
+
+        stage.addActor(hugButton);
+        stage.addActor(flowerButton);
+        stage.addActor(marriageButton);
+    }
+
+    private void closeFriend() {
+        hugButton.remove();
+        flowerButton.remove();
+        marriageButton.remove();
+    }
+
+    private void intiRespondWindow(Player askedPlayer) {
+        App.getCurrentGame().setCurrentPlayer(selectedPlayer);
+        Window window = new Window("Respond to " + askedPlayer.getPlayerUsername(), skin, "Letter");
+        window.setSize(1200, 200);
+        window.setPosition(
+            (staticStage.getWidth() - window.getWidth()) / 2,
+            (staticStage.getHeight() - window.getHeight()) / 2
+        );
+
+        Table respondTable = new Table(skin);
+        respondTable.setFillParent(true);
+        respondTable.pad(30).padRight(150);
+
+        Label label = new Label("Your respond is: ", skin);
+        SelectBox<String> selectBox = new SelectBox<>(skin);
+        selectBox.setItems("Accept", "Reject");
+        selectBox.setSelectedIndex(0);
+
+        TextButton button = new TextButton("Send", skin);
+        button.addListener(new ClickListener() {
+            @Override
+            public void clicked(InputEvent event, float x, float y) {
+                window.remove();
+                Result res = controller.respond("-" + selectBox.getSelected().toLowerCase(), askedPlayer.getPlayerUsername());
+                buildMessage();
+                textFieldMessage.setText(res.message());
+
+            }
+        });
+
+        respondTable.add(label).padRight(10);
+        respondTable.add(selectBox).padRight(10);
+        respondTable.add(button).padRight(10);
+        respondTable.row();
+
+        window.add(respondTable);
+        staticStage.addActor(window);
     }
 }
 
