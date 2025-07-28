@@ -113,7 +113,7 @@ public class Player {
     public void iniFriendships(ArrayList<Player> players) {
         for (Player player : players) {
             if(!player.getUser().getUsername().equals(user.getUsername())) {
-                this.friendShips.put(player, new Pair<>(0, 0));
+                this.friendShips.put(player, new Pair<>(3, 0));
                 this.isInteracted.put(player, false);
             }
         }
