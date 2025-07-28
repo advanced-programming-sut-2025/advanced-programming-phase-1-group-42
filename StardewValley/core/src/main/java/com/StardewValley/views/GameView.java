@@ -1498,10 +1498,12 @@ public class GameView implements Screen, InputProcessor {
     }
 
     public void drawInventory() {
-        for (Pair<ImageButton, Image> inventoryElement : controller.getInventoryController().getInventoryElements()) {
+        for (Quadruple<ImageButton, Image, Label, Label> quadruple : controller.getInventoryController().getInventoryElements()) {
             Table table = new Table();
-            table.add(inventoryElement.first());
-            table.add(inventoryElement.second()).padLeft(-48);
+            table.add(quadruple.a);
+            table.add(quadruple.b).padLeft(-48);
+            table.add(quadruple.c).padLeft(-88).padTop(-36);
+            table.add(quadruple.d).padTop(36).padLeft(-88);
             inventoryTable.add(table);
         }
 
