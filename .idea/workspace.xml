@@ -1,0 +1,160 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="AutoImportSettings">
+    <option name="autoReloadType" value="SELECTIVE" />
+  </component>
+  <component name="ChangeListManager">
+    <list default="true" id="d65d21e1-fb61-4c45-bcbf-686d1d1a7205" name="Changes" comment="">
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/StardewValley/core/src/main/java/com/StardewValley/controllers/GameMenuController.java" beforeDir="false" afterPath="$PROJECT_DIR$/StardewValley/core/src/main/java/com/StardewValley/controllers/GameMenuController.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/StardewValley/core/src/main/java/com/StardewValley/views/GameView.java" beforeDir="false" afterPath="$PROJECT_DIR$/StardewValley/core/src/main/java/com/StardewValley/views/GameView.java" afterDir="false" />
+    </list>
+    <option name="SHOW_DIALOG" value="false" />
+    <option name="HIGHLIGHT_CONFLICTS" value="true" />
+    <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
+    <option name="LAST_RESOLUTION" value="IGNORE" />
+  </component>
+  <component name="ExternalProjectsData">
+    <projectState path="$PROJECT_DIR$">
+      <ProjectState />
+    </projectState>
+  </component>
+  <component name="FileTemplateManagerImpl">
+    <option name="RECENT_TEMPLATES">
+      <list>
+        <option value="Class" />
+      </list>
+    </option>
+  </component>
+  <component name="Git.Settings">
+    <favorite-branches>
+      <branch-storage>
+        <map>
+          <entry type="LOCAL">
+            <value>
+              <list>
+                <branch-info repo="$PROJECT_DIR$" source="B_Parsa" />
+              </list>
+            </value>
+          </entry>
+          <entry type="REMOTE">
+            <value>
+              <list>
+                <branch-info repo="$PROJECT_DIR$" source="origin/B_Parsa" />
+              </list>
+            </value>
+          </entry>
+        </map>
+      </branch-storage>
+    </favorite-branches>
+    <option name="RECENT_BRANCH_BY_REPOSITORY">
+      <map>
+        <entry key="$PROJECT_DIR$" value="main" />
+      </map>
+    </option>
+    <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
+  </component>
+  <component name="ProjectColorInfo">{
+  &quot;associatedIndex&quot;: 4
+}</component>
+  <component name="ProjectId" id="2wu3xhf8BPrMDlS8LdMLyuOsbkt" />
+  <component name="ProjectViewState">
+    <option name="hideEmptyMiddlePackages" value="true" />
+    <option name="showLibraryContents" value="true" />
+  </component>
+  <component name="PropertiesComponent"><![CDATA[{
+  "keyToString": {
+    "Gradle.StardewValley:lwjgl3 [:lwjgl3:com.StardewValley.lwjgl3.Lwjgl3Launcher.main()].executor": "Run",
+    "Gradle.advanced-programming-phase-1-group-42 [:org.example.Main.main()].executor": "Run",
+    "RunOnceActivity.ShowReadmeOnStart": "true",
+    "RunOnceActivity.git.unshallow": "true",
+    "git-widget-placeholder": "B__Nader",
+    "ignore.virus.scanning.warn.message": "true",
+    "kotlin-language-version-configured": "true",
+    "last_opened_file_path": "C:/Users/The Parsa/Documents/GitHub",
+    "node.js.detected.package.eslint": "true",
+    "node.js.detected.package.tslint": "true",
+    "node.js.selected.package.eslint": "(autodetect)",
+    "node.js.selected.package.tslint": "(autodetect)",
+    "nodejs_package_manager_path": "npm",
+    "project.structure.last.edited": "Project",
+    "project.structure.proportion": "0.15",
+    "project.structure.side.proportion": "0.0",
+    "settings.editor.selected.configurable": "terminal",
+    "vue.rearranger.settings.migration": "true"
+  }
+}]]></component>
+  <component name="RecentsManager">
+    <key name="MoveFile.RECENT_KEYS">
+      <recent name="$PROJECT_DIR$/StardewValley/assets" />
+      <recent name="$PROJECT_DIR$/StardewValley/assets/GameAssets/Animals/Petted" />
+      <recent name="$PROJECT_DIR$/StardewValley/assets/GameAssets/Animals" />
+      <recent name="$PROJECT_DIR$/StardewValley/assets/GameAssets/FarmBuildings/interior" />
+    </key>
+  </component>
+  <component name="RunManager">
+    <configuration name="Unnamed" type="Application" factoryName="Application" nameIsGenerated="true">
+      <option name="MAIN_CLASS_NAME" value="com.StardewValley.lwjgl3.Lwjgl3Launcher" />
+      <module name="StardewValley.lwjgl3.main" />
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
+  </component>
+  <component name="SharedIndexes">
+    <attachedChunks>
+      <set>
+        <option value="bundled-jdk-9823dce3aa75-125ca727e0f0-intellij.indexing.shared.core-IU-243.23654.117" />
+        <option value="bundled-js-predefined-d6986cc7102b-822845ee3bb5-JavaScript-IU-243.23654.117" />
+      </set>
+    </attachedChunks>
+  </component>
+  <component name="SpellCheckerSettings" RuntimeDictionaries="0" Folders="0" CustomDictionaries="0" DefaultDictionary="application-level" UseSingleDictionary="true" transferred="true" />
+  <component name="TaskManager">
+    <task active="true" id="Default" summary="Default task">
+      <changelist id="d65d21e1-fb61-4c45-bcbf-686d1d1a7205" name="Changes" comment="" />
+      <created>1746877880519</created>
+      <option name="number" value="Default" />
+      <option name="presentableId" value="Default" />
+      <updated>1746877880519</updated>
+      <workItem from="1746877881664" duration="110000" />
+      <workItem from="1746880742936" duration="11327000" />
+      <workItem from="1746945060651" duration="4713000" />
+      <workItem from="1747222495435" duration="17980000" />
+      <workItem from="1747384098317" duration="5244000" />
+      <workItem from="1747398481084" duration="2952000" />
+      <workItem from="1747497035922" duration="1795000" />
+      <workItem from="1747770887481" duration="3349000" />
+      <workItem from="1747855055078" duration="1511000" />
+      <workItem from="1747900026830" duration="12000" />
+      <workItem from="1747900043815" duration="2979000" />
+      <workItem from="1748007684196" duration="1201000" />
+      <workItem from="1748099595473" duration="1456000" />
+      <workItem from="1749375573945" duration="76000" />
+      <workItem from="1749375888552" duration="1448000" />
+      <workItem from="1752569139056" duration="55000" />
+      <workItem from="1752569201171" duration="6000" />
+      <workItem from="1752569225581" duration="16000" />
+      <workItem from="1752569248425" duration="8000" />
+      <workItem from="1753377664993" duration="782000" />
+      <workItem from="1753417482062" duration="15330000" />
+      <workItem from="1753513528990" duration="4663000" />
+      <workItem from="1753607007011" duration="7413000" />
+    </task>
+    <servers />
+  </component>
+  <component name="TypeScriptGeneratedFilesManager">
+    <option name="version" value="3" />
+  </component>
+  <component name="Vcs.Log.Tabs.Properties">
+    <option name="TAB_STATES">
+      <map>
+        <entry key="MAIN">
+          <value>
+            <State />
+          </value>
+        </entry>
+      </map>
+    </option>
+  </component>
+</project>

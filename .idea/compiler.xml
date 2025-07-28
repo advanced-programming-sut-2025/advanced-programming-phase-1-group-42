@@ -1,15 +1,13 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="CompilerConfiguration">
-    <annotationProcessing>
-      <profile name="Maven default annotation processors profile" enabled="true">
-        <sourceOutputDir name="target/generated-sources/annotations" />
-        <sourceTestOutputDir name="target/generated-test-sources/test-annotations" />
-        <outputRelativeToContentRoot value="true" />
-        <module name="Stardew_Valley" />
-        <module name="AP" />
-      </profile>
-    </annotationProcessing>
-    <bytecodeTargetLevel target="23" />
+    <bytecodeTargetLevel>
+      <module name="StardewValley.core" target="23" />
+      <module name="StardewValley.core.main" target="23" />
+      <module name="StardewValley.core.test" target="23" />
+      <module name="StardewValley.lwjgl3" target="23" />
+      <module name="StardewValley.lwjgl3.main" target="23" />
+      <module name="StardewValley.lwjgl3.test" target="23" />
+    </bytecodeTargetLevel>
   </component>
 </project>
