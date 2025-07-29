@@ -5,14 +5,12 @@ import com.StardewValley.models.Assets;
 import com.StardewValley.models.Pair;
 import com.StardewValley.models.game_structure.Coordinate;
 import com.StardewValley.models.goods.Good;
+import com.StardewValley.models.interactions.Player;
 import com.StardewValley.views.GameView;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
-import com.badlogic.gdx.scenes.scene2d.ui.Image;
-import com.badlogic.gdx.scenes.scene2d.ui.ImageButton;
-import com.badlogic.gdx.scenes.scene2d.ui.ProgressBar;
-import com.badlogic.gdx.scenes.scene2d.ui.Table;
+import com.badlogic.gdx.scenes.scene2d.ui.*;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 
@@ -24,8 +22,10 @@ public class InventoryController {
     private final ArrayList<Pair<Pair<ImageButton, Image>, Integer>> toolsElements;
     private final ArrayList<ImageButton> mainInventoryElements;
     private final ProgressBar progressBar;
+    private ArrayList<Window> inventoryWindows = new ArrayList<>();
 
     public InventoryController(GameView gameView) {
+
         this.gameView = gameView;
         inventoryElements = new ArrayList<>();
         TextureRegionDrawable drawableSlot = Assets.getInstance().getDrawableSlot();
@@ -62,6 +62,9 @@ public class InventoryController {
 
         toolsElements = new ArrayList<>();
         mainInventoryElements = new ArrayList<>();
+
+
+
         for (int i = 0; i < 8; i++) {
             TextureRegionDrawable tabDrawable = new TextureRegionDrawable(new Texture("GameAssets/Main_Inventory/MainTable" + (i + 1) + ".png"));
             TextureRegionDrawable tabDrawableClicked = new TextureRegionDrawable(new Texture("GameAssets/Main_Inventory/MainTable" + (i + 1) + "Clicked.png"));
@@ -90,7 +93,24 @@ public class InventoryController {
                             imageButton.setChecked(false);
                             if (imageButton == tabButton) {
                                 imageButton.setChecked(true);
-                                //TODO
+                                switch (i){
+                                    case 0:
+                                        gameView.switchWindow(inventoryWindows.get(0));
+                                        break;
+                                    case 1:
+                                        gameView.switchWindow(inventoryWindows.get(1));
+                                        break;
+                                    case 2:
+                                        gameView.switchWindow(inventoryWindows.get(2));
+                                        break;
+                                    case 3:
+                                        gameView.switchWindow(inventoryWindows.get(3));
+                                        break;
+                                    default:
+                                        gameView.switchWindow(inventoryWindows.get(4));
+                                        break;
+
+                                }
                             }
                         }
                     }
@@ -100,6 +120,14 @@ public class InventoryController {
             mainInventoryElements.add(tabButton);
         }
 
+    }
+
+    public ArrayList<Window> getInventoryWindows() {
+        return inventoryWindows;
+    }
+
+    public void setInventoryWindows(ArrayList<Window> inventoryWindows) {
+        this.inventoryWindows = inventoryWindows;
     }
 
     public void updateInventory() {

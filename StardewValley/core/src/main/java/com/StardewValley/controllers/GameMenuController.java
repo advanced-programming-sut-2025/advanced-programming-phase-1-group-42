@@ -28,6 +28,7 @@ import com.StardewValley.models.interactions.Animals.AnimalProduct;
 import com.StardewValley.models.interactions.Animals.AnimalTypes;
 import com.StardewValley.models.interactions.Gender;
 import com.StardewValley.models.interactions.NPCs.NPC;
+import com.StardewValley.models.interactions.NPCs.NPCFriendship;
 import com.StardewValley.models.interactions.Player;
 import com.StardewValley.models.interactions.PlayerBuildings.FarmBuilding;
 import com.StardewValley.models.interactions.PlayerBuildings.FarmBuildingTypes;
@@ -41,6 +42,8 @@ import com.StardewValley.views.GameView;
 import com.StardewValley.views.MainMenuView;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
+import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.scenes.scene2d.ui.*;
 //import com.mongodb.ConnectionString;
 //import com.mongodb.MongoClientSettings;
 //import com.mongodb.ServerApi;
@@ -56,6 +59,7 @@ import com.badlogic.gdx.Input;
 //import org.bson.conversions.Bson;
 
 import java.util.*;
+import java.util.List;
 import java.util.regex.Matcher;
 
 import static java.awt.SystemColor.window;
@@ -73,6 +77,7 @@ public class GameMenuController extends Controller {
     private PlayerController playerController;
     private InventoryController inventoryController;
     private ClockController clockController;
+
 
     private GameMenuView view;
     private GameView gameView;
@@ -237,8 +242,10 @@ public class GameMenuController extends Controller {
 
         }
         if (Gdx.input.isKeyJustPressed(Input.Keys.E) || Gdx.input.isKeyJustPressed(Input.Keys.ESCAPE)) {
+            ArrayList<Window> inventoryWindows = createWindows();
+            inventoryController.setInventoryWindows(inventoryWindows);
             if (gameView.getMainTable() == null)
-                gameView.initMainTable();
+                gameView.initMainTable(0);
             else
                 gameView.closeMainTable();
         }
@@ -247,7 +254,12 @@ public class GameMenuController extends Controller {
         }
 
         if (Gdx.input.isKeyJustPressed(Input.Keys.M)) {
-                App.getCurrentGame().getMap().printGraphicalMap( gameView.getStage());
+            ArrayList<Window> inventoryWindows = createWindows();
+            inventoryController.setInventoryWindows(inventoryWindows);
+            if (gameView.getMainTable() == null)
+                gameView.initMainTable(3);
+            else
+                gameView.closeMainTable();
         }
         if (Gdx.input.isKeyJustPressed(Input.Keys.TAB)) {
 
@@ -335,6 +347,184 @@ public class GameMenuController extends Controller {
 
 //        if (flag)
 //            App.getCurrentGame().getCurrentPlayer().getEnergy().decreaseTurnEnergyLeft(1);
+    }
+
+    private ArrayList<Window> createWindows() {
+
+        ArrayList<Window> inventoryWindows = new ArrayList<>();
+        for (int i = 0; i < 4; i++) {
+            final int index = i;
+            Skin skin = Assets.getInstance().getSkin();
+            Window window = new Window("", skin);
+            int width = 1000;
+            int height = 800;
+            window.setSize(width, height);
+
+            // Add content based on index
+            switch (index) {
+                case 0:
+                    window.add(new Label("Inventory", skin));
+                    window.setSize(width, height);
+                    Texture test = new Texture("GameAssets\\Inventory\\Inventory_Parts.png");
+                    Image test_img = new Image(test);
+                    window.add(test_img);
+
+                    //TODO
+                    break;
+                case 1:
+
+                    window.add(new Label("Social", skin)).colspan(2).left();
+                    window.setSize(width, height);
+                    window.row().padTop(10);
+
+                    Table socialContainer = new Table();
+                    socialContainer.padLeft(44);
+                    Table leftSideTable = new Table().top().left();
+
+                    for (NPC npc : App.getCurrentGame().getNPCs()) {
+                        leftSideTable.row().padBottom(12);
+                        Table row = new Table().left();
+
+                        Texture npcTxr = new Texture("GameAssets\\Main_Inventory\\" + npc.getType().getName() + ".png");
+                        Image npc_img = new Image(npcTxr);
+
+                        Texture hearts = new Texture("GameAssets\\Main_Inventory\\" + npc.getFriendship().getFriendshipLevel() + ".png");
+                        Image hearts_img = new Image(hearts);
+                        int newWidth = hearts.getWidth() * 2;
+                        int newHeight = hearts.getHeight() * 2;
+
+                        row.add(npc_img).padRight(10).size(40, 40).left();
+
+                        String name = npc.getType().getName();
+                        int basePadding = 180;
+                        Label nameLabel = new Label(name, skin);
+                        float adjustedPadding = Math.max(0, basePadding - nameLabel.getWidth());
+                        row.add(nameLabel).padRight(adjustedPadding).left();
+                        row.add(hearts_img).size(newWidth, newHeight).left();
+
+                        leftSideTable.add(row).left();
+
+                    }
+
+                    Table rightSideTable = new Table().top().right();
+                    for (Player p : App.getCurrentGame().getPlayers()) {
+                        if (!p.equals(App.getCurrentGame().getCurrentPlayer())) {
+                            rightSideTable.row().padBottom(12);
+                            Table row = new Table().right();
+
+                            Texture playerTxr = new Texture("GameAssets\\Main_Inventory\\Player.png");
+                            Image npc_img = new Image(playerTxr);
+
+                            Pair<Integer, Integer> friendship = p.getFriendShips().get(App.getCurrentGame().getCurrentPlayer());
+                            int friendshipLevel = friendship != null ? friendship.second() : 0;
+
+                            Texture hearts = new Texture("GameAssets\\Main_Inventory\\" + friendshipLevel + ".png");
+                            Image hearts_img = new Image(hearts);
+                            int newWidth = hearts.getWidth() * 2;
+                            int newHeight = hearts.getHeight() * 2;
+
+                            row.add(npc_img).padRight(10).size(40, 40).left();
+
+                            String name = p.getUser().getNickname();
+                            int basePadding = 180;
+                            Label nameLabel = new Label(name, skin);
+                            float adjustedPadding = Math.max(0, basePadding - nameLabel.getWidth());
+                            Table nameAndHeart = new Table();
+                            nameAndHeart.add(nameLabel).left();
+                            nameAndHeart.row().padTop(2);
+                            nameAndHeart.add(hearts_img).size(newWidth, newHeight).left();
+
+                            row.add(nameAndHeart).left();
+
+                            rightSideTable.add(row).right();
+
+                        }
+                    }
+
+                    socialContainer.add(leftSideTable).expandX().left();
+                    socialContainer.add(rightSideTable).expandX().left();
+
+                    window.add(socialContainer).colspan(2).expand().fill().padTop(10);
+
+
+                    break;
+                case 2:
+                    window.add(new Label("Skills", skin)).left().padBottom(10);
+                    window.row();
+
+                    Table skillsTable = new Table().top().left();
+                    Skill skill = App.getCurrentGame().getCurrentPlayer().getSkill();
+                    String[] skillNames = {"Farming", "Mining", "Cooking", "Foraging", "Fishing"};
+                    String[] skillDescription  = {"Gives Higher Quality Goods\nLess Energy Per Hoe Swing",
+                        "Can Mine More Minerals with each Swing\nLess Energy Per Pickaxe Swing" , "Unlocks More Recipes To Cook", "Better Chance of\ngetting Better Goods\nLess Energy Per Picking Ups" ,
+                        "Higher Level Fishes\nUnlocks Legendary Fishes\nLess Energy Per Fish caught",
+                    };
+                    int[] skillLevels = {skill.getFarmingLevel(),
+                        skill.getMiningLevel(),
+                        skill.getFishingLevel(),
+                        skill.getForagingLevel(),
+                        skill.getCookingLevel()};
+//                    int[] skillLevels = {3, 5, 7, 4, 9};
+
+                    TooltipManager manager = TooltipManager.getInstance();
+                    manager.initialTime = 0f;
+                    manager.subsequentTime = 0f;
+                    manager.resetTime = 0.5f;
+                    manager.hideAll();
+
+                    for (int b = 0; b < skillNames.length; b++) {
+                        Table skillRow = new Table().left();
+
+                        // Skill icon
+                        Texture iconTexture = new Texture("GameAssets\\Main_Inventory\\" + skillNames[b] + "_Skill_Icon.png");
+                        Image skillIcon = new Image(iconTexture);
+                        skillIcon.setSize(40, 40);
+
+                        // Tooltip text
+
+                        Tooltip<Label> tooltip = new Tooltip<>(new Label("Skill: " + skillNames[b] + "\nLevel: "
+                            + skillLevels[b] + "\nDescription: " + skillDescription[b], skin));
+                        skillIcon.addListener(tooltip);
+
+                        skillRow.add(skillIcon).padRight(10);
+
+                        // Level indicators (e.g., hearts)
+                        for (int lvl = 1; lvl <= 10; lvl++) {
+                            String levelImg = lvl <= skillLevels[b] ? "_Full.png" : "_Empty.png";
+                            Texture lvlTx = new Texture("GameAssets\\Main_Inventory\\" + skillNames[b] + levelImg);
+                            Image lvlImg = new Image(lvlTx);
+                            lvlImg.setSize(20, 20);
+                            skillRow.add(lvlImg).padRight(2);
+                        }
+                        Label label = new Label("Level: " + skillLevels[b], skin);
+                        skillRow.add(label).padLeft(40);
+                        skillsTable.add(skillRow).left().padBottom(50);
+                        skillsTable.row();
+                    }
+
+                    ScrollPane scrollPane = new ScrollPane(skillsTable, skin);
+                    scrollPane.setScrollingDisabled(true, false);
+                    scrollPane.setFadeScrollBars(false);
+
+                    window.add(scrollPane).expand().fill().colspan(2).padTop(10);
+                    break;
+                case 3:
+                    window.clear();
+                    window.add(new Label("Map", skin)).left().padBottom(10);
+                    window.row();
+
+                    ScrollPane mapPane = App.getCurrentGame().getMap().createGraphicalMap();
+                    window.add(mapPane).expand().fill().colspan(2);
+                    window.row();
+
+                    break;
+                default:
+                    window.add(new Label("Empty", skin));
+            }
+
+            inventoryWindows.add(window);
+        }
+        return inventoryWindows;
     }
 
     private boolean tileValidity(Tile tile) {
@@ -2381,5 +2571,6 @@ public class GameMenuController extends Controller {
 
         return new Result(true, "test");
     }
+
 }
 

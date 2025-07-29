@@ -98,8 +98,6 @@ public class GameView implements Screen, InputProcessor {
     public Boolean isCraftingOpen = false;
     private Window cookingRecipeWindow;
     private Window craftingRecipeWindow;
-    private Table mainTable;
-    private Window mainWindow;
 
     private Window cheatWindow;
     private Table cheatTable;
@@ -1299,15 +1297,22 @@ public class GameView implements Screen, InputProcessor {
         return stage;
     }
 
-    public void initMainTable() {
+    private ArrayList<ImageButton> mainInventoryElements;
+    private Table mainTable;
+
+
+    private Window currentWindow = null; // Currently shown window
+    private Container<Window> windowContainer;
+    public void initMainTable(int index) {
+        ArrayList<Window> inventoryWindows = controller.getInventoryController().getInventoryWindows();
+        mainInventoryElements = controller.getInventoryController().getMainInventoryElements();
         mainTable = new Table(skin);
         mainTable.setFillParent(true);
-        mainWindow = new Window("", skin);
-        mainWindow.setSize(800, 600);
+
 
         for (int i = 0; i < 8; i++) {
             ImageButton imageButton = controller.getInventoryController().getMainInventoryElements().get(i);
-            if (i == 0) {
+            if (i == index) {
                 mainTable.add(imageButton);
                 imageButton.setChecked(true);
             } else if (i == 7)
@@ -1316,10 +1321,20 @@ public class GameView implements Screen, InputProcessor {
                 mainTable.add(imageButton);
         }
         mainTable.row();
-        mainTable.add(mainWindow).colspan(7);
+
+        currentWindow = controller.getInventoryController().getInventoryWindows().get(index);
+        windowContainer = new Container<>(currentWindow);
+        windowContainer.size(1000, 800);
+
+        mainTable.add(windowContainer).colspan(7); // Only add container to table
 
         staticStage.addActor(mainTable);
         setInputProcessor();
+    }
+
+    public void switchWindow(Window newWindow) {
+        currentWindow = newWindow;
+        windowContainer.setActor(currentWindow); // Replaces content without changing layout
     }
 
     private void setInputProcessor() {
@@ -1340,7 +1355,7 @@ public class GameView implements Screen, InputProcessor {
     public void closeMainTable() {
         mainTable.remove();
         mainTable = null;
-        mainWindow.remove();
+        //mainWindow.remove();
     }
 
     public Table getMainTable() {
@@ -1720,6 +1735,10 @@ public class GameView implements Screen, InputProcessor {
 
     public Boolean getIsCraftingOpen() {
         return isCraftingOpen;
+    }
+
+    public Stage getStaticStage() {
+        return staticStage;
     }
 }
 
