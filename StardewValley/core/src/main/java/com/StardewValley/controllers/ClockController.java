@@ -20,7 +20,6 @@ import com.badlogic.gdx.utils.viewport.ScreenViewport;
 
 public class ClockController extends Controller {
     private Stage stage;
-
     private Texture clockTexture;
     private Texture handTexture;
     private Image clockFaceImage;
@@ -325,6 +324,7 @@ public class ClockController extends Controller {
         stage.addActor(clockFaceImage);
         stage.addActor(clockHandImage);
     }
+
     public void setDays(){
         lastDayOfWeekName = currentTime.getDayOfWeek();
         lastDayOfMonthName = currentTime.getDayOfSeason();

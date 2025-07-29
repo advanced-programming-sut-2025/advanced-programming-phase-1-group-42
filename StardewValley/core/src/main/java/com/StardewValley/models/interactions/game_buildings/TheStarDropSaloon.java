@@ -52,21 +52,13 @@ public class TheStarDropSaloon extends GameBuilding {
     }
 
     @Override
-    public String showAllProducts() {
-        StringBuilder list = new StringBuilder();
-        list.append("The StarDrop Saloon All Products:\n");
-        listPartStock(list, products);
-
-        return list.toString();
+    public ArrayList<GoodType> showAllProducts() {
+        return getWholeGoodType(products);
     }
 
     @Override
-    public String showProducts() {
-        StringBuilder list = new StringBuilder();
-        list.append("The StarDrop Saloon Available Products:\n");
-        listAvailablePartStock(list, products);
-
-        return list.toString();
+    public ArrayList<GoodType> showProducts() {
+        return getWholeGoodType(products);
     }
 
     @Override
@@ -83,5 +75,15 @@ public class TheStarDropSaloon extends GameBuilding {
             return new Result(false, "There is no Good of this type in The StarDrop Saloon!");
 
         return purchaseProduct(productName, count, productPair);
+    }
+
+    @Override
+    public Pair<GoodType, Integer> findProduct(GoodType goodType) {
+        for (Pair<GoodType, Integer> pair : products) {
+            if(pair.first().equals(goodType)) {
+                return pair;
+            }
+        }
+        return null;
     }
 }

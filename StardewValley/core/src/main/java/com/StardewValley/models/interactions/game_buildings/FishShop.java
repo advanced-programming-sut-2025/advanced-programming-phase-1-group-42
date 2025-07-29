@@ -55,21 +55,14 @@ public class FishShop extends GameBuilding {
     }
 
     @Override
-    public String showAllProducts() {
-        StringBuilder list = new StringBuilder();
-        list.append("Fish Shop All Products:\n");
-        listPartStock(list, products);
-
-        return list.toString();
+    public ArrayList<GoodType> showAllProducts() {
+        return FishShop.getWholeGoodType(products);
     }
 
     @Override
-    public String showProducts() {
-        StringBuilder list = new StringBuilder();
-        list.append("Fish Shop Available Products:\n");
-        listAvailablePartStock(list, products);
+    public ArrayList<GoodType> showProducts() {
 
-        return list.toString();
+        return FishShop.getWholeGoodType(products);
     }
 
     @Override
@@ -100,5 +93,15 @@ public class FishShop extends GameBuilding {
 
     public ArrayList<Pair<GoodType, Integer>> getProducts() {
         return products;
+    }
+
+    @Override
+    public Pair<GoodType, Integer> findProduct(GoodType goodType) {
+        for (Pair<GoodType, Integer> pair : products) {
+            if(pair.first() == goodType) {
+                return pair;
+            }
+        }
+        return null;
     }
 }

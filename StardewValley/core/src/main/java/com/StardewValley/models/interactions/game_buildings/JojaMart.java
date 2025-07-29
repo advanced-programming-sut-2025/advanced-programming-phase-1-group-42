@@ -106,33 +106,13 @@ public class JojaMart extends GameBuilding {
     }
 
     @Override
-    public String showAllProducts() {
-        StringBuilder list = new StringBuilder();
-        list.append("JojaMart All Products:\n");
-        int ptr = 0;
-        for (ArrayList<Pair<GoodType, Integer>> products : this.products) {
-            list.append(stockParts.get(ptr++)).append(" Stock:\n");
-            listPartStock(list, products);
-        }
-
-        return list.toString();
+    public ArrayList<GoodType> showAllProducts() {
+        return getGoodTypes(products);
     }
 
     @Override
-    public String showProducts() {
-        StringBuilder list = new StringBuilder();
-        list.append("JojaMart Available Products:\n");
-        list.append(stockParts.get(0)).append(" Stock:\n");
-        listAvailablePartStock(list, products.getFirst());
-
-        list.append(stockParts.get(
-                App.getCurrentGame().getDateTime().getSeasonOfYear().getValue()
-        )).append(" Stock:\n");
-        listAvailablePartStock(list, products.get(
-                App.getCurrentGame().getDateTime().getSeasonOfYear().getValue()
-        ));
-
-        return list.toString();
+    public ArrayList<GoodType> showProducts() {
+        return getSeasonProducts(products);
     }
 
     @Override
@@ -157,5 +137,17 @@ public class JojaMart extends GameBuilding {
                     App.getCurrentGame().getDateTime().getSeasonOfYear().getName() + " in JojaMart Shop!");
 
         return purchaseProduct(productName, count, productPair);
+    }
+
+    @Override
+    public Pair<GoodType, Integer> findProduct(GoodType goodType) {
+        for (ArrayList<Pair<GoodType, Integer>> products : this.products) {
+            for (Pair<GoodType, Integer> product : products) {
+                if (product.first().getName().equals(goodType.getName())) {
+                    return product;
+                }
+            }
+        }
+        return null;
     }
 }

@@ -7,6 +7,7 @@ import com.StardewValley.models.enums.TileAssets;
 import com.StardewValley.models.game_structure.Coordinate;
 import com.StardewValley.models.game_structure.Tile;
 import com.StardewValley.models.goods.Good;
+import com.StardewValley.models.goods.GoodType;
 import com.StardewValley.models.goods.products.Product;
 import com.StardewValley.models.goods.products.ProductType;
 import com.StardewValley.models.interactions.Animals.Animal;
@@ -55,7 +56,7 @@ public class MarnieRanch extends GameBuilding {
 
 
     @Override
-    public String showAllProducts() {
+    public ArrayList<GoodType> showAllProducts() {
         for (AnimalTypes animalType : animals) {
             System.out.println(animalType.getName() + "  " + animalType.getPrice()+" G");
         }
@@ -63,8 +64,8 @@ public class MarnieRanch extends GameBuilding {
     }
 
     @Override
-    public String showProducts() {
-        return "";
+    public ArrayList<GoodType> showProducts() {
+        return null;
     }
 
     @Override
@@ -123,5 +124,10 @@ public class MarnieRanch extends GameBuilding {
 
     public Animal buildAnimal(AnimalTypes animalType,String animalName) {
         return new Animal(animalType,animalName);
+    }
+
+    @Override
+    public Pair<GoodType, Integer> findProduct(GoodType goodType) {
+        return null;
     }
 }

@@ -19,9 +19,10 @@ public abstract class GameBuilding extends Building {
     private final Pair<Integer, Integer> hours;
     private final Texture texture;
 
-    public abstract String showAllProducts();
-    public abstract String showProducts();
+    public abstract ArrayList<GoodType> showAllProducts();
+    public abstract ArrayList<GoodType> showProducts();
     public abstract Result purchase(String productName, String count);
+    public abstract Pair<GoodType, Integer> findProduct(GoodType goodType);
 
 
     public boolean isInWorkingHours() {
@@ -114,5 +115,37 @@ public abstract class GameBuilding extends Building {
             }
         }
         return upgradeTiles;
+    }
+
+    static ArrayList<GoodType> getGoodTypes(ArrayList<ArrayList<Pair<GoodType, Integer>>> products) {
+        ArrayList<GoodType> goodTypes = new ArrayList<>();
+        for (ArrayList<Pair<GoodType, Integer>> seasonProducts : products) {
+            for (Pair<GoodType, Integer> product : seasonProducts) {
+                goodTypes.add(product.first());
+            }
+        }
+
+        return goodTypes;
+    }
+
+    static ArrayList<GoodType> getSeasonProducts(ArrayList<ArrayList<Pair<GoodType, Integer>>> products) {
+        ArrayList<GoodType> goodTypes = new ArrayList<>();
+        for (Pair<GoodType, Integer> goodTypeIntegerPair : products.get(0)) {
+            goodTypes.add(goodTypeIntegerPair.first());
+        }
+        for (Pair<GoodType, Integer> goodTypeIntegerPair : products.get(
+            App.getCurrentGame().getDateTime().getSeasonOfYear().getValue())) {
+            goodTypes.add(goodTypeIntegerPair.first());
+        }
+
+        return goodTypes;
+    }
+
+    static ArrayList<GoodType> getWholeGoodType(ArrayList<Pair<GoodType, Integer>> products) {
+        ArrayList<GoodType> goodTypes = new ArrayList<>();
+        for (Pair<GoodType, Integer> product : products) {
+            goodTypes.add(product.first());
+        }
+        return goodTypes;
     }
 }

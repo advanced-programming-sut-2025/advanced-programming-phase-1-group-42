@@ -77,6 +77,7 @@ public class GameMenuController extends Controller {
     private PlayerController playerController;
     private InventoryController inventoryController;
     private ClockController clockController;
+    private FriendshipController friendshipController;
 
 
     private GameMenuView view;
@@ -99,7 +100,7 @@ public class GameMenuController extends Controller {
         fridgeController = new FridgeController(gameView);
         cookingController = new CookingController(gameView);
         craftingController = new CraftingController(gameView);
-
+        friendshipController = new FriendshipController(gameView);
     }
 
     public WorldController getWorldController() {
@@ -180,6 +181,7 @@ public class GameMenuController extends Controller {
         inventoryController.updateInventory();
         clockController.update();
         fridgeController.updateFridge();
+        friendshipController.update();
     }
 
 
@@ -1883,7 +1885,7 @@ public class GameMenuController extends Controller {
         }
 
         GameBuilding building = App.getCurrentGame().getMap().findGameBuilding(coordinate);
-        return new Result(true, building.showAllProducts());
+        return new Result(true, "");
     }
 
     public Result showAllAvailableProducts() {
@@ -1896,7 +1898,7 @@ public class GameMenuController extends Controller {
         }
 
         GameBuilding building = App.getCurrentGame().getMap().findGameBuilding(coordinate);
-        return new Result(true, building.showProducts());
+        return new Result(true, "");
     }
 
     public Result purchase(String productName, String count, Coordinate coordinate) {
@@ -2059,7 +2061,7 @@ public class GameMenuController extends Controller {
         }
 
         if (App.getCurrentGame().getCurrentPlayer().getCoordinate().distance(player.getCoordinate()) > 1)
-            return new Result(false, "You should be neighbor to " + username + " for talking!");
+            return new Result(false, "You should be neighbor to " + username + " for sending gift!");
 
         if (App.getCurrentGame().getCurrentPlayer().getFriendShips().get(player).first() < 1)
             return new Result(false, "Your friendship level with " + username + " should be more than 0");
@@ -2117,12 +2119,12 @@ public class GameMenuController extends Controller {
         App.getCurrentGame().getCurrentPlayer().getGiftHistory().add(new Pair<>(gift.first(),
             "A gift from " + gift.first().getUser().getUsername()
                 + " with " + gift.second().getList().size() + " amount of " + gift.second().getList().getFirst().getName() +
-                " have been given to you! Your rate : " + giftRate + " !"));
+                " \nhave been given to you! Your rate : " + giftRate + " !"));
 
         gift.first().getGiftHistory().add(new Pair<>(App.getCurrentGame().getCurrentPlayer(),
             "A gift with " + gift.second().getList().size() +
                 " amount of " + gift.second().getList().getFirst().getName() +
-                " have been given to " + App.getCurrentGame().getCurrentPlayer().getUser().getUsername() + " from you! " +
+                " \nhave been given to " + App.getCurrentGame().getCurrentPlayer().getUser().getUsername() + " from you! " +
                 App.getCurrentGame().getCurrentPlayer().getUser().getUsername() + "'s rate : " + giftRate + " !"));
         gift.first().getNews().add(App.getCurrentGame().getCurrentPlayer().getUser().getUsername() + " has rated your gift with amount " +
             giftRate + " !");
@@ -2182,12 +2184,13 @@ public class GameMenuController extends Controller {
             return new Result(false, "You should be neighbor to " + username + " to hug!");
 
 
+        StringBuilder list = new StringBuilder();
         if (!App.getCurrentGame().getCurrentPlayer().getIsInteracted().get(player)) {
             if (App.getCurrentGame().getCurrentPlayer().getMarried() == player) {
                 App.getCurrentGame().getCurrentPlayer().getEnergy().increaseTurnEnergyLeft(50);
                 player.getEnergy().increaseTurnEnergyLeft(50);
 
-                System.out.println("You and your partner got 50 extra energy!");
+                list.append("You and your partner got 50 extra energy!\n");
             } else {
                 App.getCurrentGame().getCurrentPlayer().getFriendShips().computeIfPresent(player,
                     (k, pair) -> new Pair<>(pair.first(), pair.second() + 60));
@@ -2196,8 +2199,8 @@ public class GameMenuController extends Controller {
 
                 player.updateFriendShips(App.getCurrentGame().getCurrentPlayer());
                 App.getCurrentGame().getCurrentPlayer().updateFriendShips(player);
-                System.out.println("Your friendship value with " + username + " is increased to " +
-                    App.getCurrentGame().getCurrentPlayer().getFriendShips().get(player).second());
+                list.append("Your friendship value with " + username + " is increased to " +
+                    App.getCurrentGame().getCurrentPlayer().getFriendShips().get(player).second() + "\n");
             }
 
             App.getCurrentGame().getCurrentPlayer().getIsInteracted().put(player, true);
@@ -2205,7 +2208,8 @@ public class GameMenuController extends Controller {
 
         }
 
-        return new Result(true, "You hugged " + username + "!");
+        list.append("You hugged " + username + "!");
+        return new Result(true, list.toString());
     }
 
     public Result flower(String username) {
@@ -2240,6 +2244,7 @@ public class GameMenuController extends Controller {
             flag = true;
         }
 
+        StringBuilder list = new StringBuilder();
         if (!flag)
             return new Result(false, "Your don't have any flower in your inventory to give to someone!");
         else if (!App.getCurrentGame().getCurrentPlayer().getIsInteracted().get(player)) {
@@ -2247,7 +2252,7 @@ public class GameMenuController extends Controller {
                 App.getCurrentGame().getCurrentPlayer().getEnergy().increaseTurnEnergyLeft(50);
                 player.getEnergy().increaseTurnEnergyLeft(50);
 
-                System.out.println("You and your partner got 50 extra energy!");
+                list.append("You and your partner got 50 extra energy!\n");
             } else {
                 App.getCurrentGame().getCurrentPlayer().getFriendShips().computeIfPresent(player,
                     (k, pair) -> new Pair<>(pair.first() + 1, pair.second()));
@@ -2256,20 +2261,19 @@ public class GameMenuController extends Controller {
 
                 player.updateFriendShips(App.getCurrentGame().getCurrentPlayer());
                 App.getCurrentGame().getCurrentPlayer().updateFriendShips(player);
-                System.out.println("Your friendship level with " + username + " has been increased to 3!");
-
+                list.append("Your friendship level with " + username + " has been increased to 3!\n");
             }
 
             App.getCurrentGame().getCurrentPlayer().getIsInteracted().put(player, true);
             player.getIsInteracted().put(App.getCurrentGame().getCurrentPlayer(), true);
         }
 
-        return new Result(true, "Your have given a flower to " + username + "!");
+        list.append("Your have given a flower to " + username + "!");
+        return new Result(true, list.toString());
     }
 
-    public Result askMarriage(String username, String ring) {
+    public Result askMarriage(String username) {
         username = username.trim();
-        ring = ring.trim();
 
         Player player = App.getCurrentGame().findPlayer(username);
         Player mainPlayer = App.getCurrentGame().getCurrentPlayer();
@@ -2292,15 +2296,20 @@ public class GameMenuController extends Controller {
             return new Result(false, username + " is already married with " +
                 player.getMarried().getUser().getUsername() + "!");
 
+        if (mainPlayer.getInHandGood().isEmpty() ||
+            !mainPlayer.getInHandGood().getLast().getName().equals("Wedding_Ring"))
+            return new Result(false, "Please select a Wedding_Ring from your inventory!");
+
+
         ArrayList<Good> goods = App.getCurrentGame().getCurrentPlayer().getInventory().isInInventory(ProductType.WEDDING_RING);
         if (goods == null)
             return new Result(false, "Your should have wedding ring in your inventory to ask marriage!");
 
-        player.getNews().add(mainPlayer.getUser().getUsername() + " asks you to marry him with " + ring + "!");
+        player.getNews().add(mainPlayer.getUser().getUsername() + " asks you to marry him with Wedding_Ring!");
         player.getMarriageList().put(mainPlayer, goods.getLast());
         goods.removeLast();
 
-        return new Result(true, "Your have asked marriage from " + username + " with " + ring + "!");
+        return new Result(true, "Your have asked marriage from " + username + " with Wedding_Ring!");
     }
 
     public Result respond(String status, String username) {

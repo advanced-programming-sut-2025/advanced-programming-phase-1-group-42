@@ -41,12 +41,6 @@ public class Map {
 
 
 
-
-
-
-
-
-
     //Textures
     Texture farm_Background;
     Texture empty;
@@ -498,34 +492,34 @@ public class Map {
         };
     }
     public void declareTextures(){
-        farm_Background = new Texture("assets\\GameAssets\\Map\\Farm.png");
-        empty = new Texture("assets\\GameAssets\\Map\\Border.png");
-        wall = new Texture("assets\\GameAssets\\Map\\Wall.png");
-        water = new Texture("assets\\GameAssets\\Map\\Water.png");
-        greenhouse = new Texture("assets\\GameAssets\\Map\\Greenhouse.png");
-        playerBuilding = new Texture("assets\\GameAssets\\Map\\House.png");
-        quarry = new Texture("assets\\GameAssets\\Map\\Quarry.png");
-        road = new Texture("assets\\GameAssets\\Map\\Road.png");
-        beach = new Texture("assets\\GameAssets\\Map\\Beach.png");
-        square = new Texture("assets\\GameAssets\\Map\\Square.png");
-        wateredFarm = new Texture("assets\\GameAssets\\Map\\WateredFarm.png");
-        tree = new Texture("assets\\GameAssets\\Map\\Tree.png");
-        seed = new Texture("assets\\GameAssets\\Map\\Seed.png");
-        Crop = new Texture("assets\\GameAssets\\Map\\Crop.png");
-        playerTexture = new Texture("assets\\GameAssets\\Map\\Player.png");
-        mushroomTree = new Texture("assets\\GameAssets\\Map\\MushroomTree.png");
-        plain = new Texture("assets\\GameAssets\\Map\\Plain.png");
-        abigail = new Texture("assets\\GameAssets\\Map\\Abigail.png");
-        clint = new Texture("assets\\GameAssets\\Map\\Clint.png");
-        gus = new Texture("assets\\GameAssets\\Map\\Gus.png");
-        harvey = new Texture("assets\\GameAssets\\Map\\Harvey.png");
-        leah = new Texture("assets\\GameAssets\\Map\\Leah.png");
-        marnie = new Texture("assets\\GameAssets\\Map\\Marnie.png");
-        morris = new Texture("assets\\GameAssets\\Map\\Morris.png");
-        pierre = new Texture("assets\\GameAssets\\Map\\Pierre.png");
-        robin = new Texture("assets\\GameAssets\\Map\\Robin.png");
-        sebastian = new Texture("assets\\GameAssets\\Map\\Sebastian.png");
-        willy = new Texture("assets\\GameAssets\\Map\\Willy.png");
+        farm_Background = new Texture("GameAssets/Map/Farm.png");
+        empty = new Texture("GameAssets/Map/Border.png");
+        wall = new Texture("GameAssets/Map/Wall.png");
+        water = new Texture("GameAssets/Map/Water.png");
+        greenhouse = new Texture("GameAssets/Map/Greenhouse.png");
+        playerBuilding = new Texture("GameAssets/Map/House.png");
+        quarry = new Texture("GameAssets/Map/Quarry.png");
+        road = new Texture("GameAssets/Map/Road.png");
+        beach = new Texture("GameAssets/Map/Beach.png");
+        square = new Texture("GameAssets/Map/Square.png");
+        wateredFarm = new Texture("GameAssets/Map/WateredFarm.png");
+        tree = new Texture("GameAssets/Map/Tree.png");
+        seed = new Texture("GameAssets/Map/Seed.png");
+        Crop = new Texture("GameAssets/Map/Crop.png");
+        playerTexture = new Texture("GameAssets/Map/Player.png");
+        mushroomTree = new Texture("GameAssets/Map/MushroomTree.png");
+        plain = new Texture("GameAssets/Map/Plain.png");
+        abigail = new Texture("GameAssets/Map/Abigail.png");
+        clint = new Texture("GameAssets/Map/Clint.png");
+        gus = new Texture("GameAssets/Map/Gus.png");
+        harvey = new Texture("GameAssets/Map/Harvey.png");
+        leah = new Texture("GameAssets/Map/Leah.png");
+        marnie = new Texture("GameAssets/Map/Marnie.png");
+        morris = new Texture("GameAssets/Map/Morris.png");
+        pierre = new Texture("GameAssets/Map/Pierre.png");
+        robin = new Texture("GameAssets/Map/Robin.png");
+        sebastian = new Texture("GameAssets/Map/Sebastian.png");
+        willy = new Texture("GameAssets/Map/Willy.png");
 
 // Create Image objects for all textures
         farm_Background_img = new Image(new TextureRegionDrawable(farm_Background));
@@ -558,34 +552,35 @@ public class Map {
         willy_img = new Image(new TextureRegionDrawable(willy));
 
 // Set sizes for all images (6x6)
-        farm_Background_img.setSize(6, 6);
-        empty_img.setSize(6, 6);
-        wall_img.setSize(6, 6);
-        water_img.setSize(6, 6);
-        greenhouse_img.setSize(6, 6);
-        playerBuilding_img.setSize(6, 6);
-        quarry_img.setSize(6, 6);
-        road_img.setSize(6, 6);
-        beach_img.setSize(6, 6);
-        square_img.setSize(6, 6);
-        wateredFarm_img.setSize(6, 6);
-        tree_img.setSize(6, 6);
-        seed_img.setSize(6, 6);
-        Crop_img.setSize(6, 6);
-        player_img.setSize(6, 6);
-        mushroomTree_img.setSize(6, 6);
-        plain_img.setSize(6, 6);
-        abigail_img.setSize(6, 6);
-        clint_img.setSize(6, 6);
-        gus_img.setSize(6, 6);
-        harvey_img.setSize(6, 6);
-        leah_img.setSize(6, 6);
-        marnie_img.setSize(6, 6);
-        morris_img.setSize(6, 6);
-        pierre_img.setSize(6, 6);
-        robin_img.setSize(6, 6);
-        sebastian_img.setSize(6, 6);
-        willy_img.setSize(6, 6);
+        int n = 8;
+        farm_Background_img.setSize(n, n);
+        empty_img.setSize(n, n);
+        wall_img.setSize(n, n);
+        water_img.setSize(n, n);
+        greenhouse_img.setSize(n, n);
+        playerBuilding_img.setSize(n, n);
+        quarry_img.setSize(n, n);
+        road_img.setSize(n, n);
+        beach_img.setSize(n, n);
+        square_img.setSize(n, n);
+        wateredFarm_img.setSize(n, n);
+        tree_img.setSize(n, n);
+        seed_img.setSize(n, n);
+        Crop_img.setSize(n, n);
+        player_img.setSize(n, n);
+        mushroomTree_img.setSize(n, n);
+        plain_img.setSize(n, n);
+        abigail_img.setSize(n, n);
+        clint_img.setSize(n, n);
+        gus_img.setSize(n, n);
+        harvey_img.setSize(n, n);
+        leah_img.setSize(n, n);
+        marnie_img.setSize(n, n);
+        morris_img.setSize(n, n);
+        pierre_img.setSize(n, n);
+        robin_img.setSize(n, n);
+        sebastian_img.setSize(n ,n);
+        willy_img.setSize(n, n);
     }
 
 

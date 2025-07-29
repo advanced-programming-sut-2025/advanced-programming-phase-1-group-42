@@ -10,3 +10,25 @@ cheat add 10000 dollars
 cheat add 1000000 dollars
 cheat add 1000000 dollars
 cheat add 100000 dollars
+cheat add 10000 dollars
+
+cheat add 100000 dollars
+cheat add item -n Wood -c 1000
+cheat add 100000 dollars
+cheat add item -n Carrot_Seed -c 100
+cheat add item -n Carrot -c 100
+cheat add item -n Carrot -c 200 
+cheat add item -n Carrot -c 100
+cheat add item -n Carrot -c 100
+cheat add item -n Carrot -c 100
+cheat add item -n Carrot -c 100
+cheat add item -n Carrot -c 100
+cheat add item -n Carrot -c 100
+
+cheat add item -n Wedding_Ring -c 10
+cheat add item -n Wedding_Ring -c 10
+cheat add item -n Wedding_Ring -c 10
+cheat add item -n Wedding_Ring -c 10
+cheat add item -n Wedding_Ring -c 10
+cheat add item -c Wedding_Ring -c 10
+cheat add item -n Wedding_Ring -c 10
