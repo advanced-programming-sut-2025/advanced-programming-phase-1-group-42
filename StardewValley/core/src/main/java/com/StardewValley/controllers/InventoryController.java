@@ -118,7 +118,7 @@ public class InventoryController {
                                         gameView.switchWindow(inventoryWindows.get(3));
                                         break;
                                     default:
-                                        gameView.switchWindow(inventoryWindows.get(4));
+                                        gameView.switchWindow(inventoryWindows.get(3));
                                         break;
 
                                 }
