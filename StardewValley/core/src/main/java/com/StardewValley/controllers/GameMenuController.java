@@ -853,7 +853,7 @@ public class GameMenuController extends Controller {
 
             if (user == null) {
                 players.add(new Player(new User(username, null, username,
-                    null, null, 0, null)));
+                    null, Gender.MALE, 0, null)));
             } else {
                 players.add(new Player(user));
             }
