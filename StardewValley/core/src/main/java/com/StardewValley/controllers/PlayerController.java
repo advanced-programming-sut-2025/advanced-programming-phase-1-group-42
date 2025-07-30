@@ -16,9 +16,13 @@ public class PlayerController {
                     player.getCoordinate().getY() * 40);
             player.getSprite().draw(Main.getBatch());
 
-            if (player.getPlayerDirection() != -1)
-                animation(player, player.getPlayerDirection());
-
+            if (player.getPlayerDirection() != -1) {
+                if(player.getUser().getGender().getName().equals("Male")) {
+                    animation(player, player.getPlayerDirection());
+                } else {
+                    femaleAnimation(player, player.getPlayerDirection());
+                }
+            }
             player.getInHandGoodSprite().setSize(40, 40);
             player.getInHandGoodSprite().draw(Main.getBatch());
         }
@@ -40,4 +44,22 @@ public class PlayerController {
 
         animation.setPlayMode(Animation.PlayMode.LOOP);
     }
+
+    private void femaleAnimation(Player player, int i) {
+        Array<Texture> regions = new Array<>(Assets.getInstance().getFemalePlayerTextures().getFirst().size());
+        Assets.getInstance().getFemalePlayerTextures().get(i).forEach(regions::add);
+        Animation<Texture> animation = new Animation<>(0.1f, regions);
+
+        player.getSprite().setRegion(animation.getKeyFrame(player.getTime()));
+
+        if(!animation.isAnimationFinished(player.getTime())) {
+            player.setTime(player.getTime() + Gdx.graphics.getDeltaTime());
+        }
+        else {
+            player.setTime(0);
+        }
+
+        animation.setPlayMode(Animation.PlayMode.LOOP);
+    }
+
 }

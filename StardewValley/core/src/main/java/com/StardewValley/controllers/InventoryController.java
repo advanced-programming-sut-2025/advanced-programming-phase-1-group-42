@@ -27,8 +27,10 @@ public class InventoryController {
     private final ArrayList<Pair<Pair<ImageButton, Image>, Integer>> toolsElements;
     private final ArrayList<ImageButton> mainInventoryElements;
     private final ProgressBar progressBar;
+    private ArrayList<Window> inventoryWindows = new ArrayList<>();
 
     public InventoryController(GameView gameView) {
+
         this.gameView = gameView;
         inventoryElements = new ArrayList<>();
         skin = Assets.getInstance().getSkin();
@@ -71,6 +73,9 @@ public class InventoryController {
 
         toolsElements = new ArrayList<>();
         mainInventoryElements = new ArrayList<>();
+
+
+
         for (int i = 0; i < 8; i++) {
             TextureRegionDrawable tabDrawable = new TextureRegionDrawable(new Texture("GameAssets/Main_Inventory/MainTable" + (i + 1) + ".png"));
             TextureRegionDrawable tabDrawableClicked = new TextureRegionDrawable(new Texture("GameAssets/Main_Inventory/MainTable" + (i + 1) + "Clicked.png"));
@@ -99,7 +104,24 @@ public class InventoryController {
                             imageButton.setChecked(false);
                             if (imageButton == tabButton) {
                                 imageButton.setChecked(true);
-                                //TODO
+                                switch (i){
+                                    case 0:
+                                        gameView.switchWindow(inventoryWindows.get(0));
+                                        break;
+                                    case 1:
+                                        gameView.switchWindow(inventoryWindows.get(1));
+                                        break;
+                                    case 2:
+                                        gameView.switchWindow(inventoryWindows.get(2));
+                                        break;
+                                    case 3:
+                                        gameView.switchWindow(inventoryWindows.get(3));
+                                        break;
+                                    default:
+                                        gameView.switchWindow(inventoryWindows.get(3));
+                                        break;
+
+                                }
                             }
                         }
                     }
@@ -109,6 +131,14 @@ public class InventoryController {
             mainInventoryElements.add(tabButton);
         }
 
+    }
+
+    public ArrayList<Window> getInventoryWindows() {
+        return inventoryWindows;
+    }
+
+    public void setInventoryWindows(ArrayList<Window> inventoryWindows) {
+        this.inventoryWindows = inventoryWindows;
     }
 
     public void updateInventory() {

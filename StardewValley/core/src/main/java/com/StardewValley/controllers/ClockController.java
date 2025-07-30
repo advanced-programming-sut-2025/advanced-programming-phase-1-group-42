@@ -62,7 +62,7 @@ public class ClockController extends Controller {
     private Image G;
     private Image H;
 
-    int x = 1920 - 72*3;
+    int x = Gdx.graphics.getWidth() - 72*3;
     public ClockController() {
         currentTime = App.getCurrentGame().getDateTime();
         currentWeather = App.getCurrentGame().getWeather();

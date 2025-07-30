@@ -102,7 +102,11 @@ public class Player {
         this.isInteracted = new HashMap<>();
         this.coordinate = new Coordinate(0, 0);
         this.playerDirection = -1;
-        this.sprite = new Sprite(Assets.getInstance().getPlayerTextures().get(2).getFirst());
+        if (user.getGender() != null && "Male".equals(user.getGender().getName())) {
+            this.sprite = new Sprite(Assets.getInstance().getPlayerTextures().get(2).getFirst());
+        } else {
+            this.sprite = new Sprite(Assets.getInstance().getFemalePlayerTextures().get(2).getFirst());
+        }
         this.sprite.setPosition(coordinate.getX(), coordinate.getY());
         this.inHandGoodSprite = new Sprite(new Texture(Assets.getInstance().getNullPNGPath()));
         this.inHandGoodSprite.setPosition(coordinate.getX() * 40,

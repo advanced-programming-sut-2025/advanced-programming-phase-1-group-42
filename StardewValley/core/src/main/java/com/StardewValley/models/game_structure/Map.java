@@ -383,130 +383,97 @@ public class Map {
 
     private Window mapWindow;
     boolean printMapFlag = false;
-    public void printGraphicalMap(Stage stage) {
+    public ScrollPane createGraphicalMap() {
+        Table mapTable = new Table();
+        mapTable.defaults().width(6).height(6);
 
-        int k = 8;
-        if (!printMapFlag) {
-            mapWindow = new Window("Map", Assets.getInstance().getSkin());
-            mapWindow.setSize(1600, 1000);
-            mapWindow.setPosition(
-                (Gdx.graphics.getWidth() - mapWindow.getWidth()) / 2f,
-                (Gdx.graphics.getHeight() - mapWindow.getHeight()) / 2f
-            );
+        for (int j = 0; j < 160; j++) {
+            mapTable.row();
+            for (int i = 0; i < 150; i++) {
+                Coordinate coordinate = new Coordinate(i, 160 - j);
+                Tile tile = findTile(coordinate);
+                Image img = plain_img;
 
-            Table mapTable = new Table();
-            mapTable.defaults().width(k).height(k);
+                if (tile == null) {
+                    img = empty_img;
+                } else {
+                    switch (tile.getTileType()) {
+                        case FARM -> img = farm_Background_img;
+                        case WATER -> img = water_img;
+                        case GREEN_HOUSE -> img = greenhouse_img;
+                        case PLAYER_BUILDING -> img = playerBuilding_img;
+                        case ROAD -> img = road_img;
+                        case QUARRY -> img = quarry_img;
+                        case BEACH -> img = beach_img;
+                        case SQUARE -> img = square_img;
+                        case STONE_WALL -> img = wall_img;
+                        default -> img = plain_img;
+                    }
 
-            for (int j = 0; j < 160; j++) {
-                mapTable.row();
-                for (int i = 0; i < 150; i++) {
-                    Coordinate coordinate = new Coordinate(i, 160 - j);
-                    Tile tile = findTile(coordinate);
-                    Image img = plain_img;
+                    if (tile.isWatered()) {
+                        img = wateredFarm_img;
+                    }
 
-                    if (tile == null) {
-                        img = empty_img;
-                    } else {
-                        switch (tile.getTileType()) {
-                            case FARM -> img = farm_Background_img;
-                            case WATER -> img = water_img;
-                            case GREEN_HOUSE -> img = greenhouse_img;
-                            case PLAYER_BUILDING -> img = playerBuilding_img;
-                            case ROAD -> img = road_img;
-                            case QUARRY -> img = quarry_img;
-                            case BEACH -> img = beach_img;
-                            case SQUARE -> img = square_img;
-                            case STONE_WALL -> img = wall_img;
-                            default -> img = plain_img;
-                        }
+                    for (Good good : tile.getGoods()) {
+                        if (good instanceof ForagingCrop) img = Crop_img;
+                        else if (good instanceof ForagingSeed) img = seed_img;
+                        else if ("Grass".equals(good.getName())) img = tree_img;
+                    }
 
-                        if (tile.isWatered()) {
-                            img = wateredFarm_img;
-                        }
+                    for (Player player : App.getCurrentGame().getPlayers()) {
+                        if (player.getCoordinate().equals(coordinate)) img = player_img;
+                    }
 
-                        for (Good good : tile.getGoods()) {
-                            if (good instanceof ForagingCrop) {
-                                img = Crop_img;
-                            } else if (good instanceof ForagingSeed) {
-                                img = seed_img;
-                            } else if ("Grass".equals(good.getName())) {
-                                img = tree_img;
-                            }
-                        }
-
-                        for (Player player : App.getCurrentGame().getPlayers()) {
-                            if (player.getCoordinate().equals(coordinate)) {
-                                img = player_img;
-                            }
-                        }
-
-                        for (NPC npc : App.getCurrentGame().getNPCs()) {
-                            if (npc.getType().getCoordinate().equals(coordinate)) {
-                                String name = npc.getType().getName();
-                                img = switch (name) {
-                                    case "Abigail" -> abigail_img;
-                                    case "Clint" -> clint_img;
-                                    case "Gus" -> gus_img;
-                                    case "Harvey" -> harvey_img;
-                                    case "Leah" -> leah_img;
-                                    case "Marnie" -> marnie_img;
-                                    case "Morris" -> morris_img;
-                                    case "Pierre" -> pierre_img;
-                                    case "Robin" -> robin_img;
-                                    case "Sebastian" -> sebastian_img;
-                                    case "Willy" -> willy_img;
-                                    default -> mushroomTree_img;
-                                };
-                            }
-                        }
-
-                        for (Animal animal : App.getCurrentGame().getMap().allAnimals()) {
-                            if (animal.getCoordinate().equals(coordinate)) {
-                                img = mushroomTree_img; // or use specific animal images if available
-                            }
+                    for (NPC npc : App.getCurrentGame().getNPCs()) {
+                        if (npc.getType().getCoordinate().equals(coordinate)) {
+                            String name = npc.getType().getName();
+                            img = switch (name) {
+                                case "Abigail" -> abigail_img;
+                                case "Clint" -> clint_img;
+                                case "Gus" -> gus_img;
+                                case "Harvey" -> harvey_img;
+                                case "Leah" -> leah_img;
+                                case "Marnie" -> marnie_img;
+                                case "Morris" -> morris_img;
+                                case "Pierre" -> pierre_img;
+                                case "Robin" -> robin_img;
+                                case "Sebastian" -> sebastian_img;
+                                case "Willy" -> willy_img;
+                                default -> mushroomTree_img;
+                            };
                         }
                     }
 
-                    Stack cellStack = new Stack();
-                    Image bg = new Image(determineTileBackground(tile).getDrawable()); // background image
-                    Image fg = new Image(img.getDrawable()); // foreground image
-
-
-                    bg.setSize(k, k);
-                    fg.setSize(k, k);
-
-                    cellStack.add(bg);
-                    cellStack.add(fg);
-
-                    mapTable.add(cellStack).width(k).height(k);
-
+                    for (Animal animal : App.getCurrentGame().getMap().allAnimals()) {
+                        if (animal.getCoordinate().equals(coordinate)) {
+                            img = mushroomTree_img;
+                        }
+                    }
                 }
+
+                Stack cellStack = new Stack();
+                Image bg = new Image(determineTileBackground(tile).getDrawable());
+                Image fg = new Image(img.getDrawable());
+
+                bg.setSize(6, 6);
+                fg.setSize(6, 6);
+
+                cellStack.add(bg);
+                cellStack.add(fg);
+
+                mapTable.add(cellStack).width(6).height(6);
             }
-
-            ScrollPane scrollPane = new ScrollPane(mapTable, Assets.getInstance().getSkin());
-            scrollPane.setFadeScrollBars(false);
-            scrollPane.setScrollingDisabled(true, false);
-
-            mapWindow.add(scrollPane).expand().fill();
-            mapWindow.row();
-
-            TextButton close = new TextButton("Close", Assets.getInstance().getSkin());
-            close.addListener(new ChangeListener() {
-                @Override
-                public void changed(ChangeEvent event, Actor actor) {
-                    mapWindow.remove();
-                    printMapFlag = false;
-                }
-            });
-            mapWindow.add(close).padTop(5);
-
-            stage.addActor(mapWindow);
-            printMapFlag = true;
-        } else {
-            mapWindow.remove();
-            printMapFlag = false;
         }
+
+        ScrollPane scrollPane = new ScrollPane(mapTable, Assets.getInstance().getSkin());
+        scrollPane.setFadeScrollBars(false);
+        scrollPane.setScrollingDisabled(true, false); // horizontal disabled, vertical enabled
+        scrollPane.setForceScroll(false, true);       // force vertical scrollbar if needed
+        scrollPane.setSize(980, 780);
+
+        return scrollPane;
     }
+
     private Image determineTileBackground(Tile tile) {
         if (tile == null) return empty_img;
         if (tile.isWatered()) return wateredFarm_img;

@@ -21,24 +21,46 @@ public class Assets {
     private final Sprite menuBackground2 = new Sprite(new Texture("menu_background_2.png"));
     private final ArrayList<ArrayList<Texture>> playerTextures = new ArrayList<>(Arrays.asList(
         new ArrayList<>(Arrays.asList(
-            new Texture("GameAssets/Player_Movement/Untitled-7.png"),
-            new Texture("GameAssets/Player_Movement/Untitled-8.png"),
-            new Texture("GameAssets/Player_Movement/Untitled-9.png")
+            new Texture("GameAssets/Player_Movement/Male/Untitled-7.png"),
+            new Texture("GameAssets/Player_Movement/Male/Untitled-8.png"),
+            new Texture("GameAssets/Player_Movement/Male/Untitled-9.png")
         )),
         new ArrayList<>(Arrays.asList(
-            new Texture("GameAssets/Player_Movement/Untitled-4.png"),
-            new Texture("GameAssets/Player_Movement/Untitled-5.png"),
-            new Texture("GameAssets/Player_Movement/Untitled-6.png")
+            new Texture("GameAssets/Player_Movement/Male/Untitled-4.png"),
+            new Texture("GameAssets/Player_Movement/Male/Untitled-5.png"),
+            new Texture("GameAssets/Player_Movement/Male/Untitled-6.png")
         )),
         new ArrayList<>(Arrays.asList(
-            new Texture("GameAssets/Player_Movement/Untitled-1.png"),
-            new Texture("GameAssets/Player_Movement/Untitled-2.png"),
-            new Texture("GameAssets/Player_Movement/Untitled-3.png")
+            new Texture("GameAssets/Player_Movement/Male/Untitled-1.png"),
+            new Texture("GameAssets/Player_Movement/Male/Untitled-2.png"),
+            new Texture("GameAssets/Player_Movement/Male/Untitled-3.png")
         )),
         new ArrayList<>(Arrays.asList(
-            new Texture("GameAssets/Player_Movement/Untitled-10.png"),
-            new Texture("GameAssets/Player_Movement/Untitled-11.png"),
-            new Texture("GameAssets/Player_Movement/Untitled-12.png")
+            new Texture("GameAssets/Player_Movement/Male/Untitled-10.png"),
+            new Texture("GameAssets/Player_Movement/Male/Untitled-11.png"),
+            new Texture("GameAssets/Player_Movement/Male/Untitled-12.png")
+        ))
+    ));
+    private final ArrayList<ArrayList<Texture>> femalePlayerTextures = new ArrayList<>(Arrays.asList(
+        new ArrayList<>(Arrays.asList(
+            new Texture("GameAssets/Player_Movement/Female/Untitled-7.png"),
+            new Texture("GameAssets/Player_Movement/Female/Untitled-8.png"),
+            new Texture("GameAssets/Player_Movement/Female/Untitled-9.png")
+        )),
+        new ArrayList<>(Arrays.asList(
+            new Texture("GameAssets/Player_Movement/Female/Untitled-4.png"),
+            new Texture("GameAssets/Player_Movement/Female/Untitled-5.png"),
+            new Texture("GameAssets/Player_Movement/Female/Untitled-6.png")
+        )),
+        new ArrayList<>(Arrays.asList(
+            new Texture("GameAssets/Player_Movement/Female/Untitled-1.png"),
+            new Texture("GameAssets/Player_Movement/Female/Untitled-2.png"),
+            new Texture("GameAssets/Player_Movement/Female/Untitled-3.png")
+        )),
+        new ArrayList<>(Arrays.asList(
+            new Texture("GameAssets/Player_Movement/Female/Untitled-10.png"),
+            new Texture("GameAssets/Player_Movement/Female/Untitled-11.png"),
+            new Texture("GameAssets/Player_Movement/Female/Untitled-12.png")
         ))
     ));
 
@@ -72,6 +94,10 @@ public class Assets {
 
     public ArrayList<ArrayList<Texture>> getPlayerTextures() {
         return playerTextures;
+    }
+
+    public ArrayList<ArrayList<Texture>> getFemalePlayerTextures() {
+        return femalePlayerTextures;
     }
 
     public TextureRegionDrawable getDrawableSlot() {
