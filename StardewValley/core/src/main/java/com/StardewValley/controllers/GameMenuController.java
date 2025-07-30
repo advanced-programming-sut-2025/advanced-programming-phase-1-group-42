@@ -196,6 +196,10 @@ public class GameMenuController extends Controller {
         Player player = App.getCurrentGame().getCurrentPlayer();
         player.setPlayerDirection(-1);
 
+        if(Gdx.input.isKeyJustPressed(Input.Keys.U)) {
+            App.getCurrentGame().getCurrentPlayer().getWallet().increaseBalance(1000);
+        }
+
         boolean flag = false;
         if (Gdx.input.isKeyPressed(Input.Keys.W)) {
             if (tileValidity(App.getCurrentGame().getMap().findTileByXY(player.getCoordinate().getX(), player.getCoordinate().getY() + 1))) {

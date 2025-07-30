@@ -99,13 +99,13 @@ public class ClockController extends Controller {
         H.setSize(H.getWidth() * 3, H.getHeight() * 3);
 
         A.setPosition(17*3 + x, Gdx.graphics.getHeight() - 56*3);
-        B.setPosition(A.getX() + 3 + B.getWidth() + x, Gdx.graphics.getHeight() - 56*3);
-        C.setPosition(B.getX() + 3 + C.getWidth() + x, Gdx.graphics.getHeight() - 56*3);
-        D.setPosition(C.getX() + 3 + D.getWidth() + x, Gdx.graphics.getHeight() - 56*3);
-        E.setPosition(D.getX() + 3 + E.getWidth() + x, Gdx.graphics.getHeight() - 56*3);
-        F.setPosition(E.getX() + 3 + F.getWidth() + x, Gdx.graphics.getHeight() - 56*3);
-        G.setPosition(F.getX() + 3 + G.getWidth() + x, Gdx.graphics.getHeight() - 56*3);
-        H.setPosition(G.getX() + 3 + H.getWidth() + x, Gdx.graphics.getHeight() - 56*3);
+        B.setPosition(A.getX() + 3 + B.getWidth(), Gdx.graphics.getHeight() - 56*3);
+        C.setPosition(B.getX() + 3 + C.getWidth(), Gdx.graphics.getHeight() - 56*3);
+        D.setPosition(C.getX() + 3 + D.getWidth(), Gdx.graphics.getHeight() - 56*3);
+        E.setPosition(D.getX() + 3 + E.getWidth(), Gdx.graphics.getHeight() - 56*3);
+        F.setPosition(E.getX() + 3 + F.getWidth(), Gdx.graphics.getHeight() - 56*3);
+        G.setPosition(F.getX() + 3 + G.getWidth(), Gdx.graphics.getHeight() - 56*3);
+        H.setPosition(G.getX() + 3 + H.getWidth(), Gdx.graphics.getHeight() - 56*3);
         setClockFace();
         setWeatherAndSeason();
         setDays();
