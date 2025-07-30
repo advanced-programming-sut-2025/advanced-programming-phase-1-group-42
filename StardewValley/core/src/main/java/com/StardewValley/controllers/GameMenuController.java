@@ -33,17 +33,21 @@ import com.StardewValley.models.interactions.Player;
 import com.StardewValley.models.interactions.PlayerBuildings.FarmBuilding;
 import com.StardewValley.models.interactions.PlayerBuildings.FarmBuildingTypes;
 import com.StardewValley.models.interactions.User;
-import com.StardewValley.models.interactions.game_buildings.Blacksmith;
-import com.StardewValley.models.interactions.game_buildings.CarpenterShop;
-import com.StardewValley.models.interactions.game_buildings.GameBuilding;
-import com.StardewValley.models.interactions.game_buildings.MarnieRanch;
+import com.StardewValley.models.interactions.game_buildings.*;
 import com.StardewValley.views.GameMenuView;
 import com.StardewValley.views.GameView;
 import com.StardewValley.views.MainMenuView;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.g2d.TextureRegion;
+import com.badlogic.gdx.scenes.scene2d.InputEvent;
+import com.badlogic.gdx.scenes.scene2d.Touchable;
 import com.badlogic.gdx.scenes.scene2d.ui.*;
+import com.badlogic.gdx.scenes.scene2d.ui.Stack;
+import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
+import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
+import com.badlogic.gdx.utils.Scaling;
 //import com.mongodb.ConnectionString;
 //import com.mongodb.MongoClientSettings;
 //import com.mongodb.ServerApi;
@@ -191,6 +195,10 @@ public class GameMenuController extends Controller {
 
         Player player = App.getCurrentGame().getCurrentPlayer();
         player.setPlayerDirection(-1);
+
+        if(Gdx.input.isKeyJustPressed(Input.Keys.U)) {
+            App.getCurrentGame().getCurrentPlayer().getWallet().increaseBalance(1000);
+        }
 
         boolean flag = false;
         if (Gdx.input.isKeyPressed(Input.Keys.W)) {
@@ -351,8 +359,11 @@ public class GameMenuController extends Controller {
 //            App.getCurrentGame().getCurrentPlayer().getEnergy().decreaseTurnEnergyLeft(1);
     }
 
-    private ArrayList<Window> createWindows() {
 
+
+    private ArrayList<Good> cursorGoods = null;
+    private Image cursorImage = new Image();
+    private ArrayList<Window> createWindows() {
         ArrayList<Window> inventoryWindows = new ArrayList<>();
         for (int i = 0; i < 4; i++) {
             final int index = i;
@@ -365,13 +376,132 @@ public class GameMenuController extends Controller {
             // Add content based on index
             switch (index) {
                 case 0:
-                    window.add(new Label("Inventory", skin));
-                    window.setSize(width, height);
-                    Texture test = new Texture("GameAssets\\Inventory\\Inventory_Parts.png");
-                    Image test_img = new Image(test);
-                    window.add(test_img);
+                    window.add(new Label("Inventory", skin)).left().padBottom(10);
+                    window.row();
 
-                    //TODO
+                    Table inventoryTable = new Table();
+                    Texture lockedSlotTexture = new Texture("GameAssets/Inventory_Table/locked.png");
+                    Texture trashTexture = new Texture("GameAssets/Inventory_Table/Trash_Can_Gold.png");
+                    TextureRegionDrawable drawableSlot = Assets.getInstance().getDrawableSlot();
+                    TextureRegionDrawable drawableHighlight = Assets.getInstance().getDrawableHighlight();
+
+                    int inventorySize = App.getCurrentGame().getCurrentPlayer().getInventory().getSize();
+                    ArrayList<ArrayList<Good>> inventoryData = App.getCurrentGame().getCurrentPlayer().getInventory().getList();
+                    ArrayList<Quadruple<ImageButton, Image, Label, Label>> inventoryElements = new ArrayList<>();
+                    final int[] selectedSlotIndex = {-1};
+
+                    int totalSlots = 36; // 3 rows * 12 columns
+                    int itemIndex = 0;
+
+                    for (int row = 0; row < 3; row++) {
+                        for (int col = 0; col < 12; col++) {
+                            Table slotContainer = new Table();
+
+                            if (itemIndex < inventorySize) {
+                                ArrayList<Good> goods = inventoryData.get(itemIndex);
+                                ImageButton imageButtonBackground = new ImageButton(drawableSlot, drawableSlot, drawableHighlight);
+
+                                Texture goodTexture = new Texture("GameAssets/null.png");
+                                if (!goods.isEmpty()) {
+                                    goodTexture = new Texture(goods.getFirst().getType().imagePath());
+                                }
+
+                                Image itemImage = new Image(new TextureRegion(goodTexture));
+
+                                itemImage.setTouchable(Touchable.disabled); // Allow background button to receive clicks
+                                itemImage.setScaling(Scaling.fit); // Optional: make icon fit better
+                                itemImage.setSize(32, 32);// Optional: define icon size
+
+                                final int currentIndex = itemIndex;
+                                Image finalImage = itemImage;
+
+                                imageButtonBackground.addListener(new ClickListener() {
+                                    @Override
+                                    public void clicked(InputEvent event, float x, float y) {
+                                        selectedSlotIndex[0] = currentIndex; // Update selected slot here
+
+                                        if (cursorGoods==null) {
+                                            // Pick up the good if slot not empty
+                                            if (!goods.isEmpty()) {
+                                                cursorGoods = new ArrayList<>(goods);  // copy all goods from slot to cursor
+                                                goods.clear();
+                                                // Set cursor image to represent this good type (you might pick the first)
+                                                App.setCursorFromImage(cursorGoods.get(0).getType().imagePath());
+                                                rebuildInventoryUI(inventoryTable, inventoryElements);
+                                            }
+                                        } else {
+                                            // Drop or swap goods
+                                            if (goods.isEmpty()) {
+                                                goods.addAll(cursorGoods);  // drop all goods held on cursor into slot
+                                                cursorGoods.clear();
+                                                cursorGoods = null;
+                                                App.setCursor();  // reset cursor
+                                                rebuildInventoryUI(inventoryTable, inventoryElements);
+                                            } else {
+                                                // Swap goods: swap whole stacks
+                                                ArrayList<Good> temp = new ArrayList<>(goods);
+                                                goods.clear();
+                                                goods.addAll(cursorGoods);
+
+                                                cursorGoods.clear();
+                                                cursorGoods.addAll(temp);
+
+                                                App.setCursorFromImage(cursorGoods.get(0).getType().imagePath());
+                                                rebuildInventoryUI(inventoryTable, inventoryElements);
+                                            }
+                                        }
+                                    }
+                                });
+
+                                Label indexLabel = new Label(String.valueOf(itemIndex + 1), skin);
+                                indexLabel.setFontScale(0.4f);
+
+                                Label quantityLabel = new Label(goods.isEmpty() ? "" : String.valueOf(goods.size()), skin, "Bold");
+                                quantityLabel.setFontScale(0.4f);
+
+                                inventoryElements.add(new Quadruple<>(imageButtonBackground, itemImage, indexLabel, quantityLabel));
+
+                                Stack slotStack = new Stack();
+                                slotStack.add(imageButtonBackground);
+                                slotStack.add(itemImage);
+
+                                slotContainer.add(slotStack).size(48, 48).row();
+                                slotContainer.add(quantityLabel);
+                            } else {
+                                Image lockedImage = new Image(lockedSlotTexture);
+                                slotContainer.add(lockedImage).size(48, 48);
+                            }
+
+                            inventoryTable.add(slotContainer).pad(4);
+                            itemIndex++;
+                        }
+                        inventoryTable.row();
+                    }
+
+                    // Add trash can
+                    Image trashCan = new Image(trashTexture);
+                    trashCan.setSize(48, 48);
+                    trashCan.addListener(new ClickListener() {
+                        @Override
+                        public void clicked(InputEvent event, float x, float y) {
+                            if (cursorGoods != null && !cursorGoods.isEmpty()) {
+                                cursorGoods.clear();
+                                cursorGoods = null;
+                                App.setCursor(); // Reset to default cursor
+                                rebuildInventoryUI(inventoryTable, inventoryElements);
+                            }
+                        }
+                    });
+
+                    Table container = new Table();
+                    container.add(inventoryTable).left().padRight(20);
+                    container.add(trashCan).top().left().padTop(20);
+
+                    ScrollPane scrollPane = new ScrollPane(container, skin);
+                    scrollPane.setScrollingDisabled(true, false);
+                    scrollPane.setFadeScrollBars(false);
+
+                    window.add(scrollPane).expand().fill().colspan(2).padTop(10);
                     break;
                 case 1:
 
@@ -504,11 +634,11 @@ public class GameMenuController extends Controller {
                         skillsTable.row();
                     }
 
-                    ScrollPane scrollPane = new ScrollPane(skillsTable, skin);
-                    scrollPane.setScrollingDisabled(true, false);
-                    scrollPane.setFadeScrollBars(false);
+                    ScrollPane MapscrollPane = new ScrollPane(skillsTable, skin);
+                    MapscrollPane.setScrollingDisabled(true, false);
+                    MapscrollPane.setFadeScrollBars(false);
 
-                    window.add(scrollPane).expand().fill().colspan(2).padTop(10);
+                    window.add(MapscrollPane).expand().fill().colspan(2).padTop(10);
                     break;
                 case 3:
                     window.clear();
@@ -529,6 +659,96 @@ public class GameMenuController extends Controller {
         return inventoryWindows;
     }
 
+    private void rebuildInventoryUI(Table inventoryTable, ArrayList<Quadruple<ImageButton, Image, Label, Label>> inventoryElements) {
+        inventoryTable.clear();
+        inventoryElements.clear();
+
+        int inventorySize = App.getCurrentGame().getCurrentPlayer().getInventory().getSize();
+        ArrayList<ArrayList<Good>> inventoryData = App.getCurrentGame().getCurrentPlayer().getInventory().getList();
+
+        int itemIndex = 0;
+
+        for (int row = 0; row < 3; row++) {
+            for (int col = 0; col < 12; col++) {
+                Table slotContainer = new Table();
+
+                if (itemIndex < inventorySize) {
+                    ArrayList<Good> goods = inventoryData.get(itemIndex);
+                    ImageButton imageButtonBackground = new ImageButton(
+                        Assets.getInstance().getDrawableSlot(),
+                        Assets.getInstance().getDrawableSlot(),
+                        Assets.getInstance().getDrawableHighlight()
+                    );
+
+                    Texture goodTexture = new Texture("GameAssets/null.png");
+                    if (!goods.isEmpty()) {
+                        goodTexture = new Texture(goods.get(0).getType().imagePath());
+                    }
+                    Image itemImage = new Image(new TextureRegion(goodTexture));
+                    itemImage.setTouchable(Touchable.disabled);
+                    itemImage.setScaling(Scaling.fit);
+                    itemImage.setSize(32, 32);
+
+                    final int currentIndex = itemIndex;
+
+                    imageButtonBackground.addListener(new ClickListener() {
+                        @Override
+                        public void clicked(InputEvent event, float x, float y) {
+                            // cursorGoods is ArrayList<Good> instead of cursorGood
+                            if (cursorGoods == null || cursorGoods.isEmpty()) {
+                                // Pick up entire stack from slot if any
+                                if (!goods.isEmpty()) {
+                                    cursorGoods = new ArrayList<>(goods);
+                                    goods.clear();
+                                    App.setCursorFromImage(cursorGoods.get(0).getType().imagePath());
+                                    rebuildInventoryUI(inventoryTable, inventoryElements);
+                                }
+                            } else {
+                                // Drop or swap entire stack
+                                if (goods.isEmpty()) {
+                                    // Place cursor stack into empty slot
+                                    goods.addAll(cursorGoods);
+                                    cursorGoods.clear();
+                                    cursorGoods = null;
+                                    App.setCursor();
+                                    rebuildInventoryUI(inventoryTable, inventoryElements);
+                                } else {
+                                    // Swap stacks
+                                    ArrayList<Good> temp = new ArrayList<>(goods);
+                                    goods.clear();
+                                    goods.addAll(cursorGoods);
+                                    cursorGoods.clear();
+                                    cursorGoods.addAll(temp);
+                                    App.setCursorFromImage(cursorGoods.get(0).getType().imagePath());
+                                    rebuildInventoryUI(inventoryTable, inventoryElements);
+                                }
+                            }
+                        }
+                    });
+
+                    Label quantityLabel = new Label(goods.isEmpty() ? "" : String.valueOf(goods.size()), Assets.getInstance().getSkin(), "Bold");
+                    quantityLabel.setFontScale(0.4f);
+
+                    inventoryElements.add(new Quadruple<>(imageButtonBackground, itemImage, null, quantityLabel));
+
+                    Stack slotStack = new Stack();
+                    slotStack.add(imageButtonBackground);
+                    slotStack.add(itemImage);
+
+                    slotContainer.add(slotStack).size(48, 48).row();
+                    slotContainer.add(quantityLabel);
+
+                } else {
+                    Image lockedImage = new Image(new Texture("GameAssets/Inventory_Table/locked.png"));
+                    slotContainer.add(lockedImage).size(48, 48);
+                }
+
+                inventoryTable.add(slotContainer).pad(4);
+                itemIndex++;
+            }
+            inventoryTable.row();
+        }
+    }
     private boolean tileValidity(Tile tile) {
         if (tile.getTileType() == TileType.STONE_WALL ||
             tile.getTileType() == TileType.WATER ||

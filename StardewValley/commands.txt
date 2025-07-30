@@ -17,7 +17,7 @@ cheat add item -n Wood -c 1000
 cheat add 100000 dollars
 cheat add item -n Carrot_Seed -c 100
 cheat add item -n Carrot -c 100
-cheat add item -n Carrot -c 200 
+cheat add item -n Carrot -c 200
 cheat add item -n Carrot -c 100
 cheat add item -n Carrot -c 100
 cheat add item -n Carrot -c 100
@@ -46,3 +46,10 @@ cheat add item -n Bomb -c 10
 cheat add item -n Bomb -c 10
 cheat add item -n Bomb -c 10
 cheat add item -n Bomb -c 10
+cheat add item -n Carrot -c 12
+cheat add item -n Carrot -c 12
+cheat add item -n Carrot -c 12
+cheat add item -n Carrot -c 12
+cheat add item -n Carrot -c 24
+cheat add item -n Carrot -c 24
+cheat add 12 dollars

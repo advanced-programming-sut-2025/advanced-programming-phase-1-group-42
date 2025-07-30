@@ -122,4 +122,42 @@ public class App {
         pixmap.dispose();
     }
 
+    public static void setCursorFromImage(String imagePath) {
+        Pixmap original = new Pixmap(Gdx.files.internal(imagePath));
+
+        int width = original.getWidth();
+        int height = original.getHeight();
+
+        // Find next power of two for width and height
+        int pow2Width = Integer.highestOneBit(width);
+        if (pow2Width < width) pow2Width <<= 1;
+
+        int pow2Height = Integer.highestOneBit(height);
+        if (pow2Height < height) pow2Height <<= 1;
+
+        Pixmap pixmap;
+
+        if (width == pow2Width && height == pow2Height) {
+            // Already power-of-two size, use as is
+            pixmap = original;
+        } else {
+            // Resize to power-of-two pixmap
+            pixmap = new Pixmap(pow2Width, pow2Height, original.getFormat());
+            pixmap.drawPixmap(original, 0, 0);
+            original.dispose();
+        }
+
+        int xHotspot = pixmap.getWidth() / 2;  // Center hotspot
+        int yHotspot = pixmap.getHeight() / 2;
+
+        if (cursor != null) {
+            cursor.dispose();
+        }
+
+        cursor = Gdx.graphics.newCursor(pixmap, xHotspot, yHotspot);
+        Gdx.graphics.setCursor(cursor);
+
+        pixmap.dispose();
+    }
+
 }
