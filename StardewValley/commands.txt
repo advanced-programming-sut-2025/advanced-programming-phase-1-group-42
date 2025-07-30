@@ -35,3 +35,14 @@ cheat add item -n Wedding_Ring -c 10
 cheat add 10000 dollars
 cheat add item -c Copper_Bar -c 100
 cheat add item -n Copper_Bar -c 100
+cheat add 10000 dollars
+cheat add item -n Bomb -c 10
+artisan use Bomb
+artisan use Bomb
+
+artisan use Bomb
+cheat add item -n Bomb -c 10
+cheat add item -n Bomb -c 10
+cheat add item -n Bomb -c 10
+cheat add item -n Bomb -c 10
+cheat add item -n Bomb -c 10

@@ -15,6 +15,8 @@ import com.StardewValley.models.game_structure.Map;
 import com.StardewValley.models.game_structure.Tile;
 import com.StardewValley.models.goods.Good;
 import com.StardewValley.models.goods.GoodType;
+import com.StardewValley.models.goods.craftings.Crafting;
+import com.StardewValley.models.goods.craftings.CraftingType;
 import com.StardewValley.models.goods.fishs.Fish;
 import com.StardewValley.models.goods.foods.FoodType;
 import com.StardewValley.models.goods.foragings.ForagingMineralType;
@@ -132,6 +134,14 @@ public class GameView implements Screen, InputProcessor {
     private final TextButton[] upgradeButton = {new TextButton("Upgrade", skin)};
     private SelectBox<String> toolSelectBox;
     private Window upgradeWindow;
+
+    private Window craftingUseWindow;
+    private Table craftingUseTable;
+    private Label craftingLabel;
+    private ArrayList<SelectBox<String>> craftingSelectBox;
+    private TextButton craftingUseButton;
+    private TextButton craftingBackButton;
+    private Label craftingMessageLabel;
 
     public GameView(GameMenuController controller, Skin skin) {
         this.controller = controller;
@@ -333,6 +343,11 @@ public class GameView implements Screen, InputProcessor {
                 selectedPlayer = player;
                 initFriend();
                 return true;
+            }
+            else if (player.getCoordinate().equals(coordinate) &&
+                !player.getInHandGood().isEmpty() &&
+                player.getInHandGood().getLast() instanceof Crafting) {
+                    initCraftingWindow(player.getInHandGood());
             }
         }
 
@@ -1866,9 +1881,9 @@ public class GameView implements Screen, InputProcessor {
             (Gdx.graphics.getHeight() - craftingWindow.getHeight()) / 2
         );
 
-        craftingTable = new Table(skin);
-        craftingTable.top().left();
-        craftingTable.setFillParent(false);
+        craftingUseTable = new Table(skin);
+        craftingUseTable.top().left();
+        craftingUseTable.setFillParent(false);
 
         controller.getCraftingController().refreshRecipes();
         ArrayList<Pair<Pair<ImageButton, Image>, Integer>> craftingRecipes = controller.getCraftingController().getCraftingRecipes();
@@ -1884,15 +1899,15 @@ public class GameView implements Screen, InputProcessor {
             itemTable.add(slotButton).size(64, 64).padRight(5);
             itemTable.add(itemImage).size(48, 48).padLeft(-48);
 
-            craftingTable.add(itemTable).pad(5);
+            craftingUseTable.add(itemTable).pad(5);
 
             count++;
             if (count % columns == 0) {
-                craftingTable.row();
+                craftingUseTable.row();
             }
         }
 
-        ScrollPane craftingScrollPane = new ScrollPane(craftingTable, skin);
+        ScrollPane craftingScrollPane = new ScrollPane(craftingUseTable, skin);
         craftingScrollPane.setFadeScrollBars(false);
         craftingScrollPane.setForceScroll(false, true);
 
@@ -2601,6 +2616,66 @@ public class GameView implements Screen, InputProcessor {
 
     public Stage getStaticStage() {
         return staticStage;
+    }
+
+    private void initCraftingWindow(ArrayList<Good> goods) {
+        craftingUseWindow = new Window(goods.getLast().getName() + " Crafting", skin);
+        craftingUseWindow.setSize(1000, 500);
+        craftingUseWindow.setPosition(
+            (staticStage.getWidth() - craftingUseWindow.getWidth()) / 2,
+            (staticStage.getHeight() - craftingUseWindow.getHeight()) / 2
+        );
+
+        craftingUseTable = new Table(skin);
+        craftingUseTable.setFillParent(true);
+        craftingUseTable.pad(30);
+
+        craftingLabel = new Label("Select Crafting ingredients:", skin);
+        craftingUseTable.add(craftingLabel).fillX().expandX().center().row();
+        craftingSelectBox = new ArrayList<>();
+        craftingSelectBox.add(new SelectBox<>(skin));
+        craftingSelectBox.add(new SelectBox<>(skin));
+        for (SelectBox<String> selectBox : craftingSelectBox) {
+            Array<String> craftingArray = new Array<>();
+            for (ArrayList<Good> goodArrayList : App.getCurrentGame().getCurrentPlayer().getInventory().getList()) {
+                if (!goodArrayList.isEmpty())
+                    craftingArray.add(goodArrayList.getLast().getName());
+            }
+
+            selectBox.setItems(craftingArray);
+            selectBox.setSelectedIndex(0);
+            craftingUseTable.add(selectBox).fillX().expandX().center().row();
+        }
+
+        craftingUseButton = new TextButton("Use Crafting", skin);
+        craftingUseTable.add(craftingUseButton).fillX().expandX().center().row();
+        craftingMessageLabel = new Label("", skin);
+        craftingUseButton.addListener(new ClickListener() {
+           @Override
+           public void clicked(InputEvent event, float x, float y) {
+               Result res = controller.artisanUse(goods.getLast().getName(), craftingSelectBox.get(0).getSelected(),
+                   craftingSelectBox.get(1).getSelected());
+                craftingMessageLabel.setText(res.message());
+           }
+        });
+
+        craftingBackButton = new TextButton("Back", skin);
+        craftingUseTable.add(craftingBackButton).fillX().expandX().center().row();
+        craftingBackButton.addListener(new ClickListener() {
+            @Override
+            public void clicked(InputEvent event, float x, float y) {
+                closeCraftingWindow();
+            }
+        });
+
+        craftingUseTable.add(craftingMessageLabel).fillX().expandX().center().row();
+
+        craftingUseWindow.addActor(craftingUseTable);
+        staticStage.addActor(craftingUseWindow);
+    }
+
+    private void closeCraftingWindow() {
+        craftingUseWindow.remove();
     }
 }
 
