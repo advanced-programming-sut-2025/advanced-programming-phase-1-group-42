@@ -907,7 +907,7 @@ public class GameMenuController extends Controller {
             if (blacksmith.upgradeTool((Tool) game.getCurrentPlayer().getInHandGood().getLast())) {
                 return new Result(false, "Your tool has successfully upgraded!");
             } else
-                return new Result(false, "You don't have enough money & ingredients to upgrade "
+                return new Result(false, "You don't have enough money & \ningredients to upgrade "
                     + game.getCurrentPlayer().getInHandGood().getLast().getName() + "!");
         } else
             return new Result(false, "You don't have tool in your hand!");

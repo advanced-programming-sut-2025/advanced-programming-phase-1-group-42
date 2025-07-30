@@ -65,7 +65,7 @@ import static java.lang.Math.min;
 
 
 public class GameView implements Screen, InputProcessor {
-    private Skin skin;
+    private Skin skin = Assets.getInstance().getSkin();
     private GameMenuController controller;
     private Stage stage;
     private Table table;
@@ -127,6 +127,13 @@ public class GameView implements Screen, InputProcessor {
     private TextButton flowerButton;
     private TextButton marriageButton;
     private Player selectedPlayer;
+
+    private Label upgradeLabel;
+    private Label descriptionLabel;
+    private Label messageLabel;
+    private final TextButton[] upgradeButton = {new TextButton("Upgrade", skin)};
+    private SelectBox<String> toolSelectBox;
+    private Window upgradeWindow;
 
     public GameView(GameMenuController controller, Skin skin) {
         this.controller = controller;
@@ -308,7 +315,6 @@ public class GameView implements Screen, InputProcessor {
         return false;
     }
 
-
     @Override
     public boolean touchDown(int screenX, int screenY, int pointer, int button) {
         Vector3 touchPos = new Vector3(screenX, screenY, 0);
@@ -445,35 +451,44 @@ public class GameView implements Screen, InputProcessor {
             info.setAlignment(Align.center);
 
 
+
+
             // MarnieRanch
             if (building instanceof MarnieRanch) {
                 marnieRanchShop(addButton, countLabel, removeButton, purchaseButton, info, tileX, tileY,
                     (MarnieRanch) building, selectedNameLabel, itemsTable, counterPanel, selectedPanel, scrollPane, content);
-            } else if (building instanceof CarpenterShop) {
+                staticStage.addActor(window);
+            }
+            else if (building instanceof CarpenterShop) {
                 carpenterShop(purchaseButton, (CarpenterShop) building, selectedNameLabel, itemsTable, counterPanel,
                     info, selectedPanel, scrollPane, content);
+                staticStage.addActor(window);
             }
             else if (building instanceof FishShop) {
                 fishShop(addButton, countLabel, removeButton, purchaseButton, info, tileX, tileY, (FishShop) building,
                     selectedNameLabel, itemsTable, counterPanel, selectedPanel, scrollPane, content);
+                staticStage.addActor(window);
             }
             else if (building instanceof PierreGeneralStore) {
                 pierreShop(addButton, countLabel, removeButton, purchaseButton, info, tileX, tileY, (PierreGeneralStore) building,
                     selectedNameLabel, itemsTable, counterPanel, selectedPanel, scrollPane, content);
+                staticStage.addActor(window);
             }
             else if (building instanceof JojaMart) {
                 jojaShop(addButton, countLabel, removeButton, purchaseButton, info, tileX, tileY, (JojaMart) building,
                     selectedNameLabel, itemsTable, counterPanel, selectedPanel, scrollPane, content);;
+                staticStage.addActor(window);
             }
             else if (building instanceof TheStarDropSaloon) {
                 stardropShop(addButton, countLabel, removeButton, purchaseButton, info, tileX, tileY, (TheStarDropSaloon) building,
                     selectedNameLabel, itemsTable, counterPanel, selectedPanel, scrollPane, content);
+                staticStage.addActor(window);
             }
             else if (building instanceof Blacksmith) {
-                blacksmithShop(addButton, countLabel, removeButton, purchaseButton, info, tileX, tileY, (Blacksmith) building,
+                blacksmithShop(window, addButton, countLabel, removeButton, purchaseButton, info, tileX, tileY, (Blacksmith) building,
                     selectedNameLabel, itemsTable, counterPanel, selectedPanel, scrollPane, content);
             }
-            staticStage.addActor(window);
+
 
 //            multiplexer.addProcessor(stage);
 //            multiplexer.addProcessor(this);
@@ -1083,7 +1098,7 @@ public class GameView implements Screen, InputProcessor {
         lastConstructionsForShop(info, counterPanel, selectedPanel, scrollPane, content);
     }
 
-    private void blacksmithShop(TextButton addButton, Label countLabel, TextButton removeButton, TextButton purchaseButton,
+    private void blacksmithShop(Window window, TextButton addButton, Label countLabel, TextButton removeButton, TextButton purchaseButton,
                               Label info, int tileX, int tileY, Blacksmith blacksmith, Label selectedNameLabel, Table itemsTable,
                               Table counterPanel, Table selectedPanel, ScrollPane scrollPane, Table content) {
 
@@ -1091,7 +1106,112 @@ public class GameView implements Screen, InputProcessor {
         final int[] selectedCount = {0};
         final boolean[] filterAvailable = {false};
 
+        upgradeWindow = new Window("Upgrade Tool", skin);
+        upgradeWindow.setSize(1000, 600);
+        upgradeWindow.setResizable(false);
+        upgradeWindow.setPosition(
+            (staticStage.getWidth() - upgradeWindow.getWidth()) / 2,
+            (staticStage.getHeight() - upgradeWindow.getHeight()) / 2
+        );
+
+        Table upgradePanel = new Table(skin);
+        counterPanel.center();
+        upgradeLabel = new Label("Select Tool", skin);
+        descriptionLabel = new Label("", skin);
+        messageLabel = new Label("", skin);
+        toolSelectBox = new SelectBox<>(skin);
+        Array<String> tools = new Array<>();
+        for (ArrayList<Good> goods : App.getCurrentGame().getCurrentPlayer().getInventory().getList()) {
+            if (!goods.isEmpty() && goods.getLast() instanceof Tool)
+                tools.add(goods.getLast().getName());
+        }
+        toolSelectBox.setItems(tools);
+        toolSelectBox.setSelectedIndex(0);
+        upgradeSelect();
+
+        toolSelectBox.addListener(new ChangeListener() {
+            @Override
+            public void changed(ChangeEvent event, Actor actor) {
+                upgradeSelect();
+            }
+        });
+        upgradePanel.add(upgradeLabel).center().row();
+        upgradePanel.add(toolSelectBox).center().row();
+        upgradePanel.add(descriptionLabel).center().row();
+        upgradePanel.add(upgradeButton).center().row();
+        TextButton upgradeBackButton = new TextButton("Back", skin);
+        upgradeBackButton.addListener(new ClickListener() {
+            @Override
+            public void clicked(InputEvent event, float x, float y) {
+                upgradeWindow.remove();
+            }
+        });
+        upgradePanel.add(upgradeBackButton).center().row();
+        upgradePanel.add(messageLabel).padLeft(-50).center().row();
+        upgradeWindow.add(upgradePanel).center().row();
+
+        Window blacksmithWindow = new Window("Blacksmith Shop", skin);
+        blacksmithWindow.setSize(300, 300);
+        blacksmithWindow.setResizable(false);
+        blacksmithWindow.setPosition(
+            (Gdx.graphics.getWidth() - blacksmithWindow.getWidth()) / 2,
+            (Gdx.graphics.getHeight() - blacksmithWindow.getHeight()) / 2
+        );
+        Table blacksmithTable = new Table(skin);
+        TextButton shopButton = new TextButton("Shop", skin);
+        shopButton.addListener(new ClickListener() {
+            @Override
+            public void clicked(InputEvent event, float x, float y) {
+                blacksmithWindow.remove();
+                smithShop(window, addButton, countLabel, removeButton, purchaseButton, info, tileX, tileY, blacksmith,
+                    selectedNameLabel, itemsTable, counterPanel, selectedPanel, scrollPane, content, selectedGoodType,
+                    selectedCount, filterAvailable);
+            }
+        });
+        TextButton upgradeButton = new TextButton("Upgrade", skin);
+        upgradeButton.addListener(new ClickListener() {
+           @Override
+           public void clicked(InputEvent event, float x, float y) {
+               blacksmithWindow.remove();
+               toolsUpgradeInit(upgradeWindow);
+           }
+        });
+        blacksmithTable.add(shopButton).fillX().expandX().center().row();
+        blacksmithTable.add(upgradeButton).fillX().expandX().center().row();
+        blacksmithWindow.add(blacksmithTable).center().row();
+
+        staticStage.addActor(blacksmithWindow);
+    }
+
+    private void upgradeSelect() {
+        String selectedToolName = toolSelectBox.getSelected();
+        Tool selectedTool = null;
+        for (ArrayList<Good> goods : App.getCurrentGame().getCurrentPlayer().getInventory().getList()) {
+            if (!goods.isEmpty() && goods.getLast() instanceof Tool && goods.getLast().getName().equals(selectedToolName)) {
+                selectedTool = (Tool) goods.getLast();
+                break;
+            }
+
+        }
+
+        descriptionLabel.setText(Blacksmith.getUpgradeDescription().get(selectedTool.getToolLevel().getLevelNumber()));
+        upgradeButton[0] = new TextButton("Upgrade", skin);
+        Tool finalSelectedTool = selectedTool;
+        upgradeButton[0].addListener(new ClickListener() {
+            @Override
+            public void clicked(InputEvent event, float x, float y) {
+                Result res = controller.toolsUpgrade(finalSelectedTool.getName());
+                messageLabel.setText(res.message());
+            }
+        });
+    }
+
+    private void smithShop(Window window, TextButton addButton, Label countLabel, TextButton removeButton, TextButton purchaseButton,
+                                Label info, int tileX, int tileY, Blacksmith blacksmith, Label selectedNameLabel, Table itemsTable,
+                                Table counterPanel, Table selectedPanel, ScrollPane scrollPane, Table content,
+                                GoodType[] selectedGoodType, int[] selectedCount, boolean[] filterAvailable) {
         TextButton filterButton = new TextButton("Filter Availables", skin, "Earth");
+        staticStage.addActor(window);
 
         addButton.addListener(new ChangeListener() {
             @Override
@@ -1140,9 +1260,6 @@ public class GameView implements Screen, InputProcessor {
                 }
                 goodsListInit(addButton, countLabel, removeButton, purchaseButton, blacksmith, selectedNameLabel,
                     itemsTable, selectedGoodType, selectedCount, filterAvailable, filterButton, info);
-                toolsUpgradeInit(addButton, countLabel, removeButton, purchaseButton, blacksmith, selectedNameLabel,
-                    itemsTable, selectedGoodType, selectedCount, filterAvailable, filterButton, info);
-
             }
         });
 
@@ -1153,8 +1270,6 @@ public class GameView implements Screen, InputProcessor {
 
         goodsListInit(addButton, countLabel, removeButton, purchaseButton, blacksmith, selectedNameLabel, itemsTable,
             selectedGoodType, selectedCount, filterAvailable, filterButton, info);
-        toolsUpgradeInit(addButton, countLabel, removeButton, purchaseButton, blacksmith, selectedNameLabel,
-            itemsTable, selectedGoodType, selectedCount, filterAvailable, filterButton, info);
 
         lastConstructionsForShop(info, counterPanel, selectedPanel, scrollPane, content);
     }
@@ -1615,7 +1730,6 @@ public class GameView implements Screen, InputProcessor {
         setInputProcessor();
     }
 
-
     // cooking
     public void initCookingWindow() {
         if (cookingWindow != null) {
@@ -1663,8 +1777,6 @@ public class GameView implements Screen, InputProcessor {
         staticStage.addActor(cookingWindow);
         setInputProcessor();
     }
-
-
 
     public void showRecipeDetails(CookingRecipeType recipeType) {
         if (cookingRecipeWindow != null) {
@@ -1742,7 +1854,6 @@ public class GameView implements Screen, InputProcessor {
 
         setInputProcessor();
     }
-
 
     // crafting
     public void initCraftingWindow() {
@@ -2080,36 +2191,8 @@ public class GameView implements Screen, InputProcessor {
         }
     }
 
-    private void toolsUpgradeInit(TextButton addButton, Label countLabel, TextButton removeButton, TextButton purchaseButton,
-                             Blacksmith blacksmith, Label selectedNameLabel, Table itemsTable, GoodType[] selectedGoodType,
-                             int[] selectedCount, boolean[] filterAvailable, TextButton filterButton, Label info) {
-        for (int i = 0; i < 4; i++) {
-            TextButton upgradeButton = new TextButton("Upgrade to " + ToolLevel.toolLevels.get(i + 1).getName(), skin);
-//            upgradeButton.addListener(new ChangeListener() {
-//                @Override
-//                public void changed(ChangeEvent event, Actor actor) {
-//                    if (gameBuilding.findProduct(product).second() == 0) {
-//                        info.setText("This product's daily quantity is 0");
-//                        info.setVisible(true);
-//                        addButton.setVisible(false);
-//                        removeButton.setVisible(false);
-//                        countLabel.setVisible(false);
-//                        purchaseButton.setVisible(false);
-//                    } else {
-//                        selectedGoodType[0] = null;
-//                        addButton.setVisible(true);
-//                        removeButton.setVisible(true);
-//                        countLabel.setVisible(true);
-//                        selectedGoodType[0] = product;
-//                        selectedCount[0] = 0;
-//                        selectedNameLabel.setText(product.getName());
-//                        countLabel.setText(String.valueOf(selectedCount[0]));
-//                        purchaseButton.setVisible(true);
-//                        info.setVisible(false);
-//                    }
-//                }
-//            });
-        }
+    private void toolsUpgradeInit(Window window) {
+        staticStage.addActor(window);
     }
 
     private void lastConstructionsForShop(Label info, Table counterPanel, Table selectedPanel, ScrollPane scrollPane, Table content) {

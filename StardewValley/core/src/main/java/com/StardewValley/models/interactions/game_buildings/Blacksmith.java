@@ -28,6 +28,14 @@ public class Blacksmith extends GameBuilding {
     private final ArrayList<Integer> dailyToolUpgradeLimit = new ArrayList<>();
     private final ArrayList<Integer> dailyTrashCanUpgradeLimit = new ArrayList<>();
     private final ArrayList<Pair<GoodType, Integer>> stock = new ArrayList<>();
+    private final static ArrayList<String> upgradeDescription = new ArrayList<>(
+        Arrays.asList(
+            "Copper Tool requirements:\nCopper_Bar: 5x",
+            "Iron Tool requirements:\nIron_Bar: 5x",
+            "Gold Tool requirements:\nGold_Bar: 5x",
+            "Iridium Tool requirements:\nIridium_Bar: 5x"
+        )
+    );
 
     public static ArrayList<Tile> getExpectedTiles(ArrayList<Tile> tiles) {
         return getTiles(tiles, new Coordinate(10, 60));
@@ -80,7 +88,7 @@ public class Blacksmith extends GameBuilding {
             player.getWallet().decreaseBalance(upgradeToolCost.get(nextLevel));
         }
 
-        Inventory.decreaseGoods(goods, (Integer) upgradeIngredients.get(nextLevel).second());
+        Inventory.decreaseGoods(goods, upgradeIngredients.get(nextLevel).second());
         ((ToolType) tool.getType()).setLevel(((ToolType) tool.getType()).getLevel().increaseGoodLevel());
         return true;
     }
@@ -140,5 +148,9 @@ public class Blacksmith extends GameBuilding {
             }
         }
         return null;
+    }
+
+    public static ArrayList<String> getUpgradeDescription() {
+        return upgradeDescription;
     }
 }
