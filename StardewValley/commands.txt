@@ -32,3 +32,9 @@ cheat add item -n Wedding_Ring -c 10
 cheat add item -n Wedding_Ring -c 10
 cheat add item -c Wedding_Ring -c 10
 cheat add item -n Wedding_Ring -c 10
+cheat add item -n Carrot -c 12
+cheat add item -n Carrot -c 12
+cheat add item -n Carrot -c 12
+cheat add item -n Carrot -c 12
+cheat add item -n Carrot -c 24
+cheat add item -n Carrot -c 24
