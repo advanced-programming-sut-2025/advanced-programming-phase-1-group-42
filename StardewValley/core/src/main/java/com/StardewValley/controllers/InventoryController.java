@@ -157,11 +157,14 @@ public class InventoryController {
                     quadruple.b.setDrawable(new TextureRegionDrawable(new Texture("GameAssets/null.png")));
                 }
 
-                if (App.getCurrentGame().getCurrentPlayer().getInventory().getList().get(i) ==
-                    App.getCurrentGame().getCurrentPlayer().getInHandGood())
-                    quadruple.a.setChecked(true);
-                else
-                    quadruple.a.setChecked(false);
+
+                if (!gameView.isTabClicked()) {
+                    if (App.getCurrentGame().getCurrentPlayer().getInventory().getList().get(i) ==
+                        App.getCurrentGame().getCurrentPlayer().getInHandGood())
+                        quadruple.a.setChecked(true);
+                    else
+                        quadruple.a.setChecked(false);
+                }
 
                 quadruple.d.setText((goods.isEmpty()) ? "" : String.valueOf(goods.size()));
             }

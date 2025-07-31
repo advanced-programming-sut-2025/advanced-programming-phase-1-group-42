@@ -246,10 +246,10 @@ public class GameMenuController extends Controller {
             inventoryController.playerChangedInventory();
         }
         if (Gdx.input.isKeyJustPressed(Input.Keys.C)) {
-
+            gameView.touchDown(Gdx.input.getX(), Gdx.input.getY(), 0, Input.Buttons.LEFT);
         }
         if (Gdx.input.isKeyJustPressed(Input.Keys.X)) {
-
+            gameView.touchDown(Gdx.input.getX(), Gdx.input.getY(), 0, Input.Buttons.LEFT);
         }
         if (Gdx.input.isKeyJustPressed(Input.Keys.E) || Gdx.input.isKeyJustPressed(Input.Keys.ESCAPE)) {
             ArrayList<Window> inventoryWindows = createWindows();
@@ -260,7 +260,10 @@ public class GameMenuController extends Controller {
                 gameView.closeMainTable();
         }
         if (Gdx.input.isKeyJustPressed(Input.Keys.F)) {
-
+            if (gameView.getJournalWindow() == null)
+                gameView.initJournalWindow();
+            else
+                gameView.closeJournalWindow();
         }
 
         if (Gdx.input.isKeyJustPressed(Input.Keys.M)) {
@@ -272,7 +275,12 @@ public class GameMenuController extends Controller {
                 gameView.closeMainTable();
         }
         if (Gdx.input.isKeyJustPressed(Input.Keys.TAB)) {
-
+            gameView.setTabClicked(!gameView.isTabClicked());
+            if (gameView.isTabClicked()) {
+                for (Quadruple<ImageButton, Image, Label, Label> inventoryElement : inventoryController.getInventoryElements()) {
+                    inventoryElement.a.setChecked(true);
+                }
+            }
         }
         if (Gdx.input.isKeyJustPressed(Input.Keys.T)) {
             if (gameView.getToolsWindow() == null)
@@ -281,7 +289,7 @@ public class GameMenuController extends Controller {
                 gameView.closeToolsWindow();
         }
         if (Gdx.input.isKeyJustPressed(Input.Keys.F4)) {
-
+            //TODO
         }
         if (Gdx.input.isKeyJustPressed(Input.Keys.SPACE)) {
             if (gameView.getCheatWindow() == null)
@@ -784,10 +792,10 @@ public class GameMenuController extends Controller {
         view.getPlayerUsernames().remove(view.getPlayersPtr());
         view.getPlayerUsernames().add(view.getPlayersPtr(), user.getUsername());
         view.increasePlayersPtr();
-        for (int i = view.getPlayersPtr(); i < 5; i++) {
+        for (int i = view.getPlayersPtr(); i < 4; i++) {
             view.getPlayerUsernames().removeLast();
         }
-        for (int i = view.getPlayersPtr(); i < 5; i++) {
+        for (int i = view.getPlayersPtr(); i < 4; i++) {
             view.getPlayerUsernames().add("Guest " + (i - view.getPlayersPtr() + 1));
         }
     }
@@ -992,18 +1000,7 @@ public class GameMenuController extends Controller {
 
     public Result nextTurn() {
         App.getCurrentGame().nextPlayer();
-
-        StringBuilder news = new StringBuilder();
-        news.append("Current player: ").append(App.getCurrentGame().getCurrentPlayer().getUser().getUsername() + "\nNews:\n");
-        int ctr = 1;
-        for (String s : App.getCurrentGame().getCurrentPlayer().getNews()) {
-            news.append("\t").append(ctr++).append(". ").append(s);
-        }
-
-        App.getCurrentGame().getCurrentPlayer().getNews().clear();
-
-
-        return new Result(true, news.toString());
+        return new Result(true, "");
     }
 
 

@@ -111,7 +111,6 @@ public class Player {
         this.inHandGoodSprite = new Sprite(new Texture(Assets.getInstance().getNullPNGPath()));
         this.inHandGoodSprite.setPosition(coordinate.getX() * 40,
             coordinate.getY() * 40);
-
     }
 
     public void iniFriendships(ArrayList<Player> players) {

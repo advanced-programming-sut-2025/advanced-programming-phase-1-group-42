@@ -112,6 +112,11 @@ public class GameView implements Screen, InputProcessor {
     private Table friendsTable;
     private TextButton friendsBackButton;
 
+    private TextButton journalButton;
+    private Window journalWindow;
+    private Table journalTable;
+    private TextButton journalBackButton;
+
     private Window playerGiftWindow;
     private Table playerGiftTable;
     private Label playerGiftLabel;
@@ -143,7 +148,7 @@ public class GameView implements Screen, InputProcessor {
     private TextButton craftingBackButton;
     private Label craftingMessageLabel;
 
-    private ArrayList<Boolean> forceTerminateArray;
+    private boolean isTabClicked = false;
 
     public GameView(GameMenuController controller, Skin skin) {
         this.controller = controller;
@@ -172,9 +177,21 @@ public class GameView implements Screen, InputProcessor {
             }
         });
 
-        this.table.add(friendsButton).padTop(400).padLeft(-400).height(70).row();
-        this.table.add(inventoryTable).padTop(1100).padLeft(-50);
-        this.table.add(controller.getInventoryController().getProgressBar()).padTop(200).padLeft(800);
+        journalButton = new TextButton("Journal", skin);
+        journalButton.addListener(new ClickListener() {
+            @Override
+            public void clicked(InputEvent event, float x, float y) {
+                if (journalWindow == null)
+                    initJournalWindow();
+                else
+                    closeJournalWindow();
+            }
+        });
+
+        this.table.add(friendsButton).padTop(200).padLeft(-400).height(70).width(250).row();
+        this.table.add(journalButton).padLeft(-400).height(70).padTop(5).width(250).row();
+        this.table.add(inventoryTable).padTop(1000).padBottom(-200).padLeft(-50);
+        this.table.add(controller.getInventoryController().getProgressBar()).padTop(300).padLeft(800);
         this.table.row();
 
 
@@ -198,10 +215,6 @@ public class GameView implements Screen, InputProcessor {
 //        App.getCurrentGame().getCurrentPlayer().getInventory().addGood(Good.newGood(ForagingMineralType.COAL),1);
 //        App.getCurrentGame().getCurrentPlayer().getSkill().increaseMiningLevel();
 //        App.getCurrentGame().getCurrentPlayer().getSkill().increaseMiningLevel();
-
-
-
-
         Pixmap normal = new Pixmap(1, 1, Pixmap.Format.RGBA8888);
         normal.setColor(Color.YELLOW);
         normal.fill();
@@ -2845,15 +2858,55 @@ public class GameView implements Screen, InputProcessor {
         staticStage.addActor(terminateWindow);
     }
 
-    public ArrayList<Boolean> getForceTerminateArray() {
-        return forceTerminateArray;
+    public void initJournalWindow() {
+        journalWindow = new Window("Journal", skin, "Letter");
+        journalWindow.setSize(1000, 500);
+        journalWindow.setPosition(
+            (staticStage.getWidth() - journalWindow.getWidth()) / 2,
+            (staticStage.getHeight() - journalWindow.getHeight()) / 2
+        );
+
+        journalTable = new Table(skin);
+        journalWindow.add(new Label("Your news:", skin, "Bold")).fillX().expandX().center().row();
+        int ctr = 1;
+        for (int i = App.getCurrentGame().getCurrentPlayer().getNews().size() - 1; i >= 0; i--) {
+            String s = App.getCurrentGame().getCurrentPlayer().getNews().get(i);
+            journalTable.add(new Label(ctr++ + ". \n" + s, skin)).fillX().expandX().center().padTop(10).row();
+        }
+
+        ScrollPane scrollPane = new ScrollPane(journalTable);
+        journalWindow.add(scrollPane).padTop(10).row();
+
+        journalBackButton = new TextButton("Back", skin);
+        journalBackButton.addListener(new ClickListener() {
+            @Override
+            public void clicked(InputEvent event, float x, float y) {
+                closeJournalWindow();
+            }
+        });
+        journalWindow.add(journalBackButton).fillX().expandX().center().row();
+
+        staticStage.addActor(journalWindow);
     }
 
-    public void setForceTerminateArray(ArrayList<Boolean> forceTerminateArray) {
-        this.forceTerminateArray = forceTerminateArray;
+    public void closeJournalWindow() {
+        journalWindow.remove();
+        journalWindow = null;
+        journalTable.remove();
+    }
+
+    public Window getJournalWindow() {
+        return journalWindow;
+    }
+
+    public boolean isTabClicked() {
+        return isTabClicked;
+    }
+
+    public void setTabClicked(boolean tabClicked) {
+        isTabClicked = tabClicked;
     }
 }
-
 
 
 
