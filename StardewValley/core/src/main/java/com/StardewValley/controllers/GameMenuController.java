@@ -917,7 +917,6 @@ public class GameMenuController extends Controller {
             return new Result(false, "Just game admin can exit the game!");
         } else {
             App.setCurrentGame(null);
-            App.setCurrentMenu(Menu.GameMenu);
             return new Result(true, "You have successfully exited the game!");
         }
     }
@@ -2155,7 +2154,7 @@ public class GameMenuController extends Controller {
 
         int quantity = (count.isEmpty()) ? goods.size() : Integer.parseInt(count);
         if (quantity > goods.size())
-            return new Result(false, "You don't have enough number of this good in your inventory!");
+            return new Result(false, "You don't have enough number \nof this good in your inventory!");
 
         boolean flag = false;
         for (int i = 0; i < 8; i++) {
@@ -2179,7 +2178,7 @@ public class GameMenuController extends Controller {
         }
 
         if (flag)
-            return new Result(true, quantity + " number of " + productName + " has been added to ShippingBin!");
+            return new Result(true, quantity + " number of " + productName + " \nhas been added to ShippingBin!");
         else
             return new Result(false, "No ShippingBin found around you!");
     }

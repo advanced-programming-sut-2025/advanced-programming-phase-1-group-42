@@ -348,7 +348,13 @@ public class GameView implements Screen, InputProcessor {
                 !player.getInHandGood().isEmpty() &&
                 player.getInHandGood().getLast() instanceof Crafting) {
                     initCraftingWindow(player.getInHandGood());
+                    return true;
             }
+        }
+
+        if (selectedTile.findGood("ShippingBin") != null) {
+            initShippingBinWindow();
+            return true;
         }
 
         if (!App.getCurrentGame().getCurrentPlayer().getInHandGood().isEmpty() &&
@@ -2676,6 +2682,86 @@ public class GameView implements Screen, InputProcessor {
 
     private void closeCraftingWindow() {
         craftingUseWindow.remove();
+    }
+
+    private void initShippingBinWindow() {
+        Window shippingBinWindow = new Window("Shipping Bin", skin);
+        shippingBinWindow.setSize(1000, 600);
+        shippingBinWindow.setPosition(
+            (staticStage.getWidth() - shippingBinWindow.getWidth()) / 2,
+            (staticStage.getHeight() - shippingBinWindow.getHeight()) / 2
+        );
+
+        Table shippingBinTable = new Table(skin);
+        shippingBinTable.setFillParent(true);
+        shippingBinTable.pad(30);
+
+        Label shippingBinLabel = new Label("Choose your Good to sell: ", skin);
+        SelectBox<String> goodsSelectBox = new SelectBox<>(skin);
+        SelectBox<String> goodsCountSelectBox = new SelectBox<>(skin);
+        Array<String> goodsArray = new Array<>();
+        Array<String> goodsCountArray = new Array<>();
+        App.getCurrentGame().getCurrentPlayer().getInventory().getList().forEach(good -> {
+           if (!good.isEmpty())
+               goodsArray.add(good.getLast().getName());
+        });
+
+        goodsSelectBox.setItems(goodsArray);
+        goodsSelectBox.setSelectedIndex(0);
+
+        for (int i = 1; i <= App.getCurrentGame().getCurrentPlayer().getInventory().getFirstElementSize(); i++) {
+            goodsCountArray.add(String.valueOf(i));
+        }
+        goodsCountSelectBox.setItems(goodsCountArray);
+        goodsCountSelectBox.setSelectedIndex(0);
+
+        goodsSelectBox.addListener(new ChangeListener() {
+            @Override
+            public void changed(ChangeEvent changeEvent, Actor actor) {
+                String selected = goodsSelectBox.getSelected();
+                for (ArrayList<Good> good : App.getCurrentGame().getCurrentPlayer().getInventory().getList()) {
+                    if (!good.isEmpty() && good.getLast().getName().equals(selected)) {
+                        goodsCountArray.clear();
+                        for (int i = 1; i <= good.size(); i++) {
+                            goodsCountArray.add(String.valueOf(i));
+                        }
+                        goodsCountSelectBox.setItems(goodsCountArray);
+                        goodsCountSelectBox.setSelectedIndex(0);
+                        break;
+                    }
+                }
+            }
+        });
+
+        TextButton sellButton = new TextButton("Sell", skin);
+        Label sellMessageLabel = new Label("", skin);
+        sellButton.addListener(new ClickListener() {
+            @Override
+            public void clicked(InputEvent event, float x, float y) {
+                Result res = controller.sell(goodsSelectBox.getSelected(), goodsCountSelectBox.getSelected());
+                sellMessageLabel.setText(res.message());
+            }
+        });
+
+        TextButton sellBackButton = new TextButton("Back", skin);
+        sellBackButton.addListener(new ClickListener() {
+           @Override
+           public void clicked(InputEvent event, float x, float y) {
+               shippingBinWindow.remove();
+               shippingBinTable.remove();
+           }
+        });
+
+        shippingBinTable.add(shippingBinLabel).fillX().expandX().center().row();
+        shippingBinTable.add(goodsSelectBox).fillX().expandX().center().row();
+        shippingBinTable.add(goodsCountSelectBox).fillX().expandX().center().row();
+        shippingBinTable.add(sellButton).fillX().expandX().center().row();
+        shippingBinTable.add(sellBackButton).fillX().expandX().center().row();
+        shippingBinTable.add(sellMessageLabel).fillX().expandX().center().row();
+
+        shippingBinWindow.addActor(shippingBinTable);
+
+        staticStage.addActor(shippingBinWindow);
     }
 }
 
