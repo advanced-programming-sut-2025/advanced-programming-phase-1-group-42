@@ -41,6 +41,7 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
+import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.Touchable;
 import com.badlogic.gdx.scenes.scene2d.ui.*;
@@ -48,6 +49,7 @@ import com.badlogic.gdx.scenes.scene2d.ui.Stack;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 import com.badlogic.gdx.utils.Scaling;
+import com.badlogic.gdx.utils.viewport.FitViewport;
 //import com.mongodb.ConnectionString;
 //import com.mongodb.MongoClientSettings;
 //import com.mongodb.ServerApi;
@@ -82,7 +84,6 @@ public class GameMenuController extends Controller {
     private InventoryController inventoryController;
     private ClockController clockController;
     private FriendshipController friendshipController;
-
 
     private GameMenuView view;
     private GameView gameView;
@@ -187,7 +188,6 @@ public class GameMenuController extends Controller {
         fridgeController.updateFridge();
         friendshipController.update();
     }
-
 
     public void handleInput() {
         if (gameView.getCheatWindow() != null)
@@ -355,17 +355,18 @@ public class GameMenuController extends Controller {
             }
         }
 
-//        if (flag)
-//            App.getCurrentGame().getCurrentPlayer().getEnergy().decreaseTurnEnergyLeft(1);
+        if (flag)
+            App.getCurrentGame().getCurrentPlayer().getEnergy().decreaseTurnEnergyLeft(0.25);
     }
 
 
 
     private ArrayList<Good> cursorGoods = null;
     private Image cursorImage = new Image();
+
     private ArrayList<Window> createWindows() {
         ArrayList<Window> inventoryWindows = new ArrayList<>();
-        for (int i = 0; i < 4; i++) {
+        for (int i = 0; i < 5; i++) {
             final int index = i;
             Skin skin = Assets.getInstance().getSkin();
             Window window = new Window("", skin);
@@ -650,6 +651,11 @@ public class GameMenuController extends Controller {
                     window.row();
 
                     break;
+                case 4:
+                    window.setSize(width, height);
+                    gameView.initExitMenu(window);
+
+                    break;
                 default:
                     window.add(new Label("Empty", skin));
             }
@@ -917,29 +923,31 @@ public class GameMenuController extends Controller {
             return new Result(false, "Just game admin can exit the game!");
         } else {
             App.setCurrentGame(null);
+            Main.getMain().getScreen().dispose();
+            Main.getMain().setScreen(new MainMenuView(new MainMenuController(), Assets.getInstance().getSkin()));
             return new Result(true, "You have successfully exited the game!");
         }
     }
 
     public Result forceTerminate() {
-        Scanner scanner = new Scanner(System.in);
-        ArrayList<Boolean> poll = new ArrayList<>();
-        poll.add(true);
-        for (int i = 1; i < App.getCurrentGame().getPlayers().size(); i++) {
-            System.out.println(App.getCurrentGame().getPlayers().get(i).getUser().getUsername() +
-                ", Please give your vote to terminate the game: (y/n)");
-
-            String input = scanner.nextLine();
-            if (input.matches("\\s*y\\s*"))
-                poll.add(true);
-            else
-                poll.add(false);
-        }
-
-        for (Boolean p : poll) {
-            if (!p)
-                return new Result(false, "All players do not agree to terminate the game!");
-        }
+//        Scanner scanner = new Scanner(System.in);
+//        ArrayList<Boolean> poll = new ArrayList<>();
+//        poll.add(true);
+//        for (int i = 1; i < App.getCurrentGame().getPlayers().size(); i++) {
+//            System.out.println(App.getCurrentGame().getPlayers().get(i).getUser().getUsername() +
+//                ", Please give your vote to terminate the game: (y/n)");
+//
+//            String input = scanner.nextLine();
+//            if (input.matches("\\s*y\\s*"))
+//                poll.add(true);
+//            else
+//                poll.add(false);
+//        }
+//
+//        for (Boolean p : poll) {
+//            if (!p)
+//                return new Result(false, "All players do not agree to terminate the game!");
+//        }
 
         for (Player player : App.getCurrentGame().getPlayers()) {
             player.getUser().setPlaying(false);
@@ -976,6 +984,8 @@ public class GameMenuController extends Controller {
 //            System.out.println("Error while setting is Playing  user.");
 //        }
         App.setCurrentGame(null);
+        Main.getMain().getScreen().dispose();
+        Main.getMain().setScreen(new MainMenuView(new MainMenuController(), Assets.getInstance().getSkin()));
         return new Result(true, "Game terminated successfully!");
 
     }
@@ -2799,6 +2809,7 @@ public class GameMenuController extends Controller {
 
         return new Result(true, "test");
     }
+
 
 }
 

@@ -72,7 +72,7 @@ public class GameView implements Screen, InputProcessor {
     private Stage stage;
     private Table table;
     private final OrthographicCamera camera;
-    private final Viewport viewport;
+    private Viewport viewport;
     private int scaledSize;
     private Table inventoryTable;
 
@@ -142,6 +142,8 @@ public class GameView implements Screen, InputProcessor {
     private TextButton craftingUseButton;
     private TextButton craftingBackButton;
     private Label craftingMessageLabel;
+
+    private ArrayList<Boolean> forceTerminateArray;
 
     public GameView(GameMenuController controller, Skin skin) {
         this.controller = controller;
@@ -2082,13 +2084,12 @@ public class GameView implements Screen, InputProcessor {
         mainTable = new Table(skin);
         mainTable.setFillParent(true);
 
-
-        for (int i = 0; i < 8; i++) {
+        for (int i = 0; i < 6; i++) {
             ImageButton imageButton = controller.getInventoryController().getMainInventoryElements().get(i);
             if (i == index) {
                 mainTable.add(imageButton);
                 imageButton.setChecked(true);
-            } else if (i == 7)
+            } else if (i == 5)
                 mainTable.add(imageButton).padLeft(100);
             else
                 mainTable.add(imageButton);
@@ -2762,6 +2763,94 @@ public class GameView implements Screen, InputProcessor {
         shippingBinWindow.addActor(shippingBinTable);
 
         staticStage.addActor(shippingBinWindow);
+    }
+
+    public void initExitMenu(Window window) {
+        window.add(new Label("Exit", skin)).left().padBottom(10);
+        window.row();
+        Label messageLabel = new Label("", skin);
+
+        TextButton exitButton = new TextButton("Exit Game", skin);
+        exitButton.addListener(new ClickListener() {
+           @Override
+           public void clicked(InputEvent event, float x, float y) {
+               Result res = controller.exitGame();
+               messageLabel.setText(res.message());
+           }
+        });
+
+        window.add(exitButton).fillX().expandX().center().row();
+
+        TextButton textButton = new TextButton("Force Terminate", skin);
+        textButton.addListener(new ClickListener() {
+            @Override
+            public void clicked(InputEvent event, float x, float y) {
+                closeMainTable();
+                initTerminateWindow(0);
+            }
+        });
+        window.add(textButton).fillX().expandX().center().row();
+        window.add(messageLabel).fillX().expandX().center().row();
+
+
+    }
+
+    public void initTerminateWindow(int playerNumber) {
+        App.getCurrentGame().setCurrentPlayer(App.getCurrentGame().getPlayers().get(playerNumber));
+        Player player = App.getCurrentGame().getCurrentPlayer();
+        Window terminateWindow = new Window("", skin, "Letter");
+        terminateWindow.setSize(1000, 500);
+        terminateWindow.setPosition(
+            (staticStage.getWidth() - terminateWindow.getWidth()) / 2,
+            (staticStage.getHeight() - terminateWindow.getHeight()) / 2
+        );
+
+        Label terminateMessageLabel = new Label(player.getPlayerUsername() + ", Are you agree to terminate the game?", skin);
+        TextButton yesButton = new TextButton("Yes", skin);
+        TextButton noButton = new TextButton("No", skin);
+        TextButton backButton = new TextButton("Back", skin);
+
+        terminateWindow.add(terminateMessageLabel).colspan(3).fillX().expandX().center().row();
+        terminateWindow.add(yesButton).fillX().padTop(10);
+        terminateWindow.add(noButton).fillX().padTop(10);
+        terminateWindow.add(backButton).fillX().padTop(10).row();
+
+        yesButton.addListener(new ClickListener() {
+           @Override
+           public void clicked(InputEvent event, float x, float y) {
+               terminateWindow.remove();
+               if (playerNumber == 3)
+                   controller.forceTerminate();
+               else
+                   initTerminateWindow(playerNumber + 1);
+           }
+        });
+
+        noButton.addListener(new ClickListener() {
+           @Override
+           public void clicked(InputEvent event, float x, float y) {
+               terminateWindow.remove();
+           }
+        });
+
+        backButton.addListener(new ClickListener() {
+           @Override
+           public void clicked(InputEvent event, float x, float y) {
+               terminateWindow.remove();
+               if (playerNumber > 0)
+                   initTerminateWindow(playerNumber - 1);
+           }
+        });
+
+        staticStage.addActor(terminateWindow);
+    }
+
+    public ArrayList<Boolean> getForceTerminateArray() {
+        return forceTerminateArray;
+    }
+
+    public void setForceTerminateArray(ArrayList<Boolean> forceTerminateArray) {
+        this.forceTerminateArray = forceTerminateArray;
     }
 }
 
