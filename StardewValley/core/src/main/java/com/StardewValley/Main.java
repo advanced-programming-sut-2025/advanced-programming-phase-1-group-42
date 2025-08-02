@@ -1,5 +1,6 @@
 package com.StardewValley;
 
+import com.StardewValley.client.AppClient;
 import com.StardewValley.controllers.LoginRegisterMenuController;
 import com.StardewValley.models.App;
 import com.StardewValley.models.Assets;
@@ -18,6 +19,15 @@ public class Main extends Game {
     public void create() {
         main = this;
         batch = new SpriteBatch();
+
+        try {
+            App.setClient(new AppClient());
+            App.getClient().connect("localhost", 1111);
+            System.out.println("Connected to server");
+        }
+        catch (Exception e) {
+            e.printStackTrace();
+        }
 
         App.setBackgroundMusic(Assets.getInstance().getStardewMusic());
         App.setCursor();

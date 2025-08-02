@@ -1,5 +1,6 @@
 package com.StardewValley.models;
 
+import com.StardewValley.client.AppClient;
 import com.StardewValley.models.enums.Menu;
 import com.StardewValley.models.game_structure.Game;
 import com.StardewValley.models.interactions.Player;
@@ -13,6 +14,8 @@ import java.util.ArrayList;
 import java.util.Arrays;
 
 public class App {
+    private static AppClient appClient;
+
     private final static ArrayList<User> users = new ArrayList<>();
 
     private static Menu currentMenu = null;
@@ -160,4 +163,11 @@ public class App {
         pixmap.dispose();
     }
 
+    public static AppClient getClient() {
+        return appClient;
+    }
+
+    public static void setClient(AppClient appClient) {
+        App.appClient = appClient;
+    }
 }

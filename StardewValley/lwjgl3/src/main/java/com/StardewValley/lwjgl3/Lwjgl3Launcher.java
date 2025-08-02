@@ -1,5 +1,7 @@
 package com.StardewValley.lwjgl3;
 
+import com.StardewValley.client.AppClient;
+import com.StardewValley.models.App;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.backends.lwjgl3.Lwjgl3Application;
 import com.badlogic.gdx.backends.lwjgl3.Lwjgl3ApplicationConfiguration;

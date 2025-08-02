@@ -785,6 +785,7 @@ public class GameMenuController extends Controller {
         }
         if (user.getPlaying()) {
             view.getNewGameErrorLabel().setText(user.getUsername() + " is already playing in other game!");
+            return;
         }
 
         view.getPlayerLabels().get(view.getPlayersPtr()).setText("Player " + (view.getPlayersPtr() + 1) + ":\n" +

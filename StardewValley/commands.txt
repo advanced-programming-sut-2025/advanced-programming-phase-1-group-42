@@ -54,3 +54,6 @@ cheat add item -n Carrot -c 24
 cheat add item -n Carrot -c 24
 cheat add 12 dollars
 cheat add 1000 dollars
+cheat add 10000 dollars
+cheat add item -n Wood -c 100
+cheat add item -n Wood -c 1000 
