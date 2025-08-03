@@ -3,6 +3,7 @@ package com.StardewValley.controllers;
 import com.StardewValley.Main;
 import com.StardewValley.models.App;
 import com.StardewValley.models.Assets;
+import com.StardewValley.models.DBInteractor;
 import com.StardewValley.models.Result;
 import com.StardewValley.models.enums.Menu;
 import com.StardewValley.views.GameMenuView;
@@ -37,11 +38,20 @@ public class MainMenuController extends Controller {
         else if (view.getLogoutButton().isChecked()) {
             view.getLogoutButton().setChecked(false);
 
-            if (App.getCurrentUser().isStayLogin()) {
-//             DBInteractor.resetStayLogin();
-            }
+//            if (App.getCurrentUser().isStayLogin()) {
+//                try {
+//                    DBInteractor.resetStayLogin();
+//                } catch (Exception e){
+//                    e.printStackTrace();
+//                }
+//            }
 
-//          DBInteractor.saveUsers();
+//            try {
+//                DBInteractor.loadUsers();
+//                System.out.println("hi");
+//            } catch (Exception e) {
+//                e.printStackTrace();
+//            }
             App.getCurrentUser().setStayLogin(false);
             App.setCurrentUser(null);
             Main.getMain().getScreen().dispose();

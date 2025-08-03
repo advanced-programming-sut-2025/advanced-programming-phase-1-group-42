@@ -41,7 +41,7 @@ public class Player {
     private Sprite sprite;
     private Sprite inHandGoodSprite;
     private float time;
-
+    private ArrayList<Pair<Player, ArrayList<String>>> privateChat = new ArrayList<>();
     private Buff buff;
     private Buff rejectionBuff;
 
@@ -351,5 +351,9 @@ public class Player {
 
     public void setInHandGoodSprite(Sprite inHandGoodSprite) {
         this.inHandGoodSprite = inHandGoodSprite;
+    }
+
+    public ArrayList<Pair<Player, ArrayList<String>>> getPrivateChat() {
+        return privateChat;
     }
 }

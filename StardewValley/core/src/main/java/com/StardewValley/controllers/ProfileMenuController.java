@@ -3,6 +3,7 @@ package com.StardewValley.controllers;
 import com.StardewValley.Main;
 import com.StardewValley.models.App;
 import com.StardewValley.models.Assets;
+import com.StardewValley.models.DBInteractor;
 import com.StardewValley.models.Result;
 import com.StardewValley.models.enums.Menu;
 import com.StardewValley.models.interactions.User;
@@ -87,7 +88,7 @@ public class ProfileMenuController extends Controller {
         }
 
         App.getCurrentUser().setUsername(username);
-//        DBInteractor.changeUserInDatabase(username,"username");
+//        DBInteractor.changeUserInDatabase(username, "username");
         return new Result(true, "Your username was successfully changed to " + username + ".");
     }
 
