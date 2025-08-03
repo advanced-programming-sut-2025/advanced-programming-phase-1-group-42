@@ -3,6 +3,7 @@ package com.StardewValley.views;
 import com.StardewValley.Main;
 import com.StardewValley.controllers.LoginRegisterMenuController;
 import com.StardewValley.models.Assets;
+import com.StardewValley.models.DBInteractor;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.scenes.scene2d.Stage;
@@ -78,6 +79,7 @@ public class LoginMenuView implements Screen {
         this.forgetErrorLabel.setFontScale(0.7f);
 
         this.controller.setView(this);
+
     }
 
     @Override

@@ -3,6 +3,7 @@ package com.StardewValley.controllers;
 import com.StardewValley.Main;
 import com.StardewValley.models.App;
 import com.StardewValley.models.Assets;
+import com.StardewValley.models.DBInteractor;
 import com.StardewValley.models.Result;
 import com.StardewValley.models.enums.LoginRegisterCommands;
 import com.StardewValley.models.enums.Menu;
@@ -75,15 +76,30 @@ public class LoginRegisterMenuController extends Controller {
         else if (registerView.getSubmitAnswerButton().isChecked()) {
             registerView.getSubmitAnswerButton().setChecked(false);
 
-            App.getUsers().add(new User(
+//            App.getUsers().add(new User(
+//                registerView.getUsernameField().getText(),
+//                getSHA256(registerView.getPasswordField().getText()),
+//                registerView.getNicknameField().getText(),
+//                registerView.getEmailField().getText(),
+//                Gender.findGender(registerView.getGenderBox().getSelected()),
+//                registerView.getSecurityQuestionBox().getSelectedIndex(),
+//                registerView.getSecurityQuestionField().getText())
+//            );
+
+            User user = new User(
                 registerView.getUsernameField().getText(),
                 getSHA256(registerView.getPasswordField().getText()),
                 registerView.getNicknameField().getText(),
                 registerView.getEmailField().getText(),
                 Gender.findGender(registerView.getGenderBox().getSelected()),
                 registerView.getSecurityQuestionBox().getSelectedIndex(),
-                registerView.getSecurityQuestionField().getText())
-            );
+                registerView.getSecurityQuestionField().getText());
+            App.getUsers().add(user);
+//            try {
+//                DBInteractor.saveUsers();
+//            }  catch (Exception e) {
+//                e.printStackTrace();
+//            }
 
             registerView.getMessageLabel().setText("Your account has been successfully registered!");
             registerView.getSecurityQuestionWindow().setVisible(false);
