@@ -127,9 +127,13 @@ public class ClockController extends Controller {
         String currentWeatherName = App.getCurrentGame().getWeather().getName();
         String currentSeasonName = App.getCurrentGame().getDateTime().getSeason().getName();
         String currentDayOfWeek = App.getCurrentGame().getDateTime().getDayOfWeek();
-        int currentDayOfMonth = App.getCurrentGame().getDateTime().getDayOfSeason();
+//        int currentDayOfMonth = App.getCurrentGame().getDateTime().getDayOfSeason();
         int currentTimeOfDay = App.getCurrentGame().getDateTime().getTime();
-        int currentNetWorth = App.getCurrentGame().getCurrentPlayer().getWallet().getBalance();
+//        int currentNetWorth = App.getCurrentGame().getCurrentPlayer().getWallet().getBalance();
+
+        int currentDayOfMonth = App.getCurrentGame().getCurrentPlayer().getLastCoordinate().getX();
+        int currentNetWorth = App.getCurrentGame().getCurrentPlayer().getCoordinate().getX();
+
 
 
         if(currentNetWorth != lastNetWorth) {

@@ -187,6 +187,7 @@ public class GameMenuController extends Controller {
         clockController.update();
         fridgeController.updateFridge();
         friendshipController.update();
+
     }
 
     public void handleInput() {
@@ -203,15 +204,18 @@ public class GameMenuController extends Controller {
         boolean flag = false;
         if (Gdx.input.isKeyPressed(Input.Keys.W)) {
             if (tileValidity(App.getCurrentGame().getMap().findTileByXY(player.getCoordinate().getX(), player.getCoordinate().getY() + 1))) {
+                player.setLastCoordinate(new Coordinate(player.getCoordinate().getX(), player.getCoordinate().getY()));
                 player.setCoordinate(new Coordinate(player.getCoordinate().getX(), player.getCoordinate().getY() + 1));
                 player.setPlayerDirection(0);
                 player.getInHandGoodSprite().setPosition(player.getCoordinate().getX() * gameView.getScaledSize(),
                     player.getCoordinate().getY() * gameView.getScaledSize() + 23);
             }
             flag = true;
+            App.getCurrentGame().getMap().updateMap();
         }
         if (Gdx.input.isKeyPressed(Input.Keys.A)) {
             if (tileValidity(App.getCurrentGame().getMap().findTileByXY(player.getCoordinate().getX() - 1, player.getCoordinate().getY()))) {
+                player.setLastCoordinate(new Coordinate(player.getCoordinate().getX(), player.getCoordinate().getY()));
                 player.setCoordinate(new Coordinate(player.getCoordinate().getX() - 1, player.getCoordinate().getY()));
                 player.setPlayerDirection(1);
                 player.getInHandGoodSprite().setPosition(player.getCoordinate().getX() * gameView.getScaledSize() - 20,
@@ -220,18 +224,22 @@ public class GameMenuController extends Controller {
                     player.getInHandGoodSprite().flip(true, false);
             }
             flag = true;
+            App.getCurrentGame().getMap().updateMap();
         }
         if (Gdx.input.isKeyPressed(Input.Keys.S)) {
             if (tileValidity(App.getCurrentGame().getMap().findTileByXY(player.getCoordinate().getX(), player.getCoordinate().getY() - 1))) {
+                player.setLastCoordinate(new Coordinate(player.getCoordinate().getX(), player.getCoordinate().getY()));
                 player.setCoordinate(new Coordinate(player.getCoordinate().getX(), player.getCoordinate().getY() - 1));
                 player.setPlayerDirection(2);
                 player.getInHandGoodSprite().setPosition(player.getCoordinate().getX() * gameView.getScaledSize(),
                     player.getCoordinate().getY() * gameView.getScaledSize() + 23);
             }
             flag = true;
+            App.getCurrentGame().getMap().updateMap();
         }
         if (Gdx.input.isKeyPressed(Input.Keys.D)) {
             if (tileValidity(App.getCurrentGame().getMap().findTileByXY(player.getCoordinate().getX() + 1, player.getCoordinate().getY()))) {
+                player.setLastCoordinate(new Coordinate(player.getCoordinate().getX(), player.getCoordinate().getY()));
                 player.setCoordinate(new Coordinate(player.getCoordinate().getX() + 1, player.getCoordinate().getY()));
                 player.setPlayerDirection(3);
                 player.getInHandGoodSprite().setPosition(player.getCoordinate().getX() * gameView.getScaledSize() + 20,
@@ -240,6 +248,7 @@ public class GameMenuController extends Controller {
                     player.getInHandGoodSprite().flip(true, false);
             }
             flag = true;
+            App.getCurrentGame().getMap().updateMap();
         }
         if (Gdx.input.isKeyJustPressed(Input.Keys.P)) {
             nextTurn();

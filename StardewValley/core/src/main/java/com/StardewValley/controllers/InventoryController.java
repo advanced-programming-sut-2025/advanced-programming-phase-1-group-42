@@ -106,22 +106,22 @@ public class InventoryController {
                                 imageButton.setChecked(true);
                                 switch (i){
                                     case 0:
-                                        gameView.switchWindow(inventoryWindows.get(0));
+                                        gameView.switchWindow(inventoryWindows.get(0),0);
                                         break;
                                     case 1:
-                                        gameView.switchWindow(inventoryWindows.get(1));
+                                        gameView.switchWindow(inventoryWindows.get(1),1);
                                         break;
                                     case 2:
-                                        gameView.switchWindow(inventoryWindows.get(2));
+                                        gameView.switchWindow(inventoryWindows.get(2),2);
                                         break;
                                     case 3:
-                                        gameView.switchWindow(inventoryWindows.get(3));
+                                        gameView.switchWindow(inventoryWindows.get(3),3);
                                         break;
                                     case 4:
-                                        gameView.switchWindow(inventoryWindows.get(4));
+                                        gameView.switchWindow(inventoryWindows.get(4),4);
                                         break;
                                     default:
-                                        gameView.switchWindow(inventoryWindows.get(3));
+                                        gameView.switchWindow(inventoryWindows.get(3),3);
                                         break;
 
                                 }

@@ -44,6 +44,7 @@ public class Map {
     //Textures
     Texture farm_Background;
     Texture empty;
+    Texture null_txr;
     Texture wall;
     Texture water;
     Texture greenhouse;
@@ -72,6 +73,7 @@ public class Map {
     Texture willy ;
     Image farm_Background_img;
     Image empty_img ;
+    Image null_img;
     Image wall_img ;
     Image water_img ;
     Image greenhouse_img;
@@ -381,35 +383,35 @@ public class Map {
     }
 
 
-    private Window mapWindow;
-    boolean printMapFlag = false;
+    private Table mapTable;
+    private Stack[][] mapCells = new Stack[160][170];
     public ScrollPane createGraphicalMap() {
-        Table mapTable = new Table();
+        mapTable = new Table(); // use the field instead of a local variable
         mapTable.defaults().width(6).height(6);
 
-        for (int j = 0; j < 160; j++) {
+        rebuildMapTable(); // extract the build logic into a reusable method
+
+        ScrollPane scrollPane = new ScrollPane(mapTable, Assets.getInstance().getSkin());
+        scrollPane.setFadeScrollBars(false);
+        scrollPane.setScrollingDisabled(true, false);
+        scrollPane.setForceScroll(false, true);
+        scrollPane.setSize(980, 780);
+
+        return scrollPane;
+    }
+    private void rebuildMapTable() {
+        mapTable.clear();
+
+        for (int j = 1; j < 161; j++) {
             mapTable.row();
             for (int i = 0; i < 150; i++) {
                 Coordinate coordinate = new Coordinate(i, 160 - j);
                 Tile tile = findTile(coordinate);
-                Image img = plain_img;
+                Image img = null_img;
 
                 if (tile == null) {
                     img = empty_img;
                 } else {
-                    switch (tile.getTileType()) {
-                        case FARM -> img = farm_Background_img;
-                        case WATER -> img = water_img;
-                        case GREEN_HOUSE -> img = greenhouse_img;
-                        case PLAYER_BUILDING -> img = playerBuilding_img;
-                        case ROAD -> img = road_img;
-                        case QUARRY -> img = quarry_img;
-                        case BEACH -> img = beach_img;
-                        case SQUARE -> img = square_img;
-                        case STONE_WALL -> img = wall_img;
-                        default -> img = plain_img;
-                    }
-
                     if (tile.isWatered()) {
                         img = wateredFarm_img;
                     }
@@ -426,8 +428,7 @@ public class Map {
 
                     for (NPC npc : App.getCurrentGame().getNPCs()) {
                         if (npc.getType().getCoordinate().equals(coordinate)) {
-                            String name = npc.getType().getName();
-                            img = switch (name) {
+                            img = switch (npc.getType().getName()) {
                                 case "Abigail" -> abigail_img;
                                 case "Clint" -> clint_img;
                                 case "Gus" -> gus_img;
@@ -461,19 +462,83 @@ public class Map {
                 cellStack.add(bg);
                 cellStack.add(fg);
 
+
+                mapCells[i][160 - j] = cellStack;
                 mapTable.add(cellStack).width(6).height(6);
             }
         }
-
-        ScrollPane scrollPane = new ScrollPane(mapTable, Assets.getInstance().getSkin());
-        scrollPane.setFadeScrollBars(false);
-        scrollPane.setScrollingDisabled(true, false); // horizontal disabled, vertical enabled
-        scrollPane.setForceScroll(false, true);       // force vertical scrollbar if needed
-        scrollPane.setSize(980, 780);
-
-        return scrollPane;
     }
+    public void updateMap() {
+        if (mapCells[App.getCurrentGame().getCurrentPlayer().getCoordinate().getX()][App.getCurrentGame().getCurrentPlayer().getCoordinate().getY()] != null) {
+            updateMapAround(App.getCurrentGame().getCurrentPlayer().getLastCoordinate().getX() , App.getCurrentGame().getCurrentPlayer().getLastCoordinate().getY());
+            updateMapAround(App.getCurrentGame().getCurrentPlayer().getCoordinate().getX() , App.getCurrentGame().getCurrentPlayer().getCoordinate().getY());
+        }
+    }
+    private void updateMapAround(int x , int y) {
 
+                Stack cellStack = mapCells[x][y];
+                cellStack.clearChildren(); // Remove all previous images in the stack
+
+                Coordinate coord = new Coordinate(x,  y);
+                Tile tile = findTile(coord);
+
+                // Background image
+                Image bg = new Image(determineTileBackground(tile).getDrawable());
+                bg.setSize(6, 6);
+                cellStack.add(bg);
+
+                // Determine what foreground image to show:
+                Image fg = null_img; // default
+
+                if (tile == null) {
+                    fg = empty_img;
+                } else {
+                    if (tile.isWatered()) {
+                        fg = wateredFarm_img;
+                    }
+
+                    for (Good good : tile.getGoods()) {
+                        if (good instanceof ForagingCrop) fg = Crop_img;
+                        else if (good instanceof ForagingSeed) fg = seed_img;
+                        else if ("Grass".equals(good.getName())) fg = tree_img;
+                    }
+
+                    for (Player player : App.getCurrentGame().getPlayers()) {
+                        if (player.getCoordinate().equals(coord)) {
+                            fg = player_img;
+                        }
+                    }
+
+                    for (NPC npc : App.getCurrentGame().getNPCs()) {
+                        if (npc.getType().getCoordinate().equals(coord)) {
+                            fg = switch (npc.getType().getName()) {
+                                case "Abigail" -> abigail_img;
+                                case "Clint" -> clint_img;
+                                case "Gus" -> gus_img;
+                                case "Harvey" -> harvey_img;
+                                case "Leah" -> leah_img;
+                                case "Marnie" -> marnie_img;
+                                case "Morris" -> morris_img;
+                                case "Pierre" -> pierre_img;
+                                case "Robin" -> robin_img;
+                                case "Sebastian" -> sebastian_img;
+                                case "Willy" -> willy_img;
+                                default -> mushroomTree_img;
+                            };
+                        }
+                    }
+
+                    for (Animal animal : App.getCurrentGame().getMap().allAnimals()) {
+                        if (animal.getCoordinate().equals(coord)) {
+                            fg = mushroomTree_img;
+                        }
+                    }
+                }
+
+                fg.setSize(6, 6);
+                cellStack.add(fg);
+
+    }
     private Image determineTileBackground(Tile tile) {
         if (tile == null) return empty_img;
         if (tile.isWatered()) return wateredFarm_img;
@@ -494,6 +559,7 @@ public class Map {
     public void declareTextures(){
         farm_Background = new Texture("GameAssets/Map/Farm.png");
         empty = new Texture("GameAssets/Map/Border.png");
+        null_txr = new Texture("GameAssets/Map/Null.png");
         wall = new Texture("GameAssets/Map/Wall.png");
         water = new Texture("GameAssets/Map/Water.png");
         greenhouse = new Texture("GameAssets/Map/Greenhouse.png");
@@ -524,6 +590,7 @@ public class Map {
 // Create Image objects for all textures
         farm_Background_img = new Image(new TextureRegionDrawable(farm_Background));
         empty_img = new Image(new TextureRegionDrawable(empty));
+        null_img = new Image(new TextureRegionDrawable(null_txr));
         wall_img = new Image(new TextureRegionDrawable(wall));
         water_img = new Image(new TextureRegionDrawable(water));
         greenhouse_img = new Image(new TextureRegionDrawable(greenhouse));
@@ -555,6 +622,7 @@ public class Map {
         int n = 8;
         farm_Background_img.setSize(n, n);
         empty_img.setSize(n, n);
+        null_img.setSize(n, n);
         wall_img.setSize(n, n);
         water_img.setSize(n, n);
         greenhouse_img.setSize(n, n);

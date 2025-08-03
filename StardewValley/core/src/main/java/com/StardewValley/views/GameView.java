@@ -2119,7 +2119,8 @@ public class GameView implements Screen, InputProcessor {
         setInputProcessor();
     }
 
-    public void switchWindow(Window newWindow) {
+    public void switchWindow(Window newWindow ,int index) {
+
         currentWindow = newWindow;
         windowContainer.setActor(currentWindow); // Replaces content without changing layout
     }
