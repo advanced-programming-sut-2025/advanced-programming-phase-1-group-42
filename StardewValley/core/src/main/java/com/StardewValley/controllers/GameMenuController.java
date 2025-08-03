@@ -197,9 +197,20 @@ public class GameMenuController extends Controller {
         Player player = App.getCurrentGame().getCurrentPlayer();
         player.setPlayerDirection(-1);
 
-        if(Gdx.input.isKeyJustPressed(Input.Keys.U)) {
-            App.getCurrentGame().getCurrentPlayer().getWallet().increaseBalance(1000);
+        if(Gdx.input.isKeyJustPressed(Input.Keys.BACKSLASH)){
+            if (gameView.getChatRoomWindow() == null)
+                gameView.chatWindow();
+            else {
+                gameView.getChatRoomWindow().remove();
+                gameView.setChatRoomWindow(null);
+            }
+
         }
+
+        if (gameView.getChatRoomWindow()==null) {
+            if(Gdx.input.isKeyJustPressed(Input.Keys.U)) {
+                App.getCurrentGame().getCurrentPlayer().getWallet().increaseBalance(1000);
+            }
 
         boolean flag = false;
         if (Gdx.input.isKeyPressed(Input.Keys.W)) {
@@ -275,105 +286,109 @@ public class GameMenuController extends Controller {
                 gameView.closeJournalWindow();
         }
 
-        if (Gdx.input.isKeyJustPressed(Input.Keys.M)) {
-            ArrayList<Window> inventoryWindows = createWindows();
-            inventoryController.setInventoryWindows(inventoryWindows);
-            if (gameView.getMainTable() == null)
-                gameView.initMainTable(3);
-            else
-                gameView.closeMainTable();
-        }
-        if (Gdx.input.isKeyJustPressed(Input.Keys.TAB)) {
-            gameView.setTabClicked(!gameView.isTabClicked());
-            if (gameView.isTabClicked()) {
-                for (Quadruple<ImageButton, Image, Label, Label> inventoryElement : inventoryController.getInventoryElements()) {
-                    inventoryElement.a.setChecked(true);
-                }
+
+
+            if (Gdx.input.isKeyJustPressed(Input.Keys.M)) {
+                ArrayList<Window> inventoryWindows = createWindows();
+                inventoryController.setInventoryWindows(inventoryWindows);
+                if (gameView.getMainTable() == null)
+                    gameView.initMainTable(3);
+                else
+                    gameView.closeMainTable();
             }
-        }
-        if (Gdx.input.isKeyJustPressed(Input.Keys.T)) {
-            if (gameView.getToolsWindow() == null)
-                gameView.initToolsWindow();
-            else
-                gameView.closeToolsWindow();
-        }
-        if (Gdx.input.isKeyJustPressed(Input.Keys.F4)) {
-            //TODO
-        }
-        if (Gdx.input.isKeyJustPressed(Input.Keys.SPACE)) {
-            if (gameView.getCheatWindow() == null)
-                gameView.initCheatWindow();
-            else
-                gameView.closeCheatWindow();
-        }
-        if (Gdx.input.isKeyJustPressed(Input.Keys.O)) {
-            for (FarmBuilding building : App.getCurrentGame().getCurrentPlayer().getFarm().getFarmBuildings()) {
-                for (Animal animal : building.getAnimals()) {
-                    if ((abs(animal.getCoordinate().getX() -
-                        App.getCurrentGame().getCurrentPlayer().getCoordinate().getX()) <= 2) &&
-                        (abs(animal.getCoordinate().getY() -
-                            App.getCurrentGame().getCurrentPlayer().getCoordinate().getY()) <= 2)) {
-                        animal.petAnimal();
-                        gameView.buildMessage();
-                        gameView.getTextFieldMessage().setText("You petted " + animal.getName());
+            if (Gdx.input.isKeyJustPressed(Input.Keys.TAB)) {
+                gameView.setTabClicked(!gameView.isTabClicked());
+                if (gameView.isTabClicked()) {
+                    for (Quadruple<ImageButton, Image, Label, Label> inventoryElement : inventoryController.getInventoryElements()) {
+                        inventoryElement.a.setChecked(true);
                     }
                 }
             }
-            gameView.buildMessage();
-            gameView.getTextFieldMessage().setText("Please approach an animal to pet");
-        }
-        if (Gdx.input.isKeyJustPressed(Input.Keys.G)) {
-            Tile selectedTile = App.getCurrentGame().getMap().findTileByXY(App.getCurrentGame().getCurrentPlayer().getCoordinate().getX()
-                , App.getCurrentGame().getCurrentPlayer().getCoordinate().getY());
-
-            if (selectedTile.getTileType() == TileType.PLAYER_BUILDING) {
-                if (!gameView.getFridgeOpen()) {
-                    gameView.initFridgeWindow();
-                } else {
-                    gameView.getFridgeWindow().remove();
+            if (Gdx.input.isKeyJustPressed(Input.Keys.T)) {
+                if (gameView.getToolsWindow() == null)
+                    gameView.initToolsWindow();
+                else
+                    gameView.closeToolsWindow();
+            }
+            if (Gdx.input.isKeyJustPressed(Input.Keys.F4)) {
+                //TODO
+            }
+            if (Gdx.input.isKeyJustPressed(Input.Keys.SPACE)) {
+                if (gameView.getCheatWindow() == null)
+                    gameView.initCheatWindow();
+                else
+                    gameView.closeCheatWindow();
+            }
+            if (Gdx.input.isKeyJustPressed(Input.Keys.O)) {
+                for (FarmBuilding building : App.getCurrentGame().getCurrentPlayer().getFarm().getFarmBuildings()) {
+                    for (Animal animal : building.getAnimals()) {
+                        if ((abs(animal.getCoordinate().getX() -
+                            App.getCurrentGame().getCurrentPlayer().getCoordinate().getX()) <= 2) &&
+                            (abs(animal.getCoordinate().getY() -
+                                App.getCurrentGame().getCurrentPlayer().getCoordinate().getY()) <= 2)) {
+                            animal.petAnimal();
+                            gameView.buildMessage();
+                            gameView.getTextFieldMessage().setText("You petted " + animal.getName());
+                        }
+                    }
                 }
-                gameView.setFridgeOpen(!gameView.getFridgeOpen());
+                gameView.buildMessage();
+                gameView.getTextFieldMessage().setText("Please approach an animal to pet");
             }
-        }
-        if (Gdx.input.isKeyJustPressed(Input.Keys.K)) {
-            Tile selectedTile = App.getCurrentGame().getMap().findTileByXY(App.getCurrentGame().getCurrentPlayer().getCoordinate().getX()
-                , App.getCurrentGame().getCurrentPlayer().getCoordinate().getY());
-            if (selectedTile.getTileType() == TileType.PLAYER_BUILDING) {
-                if (!gameView.getCookingOpen()) {
-                    gameView.initCookingWindow();
-                } else {
-                    gameView.getCookingWindow().remove();
+            if (Gdx.input.isKeyJustPressed(Input.Keys.G)) {
+                Tile selectedTile = App.getCurrentGame().getMap().findTileByXY(App.getCurrentGame().getCurrentPlayer().getCoordinate().getX()
+                    , App.getCurrentGame().getCurrentPlayer().getCoordinate().getY());
+
+                if (selectedTile.getTileType() == TileType.PLAYER_BUILDING) {
+                    if (!gameView.getFridgeOpen()) {
+                        gameView.initFridgeWindow();
+                    } else {
+                        gameView.getFridgeWindow().remove();
+                    }
+                    gameView.setFridgeOpen(!gameView.getFridgeOpen());
                 }
-                gameView.setCookingOpen(!gameView.getCookingOpen());
             }
-        }
-
-        if (Gdx.input.isKeyJustPressed(Input.Keys.B)) {
-            Tile selectedTile = App.getCurrentGame().getMap().findTileByXY(App.getCurrentGame().getCurrentPlayer().getCoordinate().getX()
-                , App.getCurrentGame().getCurrentPlayer().getCoordinate().getY());
-            if (selectedTile.getTileType() == TileType.PLAYER_BUILDING) {
-                if (!gameView.getIsCraftingOpen()) {
-                    gameView.initCraftingWindow();
-                } else {
-                    gameView.getCraftingWindow().remove();
+            if (Gdx.input.isKeyJustPressed(Input.Keys.K)) {
+                Tile selectedTile = App.getCurrentGame().getMap().findTileByXY(App.getCurrentGame().getCurrentPlayer().getCoordinate().getX()
+                    , App.getCurrentGame().getCurrentPlayer().getCoordinate().getY());
+                if (selectedTile.getTileType() == TileType.PLAYER_BUILDING) {
+                    if (!gameView.getCookingOpen()) {
+                        gameView.initCookingWindow();
+                    } else {
+                        gameView.getCookingWindow().remove();
+                    }
+                    gameView.setCookingOpen(!gameView.getCookingOpen());
                 }
-                gameView.setIsCraftingOpen(!gameView.getIsCraftingOpen());
             }
+
+            if (Gdx.input.isKeyJustPressed(Input.Keys.B)) {
+                Tile selectedTile = App.getCurrentGame().getMap().findTileByXY(App.getCurrentGame().getCurrentPlayer().getCoordinate().getX()
+                    , App.getCurrentGame().getCurrentPlayer().getCoordinate().getY());
+                if (selectedTile.getTileType() == TileType.PLAYER_BUILDING) {
+                    if (!gameView.getIsCraftingOpen()) {
+                        gameView.initCraftingWindow();
+                    } else {
+                        gameView.getCraftingWindow().remove();
+                    }
+                    gameView.setIsCraftingOpen(!gameView.getIsCraftingOpen());
+                }
+            }
+
+            ArrayList<Integer> arr = new ArrayList<>(Arrays.asList(
+                8, 9, 10, 11, 12, 13, 14, 15, 16, 7, 69, 70
+            ));
+            for (int i = 0; i < arr.size(); i++) {
+                if (Gdx.input.isKeyJustPressed(arr.get(i))) {
+                    App.getCurrentGame().getCurrentPlayer().setInHandGood(
+                        App.getCurrentGame().getCurrentPlayer().getInventory().getList().get(i));
+                    break;
+                }
+            }
+
+            if (flag)
+                App.getCurrentGame().getCurrentPlayer().getEnergy().decreaseTurnEnergyLeft(0.25);
         }
 
-        ArrayList<Integer> arr = new ArrayList<>(Arrays.asList(
-            8, 9, 10, 11, 12, 13, 14, 15, 16, 7, 69, 70
-        ));
-        for (int i = 0; i < arr.size(); i++) {
-            if (Gdx.input.isKeyJustPressed(arr.get(i))) {
-                App.getCurrentGame().getCurrentPlayer().setInHandGood(
-                    App.getCurrentGame().getCurrentPlayer().getInventory().getList().get(i));
-                break;
-            }
-        }
-
-        if (flag)
-            App.getCurrentGame().getCurrentPlayer().getEnergy().decreaseTurnEnergyLeft(0.25);
     }
 
 

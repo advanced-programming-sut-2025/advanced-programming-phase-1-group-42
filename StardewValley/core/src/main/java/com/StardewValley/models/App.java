@@ -35,6 +35,11 @@ public class App {
     private final static ArrayList<Game> games = new ArrayList<>();
 
     public static ArrayList<User> getUsers() {
+//        try {
+//            DBInteractor.loadUsers();
+//        } catch (Exception e) {
+//            System.out.println("Oh-No! Something went wrong while loading users!");
+//        }
         return users;
     }
 
@@ -76,11 +81,11 @@ public class App {
 //        musicThread.start();
 
 
-        try {
+//        try {
 //            DBInteractor.loadUsers();
-        } catch (Exception e) {
-            System.out.println("Oh-No! Something went wrong while loading users!");
-        }
+//        } catch (Exception e) {
+//            System.out.println("Oh-No! Something went wrong while loading users!");
+//        }
         if (App.getCurrentUser() != null) {
 //            App.setCurrentMenu(Menu.MainMenu);
         }

@@ -1,6 +1,7 @@
 package com.StardewValley.models.game_structure;
 
 import com.StardewValley.models.App;
+import com.StardewValley.models.Pair;
 import com.StardewValley.models.enums.TileType;
 import com.StardewValley.models.game_structure.weathers.Rain;
 import com.StardewValley.models.game_structure.weathers.Storm;
@@ -38,6 +39,7 @@ public class Game {
     private Map map = null;
     private final ArrayList<NPC> NPCs = new ArrayList<>();
     private int counter = 0;
+    private ArrayList<Pair<Player, String>> publicChat = new ArrayList<>();
 
     public static void writeIntoFile(String string) {
         try (FileWriter myWriter = new FileWriter("commands.txt", true)) {
@@ -292,7 +294,7 @@ public class Game {
         // players come back to their home
         for (Player player : players) {
             player.setCoordinate(new Coordinate(player.getFarm().getFarmBuildings().getFirst().getStartCordinate().getX() + 5,
-                    player.getFarm().getFarmBuildings().getFirst().getStartCordinate().getY() + 2));
+                player.getFarm().getFarmBuildings().getFirst().getStartCordinate().getY() + 2));
         }
 
         // Check weather
@@ -303,7 +305,7 @@ public class Game {
 
         ArrayList<Integer> haveToRemove = new ArrayList<>();
         for (int i = 0; i < tile.getGoods().size(); i++) {
-            if(tile.getGoods().get(i) == null) {
+            if (tile.getGoods().get(i) == null) {
                 haveToRemove.add(i);
             }
         }
@@ -343,7 +345,7 @@ public class Game {
             }
             int numberOfCrows = (int) Math.floor((double) cropCounter / 16);
             int crowCounter = 0;
-            System.out.println("there is a chance " + crowCounter + " Crows would attack "+ player.getUser().getUsername() + " crops");
+            System.out.println("there is a chance " + crowCounter + " Crows would attack " + player.getUser().getUsername() + " crops");
 
             while (numberOfCrows != crowCounter) {
                 int randomAttack = (int) Math.floor((Math.random() * 4));
@@ -397,5 +399,9 @@ public class Game {
 
     public void setNPCs(ArrayList<NPC> NPCs) {
         this.NPCs.addAll(NPCs);
+    }
+
+    public ArrayList<Pair<Player, String>> getPublicChat() {
+        return publicChat;
     }
 }

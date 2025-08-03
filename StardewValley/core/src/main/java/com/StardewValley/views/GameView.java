@@ -101,6 +101,7 @@ public class GameView implements Screen, InputProcessor {
     public Boolean isCraftingOpen = false;
     private Window cookingRecipeWindow;
     private Window craftingRecipeWindow;
+    private Window chatRoomWindow;
 
     private Window cheatWindow;
     private Table cheatTable;
@@ -229,6 +230,7 @@ public class GameView implements Screen, InputProcessor {
         style.over = hoverDrawable;
         style.down = normalDrawable.tint(Color.GRAY);
         style.font = font;
+
 
         selectedPlayer = null;
 
@@ -2895,6 +2897,195 @@ public class GameView implements Screen, InputProcessor {
         journalWindow = null;
         journalTable.remove();
     }
+    public void chatWindow() {
+        chatRoomWindow = new Window("Chat Room", skin);
+        chatRoomWindow.setSize(1200, 700);
+        chatRoomWindow.setPosition(
+            (staticStage.getWidth() - chatRoomWindow.getWidth()) / 2,
+            (staticStage.getHeight() - chatRoomWindow.getHeight()) / 2
+        );
+
+        final Player currentPlayer = App.getCurrentGame().getCurrentPlayer();
+        final Player[] selectedPrivateReceiver = {null};
+        final boolean[] isPublicMode = {true};
+
+        TextButton publicChatButton = new TextButton("Public", skin);
+        TextButton privateChatButton = new TextButton("Private", skin);
+        publicChatButton.setColor(Color.GREEN);
+        privateChatButton.setColor(Color.GRAY);
+
+        Table modeButtons = new Table();
+        modeButtons.add(publicChatButton).width(100).padRight(10);
+        modeButtons.add(privateChatButton).width(100);
+
+        Table messageTable = new Table();
+        messageTable.align(Align.top | Align.left);
+
+        ScrollPane messageScroll = new ScrollPane(messageTable, skin);
+        messageScroll.setFadeScrollBars(false);
+        messageScroll.setScrollingDisabled(true, false);
+        messageScroll.setForceScroll(false, true);
+
+        Table userListTable = new Table();
+        ScrollPane userListScroll = new ScrollPane(userListTable, skin);
+        userListScroll.setVisible(false);
+        userListScroll.setScrollingDisabled(true, false);
+
+        Table chatArea = new Table();
+        chatArea.add(messageScroll).expand().fill();
+        chatArea.add(userListScroll).width(200).padLeft(5);
+        chatArea.row();
+
+        TextField messageField = new TextField("", skin);
+        TextButton sendButton = new TextButton("Send", skin);
+
+        Table inputArea = new Table();
+        inputArea.add(messageField).expandX().fillX().pad(5);
+        inputArea.add(sendButton).pad(5);
+
+        Runnable updatePublicMessages = () -> {
+            messageTable.clear();
+            for (Pair<Player, String> msg : App.getCurrentGame().getPublicChat()) {
+                Label label = new Label(msg.first().getPlayerUsername() + ": " + msg.second(), skin);
+                label.setAlignment(Align.left);
+                messageTable.add(label).left().expandX().fillX().pad(2).row();
+            }
+            messageScroll.layout();
+            messageScroll.scrollTo(0, 0, 0, 0);
+        };
+
+        Runnable updatePrivateMessages = () -> {
+            messageTable.clear();
+            if (selectedPrivateReceiver[0] == null) return;
+
+            for (Pair<Player, ArrayList<String>> entry : currentPlayer.getPrivateChat()) {
+                if (entry.first().equals(selectedPrivateReceiver[0])) {
+                    for (String msg : entry.second()) {
+                        Label label = new Label(msg, skin);
+                        label.setAlignment(Align.left);
+                        messageTable.add(label).left().expandX().fillX().pad(2).row();
+                    }
+                    break;
+                }
+            }
+            messageScroll.layout();
+            messageScroll.scrollTo(0, 0, 0, 0);
+        };
+
+        Runnable updateMessages = () -> {
+            messageTable.clear();
+            userListTable.clear();
+
+            if (isPublicMode[0]) {
+                userListScroll.setVisible(false);
+                updatePublicMessages.run();
+                selectedPrivateReceiver[0] = null;
+            } else {
+                userListScroll.setVisible(true);
+
+                for (Player player : App.getCurrentGame().getPlayers()) {
+                    if (player.equals(currentPlayer)) continue;
+
+                    TextButton btn = new TextButton(player.getPlayerUsername(), style);
+                    btn.addListener(new ClickListener() {
+                        @Override
+                        public void clicked(InputEvent event, float x, float y) {
+                            selectedPrivateReceiver[0] = player;
+                            updatePrivateMessages.run();
+                        }
+                    });
+                    btn.getLabel().setFontScale(1.2f);
+                    btn.setWidth(200);
+                    btn.setHeight(60);
+                    userListTable.add(btn).fillX().pad(5).row();
+                }
+
+                if (selectedPrivateReceiver[0] != null) {
+                    updatePrivateMessages.run();
+                } else {
+                    messageTable.clear();
+                }
+            }
+        };
+
+        publicChatButton.addListener(new ClickListener() {
+            @Override
+            public void clicked(InputEvent event, float x, float y) {
+                isPublicMode[0] = true;
+                publicChatButton.setColor(Color.GREEN);
+                privateChatButton.setColor(Color.GRAY);
+                selectedPrivateReceiver[0] = null;
+                updateMessages.run();
+            }
+        });
+
+        privateChatButton.addListener(new ClickListener() {
+            @Override
+            public void clicked(InputEvent event, float x, float y) {
+                isPublicMode[0] = false;
+                publicChatButton.setColor(Color.GRAY);
+                privateChatButton.setColor(Color.GREEN);
+                updateMessages.run();
+            }
+        });
+
+        sendButton.addListener(new ClickListener() {
+            @Override
+            public void clicked(InputEvent event, float x, float y) {
+                String text = messageField.getText().trim();
+                if (text.isEmpty()) return;
+
+                if (isPublicMode[0]) {
+                    App.getCurrentGame().getPublicChat().add(new Pair<>(currentPlayer, text));
+                    updatePublicMessages.run();
+                } else if (selectedPrivateReceiver[0] != null) {
+                    String formattedMessage = currentPlayer.getPlayerUsername() + ": " + text;
+
+                    boolean found = false;
+                    for (Pair<Player, ArrayList<String>> entry : currentPlayer.getPrivateChat()) {
+                        if (entry.first().equals(selectedPrivateReceiver[0])) {
+                            entry.second().add(formattedMessage);
+                            found = true;
+                            break;
+                        }
+                    }
+                    if (!found) {
+                        ArrayList<String> msgs = new ArrayList<>();
+                        msgs.add(formattedMessage);
+                        currentPlayer.getPrivateChat().add(new Pair<>(selectedPrivateReceiver[0], msgs));
+                    }
+
+                    found = false;
+                    for (Pair<Player, ArrayList<String>> entry : selectedPrivateReceiver[0].getPrivateChat()) {
+                        if (entry.first().equals(currentPlayer)) {
+                            entry.second().add(formattedMessage);
+                            found = true;
+                            break;
+                        }
+                    }
+                    if (!found) {
+                        ArrayList<String> msgs = new ArrayList<>();
+                        msgs.add(formattedMessage);
+                        selectedPrivateReceiver[0].getPrivateChat().add(new Pair<>(currentPlayer, msgs));
+                    }
+
+                    updatePrivateMessages.run();
+                }
+
+                messageField.setText("");
+            }
+        });
+
+        chatRoomWindow.clearChildren();
+        chatRoomWindow.add(modeButtons).pad(5).left().row();
+        chatRoomWindow.add(chatArea).expand().fill().pad(5).row();
+        chatRoomWindow.add(inputArea).fillX().pad(5).bottom();
+
+        staticStage.addActor(chatRoomWindow);
+        updateMessages.run();
+    }
+
+
 
     public Window getJournalWindow() {
         return journalWindow;
@@ -2906,6 +3097,14 @@ public class GameView implements Screen, InputProcessor {
 
     public void setTabClicked(boolean tabClicked) {
         isTabClicked = tabClicked;
+    }
+
+    public Window getChatRoomWindow() {
+        return chatRoomWindow;
+    }
+
+    public void setChatRoomWindow(Window chatRoomWindow) {
+        this.chatRoomWindow = chatRoomWindow;
     }
 }
 
