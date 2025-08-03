@@ -76,11 +76,11 @@ public class InventoryController {
 
 
 
-        for (int i = 0; i < 8; i++) {
+        for (int i = 0; i < 6; i++) {
             TextureRegionDrawable tabDrawable = new TextureRegionDrawable(new Texture("GameAssets/Main_Inventory/MainTable" + (i + 1) + ".png"));
             TextureRegionDrawable tabDrawableClicked = new TextureRegionDrawable(new Texture("GameAssets/Main_Inventory/MainTable" + (i + 1) + "Clicked.png"));
             ImageButton tabButton = new ImageButton(tabDrawable, tabDrawableClicked, tabDrawableClicked);
-            if (i == 7) {
+            if (i == 5) {
                 tabButton.addListener(new ClickListener() {
                     @Override
                     public void clicked(InputEvent event, float x, float y) {
@@ -116,6 +116,9 @@ public class InventoryController {
                                         break;
                                     case 3:
                                         gameView.switchWindow(inventoryWindows.get(3));
+                                        break;
+                                    case 4:
+                                        gameView.switchWindow(inventoryWindows.get(4));
                                         break;
                                     default:
                                         gameView.switchWindow(inventoryWindows.get(3));
@@ -154,11 +157,14 @@ public class InventoryController {
                     quadruple.b.setDrawable(new TextureRegionDrawable(new Texture("GameAssets/null.png")));
                 }
 
-                if (App.getCurrentGame().getCurrentPlayer().getInventory().getList().get(i) ==
-                    App.getCurrentGame().getCurrentPlayer().getInHandGood())
-                    quadruple.a.setChecked(true);
-                else
-                    quadruple.a.setChecked(false);
+
+                if (!gameView.isTabClicked()) {
+                    if (App.getCurrentGame().getCurrentPlayer().getInventory().getList().get(i) ==
+                        App.getCurrentGame().getCurrentPlayer().getInHandGood())
+                        quadruple.a.setChecked(true);
+                    else
+                        quadruple.a.setChecked(false);
+                }
 
                 quadruple.d.setText((goods.isEmpty()) ? "" : String.valueOf(goods.size()));
             }

@@ -24,7 +24,8 @@ public class PlayerController {
                 }
             }
             player.getInHandGoodSprite().setSize(40, 40);
-            player.getInHandGoodSprite().draw(Main.getBatch());
+            Main.getBatch().draw(player.getInHandGoodSprite(),
+                player.getInHandGoodSprite().getX(), player.getInHandGoodSprite().getY());
         }
     }
 

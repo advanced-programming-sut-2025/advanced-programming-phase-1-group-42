@@ -6,6 +6,8 @@ import com.StardewValley.models.App;
 import com.StardewValley.models.Assets;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
+import com.badlogic.gdx.graphics.GL20;
+import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
@@ -80,6 +82,13 @@ public class MainMenuView implements Screen {
 
     @Override
     public void render(float v) {
+        Gdx.gl.glClearColor(0, 0, 0, 1);
+        Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
+        OrthographicCamera defaultCamera = new OrthographicCamera();
+        defaultCamera.setToOrtho(false, Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
+        defaultCamera.update();
+        Main.getBatch().setProjectionMatrix(defaultCamera.combined);
+
         Main.getBatch().begin();
         Assets.getInstance().getMenuBackground().setSize(Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
         Assets.getInstance().getMenuBackground().setPosition(0, 0);

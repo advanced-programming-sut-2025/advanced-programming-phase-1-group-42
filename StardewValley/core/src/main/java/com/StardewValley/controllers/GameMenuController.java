@@ -41,6 +41,7 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
+import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.Touchable;
 import com.badlogic.gdx.scenes.scene2d.ui.*;
@@ -48,6 +49,7 @@ import com.badlogic.gdx.scenes.scene2d.ui.Stack;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 import com.badlogic.gdx.utils.Scaling;
+import com.badlogic.gdx.utils.viewport.FitViewport;
 //import com.mongodb.ConnectionString;
 //import com.mongodb.MongoClientSettings;
 //import com.mongodb.ServerApi;
@@ -82,7 +84,6 @@ public class GameMenuController extends Controller {
     private InventoryController inventoryController;
     private ClockController clockController;
     private FriendshipController friendshipController;
-
 
     private GameMenuView view;
     private GameView gameView;
@@ -188,13 +189,16 @@ public class GameMenuController extends Controller {
         friendshipController.update();
     }
 
-
     public void handleInput() {
         if (gameView.getCheatWindow() != null)
             return;
 
         Player player = App.getCurrentGame().getCurrentPlayer();
         player.setPlayerDirection(-1);
+
+        if(Gdx.input.isKeyJustPressed(Input.Keys.U)) {
+            App.getCurrentGame().getCurrentPlayer().getWallet().increaseBalance(1000);
+        }
 
         boolean flag = false;
         if (Gdx.input.isKeyPressed(Input.Keys.W)) {
@@ -242,10 +246,10 @@ public class GameMenuController extends Controller {
             inventoryController.playerChangedInventory();
         }
         if (Gdx.input.isKeyJustPressed(Input.Keys.C)) {
-
+            gameView.touchDown(Gdx.input.getX(), Gdx.input.getY(), 0, Input.Buttons.LEFT);
         }
         if (Gdx.input.isKeyJustPressed(Input.Keys.X)) {
-
+            gameView.touchDown(Gdx.input.getX(), Gdx.input.getY(), 0, Input.Buttons.LEFT);
         }
         if (Gdx.input.isKeyJustPressed(Input.Keys.E) || Gdx.input.isKeyJustPressed(Input.Keys.ESCAPE)) {
             ArrayList<Window> inventoryWindows = createWindows();
@@ -256,7 +260,10 @@ public class GameMenuController extends Controller {
                 gameView.closeMainTable();
         }
         if (Gdx.input.isKeyJustPressed(Input.Keys.F)) {
-
+            if (gameView.getJournalWindow() == null)
+                gameView.initJournalWindow();
+            else
+                gameView.closeJournalWindow();
         }
 
         if (Gdx.input.isKeyJustPressed(Input.Keys.M)) {
@@ -268,7 +275,12 @@ public class GameMenuController extends Controller {
                 gameView.closeMainTable();
         }
         if (Gdx.input.isKeyJustPressed(Input.Keys.TAB)) {
-
+            gameView.setTabClicked(!gameView.isTabClicked());
+            if (gameView.isTabClicked()) {
+                for (Quadruple<ImageButton, Image, Label, Label> inventoryElement : inventoryController.getInventoryElements()) {
+                    inventoryElement.a.setChecked(true);
+                }
+            }
         }
         if (Gdx.input.isKeyJustPressed(Input.Keys.T)) {
             if (gameView.getToolsWindow() == null)
@@ -277,7 +289,7 @@ public class GameMenuController extends Controller {
                 gameView.closeToolsWindow();
         }
         if (Gdx.input.isKeyJustPressed(Input.Keys.F4)) {
-
+            //TODO
         }
         if (Gdx.input.isKeyJustPressed(Input.Keys.SPACE)) {
             if (gameView.getCheatWindow() == null)
@@ -351,17 +363,18 @@ public class GameMenuController extends Controller {
             }
         }
 
-//        if (flag)
-//            App.getCurrentGame().getCurrentPlayer().getEnergy().decreaseTurnEnergyLeft(1);
+        if (flag)
+            App.getCurrentGame().getCurrentPlayer().getEnergy().decreaseTurnEnergyLeft(0.25);
     }
 
 
 
     private ArrayList<Good> cursorGoods = null;
     private Image cursorImage = new Image();
+
     private ArrayList<Window> createWindows() {
         ArrayList<Window> inventoryWindows = new ArrayList<>();
-        for (int i = 0; i < 4; i++) {
+        for (int i = 0; i < 5; i++) {
             final int index = i;
             Skin skin = Assets.getInstance().getSkin();
             Window window = new Window("", skin);
@@ -646,6 +659,11 @@ public class GameMenuController extends Controller {
                     window.row();
 
                     break;
+                case 4:
+                    window.setSize(width, height);
+                    gameView.initExitMenu(window);
+
+                    break;
                 default:
                     window.add(new Label("Empty", skin));
             }
@@ -774,10 +792,10 @@ public class GameMenuController extends Controller {
         view.getPlayerUsernames().remove(view.getPlayersPtr());
         view.getPlayerUsernames().add(view.getPlayersPtr(), user.getUsername());
         view.increasePlayersPtr();
-        for (int i = view.getPlayersPtr(); i < 5; i++) {
+        for (int i = view.getPlayersPtr(); i < 4; i++) {
             view.getPlayerUsernames().removeLast();
         }
-        for (int i = view.getPlayersPtr(); i < 5; i++) {
+        for (int i = view.getPlayersPtr(); i < 4; i++) {
             view.getPlayerUsernames().add("Guest " + (i - view.getPlayersPtr() + 1));
         }
     }
@@ -849,7 +867,7 @@ public class GameMenuController extends Controller {
 
             if (user == null) {
                 players.add(new Player(new User(username, null, username,
-                    null, null, 0, null)));
+                    null, Gender.MALE, 0, null)));
             } else {
                 players.add(new Player(user));
             }
@@ -913,30 +931,31 @@ public class GameMenuController extends Controller {
             return new Result(false, "Just game admin can exit the game!");
         } else {
             App.setCurrentGame(null);
-            App.setCurrentMenu(Menu.GameMenu);
+            Main.getMain().getScreen().dispose();
+            Main.getMain().setScreen(new MainMenuView(new MainMenuController(), Assets.getInstance().getSkin()));
             return new Result(true, "You have successfully exited the game!");
         }
     }
 
     public Result forceTerminate() {
-        Scanner scanner = new Scanner(System.in);
-        ArrayList<Boolean> poll = new ArrayList<>();
-        poll.add(true);
-        for (int i = 1; i < App.getCurrentGame().getPlayers().size(); i++) {
-            System.out.println(App.getCurrentGame().getPlayers().get(i).getUser().getUsername() +
-                ", Please give your vote to terminate the game: (y/n)");
-
-            String input = scanner.nextLine();
-            if (input.matches("\\s*y\\s*"))
-                poll.add(true);
-            else
-                poll.add(false);
-        }
-
-        for (Boolean p : poll) {
-            if (!p)
-                return new Result(false, "All players do not agree to terminate the game!");
-        }
+//        Scanner scanner = new Scanner(System.in);
+//        ArrayList<Boolean> poll = new ArrayList<>();
+//        poll.add(true);
+//        for (int i = 1; i < App.getCurrentGame().getPlayers().size(); i++) {
+//            System.out.println(App.getCurrentGame().getPlayers().get(i).getUser().getUsername() +
+//                ", Please give your vote to terminate the game: (y/n)");
+//
+//            String input = scanner.nextLine();
+//            if (input.matches("\\s*y\\s*"))
+//                poll.add(true);
+//            else
+//                poll.add(false);
+//        }
+//
+//        for (Boolean p : poll) {
+//            if (!p)
+//                return new Result(false, "All players do not agree to terminate the game!");
+//        }
 
         for (Player player : App.getCurrentGame().getPlayers()) {
             player.getUser().setPlaying(false);
@@ -973,24 +992,15 @@ public class GameMenuController extends Controller {
 //            System.out.println("Error while setting is Playing  user.");
 //        }
         App.setCurrentGame(null);
+        Main.getMain().getScreen().dispose();
+        Main.getMain().setScreen(new MainMenuView(new MainMenuController(), Assets.getInstance().getSkin()));
         return new Result(true, "Game terminated successfully!");
 
     }
 
     public Result nextTurn() {
         App.getCurrentGame().nextPlayer();
-
-        StringBuilder news = new StringBuilder();
-        news.append("Current player: ").append(App.getCurrentGame().getCurrentPlayer().getUser().getUsername() + "\nNews:\n");
-        int ctr = 1;
-        for (String s : App.getCurrentGame().getCurrentPlayer().getNews()) {
-            news.append("\t").append(ctr++).append(". ").append(s);
-        }
-
-        App.getCurrentGame().getCurrentPlayer().getNews().clear();
-
-
-        return new Result(true, news.toString());
+        return new Result(true, "");
     }
 
 
@@ -1313,7 +1323,7 @@ public class GameMenuController extends Controller {
             if (blacksmith.upgradeTool((Tool) game.getCurrentPlayer().getInHandGood().getLast())) {
                 return new Result(false, "Your tool has successfully upgraded!");
             } else
-                return new Result(false, "You don't have enough money & ingredients to upgrade "
+                return new Result(false, "You don't have enough money & \ningredients to upgrade "
                     + game.getCurrentPlayer().getInHandGood().getLast().getName() + "!");
         } else
             return new Result(false, "You don't have tool in your hand!");
@@ -2151,7 +2161,7 @@ public class GameMenuController extends Controller {
 
         int quantity = (count.isEmpty()) ? goods.size() : Integer.parseInt(count);
         if (quantity > goods.size())
-            return new Result(false, "You don't have enough number of this good in your inventory!");
+            return new Result(false, "You don't have enough number \nof this good in your inventory!");
 
         boolean flag = false;
         for (int i = 0; i < 8; i++) {
@@ -2175,7 +2185,7 @@ public class GameMenuController extends Controller {
         }
 
         if (flag)
-            return new Result(true, quantity + " number of " + productName + " has been added to ShippingBin!");
+            return new Result(true, quantity + " number of " + productName + " \nhas been added to ShippingBin!");
         else
             return new Result(false, "No ShippingBin found around you!");
     }
@@ -2796,6 +2806,7 @@ public class GameMenuController extends Controller {
 
         return new Result(true, "test");
     }
+
 
 }
 

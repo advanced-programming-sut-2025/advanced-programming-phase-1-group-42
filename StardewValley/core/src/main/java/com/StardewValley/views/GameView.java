@@ -15,6 +15,8 @@ import com.StardewValley.models.game_structure.Map;
 import com.StardewValley.models.game_structure.Tile;
 import com.StardewValley.models.goods.Good;
 import com.StardewValley.models.goods.GoodType;
+import com.StardewValley.models.goods.craftings.Crafting;
+import com.StardewValley.models.goods.craftings.CraftingType;
 import com.StardewValley.models.goods.fishs.Fish;
 import com.StardewValley.models.goods.foods.FoodType;
 import com.StardewValley.models.goods.foragings.ForagingMineralType;
@@ -65,12 +67,12 @@ import static java.lang.Math.min;
 
 
 public class GameView implements Screen, InputProcessor {
-    private Skin skin;
+    private Skin skin = Assets.getInstance().getSkin();
     private GameMenuController controller;
     private Stage stage;
     private Table table;
     private final OrthographicCamera camera;
-    private final Viewport viewport;
+    private Viewport viewport;
     private int scaledSize;
     private Table inventoryTable;
 
@@ -110,6 +112,11 @@ public class GameView implements Screen, InputProcessor {
     private Table friendsTable;
     private TextButton friendsBackButton;
 
+    private TextButton journalButton;
+    private Window journalWindow;
+    private Table journalTable;
+    private TextButton journalBackButton;
+
     private Window playerGiftWindow;
     private Table playerGiftTable;
     private Label playerGiftLabel;
@@ -125,6 +132,23 @@ public class GameView implements Screen, InputProcessor {
     private TextButton flowerButton;
     private TextButton marriageButton;
     private Player selectedPlayer;
+
+    private Label upgradeLabel;
+    private Label descriptionLabel;
+    private Label messageLabel;
+    private final TextButton[] upgradeButton = {new TextButton("Upgrade", skin)};
+    private SelectBox<String> toolSelectBox;
+    private Window upgradeWindow;
+
+    private Window craftingUseWindow;
+    private Table craftingUseTable;
+    private Label craftingLabel;
+    private ArrayList<SelectBox<String>> craftingSelectBox;
+    private TextButton craftingUseButton;
+    private TextButton craftingBackButton;
+    private Label craftingMessageLabel;
+
+    private boolean isTabClicked = false;
 
     public GameView(GameMenuController controller, Skin skin) {
         this.controller = controller;
@@ -153,9 +177,21 @@ public class GameView implements Screen, InputProcessor {
             }
         });
 
-        this.table.add(friendsButton).padTop(400).padLeft(-400).height(70).row();
-        this.table.add(inventoryTable).padTop(1100).padLeft(-50);
-        this.table.add(controller.getInventoryController().getProgressBar()).padTop(200).padLeft(800);
+        journalButton = new TextButton("Journal", skin);
+        journalButton.addListener(new ClickListener() {
+            @Override
+            public void clicked(InputEvent event, float x, float y) {
+                if (journalWindow == null)
+                    initJournalWindow();
+                else
+                    closeJournalWindow();
+            }
+        });
+
+        this.table.add(friendsButton).padTop(200).padLeft(-400).height(70).width(250).row();
+        this.table.add(journalButton).padLeft(-400).height(70).padTop(5).width(250).row();
+        this.table.add(inventoryTable).padTop(1000).padBottom(-200).padLeft(-50);
+        this.table.add(controller.getInventoryController().getProgressBar()).padTop(300).padLeft(800);
         this.table.row();
 
 
@@ -179,10 +215,6 @@ public class GameView implements Screen, InputProcessor {
 //        App.getCurrentGame().getCurrentPlayer().getInventory().addGood(Good.newGood(ForagingMineralType.COAL),1);
 //        App.getCurrentGame().getCurrentPlayer().getSkill().increaseMiningLevel();
 //        App.getCurrentGame().getCurrentPlayer().getSkill().increaseMiningLevel();
-
-
-
-
         Pixmap normal = new Pixmap(1, 1, Pixmap.Format.RGBA8888);
         normal.setColor(Color.YELLOW);
         normal.fill();
@@ -306,7 +338,6 @@ public class GameView implements Screen, InputProcessor {
         return false;
     }
 
-
     @Override
     public boolean touchDown(int screenX, int screenY, int pointer, int button) {
         Vector3 touchPos = new Vector3(screenX, screenY, 0);
@@ -328,6 +359,17 @@ public class GameView implements Screen, InputProcessor {
                 initFriend();
                 return true;
             }
+            else if (player.getCoordinate().equals(coordinate) &&
+                !player.getInHandGood().isEmpty() &&
+                player.getInHandGood().getLast() instanceof Crafting) {
+                    initCraftingWindow(player.getInHandGood());
+                    return true;
+            }
+        }
+
+        if (selectedTile.findGood("ShippingBin") != null) {
+            initShippingBinWindow();
+            return true;
         }
 
         if (!App.getCurrentGame().getCurrentPlayer().getInHandGood().isEmpty() &&
@@ -443,35 +485,44 @@ public class GameView implements Screen, InputProcessor {
             info.setAlignment(Align.center);
 
 
+
+
             // MarnieRanch
             if (building instanceof MarnieRanch) {
                 marnieRanchShop(addButton, countLabel, removeButton, purchaseButton, info, tileX, tileY,
                     (MarnieRanch) building, selectedNameLabel, itemsTable, counterPanel, selectedPanel, scrollPane, content);
-            } else if (building instanceof CarpenterShop) {
+                staticStage.addActor(window);
+            }
+            else if (building instanceof CarpenterShop) {
                 carpenterShop(purchaseButton, (CarpenterShop) building, selectedNameLabel, itemsTable, counterPanel,
                     info, selectedPanel, scrollPane, content);
+                staticStage.addActor(window);
             }
             else if (building instanceof FishShop) {
                 fishShop(addButton, countLabel, removeButton, purchaseButton, info, tileX, tileY, (FishShop) building,
                     selectedNameLabel, itemsTable, counterPanel, selectedPanel, scrollPane, content);
+                staticStage.addActor(window);
             }
             else if (building instanceof PierreGeneralStore) {
                 pierreShop(addButton, countLabel, removeButton, purchaseButton, info, tileX, tileY, (PierreGeneralStore) building,
                     selectedNameLabel, itemsTable, counterPanel, selectedPanel, scrollPane, content);
+                staticStage.addActor(window);
             }
             else if (building instanceof JojaMart) {
                 jojaShop(addButton, countLabel, removeButton, purchaseButton, info, tileX, tileY, (JojaMart) building,
                     selectedNameLabel, itemsTable, counterPanel, selectedPanel, scrollPane, content);;
+                staticStage.addActor(window);
             }
             else if (building instanceof TheStarDropSaloon) {
                 stardropShop(addButton, countLabel, removeButton, purchaseButton, info, tileX, tileY, (TheStarDropSaloon) building,
                     selectedNameLabel, itemsTable, counterPanel, selectedPanel, scrollPane, content);
+                staticStage.addActor(window);
             }
             else if (building instanceof Blacksmith) {
-                blacksmithShop(addButton, countLabel, removeButton, purchaseButton, info, tileX, tileY, (Blacksmith) building,
+                blacksmithShop(window, addButton, countLabel, removeButton, purchaseButton, info, tileX, tileY, (Blacksmith) building,
                     selectedNameLabel, itemsTable, counterPanel, selectedPanel, scrollPane, content);
             }
-            staticStage.addActor(window);
+
 
 //            multiplexer.addProcessor(stage);
 //            multiplexer.addProcessor(this);
@@ -1081,7 +1132,7 @@ public class GameView implements Screen, InputProcessor {
         lastConstructionsForShop(info, counterPanel, selectedPanel, scrollPane, content);
     }
 
-    private void blacksmithShop(TextButton addButton, Label countLabel, TextButton removeButton, TextButton purchaseButton,
+    private void blacksmithShop(Window window, TextButton addButton, Label countLabel, TextButton removeButton, TextButton purchaseButton,
                               Label info, int tileX, int tileY, Blacksmith blacksmith, Label selectedNameLabel, Table itemsTable,
                               Table counterPanel, Table selectedPanel, ScrollPane scrollPane, Table content) {
 
@@ -1089,7 +1140,112 @@ public class GameView implements Screen, InputProcessor {
         final int[] selectedCount = {0};
         final boolean[] filterAvailable = {false};
 
+        upgradeWindow = new Window("Upgrade Tool", skin);
+        upgradeWindow.setSize(1000, 600);
+        upgradeWindow.setResizable(false);
+        upgradeWindow.setPosition(
+            (staticStage.getWidth() - upgradeWindow.getWidth()) / 2,
+            (staticStage.getHeight() - upgradeWindow.getHeight()) / 2
+        );
+
+        Table upgradePanel = new Table(skin);
+        counterPanel.center();
+        upgradeLabel = new Label("Select Tool", skin);
+        descriptionLabel = new Label("", skin);
+        messageLabel = new Label("", skin);
+        toolSelectBox = new SelectBox<>(skin);
+        Array<String> tools = new Array<>();
+        for (ArrayList<Good> goods : App.getCurrentGame().getCurrentPlayer().getInventory().getList()) {
+            if (!goods.isEmpty() && goods.getLast() instanceof Tool)
+                tools.add(goods.getLast().getName());
+        }
+        toolSelectBox.setItems(tools);
+        toolSelectBox.setSelectedIndex(0);
+        upgradeSelect();
+
+        toolSelectBox.addListener(new ChangeListener() {
+            @Override
+            public void changed(ChangeEvent event, Actor actor) {
+                upgradeSelect();
+            }
+        });
+        upgradePanel.add(upgradeLabel).center().row();
+        upgradePanel.add(toolSelectBox).center().row();
+        upgradePanel.add(descriptionLabel).center().row();
+        upgradePanel.add(upgradeButton).center().row();
+        TextButton upgradeBackButton = new TextButton("Back", skin);
+        upgradeBackButton.addListener(new ClickListener() {
+            @Override
+            public void clicked(InputEvent event, float x, float y) {
+                upgradeWindow.remove();
+            }
+        });
+        upgradePanel.add(upgradeBackButton).center().row();
+        upgradePanel.add(messageLabel).padLeft(-50).center().row();
+        upgradeWindow.add(upgradePanel).center().row();
+
+        Window blacksmithWindow = new Window("Blacksmith Shop", skin);
+        blacksmithWindow.setSize(300, 300);
+        blacksmithWindow.setResizable(false);
+        blacksmithWindow.setPosition(
+            (Gdx.graphics.getWidth() - blacksmithWindow.getWidth()) / 2,
+            (Gdx.graphics.getHeight() - blacksmithWindow.getHeight()) / 2
+        );
+        Table blacksmithTable = new Table(skin);
+        TextButton shopButton = new TextButton("Shop", skin);
+        shopButton.addListener(new ClickListener() {
+            @Override
+            public void clicked(InputEvent event, float x, float y) {
+                blacksmithWindow.remove();
+                smithShop(window, addButton, countLabel, removeButton, purchaseButton, info, tileX, tileY, blacksmith,
+                    selectedNameLabel, itemsTable, counterPanel, selectedPanel, scrollPane, content, selectedGoodType,
+                    selectedCount, filterAvailable);
+            }
+        });
+        TextButton upgradeButton = new TextButton("Upgrade", skin);
+        upgradeButton.addListener(new ClickListener() {
+           @Override
+           public void clicked(InputEvent event, float x, float y) {
+               blacksmithWindow.remove();
+               toolsUpgradeInit(upgradeWindow);
+           }
+        });
+        blacksmithTable.add(shopButton).fillX().expandX().center().row();
+        blacksmithTable.add(upgradeButton).fillX().expandX().center().row();
+        blacksmithWindow.add(blacksmithTable).center().row();
+
+        staticStage.addActor(blacksmithWindow);
+    }
+
+    private void upgradeSelect() {
+        String selectedToolName = toolSelectBox.getSelected();
+        Tool selectedTool = null;
+        for (ArrayList<Good> goods : App.getCurrentGame().getCurrentPlayer().getInventory().getList()) {
+            if (!goods.isEmpty() && goods.getLast() instanceof Tool && goods.getLast().getName().equals(selectedToolName)) {
+                selectedTool = (Tool) goods.getLast();
+                break;
+            }
+
+        }
+
+        descriptionLabel.setText(Blacksmith.getUpgradeDescription().get(selectedTool.getToolLevel().getLevelNumber()));
+        upgradeButton[0] = new TextButton("Upgrade", skin);
+        Tool finalSelectedTool = selectedTool;
+        upgradeButton[0].addListener(new ClickListener() {
+            @Override
+            public void clicked(InputEvent event, float x, float y) {
+                Result res = controller.toolsUpgrade(finalSelectedTool.getName());
+                messageLabel.setText(res.message());
+            }
+        });
+    }
+
+    private void smithShop(Window window, TextButton addButton, Label countLabel, TextButton removeButton, TextButton purchaseButton,
+                                Label info, int tileX, int tileY, Blacksmith blacksmith, Label selectedNameLabel, Table itemsTable,
+                                Table counterPanel, Table selectedPanel, ScrollPane scrollPane, Table content,
+                                GoodType[] selectedGoodType, int[] selectedCount, boolean[] filterAvailable) {
         TextButton filterButton = new TextButton("Filter Availables", skin, "Earth");
+        staticStage.addActor(window);
 
         addButton.addListener(new ChangeListener() {
             @Override
@@ -1138,9 +1294,6 @@ public class GameView implements Screen, InputProcessor {
                 }
                 goodsListInit(addButton, countLabel, removeButton, purchaseButton, blacksmith, selectedNameLabel,
                     itemsTable, selectedGoodType, selectedCount, filterAvailable, filterButton, info);
-                toolsUpgradeInit(addButton, countLabel, removeButton, purchaseButton, blacksmith, selectedNameLabel,
-                    itemsTable, selectedGoodType, selectedCount, filterAvailable, filterButton, info);
-
             }
         });
 
@@ -1151,8 +1304,6 @@ public class GameView implements Screen, InputProcessor {
 
         goodsListInit(addButton, countLabel, removeButton, purchaseButton, blacksmith, selectedNameLabel, itemsTable,
             selectedGoodType, selectedCount, filterAvailable, filterButton, info);
-        toolsUpgradeInit(addButton, countLabel, removeButton, purchaseButton, blacksmith, selectedNameLabel,
-            itemsTable, selectedGoodType, selectedCount, filterAvailable, filterButton, info);
 
         lastConstructionsForShop(info, counterPanel, selectedPanel, scrollPane, content);
     }
@@ -1613,7 +1764,6 @@ public class GameView implements Screen, InputProcessor {
         setInputProcessor();
     }
 
-
     // cooking
     public void initCookingWindow() {
         if (cookingWindow != null) {
@@ -1661,8 +1811,6 @@ public class GameView implements Screen, InputProcessor {
         staticStage.addActor(cookingWindow);
         setInputProcessor();
     }
-
-
 
     public void showRecipeDetails(CookingRecipeType recipeType) {
         if (cookingRecipeWindow != null) {
@@ -1741,7 +1889,6 @@ public class GameView implements Screen, InputProcessor {
         setInputProcessor();
     }
 
-
     // crafting
     public void initCraftingWindow() {
         if (craftingWindow != null) {
@@ -1755,9 +1902,9 @@ public class GameView implements Screen, InputProcessor {
             (Gdx.graphics.getHeight() - craftingWindow.getHeight()) / 2
         );
 
-        craftingTable = new Table(skin);
-        craftingTable.top().left();
-        craftingTable.setFillParent(false);
+        craftingUseTable = new Table(skin);
+        craftingUseTable.top().left();
+        craftingUseTable.setFillParent(false);
 
         controller.getCraftingController().refreshRecipes();
         ArrayList<Pair<Pair<ImageButton, Image>, Integer>> craftingRecipes = controller.getCraftingController().getCraftingRecipes();
@@ -1773,15 +1920,15 @@ public class GameView implements Screen, InputProcessor {
             itemTable.add(slotButton).size(64, 64).padRight(5);
             itemTable.add(itemImage).size(48, 48).padLeft(-48);
 
-            craftingTable.add(itemTable).pad(5);
+            craftingUseTable.add(itemTable).pad(5);
 
             count++;
             if (count % columns == 0) {
-                craftingTable.row();
+                craftingUseTable.row();
             }
         }
 
-        ScrollPane craftingScrollPane = new ScrollPane(craftingTable, skin);
+        ScrollPane craftingScrollPane = new ScrollPane(craftingUseTable, skin);
         craftingScrollPane.setFadeScrollBars(false);
         craftingScrollPane.setForceScroll(false, true);
 
@@ -1950,13 +2097,12 @@ public class GameView implements Screen, InputProcessor {
         mainTable = new Table(skin);
         mainTable.setFillParent(true);
 
-
-        for (int i = 0; i < 8; i++) {
+        for (int i = 0; i < 6; i++) {
             ImageButton imageButton = controller.getInventoryController().getMainInventoryElements().get(i);
             if (i == index) {
                 mainTable.add(imageButton);
                 imageButton.setChecked(true);
-            } else if (i == 7)
+            } else if (i == 5)
                 mainTable.add(imageButton).padLeft(100);
             else
                 mainTable.add(imageButton);
@@ -2095,36 +2241,8 @@ public class GameView implements Screen, InputProcessor {
         }
     }
 
-    private void toolsUpgradeInit(TextButton addButton, Label countLabel, TextButton removeButton, TextButton purchaseButton,
-                             Blacksmith blacksmith, Label selectedNameLabel, Table itemsTable, GoodType[] selectedGoodType,
-                             int[] selectedCount, boolean[] filterAvailable, TextButton filterButton, Label info) {
-        for (int i = 0; i < 4; i++) {
-            TextButton upgradeButton = new TextButton("Upgrade to " + ToolLevel.toolLevels.get(i + 1).getName(), skin);
-//            upgradeButton.addListener(new ChangeListener() {
-//                @Override
-//                public void changed(ChangeEvent event, Actor actor) {
-//                    if (gameBuilding.findProduct(product).second() == 0) {
-//                        info.setText("This product's daily quantity is 0");
-//                        info.setVisible(true);
-//                        addButton.setVisible(false);
-//                        removeButton.setVisible(false);
-//                        countLabel.setVisible(false);
-//                        purchaseButton.setVisible(false);
-//                    } else {
-//                        selectedGoodType[0] = null;
-//                        addButton.setVisible(true);
-//                        removeButton.setVisible(true);
-//                        countLabel.setVisible(true);
-//                        selectedGoodType[0] = product;
-//                        selectedCount[0] = 0;
-//                        selectedNameLabel.setText(product.getName());
-//                        countLabel.setText(String.valueOf(selectedCount[0]));
-//                        purchaseButton.setVisible(true);
-//                        info.setVisible(false);
-//                    }
-//                }
-//            });
-        }
+    private void toolsUpgradeInit(Window window) {
+        staticStage.addActor(window);
     }
 
     private void lastConstructionsForShop(Label info, Table counterPanel, Table selectedPanel, ScrollPane scrollPane, Table content) {
@@ -2519,8 +2637,276 @@ public class GameView implements Screen, InputProcessor {
     public Stage getStaticStage() {
         return staticStage;
     }
-}
 
+    private void initCraftingWindow(ArrayList<Good> goods) {
+        craftingUseWindow = new Window(goods.getLast().getName() + " Crafting", skin);
+        craftingUseWindow.setSize(1000, 500);
+        craftingUseWindow.setPosition(
+            (staticStage.getWidth() - craftingUseWindow.getWidth()) / 2,
+            (staticStage.getHeight() - craftingUseWindow.getHeight()) / 2
+        );
+
+        craftingUseTable = new Table(skin);
+        craftingUseTable.setFillParent(true);
+        craftingUseTable.pad(30);
+
+        craftingLabel = new Label("Select Crafting ingredients:", skin);
+        craftingUseTable.add(craftingLabel).fillX().expandX().center().row();
+        craftingSelectBox = new ArrayList<>();
+        craftingSelectBox.add(new SelectBox<>(skin));
+        craftingSelectBox.add(new SelectBox<>(skin));
+        for (SelectBox<String> selectBox : craftingSelectBox) {
+            Array<String> craftingArray = new Array<>();
+            for (ArrayList<Good> goodArrayList : App.getCurrentGame().getCurrentPlayer().getInventory().getList()) {
+                if (!goodArrayList.isEmpty())
+                    craftingArray.add(goodArrayList.getLast().getName());
+            }
+
+            selectBox.setItems(craftingArray);
+            selectBox.setSelectedIndex(0);
+            craftingUseTable.add(selectBox).fillX().expandX().center().row();
+        }
+
+        craftingUseButton = new TextButton("Use Crafting", skin);
+        craftingUseTable.add(craftingUseButton).fillX().expandX().center().row();
+        craftingMessageLabel = new Label("", skin);
+        craftingUseButton.addListener(new ClickListener() {
+           @Override
+           public void clicked(InputEvent event, float x, float y) {
+               Result res = controller.artisanUse(goods.getLast().getName(), craftingSelectBox.get(0).getSelected(),
+                   craftingSelectBox.get(1).getSelected());
+                craftingMessageLabel.setText(res.message());
+           }
+        });
+
+        craftingBackButton = new TextButton("Back", skin);
+        craftingUseTable.add(craftingBackButton).fillX().expandX().center().row();
+        craftingBackButton.addListener(new ClickListener() {
+            @Override
+            public void clicked(InputEvent event, float x, float y) {
+                closeCraftingWindow();
+            }
+        });
+
+        craftingUseTable.add(craftingMessageLabel).fillX().expandX().center().row();
+
+        craftingUseWindow.addActor(craftingUseTable);
+        staticStage.addActor(craftingUseWindow);
+    }
+
+    private void closeCraftingWindow() {
+        craftingUseWindow.remove();
+    }
+
+    private void initShippingBinWindow() {
+        Window shippingBinWindow = new Window("Shipping Bin", skin);
+        shippingBinWindow.setSize(1000, 600);
+        shippingBinWindow.setPosition(
+            (staticStage.getWidth() - shippingBinWindow.getWidth()) / 2,
+            (staticStage.getHeight() - shippingBinWindow.getHeight()) / 2
+        );
+
+        Table shippingBinTable = new Table(skin);
+        shippingBinTable.setFillParent(true);
+        shippingBinTable.pad(30);
+
+        Label shippingBinLabel = new Label("Choose your Good to sell: ", skin);
+        SelectBox<String> goodsSelectBox = new SelectBox<>(skin);
+        SelectBox<String> goodsCountSelectBox = new SelectBox<>(skin);
+        Array<String> goodsArray = new Array<>();
+        Array<String> goodsCountArray = new Array<>();
+        App.getCurrentGame().getCurrentPlayer().getInventory().getList().forEach(good -> {
+           if (!good.isEmpty())
+               goodsArray.add(good.getLast().getName());
+        });
+
+        goodsSelectBox.setItems(goodsArray);
+        goodsSelectBox.setSelectedIndex(0);
+
+        for (int i = 1; i <= App.getCurrentGame().getCurrentPlayer().getInventory().getFirstElementSize(); i++) {
+            goodsCountArray.add(String.valueOf(i));
+        }
+        goodsCountSelectBox.setItems(goodsCountArray);
+        goodsCountSelectBox.setSelectedIndex(0);
+
+        goodsSelectBox.addListener(new ChangeListener() {
+            @Override
+            public void changed(ChangeEvent changeEvent, Actor actor) {
+                String selected = goodsSelectBox.getSelected();
+                for (ArrayList<Good> good : App.getCurrentGame().getCurrentPlayer().getInventory().getList()) {
+                    if (!good.isEmpty() && good.getLast().getName().equals(selected)) {
+                        goodsCountArray.clear();
+                        for (int i = 1; i <= good.size(); i++) {
+                            goodsCountArray.add(String.valueOf(i));
+                        }
+                        goodsCountSelectBox.setItems(goodsCountArray);
+                        goodsCountSelectBox.setSelectedIndex(0);
+                        break;
+                    }
+                }
+            }
+        });
+
+        TextButton sellButton = new TextButton("Sell", skin);
+        Label sellMessageLabel = new Label("", skin);
+        sellButton.addListener(new ClickListener() {
+            @Override
+            public void clicked(InputEvent event, float x, float y) {
+                Result res = controller.sell(goodsSelectBox.getSelected(), goodsCountSelectBox.getSelected());
+                sellMessageLabel.setText(res.message());
+            }
+        });
+
+        TextButton sellBackButton = new TextButton("Back", skin);
+        sellBackButton.addListener(new ClickListener() {
+           @Override
+           public void clicked(InputEvent event, float x, float y) {
+               shippingBinWindow.remove();
+               shippingBinTable.remove();
+           }
+        });
+
+        shippingBinTable.add(shippingBinLabel).fillX().expandX().center().row();
+        shippingBinTable.add(goodsSelectBox).fillX().expandX().center().row();
+        shippingBinTable.add(goodsCountSelectBox).fillX().expandX().center().row();
+        shippingBinTable.add(sellButton).fillX().expandX().center().row();
+        shippingBinTable.add(sellBackButton).fillX().expandX().center().row();
+        shippingBinTable.add(sellMessageLabel).fillX().expandX().center().row();
+
+        shippingBinWindow.addActor(shippingBinTable);
+
+        staticStage.addActor(shippingBinWindow);
+    }
+
+    public void initExitMenu(Window window) {
+        window.add(new Label("Exit", skin)).left().padBottom(10);
+        window.row();
+        Label messageLabel = new Label("", skin);
+
+        TextButton exitButton = new TextButton("Exit Game", skin);
+        exitButton.addListener(new ClickListener() {
+           @Override
+           public void clicked(InputEvent event, float x, float y) {
+               Result res = controller.exitGame();
+               messageLabel.setText(res.message());
+           }
+        });
+
+        window.add(exitButton).fillX().expandX().center().row();
+
+        TextButton textButton = new TextButton("Force Terminate", skin);
+        textButton.addListener(new ClickListener() {
+            @Override
+            public void clicked(InputEvent event, float x, float y) {
+                closeMainTable();
+                initTerminateWindow(0);
+            }
+        });
+        window.add(textButton).fillX().expandX().center().row();
+        window.add(messageLabel).fillX().expandX().center().row();
+
+
+    }
+
+    public void initTerminateWindow(int playerNumber) {
+        App.getCurrentGame().setCurrentPlayer(App.getCurrentGame().getPlayers().get(playerNumber));
+        Player player = App.getCurrentGame().getCurrentPlayer();
+        Window terminateWindow = new Window("", skin, "Letter");
+        terminateWindow.setSize(1000, 500);
+        terminateWindow.setPosition(
+            (staticStage.getWidth() - terminateWindow.getWidth()) / 2,
+            (staticStage.getHeight() - terminateWindow.getHeight()) / 2
+        );
+
+        Label terminateMessageLabel = new Label(player.getPlayerUsername() + ", Are you agree to terminate the game?", skin);
+        TextButton yesButton = new TextButton("Yes", skin);
+        TextButton noButton = new TextButton("No", skin);
+        TextButton backButton = new TextButton("Back", skin);
+
+        terminateWindow.add(terminateMessageLabel).colspan(3).fillX().expandX().center().row();
+        terminateWindow.add(yesButton).fillX().padTop(10);
+        terminateWindow.add(noButton).fillX().padTop(10);
+        terminateWindow.add(backButton).fillX().padTop(10).row();
+
+        yesButton.addListener(new ClickListener() {
+           @Override
+           public void clicked(InputEvent event, float x, float y) {
+               terminateWindow.remove();
+               if (playerNumber == 3)
+                   controller.forceTerminate();
+               else
+                   initTerminateWindow(playerNumber + 1);
+           }
+        });
+
+        noButton.addListener(new ClickListener() {
+           @Override
+           public void clicked(InputEvent event, float x, float y) {
+               terminateWindow.remove();
+           }
+        });
+
+        backButton.addListener(new ClickListener() {
+           @Override
+           public void clicked(InputEvent event, float x, float y) {
+               terminateWindow.remove();
+               if (playerNumber > 0)
+                   initTerminateWindow(playerNumber - 1);
+           }
+        });
+
+        staticStage.addActor(terminateWindow);
+    }
+
+    public void initJournalWindow() {
+        journalWindow = new Window("Journal", skin, "Letter");
+        journalWindow.setSize(1000, 500);
+        journalWindow.setPosition(
+            (staticStage.getWidth() - journalWindow.getWidth()) / 2,
+            (staticStage.getHeight() - journalWindow.getHeight()) / 2
+        );
+
+        journalTable = new Table(skin);
+        journalWindow.add(new Label("Your news:", skin, "Bold")).fillX().expandX().center().row();
+        int ctr = 1;
+        for (int i = App.getCurrentGame().getCurrentPlayer().getNews().size() - 1; i >= 0; i--) {
+            String s = App.getCurrentGame().getCurrentPlayer().getNews().get(i);
+            journalTable.add(new Label(ctr++ + ". \n" + s, skin)).fillX().expandX().center().padTop(10).row();
+        }
+
+        ScrollPane scrollPane = new ScrollPane(journalTable);
+        journalWindow.add(scrollPane).padTop(10).row();
+
+        journalBackButton = new TextButton("Back", skin);
+        journalBackButton.addListener(new ClickListener() {
+            @Override
+            public void clicked(InputEvent event, float x, float y) {
+                closeJournalWindow();
+            }
+        });
+        journalWindow.add(journalBackButton).fillX().expandX().center().row();
+
+        staticStage.addActor(journalWindow);
+    }
+
+    public void closeJournalWindow() {
+        journalWindow.remove();
+        journalWindow = null;
+        journalTable.remove();
+    }
+
+    public Window getJournalWindow() {
+        return journalWindow;
+    }
+
+    public boolean isTabClicked() {
+        return isTabClicked;
+    }
+
+    public void setTabClicked(boolean tabClicked) {
+        isTabClicked = tabClicked;
+    }
+}
 
 
 

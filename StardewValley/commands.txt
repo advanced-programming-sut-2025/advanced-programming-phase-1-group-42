@@ -17,7 +17,7 @@ cheat add item -n Wood -c 1000
 cheat add 100000 dollars
 cheat add item -n Carrot_Seed -c 100
 cheat add item -n Carrot -c 100
-cheat add item -n Carrot -c 200 
+cheat add item -n Carrot -c 200
 cheat add item -n Carrot -c 100
 cheat add item -n Carrot -c 100
 cheat add item -n Carrot -c 100
@@ -32,9 +32,25 @@ cheat add item -n Wedding_Ring -c 10
 cheat add item -n Wedding_Ring -c 10
 cheat add item -c Wedding_Ring -c 10
 cheat add item -n Wedding_Ring -c 10
+cheat add 10000 dollars
+cheat add item -c Copper_Bar -c 100
+cheat add item -n Copper_Bar -c 100
+cheat add 10000 dollars
+cheat add item -n Bomb -c 10
+artisan use Bomb
+artisan use Bomb
+
+artisan use Bomb
+cheat add item -n Bomb -c 10
+cheat add item -n Bomb -c 10
+cheat add item -n Bomb -c 10
+cheat add item -n Bomb -c 10
+cheat add item -n Bomb -c 10
 cheat add item -n Carrot -c 12
 cheat add item -n Carrot -c 12
 cheat add item -n Carrot -c 12
 cheat add item -n Carrot -c 12
 cheat add item -n Carrot -c 24
 cheat add item -n Carrot -c 24
+cheat add 12 dollars
+cheat add 1000 dollars

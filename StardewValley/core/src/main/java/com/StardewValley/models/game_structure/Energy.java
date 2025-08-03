@@ -5,10 +5,10 @@ import com.StardewValley.models.App;
 import static java.lang.Math.min;
 
 public class Energy {
-    private int dayEnergyLeft = 200;
-    private int maxDayEnergy = 200;
-    private int maxTurnEnergy = 50;
-    private int turnValueLeft = 50;
+    private double dayEnergyLeft = 200;
+    private double maxDayEnergy = 200;
+    private double maxTurnEnergy = 50;
+    private double turnValueLeft = 50;
     private boolean isAwake = true;
 
 
@@ -26,13 +26,12 @@ public class Energy {
     public void setDayEnergyLeft(int dayEnergyLeft) { this.dayEnergyLeft = dayEnergyLeft; }
 
     public int getTurnValueLeft() {
-        return turnValueLeft;
+        return (int) turnValueLeft;
     }
 
-    public void decreaseTurnEnergyLeft(int value) {
-        System.out.println(value);
-        this.dayEnergyLeft -= (int) (App.getCurrentGame().getWeather().getWeatherEffectingEnergy() * value);
-        this.turnValueLeft -= (int) (App.getCurrentGame().getWeather().getWeatherEffectingEnergy() * value);
+    public void decreaseTurnEnergyLeft(double value) {
+        this.dayEnergyLeft -= (App.getCurrentGame().getWeather().getWeatherEffectingEnergy() * value);
+        this.turnValueLeft -= (App.getCurrentGame().getWeather().getWeatherEffectingEnergy() * value);
         if(this.dayEnergyLeft <= 0){
             this.isAwake = false;
         }
@@ -62,14 +61,14 @@ public class Energy {
 
 
     public int getDayEnergyLeft() {
-        return dayEnergyLeft;
+        return (int) dayEnergyLeft;
     }
 
     public int getMaxDayEnergy() {
-        return maxDayEnergy;
+        return (int) maxDayEnergy;
     }
 
     public int getMaxTurnEnergy() {
-        return maxTurnEnergy;
+        return (int) maxTurnEnergy;
     }
 }
