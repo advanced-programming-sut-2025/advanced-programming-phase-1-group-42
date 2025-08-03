@@ -1,6 +1,6 @@
-package com.StardewValley.controllers;
+package com.StardewValley.server.controllers;
 
-import com.StardewValley.views.GameView;
+import com.StardewValley.client.views.GameView;
 
 public class FriendshipController {
     private GameView gameView;

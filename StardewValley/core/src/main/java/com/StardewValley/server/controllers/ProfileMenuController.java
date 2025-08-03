@@ -1,16 +1,12 @@
-package com.StardewValley.controllers;
+package com.StardewValley.server.controllers;
 
 import com.StardewValley.Main;
 import com.StardewValley.models.App;
 import com.StardewValley.models.Assets;
 import com.StardewValley.models.Result;
-import com.StardewValley.models.enums.Menu;
 import com.StardewValley.models.interactions.User;
-import com.StardewValley.views.MainMenuView;
-import com.StardewValley.views.ProfileMenuView;
-
-import java.util.Random;
-import java.util.Scanner;
+import com.StardewValley.client.views.MainMenuView;
+import com.StardewValley.client.views.ProfileMenuView;
 
 public class ProfileMenuController extends Controller {
     private ProfileMenuView view;

@@ -1,4 +1,4 @@
-package com.StardewValley.controllers;
+package com.StardewValley.server.controllers;
 
 import com.StardewValley.Main;
 import com.StardewValley.models.App;
@@ -28,20 +28,18 @@ import com.StardewValley.models.interactions.Animals.AnimalProduct;
 import com.StardewValley.models.interactions.Animals.AnimalTypes;
 import com.StardewValley.models.interactions.Gender;
 import com.StardewValley.models.interactions.NPCs.NPC;
-import com.StardewValley.models.interactions.NPCs.NPCFriendship;
 import com.StardewValley.models.interactions.Player;
 import com.StardewValley.models.interactions.PlayerBuildings.FarmBuilding;
 import com.StardewValley.models.interactions.PlayerBuildings.FarmBuildingTypes;
 import com.StardewValley.models.interactions.User;
 import com.StardewValley.models.interactions.game_buildings.*;
-import com.StardewValley.views.GameMenuView;
-import com.StardewValley.views.GameView;
-import com.StardewValley.views.MainMenuView;
+import com.StardewValley.client.views.GameMenuView;
+import com.StardewValley.client.views.GameView;
+import com.StardewValley.client.views.MainMenuView;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
-import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.Touchable;
 import com.badlogic.gdx.scenes.scene2d.ui.*;
@@ -49,7 +47,6 @@ import com.badlogic.gdx.scenes.scene2d.ui.Stack;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 import com.badlogic.gdx.utils.Scaling;
-import com.badlogic.gdx.utils.viewport.FitViewport;
 //import com.mongodb.ConnectionString;
 //import com.mongodb.MongoClientSettings;
 //import com.mongodb.ServerApi;
@@ -66,9 +63,7 @@ import com.badlogic.gdx.utils.viewport.FitViewport;
 
 import java.util.*;
 import java.util.List;
-import java.util.regex.Matcher;
 
-import static java.awt.SystemColor.window;
 import static java.lang.Math.abs;
 
 public class GameMenuController extends Controller {

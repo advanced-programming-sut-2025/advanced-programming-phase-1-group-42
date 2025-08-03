@@ -1,4 +1,4 @@
-package com.StardewValley.views;
+package com.StardewValley.client.views;
 
 import com.StardewValley.models.App;
 import com.StardewValley.models.enums.Menu;

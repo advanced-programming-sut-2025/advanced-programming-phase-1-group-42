@@ -1,4 +1,4 @@
-package com.StardewValley.views;
+package com.StardewValley.client.views;
 
 import java.util.Scanner;
 

@@ -1,12 +1,12 @@
-package com.StardewValley.controllers;
+package com.StardewValley.server.controllers;
 
 import com.StardewValley.models.App;
 import com.StardewValley.models.Assets;
 import com.StardewValley.models.Pair;
 import com.StardewValley.models.goods.GoodType;
-import com.StardewValley.models.goods.recipes.CookingRecipe;
-import com.StardewValley.models.goods.recipes.CookingRecipeType;
-import com.StardewValley.views.GameView;
+import com.StardewValley.models.goods.recipes.CraftingRecipe;
+import com.StardewValley.models.goods.recipes.CraftingRecipeType;
+import com.StardewValley.client.views.GameView;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
@@ -18,16 +18,16 @@ import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 
 import java.util.ArrayList;
 
-public class CookingController {
+public class CraftingController {
     private final GameView gameView;
-    private final ArrayList<Pair<Pair<ImageButton, Image>, Integer>> cookingRecipe;
+    private final ArrayList<Pair<Pair<ImageButton, Image>, Integer>> craftingRecipes;
 
     private final TextureRegionDrawable drawableSlot;
     private final ButtonGroup<ImageButton> buttonGroup;
 
-    public CookingController(GameView gameView) {
+    public CraftingController(GameView gameView) {
         this.gameView = gameView;
-        cookingRecipe = new ArrayList<>();
+        craftingRecipes = new ArrayList<>();
 
         drawableSlot = Assets.getInstance().getDrawableSlot();
 
@@ -40,19 +40,19 @@ public class CookingController {
     }
 
     public void refreshRecipes() {
-        cookingRecipe.clear();
+        craftingRecipes.clear();
         buttonGroup.clear();
 
-        CookingRecipeType[] recipeTypes = CookingRecipeType.values();
+        CraftingRecipeType[] recipeTypes = CraftingRecipeType.values();
 
-        ArrayList<CookingRecipeType> playerRecipes = new ArrayList<>();
-        for (CookingRecipe recipe : App.getCurrentGame().getCurrentPlayer().getCookingRecipes()) {
-            playerRecipes.add(recipe.getType());
+        ArrayList<CraftingRecipeType> playerRecipes = new ArrayList<>();
+        for (CraftingRecipe recipe : App.getCurrentGame().getCurrentPlayer().getCraftingRecipes()) {
+            playerRecipes.add((CraftingRecipeType) recipe.getType());
         }
 
         for (int i = 0; i < recipeTypes.length; i++) {
-            CookingRecipeType type = recipeTypes[i];
-            GoodType goodType = type.getGoodType();
+            CraftingRecipeType type = recipeTypes[i];
+            GoodType goodType = type.getCraftingType();
 
             ImageButton slotButton = new ImageButton(drawableSlot);
             slotButton.setProgrammaticChangeEvents(false);
@@ -73,9 +73,9 @@ public class CookingController {
                                 slotButton.setChecked(true);
                             }
 
-                            CookingRecipeType clickedType = recipeTypes[index];
+                            CraftingRecipeType clickedType = recipeTypes[index];
                             if (clickedType != null) {
-                                gameView.showRecipeDetails(clickedType);
+                                gameView.showCraftingRecipeDetails(clickedType);
                             }
                         }
                     });
@@ -100,15 +100,15 @@ public class CookingController {
             }
 
 
-            cookingRecipe.add(new Pair<>(new Pair<>(slotButton, itemImage), i));
+            craftingRecipes.add(new Pair<>(new Pair<>(slotButton, itemImage), i));
             buttonGroup.add(slotButton);
         }
     }
 
-    public void updateRecipes() {
-    }
+//    public void updateRecipes() {
+//    }
 
-    public ArrayList<Pair<Pair<ImageButton, Image>, Integer>> getCookingRecipe() {
-        return cookingRecipe;
+    public ArrayList<Pair<Pair<ImageButton, Image>, Integer>> getCraftingRecipes() {
+        return craftingRecipes;
     }
 }

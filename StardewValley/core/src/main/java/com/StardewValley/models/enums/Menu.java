@@ -1,8 +1,6 @@
 package com.StardewValley.models.enums;
 
-import com.StardewValley.views.*;
-
-import java.util.Scanner;
+import com.StardewValley.client.views.*;
 
 public enum Menu {
     GameMenu(new GameMenu()),

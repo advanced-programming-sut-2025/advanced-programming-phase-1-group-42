@@ -1,7 +1,7 @@
-package com.StardewValley.views;
+package com.StardewValley.client.views;
 
 import com.StardewValley.Main;
-import com.StardewValley.controllers.GameMenuController;
+import com.StardewValley.server.controllers.GameMenuController;
 import com.StardewValley.models.App;
 import com.StardewValley.models.Assets;
 import com.StardewValley.models.game_structure.Farm;

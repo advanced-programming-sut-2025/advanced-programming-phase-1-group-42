@@ -1,10 +1,9 @@
-package com.StardewValley.views;
+package com.StardewValley.client.views;
 
-import com.StardewValley.controllers.TradeMenuController;
+import com.StardewValley.server.controllers.TradeMenuController;
 import com.StardewValley.models.enums.TradeMenuCommands;
 import com.StardewValley.models.game_structure.Game;
 
-import java.util.Scanner;
 import java.util.regex.Matcher;
 
 public class TradeMenu implements AppMenu {

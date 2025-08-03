@@ -1,6 +1,4 @@
-package com.StardewValley.views;
-
-import java.util.Scanner;
+package com.StardewValley.client.views;
 
 public class ExitMenu implements AppMenu {
     @Override

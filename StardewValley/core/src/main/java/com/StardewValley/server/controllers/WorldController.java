@@ -1,4 +1,4 @@
-package com.StardewValley.controllers;
+package com.StardewValley.server.controllers;
 
 public class WorldController {
 

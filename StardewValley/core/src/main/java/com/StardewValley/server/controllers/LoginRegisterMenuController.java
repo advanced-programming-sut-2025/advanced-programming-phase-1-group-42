@@ -1,23 +1,15 @@
-package com.StardewValley.controllers;
+package com.StardewValley.server.controllers;
 
 import com.StardewValley.Main;
 import com.StardewValley.models.App;
 import com.StardewValley.models.Assets;
 import com.StardewValley.models.Result;
-import com.StardewValley.models.enums.LoginRegisterCommands;
-import com.StardewValley.models.enums.Menu;
 import com.StardewValley.models.interactions.Gender;
 import com.StardewValley.models.interactions.User;
-import com.StardewValley.views.LoginMenuView;
-import com.StardewValley.views.MainMenuView;
-import com.StardewValley.views.RegisterMenuView;
+import com.StardewValley.client.views.LoginMenuView;
+import com.StardewValley.client.views.MainMenuView;
+import com.StardewValley.client.views.RegisterMenuView;
 import com.badlogic.gdx.Screen;
-import com.badlogic.gdx.scenes.scene2d.ui.TextField;
-
-import java.util.Random;
-import java.util.Scanner;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 
 public class LoginRegisterMenuController extends Controller {
     private Screen view;

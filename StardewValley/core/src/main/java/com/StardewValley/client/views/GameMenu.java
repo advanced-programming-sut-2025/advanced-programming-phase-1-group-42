@@ -1,12 +1,11 @@
-package com.StardewValley.views;
+package com.StardewValley.client.views;
 
-import com.StardewValley.controllers.GameMenuController;
+import com.StardewValley.server.controllers.GameMenuController;
 import com.StardewValley.models.App;
 import com.StardewValley.models.enums.GameMenuCommands;
 import com.StardewValley.models.game_structure.Game;
 
 import java.util.ArrayList;
-import java.util.Scanner;
 import java.util.regex.Matcher;
 
 public class GameMenu implements AppMenu {

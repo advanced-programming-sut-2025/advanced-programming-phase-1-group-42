@@ -1,11 +1,10 @@
-package com.StardewValley.views;
+package com.StardewValley.client.views;
 
-import com.StardewValley.controllers.ProfileMenuController;
+import com.StardewValley.server.controllers.ProfileMenuController;
 import com.StardewValley.models.enums.LoginRegisterCommands;
 import com.StardewValley.models.enums.ProfileMenuCommands;
 import com.StardewValley.models.game_structure.Game;
 
-import java.util.Scanner;
 import java.util.regex.Matcher;
 
 public class ProfileMenu implements AppMenu {

@@ -1,10 +1,10 @@
 package com.StardewValley;
 
 import com.StardewValley.client.AppClient;
-import com.StardewValley.controllers.LoginRegisterMenuController;
+import com.StardewValley.server.controllers.LoginRegisterMenuController;
 import com.StardewValley.models.App;
 import com.StardewValley.models.Assets;
-import com.StardewValley.views.RegisterMenuView;
+import com.StardewValley.client.views.RegisterMenuView;
 import com.badlogic.gdx.Game;
 import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;

@@ -1,14 +1,11 @@
-package com.StardewValley.controllers;
+package com.StardewValley.server.controllers;
 
-import com.StardewValley.Main;
 import com.StardewValley.models.App;
 import com.StardewValley.models.Assets;
 import com.StardewValley.models.Pair;
-import com.StardewValley.models.game_structure.Coordinate;
 import com.StardewValley.models.goods.Good;
 import com.StardewValley.models.interactions.game_buildings.Quadruple;
-import com.StardewValley.views.GameView;
-import com.badlogic.gdx.Gdx;
+import com.StardewValley.client.views.GameView;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;

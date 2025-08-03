@@ -1,7 +1,7 @@
-package com.StardewValley.views;
+package com.StardewValley.client.views;
 
 import com.StardewValley.Main;
-import com.StardewValley.controllers.LoginRegisterMenuController;
+import com.StardewValley.server.controllers.LoginRegisterMenuController;
 import com.StardewValley.models.Assets;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;

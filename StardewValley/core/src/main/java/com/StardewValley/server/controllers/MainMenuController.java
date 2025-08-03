@@ -1,14 +1,12 @@
-package com.StardewValley.controllers;
+package com.StardewValley.server.controllers;
 
 import com.StardewValley.Main;
 import com.StardewValley.models.App;
 import com.StardewValley.models.Assets;
-import com.StardewValley.models.Result;
-import com.StardewValley.models.enums.Menu;
-import com.StardewValley.views.GameMenuView;
-import com.StardewValley.views.LoginMenuView;
-import com.StardewValley.views.MainMenuView;
-import com.StardewValley.views.ProfileMenuView;
+import com.StardewValley.client.views.GameMenuView;
+import com.StardewValley.client.views.LoginMenuView;
+import com.StardewValley.client.views.MainMenuView;
+import com.StardewValley.client.views.ProfileMenuView;
 
 public class MainMenuController extends Controller {
     private MainMenuView view;

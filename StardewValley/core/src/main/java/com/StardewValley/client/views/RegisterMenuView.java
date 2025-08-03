@@ -1,18 +1,13 @@
-package com.StardewValley.views;
+package com.StardewValley.client.views;
 
 import com.StardewValley.Main;
-import com.StardewValley.controllers.LoginRegisterMenuController;
-import com.StardewValley.models.App;
+import com.StardewValley.server.controllers.LoginRegisterMenuController;
 import com.StardewValley.models.Assets;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
-import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.*;
-import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
-import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
-import org.w3c.dom.Text;
 
 public class RegisterMenuView implements Screen {
     private Stage stage;
