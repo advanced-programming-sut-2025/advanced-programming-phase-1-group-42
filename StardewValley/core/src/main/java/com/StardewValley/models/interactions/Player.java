@@ -1,6 +1,6 @@
 package com.StardewValley.models.interactions;
 
-import com.StardewValley.models.App;
+import com.StardewValley.client.AppClient;
 import com.StardewValley.models.Assets;
 import com.StardewValley.models.Pair;
 import com.StardewValley.models.game_structure.*;
@@ -17,7 +17,6 @@ import com.StardewValley.models.interactions.Animals.Animal;
 import com.StardewValley.models.interactions.PlayerBuildings.FarmBuilding;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Sprite;
-import com.badlogic.gdx.graphics.g2d.TextureRegion;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -124,19 +123,19 @@ public class Player {
 
     // Function for eat
     public void eat(Good food) {
-        App.getCurrentGame().getCurrentPlayer().getEnergy().increaseTurnEnergyLeft(Good.newGoodType(food.getName()).getEnergy());
+        AppClient.getCurrentGame().getCurrentPlayer().getEnergy().increaseTurnEnergyLeft(Good.newGoodType(food.getName()).getEnergy());
         if (food instanceof Food) {
             FoodType type = (FoodType) food.getType();
             Buff currentBuff = type.getBuff();
             if (currentBuff != null) {
-                App.getCurrentGame().getCurrentPlayer().setBuff(currentBuff);
+                AppClient.getCurrentGame().getCurrentPlayer().setBuff(currentBuff);
                 if (currentBuff.getType() == BuffType.ENERGY_BUFF) {
-                    App.getCurrentGame().getCurrentPlayer().getEnergy().setDayEnergyLeft(300);
-                    App.getCurrentGame().getCurrentPlayer().getEnergy().setMaxDayEnergy(300);
+                    AppClient.getCurrentGame().getCurrentPlayer().getEnergy().setDayEnergyLeft(300);
+                    AppClient.getCurrentGame().getCurrentPlayer().getEnergy().setMaxDayEnergy(300);
                 }
             }
         }
-        App.getCurrentGame().getCurrentPlayer().getInventory().removeItemsFromInventory(food.getType(),1);
+        AppClient.getCurrentGame().getCurrentPlayer().getInventory().removeItemsFromInventory(food.getType(),1);
     }
 
     public Inventory getInventory() {

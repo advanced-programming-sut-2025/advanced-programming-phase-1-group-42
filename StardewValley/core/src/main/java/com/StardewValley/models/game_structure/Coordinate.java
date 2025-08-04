@@ -1,6 +1,6 @@
 package com.StardewValley.models.game_structure;
 
-import com.StardewValley.models.App;
+import com.StardewValley.client.AppClient;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -27,8 +27,8 @@ public class Coordinate {
     }
 
     public static Coordinate getDirection(String direction) {
-        int newX = App.getCurrentGame().getCurrentPlayer().getCoordinate().getX();
-        int newY = App.getCurrentGame().getCurrentPlayer().getCoordinate().getY();
+        int newX = AppClient.getCurrentGame().getCurrentPlayer().getCoordinate().getX();
+        int newY = AppClient.getCurrentGame().getCurrentPlayer().getCoordinate().getY();
         switch (direction) {
             case "up":
                 newY -= 1;

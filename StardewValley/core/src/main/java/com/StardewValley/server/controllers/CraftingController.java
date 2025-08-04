@@ -1,6 +1,6 @@
 package com.StardewValley.server.controllers;
 
-import com.StardewValley.models.App;
+import com.StardewValley.client.AppClient;
 import com.StardewValley.models.Assets;
 import com.StardewValley.models.Pair;
 import com.StardewValley.models.goods.GoodType;
@@ -46,7 +46,7 @@ public class CraftingController {
         CraftingRecipeType[] recipeTypes = CraftingRecipeType.values();
 
         ArrayList<CraftingRecipeType> playerRecipes = new ArrayList<>();
-        for (CraftingRecipe recipe : App.getCurrentGame().getCurrentPlayer().getCraftingRecipes()) {
+        for (CraftingRecipe recipe : AppClient.getCurrentGame().getCurrentPlayer().getCraftingRecipes()) {
             playerRecipes.add((CraftingRecipeType) recipe.getType());
         }
 

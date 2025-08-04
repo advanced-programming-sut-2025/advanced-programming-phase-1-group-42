@@ -1,6 +1,6 @@
 package com.StardewValley.models.goods.farmings;
 
-import com.StardewValley.models.App;
+import com.StardewValley.client.AppClient;
 import com.StardewValley.models.enums.Season;
 import com.StardewValley.models.goods.GoodType;
 
@@ -34,7 +34,7 @@ public class FarmingTree extends Farming {
             harvestCycleCounter = 0;
         }
        for (Season season : type.getSeasons()) {
-           if (season.equals(App.getCurrentGame().getDateTime().getSeason())){
+           if (season.equals(AppClient.getCurrentGame().getDateTime().getSeason())){
                harvestCycleCounter++;
                if (harvestCycleCounter == type.getFruitHarvestCycle()) {
                    isFruitAvailable = true;

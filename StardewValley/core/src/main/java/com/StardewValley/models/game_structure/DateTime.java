@@ -1,6 +1,6 @@
 package com.StardewValley.models.game_structure;
 
-import com.StardewValley.models.App;
+import com.StardewValley.client.AppClient;
 import com.StardewValley.models.Pair;
 import com.StardewValley.models.enums.Season;
 import com.StardewValley.models.enums.TileType;
@@ -23,30 +23,30 @@ public class DateTime {
         time++;
 
         if (time >= 22) {
-            App.getCurrentGame().gameFlow();
+            AppClient.getCurrentGame().gameFlow();
             time = 9;
             difTime = 11;
             date++;
         }
 
-        if(App.getCurrentGame().getCurrentPlayer().getBuff() != null){
-            App.getCurrentGame().getCurrentPlayer().getBuff().setRemainEffectTime();
-            if(App.getCurrentGame().getCurrentPlayer().getBuff().getRemainEffectTime() == 0){
-                App.getCurrentGame().getCurrentPlayer().setBuff(null);
-                App.getCurrentGame().getCurrentPlayer().getEnergy().setMaxDayEnergy(200);
-                App.getCurrentGame().getCurrentPlayer().getEnergy().setDayEnergyLeft(200);
+        if(AppClient.getCurrentGame().getCurrentPlayer().getBuff() != null){
+            AppClient.getCurrentGame().getCurrentPlayer().getBuff().setRemainEffectTime();
+            if(AppClient.getCurrentGame().getCurrentPlayer().getBuff().getRemainEffectTime() == 0){
+                AppClient.getCurrentGame().getCurrentPlayer().setBuff(null);
+                AppClient.getCurrentGame().getCurrentPlayer().getEnergy().setMaxDayEnergy(200);
+                AppClient.getCurrentGame().getCurrentPlayer().getEnergy().setDayEnergyLeft(200);
             }
             else {
-                App.getCurrentGame().getCurrentPlayer().getEnergy().setDayEnergyLeft(300);
-                App.getCurrentGame().getCurrentPlayer().getEnergy().setMaxDayEnergy(300);
+                AppClient.getCurrentGame().getCurrentPlayer().getEnergy().setDayEnergyLeft(300);
+                AppClient.getCurrentGame().getCurrentPlayer().getEnergy().setMaxDayEnergy(300);
             }
         }
-        for (Player player : App.getCurrentGame().getPlayers()) {
+        for (Player player : AppClient.getCurrentGame().getPlayers()) {
             ArrayList<Pair<Integer, Good>> newArtisanGoods = new ArrayList<>();
             for (Pair<Integer, Good> integerGoodPair : player.getArtisansGoodTime()) {
                 if(integerGoodPair.first() - difTime <= 0) {
-                    App.getCurrentGame().getCurrentPlayer().getInventory().addGood(new ArrayList<>(Arrays.asList(integerGoodPair.second())));
-                    App.getCurrentGame().getCurrentPlayer().getNews().add(integerGoodPair.second().getName() + " has been added to the inventory");
+                    AppClient.getCurrentGame().getCurrentPlayer().getInventory().addGood(new ArrayList<>(Arrays.asList(integerGoodPair.second())));
+                    AppClient.getCurrentGame().getCurrentPlayer().getNews().add(integerGoodPair.second().getName() + " has been added to the inventory");
                 }
                 else
                     newArtisanGoods.add(new Pair<>(integerGoodPair.first() - difTime, integerGoodPair.second()));
@@ -118,7 +118,7 @@ public class DateTime {
         for (int i = 0 ; i < 140 ; i++) {
             for (int j = 0; j < 160; j++) {
                 Coordinate coordinate = new Coordinate(i, j);
-                Tile tile = App.getCurrentGame().getMap().findTile(coordinate);
+                Tile tile = AppClient.getCurrentGame().getMap().findTile(coordinate);
                 if(!tile.getTileType().equals(TileType.GREEN_HOUSE)) {
                     Iterator<Good> iterator = tile.getGoods().iterator();
                     while (iterator.hasNext()) {

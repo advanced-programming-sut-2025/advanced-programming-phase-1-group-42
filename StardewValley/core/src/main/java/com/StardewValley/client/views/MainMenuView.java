@@ -1,8 +1,7 @@
 package com.StardewValley.client.views;
 
-import com.StardewValley.Main;
-import com.StardewValley.server.controllers.MainMenuController;
-import com.StardewValley.models.App;
+import com.StardewValley.client.Main;
+import com.StardewValley.client.AppClient;
 import com.StardewValley.models.Assets;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
@@ -17,7 +16,6 @@ import com.badlogic.gdx.utils.viewport.ScreenViewport;
 
 public class MainMenuView implements Screen {
     private Skin skin;
-    private MainMenuController controller;
     private Stage stage;
     private Table table;
     private Label titleLabel;
@@ -28,23 +26,21 @@ public class MainMenuView implements Screen {
     private Label earnedPointsLabel;
     private Label isPlayingLabel;
 
-    public MainMenuView(MainMenuController controller, Skin skin) {
-        this.controller = controller;
+    public MainMenuView(Skin skin) {
         this.skin = skin;
         this.titleLabel = new Label("Main Menu", skin, "Bold");
 
         this.logoutButton = new TextButton("Logout", skin, "Earth");
         this.profileButton = new TextButton("Profile Menu", skin, "Earth");
         this.gameButton = new TextButton("Game Menu", skin, "Earth");
-        this.usernameLabel = new Label("Username: " + App.getCurrentUser().getUsername(), skin);
+        this.usernameLabel = new Label("Username: " + AppClient.getCurrentUser().getUsername(), skin);
         this.usernameLabel.setFontScale(0.7f);
-        this.earnedPointsLabel = new Label("Earned Points: " + App.getCurrentUser().getEarnedPoints(), skin);
+        this.earnedPointsLabel = new Label("Earned Points: " + AppClient.getCurrentUser().getEarnedPoints(), skin);
         this.earnedPointsLabel.setFontScale(0.7f);
-        this.isPlayingLabel = new Label("isPlaying: " + App.getCurrentUser().getPlaying(), skin);
+        this.isPlayingLabel = new Label("isPlaying: " + AppClient.getCurrentUser().getPlaying(), skin);
         this.isPlayingLabel.setFontScale(0.7f);
 
 
-        this.controller.setView(this);
     }
 
     @Override
@@ -98,7 +94,7 @@ public class MainMenuView implements Screen {
         stage.act(Math.min(Gdx.graphics.getDeltaTime(), 1 / 30f));
         stage.draw();
 
-        controller.handleMainMenu();
+        handleMainMenu();
     }
 
     @Override
@@ -136,5 +132,9 @@ public class MainMenuView implements Screen {
 
     public TextButton getGameButton() {
         return gameButton;
+    }
+
+    private void handleMainMenu() {
+
     }
 }

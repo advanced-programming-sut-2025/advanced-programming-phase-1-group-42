@@ -1,18 +1,24 @@
 package com.StardewValley.server.controllers;
 
-import com.StardewValley.Main;
-import com.StardewValley.models.App;
+import com.StardewValley.client.Main;
+import com.StardewValley.client.AppClient;
 import com.StardewValley.models.Assets;
 import com.StardewValley.client.views.GameMenuView;
 import com.StardewValley.client.views.LoginMenuView;
 import com.StardewValley.client.views.MainMenuView;
 import com.StardewValley.client.views.ProfileMenuView;
+import com.StardewValley.models.Message;
 
 public class MainMenuController extends Controller {
     private MainMenuView view;
 
     public void setView(MainMenuView view) {
         this.view = view;
+    }
+
+    @Override
+    public Message handleMessage(Message message) {
+        return null;
     }
 
     public void handleMainMenu() {
@@ -35,15 +41,15 @@ public class MainMenuController extends Controller {
         else if (view.getLogoutButton().isChecked()) {
             view.getLogoutButton().setChecked(false);
 
-            if (App.getCurrentUser().isStayLogin()) {
+            if (AppClient.getCurrentUser().isStayLogin()) {
 //             DBInteractor.resetStayLogin();
             }
 
 //          DBInteractor.saveUsers();
-            App.getCurrentUser().setStayLogin(false);
-            App.setCurrentUser(null);
+            AppClient.getCurrentUser().setStayLogin(false);
+            AppClient.setCurrentUser(null);
             Main.getMain().getScreen().dispose();
-            Main.getMain().setScreen(new LoginMenuView(new LoginRegisterMenuController(), Assets.getInstance().getSkin()));
+            Main.getMain().setScreen(new LoginMenuView(Assets.getInstance().getSkin()));
         }
     }
 }

@@ -1,6 +1,6 @@
 package com.StardewValley.models.interactions.NPCs;
 
-import com.StardewValley.models.App;
+import com.StardewValley.client.AppClient;
 import com.StardewValley.models.goods.Good;
 import com.StardewValley.models.interactions.Player;
 
@@ -24,7 +24,7 @@ public class NPCFriendship {
         availableQuests.add(1);
         this.player = player;
         this.npc = npc;
-        firstMeetSeason = App.getCurrentGame().getDateTime().getSeasonOfYearInt();
+        firstMeetSeason = AppClient.getCurrentGame().getDateTime().getSeasonOfYearInt();
     }
 
     public Player getPlayer() {
@@ -44,7 +44,7 @@ public class NPCFriendship {
         if (friendshipLevel == 1){
             getAvailableQuests().add(2);
         }
-        if (App.getCurrentGame().getDateTime().getSeasonOfYearInt() == firstMeetSeason + 1){
+        if (AppClient.getCurrentGame().getDateTime().getSeasonOfYearInt() == firstMeetSeason + 1){
             getAvailableQuests().add(3);
         }
     }
@@ -67,7 +67,7 @@ public class NPCFriendship {
             getAvailableQuests().add(2);
         }
 
-        if (App.getCurrentGame().getDateTime().getSeasonOfYearInt() == firstMeetSeason + 1){
+        if (AppClient.getCurrentGame().getDateTime().getSeasonOfYearInt() == firstMeetSeason + 1){
             getAvailableQuests().add(3);
         }
 

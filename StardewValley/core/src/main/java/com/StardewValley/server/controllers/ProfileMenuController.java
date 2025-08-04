@@ -1,8 +1,9 @@
 package com.StardewValley.server.controllers;
 
-import com.StardewValley.Main;
-import com.StardewValley.models.App;
+import com.StardewValley.client.Main;
+import com.StardewValley.client.AppClient;
 import com.StardewValley.models.Assets;
+import com.StardewValley.models.Message;
 import com.StardewValley.models.Result;
 import com.StardewValley.models.interactions.User;
 import com.StardewValley.client.views.MainMenuView;
@@ -11,6 +12,10 @@ import com.StardewValley.client.views.ProfileMenuView;
 public class ProfileMenuController extends Controller {
     private ProfileMenuView view;
 
+    @Override
+    public Message handleMessage(Message message) {
+        return null;
+    }
 
     public void setView(ProfileMenuView view) {
         this.view = view;
@@ -24,14 +29,14 @@ public class ProfileMenuController extends Controller {
         if (view.getSaveButton().isChecked()) {
             view.getSaveButton().setChecked(false);
 
-            if (view.getUsernameField().getText().equals(App.getCurrentUser().getUsername())) {
+            if (view.getUsernameField().getText().equals(AppClient.getCurrentUser().getUsername())) {
                 Result res = changeUsername(view.getUsernameField().getText());
                 if (!res.success()) {
                     view.getErrorLabel().setText(res.message());
                     return;
                 }
             }
-            if (view.getPasswordField().getText().equals(App.getCurrentUser().getPassword())) {
+            if (view.getPasswordField().getText().equals(AppClient.getCurrentUser().getPassword())) {
                 Result res = changePassword(view.getPasswordField().getText());
 
                 if (!res.success()) {
@@ -39,7 +44,7 @@ public class ProfileMenuController extends Controller {
                     return;
                 }
             }
-            if (view.getEmailField().getText().equals(App.getCurrentUser().getEmail())) {
+            if (view.getEmailField().getText().equals(AppClient.getCurrentUser().getEmail())) {
                 Result res = changeEmail(view.getEmailField().getText());
 
                 if (!res.success()) {
@@ -47,7 +52,7 @@ public class ProfileMenuController extends Controller {
                     return;
                 }
             }
-            if (view.getNicknameField().getText().equals(App.getCurrentUser().getNickname())) {
+            if (view.getNicknameField().getText().equals(AppClient.getCurrentUser().getNickname())) {
                 Result res = changeNickname(view.getNicknameField().getText());
 
                 if (!res.success()) {
@@ -61,13 +66,13 @@ public class ProfileMenuController extends Controller {
             view.getBackButton().setChecked(false);
 
             Main.getMain().getScreen().dispose();
-            Main.getMain().setScreen(new MainMenuView(new MainMenuController(), Assets.getInstance().getSkin()));
+            Main.getMain().setScreen(new MainMenuView(Assets.getInstance().getSkin()));
         }
     }
 
     public Result changeUsername(String username) {
         // Check Username is new
-        if(App.getCurrentUser().getUsername().equals(username)) {
+        if(AppClient.getCurrentUser().getUsername().equals(username)) {
             return new Result(false, "Your new username should be different from the current one.");
         }
         // Check username format
@@ -82,25 +87,25 @@ public class ProfileMenuController extends Controller {
             return new Result(false, "Username already exists");
         }
 
-        App.getCurrentUser().setUsername(username);
+        AppClient.getCurrentUser().setUsername(username);
 //        DBInteractor.changeUserInDatabase(username,"username");
         return new Result(true, "Your username was successfully changed to " + username + ".");
     }
 
     public Result changeNickname(String nickname) {
         // Check nickname is new
-        if(App.getCurrentUser().getNickname().equals(nickname)) {
+        if(AppClient.getCurrentUser().getNickname().equals(nickname)) {
             return new Result(false, "Your nickname should be different from the current one.");
         }
 
-        App.getCurrentUser().setNickname(nickname);
+        AppClient.getCurrentUser().setNickname(nickname);
 //        DBInteractor.changeUserInDatabase(nickname,"nickname");
         return new Result(true, "Your nickname was successfully changed to " + nickname + ".");
     }
 
     public Result changeEmail(String email) {
         // Check email is new
-        if(App.getCurrentUser().getEmail().equals(email)) {
+        if(AppClient.getCurrentUser().getEmail().equals(email)) {
             return new Result(false, "Your email should be different from the current one.");
         }
 
@@ -109,7 +114,7 @@ public class ProfileMenuController extends Controller {
             return new Result(false, "Invalid email format!");
         }
 
-        App.getCurrentUser().setEmail(email);
+        AppClient.getCurrentUser().setEmail(email);
 //        DBInteractor.changeUserInDatabase(email,"email");
         return new Result(true, "Your email was successfully changed to " + email + ".");
     }
@@ -123,13 +128,13 @@ public class ProfileMenuController extends Controller {
             return new Result(false, checkPasswordStrength(newPassword).toString());
 
 
-        App.getCurrentUser().setPassword(newPassword);
+        AppClient.getCurrentUser().setPassword(newPassword);
 //        DBInteractor.changeUserInDatabase(newPassword,"password");
         return new Result(true, "Your password was successfully changed to " + newPassword + ".");
     }
 
     public Result userInfo() {
-        return new Result(true, App.getCurrentUser().showInfo());
+        return new Result(true, AppClient.getCurrentUser().showInfo());
     }
 
     public Result exit() {

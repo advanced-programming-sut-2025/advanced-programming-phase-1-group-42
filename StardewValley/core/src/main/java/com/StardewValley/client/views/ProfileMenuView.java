@@ -1,8 +1,8 @@
 package com.StardewValley.client.views;
 
-import com.StardewValley.Main;
+import com.StardewValley.client.Main;
+import com.StardewValley.client.AppClient;
 import com.StardewValley.server.controllers.ProfileMenuController;
-import com.StardewValley.models.App;
 import com.StardewValley.models.Assets;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
@@ -12,7 +12,6 @@ import com.badlogic.gdx.utils.viewport.ScreenViewport;
 
 public class ProfileMenuView implements Screen {
     private Skin skin;
-    private ProfileMenuController controller;
     private Stage stage;
     private Window window;
     private Table table;
@@ -37,45 +36,44 @@ public class ProfileMenuView implements Screen {
     private Label errorLabel;
 
     public ProfileMenuView(ProfileMenuController controller, Skin skin) {
-        this.controller = controller;
         this.skin = skin;
 
         this.usernameLabel = new Label("Username", skin);
         this.usernameLabel.setFontScale(0.7f);
-        this.usernameField = new TextField(App.getCurrentUser().getUsername(), skin);
+        this.usernameField = new TextField(AppClient.getCurrentUser().getUsername(), skin);
 
         this.passwordLabel = new Label("Password", skin);
         this.passwordLabel.setFontScale(0.7f);
-        this.passwordField = new TextField(App.getCurrentUser().getPassword(), skin);
+        this.passwordField = new TextField(AppClient.getCurrentUser().getPassword(), skin);
 
         this.nicknameLabel = new Label("Nickname", skin);
         this.nicknameLabel.setFontScale(0.7f);
-        this.nicknameField = new TextField(App.getCurrentUser().getNickname(), skin);
+        this.nicknameField = new TextField(AppClient.getCurrentUser().getNickname(), skin);
 
         this.emailLabel = new Label("Email", skin);
         this.emailLabel.setFontScale(0.7f);
-        this.emailField = new TextField(App.getCurrentUser().getEmail(), skin);
+        this.emailField = new TextField(AppClient.getCurrentUser().getEmail(), skin);
 
 
 
         this.genderLabel = new Label("Gender", skin);
         this.genderLabel.setFontScale(0.7f);
-        this.genderField = new TextField(App.getCurrentUser().getGender().getName(), skin);
+        this.genderField = new TextField(AppClient.getCurrentUser().getGender().getName(), skin);
         this.genderField.setDisabled(true);
 
         this.earnedPointsLabel = new Label("Earned Points", skin);
         this.earnedPointsLabel.setFontScale(0.7f);
-        this.earnedPointsField = new TextField(String.valueOf(App.getCurrentUser().getEarnedPoints()), skin);
+        this.earnedPointsField = new TextField(String.valueOf(AppClient.getCurrentUser().getEarnedPoints()), skin);
         this.earnedPointsField.setDisabled(true);
 
         this.maxPointsLabel = new Label("Max Points", skin);
         this.maxPointsLabel.setFontScale(0.7f);
-        this.maxPointsField = new TextField(String.valueOf(App.getCurrentUser().getMaxPoints()), skin);
+        this.maxPointsField = new TextField(String.valueOf(AppClient.getCurrentUser().getMaxPoints()), skin);
         this.maxPointsField.setDisabled(true);
 
         this.gamePlayLabel = new Label("Game Play", skin);
         this.gamePlayLabel.setFontScale(0.7f);
-        this.gamePlayField = new TextField(String.valueOf(App.getCurrentUser().getGamePlay()), skin);
+        this.gamePlayField = new TextField(String.valueOf(AppClient.getCurrentUser().getGamePlay()), skin);
         this.gamePlayField.setDisabled(true);
 
         this.saveButton = new TextButton("Save", skin);
@@ -83,7 +81,6 @@ public class ProfileMenuView implements Screen {
         this.errorLabel = new Label("", skin);
         this.errorLabel.setFontScale(0.7f);
 
-        this.controller.setView(this);
     }
 
     @Override
@@ -158,7 +155,7 @@ public class ProfileMenuView implements Screen {
         stage.act(Math.min(Gdx.graphics.getDeltaTime(), 1 / 30f));
         stage.draw();
 
-        controller.handleProfile();
+        handleProfile();
     }
 
     @Override
@@ -215,5 +212,9 @@ public class ProfileMenuView implements Screen {
 
     public Label getErrorLabel() {
         return errorLabel;
+    }
+
+    private void handleProfile() {
+
     }
 }

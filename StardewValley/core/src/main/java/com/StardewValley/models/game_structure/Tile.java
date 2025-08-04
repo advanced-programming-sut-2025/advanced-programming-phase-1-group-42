@@ -1,6 +1,6 @@
 package com.StardewValley.models.game_structure;
 
-import com.StardewValley.models.App;
+import com.StardewValley.client.AppClient;
 import com.StardewValley.models.enums.TileType;
 import com.StardewValley.models.goods.Good;
 import com.StardewValley.models.goods.GoodType;
@@ -16,7 +16,6 @@ import com.StardewValley.models.goods.foragings.ForagingSeed;
 import com.StardewValley.models.goods.foragings.ForagingTree;
 import com.StardewValley.models.goods.products.Product;
 import com.StardewValley.models.goods.recipes.CookingRecipe;
-import com.StardewValley.models.goods.recipes.CookingRecipeType;
 import com.StardewValley.models.goods.recipes.CraftingRecipe;
 import com.StardewValley.models.goods.tools.Tool;
 
@@ -95,7 +94,7 @@ public class Tile {
     public boolean checkAroundForScarCrow(){
         for(int i = -1 ; i < 1 ; i++) {
             for(int j = -1 ; j < 1 ; j++) {
-                for (Good good : App.getCurrentGame().getMap()
+                for (Good good : AppClient.getCurrentGame().getMap()
                         .findTileByXY(this.coordinate.getX() + i, this.coordinate.getY() + j).getGoods()) {
                     if (good.equals(CraftingType.SCARECROW)) {
                         return true;

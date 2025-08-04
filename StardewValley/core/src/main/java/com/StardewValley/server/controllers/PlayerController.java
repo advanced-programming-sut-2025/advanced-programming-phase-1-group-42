@@ -1,7 +1,7 @@
 package com.StardewValley.server.controllers;
 
-import com.StardewValley.Main;
-import com.StardewValley.models.App;
+import com.StardewValley.client.Main;
+import com.StardewValley.client.AppClient;
 import com.StardewValley.models.Assets;
 import com.StardewValley.models.interactions.Player;
 import com.badlogic.gdx.Gdx;
@@ -11,7 +11,7 @@ import com.badlogic.gdx.utils.Array;
 
 public class PlayerController {
     public void updatePlayer() {
-        for (Player player : App.getCurrentGame().getPlayers()) {
+        for (Player player : AppClient.getCurrentGame().getPlayers()) {
             player.getSprite().setPosition(player.getCoordinate().getX() * 40,
                     player.getCoordinate().getY() * 40);
             player.getSprite().draw(Main.getBatch());

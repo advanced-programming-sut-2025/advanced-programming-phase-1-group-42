@@ -1,8 +1,8 @@
 package com.StardewValley.client.views;
 
-import com.StardewValley.Main;
+import com.StardewValley.client.Main;
+import com.StardewValley.client.AppClient;
 import com.StardewValley.server.controllers.GameMenuController;
-import com.StardewValley.models.App;
 import com.StardewValley.models.Assets;
 import com.StardewValley.models.game_structure.Farm;
 import com.badlogic.gdx.Gdx;
@@ -19,7 +19,6 @@ import java.util.ArrayList;
 
 public class GameMenuView implements Screen {
     private Skin skin;
-    private GameMenuController controller;
     private Stage stage;
     private Table table;
     private Window menuWindow;
@@ -51,21 +50,20 @@ public class GameMenuView implements Screen {
     private TextButton choiceFarmBackButton;
 
     public GameMenuView(GameMenuController controller, Skin skin) {
-        this.controller = controller;
         this.skin = skin;
 
         this.menuWindow = new Window("Game Menu", skin);
         this.newGameButton = new TextButton("New Game", skin);
         this.loadGameButton = new TextButton("Load Game", skin);
         this.backButton = new TextButton("Back", skin);
-        this.titleSavedGameLabel = new Label("Saved Game: " + App.getCurrentUser().getPlaying(), skin);
+        this.titleSavedGameLabel = new Label("Saved Game: " + AppClient.getCurrentUser().getPlaying(), skin);
         this.titleSavedGameLabel.setFontScale(1.0f);
         this.detailsSavedGameLabel = new Label("", skin);
-        if(App.getCurrentUser().getPlaying()) {
-            this.detailsSavedGameLabel.setText("Details:\nDays: " + App.getCurrentUser().getGame().getDateTime().getDays() +
-                "\nSeason: " + App.getCurrentUser().getGame().getDateTime().getSeason() +
-                "\nYear: " + App.getCurrentUser().getGame().getDateTime().getYear() +
-                "\nPoints: " + App.getCurrentUser().getGame().findPlayer(App.getCurrentUser().getUsername()).getPoints());
+        if(AppClient.getCurrentUser().getPlaying()) {
+            this.detailsSavedGameLabel.setText("Details:\nDays: " + AppClient.getCurrentUser().getGame().getDateTime().getDays() +
+                "\nSeason: " + AppClient.getCurrentUser().getGame().getDateTime().getSeason() +
+                "\nYear: " + AppClient.getCurrentUser().getGame().getDateTime().getYear() +
+                "\nPoints: " + AppClient.getCurrentUser().getGame().findPlayer(AppClient.getCurrentUser().getUsername()).getPoints());
         }
         this.detailsSavedGameLabel.setText("Details:\nDays: " +
             "\nSeason: " +
@@ -82,11 +80,11 @@ public class GameMenuView implements Screen {
         this.addPlayerField = new TextField("example: Parsa-374", skin);
         this.addPlayerButton = new TextButton("Add Player", skin);
         this.playerLabels = new ArrayList();
-        Label tempLabel = new Label("Player 1:\n" + App.getCurrentUser().getUsername(), skin);
+        Label tempLabel = new Label("Player 1:\n" + AppClient.getCurrentUser().getUsername(), skin);
         tempLabel.setFontScale(0.7f);
         this.playerLabels.add(tempLabel);
         this.playerUsernames = new ArrayList<>();
-        this.playerUsernames.add(App.getCurrentUser().getUsername());
+        this.playerUsernames.add(AppClient.getCurrentUser().getUsername());
         for (int i = 2; i < 5; i++) {
             tempLabel = new Label("Player " + i + ":\nGuest " + (i - 1), skin);
             tempLabel.setFontScale(0.7f);
@@ -178,7 +176,6 @@ public class GameMenuView implements Screen {
             }
         });
 
-        this.controller.setView(this);
     }
 
     @Override
@@ -288,7 +285,7 @@ public class GameMenuView implements Screen {
         stage.act(Math.min(Gdx.graphics.getDeltaTime(), 1 / 30f));
         stage.draw();
 
-        controller.handleGameMenu();
+        handleGameMenu();
     }
 
     @Override
@@ -366,9 +363,9 @@ public class GameMenuView implements Screen {
 
     public void initNewGameWindow() {
         this.addPlayerField.setText("example: Parsa-374");
-        this.playerLabels.getFirst().setText("Player 1:\n" + App.getCurrentUser().getUsername());
+        this.playerLabels.getFirst().setText("Player 1:\n" + AppClient.getCurrentUser().getUsername());
         this.playerUsernames.clear();
-        this.playerUsernames.add(App.getCurrentUser().getUsername());
+        this.playerUsernames.add(AppClient.getCurrentUser().getUsername());
         for (int i = 2; i < 5; i++) {
             this.playerLabels.get(i - 1).setText("Player " + i + ":\nGuest " + (i - 1));
             this.playerUsernames.add("Guest " + (i - 1));
@@ -396,5 +393,9 @@ public class GameMenuView implements Screen {
 
     public Window getMenuWindow() {
         return menuWindow;
+    }
+
+    private void handleGameMenu() {
+
     }
 }

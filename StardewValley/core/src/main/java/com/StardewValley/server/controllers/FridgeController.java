@@ -1,6 +1,6 @@
 package com.StardewValley.server.controllers;
 
-import com.StardewValley.models.App;
+import com.StardewValley.client.AppClient;
 import com.StardewValley.models.Assets;
 import com.StardewValley.models.Pair;
 import com.StardewValley.models.goods.Good;
@@ -44,7 +44,7 @@ public class FridgeController {
         fridgeElements.clear();
         buttonGroup.clear();
 
-        ArrayList<ArrayList<Good>> fridgeItems = App.getCurrentGame().getCurrentPlayer().getFridge().getInFridgeItems();
+        ArrayList<ArrayList<Good>> fridgeItems = AppClient.getCurrentGame().getCurrentPlayer().getFridge().getInFridgeItems();
 
         for (int i = 0; i < fridgeItems.size(); i++) {
             ArrayList<Good> goods = fridgeItems.get(i);
@@ -67,11 +67,11 @@ public class FridgeController {
                     if (!slotButton.isChecked()) {
                         slotButton.setChecked(true);
                     }
-                    ArrayList<Good> itemsInSlot = App.getCurrentGame().getCurrentPlayer().getFridge().getInFridgeItems().get(index);
+                    ArrayList<Good> itemsInSlot = AppClient.getCurrentGame().getCurrentPlayer().getFridge().getInFridgeItems().get(index);
                     if (!itemsInSlot.isEmpty()) {
                         Good good = itemsInSlot.getFirst();
-                        App.getCurrentGame().getCurrentPlayer().getFridge().removeItemsFromFridge(good.getType(), 1);
-                        App.getCurrentGame().getCurrentPlayer().getInventory().addGoodByObject(Good.newGood(good.getType()));
+                        AppClient.getCurrentGame().getCurrentPlayer().getFridge().removeItemsFromFridge(good.getType(), 1);
+                        AppClient.getCurrentGame().getCurrentPlayer().getInventory().addGoodByObject(Good.newGood(good.getType()));
                         refreshFridgeElements();
                         updateFridge();
                         gameView.initFridgeWindow();
@@ -100,7 +100,7 @@ public class FridgeController {
     public void updateFridge() {
         try {
             for (Pair<Pair<ImageButton, Image>, Integer> pair : fridgeElements) {
-                ArrayList<Good> goods = App.getCurrentGame().getCurrentPlayer().getFridge().getInFridgeItems().get(pair.second());
+                ArrayList<Good> goods = AppClient.getCurrentGame().getCurrentPlayer().getFridge().getInFridgeItems().get(pair.second());
 
                 if (!goods.isEmpty()) {
                     pair.first().second().setDrawable(new TextureRegionDrawable(new Texture(goods.get(0).getType().imagePath())));
@@ -108,8 +108,8 @@ public class FridgeController {
                     pair.first().second().setDrawable(new TextureRegionDrawable(new Texture("GameAssets/null.png")));
                 }
 
-                if (!goods.isEmpty() && App.getCurrentGame().getCurrentPlayer().getInHandGood() != null
-                    && App.getCurrentGame().getCurrentPlayer().getInHandGood().getFirst() == goods.get(0)) {
+                if (!goods.isEmpty() && AppClient.getCurrentGame().getCurrentPlayer().getInHandGood() != null
+                    && AppClient.getCurrentGame().getCurrentPlayer().getInHandGood().getFirst() == goods.get(0)) {
                     pair.first().first().setChecked(true);
                 } else {
                     pair.first().first().setChecked(false);

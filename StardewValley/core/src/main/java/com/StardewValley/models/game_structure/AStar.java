@@ -1,6 +1,6 @@
 package com.StardewValley.models.game_structure;
 
-import com.StardewValley.models.App;
+import com.StardewValley.client.AppClient;
 import com.StardewValley.models.Pair;
 import com.StardewValley.models.enums.TileType;
 import com.StardewValley.models.goods.Good;
@@ -8,7 +8,6 @@ import com.StardewValley.models.goods.farmings.FarmingTree;
 import com.StardewValley.models.goods.foragings.ForagingMineral;
 import com.StardewValley.models.goods.foragings.ForagingTree;
 
-import com.StardewValley.models.game_structure.Map;
 import java.util.*;
 
 enum Direction {
@@ -104,15 +103,15 @@ public class AStar {
 
         Farm farm = map.findFarm(new Coordinate(x, y));
         if(farm != null &&
-                !(App.getCurrentGame().getCurrentPlayer().getFarm() == farm ||
-                        (App.getCurrentGame().getCurrentPlayer().getMarried() != null && App.getCurrentGame().getCurrentPlayer().getMarried().getFarm() == farm)))
+                !(AppClient.getCurrentGame().getCurrentPlayer().getFarm() == farm ||
+                        (AppClient.getCurrentGame().getCurrentPlayer().getMarried() != null && AppClient.getCurrentGame().getCurrentPlayer().getMarried().getFarm() == farm)))
             return false;
 
         try {
             if(tile.getTileType() == TileType.WATER || tile.getTileType() == TileType.STONE_WALL ||
-                    (tile.getTileType() == TileType.GREEN_HOUSE && !App.getCurrentGame().getCurrentPlayer().getFarm().getGreenHouse().isAvailable()) ||
+                    (tile.getTileType() == TileType.GREEN_HOUSE && !AppClient.getCurrentGame().getCurrentPlayer().getFarm().getGreenHouse().isAvailable()) ||
                     (tile.getTileType() == TileType.GAME_BUILDING &&
-                            !App.getCurrentGame().getMap().findGameBuilding(new Coordinate(x, y)).isInWorkingHours()))
+                            !AppClient.getCurrentGame().getMap().findGameBuilding(new Coordinate(x, y)).isInWorkingHours()))
                 return false;
         }  catch (Exception e) {
             System.out.println(new Coordinate(x, y));

@@ -1,7 +1,7 @@
 package com.StardewValley.client.views;
 
+import com.StardewValley.client.AppClient;
 import com.StardewValley.server.controllers.GameMenuController;
-import com.StardewValley.models.App;
 import com.StardewValley.models.enums.GameMenuCommands;
 import com.StardewValley.models.game_structure.Game;
 
@@ -47,7 +47,7 @@ public class GameMenu implements AppMenu {
             System.out.println(controller.loadGame());
         }
 
-        if(App.getCurrentGame() == null) {
+        if(AppClient.getCurrentGame() == null) {
             System.out.println("You should run a game first to use this commands!");
             return;
         }
@@ -273,7 +273,7 @@ public class GameMenu implements AppMenu {
          } else if ((matcher = GameMenuCommands.Test.matcher(input)) != null) {
             System.out.println(controller.test());
          } else if ((matcher = GameMenuCommands.SHOW_FRIDGE.matcher(input)) != null) {
-             App.getCurrentGame().getCurrentPlayer().getFridge().showFridge();
+             AppClient.getCurrentGame().getCurrentPlayer().getFridge().showFridge();
         } else if ((matcher = GameMenuCommands.SHOW_CURRENT_MENU.matcher(input)) != null) {
             System.out.println("current menu: Game Menu");
         }

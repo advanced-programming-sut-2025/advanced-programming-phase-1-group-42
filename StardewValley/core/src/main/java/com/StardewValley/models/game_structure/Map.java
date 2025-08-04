@@ -2,7 +2,7 @@ package com.StardewValley.models.game_structure;
 
 
 
-import com.StardewValley.models.App;
+import com.StardewValley.client.AppClient;
 import com.StardewValley.models.Assets;
 import com.StardewValley.models.enums.TileType;
 import com.StardewValley.models.goods.Good;
@@ -15,17 +15,9 @@ import com.StardewValley.models.interactions.Animals.Animal;
 import com.StardewValley.models.interactions.NPCs.NPC;
 import com.StardewValley.models.interactions.Player;
 import com.StardewValley.models.interactions.game_buildings.GameBuilding;
-import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.graphics.Color;
-import com.badlogic.gdx.graphics.Pixmap;
 import com.badlogic.gdx.graphics.Texture;
-import com.badlogic.gdx.graphics.g2d.TextureRegion;
-import com.badlogic.gdx.scenes.scene2d.Actor;
-import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.*;
-import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
-import com.badlogic.gdx.utils.Align;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -345,14 +337,14 @@ public class Map {
                 }
 
                 int counter = 0;
-                for(Player player: App.getCurrentGame().getPlayers()) {
+                for(Player player: AppClient.getCurrentGame().getPlayers()) {
                     counter++;
                     if (player.getCoordinate().equals(coordinate)) {
                         map[i][j] = colorMap.get("White") + counter + colorMap.get("Reset");
 
                     }
                 }
-                for(NPC npc: App.getCurrentGame().getNPCs()) {
+                for(NPC npc: AppClient.getCurrentGame().getNPCs()) {
                     if (npc.getType().getCoordinate().equals(coordinate)) {
                         String name = npc.getType().getName();
                         String firstName = name.substring(0, 1).toUpperCase();
@@ -360,7 +352,7 @@ public class Map {
 
                     }
                 }
-                for(Animal animal: App.getCurrentGame().getMap().allAnimals()) {
+                for(Animal animal: AppClient.getCurrentGame().getMap().allAnimals()) {
                     if (animal.getCoordinate().equals(coordinate)) {
                         String name = animal.getName();
                         String firstName = name.substring(0, 1).toUpperCase();
@@ -420,11 +412,11 @@ public class Map {
                         else if ("Grass".equals(good.getName())) img = tree_img;
                     }
 
-                    for (Player player : App.getCurrentGame().getPlayers()) {
+                    for (Player player : AppClient.getCurrentGame().getPlayers()) {
                         if (player.getCoordinate().equals(coordinate)) img = player_img;
                     }
 
-                    for (NPC npc : App.getCurrentGame().getNPCs()) {
+                    for (NPC npc : AppClient.getCurrentGame().getNPCs()) {
                         if (npc.getType().getCoordinate().equals(coordinate)) {
                             String name = npc.getType().getName();
                             img = switch (name) {
@@ -444,7 +436,7 @@ public class Map {
                         }
                     }
 
-                    for (Animal animal : App.getCurrentGame().getMap().allAnimals()) {
+                    for (Animal animal : AppClient.getCurrentGame().getMap().allAnimals()) {
                         if (animal.getCoordinate().equals(coordinate)) {
                             img = mushroomTree_img;
                         }
@@ -621,7 +613,7 @@ public class Map {
     }
 
     public static Tile findTile(Coordinate coordinate) {
-        for (Tile tile : App.getCurrentGame().getMap().getTiles()) {
+        for (Tile tile : AppClient.getCurrentGame().getMap().getTiles()) {
             if(tile.getCordinate().equals(coordinate))
                 return tile;
         }
@@ -692,7 +684,7 @@ public class Map {
                     if(tile.getTileType().equals(TileType.FARM) || tile.getTileType().equals(TileType.PLAIN)){
                         if(random >= probability){
                             int randomForaging = (int)Math.floor((Math.random()*9));
-                            switch (App.getCurrentGame().getDateTime().getSeasonOfYear().getName()){
+                            switch (AppClient.getCurrentGame().getDateTime().getSeasonOfYear().getName()){
                                 case "Spring":
                                     switch(randomForaging) {
                                         case 1:
@@ -802,7 +794,7 @@ public class Map {
                 if (tile != null && tile.getTileType().equals(TileType.PLOWED_FARM)) {
                     if (random >= probability) {
                         int randomForaging = (int) Math.floor((Math.random() * 9));
-                        String season = App.getCurrentGame().getDateTime().getSeasonOfYear().getName();
+                        String season = AppClient.getCurrentGame().getDateTime().getSeasonOfYear().getName();
 
                         switch (season) {
                             case "Spring":

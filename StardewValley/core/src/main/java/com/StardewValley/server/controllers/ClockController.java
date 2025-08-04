@@ -1,6 +1,6 @@
 package com.StardewValley.server.controllers;
 
-import com.StardewValley.models.App;
+import com.StardewValley.client.AppClient;
 import com.StardewValley.models.Assets;
 import com.StardewValley.models.game_structure.DateTime;
 import com.StardewValley.models.game_structure.Wallet;
@@ -14,7 +14,7 @@ import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 
-public class ClockController extends Controller {
+public class ClockController {
     private Stage stage;
     private Texture clockTexture;
     private Texture handTexture;
@@ -60,9 +60,9 @@ public class ClockController extends Controller {
 
     int x = Gdx.graphics.getWidth() - 72*3;
     public ClockController() {
-        currentTime = App.getCurrentGame().getDateTime();
-        currentWeather = App.getCurrentGame().getWeather();
-        currentWallet = App.getCurrentGame().getCurrentPlayer().getWallet();
+        currentTime = AppClient.getCurrentGame().getDateTime();
+        currentWeather = AppClient.getCurrentGame().getWeather();
+        currentWallet = AppClient.getCurrentGame().getCurrentPlayer().getWallet();
         skin = Assets.getInstance().getSkin();
         stage = new Stage();
 
@@ -120,12 +120,12 @@ public class ClockController extends Controller {
 
         clockHandImage.setRotation(180 - ((currentTime.getTime() - 9) * 14));
 
-        String currentWeatherName = App.getCurrentGame().getWeather().getName();
-        String currentSeasonName = App.getCurrentGame().getDateTime().getSeason().getName();
-        String currentDayOfWeek = App.getCurrentGame().getDateTime().getDayOfWeek();
-        int currentDayOfMonth = App.getCurrentGame().getDateTime().getDayOfSeason();
-        int currentTimeOfDay = App.getCurrentGame().getDateTime().getTime();
-        int currentNetWorth = App.getCurrentGame().getCurrentPlayer().getWallet().getBalance();
+        String currentWeatherName = AppClient.getCurrentGame().getWeather().getName();
+        String currentSeasonName = AppClient.getCurrentGame().getDateTime().getSeason().getName();
+        String currentDayOfWeek = AppClient.getCurrentGame().getDateTime().getDayOfWeek();
+        int currentDayOfMonth = AppClient.getCurrentGame().getDateTime().getDayOfSeason();
+        int currentTimeOfDay = AppClient.getCurrentGame().getDateTime().getTime();
+        int currentNetWorth = AppClient.getCurrentGame().getCurrentPlayer().getWallet().getBalance();
 
 
         if(currentNetWorth != lastNetWorth) {

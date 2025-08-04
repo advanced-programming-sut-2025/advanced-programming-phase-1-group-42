@@ -1,6 +1,6 @@
 package com.StardewValley.models.game_structure;
 
-import com.StardewValley.models.App;
+import com.StardewValley.client.AppClient;
 import com.StardewValley.models.enums.TileType;
 import com.StardewValley.models.game_structure.weathers.Rain;
 import com.StardewValley.models.game_structure.weathers.Storm;
@@ -117,7 +117,7 @@ public class Game {
     public void gameFlow() {
 
         // Weather setups for next day
-        App.getCurrentGame().getDateTime().setTime(9);
+        AppClient.getCurrentGame().getDateTime().setTime(9);
         this.weather = tomorrow.getWeather();
         tomorrow.setTomorrowWeather(this);
         if (this.weather instanceof Storm) {
@@ -127,7 +127,7 @@ public class Game {
         if (this.weather instanceof Rain) {
             ((Rain) this.weather).waterAllTiles();
         }
-        for (Player player : App.getCurrentGame().getPlayers()) {
+        for (Player player : AppClient.getCurrentGame().getPlayers()) {
             if (player.getRejectionBuff() != null) {
                 player.getRejectionBuff().setRemainEffectTime();
                 if (player.getRejectionBuff().getRemainEffectTime() == 0) {
@@ -143,23 +143,23 @@ public class Game {
             }
         }
 
-        for (Tile tile : App.getCurrentGame().getMap().getTiles()) {
+        for (Tile tile : AppClient.getCurrentGame().getMap().getTiles()) {
             tile.setWatered(false);
         }
 
         crowAttack();
-        App.getCurrentGame().getMap().generateRandomForagingCrops(99);
-        App.getCurrentGame().getMap().generateRandomForagingSeed(99);
-        App.getCurrentGame().getMap().generateRandomMinerals(99);
+        AppClient.getCurrentGame().getMap().generateRandomForagingCrops(99);
+        AppClient.getCurrentGame().getMap().generateRandomForagingSeed(99);
+        AppClient.getCurrentGame().getMap().generateRandomMinerals(99);
 
-        App.getCurrentGame().getMap().Fertilize();
+        AppClient.getCurrentGame().getMap().Fertilize();
 
-        for (ShippingBin shippingBin : App.getCurrentGame().getMap().getShippingBins()) {
+        for (ShippingBin shippingBin : AppClient.getCurrentGame().getMap().getShippingBins()) {
             shippingBin.emptyShippingBin();
         }
 
-        if (App.getCurrentGame().getDateTime().getDayOfSeason() == 1) {
-            App.getCurrentGame().getDateTime().farmingSeasonChange();
+        if (AppClient.getCurrentGame().getDateTime().getDayOfSeason() == 1) {
+            AppClient.getCurrentGame().getDateTime().farmingSeasonChange();
         }
 
         //for animals
@@ -239,7 +239,7 @@ public class Game {
             addGoodToTile(tile, goodsToAdd);
         }
 
-        Coordinate coordinate = App.getCurrentGame().getCurrentPlayer().getCoordinate();
+        Coordinate coordinate = AppClient.getCurrentGame().getCurrentPlayer().getCoordinate();
         for (Tile tile : map.getTiles()) {
             for (Good good : tile.getGoods()) {
                 if (good instanceof Crafting) {
@@ -250,7 +250,7 @@ public class Game {
                             Coordinate coordinate1 = new Coordinate(coordinate.getX() + Coordinate.coordinates.get(i).getX(),
                                 coordinate.getY() + Coordinate.coordinates.get(i).getY());
 
-                            Tile t = App.getCurrentGame().getMap().findTile(coordinate1);
+                            Tile t = AppClient.getCurrentGame().getMap().findTile(coordinate1);
                             if (t != null) {
                                 t.setWatered(true);
                             }
@@ -260,7 +260,7 @@ public class Game {
                             Coordinate coordinate1 = new Coordinate(coordinate.getX() + Coordinate.coordinates.get(i).getX(),
                                 coordinate.getY() + Coordinate.coordinates.get(i).getY());
 
-                            Tile t = App.getCurrentGame().getMap().findTile(coordinate1);
+                            Tile t = AppClient.getCurrentGame().getMap().findTile(coordinate1);
                             if (t != null) {
                                 t.setWatered(true);
                             }
@@ -271,7 +271,7 @@ public class Game {
                                 Coordinate coordinate1 = new Coordinate(coordinate.getX() + j * Coordinate.coordinates.get(i).getX(),
                                     coordinate.getY() + j * Coordinate.coordinates.get(i).getY());
 
-                                Tile t = App.getCurrentGame().getMap().findTile(coordinate1);
+                                Tile t = AppClient.getCurrentGame().getMap().findTile(coordinate1);
                                 if (t != null) {
                                     t.setWatered(true);
                                 }
@@ -330,7 +330,7 @@ public class Game {
     }
 
     public void crowAttack() {
-        for (Player player : App.getCurrentGame().getPlayers()) {
+        for (Player player : AppClient.getCurrentGame().getPlayers()) {
             int cropCounter = 0;
             for (Tile tile : player.getFarm().getTiles()) {
                 if (!(tile.getTileType().equals(TileType.GREEN_HOUSE))) {

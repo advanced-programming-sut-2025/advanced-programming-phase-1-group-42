@@ -1,17 +1,23 @@
 package com.StardewValley.client.views;
 
-import com.StardewValley.Main;
-import com.StardewValley.server.controllers.LoginRegisterMenuController;
+import com.StardewValley.client.Main;
+import com.StardewValley.client.AppClient;
 import com.StardewValley.models.Assets;
+import com.StardewValley.models.Message;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
+import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.*;
+import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
+
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.HashMap;
 
 public class RegisterMenuView implements Screen {
     private Stage stage;
-    private final LoginRegisterMenuController controller;
     private Table table;
     private Skin skin;
     private Label titleLabel;
@@ -60,8 +66,7 @@ public class RegisterMenuView implements Screen {
 	}
      */
 
-    public RegisterMenuView(LoginRegisterMenuController controller, Skin skin) {
-        this.controller = controller;
+    public RegisterMenuView(Skin skin) {
         this.skin = skin;
         this.titleLabel = new Label("Register Menu", skin, "Bold");
         this.usernameLabel = new Label("Username", skin);
@@ -107,7 +112,6 @@ public class RegisterMenuView implements Screen {
         this.securityQuestionField = new TextField("yes i was.", skin);
         this.submitAnswerButton = new TextButton("Submit", skin);
         this.backButton = new TextButton("Back", skin);
-        this.controller.setView(this);
     }
 
 
@@ -193,6 +197,121 @@ public class RegisterMenuView implements Screen {
         securityQuestionWindow = new Window("Security Question", skin);
         securityQuestionWindow.getTitleLabel().setFontScale(0.8f);
         GameMenuView.setWindowForTable(securityQuestionWindow, securityQuestionTable, stage);
+
+//        randomPasswordButton.addListener(new ClickListener() {
+//            @Override
+//            public void clicked(InputEvent event, float x, float y) {
+//                Message message = new Message(new HashMap<>() {{
+//                    put("function", "generateRandomPassword");
+//                    put("arguments", null);
+//                }},
+//                    Message.Type.command);
+//
+//                Message responseMessage = AppClient.getServerHandler().sendAndWaitForResponse(message, 500);
+//                if (!checkMessageValidity(responseMessage, Message.Type.response)) {
+//                    getMessageLabel().setText("Network error!");
+//                }
+//
+//                String randomPassword = responseMessage.getFromBody("message");
+//                getPasswordField().setText(randomPassword);
+//                getConfirmPasswordField().setText(randomPassword);
+//            }
+//        });
+//
+//        exitButton.addListener(new ClickListener() {
+//            @Override
+//            public void clicked(InputEvent event, float x, float y) {
+//                AppClient.getServerHandler().end();
+//                Main.getBatch().dispose();
+//            }
+//        });
+//
+//        loginButton.addListener(new ClickListener() {
+//            @Override
+//            public void clicked(InputEvent event, float x, float y) {
+//                Message message = new Message(new HashMap<>() {{
+//                    put("field", "controller");
+//                    put("change", "LoginMenuController");
+//                }}, Message.Type.change);
+//                Message responseMessage = AppClient.getServerHandler().sendAndWaitForResponse(message, 500);
+//                if (!checkMessageValidity(responseMessage, Message.Type.response)) {
+//                    getMessageLabel().setText("Network error!");
+//                    return;
+//                }
+//
+//                Main.getMain().getScreen().dispose();
+//                Main.getMain().setScreen(new LoginMenuView(Assets.getInstance().getSkin()));
+//            }
+//        });
+//
+//
+//        registerButton.addListener(new ClickListener() {
+//            @Override
+//            public void clicked(InputEvent event, float x, float y) {
+//                Message message = new Message(new HashMap<>() {{
+//                    put("function", "register");
+//                    put("arguments", new ArrayList<String>(Arrays.asList(
+//                        getUsernameField().getText(),
+//                        getPasswordField().getText(),
+//                        getConfirmPasswordField().getText(),
+//                        getNicknameField().getText(),
+//                        getEmailField().getText(),
+//                        getGenderBox().getSelected()
+//                    )));
+//                }}, Message.Type.command);
+//
+//                Message responseMessage = AppClient.getServerHandler().sendAndWaitForResponse(message, 500);
+//                if (!checkMessageValidity(responseMessage, Message.Type.response)) {
+//                    getMessageLabel().setText("Network error!");
+//                    return;
+//                }
+//
+//                if(!responseMessage.getBooleanFromBody("success")) {
+//                    getMessageLabel().setText(responseMessage.getFromBody("message"));
+//                    return;
+//                }
+//
+//                getSecurityQuestionWindow().setVisible(true);
+//                getSecurityQuestionBox().setSelectedIndex(0);
+//                getSecurityQuestionField().setText("yes i was");
+//            }
+//        });
+//
+//        backButton.addListener(new ClickListener() {
+//            @Override
+//            public void clicked(InputEvent event, float x, float y) {
+//                getSecurityQuestionWindow().setVisible(false);
+//            }
+//        });
+//
+//        submitAnswerButton.addListener(new ClickListener() {
+//            @Override
+//            public void clicked(InputEvent event, float x, float y) {
+//                Message message = new Message(new HashMap<>() {{
+//                    put("field", "users");
+//                    put("change", new ArrayList<>(Arrays.asList(
+//                        getUsernameField().getText(),
+//                        getPasswordField().getText(), //getSHA256
+//                        getNicknameField().getText(),
+//                        getEmailField().getText(),
+//                        getGenderBox().getSelected(), // Gender.findGender
+//                        String.valueOf(getSecurityQuestionBox().getSelectedIndex()),
+//                        getSecurityQuestionField().getText())
+//                    ));
+//                }}, Message.Type.change);
+//
+//                Message responseMessage = AppClient.getServerHandler().sendAndWaitForResponse(message, 500);
+//                if (!checkMessageValidity(responseMessage, Message.Type.response)) {
+//                    getMessageLabel().setText("Network error!");
+//                    return;
+//                }
+//
+//
+//                getMessageLabel().setText("Your account has been successfully registered!");
+//                getSecurityQuestionWindow().setVisible(false);
+//            }
+//        });
+
     }
 
     @Override
@@ -206,7 +325,7 @@ public class RegisterMenuView implements Screen {
         stage.act(Math.min(Gdx.graphics.getDeltaTime(), 1 / 30f));
         stage.draw();
 
-        controller.handleRegister();
+        handleRegister();
     }
 
     @Override
@@ -302,5 +421,112 @@ public class RegisterMenuView implements Screen {
         return securityQuestionField;
     }
 
+    private void handleRegister() {
+
+//        System.out.println(AppClient.getServerHandler().isAlive());
+        if (getRandomPasswordButton().isChecked()) {
+            getRandomPasswordButton().setChecked(false);
+
+            Message message = new Message(new HashMap<>() {{
+                put("function", "generateRandomPassword");
+                put("arguments", null);
+            }},
+                Message.Type.command);
+
+            Message responseMessage = AppClient.getServerHandler().sendAndWaitForResponse(message, 500);
+            if (!checkMessageValidity(responseMessage, Message.Type.response)) {
+                getMessageLabel().setText("Network error!");
+            }
+
+            String randomPassword = responseMessage.getFromBody("message");
+            getPasswordField().setText(randomPassword);
+            getConfirmPasswordField().setText(randomPassword);
+        }
+        else if (getExitButton().isChecked()) {
+            getExitButton().setChecked(false);
+            AppClient.getServerHandler().end();
+            Main.getBatch().dispose();
+        }
+        else if (getLoginButton().isChecked()) {
+            getLoginButton().setChecked(false);
+
+            Message message = new Message(new HashMap<>() {{
+                put("field", "controller");
+                put("change", "LoginMenuController");
+            }}, Message.Type.change);
+            Message responseMessage = AppClient.getServerHandler().sendAndWaitForResponse(message, 500);
+            if (!checkMessageValidity(responseMessage, Message.Type.response)) {
+                getMessageLabel().setText("Network error!");
+                return;
+            }
+
+            Main.getMain().getScreen().dispose();
+            Main.getMain().setScreen(new LoginMenuView(Assets.getInstance().getSkin()));
+        }
+        else if (getRegisterButton().isChecked()) {
+            getRegisterButton().setChecked(false);
+
+            Message message = new Message(new HashMap<>() {{
+                put("function", "register");
+                put("arguments", new ArrayList<String>(Arrays.asList(
+                    getUsernameField().getText(),
+                    getPasswordField().getText(),
+                    getConfirmPasswordField().getText(),
+                    getNicknameField().getText(),
+                    getEmailField().getText(),
+                    getGenderBox().getSelected()
+                )));
+            }}, Message.Type.command);
+
+            Message responseMessage = AppClient.getServerHandler().sendAndWaitForResponse(message, 500);
+            if (!checkMessageValidity(responseMessage, Message.Type.response)) {
+                getMessageLabel().setText("Network error!");
+                return;
+            }
+
+            if(!responseMessage.getBooleanFromBody("success")) {
+                getMessageLabel().setText(responseMessage.getFromBody("message"));
+                return;
+            }
+
+            getSecurityQuestionWindow().setVisible(true);
+            getSecurityQuestionBox().setSelectedIndex(0);
+            getSecurityQuestionField().setText("yes i was");
+        }
+        else if (getBackButton().isChecked()) {
+            getBackButton().setChecked(false);
+            getSecurityQuestionWindow().setVisible(false);
+        }
+        else if (getSubmitAnswerButton().isChecked()) {
+            getSubmitAnswerButton().setChecked(false);
+
+            Message message = new Message(new HashMap<>() {{
+                put("field", "users");
+                put("change", new ArrayList<>(Arrays.asList(
+                     getUsernameField().getText(),
+                    getPasswordField().getText(), //getSHA256
+                    getNicknameField().getText(),
+                    getEmailField().getText(),
+                    getGenderBox().getSelected(), // Gender.findGender
+                    String.valueOf(getSecurityQuestionBox().getSelectedIndex()),
+                    getSecurityQuestionField().getText())
+                ));
+            }}, Message.Type.change);
+
+            Message responseMessage = AppClient.getServerHandler().sendAndWaitForResponse(message, 500);
+            if (!checkMessageValidity(responseMessage, Message.Type.response)) {
+                getMessageLabel().setText("Network error!");
+                return;
+            }
+
+
+            getMessageLabel().setText("Your account has been successfully registered!");
+            getSecurityQuestionWindow().setVisible(false);
+        }
+    }
+
+    public boolean checkMessageValidity(Message message, Message.Type type) {
+        return message.getType() == type;
+    }
 
 }

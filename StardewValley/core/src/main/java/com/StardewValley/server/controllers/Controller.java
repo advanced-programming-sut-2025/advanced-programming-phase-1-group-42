@@ -1,8 +1,9 @@
 package com.StardewValley.server.controllers;
 
-import com.StardewValley.models.App;
+import com.StardewValley.models.Message;
 import com.StardewValley.models.Result;
 import com.StardewValley.models.interactions.User;
+import com.StardewValley.server.AppServer;
 
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
@@ -11,9 +12,9 @@ import java.util.Random;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-public class Controller {
+public abstract class Controller {
     protected User findAppUser(String username) {
-        for (User user : App.getUsers()) {
+        for (User user : AppServer.getUsers()) {
             if(user.getUsername().equals(username)) {
                 return user;
             }
@@ -111,4 +112,6 @@ public class Controller {
             throw new RuntimeException("SHA-256 algorithm not found", e);
         }
     }
+
+    public abstract Message handleMessage(Message message);
 }

@@ -1,34 +1,66 @@
 package com.StardewValley.server;
 
+import com.StardewValley.models.game_structure.Game;
+import com.StardewValley.models.interactions.Player;
+import com.StardewValley.models.interactions.User;
+
 import java.io.IOException;
-import java.net.ServerSocket;
-import java.net.Socket;
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
+import java.util.ArrayList;
 
 public class AppServer {
-    private static final int PORT = 1111;
-    private ServerSocket serverSocket;
-    private ExecutorService threadPool;
+    private static ClientListener clientListener;
 
-    public void start() throws IOException {
-        serverSocket = new ServerSocket(PORT);
-        threadPool = Executors.newCachedThreadPool();
+    private static boolean ended = false;
 
-        System.out.println("Server started on port " + PORT);
+    private final static ArrayList<User> users = new ArrayList<>();
 
-        while (true) {
-            Socket clientSocket = serverSocket.accept();
-            System.out.println("New client connected: " + clientSocket.getInetAddress() + ":" + clientSocket.getPort());
-//            threadPool.execute(new ClientHandler(clientSocket));
-        }
+    private final static ArrayList<User> onlineUsers = new ArrayList<>();
+
+    private final static ArrayList<Game> games = new ArrayList<>();
+
+    public static void start() throws IOException {
+        if (clientListener != null && !clientListener.isAlive())
+            clientListener.start();
+        else
+            throw new IllegalStateException("Server already started");
     }
 
-    public static void main(String[] args) {
-        try {
-            new AppServer().start();
-        } catch (IOException e) {
-            e.printStackTrace();
+    public static ArrayList<User> getOnlineUsers() {
+        return onlineUsers;
+    }
+
+    public static ArrayList<Game> getGames() {
+        return games;
+    }
+
+    public static ArrayList<User> getUsers() {
+        return users;
+    }
+
+    public static Game findGame(User user) {
+        for (Game game : games) {
+            for (Player player : game.getPlayers()) {
+                if(player.getUser().getUsername().equals(user.getUsername())) {
+                    return game;
+                }
+            }
         }
+        return null;
+    }
+
+    public static ClientListener getClientListener() {
+        return clientListener;
+    }
+
+    public static void setClientListener(ClientListener clientListener) {
+        AppServer.clientListener = clientListener;
+    }
+
+    public static boolean isEnded() {
+        return ended;
+    }
+
+    public static void setEnded(boolean ended) {
+        AppServer.ended = ended;
     }
 }

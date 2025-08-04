@@ -1,6 +1,6 @@
 package com.StardewValley.models.interactions.game_buildings;
 
-import com.StardewValley.models.App;
+import com.StardewValley.client.AppClient;
 import com.StardewValley.models.Pair;
 import com.StardewValley.models.Result;
 import com.StardewValley.models.enums.TileType;
@@ -26,8 +26,8 @@ public abstract class GameBuilding extends Building {
 
 
     public boolean isInWorkingHours() {
-        if(App.getCurrentGame().getDateTime().getTime() < getHours().second()
-                || App.getCurrentGame().getDateTime().getTime() > getHours().first())
+        if(AppClient.getCurrentGame().getDateTime().getTime() < getHours().second()
+                || AppClient.getCurrentGame().getDateTime().getTime() > getHours().first())
             return true;
         return false;
     }
@@ -88,16 +88,16 @@ public abstract class GameBuilding extends Building {
         if(productPair.second() < quantity)
             return new Result(false, productName + "'s stock is less than the quantity you want!");
 
-        if(quantity * productPair.first().getSellPrice() > App.getCurrentGame().getCurrentPlayer().getWallet().getBalance()) {
+        if(quantity * productPair.first().getSellPrice() > AppClient.getCurrentGame().getCurrentPlayer().getWallet().getBalance()) {
             return new Result(false, "You don't have enough money in your wallet to purchase this product(s)!");
         }
-        if(App.getCurrentGame().getCurrentPlayer().getInventory().isInInventory(productName) == null &&
-                App.getCurrentGame().getCurrentPlayer().getInventory().isFull())
+        if(AppClient.getCurrentGame().getCurrentPlayer().getInventory().isInInventory(productName) == null &&
+                AppClient.getCurrentGame().getCurrentPlayer().getInventory().isFull())
             return new Result(false, "Your inventory is full to purchase this product(s)!");
 
         int totalPrice = quantity * productPair.first().getSellPrice();
-        App.getCurrentGame().getCurrentPlayer().getWallet().decreaseBalance(totalPrice);
-        App.getCurrentGame().getCurrentPlayer().getInventory().addGood(Good.newGoods(productPair.first(), quantity));
+        AppClient.getCurrentGame().getCurrentPlayer().getWallet().decreaseBalance(totalPrice);
+        AppClient.getCurrentGame().getCurrentPlayer().getInventory().addGood(Good.newGoods(productPair.first(), quantity));
 
 
         if(productPair.second() != Integer.MAX_VALUE)
@@ -134,7 +134,7 @@ public abstract class GameBuilding extends Building {
             goodTypes.add(goodTypeIntegerPair.first());
         }
         for (Pair<GoodType, Integer> goodTypeIntegerPair : products.get(
-            App.getCurrentGame().getDateTime().getSeasonOfYear().getValue())) {
+            AppClient.getCurrentGame().getDateTime().getSeasonOfYear().getValue())) {
             goodTypes.add(goodTypeIntegerPair.first());
         }
 

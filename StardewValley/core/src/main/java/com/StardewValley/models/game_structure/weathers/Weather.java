@@ -1,6 +1,6 @@
 package com.StardewValley.models.game_structure.weathers;
 
-import com.StardewValley.models.App;
+import com.StardewValley.client.AppClient;
 import com.StardewValley.models.enums.TileType;
 import com.StardewValley.models.game_structure.Coordinate;
 import com.StardewValley.models.game_structure.Tile;
@@ -20,16 +20,16 @@ public abstract class Weather {
 
     public void thunder(int x, int y) {
         Coordinate coordinate = new Coordinate(x, y);
-        if(App.getCurrentGame().getCurrentPlayer().getCoordinate().equals(coordinate)){
+        if(AppClient.getCurrentGame().getCurrentPlayer().getCoordinate().equals(coordinate)){
             System.out.println("You've Been Struck by Thunder!");
         } else {
             // Null checks first
-            if (App.getCurrentGame() == null || App.getCurrentGame().getMap() == null) {
+            if (AppClient.getCurrentGame() == null || AppClient.getCurrentGame().getMap() == null) {
                 System.err.println("Error: Game or map not loaded.");
                 return;
             }
 
-            Tile tile = App.getCurrentGame().getMap().findTile(coordinate);
+            Tile tile = AppClient.getCurrentGame().getMap().findTile(coordinate);
             if (tile == null) {
                 System.err.println("Error: Tile not found at coordinate " + coordinate);
                 return;

@@ -1,6 +1,6 @@
 package com.StardewValley.models.interactions.game_buildings;
 
-import com.StardewValley.models.App;
+import com.StardewValley.client.AppClient;
 import com.StardewValley.models.Pair;
 import com.StardewValley.models.Result;
 import com.StardewValley.models.enums.TileAssets;
@@ -62,25 +62,25 @@ public class CarpenterShop extends GameBuilding {
         ProductType type = null;
         if (productName.equals("Wood")) {
             type = ProductType.WOOD;
-            if (!(App.getCurrentGame().getCurrentPlayer().getWallet().getBalance() >= countInt * type.getSellPrice())) {
+            if (!(AppClient.getCurrentGame().getCurrentPlayer().getWallet().getBalance() >= countInt * type.getSellPrice())) {
                 return new Result(false, "You don't have enough money");
             } else {
-                if (!App.getCurrentGame().getCurrentPlayer().getInventory().addGood(Good.newGood(ProductType.WOOD), countInt)) {
+                if (!AppClient.getCurrentGame().getCurrentPlayer().getInventory().addGood(Good.newGood(ProductType.WOOD), countInt)) {
                     return new Result(false, "Your inventory is full");
                 } else {
-                    App.getCurrentGame().getCurrentPlayer().getWallet().decreaseBalance(countInt * type.getSellPrice());
+                    AppClient.getCurrentGame().getCurrentPlayer().getWallet().decreaseBalance(countInt * type.getSellPrice());
                 }
                 return new Result(true, "You bought " + countInt + " Wood");
             }
         } else if (productName.equals("Stone")) {
             type = ProductType.STONE;
-            if (!(App.getCurrentGame().getCurrentPlayer().getWallet().getBalance() >= countInt * type.getSellPrice())) {
+            if (!(AppClient.getCurrentGame().getCurrentPlayer().getWallet().getBalance() >= countInt * type.getSellPrice())) {
                 return new Result(false, "You don't have enough money");
             } else {
-                if (!App.getCurrentGame().getCurrentPlayer().getInventory().addGood(Good.newGood(ProductType.STONE), countInt)) {
+                if (!AppClient.getCurrentGame().getCurrentPlayer().getInventory().addGood(Good.newGood(ProductType.STONE), countInt)) {
                     return new Result(false, "Your inventory is full");
                 } else {
-                    App.getCurrentGame().getCurrentPlayer().getWallet().decreaseBalance(countInt * type.getSellPrice());
+                    AppClient.getCurrentGame().getCurrentPlayer().getWallet().decreaseBalance(countInt * type.getSellPrice());
                 }
                 return new Result(true, "You bought " + countInt + " Stone");
             }

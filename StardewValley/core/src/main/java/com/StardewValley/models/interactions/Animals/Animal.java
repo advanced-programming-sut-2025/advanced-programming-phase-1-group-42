@@ -1,6 +1,6 @@
 package com.StardewValley.models.interactions.Animals;
 
-import com.StardewValley.models.App;
+import com.StardewValley.client.AppClient;
 import com.StardewValley.models.game_structure.Coordinate;
 import com.StardewValley.models.goods.products.ProductType;
 import com.StardewValley.models.interactions.PlayerBuildings.FarmBuilding;
@@ -42,30 +42,30 @@ public class Animal {
 
     public ArrayList<AnimalProduct> getProducts() {
         if (animalType.equals(AnimalTypes.COW)) {
-            if (App.getCurrentGame().getCurrentPlayer().getInventory().isInInventoryBoolean(ProductType.MILK_PAIL)) {
+            if (AppClient.getCurrentGame().getCurrentPlayer().getInventory().isInInventoryBoolean(ProductType.MILK_PAIL)) {
                 friendShip += 5;
-                App.getCurrentGame().getCurrentPlayer().getInventory().removeItemsFromInventory(ProductType.MILK_PAIL, 1);
-                App.getCurrentGame().getCurrentPlayer().getEnergy().decreaseTurnEnergyLeft(7);
+                AppClient.getCurrentGame().getCurrentPlayer().getInventory().removeItemsFromInventory(ProductType.MILK_PAIL, 1);
+                AppClient.getCurrentGame().getCurrentPlayer().getEnergy().decreaseTurnEnergyLeft(7);
                 return products;
             } else {
                 System.out.println("You need Milk Pail to get Milk");
                 return null;
             }
         } else if (animalType.equals(AnimalTypes.GOAT)) {
-            if (App.getCurrentGame().getCurrentPlayer().getInventory().isInInventoryBoolean(ProductType.MILK_PAIL)) {
+            if (AppClient.getCurrentGame().getCurrentPlayer().getInventory().isInInventoryBoolean(ProductType.MILK_PAIL)) {
                 friendShip += 5;
-                App.getCurrentGame().getCurrentPlayer().getInventory().removeItemsFromInventory(ProductType.MILK_PAIL, 1);
-                App.getCurrentGame().getCurrentPlayer().getEnergy().decreaseTurnEnergyLeft(7);
+                AppClient.getCurrentGame().getCurrentPlayer().getInventory().removeItemsFromInventory(ProductType.MILK_PAIL, 1);
+                AppClient.getCurrentGame().getCurrentPlayer().getEnergy().decreaseTurnEnergyLeft(7);
                 return products;
             } else {
                 System.out.println("You need Milk Pail to get Milk");
                 return null;
             }
         } else if (animalType.equals(AnimalTypes.SHEEP)) {
-            if (App.getCurrentGame().getCurrentPlayer().getInventory().isInInventoryBoolean(ProductType.SHEARS)) {
+            if (AppClient.getCurrentGame().getCurrentPlayer().getInventory().isInInventoryBoolean(ProductType.SHEARS)) {
                 friendShip += 5;
-                App.getCurrentGame().getCurrentPlayer().getInventory().removeItemsFromInventory(ProductType.SHEARS, 1);
-                App.getCurrentGame().getCurrentPlayer().getEnergy().decreaseTurnEnergyLeft(7);
+                AppClient.getCurrentGame().getCurrentPlayer().getInventory().removeItemsFromInventory(ProductType.SHEARS, 1);
+                AppClient.getCurrentGame().getCurrentPlayer().getEnergy().decreaseTurnEnergyLeft(7);
                 return products;
             } else {
                 System.out.println("You need Shear to get Sheep's wool");
@@ -102,11 +102,11 @@ public class Animal {
     }
 
     public void shepherdAnimal(Coordinate coordinate) {
-        if (App.getCurrentGame().getWeather().getName().equals("Snow")) {
+        if (AppClient.getCurrentGame().getWeather().getName().equals("Snow")) {
             System.out.println("It's Snowing. You can't feed animals outside");
-        } else if (App.getCurrentGame().getWeather().getName().equals("Rain")) {
+        } else if (AppClient.getCurrentGame().getWeather().getName().equals("Rain")) {
             System.out.println("It's Raining. You can't feed animals outside");
-        } else if (App.getCurrentGame().getWeather().getName().equals("Storm")) {
+        } else if (AppClient.getCurrentGame().getWeather().getName().equals("Storm")) {
             System.out.println("It's Stormy. You can't feed animals outside");
         } else {
             if (isOutside) {

@@ -1,6 +1,6 @@
 package com.StardewValley.models.goods.tools;
 
-import com.StardewValley.models.App;
+import com.StardewValley.client.AppClient;
 import com.StardewValley.models.Pair;
 import com.StardewValley.models.Result;
 import com.StardewValley.models.enums.Season;
@@ -53,33 +53,33 @@ public class ToolFunctions {
     public static Result tooluse(Tool tool, Coordinate coordinate) {
         switch ((ToolType) tool.getType()){
             case ToolType.HOE -> {
-                if(App.getCurrentGame().getCurrentPlayer().getBuff() != null) {
-                    if (App.getCurrentGame().getCurrentPlayer().getBuff().getType().equals(BuffType.FARMING_BUFF)) {
-                        App.getCurrentGame().getCurrentPlayer().getEnergy().increaseTurnEnergyLeft(1);
+                if(AppClient.getCurrentGame().getCurrentPlayer().getBuff() != null) {
+                    if (AppClient.getCurrentGame().getCurrentPlayer().getBuff().getType().equals(BuffType.FARMING_BUFF)) {
+                        AppClient.getCurrentGame().getCurrentPlayer().getEnergy().increaseTurnEnergyLeft(1);
                     }
                 }
                 return useHoe(tool, coordinate);
             }
             case ToolType.PICKAXE -> {
-                if(App.getCurrentGame().getCurrentPlayer().getBuff() != null) {
-                    if (App.getCurrentGame().getCurrentPlayer().getBuff().getType().equals(BuffType.MINING_BUFF)) {
-                        App.getCurrentGame().getCurrentPlayer().getEnergy().increaseTurnEnergyLeft(1);
+                if(AppClient.getCurrentGame().getCurrentPlayer().getBuff() != null) {
+                    if (AppClient.getCurrentGame().getCurrentPlayer().getBuff().getType().equals(BuffType.MINING_BUFF)) {
+                        AppClient.getCurrentGame().getCurrentPlayer().getEnergy().increaseTurnEnergyLeft(1);
                     }
                 }
                 return usePickaxe(tool, coordinate);
             }
             case ToolType.AXE -> {
-                if(App.getCurrentGame().getCurrentPlayer().getBuff() != null) {
-                    if (App.getCurrentGame().getCurrentPlayer().getBuff().getType().equals(BuffType.FORAGING_BUFF)) {
-                        App.getCurrentGame().getCurrentPlayer().getEnergy().increaseTurnEnergyLeft(1);
+                if(AppClient.getCurrentGame().getCurrentPlayer().getBuff() != null) {
+                    if (AppClient.getCurrentGame().getCurrentPlayer().getBuff().getType().equals(BuffType.FORAGING_BUFF)) {
+                        AppClient.getCurrentGame().getCurrentPlayer().getEnergy().increaseTurnEnergyLeft(1);
                     }
                 }
                 return useAxe(tool, coordinate);
             }
             case ToolType.WATERING_CAN -> {
-                if(App.getCurrentGame().getCurrentPlayer().getBuff() != null) {
-                    if (App.getCurrentGame().getCurrentPlayer().getBuff().getType().equals(BuffType.FARMING_BUFF)) {
-                        App.getCurrentGame().getCurrentPlayer().getEnergy().increaseTurnEnergyLeft(1);
+                if(AppClient.getCurrentGame().getCurrentPlayer().getBuff() != null) {
+                    if (AppClient.getCurrentGame().getCurrentPlayer().getBuff().getType().equals(BuffType.FARMING_BUFF)) {
+                        AppClient.getCurrentGame().getCurrentPlayer().getEnergy().increaseTurnEnergyLeft(1);
                     }
                 }
                 return useWateringCan(tool, coordinate);
@@ -106,7 +106,7 @@ public class ToolFunctions {
 
 
     private static Result useHoe(Tool tool, Coordinate coordinate) {
-        Tile tile = App.getCurrentGame().getCurrentPlayer().getFarm().checkInFarm(coordinate, App.getCurrentGame().getCurrentPlayer());
+        Tile tile = AppClient.getCurrentGame().getCurrentPlayer().getFarm().checkInFarm(coordinate, AppClient.getCurrentGame().getCurrentPlayer());
         if(tile == null)
             return new Result(false, "Selected Tile should be in your farm");
 
@@ -119,8 +119,8 @@ public class ToolFunctions {
         while (iterator.hasNext()) {
             Good good = iterator.next();
             if (good.getType() instanceof FarmingCropType || good.getType() instanceof ForagingSeedType) {
-                App.getCurrentGame().getCurrentPlayer().getInventory().addGoodByObject(good);
-                App.getCurrentGame().getCurrentPlayer().getSkill().increaseFarmingPoints(5);
+                AppClient.getCurrentGame().getCurrentPlayer().getInventory().addGoodByObject(good);
+                AppClient.getCurrentGame().getCurrentPlayer().getSkill().increaseFarmingPoints(5);
                 iterator.remove(); // Safe removal
             }
         }
@@ -130,7 +130,7 @@ public class ToolFunctions {
 
 
     private static Result usePickaxe(Tool tool, Coordinate coordinate){
-        Tile tile = App.getCurrentGame().getCurrentPlayer().getFarm().checkInFarm(coordinate, App.getCurrentGame().getCurrentPlayer());
+        Tile tile = AppClient.getCurrentGame().getCurrentPlayer().getFarm().checkInFarm(coordinate, AppClient.getCurrentGame().getCurrentPlayer());
         if(tile == null)
             return new Result(false, "Selected Tile should be in your farm");
 
@@ -143,13 +143,13 @@ public class ToolFunctions {
             if (good instanceof ForagingMineral foragingMineral) {
                 if(checkCanBreak(tool, foragingMineral)) {
                     //? i deleted something?
-                    if(App.getCurrentGame().getCurrentPlayer().getSkill().getMiningLevel() >= 2){
+                    if(AppClient.getCurrentGame().getCurrentPlayer().getSkill().getMiningLevel() >= 2){
                         ArrayList<Good> gooods = Good.newGoods(good.getType(), 2);
-                        App.getCurrentGame().getCurrentPlayer().getInventory().addGood(gooods);
+                        AppClient.getCurrentGame().getCurrentPlayer().getInventory().addGood(gooods);
                     }
                     else{
                         ArrayList<Good> gooods = Good.newGoods(good.getType(), 1);
-                        App.getCurrentGame().getCurrentPlayer().getInventory().addGood(gooods);
+                        AppClient.getCurrentGame().getCurrentPlayer().getInventory().addGood(gooods);
                     }
                 }
                 else
@@ -158,7 +158,7 @@ public class ToolFunctions {
                 FarmingTreeType type = (FarmingTreeType) farmingTree.getType();
                 for (Pair<GoodType, Integer> product : type.getProducts()) {
                     if (farmingTree.isFruitAvailable()){
-                        App.getCurrentGame().getCurrentPlayer().getInventory().addGood(
+                        AppClient.getCurrentGame().getCurrentPlayer().getInventory().addGood(
                                 Good.newGoods(product.first(), product.second())
                         );
                     }
@@ -167,13 +167,13 @@ public class ToolFunctions {
             else if(good instanceof ForagingTree foragingTree) {
                 ForagingTreeType type = (ForagingTreeType) foragingTree.getType();
                 for (Pair<GoodType, Integer> product : type.getProducts()) {
-                    App.getCurrentGame().getCurrentPlayer().getInventory().addGood(
+                    AppClient.getCurrentGame().getCurrentPlayer().getInventory().addGood(
                             Good.newGoods(product.first(), product.second())
                     );
                 }
             }
             else {
-                App.getCurrentGame().getCurrentPlayer().getInventory().addGood(new ArrayList<>(Arrays.asList(good)));
+                AppClient.getCurrentGame().getCurrentPlayer().getInventory().addGood(new ArrayList<>(Arrays.asList(good)));
             }
         }
 
@@ -182,7 +182,7 @@ public class ToolFunctions {
     }
 
     private static Result useAxe(Tool tool, Coordinate coordinate) {
-        Tile tile = App.getCurrentGame().getCurrentPlayer().getFarm().checkInFarm(coordinate, App.getCurrentGame().getCurrentPlayer());
+        Tile tile = AppClient.getCurrentGame().getCurrentPlayer().getFarm().checkInFarm(coordinate, AppClient.getCurrentGame().getCurrentPlayer());
         if(tile == null)
             return new Result(false, "Selected Tile should be in your farm");
 
@@ -191,17 +191,17 @@ public class ToolFunctions {
             if(good instanceof ForagingTree foragingTree) {
                 for (Pair<GoodType, Integer> product : ((ForagingTreeType) foragingTree.getType()).getProducts()) {
                     ArrayList<Good> newGoods = Good.newGoods(product.first(), product.second());
-                    App.getCurrentGame().getCurrentPlayer().getInventory().addGood(newGoods);
+                    AppClient.getCurrentGame().getCurrentPlayer().getInventory().addGood(newGoods);
                 }
             }
             else if(good instanceof FarmingTree farmingTree && farmingTree.isFruitAvailable()) {
                 for (Pair<GoodType, Integer> product : ((FarmingTreeType) farmingTree.getType()).getProducts()) {
                     ArrayList<Good> newGoods = Good.newGoods(product.first(), product.second());
-                    App.getCurrentGame().getCurrentPlayer().getInventory().addGood(newGoods);
+                    AppClient.getCurrentGame().getCurrentPlayer().getInventory().addGood(newGoods);
                 }
             } else if(good instanceof FarmingTreeSapling) {
                 ArrayList<Good> newGoods = Good.newGoods(ProductType.WOOD, 2);
-                App.getCurrentGame().getCurrentPlayer().getInventory().addGood(newGoods);
+                AppClient.getCurrentGame().getCurrentPlayer().getInventory().addGood(newGoods);
             }
             else
                 tileGoods.add(good);
@@ -215,8 +215,8 @@ public class ToolFunctions {
         while (iterator.hasNext()) {
             Good good = iterator.next();
             if (good.getType() instanceof ForagingSeedType || good.getType() instanceof ForagingCropType) {
-                App.getCurrentGame().getCurrentPlayer().getInventory().addGoodByObject(good);
-                App.getCurrentGame().getCurrentPlayer().getSkill().increaseForagingPoints(10);
+                AppClient.getCurrentGame().getCurrentPlayer().getInventory().addGoodByObject(good);
+                AppClient.getCurrentGame().getCurrentPlayer().getSkill().increaseForagingPoints(10);
                 iterator.remove(); // Safe removal
             }
         }
@@ -224,7 +224,7 @@ public class ToolFunctions {
     }
 
     private static Result useWateringCan(Tool tool, Coordinate coordinate) {
-        Tile tile = App.getCurrentGame().getMap().findTile(coordinate);
+        Tile tile = AppClient.getCurrentGame().getMap().findTile(coordinate);
         if(tile == null)
             return new Result(false, "Tile not found!");
 
@@ -244,7 +244,7 @@ public class ToolFunctions {
             return new Result(true, ((ToolType) tool.getType()).getName() + "'s capacity gets full");
         }
 
-        if(App.getCurrentGame().getCurrentPlayer().getFarm().findTile(App.getCurrentGame().getCurrentPlayer().getCoordinate()) == null)
+        if(AppClient.getCurrentGame().getCurrentPlayer().getFarm().findTile(AppClient.getCurrentGame().getCurrentPlayer().getCoordinate()) == null)
             return new Result(false, "Selected Tile should be in your farm");
 
         if(tool.capacity == 0)
@@ -257,13 +257,13 @@ public class ToolFunctions {
 
     public static Result fish(ToolType fishingPole, double numberOfFishes, double rarityChance) {
 
-        if(App.getCurrentGame().getCurrentPlayer().getBuff() != null) {
-            if (App.getCurrentGame().getCurrentPlayer().getBuff().getType().equals(BuffType.FISHING_BUFF)) {
-                App.getCurrentGame().getCurrentPlayer().getEnergy().increaseTurnEnergyLeft(1);
+        if(AppClient.getCurrentGame().getCurrentPlayer().getBuff() != null) {
+            if (AppClient.getCurrentGame().getCurrentPlayer().getBuff().getType().equals(BuffType.FISHING_BUFF)) {
+                AppClient.getCurrentGame().getCurrentPlayer().getEnergy().increaseTurnEnergyLeft(1);
             }
         }
 
-        App.getCurrentGame().getCurrentPlayer().getSkill().increaseFishingPoints(5);
+        AppClient.getCurrentGame().getCurrentPlayer().getSkill().increaseFishingPoints(5);
 
         int numberOfFishesInt = (int)Math.floor(numberOfFishes);
         int fishQuality = (int) Math.floor(rarityChance);
@@ -291,12 +291,12 @@ public class ToolFunctions {
                 fishLevel = GoodLevel.ORDINARY;
         }
 
-        Skill skill = App.getCurrentGame().getCurrentPlayer().getSkill();
-        if(App.getCurrentGame().getCurrentPlayer().getInventory().isFull()){
+        Skill skill = AppClient.getCurrentGame().getCurrentPlayer().getSkill();
+        if(AppClient.getCurrentGame().getCurrentPlayer().getInventory().isFull()){
             return new Result(true, "Your inventory is full!");
         }
 
-        Season season = App.getCurrentGame().getDateTime().getSeasonOfYear();
+        Season season = AppClient.getCurrentGame().getDateTime().getSeasonOfYear();
         ArrayList<Good> good = null;
 
         int chance = (int) Math.floor(Math.random()*5);
@@ -418,38 +418,38 @@ public class ToolFunctions {
             }
         }
 
-        App.getCurrentGame().getCurrentPlayer().getInventory().addGood(good);
+        AppClient.getCurrentGame().getCurrentPlayer().getInventory().addGood(good);
         System.out.println("You've got " + good.size() + " " + good.getFirst().getName() + " !!!");
         return new Result(true,"You've got " + good.lastIndexOf(good.getFirst()) + " " + good.getFirst().getName() + " !!!");
     }
 
 
     private static Result useScythe(Tool tool, Coordinate coordinate) {
-        Tile tile = App.getCurrentGame().getCurrentPlayer().getFarm().checkInFarm(coordinate, App.getCurrentGame().getCurrentPlayer());
+        Tile tile = AppClient.getCurrentGame().getCurrentPlayer().getFarm().checkInFarm(coordinate, AppClient.getCurrentGame().getCurrentPlayer());
         if(tile == null)
             return new Result(false, "Selected Tile should be in your farm");
 
         ArrayList<Good> goods = new ArrayList<>();
         for (Good good : tile.getGoods()) {
             if(good.getType() != ProductType.GRASS) {
-                App.getCurrentGame().getCurrentPlayer().getInventory().addGood(
+                AppClient.getCurrentGame().getCurrentPlayer().getInventory().addGood(
                         new ArrayList<>(Arrays.asList(good))
                 );
             }
             else if(good instanceof ForagingTree foragingTree) {
                 for (Pair<GoodType, Integer> product : ((ForagingTreeType) foragingTree.getType()).getProducts()) {
                     ArrayList<Good> newGoods = Good.newGoods(product.first(), product.second());
-                    App.getCurrentGame().getCurrentPlayer().getInventory().addGood(newGoods);
+                    AppClient.getCurrentGame().getCurrentPlayer().getInventory().addGood(newGoods);
                 }
             }
             else if(good instanceof FarmingTree farmingTree && farmingTree.isFruitAvailable()) {
                 for (Pair<GoodType, Integer> product : ((FarmingTreeType) farmingTree.getType()).getProducts()) {
                     ArrayList<Good> newGoods = Good.newGoods(product.first(), product.second());
-                    App.getCurrentGame().getCurrentPlayer().getInventory().addGood(newGoods);
+                    AppClient.getCurrentGame().getCurrentPlayer().getInventory().addGood(newGoods);
                 }
             } else if(good instanceof FarmingTreeSapling) {
                 ArrayList<Good> newGoods = Good.newGoods(ProductType.WOOD, 2);
-                App.getCurrentGame().getCurrentPlayer().getInventory().addGood(newGoods);
+                AppClient.getCurrentGame().getCurrentPlayer().getInventory().addGood(newGoods);
             }
             else
                 goods.add(good);

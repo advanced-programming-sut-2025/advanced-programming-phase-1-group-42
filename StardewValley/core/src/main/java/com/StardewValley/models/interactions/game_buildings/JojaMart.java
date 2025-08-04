@@ -1,6 +1,6 @@
 package com.StardewValley.models.interactions.game_buildings;
 
-import com.StardewValley.models.App;
+import com.StardewValley.client.AppClient;
 import com.StardewValley.models.Pair;
 import com.StardewValley.models.Result;
 import com.StardewValley.models.enums.TileAssets;
@@ -132,9 +132,9 @@ public class JojaMart extends GameBuilding {
         if(productPair == null)
             return new Result(false, "There is no Good of this type in JojaMart Shop!");
         if(partNumber != 0 &&
-                partNumber != App.getCurrentGame().getDateTime().getSeasonOfYear().getValue())
+                partNumber != AppClient.getCurrentGame().getDateTime().getSeasonOfYear().getValue())
             return new Result(false, "This product is not available in season " +
-                    App.getCurrentGame().getDateTime().getSeasonOfYear().getName() + " in JojaMart Shop!");
+                    AppClient.getCurrentGame().getDateTime().getSeasonOfYear().getName() + " in JojaMart Shop!");
 
         return purchaseProduct(productName, count, productPair);
     }

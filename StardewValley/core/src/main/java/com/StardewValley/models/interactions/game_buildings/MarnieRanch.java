@@ -1,6 +1,6 @@
 package com.StardewValley.models.interactions.game_buildings;
 
-import com.StardewValley.models.App;
+import com.StardewValley.client.AppClient;
 import com.StardewValley.models.Pair;
 import com.StardewValley.models.Result;
 import com.StardewValley.models.enums.TileAssets;
@@ -74,37 +74,37 @@ public class MarnieRanch extends GameBuilding {
         ProductType type = null;
         if (productName.equals("Hay")) {
             type = ProductType.HAY;
-            if (!(App.getCurrentGame().getCurrentPlayer().getWallet().getBalance() > countInt * type.getSellPrice())) {
+            if (!(AppClient.getCurrentGame().getCurrentPlayer().getWallet().getBalance() > countInt * type.getSellPrice())) {
                 return new Result(false, "You don't have enough money");
             } else {
-                if (!App.getCurrentGame().getCurrentPlayer().getInventory().addGood((Good) new Product(ProductType.WOOD), countInt)) {
+                if (!AppClient.getCurrentGame().getCurrentPlayer().getInventory().addGood((Good) new Product(ProductType.WOOD), countInt)) {
                     return new Result(false, "Your inventory is full");
                 } else {
-                    App.getCurrentGame().getCurrentPlayer().getWallet().decreaseBalance(countInt * type.getSellPrice());
+                    AppClient.getCurrentGame().getCurrentPlayer().getWallet().decreaseBalance(countInt * type.getSellPrice());
                 }
                 return new Result(true, "You bought " + countInt + " Wood");
             }
         } else if (productName.equals("Shears")) {
             type = ProductType.SHEARS;
-            if (!(App.getCurrentGame().getCurrentPlayer().getWallet().getBalance() > countInt * type.getSellPrice())) {
+            if (!(AppClient.getCurrentGame().getCurrentPlayer().getWallet().getBalance() > countInt * type.getSellPrice())) {
                 return new Result(false, "You don't have enough money");
             } else {
-                if (!App.getCurrentGame().getCurrentPlayer().getInventory().addGood((Good) new Product(ProductType.WOOD), countInt)) {
+                if (!AppClient.getCurrentGame().getCurrentPlayer().getInventory().addGood((Good) new Product(ProductType.WOOD), countInt)) {
                     return new Result(false, "Your inventory is full");
                 } else {
-                    App.getCurrentGame().getCurrentPlayer().getWallet().decreaseBalance(countInt * type.getSellPrice());
+                    AppClient.getCurrentGame().getCurrentPlayer().getWallet().decreaseBalance(countInt * type.getSellPrice());
                 }
                 return new Result(true, "You bought " + countInt + " Wood");
             }
         } else if (productName.equals("Milk Pail")) {
             type = ProductType.MILK_PAIL;
-            if (!(App.getCurrentGame().getCurrentPlayer().getWallet().getBalance() > countInt * type.getSellPrice())) {
+            if (!(AppClient.getCurrentGame().getCurrentPlayer().getWallet().getBalance() > countInt * type.getSellPrice())) {
                 return new Result(false, "You don't have enough money");
             } else {
-                if (!App.getCurrentGame().getCurrentPlayer().getInventory().addGood((Good) new Product(ProductType.WOOD), countInt)) {
+                if (!AppClient.getCurrentGame().getCurrentPlayer().getInventory().addGood((Good) new Product(ProductType.WOOD), countInt)) {
                     return new Result(false, "Your inventory is full");
                 } else {
-                    App.getCurrentGame().getCurrentPlayer().getWallet().decreaseBalance(countInt * type.getSellPrice());
+                    AppClient.getCurrentGame().getCurrentPlayer().getWallet().decreaseBalance(countInt * type.getSellPrice());
                 }
                 return new Result(true, "You bought " + countInt + " Wood");
             }

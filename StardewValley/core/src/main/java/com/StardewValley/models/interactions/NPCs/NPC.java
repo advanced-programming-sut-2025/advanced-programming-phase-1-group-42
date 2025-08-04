@@ -1,6 +1,6 @@
 package com.StardewValley.models.interactions.NPCs;
 
-import com.StardewValley.models.App;
+import com.StardewValley.client.AppClient;
 import com.StardewValley.models.enums.Season;
 import com.StardewValley.models.game_structure.Coordinate;
 import com.StardewValley.models.goods.Good;
@@ -29,8 +29,8 @@ public class NPC {
 
     public boolean isBirthdayToday() {
 
-        return App.getCurrentGame().getDateTime().getSeasonOfYear().equals(type.getBirthday().first())
-                && App.getCurrentGame().getDateTime().getDayOfSeason()==type.getBirthday().second();
+        return AppClient.getCurrentGame().getDateTime().getSeasonOfYear().equals(type.getBirthday().first())
+                && AppClient.getCurrentGame().getDateTime().getDayOfSeason()==type.getBirthday().second();
     }
 
     public Coordinate getCoordinate() {
@@ -40,7 +40,7 @@ public class NPC {
 
     public String  npcDialogs() {
         for (NPCFriendship friendship : friendships) {
-            if (friendship.getPlayer().equals(App.getCurrentGame().getCurrentPlayer())) {
+            if (friendship.getPlayer().equals(AppClient.getCurrentGame().getCurrentPlayer())) {
                 if (friendship.getFirstMeetToday()){
                     getFriendship().setFriendshipPoints(20);
                     friendship.setFirstMeetToday();
@@ -65,23 +65,23 @@ public class NPC {
         //talk about weather or season
         int seasonIndex = -1;
         int weatherIndex = -1;
-        if (App.getCurrentGame().getDateTime().getSeasonOfYear().equals(Season.SPRING)) {
+        if (AppClient.getCurrentGame().getDateTime().getSeasonOfYear().equals(Season.SPRING)) {
             seasonIndex = 2;
-        } else if (App.getCurrentGame().getDateTime().getSeasonOfYear().equals(Season.SUMMER)) {
+        } else if (AppClient.getCurrentGame().getDateTime().getSeasonOfYear().equals(Season.SUMMER)) {
             seasonIndex = 3;
-        } else if (App.getCurrentGame().getDateTime().getSeasonOfYear().equals(Season.FALL)) {
+        } else if (AppClient.getCurrentGame().getDateTime().getSeasonOfYear().equals(Season.FALL)) {
             seasonIndex = 4;
-        } else if (App.getCurrentGame().getDateTime().getSeasonOfYear().equals(Season.WINTER)) {
+        } else if (AppClient.getCurrentGame().getDateTime().getSeasonOfYear().equals(Season.WINTER)) {
             seasonIndex = 5;
         }
 
-        if (App.getCurrentGame().getWeather().getName().equals("Sunny")) {
+        if (AppClient.getCurrentGame().getWeather().getName().equals("Sunny")) {
             weatherIndex = 6;
-        } else if (App.getCurrentGame().getWeather().getName().equals("Rainy")) {
+        } else if (AppClient.getCurrentGame().getWeather().getName().equals("Rainy")) {
             weatherIndex = 7;
-        } else if (App.getCurrentGame().getWeather().getName().equals("Storm")) {
+        } else if (AppClient.getCurrentGame().getWeather().getName().equals("Storm")) {
             weatherIndex = 8;
-        } else if (App.getCurrentGame().getWeather().getName().equals("Snowy")) {
+        } else if (AppClient.getCurrentGame().getWeather().getName().equals("Snowy")) {
             weatherIndex = 9;
         }
 
@@ -101,13 +101,13 @@ public class NPC {
 
     public NPCFriendship getFriendship() {
         for (NPCFriendship friendship : friendships) {
-            if (friendship.getPlayer().equals(App.getCurrentGame().getCurrentPlayer())) {
+            if (friendship.getPlayer().equals(AppClient.getCurrentGame().getCurrentPlayer())) {
                 return friendship;
             }
         }
-        friendships.add(new NPCFriendship(App.getCurrentGame().getCurrentPlayer(),this));
+        friendships.add(new NPCFriendship(AppClient.getCurrentGame().getCurrentPlayer(),this));
         for (NPCFriendship friendship : friendships) {
-            if (friendship.getPlayer().equals(App.getCurrentGame().getCurrentPlayer())) {
+            if (friendship.getPlayer().equals(AppClient.getCurrentGame().getCurrentPlayer())) {
                 return friendship;
             }
         }

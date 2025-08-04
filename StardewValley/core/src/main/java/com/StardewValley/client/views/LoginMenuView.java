@@ -1,7 +1,6 @@
 package com.StardewValley.client.views;
 
-import com.StardewValley.Main;
-import com.StardewValley.server.controllers.LoginRegisterMenuController;
+import com.StardewValley.client.Main;
 import com.StardewValley.models.Assets;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
@@ -12,7 +11,6 @@ import com.badlogic.gdx.utils.viewport.ScreenViewport;
 public class LoginMenuView implements Screen {
     private Stage stage;
     private Skin skin;
-    private LoginRegisterMenuController controller;
     private Table table;
     private Label titleLabel;
     private Label usernameLabel;
@@ -42,8 +40,7 @@ public class LoginMenuView implements Screen {
     private Label forgetErrorLabel;
 
 
-    public LoginMenuView(LoginRegisterMenuController controller, Skin skin) {
-        this.controller = controller;
+    public LoginMenuView(Skin skin) {
         this.skin = skin;
         this.stage = new Stage();
         this.titleLabel = new Label("Login Menu", skin, "Bold");
@@ -76,8 +73,6 @@ public class LoginMenuView implements Screen {
         this.forgetBackButton = new TextButton("Back", skin);
         this.forgetErrorLabel = new Label("", skin);
         this.forgetErrorLabel.setFontScale(0.7f);
-
-        this.controller.setView(this);
     }
 
     @Override
@@ -165,7 +160,7 @@ public class LoginMenuView implements Screen {
         stage.act(Math.min(Gdx.graphics.getDeltaTime(), 1 / 30f));
         stage.draw();
 
-        controller.handleLogin();
+        handleLogin();
     }
 
     @Override
@@ -278,5 +273,9 @@ public class LoginMenuView implements Screen {
 
     public CheckBox getStayOnLoginCheckBox() {
         return stayOnLoginCheckBox;
+    }
+
+    private void handleLogin() {
+
     }
 }

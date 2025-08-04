@@ -1,6 +1,6 @@
 package com.StardewValley.models.game_structure.weathers;
 
-import com.StardewValley.models.App;
+import com.StardewValley.client.AppClient;
 import com.StardewValley.models.enums.TileType;
 import com.StardewValley.models.game_structure.Tile;
 
@@ -23,7 +23,7 @@ public class Rain extends Weather {
     public void waterAllTiles() {
         for(int i = 0 ; i < 140 ; i++){
             for(int j = 0 ; j < 160 ; j++){
-                Tile tile = App.getCurrentGame().getMap().findTileByXY(i , j);
+                Tile tile = AppClient.getCurrentGame().getMap().findTileByXY(i , j);
                 if(tile.getTileType().equals(TileType.FARM)){
                     tile.setWatered(true);
                 }

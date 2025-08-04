@@ -1,8 +1,8 @@
 package com.StardewValley.client.views;
 
-import com.StardewValley.Main;
+import com.StardewValley.client.Main;
+import com.StardewValley.client.AppClient;
 import com.StardewValley.server.controllers.GameMenuController;
-import com.StardewValley.models.App;
 import com.StardewValley.models.Assets;
 import com.StardewValley.models.Pair;
 import com.StardewValley.models.Result;
@@ -262,11 +262,11 @@ public class GameView implements Screen, InputProcessor {
         timeAccumulator += delta;
 
         if (timeAccumulator >= 1f) {
-            for (Animal animal : App.getCurrentGame().getMap().allAnimals()) {
+            for (Animal animal : AppClient.getCurrentGame().getMap().allAnimals()) {
                 animal.updateCounter();
             }
 
-            for (FarmBuilding farmBuilding : App.getCurrentGame().getCurrentPlayer().getFarm().getFarmBuildings()) {
+            for (FarmBuilding farmBuilding : AppClient.getCurrentGame().getCurrentPlayer().getFarm().getFarmBuildings()) {
                 for (Animal animal : farmBuilding.getAnimals()) {
                     animal.updateCounter();
                 }
@@ -284,7 +284,7 @@ public class GameView implements Screen, InputProcessor {
     }
 
     public void setColorFunction() {
-        int time = App.getCurrentGame().getDateTime().getTime();
+        int time = AppClient.getCurrentGame().getDateTime().getTime();
         if (time >= 19) {
             Sprite sprite = new Sprite(Assets.getInstance().getNight_background());
             sprite.draw(Main.getBatch());
@@ -339,15 +339,15 @@ public class GameView implements Screen, InputProcessor {
         int tileX = (int) (touchPos.x / scaledSize);
         int tileY = (int) (touchPos.y / scaledSize);
 
-        Tile playerTile = Map.findTile(App.getCurrentGame().getCurrentPlayer().getCoordinate());
+        Tile playerTile = Map.findTile(AppClient.getCurrentGame().getCurrentPlayer().getCoordinate());
         Coordinate coordinate = new Coordinate(tileX, tileY);
         Tile selectedTile = Map.findTile(coordinate);
         if (selectedTile == null || playerTile == null)
             return false;
 
-        for (Player player : App.getCurrentGame().getPlayers()) {
+        for (Player player : AppClient.getCurrentGame().getPlayers()) {
             if (player.getCoordinate().equals(coordinate) &&
-            player != App.getCurrentGame().getCurrentPlayer()) {
+            player != AppClient.getCurrentGame().getCurrentPlayer()) {
                 selectedPlayer = player;
                 initFriend();
                 return true;
@@ -365,8 +365,8 @@ public class GameView implements Screen, InputProcessor {
             return true;
         }
 
-        if (!App.getCurrentGame().getCurrentPlayer().getInHandGood().isEmpty() &&
-            App.getCurrentGame().getCurrentPlayer().getInHandGood().getLast() instanceof Tool &&
+        if (!AppClient.getCurrentGame().getCurrentPlayer().getInHandGood().isEmpty() &&
+            AppClient.getCurrentGame().getCurrentPlayer().getInHandGood().getLast() instanceof Tool &&
             playerTile.getTileType() != TileType.PLAIN && selectedTile.getTileType() != TileType.GREEN_HOUSE &&
             playerTile.getTileType() != TileType.PLAYER_BUILDING) {
 
@@ -377,12 +377,12 @@ public class GameView implements Screen, InputProcessor {
         }
         if (petsClicking(button, tileX, tileY)) return true;
         if (selectedTile.getTileType() == TileType.GREEN_HOUSE &&
-            !App.getCurrentGame().getCurrentPlayer().getFarm().getGreenHouse().isAvailable()) {
+            !AppClient.getCurrentGame().getCurrentPlayer().getFarm().getGreenHouse().isAvailable()) {
 
             initGreenHouseWindow();
         }
 
-        GameBuilding building = App.getCurrentGame().getMap().findGameBuilding(new Coordinate(tileX, tileY));
+        GameBuilding building = AppClient.getCurrentGame().getMap().findGameBuilding(new Coordinate(tileX, tileY));
         if (building != null) {
 
             Texture backgroundTexture = new Texture(Gdx.files.internal("shop-menu.png"));
@@ -397,7 +397,7 @@ public class GameView implements Screen, InputProcessor {
             );
 
             Table header = new Table(skin);
-            Label title = new Label(String.valueOf(App.getCurrentGame().getCurrentPlayer().getWallet().getBalance()), skin);
+            Label title = new Label(String.valueOf(AppClient.getCurrentGame().getCurrentPlayer().getWallet().getBalance()), skin);
             TextButton closeButton = new TextButton("X", skin);
             closeButton.pad(4);
             closeButton.addListener(new ChangeListener() {
@@ -530,7 +530,7 @@ public class GameView implements Screen, InputProcessor {
         // right click for pets
         if (button == Input.Buttons.RIGHT) {
             Animal animal = null;
-            for (FarmBuilding building : App.getCurrentGame().getCurrentPlayer().getFarm().getFarmBuildings()) {
+            for (FarmBuilding building : AppClient.getCurrentGame().getCurrentPlayer().getFarm().getFarmBuildings()) {
                 for (Animal animal2 : building.getAnimals()) {
                     if (animal2.getCoordinate().getX() == tileX && animal2.getCoordinate().getY() == tileY) {
                         animal = animal2;
@@ -635,7 +635,7 @@ public class GameView implements Screen, InputProcessor {
                 }
 
             } else {
-                for (FarmBuilding building : App.getCurrentGame().getCurrentPlayer().getFarm().getFarmBuildings()) {
+                for (FarmBuilding building : AppClient.getCurrentGame().getCurrentPlayer().getFarm().getFarmBuildings()) {
                     for (Animal animal2 : building.getAnimals()) {
                         if (animal2.getCoordinate().getX() == tileX && animal2.getCoordinate().getY() == tileY) {
                             selectedAnimal = animal2;
@@ -1148,7 +1148,7 @@ public class GameView implements Screen, InputProcessor {
         messageLabel = new Label("", skin);
         toolSelectBox = new SelectBox<>(skin);
         Array<String> tools = new Array<>();
-        for (ArrayList<Good> goods : App.getCurrentGame().getCurrentPlayer().getInventory().getList()) {
+        for (ArrayList<Good> goods : AppClient.getCurrentGame().getCurrentPlayer().getInventory().getList()) {
             if (!goods.isEmpty() && goods.getLast() instanceof Tool)
                 tools.add(goods.getLast().getName());
         }
@@ -1213,7 +1213,7 @@ public class GameView implements Screen, InputProcessor {
     private void upgradeSelect() {
         String selectedToolName = toolSelectBox.getSelected();
         Tool selectedTool = null;
-        for (ArrayList<Good> goods : App.getCurrentGame().getCurrentPlayer().getInventory().getList()) {
+        for (ArrayList<Good> goods : AppClient.getCurrentGame().getCurrentPlayer().getInventory().getList()) {
             if (!goods.isEmpty() && goods.getLast() instanceof Tool && goods.getLast().getName().equals(selectedToolName)) {
                 selectedTool = (Tool) goods.getLast();
                 break;
@@ -1324,35 +1324,35 @@ public class GameView implements Screen, InputProcessor {
     @Override
     public boolean scrolled(float v, float v1) {
         int ptr = -1;
-        for (int i = 0; i < App.getCurrentGame().getCurrentPlayer().getInventory().getSize(); i++) {
-            ArrayList<Good> goods = App.getCurrentGame().getCurrentPlayer().getInventory().getList().get(i);
-            if (goods == App.getCurrentGame().getCurrentPlayer().getInHandGood())
+        for (int i = 0; i < AppClient.getCurrentGame().getCurrentPlayer().getInventory().getSize(); i++) {
+            ArrayList<Good> goods = AppClient.getCurrentGame().getCurrentPlayer().getInventory().getList().get(i);
+            if (goods == AppClient.getCurrentGame().getCurrentPlayer().getInHandGood())
                 ptr = i;
         }
 
         if (v1 > 0) {
-            ptr = (ptr + 1) % App.getCurrentGame().getCurrentPlayer().getInventory().getSize();
+            ptr = (ptr + 1) % AppClient.getCurrentGame().getCurrentPlayer().getInventory().getSize();
         }
         else if (v1 < 0){
-            ptr = (ptr - 1 + App.getCurrentGame().getCurrentPlayer().getInventory().getSize())
-            % App.getCurrentGame().getCurrentPlayer().getInventory().getSize();
+            ptr = (ptr - 1 + AppClient.getCurrentGame().getCurrentPlayer().getInventory().getSize())
+            % AppClient.getCurrentGame().getCurrentPlayer().getInventory().getSize();
         }
 
-        App.getCurrentGame().getCurrentPlayer().setInHandGood(
-            App.getCurrentGame().getCurrentPlayer().getInventory().getList().get(ptr)
+        AppClient.getCurrentGame().getCurrentPlayer().setInHandGood(
+            AppClient.getCurrentGame().getCurrentPlayer().getInventory().getList().get(ptr)
         );
         return false;
     }
 
     private void updateCamera() {
-        camera.position.set((App.getCurrentGame().getCurrentPlayer().getCoordinate().getX()) * scaledSize,
-            (App.getCurrentGame().getCurrentPlayer().getCoordinate().getY()) * scaledSize, 0);
+        camera.position.set((AppClient.getCurrentGame().getCurrentPlayer().getCoordinate().getX()) * scaledSize,
+            (AppClient.getCurrentGame().getCurrentPlayer().getCoordinate().getY()) * scaledSize, 0);
         camera.update();
     }
 
     private void renderWorld() {
-        int midX = App.getCurrentGame().getCurrentPlayer().getCoordinate().getX() * scaledSize;
-        int midY = App.getCurrentGame().getCurrentPlayer().getCoordinate().getY() * scaledSize;
+        int midX = AppClient.getCurrentGame().getCurrentPlayer().getCoordinate().getX() * scaledSize;
+        int midY = AppClient.getCurrentGame().getCurrentPlayer().getCoordinate().getY() * scaledSize;
 
         for (int x = max((midX - Gdx.graphics.getWidth() / 2) / scaledSize - 5, 0); x < min((midX + Gdx.graphics.getWidth() / 2) / scaledSize + 1, 150); x++) {
             for (int y = max((midY - Gdx.graphics.getHeight() / 2) / scaledSize - 5, 0); y < min((midY + Gdx.graphics.getHeight() / 2) / scaledSize + 1, 160); y++) {
@@ -1363,7 +1363,7 @@ public class GameView implements Screen, InputProcessor {
                         Main.getBatch().draw(TileAssets.QUARRY.getTexture(), x * scaledSize, y * scaledSize, scaledSize, scaledSize);
                     }
                     case TileType.FARM, TileType.PLAYER_BUILDING, TileType.GREEN_HOUSE -> {
-                        if (App.getCurrentGame().getDateTime().getSeason() == Season.WINTER)
+                        if (AppClient.getCurrentGame().getDateTime().getSeason() == Season.WINTER)
                             Main.getBatch().draw(TileAssets.FARM_WINTER.getTexture(), x * scaledSize, y * scaledSize, scaledSize, scaledSize);
                         else
                             Main.getBatch().draw(TileAssets.FARM_ORDINARY.getTexture(), x * scaledSize, y * scaledSize, scaledSize, scaledSize);
@@ -1378,7 +1378,7 @@ public class GameView implements Screen, InputProcessor {
                         Main.getBatch().draw(TileAssets.WATER.getTexture(), x * scaledSize, y * scaledSize, scaledSize, scaledSize);
                     }
                     case TileType.PLAIN, TileType.GAME_BUILDING -> {
-                        if (App.getCurrentGame().getDateTime().getSeason() == Season.WINTER)
+                        if (AppClient.getCurrentGame().getDateTime().getSeason() == Season.WINTER)
                             Main.getBatch().draw(TileAssets.FARM_WINTER.getTexture(), x * scaledSize, y * scaledSize, scaledSize, scaledSize);
                         else
                             Main.getBatch().draw(TileAssets.GRASS.getTexture(), x * scaledSize, y * scaledSize, scaledSize, scaledSize);
@@ -1411,7 +1411,7 @@ public class GameView implements Screen, InputProcessor {
                         Tile backTile = Map.findTile(new Coordinate(coordinate.getX() - 1, coordinate.getY()));
                         Tile upTile = Map.findTile(new Coordinate(coordinate.getX(), coordinate.getY() - 1));
                         if (backTile.getTileType() != TileType.GAME_BUILDING && upTile.getTileType() != TileType.GAME_BUILDING) {
-                            GameBuilding gameBuilding = App.getCurrentGame().getMap().findGameBuilding(coordinate);
+                            GameBuilding gameBuilding = AppClient.getCurrentGame().getMap().findGameBuilding(coordinate);
                             Coordinate size = new Coordinate(gameBuilding.getEndCordinate().getX() - gameBuilding.getStartCordinate().getX(),
                                 gameBuilding.getEndCordinate().getY() - gameBuilding.getStartCordinate().getY());
                             Main.getBatch().draw(gameBuilding.getTexture(), x * scaledSize, y * scaledSize, size.getX() * scaledSize, size.getY() * scaledSize);
@@ -1428,13 +1428,13 @@ public class GameView implements Screen, InputProcessor {
                         Tile backTile = Map.findTile(new Coordinate(coordinate.getX() - 1, coordinate.getY()));
                         Tile upTile = Map.findTile(new Coordinate(coordinate.getX(), coordinate.getY() - 1));
                         if (backTile.getTileType() != TileType.GREEN_HOUSE && upTile.getTileType() != TileType.GREEN_HOUSE) {
-                            if (App.getCurrentGame().getCurrentPlayer().getFarm().getGreenHouse().isAvailable())
+                            if (AppClient.getCurrentGame().getCurrentPlayer().getFarm().getGreenHouse().isAvailable())
                                 Main.getBatch().draw(TileAssets.GREEN_HOUSE.getTexture(), (x - 1) * scaledSize, (y) * scaledSize, 8 * scaledSize, 7 * scaledSize);
                             else
                                 Main.getBatch().draw(TileAssets.BROKEN_GREEN_HOUSE.getTexture(), (x) * scaledSize, (y) * scaledSize, 6 * scaledSize, 5 * scaledSize);
                         }
 
-                        if (App.getCurrentGame().getCurrentPlayer().getFarm().getGreenHouse().isAvailable())
+                        if (AppClient.getCurrentGame().getCurrentPlayer().getFarm().getGreenHouse().isAvailable())
                             Main.getBatch().draw(TileAssets.FARM_ORDINARY.getTexture(), x * scaledSize, (y + 1) * scaledSize, scaledSize, scaledSize);
                     }
                 }
@@ -1472,7 +1472,7 @@ public class GameView implements Screen, InputProcessor {
             NPCTypes.LEAH
         };
 
-        for (NPC npc : App.getCurrentGame().getNPCs()) {
+        for (NPC npc : AppClient.getCurrentGame().getNPCs()) {
             Sprite sprite = new Sprite(new Texture(npc.getType().getImagePath()));
             float x = npc.getType().getCoordinate().getX() * scaledSize;
             float y = npc.getType().getCoordinate().getY() * scaledSize;
@@ -1562,7 +1562,7 @@ public class GameView implements Screen, InputProcessor {
                             public void clicked(InputEvent event, float x, float y) {
                                 if (controller.isCloseEnough(npc.getType().getName())) {
                                     Result result = controller.giftNPC(npc.getType().getName(),
-                                        App.getCurrentGame().getCurrentPlayer().getInHandGood().getFirst().getName());
+                                        AppClient.getCurrentGame().getCurrentPlayer().getInHandGood().getFirst().getName());
                                     buildMessage();
                                     textFieldMessage.setText(result.message());
                                 } else {
@@ -1601,7 +1601,7 @@ public class GameView implements Screen, InputProcessor {
     }
 
     public void buildMessage() {
-        lastCoordinate = App.getCurrentGame().getCurrentPlayer().getCoordinate();
+        lastCoordinate = AppClient.getCurrentGame().getCurrentPlayer().getCoordinate();
         float screenWidth = stage.getViewport().getWorldWidth();
         if (textFieldMessage != null) {
             textFieldMessage.remove();
@@ -1625,8 +1625,8 @@ public class GameView implements Screen, InputProcessor {
 
     private void isPlayerMoved() {
         if (lastCoordinate != null) {
-            if (App.getCurrentGame().getCurrentPlayer().getCoordinate().getX() != lastCoordinate.getX() ||
-                App.getCurrentGame().getCurrentPlayer().getCoordinate().getY() != lastCoordinate.getY()) {
+            if (AppClient.getCurrentGame().getCurrentPlayer().getCoordinate().getX() != lastCoordinate.getX() ||
+                AppClient.getCurrentGame().getCurrentPlayer().getCoordinate().getY() != lastCoordinate.getY()) {
                 textFieldMessage.remove();
                 if (npcImage != null) {
                     npcImage.clear();
@@ -1651,7 +1651,7 @@ public class GameView implements Screen, InputProcessor {
     }
 
     private void drawAnimals() {
-        for (Player player : App.getCurrentGame().getPlayers()) {
+        for (Player player : AppClient.getCurrentGame().getPlayers()) {
             for (FarmBuilding farmBuilding : player.getFarm().getFarmBuildings()) {
                 for (Animal animal : farmBuilding.getAnimals()) {
                     if (animal.getPetCounter() >= 0) {
@@ -1672,7 +1672,7 @@ public class GameView implements Screen, InputProcessor {
     }
 
     private void drawFarmingBuilding() {
-        for (Player player : App.getCurrentGame().getPlayers()) {
+        for (Player player : AppClient.getCurrentGame().getPlayers()) {
             for (FarmBuilding farmBuilding : player.getFarm().getFarmBuildings()) {
                 if (farmBuilding.getType() != FarmBuildingTypes.HOME) {
                     Main.getBatch().draw(farmBuilding.getType().getInteriorTexture(), (float) (farmBuilding.getStartCordinate().getX() + farmBuilding.getEndCordinate().getX()) / 2 * scaledSize,
@@ -1694,7 +1694,7 @@ public class GameView implements Screen, InputProcessor {
         }
 
         controller.getInventoryController().getProgressBar().setValue(
-            App.getCurrentGame().getCurrentPlayer().getEnergy().getDayEnergyLeft()
+            AppClient.getCurrentGame().getCurrentPlayer().getEnergy().getDayEnergyLeft()
         );
     }
 
@@ -1714,7 +1714,7 @@ public class GameView implements Screen, InputProcessor {
         int columns = 4;
         int count = 0;
 
-        ArrayList<ArrayList<Good>> fridgeItems = App.getCurrentGame().getCurrentPlayer().getFridge().getInFridgeItems();
+        ArrayList<ArrayList<Good>> fridgeItems = AppClient.getCurrentGame().getCurrentPlayer().getFridge().getInFridgeItems();
 
         for (Pair<Pair<ImageButton, Image>, Integer> pair : controller.getFridgeController().getFridgeElements()) {
             ImageButton imageButtonBackground = pair.first().first();
@@ -2020,7 +2020,7 @@ public class GameView implements Screen, InputProcessor {
         TextureRegionDrawable drawableHighlight = Assets.getInstance().getDrawableHighlight();
 
         for (int i = 0; i < controller.getInventoryController().getInventoryElements().size(); i++) {
-            ArrayList<Good> goods = App.getCurrentGame().getCurrentPlayer().getInventory().getList().get(i);
+            ArrayList<Good> goods = AppClient.getCurrentGame().getCurrentPlayer().getInventory().getList().get(i);
             if (!goods.isEmpty() && goods.getLast() instanceof Tool) {
                 ImageButton imageButtonBackground = new ImageButton(drawableSlot, drawableSlot, drawableHighlight);
                 Image image = new Image(new TextureRegion(new Texture(goods.getFirst().getType().imagePath())));
@@ -2035,8 +2035,8 @@ public class GameView implements Screen, InputProcessor {
                             pair.first().first().setChecked(false);
                             if (pair.first().second() == finalImage) {
                                 pair.first().first().setChecked(true);
-                                App.getCurrentGame().getCurrentPlayer().setInHandGood(
-                                    App.getCurrentGame().getCurrentPlayer().getInventory().getList().get(pair.second())
+                                AppClient.getCurrentGame().getCurrentPlayer().setInHandGood(
+                                    AppClient.getCurrentGame().getCurrentPlayer().getInventory().getList().get(pair.second())
                                 );
                                 closeToolsWindow();
                             }
@@ -2369,8 +2369,8 @@ public class GameView implements Screen, InputProcessor {
         friendsTable.setFillParent(true);
         friendsTable.pad(40).padRight(130);
 
-        for (Player player : App.getCurrentGame().getCurrentPlayer().getFriendShips().keySet()) {
-            Pair<Integer, Integer> pair = App.getCurrentGame().getCurrentPlayer().getFriendShips().get(player);
+        for (Player player : AppClient.getCurrentGame().getCurrentPlayer().getFriendShips().keySet()) {
+            Pair<Integer, Integer> pair = AppClient.getCurrentGame().getCurrentPlayer().getFriendShips().get(player);
             Label label = new Label(player.getPlayerUsername() + "> Level: " +
                 pair.first() + ", Value: " + pair.second(), skin);
             TextButton button = new TextButton("Send Gift", skin);
@@ -2423,7 +2423,7 @@ public class GameView implements Screen, InputProcessor {
         playerGiftTable.add(playerGiftLabel).padRight(10);
         playerGiftSelectBox = new SelectBox<>(skin);
         Array<String> inventoryNames = new Array<>();
-        for (ArrayList<Good> goods : App.getCurrentGame().getCurrentPlayer().getInventory().getList()) {
+        for (ArrayList<Good> goods : AppClient.getCurrentGame().getCurrentPlayer().getInventory().getList()) {
             if (!goods.isEmpty())
                 inventoryNames.add(goods.getLast().getName());
         }
@@ -2433,7 +2433,7 @@ public class GameView implements Screen, InputProcessor {
 
         playerCountGiftSelectBox = new SelectBox<>(skin);
         Array<Integer> counters = new Array<>();
-        int ptr = App.getCurrentGame().getCurrentPlayer().getInventory().getFirstElementSize();
+        int ptr = AppClient.getCurrentGame().getCurrentPlayer().getInventory().getFirstElementSize();
         for (int i = 1; i <= ptr; i++) {
             counters.add(i);
         }
@@ -2443,7 +2443,7 @@ public class GameView implements Screen, InputProcessor {
             public void changed(ChangeEvent event, Actor actor) {
                 Array<Integer> counters = new Array<>();
                 String selected = playerGiftSelectBox.getSelected();
-                int ptr = App.getCurrentGame().getCurrentPlayer().getInventory().isInInventory(selected).size();
+                int ptr = AppClient.getCurrentGame().getCurrentPlayer().getInventory().isInInventory(selected).size();
                 for (int i = 1; i <= ptr; i++) {
                     counters.add(i);
                 }
@@ -2469,7 +2469,7 @@ public class GameView implements Screen, InputProcessor {
 
         giftTable = new Table(skin);
         int giftListPtr = 1;
-        for (Pair<Player, Gift> playerGiftPair : App.getCurrentGame().getCurrentPlayer().getGiftList()) {
+        for (Pair<Player, Gift> playerGiftPair : AppClient.getCurrentGame().getCurrentPlayer().getGiftList()) {
             if (!playerGiftPair.first().getPlayerUsername().equals(player.getPlayerUsername()))
                 continue;
 
@@ -2492,7 +2492,7 @@ public class GameView implements Screen, InputProcessor {
             giftTable.row();
         }
 
-        for (Pair<Player, String> playerStringPair : App.getCurrentGame().getCurrentPlayer().getGiftHistory()) {
+        for (Pair<Player, String> playerStringPair : AppClient.getCurrentGame().getCurrentPlayer().getGiftHistory()) {
             if (player.getPlayerUsername().equals(playerStringPair.first().getPlayerUsername())) {
                 Label label = new Label(giftListPtr++ + ". " + playerStringPair.second(), skin);
                 giftTable.add(label).row();
@@ -2561,7 +2561,7 @@ public class GameView implements Screen, InputProcessor {
                     textFieldMessage.setText(res.message());
                 }
                 else {
-                    intiRespondWindow(App.getCurrentGame().getCurrentPlayer());
+                    intiRespondWindow(AppClient.getCurrentGame().getCurrentPlayer());
                 }
                 closeFriend();
             }
@@ -2589,7 +2589,7 @@ public class GameView implements Screen, InputProcessor {
     }
 
     private void intiRespondWindow(Player askedPlayer) {
-        App.getCurrentGame().setCurrentPlayer(selectedPlayer);
+        AppClient.getCurrentGame().setCurrentPlayer(selectedPlayer);
         Window window = new Window("Respond to " + askedPlayer.getPlayerUsername(), skin, "Letter");
         window.setSize(1200, 200);
         window.setPosition(
@@ -2650,7 +2650,7 @@ public class GameView implements Screen, InputProcessor {
         craftingSelectBox.add(new SelectBox<>(skin));
         for (SelectBox<String> selectBox : craftingSelectBox) {
             Array<String> craftingArray = new Array<>();
-            for (ArrayList<Good> goodArrayList : App.getCurrentGame().getCurrentPlayer().getInventory().getList()) {
+            for (ArrayList<Good> goodArrayList : AppClient.getCurrentGame().getCurrentPlayer().getInventory().getList()) {
                 if (!goodArrayList.isEmpty())
                     craftingArray.add(goodArrayList.getLast().getName());
             }
@@ -2708,7 +2708,7 @@ public class GameView implements Screen, InputProcessor {
         SelectBox<String> goodsCountSelectBox = new SelectBox<>(skin);
         Array<String> goodsArray = new Array<>();
         Array<String> goodsCountArray = new Array<>();
-        App.getCurrentGame().getCurrentPlayer().getInventory().getList().forEach(good -> {
+        AppClient.getCurrentGame().getCurrentPlayer().getInventory().getList().forEach(good -> {
            if (!good.isEmpty())
                goodsArray.add(good.getLast().getName());
         });
@@ -2716,7 +2716,7 @@ public class GameView implements Screen, InputProcessor {
         goodsSelectBox.setItems(goodsArray);
         goodsSelectBox.setSelectedIndex(0);
 
-        for (int i = 1; i <= App.getCurrentGame().getCurrentPlayer().getInventory().getFirstElementSize(); i++) {
+        for (int i = 1; i <= AppClient.getCurrentGame().getCurrentPlayer().getInventory().getFirstElementSize(); i++) {
             goodsCountArray.add(String.valueOf(i));
         }
         goodsCountSelectBox.setItems(goodsCountArray);
@@ -2726,7 +2726,7 @@ public class GameView implements Screen, InputProcessor {
             @Override
             public void changed(ChangeEvent changeEvent, Actor actor) {
                 String selected = goodsSelectBox.getSelected();
-                for (ArrayList<Good> good : App.getCurrentGame().getCurrentPlayer().getInventory().getList()) {
+                for (ArrayList<Good> good : AppClient.getCurrentGame().getCurrentPlayer().getInventory().getList()) {
                     if (!good.isEmpty() && good.getLast().getName().equals(selected)) {
                         goodsCountArray.clear();
                         for (int i = 1; i <= good.size(); i++) {
@@ -2802,8 +2802,8 @@ public class GameView implements Screen, InputProcessor {
     }
 
     public void initTerminateWindow(int playerNumber) {
-        App.getCurrentGame().setCurrentPlayer(App.getCurrentGame().getPlayers().get(playerNumber));
-        Player player = App.getCurrentGame().getCurrentPlayer();
+        AppClient.getCurrentGame().setCurrentPlayer(AppClient.getCurrentGame().getPlayers().get(playerNumber));
+        Player player = AppClient.getCurrentGame().getCurrentPlayer();
         Window terminateWindow = new Window("", skin, "Letter");
         terminateWindow.setSize(1000, 500);
         terminateWindow.setPosition(
@@ -2862,8 +2862,8 @@ public class GameView implements Screen, InputProcessor {
         journalTable = new Table(skin);
         journalWindow.add(new Label("Your news:", skin, "Bold")).fillX().expandX().center().row();
         int ctr = 1;
-        for (int i = App.getCurrentGame().getCurrentPlayer().getNews().size() - 1; i >= 0; i--) {
-            String s = App.getCurrentGame().getCurrentPlayer().getNews().get(i);
+        for (int i = AppClient.getCurrentGame().getCurrentPlayer().getNews().size() - 1; i >= 0; i--) {
+            String s = AppClient.getCurrentGame().getCurrentPlayer().getNews().get(i);
             journalTable.add(new Label(ctr++ + ". \n" + s, skin)).fillX().expandX().center().padTop(10).row();
         }
 

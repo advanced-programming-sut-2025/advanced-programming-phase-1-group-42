@@ -1,6 +1,6 @@
 package com.StardewValley.server.controllers;
 
-import com.StardewValley.models.App;
+import com.StardewValley.client.AppClient;
 import com.StardewValley.models.Assets;
 import com.StardewValley.models.Pair;
 import com.StardewValley.models.goods.Good;
@@ -35,7 +35,7 @@ public class InventoryController {
         TextureRegionDrawable drawableHighlight = Assets.getInstance().getDrawableHighlight();
 
         int ctr = 1;
-        for (ArrayList<Good> goods : App.getCurrentGame().getCurrentPlayer().getInventory().getList()) {
+        for (ArrayList<Good> goods : AppClient.getCurrentGame().getCurrentPlayer().getInventory().getList()) {
             ImageButton imageButtonBackground = new ImageButton(drawableSlot, drawableSlot, drawableHighlight);
             Image image = new Image(new TextureRegion(new Texture("GameAssets/null.png")));
             if (!goods.isEmpty())
@@ -54,8 +54,8 @@ public class InventoryController {
                         quadruple.a.setChecked(false);
                         if (quadruple.b == finalImage) {
                             quadruple.a.setChecked(true);
-                            App.getCurrentGame().getCurrentPlayer().setInHandGood(
-                                    App.getCurrentGame().getCurrentPlayer().getInventory().getList().get(i)
+                            AppClient.getCurrentGame().getCurrentPlayer().setInHandGood(
+                                    AppClient.getCurrentGame().getCurrentPlayer().getInventory().getList().get(i)
                             );
                         }
                     }
@@ -66,7 +66,7 @@ public class InventoryController {
         }
 
         progressBar = new ProgressBar(0, 200, 1, true, Assets.getInstance().getSkin());
-        progressBar.setValue(App.getCurrentGame().getCurrentPlayer().getEnergy().getDayEnergyLeft());
+        progressBar.setValue(AppClient.getCurrentGame().getCurrentPlayer().getEnergy().getDayEnergyLeft());
 
         toolsElements = new ArrayList<>();
         mainInventoryElements = new ArrayList<>();
@@ -144,11 +144,11 @@ public class InventoryController {
     public void updateInventory() {
         try {
             for (int i = 0; i < 12; i++) {
-                ArrayList<Good> goods = App.getCurrentGame().getCurrentPlayer().getInventory().getList().get(i);
+                ArrayList<Good> goods = AppClient.getCurrentGame().getCurrentPlayer().getInventory().getList().get(i);
                 Quadruple<ImageButton, Image, Label, Label> quadruple = inventoryElements.get(i);
-                if (!App.getCurrentGame().getCurrentPlayer().getInventory().getList().get(i).isEmpty()) {
+                if (!AppClient.getCurrentGame().getCurrentPlayer().getInventory().getList().get(i).isEmpty()) {
                     quadruple.b.setDrawable(new TextureRegionDrawable(new Texture(
-                        App.getCurrentGame().getCurrentPlayer().getInventory().getList().get(i).getLast().getType().imagePath()
+                        AppClient.getCurrentGame().getCurrentPlayer().getInventory().getList().get(i).getLast().getType().imagePath()
                     )));
                 } else {
                     quadruple.b.setDrawable(new TextureRegionDrawable(new Texture("GameAssets/null.png")));
@@ -156,8 +156,8 @@ public class InventoryController {
 
 
                 if (!gameView.isTabClicked()) {
-                    if (App.getCurrentGame().getCurrentPlayer().getInventory().getList().get(i) ==
-                        App.getCurrentGame().getCurrentPlayer().getInHandGood())
+                    if (AppClient.getCurrentGame().getCurrentPlayer().getInventory().getList().get(i) ==
+                        AppClient.getCurrentGame().getCurrentPlayer().getInHandGood())
                         quadruple.a.setChecked(true);
                     else
                         quadruple.a.setChecked(false);
@@ -169,14 +169,14 @@ public class InventoryController {
             e.printStackTrace();
         }
 
-        progressBar.setValue(App.getCurrentGame().getCurrentPlayer().getEnergy().getDayEnergyLeft());
+        progressBar.setValue(AppClient.getCurrentGame().getCurrentPlayer().getEnergy().getDayEnergyLeft());
     }
 
     public void playerChangedInventory() {
         for (int i = 0; i < inventoryElements.size(); i++) {
             Quadruple<ImageButton, Image, Label, Label> quadruple = inventoryElements.get(i);
-            if (App.getCurrentGame().getCurrentPlayer().getInventory().getList().get(i) ==
-                    App.getCurrentGame().getCurrentPlayer().getInHandGood())
+            if (AppClient.getCurrentGame().getCurrentPlayer().getInventory().getList().get(i) ==
+                    AppClient.getCurrentGame().getCurrentPlayer().getInHandGood())
                 quadruple.a.setChecked(true);
             else
                 quadruple.a.setChecked(false);

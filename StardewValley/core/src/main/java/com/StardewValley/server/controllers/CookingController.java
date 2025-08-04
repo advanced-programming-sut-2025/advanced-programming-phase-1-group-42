@@ -1,6 +1,6 @@
 package com.StardewValley.server.controllers;
 
-import com.StardewValley.models.App;
+import com.StardewValley.client.AppClient;
 import com.StardewValley.models.Assets;
 import com.StardewValley.models.Pair;
 import com.StardewValley.models.goods.GoodType;
@@ -46,7 +46,7 @@ public class CookingController {
         CookingRecipeType[] recipeTypes = CookingRecipeType.values();
 
         ArrayList<CookingRecipeType> playerRecipes = new ArrayList<>();
-        for (CookingRecipe recipe : App.getCurrentGame().getCurrentPlayer().getCookingRecipes()) {
+        for (CookingRecipe recipe : AppClient.getCurrentGame().getCurrentPlayer().getCookingRecipes()) {
             playerRecipes.add(recipe.getType());
         }
 

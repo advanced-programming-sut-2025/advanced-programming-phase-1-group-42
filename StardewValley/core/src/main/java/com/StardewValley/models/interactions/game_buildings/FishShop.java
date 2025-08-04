@@ -1,6 +1,6 @@
 package com.StardewValley.models.interactions.game_buildings;
 
-import com.StardewValley.models.App;
+import com.StardewValley.client.AppClient;
 import com.StardewValley.models.Pair;
 import com.StardewValley.models.Result;
 import com.StardewValley.models.enums.TileAssets;
@@ -84,7 +84,7 @@ public class FishShop extends GameBuilding {
                 return purchaseProduct(productName, count, productPair);
         }
         else {
-            if(App.getCurrentGame().getCurrentPlayer().getInventory().isInInventory(productPair.first()) != null)
+            if(AppClient.getCurrentGame().getCurrentPlayer().getInventory().isInInventory(productPair.first()) != null)
                 return new Result(false, "You have this Pole in your inventory!");
 
             return purchaseProduct(productName, count, productPair);

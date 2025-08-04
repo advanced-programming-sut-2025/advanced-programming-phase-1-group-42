@@ -1,13 +1,12 @@
-package com.StardewValley;
+package com.StardewValley.client;
 
-import com.StardewValley.client.AppClient;
-import com.StardewValley.server.controllers.LoginRegisterMenuController;
-import com.StardewValley.models.App;
 import com.StardewValley.models.Assets;
 import com.StardewValley.client.views.RegisterMenuView;
 import com.badlogic.gdx.Game;
 import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+
+import java.net.Socket;
 
 /** {@link com.badlogic.gdx.ApplicationListener} implementation shared by all platforms. */
 public class Main extends Game {
@@ -20,19 +19,19 @@ public class Main extends Game {
         main = this;
         batch = new SpriteBatch();
 
-        try {
-            App.setClient(new AppClient());
-            App.getClient().connect("localhost", 1111);
-            System.out.println("Connected to server");
+        try (Socket socket = new Socket("localhost", 1111)) {
+            AppClient.setServerHandler(new ServerHandler(socket));
+            AppClient.getServerHandler().start();
+            System.out.println("Connected to server with port: " + socket.getPort());
         }
         catch (Exception e) {
             e.printStackTrace();
         }
 
-        App.setBackgroundMusic(Assets.getInstance().getStardewMusic());
-        App.setCursor();
+        AppClient.setBackgroundMusic(Assets.getInstance().getStardewMusic());
+        AppClient.setCursor();
 
-        main.setScreen(new RegisterMenuView(new LoginRegisterMenuController(), Assets.getInstance().getSkin()));
+        main.setScreen(new RegisterMenuView(Assets.getInstance().getSkin()));
     }
 
     @Override
@@ -42,8 +41,8 @@ public class Main extends Game {
 
     @Override
     public void dispose() {
-        if(App.getBackgroundMusic() != null)
-            App.getBackgroundMusic().dispose();
+        if(AppClient.getBackgroundMusic() != null)
+            AppClient.getBackgroundMusic().dispose();
 
         batch.dispose();
     }

@@ -1,6 +1,6 @@
 package com.StardewValley.models.interactions.game_buildings;
 
-import com.StardewValley.models.App;
+import com.StardewValley.client.AppClient;
 import com.StardewValley.models.Pair;
 import com.StardewValley.models.Result;
 import com.StardewValley.models.enums.TileAssets;
@@ -152,9 +152,9 @@ public class PierreGeneralStore extends GameBuilding {
         if(productPair == null)
             return new Result(false, "There is no Good of this type in Pierre's General Store!");
         if(partNumber != 0 && partNumber != 5 &&
-        partNumber != App.getCurrentGame().getDateTime().getSeasonOfYear().getValue())
+        partNumber != AppClient.getCurrentGame().getDateTime().getSeasonOfYear().getValue())
             return new Result(false, "This product is not available in season " +
-                    App.getCurrentGame().getDateTime().getSeasonOfYear().getName() + " in Pierre's General Store!");
+                    AppClient.getCurrentGame().getDateTime().getSeasonOfYear().getName() + " in Pierre's General Store!");
 
         if(partNumber == 5) {
             if(!count.matches("-?\\d+") && !count.isEmpty())
@@ -164,22 +164,22 @@ public class PierreGeneralStore extends GameBuilding {
             if(productPair.second() < quantity)
                 return new Result(false, productName + "'s stock is less than the quantity you want!");
 
-            if(quantity * productPair.first().getSellPrice() > App.getCurrentGame().getCurrentPlayer().getWallet().getBalance()) {
+            if(quantity * productPair.first().getSellPrice() > AppClient.getCurrentGame().getCurrentPlayer().getWallet().getBalance()) {
                 return new Result(false, "You don't have enough money in your wallet to purchase this product(s)!");
             }
 
             if(productPair.first() == ProductType.LARGE_PACK) {
-                App.getCurrentGame().getCurrentPlayer().getInventory().increaseCapacity();
+                AppClient.getCurrentGame().getCurrentPlayer().getInventory().increaseCapacity();
             }
 
             if(productPair.first() == ProductType.DELUXE_PACK) {
-                if(App.getCurrentGame().getCurrentPlayer().getInventory().getSize() != 12)
+                if(AppClient.getCurrentGame().getCurrentPlayer().getInventory().getSize() != 12)
                     return new Result(false, "Your inventory should be large to make your inventory deluxe!");
-                App.getCurrentGame().getCurrentPlayer().getInventory().increaseCapacity();
+                AppClient.getCurrentGame().getCurrentPlayer().getInventory().increaseCapacity();
             }
 
             int totalPrice = quantity * productPair.first().getSellPrice();
-            App.getCurrentGame().getCurrentPlayer().getWallet().decreaseBalance(totalPrice);
+            AppClient.getCurrentGame().getCurrentPlayer().getWallet().decreaseBalance(totalPrice);
             if(productPair.second() != Integer.MAX_VALUE)
                 productPair.setSecond(productPair.second() - quantity);
 

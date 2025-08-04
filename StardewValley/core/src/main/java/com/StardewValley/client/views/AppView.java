@@ -1,17 +1,18 @@
 package com.StardewValley.client.views;
 
-import com.StardewValley.models.App;
+import com.StardewValley.client.AppClient;
 import com.StardewValley.models.enums.Menu;
 
-import java.util.Scanner;
-
 public class AppView {
+    public AppView() {
+    }
+
     public void run() {
 //        Scanner scanner = new Scanner(System.in);
 
         do {
-            App.getCurrentMenu().checkCommand();
-        } while (App.getCurrentMenu() != Menu.ExitMenu);
+            AppClient.getCurrentMenu().checkCommand();
+        } while (AppClient.getCurrentMenu() != Menu.ExitMenu);
 
     }
 }

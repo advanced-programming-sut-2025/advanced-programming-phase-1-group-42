@@ -1,6 +1,6 @@
 package com.StardewValley.models.goods.tools;
 
-import com.StardewValley.models.App;
+import com.StardewValley.client.AppClient;
 import com.StardewValley.models.goods.GoodType;
 
 public enum ToolType implements GoodType {
@@ -26,14 +26,14 @@ public enum ToolType implements GoodType {
     public int getEnergy() {
         int finalEnergy = this.energy;
         finalEnergy -= this.getLevel().getLevelNumber();
-        if((this == HOE || this == WATERING_CAN) && App.getCurrentGame().getCurrentPlayer().getSkill().getFarmingLevel() == 4)
+        if((this == HOE || this == WATERING_CAN) && AppClient.getCurrentGame().getCurrentPlayer().getSkill().getFarmingLevel() == 4)
             finalEnergy--;
-        if((this == PICKAXE) && App.getCurrentGame().getCurrentPlayer().getSkill().getMiningLevel() == 4)
+        if((this == PICKAXE) && AppClient.getCurrentGame().getCurrentPlayer().getSkill().getMiningLevel() == 4)
             finalEnergy--;
-        if((this == AXE) && App.getCurrentGame().getCurrentPlayer().getSkill().getForagingLevel() == 4)
+        if((this == AXE) && AppClient.getCurrentGame().getCurrentPlayer().getSkill().getForagingLevel() == 4)
             finalEnergy--;
         if((this == TRAINING_FISHING_POLE || this == BAMBOO_FISHING_POLE || this == FIBERGLASS_FISHING_POLE ||
-                this == IRIDIUM_FISHING_POLE) && App.getCurrentGame().getCurrentPlayer().getSkill().getFishingLevel() == 4)
+                this == IRIDIUM_FISHING_POLE) && AppClient.getCurrentGame().getCurrentPlayer().getSkill().getFishingLevel() == 4)
             finalEnergy--;
 
         return Math.max(finalEnergy, 0);

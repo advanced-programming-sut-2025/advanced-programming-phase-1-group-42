@@ -1,6 +1,6 @@
 package com.StardewValley.models.game_structure;
 
-import com.StardewValley.models.App;
+import com.StardewValley.client.AppClient;
 
 import static java.lang.Math.min;
 
@@ -30,13 +30,13 @@ public class Energy {
     }
 
     public void decreaseTurnEnergyLeft(double value) {
-        this.dayEnergyLeft -= (App.getCurrentGame().getWeather().getWeatherEffectingEnergy() * value);
-        this.turnValueLeft -= (App.getCurrentGame().getWeather().getWeatherEffectingEnergy() * value);
+        this.dayEnergyLeft -= (AppClient.getCurrentGame().getWeather().getWeatherEffectingEnergy() * value);
+        this.turnValueLeft -= (AppClient.getCurrentGame().getWeather().getWeatherEffectingEnergy() * value);
         if(this.dayEnergyLeft <= 0){
             this.isAwake = false;
         }
         if(this.turnValueLeft <= 0){
-            App.getCurrentGame().nextPlayer();
+            AppClient.getCurrentGame().nextPlayer();
             this.turnValueLeft = min(50, dayEnergyLeft);
         }
     }

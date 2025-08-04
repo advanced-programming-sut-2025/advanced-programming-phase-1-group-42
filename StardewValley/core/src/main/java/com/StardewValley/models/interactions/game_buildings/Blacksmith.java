@@ -1,6 +1,6 @@
 package com.StardewValley.models.interactions.game_buildings;
 
-import com.StardewValley.models.App;
+import com.StardewValley.client.AppClient;
 import com.StardewValley.models.Pair;
 import com.StardewValley.models.Result;
 import com.StardewValley.models.enums.TileAssets;
@@ -12,7 +12,6 @@ import com.StardewValley.models.goods.GoodType;
 import com.StardewValley.models.goods.foragings.ForagingMineralType;
 import com.StardewValley.models.goods.products.ProductType;
 import com.StardewValley.models.goods.tools.Tool;
-import com.StardewValley.models.goods.tools.ToolLevel;
 import com.StardewValley.models.goods.tools.ToolType;
 import com.StardewValley.models.interactions.NPCs.NPC;
 import com.StardewValley.models.interactions.NPCs.NPCTypes;
@@ -68,7 +67,7 @@ public class Blacksmith extends GameBuilding {
     }
 
     public boolean upgradeTool(Tool tool) {
-        Player player = App.getCurrentGame().getCurrentPlayer();
+        Player player = AppClient.getCurrentGame().getCurrentPlayer();
         int nextLevel = ((ToolType) tool.getType()).getLevel().getLevelNumber();
 
         ArrayList<Good> goods = player.getInventory().isInInventory(upgradeIngredients.get(nextLevel).first());

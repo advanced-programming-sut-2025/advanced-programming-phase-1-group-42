@@ -1,6 +1,6 @@
 package com.StardewValley.server.controllers;
 
-import com.StardewValley.models.App;
+import com.StardewValley.client.AppClient;
 import com.StardewValley.models.Result;
 import com.StardewValley.models.enums.Menu;
 import com.StardewValley.models.game_structure.Trade;
@@ -22,8 +22,8 @@ public class TradeMenuController {
 
         System.out.println(tradeType + " " + amount + " " + item + " " + "for " + price + "g from " + receiver );
 
-        Player currentPlayer = App.getCurrentGame().getCurrentPlayer();
-        Player receiverPlayer = App.getCurrentGame().findPlayer(receiver);
+        Player currentPlayer = AppClient.getCurrentGame().getCurrentPlayer();
+        Player receiverPlayer = AppClient.getCurrentGame().findPlayer(receiver);
         if(receiverPlayer == null) {
             return new Result(false, "Player not found!");
         }
@@ -33,14 +33,14 @@ public class TradeMenuController {
         TradeType type = TradeType.valueOf(tradeType);
 
         if(type == TradeType.OFFER) {
-        ArrayList<Good> goods = App.getCurrentGame().getCurrentPlayer().getInventory().isInInventory(item);
+        ArrayList<Good> goods = AppClient.getCurrentGame().getCurrentPlayer().getInventory().isInInventory(item);
         if(goods == null)
             return new Result(false, "Your don't have " + item + " in your inventory!");
         if(goods.size() < Integer.parseInt(amount))
             return new Result(false, "Your don't have enough number of " + item + " in your inventory!");
         }
         if(type == TradeType.REQUEST) {
-            if(App.getCurrentGame().getCurrentPlayer().getWallet().getBalance() < priceInt)
+            if(AppClient.getCurrentGame().getCurrentPlayer().getWallet().getBalance() < priceInt)
                 return new Result(false, "Your don't enough Money in your wallet!");
         }
 
@@ -54,22 +54,22 @@ public class TradeMenuController {
 
     public Result tradeWithGoods(String receiver, String tradeType, String item,
                                  String amount, String targetItem, String targetAmount) {
-        Player currentPlayer = App.getCurrentGame().getCurrentPlayer();
-        Player receiverPlayer = App.getCurrentGame().findPlayer(receiver);
+        Player currentPlayer = AppClient.getCurrentGame().getCurrentPlayer();
+        Player receiverPlayer = AppClient.getCurrentGame().findPlayer(receiver);
         TradeType type = TradeType.valueOf(tradeType);
 
         int amountInt = Integer.parseInt(amount);
         int targetAmountInt = Integer.parseInt(targetAmount);
 
         if(type == TradeType.OFFER) {
-            ArrayList<Good> goods = App.getCurrentGame().getCurrentPlayer().getInventory().isInInventory(item);
+            ArrayList<Good> goods = AppClient.getCurrentGame().getCurrentPlayer().getInventory().isInInventory(item);
             if(goods == null)
                 return new Result(false, "Your don't have " + item + " in your inventory!");
             if(goods.size() < Integer.parseInt(amount))
                 return new Result(false, "Your don't have enough number of " + item + " in your inventory!");
         }
         if(type == TradeType.REQUEST) {
-            ArrayList<Good> goods = App.getCurrentGame().getCurrentPlayer().getInventory().isInInventory(targetItem);
+            ArrayList<Good> goods = AppClient.getCurrentGame().getCurrentPlayer().getInventory().isInInventory(targetItem);
             if(goods == null)
                 return new Result(false, "Your don't have " + targetItem + " in your inventory!");
             if(goods.size() < Integer.parseInt(targetAmount))
@@ -82,7 +82,7 @@ public class TradeMenuController {
     }
 
     public Result tradeList() {
-        Player currentPlayer = App.getCurrentGame().getCurrentPlayer();
+        Player currentPlayer = AppClient.getCurrentGame().getCurrentPlayer();
         List<Trade> trades = TradeManager.getTradesFor(currentPlayer);
 
         if (trades.isEmpty()) {
@@ -96,7 +96,7 @@ public class TradeMenuController {
     }
 
     public Result tradeResponse(String response, String tradeID) {
-        Player currentPlayer = App.getCurrentGame().getCurrentPlayer();
+        Player currentPlayer = AppClient.getCurrentGame().getCurrentPlayer();
 
         int tradeIdInt = Integer.parseInt(tradeID);
 
@@ -113,7 +113,7 @@ public class TradeMenuController {
     }
 
     public Result tradeHistory() {
-        Player currentPlayer = App.getCurrentGame().getCurrentPlayer();
+        Player currentPlayer = AppClient.getCurrentGame().getCurrentPlayer();
         List<Trade> history = currentPlayer.getTradeHistory();
 
         if (history.isEmpty()) {
@@ -127,7 +127,7 @@ public class TradeMenuController {
     }
 
     public Result exitTradeMenu() {
-        App.setCurrentMenu(Menu.GameMenu);
+        AppClient.setCurrentMenu(Menu.GameMenu);
         return new Result(true, "You are now exiting trade\n");
     }
 
