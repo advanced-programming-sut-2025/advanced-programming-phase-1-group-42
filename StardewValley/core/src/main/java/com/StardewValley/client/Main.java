@@ -21,7 +21,6 @@ public class Main extends Game {
 
         try (Socket socket = new Socket("localhost", 1111)) {
             AppClient.setServerHandler(new ServerHandler(socket));
-            AppClient.getServerHandler().start();
             System.out.println("Connected to server with port: " + socket.getPort());
         }
         catch (Exception e) {

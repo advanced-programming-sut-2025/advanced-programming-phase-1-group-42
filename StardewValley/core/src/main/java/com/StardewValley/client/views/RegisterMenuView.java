@@ -433,7 +433,7 @@ public class RegisterMenuView implements Screen {
             }},
                 Message.Type.command);
 
-            Message responseMessage = AppClient.getServerHandler().sendAndWaitForResponse(message, 500);
+            Message responseMessage = AppClient.getServerHandler().sendAndWaitForResponse(message);
             if (!checkMessageValidity(responseMessage, Message.Type.response)) {
                 getMessageLabel().setText("Network error!");
             }
@@ -444,7 +444,6 @@ public class RegisterMenuView implements Screen {
         }
         else if (getExitButton().isChecked()) {
             getExitButton().setChecked(false);
-            AppClient.getServerHandler().end();
             Main.getBatch().dispose();
         }
         else if (getLoginButton().isChecked()) {
@@ -454,7 +453,7 @@ public class RegisterMenuView implements Screen {
                 put("field", "controller");
                 put("change", "LoginMenuController");
             }}, Message.Type.change);
-            Message responseMessage = AppClient.getServerHandler().sendAndWaitForResponse(message, 500);
+            Message responseMessage = AppClient.getServerHandler().sendAndWaitForResponse(message);
             if (!checkMessageValidity(responseMessage, Message.Type.response)) {
                 getMessageLabel().setText("Network error!");
                 return;
@@ -478,7 +477,7 @@ public class RegisterMenuView implements Screen {
                 )));
             }}, Message.Type.command);
 
-            Message responseMessage = AppClient.getServerHandler().sendAndWaitForResponse(message, 500);
+            Message responseMessage = AppClient.getServerHandler().sendAndWaitForResponse(message);
             if (!checkMessageValidity(responseMessage, Message.Type.response)) {
                 getMessageLabel().setText("Network error!");
                 return;
@@ -513,7 +512,7 @@ public class RegisterMenuView implements Screen {
                 ));
             }}, Message.Type.change);
 
-            Message responseMessage = AppClient.getServerHandler().sendAndWaitForResponse(message, 500);
+            Message responseMessage = AppClient.getServerHandler().sendAndWaitForResponse(message);
             if (!checkMessageValidity(responseMessage, Message.Type.response)) {
                 getMessageLabel().setText("Network error!");
                 return;

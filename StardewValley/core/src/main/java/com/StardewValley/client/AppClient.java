@@ -100,7 +100,7 @@ public class AppClient {
     public static void setBackgroundMusic(Music backgroundMusic) {
         AppClient.backgroundMusic = backgroundMusic;
         AppClient.getBackgroundMusic().setLooping(true);
-        AppClient.getBackgroundMusic().setVolume(0.5f);
+        AppClient.getBackgroundMusic().setVolume(0.0f);
         AppClient.getBackgroundMusic().play();
     }
 
