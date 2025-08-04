@@ -2078,6 +2078,8 @@ public class GameView implements Screen, InputProcessor {
         return scaledSize;
     }
 
+    private Window currentWindow = null;
+
     public void initToolsWindow() {
         this.toolsTable = new Table(skin);
         this.toolsTable.setFillParent(true);
@@ -2149,7 +2151,7 @@ public class GameView implements Screen, InputProcessor {
     private Table mainTable;
 
 
-    private Window currentWindow = null; // Currently shown window
+
     private Container<Window> windowContainer;
     public void initMainTable(int index) {
         ArrayList<Window> inventoryWindows = controller.getInventoryController().getInventoryWindows();
@@ -2180,7 +2182,7 @@ public class GameView implements Screen, InputProcessor {
     }
 
     public void switchWindow(Window newWindow ,int index) {
-
+        controller.setCurrentTab(index);
         currentWindow = newWindow;
         windowContainer.setActor(currentWindow); // Replaces content without changing layout
     }

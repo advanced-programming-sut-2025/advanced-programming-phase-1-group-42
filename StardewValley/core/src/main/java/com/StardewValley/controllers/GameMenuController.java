@@ -39,6 +39,7 @@ import com.StardewValley.views.GameView;
 import com.StardewValley.views.MainMenuView;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
+import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.Vector3;
@@ -188,7 +189,7 @@ public class GameMenuController extends Controller {
         fridgeController.updateFridge();
         friendshipController.update();
 
-
+        refreshLeaderBoard();
     }
 
     public void handleInput() {
@@ -405,7 +406,7 @@ public class GameMenuController extends Controller {
 
     private ArrayList<Window> createWindows() {
         ArrayList<Window> inventoryWindows = new ArrayList<>();
-        for (int i = 0; i < 5; i++) {
+        for (int i = 0; i < 6; i++) {
             final int index = i;
             Skin skin = Assets.getInstance().getSkin();
             Window window = new Window("", skin);
@@ -691,6 +692,60 @@ public class GameMenuController extends Controller {
 
                     break;
                 case 4:
+                    window.add(new Label("Leader Board", skin)).expandY().expandX().left().top().row();
+                    Table leaderboardTable = new Table();
+                    this.leaderboardTable = leaderboardTable;
+                    // Create sorting buttons
+                    Label sortBy = new Label("Sort By:", skin);
+                    TextButton sortByUsernameBtn = new TextButton("Name", skin);
+                    TextButton sortByBalanceBtn = new TextButton("Money", skin);
+                    TextButton sortByPointsBtn = new TextButton("Points", skin);
+                    TextButton sortBySkillLevelBtn = new TextButton("Skill", skin);
+
+                    // Add buttons to the UI
+                    window.add(sortBy).expandY().expandX().left().top();
+                    window.add(sortByUsernameBtn).expandY().expandX().left().top().pad(5).width(150);
+                    window.add(sortByBalanceBtn).expandY().expandX().left().top().pad(5).width(150);
+                    window.add(sortByPointsBtn).expandY().expandX().left().top().pad(5).width(150);
+                    window.add(sortBySkillLevelBtn).expandY().expandX().left().top().pad(5).width(150);
+                    window.row();
+
+                    // Add the leaderboard table to the UI
+                    window.add(leaderboardTable).expandY().expandX().left().top().colspan(4).padTop(10);
+
+                    // 📍 Now, here is where you add the listeners:
+                    sortByUsernameBtn.addListener(new ClickListener() {
+                        @Override public void clicked(InputEvent event, float x, float y) {
+                            currentSortType = LeaderboardSortType.USERNAME;
+                            refreshLeaderboardTable();
+                        }
+                    });
+
+                    sortByBalanceBtn.addListener(new ClickListener() {
+                        @Override public void clicked(InputEvent event, float x, float y) {
+                            currentSortType = LeaderboardSortType.BALANCE;
+                            refreshLeaderboardTable();
+                        }
+                    });
+
+                    sortByPointsBtn.addListener(new ClickListener() {
+                        @Override public void clicked(InputEvent event, float x, float y) {
+                            currentSortType = LeaderboardSortType.POINTS;
+                            refreshLeaderboardTable();
+                        }
+                    });
+
+                    sortBySkillLevelBtn.addListener(new ClickListener() {
+                        @Override public void clicked(InputEvent event, float x, float y) {
+                            currentSortType = LeaderboardSortType.SKILL;
+                            refreshLeaderboardTable();
+                        }
+                    });
+
+                    // Initial table build
+                    refreshLeaderboardTable();
+                    break;
+                case 5:
                     window.setSize(width, height);
                     gameView.initExitMenu(window);
 
@@ -2840,6 +2895,68 @@ public class GameMenuController extends Controller {
 
     public ClockController getClockController() {
         return clockController;
+    }
+
+    private Table leaderboardTable;
+    private LeaderboardSortType currentSortType = LeaderboardSortType.POINTS;
+    private float refreshTimer = 0f;
+
+    private void refreshLeaderboardTable() {
+        ArrayList<Player> players = new ArrayList<>(App.getCurrentGame().getPlayers());
+        Skin skin = Assets.getInstance().getSkin();
+
+        // Sort by current type
+        switch (currentSortType) {
+            case USERNAME -> players.sort(Comparator.comparing(p -> p.getUser().getUsername()));
+            case BALANCE -> players.sort(Comparator.comparingInt((Player p) -> p.getWallet().getBalance()).reversed());
+            case POINTS -> players.sort(Comparator.comparingInt(Player::getPoints).reversed());
+            case SKILL -> players.sort(Comparator.comparingInt((Player p) -> p.getSkill().getOverallSkillLevel()).reversed());
+        }
+
+        leaderboardTable.clear();
+
+        // Header row (all Labels)
+        leaderboardTable.add(new Label("Rank", skin)).padRight(10);
+        leaderboardTable.add(new Label("Username", skin)).padRight(30);
+        leaderboardTable.add(new Label("Balance", skin)).padRight(30);
+        leaderboardTable.add(new Label("Points", skin)).padRight(30);
+        leaderboardTable.add(new Label("Skill", skin)).padRight(30);
+        leaderboardTable.row();
+
+        // Player rows
+        for (int i = 0; i < players.size(); i++) {
+            Player p = players.get(i);
+            int rank = i + 1;
+            String name = p.getUser().getUsername();
+
+            Color rowColor = switch (rank) {
+                case 1 -> Color.GOLD;
+                case 2 -> Color.LIGHT_GRAY;
+                case 3 -> new Color(0.8f, 0.5f, 0.2f, 1); // bronze-ish
+                default -> App.getCurrentGame().getCurrentPlayer().equals(p) ? Color.SKY : Color.WHITE;
+            };
+
+            Label.LabelStyle style = new Label.LabelStyle(skin.get(Label.LabelStyle.class).font, rowColor);
+
+            leaderboardTable.add(new Label(String.valueOf(rank), style)).padRight(10);
+            leaderboardTable.add(new Label(name, style)).padRight(30);
+            leaderboardTable.add(new Label(String.valueOf(p.getWallet().getBalance()), style)).padRight(30);
+            leaderboardTable.add(new Label(String.valueOf(p.getPoints()), style)).padRight(30);
+            leaderboardTable.add(new Label(String.valueOf(p.getSkill().getOverallSkillLevel()), style)).padRight(30);
+            leaderboardTable.row();
+        }
+    }
+    private int currentTab = -1;
+    private void refreshLeaderBoard(){
+        refreshTimer += Gdx.graphics.getDeltaTime();
+        if (currentTab == 4 && refreshTimer >= 1f) { // refresh every second
+            refreshLeaderboardTable();
+            refreshTimer = 0f;
+        }
+    }
+
+    public void setCurrentTab(int currentTab) {
+        this.currentTab = currentTab;
     }
 }
 
