@@ -188,6 +188,7 @@ public class GameMenuController extends Controller {
         fridgeController.updateFridge();
         friendshipController.update();
 
+
     }
 
     public void handleInput() {
@@ -309,6 +310,12 @@ public class GameMenuController extends Controller {
                     gameView.initToolsWindow();
                 else
                     gameView.closeToolsWindow();
+            }
+            if(Gdx.input.isKeyJustPressed(Input.Keys.Q)){
+                if (gameView.getEmojiWindow() == null)
+                    gameView.initPopupReactionWindow();
+                else
+                    gameView.closePopupReactionWindow();
             }
             if (Gdx.input.isKeyJustPressed(Input.Keys.F4)) {
                 //TODO
@@ -2831,6 +2838,8 @@ public class GameMenuController extends Controller {
         return new Result(true, "test");
     }
 
-
+    public ClockController getClockController() {
+        return clockController;
+    }
 }
 

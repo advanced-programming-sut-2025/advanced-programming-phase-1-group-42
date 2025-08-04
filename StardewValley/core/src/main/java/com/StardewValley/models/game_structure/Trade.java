@@ -19,6 +19,7 @@ public class Trade {
     private final Integer targetAmount;
     private boolean Shown = false;
     private boolean accepted = false;
+    private boolean responded = false;
 
     public Trade(TradeType type, Player sender, Player receiver, String item, int amount,
                  Integer price, String targetItem, Integer targetAmount) {
@@ -72,6 +73,64 @@ public class Trade {
         return "Trade{id=" + id + ", type=" + type + ", sender=" + sender.getUser().getUsername() +
                 ", receiver=" + receiver.getUser().getUsername() +
                 ", item=" + item + ", amount=" + amount + ", price=" + price +
-                ", targetItem=" + targetItem + ", targetAmount=" + targetAmount + ", Acceptance=" + accepted + "}";
+                ", targetItem=" + targetItem + ", targetAmount=" + targetAmount + ", Acceptance=" + accepted + ", Responded=" + responded + "}";
+    }
+
+    public String shortTradeString() {
+
+        if(price == null){
+            return String.format("Trade #%d: %s > %s | %d x %s > %d x %s",
+                id,
+                sender.getUser().getUsername(),
+                receiver.getUser().getUsername(),
+                amount,
+                item,
+                targetAmount,
+                targetItem
+            );
+        } else {
+            return String.format("Trade #%d: %s > %s | %d x %s > %d each",
+                id,
+                sender.getUser().getUsername(),
+                receiver.getUser().getUsername(),
+                amount,
+                item,
+                price
+            );
+        }
+    }
+
+    public String shortTradeHistoryString() {
+        if(price == null){
+            return String.format("Trade #%d: %s > %s | %d x %s > %d x %s | Responded %s | accepted %s",
+                id,
+                sender.getUser().getUsername(),
+                receiver.getUser().getUsername(),
+                amount,
+                item,
+                targetAmount,
+                targetItem,
+                responded ? "Yes" : "No",
+                accepted ? "Yes" : "No"
+            );
+        } else {
+            return String.format("Trade #%d: %s > %s | %d x %s > %d each | Responded %s | accepted %s",
+                id,
+                sender.getUser().getUsername(),
+                receiver.getUser().getUsername(),
+                amount,
+                item,
+                price,
+                responded ? "Yes" : "No",
+                accepted ? "Yes" : "No"
+            );
+        }
+    }
+    public boolean isResponded() {
+        return responded;
+    }
+
+    public void setResponded(boolean responded) {
+        this.responded = responded;
     }
 }

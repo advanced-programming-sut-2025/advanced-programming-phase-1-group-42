@@ -9,6 +9,7 @@ import com.StardewValley.models.game_structure.weathers.Weather;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
@@ -17,6 +18,7 @@ import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 import com.badlogic.gdx.utils.ScreenUtils;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
+
 
 public class ClockController extends Controller {
     private Stage stage;
@@ -62,6 +64,7 @@ public class ClockController extends Controller {
     private Image G;
     private Image H;
 
+
     int x = Gdx.graphics.getWidth() - 72*3;
     public ClockController() {
         currentTime = App.getCurrentGame().getDateTime();
@@ -69,7 +72,6 @@ public class ClockController extends Controller {
         currentWallet = App.getCurrentGame().getCurrentPlayer().getWallet();
         skin = Assets.getInstance().getSkin();
         stage = new Stage();
-
 
         lastNetWorth = currentWallet.getBalance();
         a = new Texture(Gdx.files.internal("GameAssets/Clock/Nan.png"));
@@ -118,22 +120,20 @@ public class ClockController extends Controller {
         stage.addActor(F);
         stage.addActor(G);
         stage.addActor(H);
+
     }
 
     public void update() {
+
 
         clockHandImage.setRotation(180 - ((currentTime.getTime() - 9) * 14));
 
         String currentWeatherName = App.getCurrentGame().getWeather().getName();
         String currentSeasonName = App.getCurrentGame().getDateTime().getSeason().getName();
         String currentDayOfWeek = App.getCurrentGame().getDateTime().getDayOfWeek();
-//        int currentDayOfMonth = App.getCurrentGame().getDateTime().getDayOfSeason();
+        int currentDayOfMonth = App.getCurrentGame().getDateTime().getDayOfSeason();
         int currentTimeOfDay = App.getCurrentGame().getDateTime().getTime();
-//        int currentNetWorth = App.getCurrentGame().getCurrentPlayer().getWallet().getBalance();
-
-        int currentDayOfMonth = App.getCurrentGame().getCurrentPlayer().getLastCoordinate().getX();
-        int currentNetWorth = App.getCurrentGame().getCurrentPlayer().getCoordinate().getX();
-
+        int currentNetWorth = App.getCurrentGame().getCurrentPlayer().getWallet().getBalance();
 
 
         if(currentNetWorth != lastNetWorth) {
@@ -261,29 +261,29 @@ public class ClockController extends Controller {
             lastDayOfWeekName = currentDayOfWeek;
             switch (currentDayOfWeek) {
                 case "Saturday":
-                dayOfWeekLabel.setText("Sat.");
-                break;
+                    dayOfWeekLabel.setText("Sat.");
+                    break;
                 case "Sunday":
-                dayOfWeekLabel.setText("Sun.");
-                break;
+                    dayOfWeekLabel.setText("Sun.");
+                    break;
                 case "Monday":
-                dayOfWeekLabel.setText("Mon.");
-                break;
+                    dayOfWeekLabel.setText("Mon.");
+                    break;
                 case "Tuesday":
-                dayOfWeekLabel.setText("Tue.");
-                break;
+                    dayOfWeekLabel.setText("Tue.");
+                    break;
                 case "Wednesday":
-                dayOfWeekLabel.setText("Wed.");
-                break;
+                    dayOfWeekLabel.setText("Wed.");
+                    break;
                 case "Thursday":
-                dayOfWeekLabel.setText("Thu.");
-                break;
+                    dayOfWeekLabel.setText("Thu.");
+                    break;
                 case "Friday":
-                dayOfWeekLabel.setText("Fri.");
-                break;
+                    dayOfWeekLabel.setText("Fri.");
+                    break;
                 default:
-                dayOfWeekLabel.setText("Sun.");
-                break;
+                    dayOfWeekLabel.setText("Sun.");
+                    break;
             }
         }
         else if (currentDayOfMonth != lastDayOfMonthName) {
@@ -298,7 +298,6 @@ public class ClockController extends Controller {
         stage.act(Gdx.graphics.getDeltaTime());
         stage.draw();
     }
-
 
     public void setWeatherAndSeason(){
         seasonTexture = new Texture("GameAssets/Clock/" + currentTime.getSeason().getName() + ".png");
@@ -345,6 +344,7 @@ public class ClockController extends Controller {
         stage.addActor(dayOfMonthLabel);
         stage.addActor(timeOfDayLabel);
     }
+
 
     public Stage getStage() {
         return stage;

@@ -2,6 +2,7 @@ package com.StardewValley.views;
 
 import com.StardewValley.Main;
 import com.StardewValley.controllers.GameMenuController;
+import com.StardewValley.controllers.TradeMenuController;
 import com.StardewValley.models.App;
 import com.StardewValley.models.Assets;
 import com.StardewValley.models.Pair;
@@ -9,10 +10,7 @@ import com.StardewValley.models.Result;
 import com.StardewValley.models.enums.Season;
 import com.StardewValley.models.enums.TileAssets;
 import com.StardewValley.models.enums.TileType;
-import com.StardewValley.models.game_structure.Coordinate;
-import com.StardewValley.models.game_structure.Gift;
-import com.StardewValley.models.game_structure.Map;
-import com.StardewValley.models.game_structure.Tile;
+import com.StardewValley.models.game_structure.*;
 import com.StardewValley.models.goods.Good;
 import com.StardewValley.models.goods.GoodType;
 import com.StardewValley.models.goods.craftings.Crafting;
@@ -36,7 +34,9 @@ import com.StardewValley.models.interactions.PlayerBuildings.FarmBuilding;
 import com.StardewValley.models.interactions.PlayerBuildings.FarmBuildingTypes;
 import com.StardewValley.models.interactions.game_buildings.*;
 import com.badlogic.gdx.*;
+import com.badlogic.gdx.files.FileHandle;
 import com.badlogic.gdx.graphics.*;
+import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
@@ -60,7 +60,9 @@ import com.badlogic.gdx.utils.viewport.Viewport;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.stream.Collectors;
 
+import static com.StardewValley.models.goods.Good.newGoodType;
 import static java.lang.Math.abs;
 import static java.lang.Math.max;
 import static java.lang.Math.min;
@@ -118,10 +120,21 @@ public class GameView implements Screen, InputProcessor {
     private Table journalTable;
     private TextButton journalBackButton;
 
+    private TextButton tradeButton;
+    private Window tradeWindow;
+    private Table tradeTable;
+    private TextButton tradeBackButton;
+
+    private TextButton tradeInboxButton;
+    private Window tradeInboxWindow;
+    private Table tradeInboxTable;
+    private TextButton tradeInboxBackButton;
+
     private Window playerGiftWindow;
     private Table playerGiftTable;
     private Label playerGiftLabel;
     private SelectBox<String> playerGiftSelectBox;
+    private SelectBox<String> goodsDropdown;
     private SelectBox<Integer> playerCountGiftSelectBox;
     private TextButton playerGiftButton;
     private ScrollPane playerGiftScrollPane;
@@ -151,6 +164,8 @@ public class GameView implements Screen, InputProcessor {
 
     private boolean isTabClicked = false;
 
+    TradeMenuController tradeController = new TradeMenuController();
+    TradeManager tradeManager = new TradeManager();
     public GameView(GameMenuController controller, Skin skin) {
         this.controller = controller;
 //        this.controller.initGameControllers();
@@ -189,9 +204,35 @@ public class GameView implements Screen, InputProcessor {
             }
         });
 
+        tradeButton = new TextButton("Trade", skin);
+        tradeButton.addListener(new ClickListener() {
+            @Override
+            public void clicked(InputEvent event, float x, float y) {
+                if (tradeWindow == null)
+                    initTradeWindow();
+                else
+                    closeTradeWindow();
+            }
+        });
+
+        tradeInboxButton = new TextButton("Inbox", skin);
+        tradeInboxButton.addListener(new ClickListener() {
+            @Override
+            public void clicked(InputEvent event, float x, float y) {
+                if (tradeInboxWindow == null)
+                    initTradeInboxWindow();
+                else{
+                    //TODO
+                }
+
+            }
+        });
+
         this.table.add(friendsButton).padTop(200).padLeft(-400).height(70).width(250).row();
         this.table.add(journalButton).padLeft(-400).height(70).padTop(5).width(250).row();
-        this.table.add(inventoryTable).padTop(1000).padBottom(-200).padLeft(-50);
+        this.table.add(tradeButton).padLeft(-525).height(70).padTop(6).width(125);
+        this.table.add(tradeInboxButton).padLeft(-1650).height(70).width(125).row();
+        this.table.add(inventoryTable).padTop(995).padBottom(-200).padLeft(-50);
         this.table.add(controller.getInventoryController().getProgressBar()).padTop(300).padLeft(800);
         this.table.row();
 
@@ -265,6 +306,23 @@ public class GameView implements Screen, InputProcessor {
         renderWorld();
         controller.handleGame();
         setColorFunction();
+
+        if (showEmote && emoteAnimation != null) {
+            emoteStateTime += delta;
+            Texture currentFrame = emoteAnimation.getKeyFrame(emoteStateTime, false);
+            // Calculate position for center
+
+            float x = (Gdx.graphics.getWidth() - currentFrame.getWidth())/2;
+            float y = (Gdx.graphics.getHeight() - currentFrame.getHeight())/2 + 90;
+
+            Main.getBatch().draw(currentFrame, x, y,64, 64);
+
+            // Optionally hide animation when finished
+            if (emoteAnimation.isAnimationFinished(emoteStateTime)) {
+                showEmote = false;
+                closePopupReactionWindow();
+            }
+        }
 
         Main.getBatch().end();
 
@@ -2367,6 +2425,555 @@ public class GameView implements Screen, InputProcessor {
         return isCraftingOpen;
     }
 
+
+    final Label tradeInfoLabel = new Label("", skin);
+    final Label tradeWithGoodsLabel = new Label("", skin);
+    private void initTradeWindow() {
+        this.tradeWindow = new Window("Trade", skin, "Letter");
+        this.tradeWindow.setSize(1000, 560);
+        this.tradeWindow.setResizable(false);
+        tradeWindow.setPosition(
+            (staticStage.getWidth() - tradeWindow.getWidth()) / 2,
+            (staticStage.getHeight() - tradeWindow.getHeight()) / 2
+        );
+        tradeTable = new Table(skin);
+        tradeTable.setFillParent(true);
+        tradeTable.pad(40).padRight(130);
+
+        tradeInfoLabel.setColor(Color.RED);
+        tradeWithGoodsLabel.setColor(Color.RED);
+
+        for (Player player : App.getCurrentGame().getCurrentPlayer().getFriendShips().keySet()) {
+            Pair<Integer, Integer> pair = App.getCurrentGame().getCurrentPlayer().getFriendShips().get(player);
+            Label label = new Label(player.getPlayerUsername() + "> Level: " + pair.first(), skin);
+            TextButton goodsButton = new TextButton("Goods", skin);
+            TextButton moneyButton = new TextButton("Money", skin);
+            goodsButton.addListener(new ClickListener() {
+                @Override
+                public void clicked(InputEvent event, float x, float y) {
+                    closeTradeWindow();
+                    initPlayerTradeWithGoodsWindow(player);
+                }
+            });
+            moneyButton.addListener(new ClickListener() {
+                @Override
+                public void clicked(InputEvent event, float x, float y) {
+                    closeTradeWindow();
+                    initPlayerTradeWithMoneyWindow(player);
+                }
+            });
+
+            tradeTable.add(label).height(50).padRight(50);
+            tradeTable.add(goodsButton).height(70).width(150).height(70);
+            tradeTable.add(moneyButton).height(70).width(150).height(70);
+            tradeTable.row();
+            tradeTable.add(tradeInfoLabel).colspan(2).row();
+        }
+
+        tradeBackButton = new TextButton("Back", skin);
+        tradeBackButton.addListener(new ClickListener() {
+            @Override
+            public void clicked(InputEvent event, float x, float y) {
+                closeTradeWindow();
+            }
+        });
+        tradeTable.add(tradeBackButton).colspan(2).width(200).height(70).padTop(10).row();
+
+        tradeWindow.add(tradeTable);
+        staticStage.addActor(tradeWindow);
+    }
+    private void closeTradeWindow() {
+        tradeWindow.remove();
+        tradeTable.remove();
+        tradeWindow = null;
+    }
+
+
+
+    private void initPlayerTradeWithGoodsWindow(Player receiver) {
+        Window window = new Window("New Goods Trade With " + receiver.getPlayerUsername(), skin);
+        window.setSize(1000, 800);
+        window.setPosition(
+            (staticStage.getWidth() - window.getWidth()) / 2,
+            (staticStage.getHeight() - window.getHeight()) / 2
+        );
+
+        Table table = new Table(skin);
+        table.pad(15);
+        table.defaults().pad(5).fillX();
+
+        final SelectBox<String> tradeTypeBox = new SelectBox<>(skin);
+        tradeTypeBox.setItems("OFFER", "REQUEST");
+        tradeTypeBox.setSelected("OFFER");
+
+        goodsDropdown = new SelectBox<>(skin);
+        Array<String> inventoryNames = new Array<>();
+        for (ArrayList<Good> goods : App.getCurrentGame().getCurrentPlayer().getInventory().getList()) {
+            if (!goods.isEmpty())
+                inventoryNames.add(goods.getLast().getName());
+
+        }
+        goodsDropdown.setItems(inventoryNames);
+
+        final TextField amountField = new TextField("", skin);
+        amountField.setMessageText("e.g. 10");
+        amountField.setTextFieldFilter((textField, c) -> Character.isDigit(c)); // Only digits allowed
+
+        final TextField demandItemField = new TextField("", skin);
+        demandItemField.setMessageText("e.g. Wheat");
+
+        final TextField demandAmountField = new TextField("", skin);
+        amountField.setMessageText("e.g. 10");
+        amountField.setTextFieldFilter((textField, c) -> Character.isDigit(c)); // Only digits allowed
+
+        TextButton submitButton = new TextButton("Send Trade", skin);
+        TextButton cancelButton = new TextButton("Cancel", skin);
+
+        // Layout components
+        table.add(new Label("Trade Type:", skin)).left();
+        table.add(tradeTypeBox).width(200).row();
+
+        table.add(new Label("Goods:", skin)).left();
+        table.add(goodsDropdown).width(200).row();
+
+        table.add(new Label("Amount:", skin)).left();
+        table.add(amountField).width(200).row();
+
+        table.add(new Label("Target Goods:", skin)).left();
+        table.add(demandItemField).width(200).row();
+
+        table.add(new Label("Target Amount:", skin)).left();
+        table.add(demandAmountField).width(200).row();
+
+        table.add(tradeWithGoodsLabel).width(200).row();
+
+        Table buttonTable = new Table(skin);
+        buttonTable.defaults().expandX().fillX().pad(5);
+        buttonTable.add(submitButton);
+        buttonTable.add(cancelButton);
+
+        table.add(buttonTable).colspan(2).padTop(10).row();
+
+        window.add(table);
+        staticStage.addActor(window);
+
+        cancelButton.addListener(new ClickListener() {
+            @Override
+            public void clicked(InputEvent event, float x, float y) {
+                window.remove();
+            }
+        });
+
+
+        submitButton.addListener(new ClickListener() {
+            @Override
+            public void clicked(InputEvent event, float x, float y) {
+                tradeInfoLabel.setText(""); // Clear previous errors
+                tradeWithGoodsLabel.setText("");
+                String selectedItem = goodsDropdown.getSelected();
+                String amountStr = amountField.getText().trim();
+                String demandItemStr = demandItemField.getText().trim();
+                String demandAmountStr = demandAmountField.getText().trim();
+                String tradeType = tradeTypeBox.getSelected();
+
+                TradeType type = TradeType.valueOf(tradeType);
+
+                if(goodsDropdown.isDisabled()){
+                    tradeWithGoodsLabel.setText("No good selected");
+                } else if (selectedItem == null || selectedItem.isEmpty()) {
+                    tradeWithGoodsLabel.setText("Please select an item.");
+                    return;
+                } else if (amountStr.isEmpty()) {
+                    tradeWithGoodsLabel.setText("Please enter Amount.");
+                    return;
+                } else if(demandItemStr.isEmpty()) {
+                    tradeWithGoodsLabel.setText("Please enter Target Item.");
+                    return;
+                } else if(demandAmountStr.isEmpty()) {
+                    tradeWithGoodsLabel.setText("Please enter Target Item Amount.");
+                    return;
+                }
+                if(type == TradeType.OFFER) {
+                    ArrayList<Good> goods = App.getCurrentGame().getCurrentPlayer().getInventory().isInInventory(selectedItem);
+                    if(goods == null){
+                        tradeWithGoodsLabel.setText("Your don't have " + selectedItem + " in your inventory!");
+                        return;
+                    }
+                    if(goods.size() < Integer.parseInt(amountStr)){
+                        tradeWithGoodsLabel.setText("Your don't have enough number of " + selectedItem + " in your inventory!");
+                        return;
+                    }
+                }
+                if(type == TradeType.REQUEST) {
+                    ArrayList<Good> goods = App.getCurrentGame().getCurrentPlayer().getInventory().isInInventory(demandItemStr);
+                    if (goods == null){
+                        tradeWithGoodsLabel.setText("Your don't have " + demandItemStr + " in your inventory!");
+                        return;
+                    }
+                    if(goods.size() < Integer.parseInt(demandAmountStr)){
+                        tradeWithGoodsLabel.setText("Your don't have enough number of " + demandItemStr + " in your inventory!");
+                        return;
+                    }
+                }
+
+                Result result = tradeController.tradeWithGoods(receiver.getPlayerUsername(), tradeType, selectedItem, amountStr, demandItemStr, demandAmountStr);
+                tradeInfoLabel.setText(result.message());
+
+                window.remove(); // close window on success
+                initTradeWindow();
+            }
+        });
+    }
+
+    private void initPlayerTradeWithMoneyWindow(Player receiver) {
+        Window window = new Window("New Money Trade With " + receiver.getPlayerUsername(), skin);
+        window.setSize(1000, 800);
+        window.setPosition(
+            (staticStage.getWidth() - window.getWidth()) / 2,
+            (staticStage.getHeight() - window.getHeight()) / 2
+        );
+
+        Table table = new Table(skin);
+        table.pad(15);
+        table.defaults().pad(5).fillX();
+
+        final SelectBox<String> tradeTypeBox = new SelectBox<>(skin);
+        tradeTypeBox.setItems("OFFER", "REQUEST");
+        tradeTypeBox.setSelected("OFFER");
+
+        goodsDropdown = new SelectBox<>(skin);
+        Array<String> inventoryNames = new Array<>();
+        for (ArrayList<Good> goods : App.getCurrentGame().getCurrentPlayer().getInventory().getList()) {
+            if (!goods.isEmpty())
+                inventoryNames.add(goods.getLast().getName());
+
+        }
+        goodsDropdown.setItems(inventoryNames);
+
+        final TextField amountField = new TextField("", skin);
+        amountField.setMessageText("e.g. 10");
+        amountField.setTextFieldFilter((textField, c) -> Character.isDigit(c)); // Only digits allowed
+
+        final TextField priceField = new TextField("", skin);
+        amountField.setMessageText("e.g. 10");
+        amountField.setTextFieldFilter((textField, c) -> Character.isDigit(c)); // Only digits allowed
+
+        TextButton submitButton = new TextButton("Send Trade", skin);
+        TextButton cancelButton = new TextButton("Cancel", skin);
+
+        // Layout components
+        table.add(new Label("Trade Type:", skin)).left();
+        table.add(tradeTypeBox).width(200).row();
+
+        table.add(new Label("Goods:", skin)).left();
+        table.add(goodsDropdown).width(200).row();
+
+        table.add(new Label("Amount:", skin)).left();
+        table.add(amountField).width(200).row();
+
+        table.add(new Label("Price:", skin)).left();
+        table.add(priceField).width(200).row();
+
+        table.add(tradeWithGoodsLabel).width(200).row();
+
+        Table buttonTable = new Table(skin);
+        buttonTable.defaults().expandX().fillX().pad(5);
+        buttonTable.add(submitButton);
+        buttonTable.add(cancelButton);
+
+        table.add(buttonTable).colspan(2).padTop(10).row();
+
+        window.add(table);
+        staticStage.addActor(window);
+
+        cancelButton.addListener(new ClickListener() {
+            @Override
+            public void clicked(InputEvent event, float x, float y) {
+                window.remove();
+            }
+        });
+
+
+        submitButton.addListener(new ClickListener() {
+            @Override
+            public void clicked(InputEvent event, float x, float y) {
+                tradeInfoLabel.setText(""); // Clear previous errors
+                tradeWithGoodsLabel.setText("");
+                String selectedItem = goodsDropdown.getSelected();
+                String amountStr = amountField.getText().trim();
+                String priceStr = priceField.getText().trim();
+                String tradeType = tradeTypeBox.getSelected();
+
+                TradeType type = TradeType.valueOf(tradeType);
+
+                if(goodsDropdown.isDisabled()){
+                    tradeWithGoodsLabel.setText("No good selected");
+                } else if (selectedItem == null || selectedItem.isEmpty()) {
+                    tradeWithGoodsLabel.setText("Please select an item.");
+                    return;
+                } else if (amountStr.isEmpty()) {
+                    tradeWithGoodsLabel.setText("Please enter Amount.");
+                    return;
+                } else if(priceStr.isEmpty()) {
+                    tradeWithGoodsLabel.setText("Please enter Target Item Amount.");
+                    return;
+                }
+                if(type == TradeType.OFFER) {
+                    ArrayList<Good> goods = App.getCurrentGame().getCurrentPlayer().getInventory().isInInventory(selectedItem);
+                    if(goods == null)
+                        tradeWithGoodsLabel.setText( "Your don't have " + selectedItem + " in your inventory!");
+                    if(goods.size() < Integer.parseInt(amountStr))
+                        tradeWithGoodsLabel.setText("Your don't have enough number of " + selectedItem + " in your inventory!");
+                }
+                if(type == TradeType.REQUEST) {
+                    if(App.getCurrentGame().getCurrentPlayer().getWallet().getBalance() < Integer.parseInt(priceStr))
+                        tradeWithGoodsLabel.setText( "Your don't enough Money in your wallet!");
+                }
+
+                Result result = tradeController.tradeWithMoney(receiver.getPlayerUsername(), tradeType, selectedItem, amountStr, priceStr);
+                tradeInfoLabel.setText(result.message());
+
+                window.remove(); // close window on success
+                initTradeWindow();
+            }
+        });
+    }
+
+    Label feedbackLabel = new Label("", skin);
+    private void initTradeInboxWindow() {
+        Window inboxWindow = new Window("Trade Inbox", skin, "Letter");
+        inboxWindow.setSize(1350, 800); // smaller width and height for a popup
+        inboxWindow.setPosition(
+            (staticStage.getWidth() - inboxWindow.getWidth()) / 2,
+            (staticStage.getHeight() - inboxWindow.getHeight()) / 2
+        );
+        feedbackLabel.setColor(Color.RED);
+        feedbackLabel.setText("");
+
+        Table inboxTable = new Table(skin).pad(10);
+
+        java.util.List<Trade> tradeData = tradeManager.getRespondedTradesFor(App.getCurrentGame().getCurrentPlayer());
+
+        Table tradesListTable = new Table(skin); // this table holds trade rows
+
+        boolean foundAny = false;
+        for (Trade trade : tradeData) {
+            // Only show trades for current player and not responded
+            if (trade.getReceiver().equals(App.getCurrentGame().getCurrentPlayer()) && !trade.isResponded()) {
+                foundAny = true;
+
+                Label tradeLabel = new Label(trade.shortTradeString(), skin);
+                TextButton acceptButton = new TextButton("Accept", skin);
+                TextButton rejectButton = new TextButton("Reject", skin);
+
+                acceptButton.addListener(new ClickListener() {
+                    @Override
+                    public void clicked(InputEvent event, float x, float y) {
+                        Result result = tradeController.tradeResponse("–accept", String.valueOf(trade.getId()));
+                        feedbackLabel.setText(result.message());
+                        inboxWindow.remove();
+                        reInitTradeInboxWindow();
+                    }
+                });
+
+                rejectButton.addListener(new ClickListener() {
+                    @Override
+                    public void clicked(InputEvent event, float x, float y) {
+                        Result result = tradeController.tradeResponse("–reject", String.valueOf(trade.getId()));
+                        feedbackLabel.setText(result.message());
+                        inboxWindow.remove();
+                        reInitTradeInboxWindow();
+                    }
+                });
+
+                // Add one trade row: trade label + accept + reject
+                tradesListTable.add(tradeLabel).expandX().left().padRight(10);
+                tradesListTable.add(acceptButton).width(100).padRight(5);
+                tradesListTable.add(rejectButton).width(100);
+                tradesListTable.row().padBottom(8);
+            }
+        }
+
+        if (!foundAny) {
+            tradesListTable.add(new Label("No incoming trades found.", skin));
+        }
+
+        // Wrap the trades list table in a scroll pane
+        ScrollPane scrollPane = new ScrollPane(tradesListTable, skin);
+        scrollPane.setFadeScrollBars(false);
+        scrollPane.setScrollingDisabled(false, false);
+        scrollPane.setForceScroll(false, true);
+
+        // Add scroll pane to main inboxTable with fixed size
+        inboxTable.add(scrollPane).padTop(100).width(1250).height(500).row();
+
+        // Add feedback label and close button
+        inboxTable.add(feedbackLabel).colspan(3).padTop(10).row();
+
+        TextButton closeBtn = new TextButton("Close", skin);
+        closeBtn.addListener(new ClickListener() {
+            @Override
+            public void clicked(InputEvent event, float x, float y) {
+                inboxWindow.remove();
+            }
+        });
+        TextButton historyBtn = new TextButton("History", skin);
+        historyBtn.addListener(new ClickListener() {
+            @Override
+            public void clicked(InputEvent event, float x, float y) {
+                inboxWindow.remove();
+                initTradeHistoryWindow();
+            }
+        });
+
+        inboxTable.add(closeBtn).colspan(3).padTop(10);
+        inboxTable.add(historyBtn).padLeft(-300).colspan(3);
+
+        inboxWindow.add(inboxTable);
+        staticStage.addActor(inboxWindow);
+    }
+
+    private void reInitTradeInboxWindow() {
+        Window inboxWindow = new Window("Trade Inbox", skin, "Letter");
+        inboxWindow.setSize(1350, 800); // smaller width and height for a popup
+        inboxWindow.setPosition(
+            (staticStage.getWidth() - inboxWindow.getWidth()) / 2,
+            (staticStage.getHeight() - inboxWindow.getHeight()) / 2
+        );
+        feedbackLabel.setColor(Color.RED);
+
+        Table inboxTable = new Table(skin).pad(10);
+
+        java.util.List<Trade> tradeData = tradeManager.getRespondedTradesFor(App.getCurrentGame().getCurrentPlayer());
+
+        Table tradesListTable = new Table(skin); // this table holds trade rows
+
+        boolean foundAny = false;
+        for (Trade trade : tradeData) {
+            // Only show trades for current player and not responded
+            if (trade.getReceiver().equals(App.getCurrentGame().getCurrentPlayer()) && !trade.isResponded()) {
+                foundAny = true;
+
+                Label tradeLabel = new Label(trade.shortTradeString(), skin);
+                TextButton acceptButton = new TextButton("Accept", skin);
+                TextButton rejectButton = new TextButton("Reject", skin);
+
+                acceptButton.addListener(new ClickListener() {
+                    @Override
+                    public void clicked(InputEvent event, float x, float y) {
+                        Result result = tradeController.tradeResponse("–accept", String.valueOf(trade.getId()));
+                        feedbackLabel.setText(result.message());
+                        inboxWindow.remove();
+                        reInitTradeInboxWindow();
+                    }
+                });
+
+                rejectButton.addListener(new ClickListener() {
+                    @Override
+                    public void clicked(InputEvent event, float x, float y) {
+                        Result result = tradeController.tradeResponse("–reject", String.valueOf(trade.getId()));
+                        feedbackLabel.setText(result.message());
+                        inboxWindow.remove();
+                        reInitTradeInboxWindow();
+                    }
+                });
+
+                // Add one trade row: trade label + accept + reject
+                tradesListTable.add(tradeLabel).expandX().left().padRight(10);
+                tradesListTable.add(acceptButton).width(100).padRight(5);
+                tradesListTable.add(rejectButton).width(100);
+                tradesListTable.row().padBottom(8);
+            }
+        }
+
+        if (!foundAny) {
+            tradesListTable.add(new Label("No incoming trades found.", skin));
+        }
+
+        // Wrap the trades list table in a scroll pane
+        ScrollPane scrollPane = new ScrollPane(tradesListTable, skin);
+        scrollPane.setFadeScrollBars(false);
+        scrollPane.setScrollingDisabled(false, false);
+        scrollPane.setForceScroll(false, true);
+
+        // Add scroll pane to main inboxTable with fixed size
+        inboxTable.add(scrollPane).padTop(100).width(1250).height(500).row();
+
+        // Add feedback label and close button
+        inboxTable.add(feedbackLabel).colspan(3).padTop(10).row();
+
+        TextButton closeBtn = new TextButton("Close", skin);
+        closeBtn.addListener(new ClickListener() {
+            @Override
+            public void clicked(InputEvent event, float x, float y) {
+                inboxWindow.remove();
+            }
+        });
+        TextButton historyBtn = new TextButton("History", skin);
+        historyBtn.addListener(new ClickListener() {
+            @Override
+            public void clicked(InputEvent event, float x, float y) {
+                inboxWindow.remove();
+                initTradeHistoryWindow();
+            }
+        });
+
+        inboxTable.add(closeBtn).colspan(3).padTop(10);
+        inboxTable.add(historyBtn).padLeft(-300).colspan(3);
+
+        inboxWindow.add(inboxTable);
+        staticStage.addActor(inboxWindow);
+    }
+
+    private void initTradeHistoryWindow() {
+        Window inboxWindow = new Window("Trade History", skin, "Letter");
+        inboxWindow.setSize(1350, 800);
+        inboxWindow.setPosition(
+            (staticStage.getWidth() - inboxWindow.getWidth()) / 2,
+            (staticStage.getHeight() - inboxWindow.getHeight()) / 2
+        );
+
+        Player currentPlayer = App.getCurrentGame().getCurrentPlayer();
+        java.util.List<Trade> history = currentPlayer.getTradeHistory();
+
+        Table inboxTable = new Table(skin).pad(10);
+
+        Table tradesListTable = new Table(skin);
+
+        for (Trade trade : history) {
+            Label tradeLabel = new Label(trade.shortTradeHistoryString(), skin);
+            tradesListTable.add(tradeLabel).expandX().left().padRight(10);
+            tradesListTable.row().padBottom(8);
+        }
+
+        if (history.isEmpty()) {
+            tradesListTable.add(new Label("No trade History found.", skin));
+        }
+
+        ScrollPane scrollPane = new ScrollPane(tradesListTable, skin);
+        scrollPane.setFadeScrollBars(false);
+        scrollPane.setScrollingDisabled(false, false);
+        scrollPane.setForceScroll(false, true);
+
+        inboxTable.add(scrollPane).padTop(100).width(1250).height(500).row();
+
+        inboxTable.add(feedbackLabel).colspan(3).padTop(10).row();
+
+        TextButton closeBtn = new TextButton("Close", skin);
+        closeBtn.addListener(new ClickListener() {
+            @Override
+            public void clicked(InputEvent event, float x, float y) {
+                inboxWindow.remove();
+                reInitTradeInboxWindow();
+            }
+        });
+
+        inboxTable.add(closeBtn).colspan(3).padTop(10);
+
+        inboxWindow.add(inboxTable);
+        staticStage.addActor(inboxWindow);
+    }
+
     private void initFriendshipsWindow() {
         this.friendsWindow = new Window("Friendships", skin, "Letter");
         this.friendsWindow.setSize(1000, 350);
@@ -2436,6 +3043,7 @@ public class GameView implements Screen, InputProcessor {
         for (ArrayList<Good> goods : App.getCurrentGame().getCurrentPlayer().getInventory().getList()) {
             if (!goods.isEmpty())
                 inventoryNames.add(goods.getLast().getName());
+
         }
         playerGiftSelectBox.setItems(inventoryNames);
         playerGiftSelectBox.setSelectedIndex(0);
@@ -3106,6 +3714,196 @@ public class GameView implements Screen, InputProcessor {
     public void setChatRoomWindow(Window chatRoomWindow) {
         this.chatRoomWindow = chatRoomWindow;
     }
+
+
+    public Window getEmojiWindow() {
+        return emojiWindow;
+    }
+
+    private Window emojiWindow;
+    private Table emojiTable = new Table();
+    public void initPopupReactionWindow() {
+        emojiWindow = new Window("Reactions", skin);
+        emojiWindow.setName("emojiWindow"); // Important for later reference
+        emojiWindow.setSize(520, 300); // Smaller height since we show fewer emotes
+        emojiWindow.setPosition(
+            (staticStage.getWidth() - emojiWindow.getWidth()) / 2,
+            (staticStage.getHeight() - emojiWindow.getHeight()) / 2 + 300
+        );
+
+        Table emojiTable = new Table();
+        emojiTable.defaults().pad(10).size(80, 80);
+
+        // Add the 7 selected emotes
+        for (int i = 0; i <  EmoteManager.selectedEmotes.size; i++) {
+            String emoteName = EmoteManager.selectedEmotes.get(i);
+            emojiTable.add(createEmoteButton(getTextureForEmote(emoteName), emoteName));
+            if ((i + 1) % 4 == 0 && i != 6) emojiTable.row(); // 4 per row
+        }
+
+        // Add edit button in remaining space (8th slot)
+        TextButton editBtn = new TextButton("Edit", skin);
+        editBtn.addListener(new ClickListener() {
+            @Override
+            public void clicked(InputEvent event, float x, float y) {
+                showEmoteSelectionWindow();
+                emojiWindow.remove();
+            }
+        });
+        emojiTable.add(editBtn).size(80, 80);
+
+        emojiWindow.add(emojiTable).pad(10);
+        staticStage.addActor(emojiWindow);
+    }
+    public void closePopupReactionWindow(){
+        emojiWindow.remove();
+        emojiWindow = null;
+        emojiTable.remove();
+    }
+    private Texture getTextureForEmote(String emoteName) {
+        switch(emoteName) {
+            case "Like": return Assets.getInstance().getLike();
+            case "Dislike": return Assets.getInstance().getDislike();
+            case "Heart": return Assets.getInstance().getHeart();
+            case "Music": return Assets.getInstance().getSmile();
+            case "UwU": return Assets.getInstance().getUwu();
+            case "Question": return Assets.getInstance().getQuestion();
+            case "Angry": return Assets.getInstance().getAngry();
+            case "Speechless": return Assets.getInstance().getSpeechless();
+            case "Surprised": return Assets.getInstance().getSurprised();
+            case "Sleepy": return Assets.getInstance().getSleepy();
+            case "Not Sure": return Assets.getInstance().getNotSure();
+            case "Edit": return Assets.getInstance().getEdit();
+            default: return Assets.getInstance().getLike();
+        }
+    }
+
+    private void showEmoteSelectionWindow() {
+        final Window selectionWindow = new Window("Select Emotes", skin);
+        selectionWindow.setModal(true);
+        selectionWindow.setSize(600, 800);
+        selectionWindow.setPosition(
+            (staticStage.getWidth() - selectionWindow.getWidth()) / 2,
+            (staticStage.getHeight() - selectionWindow.getHeight()) / 2
+        );
+
+        Table mainTable = new Table();
+        ScrollPane scrollPane = new ScrollPane(mainTable, skin);
+        scrollPane.setFadeScrollBars(false);
+
+        // Create checkboxes for all emotes
+        for (String emote : EmoteManager.ALL_EMOTES) {
+            CheckBox checkBox = new CheckBox(emote, skin);
+            checkBox.setChecked(EmoteManager.selectedEmotes.contains(emote, false));
+
+            checkBox.addListener(new ChangeListener() {
+                @Override
+                public void changed(ChangeEvent event, Actor actor) {
+                    if (((CheckBox)actor).isChecked()) {
+                        if (!EmoteManager.selectedEmotes.contains(emote, false)) {
+                            EmoteManager.selectedEmotes.add(emote);
+                        }
+                    } else {
+                        EmoteManager.selectedEmotes.removeValue(emote, false);
+                    }
+                }
+            });
+
+            mainTable.add(checkBox).left().pad(5).width(150);
+            mainTable.add(createEmoteButton(getTextureForEmote(emote), emote)).pad(5).size(60, 60);
+            mainTable.row();
+        }
+
+        // Add save button
+        TextButton saveBtn = new TextButton("Save", skin);
+        saveBtn.addListener(new ClickListener() {
+            @Override
+            public void clicked(InputEvent event, float x, float y) {
+                EmoteManager.savePreferences();
+                selectionWindow.remove();
+                initPopupReactionWindow(); // Reopen main window with new selection
+            }
+        });
+
+        selectionWindow.add(scrollPane).expand().fill().pad(10);
+        selectionWindow.row();
+        selectionWindow.add(saveBtn).padBottom(10).padTop(10);
+
+        staticStage.addActor(selectionWindow);
+    }
+
+    private ImageButton createEmoteButton(Texture texture, final String emoteName) {
+        // Create drawable from texture
+        TextureRegionDrawable drawable = new TextureRegionDrawable(new TextureRegion(texture));
+
+        // Create button style
+        ImageButton.ImageButtonStyle style = new ImageButton.ImageButtonStyle();
+        style.up = drawable;
+        style.down = drawable;
+        style.over = drawable;
+        // Create button
+        ImageButton button = new ImageButton(style);
+        // Add click listener
+        button.addListener(new ClickListener() {
+            @Override
+            public void clicked(InputEvent event, float x, float y) {
+                showEmote(emoteName);
+                button.getStage().getRoot().findActor("emojiWindow").remove(); // Close window
+            }
+        });
+
+        return button;
+    }
+
+    public class EmoteManager {
+        public static final String[] ALL_EMOTES = {
+            "Like", "Dislike", "Heart", "Music", "UwU",
+            "Question", "Angry", "Speechless", "Surprised",
+            "Sleepy", "Not Sure"
+        };
+
+        public static Array<String> selectedEmotes = new Array<>(new String[]{
+            "Like", "Dislike", "Heart", "Music", "UwU", "Question", "Angry"
+        });
+
+        public static void savePreferences() {
+
+        }
+    }
+
+    private Animation<Texture> emoteAnimation;
+    private float emoteStateTime = 0f;
+    private boolean showEmote = false;
+
+    private void showEmote(String emoteName) {
+        Texture popup_1Frame = new Texture("assets/GameAssets/Popup/popup1.png");
+        Texture popup_2Frame = new Texture("assets/GameAssets/Popup/popup2.png");
+        Texture popup_3Frame = new Texture("assets/GameAssets/Popup/popup3.png");
+        Texture popup_4Frame = new Texture("assets/GameAssets/Popup/popup4.png");
+        Texture _1Frame = new Texture("assets/GameAssets/Popup/" + emoteName + "1.png");
+        Texture _2Frame = new Texture("assets/GameAssets/Popup/" + emoteName + "2.png");
+        Texture _3Frame = new Texture("assets/GameAssets/Popup/" + emoteName + "3.png");
+        Texture _4Frame = new Texture("assets/GameAssets/Popup/" + emoteName + "4.png");
+
+        emoteAnimation = new Animation<>(0.1f,
+            popup_1Frame, popup_1Frame, popup_2Frame, popup_2Frame,
+            popup_3Frame, popup_3Frame, popup_4Frame, popup_4Frame,
+            _1Frame, _1Frame, _2Frame, _2Frame, _3Frame, _3Frame, _4Frame, _4Frame,
+            _3Frame, _3Frame, _2Frame, _2Frame, _1Frame, _1Frame, _2Frame, _2Frame,
+            _3Frame, _3Frame, _4Frame, _4Frame, _3Frame, _3Frame, _2Frame, _2Frame,
+            _1Frame, _1Frame, _2Frame, _2Frame, _3Frame, _3Frame, _4Frame, _4Frame,
+            _3Frame, _3Frame, _2Frame, _2Frame, _1Frame, _1Frame,
+            popup_4Frame, popup_4Frame, popup_3Frame, popup_3Frame,
+            popup_2Frame, popup_2Frame, popup_1Frame, popup_1Frame
+        );
+
+        emoteAnimation.setPlayMode(Animation.PlayMode.NORMAL);
+
+        emoteStateTime = 0f;
+        showEmote = true;
+    }
+
+
 }
 
 

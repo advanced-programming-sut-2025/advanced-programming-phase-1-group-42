@@ -2,6 +2,7 @@ package com.StardewValley.models.game_structure;
 
 import com.StardewValley.models.App;
 import com.StardewValley.models.Pair;
+import com.StardewValley.models.Result;
 import com.StardewValley.models.goods.Good;
 import com.StardewValley.models.goods.GoodType;
 import com.StardewValley.models.interactions.Player;
@@ -32,7 +33,18 @@ public class TradeManager {
         return list;
     }
 
-    public static boolean respondToTrade(Player player, int tradeId, boolean accept) {
+    public static List<Trade> getRespondedTradesFor(Player player) {
+        List<Trade> list = new ArrayList<>();
+        for (Trade trade : allTrades) {
+            if (trade.getReceiver().equals(player) && !trade.isResponded()) {
+                list.add(trade);
+            }
+        }
+        return list;
+    }
+
+
+    public static Result respondToTrade(Player player, int tradeId, boolean accept) {
 
         for (Trade trade : allTrades) {
             if (trade.getId() == tradeId && trade.getReceiver().equals(player)) {
@@ -40,111 +52,100 @@ public class TradeManager {
                     if (trade.getTradePrice() != null) {
                         if (trade.getType() == TradeType.OFFER) {
                             if (trade.getAmount() > trade.getReceiver().getWallet().getBalance()) {
-                                System.out.println("You dont have enough money!, Dumbass");
                                 App.getCurrentGame().getCurrentPlayer().getFriendShips().computeIfPresent(trade.getSender(),
                                         (k, pair) -> new Pair<>(pair.first(), pair.second() - 30));
                                 trade.getSender().getFriendShips().computeIfPresent(App.getCurrentGame().getCurrentPlayer(),
                                         (k, pair) -> new Pair<>(pair.first(), pair.second() - 30));
                                 trade.setAccepted(false);
-                                return false;
+                                trade.setResponded(true);
+                                return new Result(false ,"You dont have enough money!, Dumbass" );
                             } else {
                                 trade.getSender().getWallet().increaseBalance(trade.getAmount());
-                                trade.getReceiver().getWallet().decreaseBalance(trade.getAmount());
-
-                                GoodType goodType = Good.newGoodType(trade.getItem());
-                                ArrayList<Good> newGoods = Good.newGoods(goodType, trade.getAmount());
-                                trade.getReceiver().getInventory().addGood(newGoods);
-
                                 trade.getSender().getInventory().removeItemsFromInventory(Good.newGoodType(trade.getItem()), trade.getAmount());
+                                trade.getReceiver().getWallet().decreaseBalance(trade.getAmount());
+                                trade.getReceiver().getInventory().addGood(Good.newGood(Good.newGoodType(trade.getItem())), trade.getAmount());
+
                                 App.getCurrentGame().getCurrentPlayer().getFriendShips().computeIfPresent(trade.getSender(),
                                         (k, pair) -> new Pair<>(pair.first(), pair.second() + 30));
                                 trade.getSender().getFriendShips().computeIfPresent(App.getCurrentGame().getCurrentPlayer(),
                                         (k, pair) -> new Pair<>(pair.first(), pair.second() + 30));
                                 trade.setAccepted(true);
-                                return true;
+                                trade.setResponded(true);
+                                return new Result(true ,"Trade Successful" );
                             }
                         }
                         if (trade.getType() == TradeType.REQUEST) {
                             if (trade.getReceiver().getInventory().howManyInInventoryByType(Good.newGoodType(trade.getItem())) < trade.getAmount()) {
-                                System.out.println("You dont have enough Material!, Dumbass");
                                 App.getCurrentGame().getCurrentPlayer().getFriendShips().computeIfPresent(trade.getSender(),
                                         (k, pair) -> new Pair<>(pair.first(), pair.second() - 30));
                                 trade.getSender().getFriendShips().computeIfPresent(App.getCurrentGame().getCurrentPlayer(),
                                         (k, pair) -> new Pair<>(pair.first(), pair.second() - 30));
                                 trade.setAccepted(false);
-                                return false;
+                                trade.setResponded(true);
+                                return new Result(false ,"You dont have enough Material!, Dumbass" );
                             } else {
 
                                 trade.getReceiver().getWallet().increaseBalance(trade.getAmount());
-                                trade.getSender().getWallet().decreaseBalance(trade.getAmount());
-
-                                GoodType goodType = Good.newGoodType(trade.getItem());
-                                ArrayList<Good> newGoods = Good.newGoods(goodType, trade.getAmount());
-                                trade.getSender().getInventory().addGood(newGoods);
-
                                 trade.getReceiver().getInventory().removeItemsFromInventory(Good.newGoodType(trade.getItem()), trade.getAmount());
+                                trade.getSender().getWallet().decreaseBalance(trade.getAmount());
+                                trade.getSender().getInventory().addGood(Good.newGood(Good.newGoodType(trade.getItem())), trade.getAmount());
 
                                 App.getCurrentGame().getCurrentPlayer().getFriendShips().computeIfPresent(trade.getSender(),
                                         (k, pair) -> new Pair<>(pair.first(), pair.second() + 30));
                                 trade.getSender().getFriendShips().computeIfPresent(App.getCurrentGame().getCurrentPlayer(),
                                         (k, pair) -> new Pair<>(pair.first(), pair.second() + 30));
                                 trade.setAccepted(true);
-                                return true;
+                                trade.setResponded(true);
+                                return new Result(true ,"Trade Successful" );
                             }
                         }
                     } else {
                         if (trade.getType() == TradeType.OFFER) {
-                            if (trade.getReceiver().getInventory().howManyInInventoryByType(Good.newGoodType(trade.getItem())) < trade.getAmount()) {
-                                System.out.println("You dont have enough Material!, Dumbass");
+                            if (trade.getReceiver().getInventory().howManyInInventoryByType(Good.newGoodType(trade.getTargetItem())) < trade.getTargetAmount()) {
                                 App.getCurrentGame().getCurrentPlayer().getFriendShips().computeIfPresent(trade.getSender(),
                                         (k, pair) -> new Pair<>(pair.first(), pair.second() - 30));
                                 trade.getSender().getFriendShips().computeIfPresent(App.getCurrentGame().getCurrentPlayer(),
                                         (k, pair) -> new Pair<>(pair.first(), pair.second() - 30));
                                 trade.setAccepted(false);
-                                return false;
+                                trade.setResponded(true);
+                                return new Result(false ,"You dont have enough Material!, Dumbass" );
                             } else {
                                 trade.getReceiver().getInventory().addGood(Good.newGood(Good.newGoodType(trade.getItem())), trade.getAmount());
-                                trade.getSender().getInventory().removeItemsFromInventory(Good.newGoodType(trade.getItem()), trade.getAmount());
-
-                                GoodType goodType = Good.newGoodType(trade.getItem());
-                                ArrayList<Good> newGoods = Good.newGoods(goodType, trade.getAmount());
-                                trade.getSender().getInventory().addGood(newGoods);
-
                                 trade.getReceiver().getInventory().removeItemsFromInventory(Good.newGoodType(trade.getTargetItem()), trade.getTargetAmount());
+                                trade.getSender().getInventory().removeItemsFromInventory(Good.newGoodType(trade.getItem()), trade.getAmount());
+                                trade.getSender().getInventory().addGood(Good.newGood(Good.newGoodType(trade.getTargetItem())), trade.getTargetAmount());
 
                                 App.getCurrentGame().getCurrentPlayer().getFriendShips().computeIfPresent(trade.getSender(),
                                         (k, pair) -> new Pair<>(pair.first(), pair.second() + 30));
                                 trade.getSender().getFriendShips().computeIfPresent(App.getCurrentGame().getCurrentPlayer(),
                                         (k, pair) -> new Pair<>(pair.first(), pair.second() + 30));
                                 trade.setAccepted(true);
-                                return true;
+                                trade.setResponded(true);
+                                return new Result(true ,"Trade Successful" );
                             }
                         }
                         if (trade.getType() == TradeType.REQUEST) {
                             if (trade.getReceiver().getInventory().howManyInInventoryByType(Good.newGoodType(trade.getItem())) < trade.getAmount()) {
-                                System.out.println("You dont have enough Material!, Dumbass");
                                 App.getCurrentGame().getCurrentPlayer().getFriendShips().computeIfPresent(trade.getSender(),
                                         (k, pair) -> new Pair<>(pair.first(), pair.second() - 30));
                                 trade.getSender().getFriendShips().computeIfPresent(App.getCurrentGame().getCurrentPlayer(),
                                         (k, pair) -> new Pair<>(pair.first(), pair.second() - 30));
                                 trade.setAccepted(false);
-                                return false;
+                                trade.setResponded(true);
+                                return new Result(false ,"You dont have enough Material!, Dumbass" );
                             } else {
-                                trade.getReceiver().getInventory().addGood(Good.newGood(Good.newGoodType(trade.getItem())), trade.getAmount());
-                                trade.getSender().getInventory().removeItemsFromInventory(Good.newGoodType(trade.getItem()), trade.getAmount());
-
-                                GoodType goodType = Good.newGoodType(trade.getItem());
-                                ArrayList<Good> newGoods = Good.newGoods(goodType, trade.getAmount());
-                                trade.getSender().getInventory().addGood(newGoods);
-
-                                trade.getReceiver().getInventory().removeItemsFromInventory(Good.newGoodType(trade.getTargetItem()), trade.getTargetAmount());
+                                trade.getSender().getInventory().addGood(Good.newGood(Good.newGoodType(trade.getItem())), trade.getAmount());
+                                trade.getSender().getInventory().removeItemsFromInventory(Good.newGoodType(trade.getTargetItem()), trade.getTargetAmount());
+                                trade.getReceiver().getInventory().removeItemsFromInventory(Good.newGoodType(trade.getItem()), trade.getAmount());
+                                trade.getReceiver().getInventory().addGood(Good.newGood(Good.newGoodType(trade.getTargetItem())), trade.getTargetAmount());
 
                                 App.getCurrentGame().getCurrentPlayer().getFriendShips().computeIfPresent(trade.getSender(),
                                         (k, pair) -> new Pair<>(pair.first(), pair.second() + 30));
                                 trade.getSender().getFriendShips().computeIfPresent(App.getCurrentGame().getCurrentPlayer(),
                                         (k, pair) -> new Pair<>(pair.first(), pair.second() + 30));
                                 trade.setAccepted(true);
-                                return true;
+                                trade.setResponded(true);
+                                return new Result(true ,"Trade Successful" );
                             }
                         }
                     }
@@ -154,11 +155,12 @@ public class TradeManager {
                     trade.getSender().getFriendShips().computeIfPresent(App.getCurrentGame().getCurrentPlayer(),
                             (k, pair) -> new Pair<>(pair.first(), pair.second() - 30));
                     trade.setAccepted(false);
-                    return false;
+                    trade.setResponded(true);
+                    return new Result(false ,"Trade Rejected" );
                 }
 
             }
         }
-        return false;
+        return new Result(false ,"Trade Rejected" );
     }
 }
