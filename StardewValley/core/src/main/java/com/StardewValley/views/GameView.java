@@ -61,6 +61,7 @@ import com.badlogic.gdx.utils.viewport.Viewport;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Objects;
 import java.util.stream.Collectors;
 
 import static com.StardewValley.models.goods.Good.newGoodType;
@@ -167,6 +168,7 @@ public class GameView implements Screen, InputProcessor {
 
     TradeMenuController tradeController = new TradeMenuController();
     TradeManager tradeManager = new TradeManager();
+
     public GameView(GameMenuController controller, Skin skin) {
         this.controller = controller;
         App.getCurrentGame().setController(controller);
@@ -399,16 +401,15 @@ public class GameView implements Screen, InputProcessor {
 
         for (Player player : App.getCurrentGame().getPlayers()) {
             if (player.getCoordinate().equals(coordinate) &&
-            player != App.getCurrentGame().getCurrentPlayer()) {
+                player != App.getCurrentGame().getCurrentPlayer()) {
                 selectedPlayer = player;
                 initFriend();
                 return true;
-            }
-            else if (player.getCoordinate().equals(coordinate) &&
+            } else if (player.getCoordinate().equals(coordinate) &&
                 !player.getInHandGood().isEmpty() &&
                 player.getInHandGood().getLast() instanceof Crafting) {
-                    initCraftingWindow(player.getInHandGood());
-                    return true;
+                initCraftingWindow(player.getInHandGood());
+                return true;
             }
         }
 
@@ -530,40 +531,33 @@ public class GameView implements Screen, InputProcessor {
             info.setAlignment(Align.center);
 
 
-
-
             // MarnieRanch
             if (building instanceof MarnieRanch) {
                 marnieRanchShop(addButton, countLabel, removeButton, purchaseButton, info, tileX, tileY,
                     (MarnieRanch) building, selectedNameLabel, itemsTable, counterPanel, selectedPanel, scrollPane, content);
                 staticStage.addActor(window);
-            }
-            else if (building instanceof CarpenterShop) {
+            } else if (building instanceof CarpenterShop) {
                 carpenterShop(purchaseButton, (CarpenterShop) building, selectedNameLabel, itemsTable, counterPanel,
                     info, selectedPanel, scrollPane, content);
                 staticStage.addActor(window);
-            }
-            else if (building instanceof FishShop) {
+            } else if (building instanceof FishShop) {
                 fishShop(addButton, countLabel, removeButton, purchaseButton, info, tileX, tileY, (FishShop) building,
                     selectedNameLabel, itemsTable, counterPanel, selectedPanel, scrollPane, content);
                 staticStage.addActor(window);
-            }
-            else if (building instanceof PierreGeneralStore) {
+            } else if (building instanceof PierreGeneralStore) {
                 pierreShop(addButton, countLabel, removeButton, purchaseButton, info, tileX, tileY, (PierreGeneralStore) building,
                     selectedNameLabel, itemsTable, counterPanel, selectedPanel, scrollPane, content);
                 staticStage.addActor(window);
-            }
-            else if (building instanceof JojaMart) {
+            } else if (building instanceof JojaMart) {
                 jojaShop(addButton, countLabel, removeButton, purchaseButton, info, tileX, tileY, (JojaMart) building,
-                    selectedNameLabel, itemsTable, counterPanel, selectedPanel, scrollPane, content);;
+                    selectedNameLabel, itemsTable, counterPanel, selectedPanel, scrollPane, content);
+                ;
                 staticStage.addActor(window);
-            }
-            else if (building instanceof TheStarDropSaloon) {
+            } else if (building instanceof TheStarDropSaloon) {
                 stardropShop(addButton, countLabel, removeButton, purchaseButton, info, tileX, tileY, (TheStarDropSaloon) building,
                     selectedNameLabel, itemsTable, counterPanel, selectedPanel, scrollPane, content);
                 staticStage.addActor(window);
-            }
-            else if (building instanceof Blacksmith) {
+            } else if (building instanceof Blacksmith) {
                 blacksmithShop(window, addButton, countLabel, removeButton, purchaseButton, info, tileX, tileY, (Blacksmith) building,
                     selectedNameLabel, itemsTable, counterPanel, selectedPanel, scrollPane, content);
             }
@@ -933,8 +927,7 @@ public class GameView implements Screen, InputProcessor {
                 if (!filterAvailable[0]) {
                     filterButton.setText("Filter All");
                     filterAvailable[0] = true;
-                }
-                else {
+                } else {
                     filterButton.setText("Filter Availables");
                     filterAvailable[0] = false;
                 }
@@ -1007,8 +1000,7 @@ public class GameView implements Screen, InputProcessor {
                 if (!filterAvailable[0]) {
                     filterButton.setText("Filter All");
                     filterAvailable[0] = true;
-                }
-                else {
+                } else {
                     filterButton.setText("Filter Availables");
                     filterAvailable[0] = false;
                 }
@@ -1032,80 +1024,7 @@ public class GameView implements Screen, InputProcessor {
     }
 
     private void jojaShop(TextButton addButton, Label countLabel, TextButton removeButton, TextButton purchaseButton,
-                            Label info, int tileX, int tileY, JojaMart jojaMart, Label selectedNameLabel, Table itemsTable,
-                            Table counterPanel, Table selectedPanel, ScrollPane scrollPane, Table content) {
-
-        final GoodType[] selectedGoodType = {null};
-        final int[] selectedCount = {0};
-        final boolean[] filterAvailable = {false};
-
-        TextButton filterButton = new TextButton("Filter Availables", skin, "Earth");
-
-        addButton.addListener(new ChangeListener() {
-            @Override
-            public void changed(ChangeEvent event, Actor actor) {
-                if (selectedGoodType[0] != null) {
-                    selectedCount[0]++;
-                    countLabel.setText(String.valueOf(selectedCount[0]));
-                }
-            }
-        });
-
-        removeButton.addListener(new ChangeListener() {
-            @Override
-            public void changed(ChangeEvent event, Actor actor) {
-                if (selectedGoodType[0] != null && selectedCount[0] > 0) {
-                    selectedCount[0]--;
-                    countLabel.setText(String.valueOf(selectedCount[0]));
-                }
-            }
-        });
-
-
-        purchaseButton.addListener(new ChangeListener() {
-            @Override
-            public void changed(ChangeEvent changeEvent, Actor actor) {
-                if (selectedGoodType[0] != null) {
-                    Result result = controller.purchase(selectedGoodType[0].getName(), String.valueOf(selectedCount[0]),
-                        new Coordinate(tileX, tileY));
-                    System.out.println(result.message());
-                    info.setText(result.toString());
-                    info.setVisible(true);
-                }
-            }
-        });
-
-        filterButton.addListener(new ClickListener() {
-            @Override
-            public void clicked(InputEvent event, float x, float y) {
-                if (!filterAvailable[0]) {
-                    filterButton.setText("Filter All");
-                    filterAvailable[0] = true;
-                }
-                else {
-                    filterButton.setText("Filter Availables");
-                    filterAvailable[0] = false;
-                }
-                goodsListInit(addButton, countLabel, removeButton, purchaseButton, jojaMart, selectedNameLabel, itemsTable,
-                    selectedGoodType, selectedCount, filterAvailable, filterButton, info);
-
-            }
-        });
-
-        itemsTable.add(filterButton)
-            .fillX()
-            .pad(5)
-            .row();
-
-
-        goodsListInit(addButton, countLabel, removeButton, purchaseButton, jojaMart, selectedNameLabel, itemsTable,
-            selectedGoodType, selectedCount, filterAvailable, filterButton, info);
-
-        lastConstructionsForShop(info, counterPanel, selectedPanel, scrollPane, content);
-    }
-
-    private void stardropShop(TextButton addButton, Label countLabel, TextButton removeButton, TextButton purchaseButton,
-                          Label info, int tileX, int tileY, TheStarDropSaloon theStarDropSaloon, Label selectedNameLabel, Table itemsTable,
+                          Label info, int tileX, int tileY, JojaMart jojaMart, Label selectedNameLabel, Table itemsTable,
                           Table counterPanel, Table selectedPanel, ScrollPane scrollPane, Table content) {
 
         final GoodType[] selectedGoodType = {null};
@@ -1154,8 +1073,79 @@ public class GameView implements Screen, InputProcessor {
                 if (!filterAvailable[0]) {
                     filterButton.setText("Filter All");
                     filterAvailable[0] = true;
+                } else {
+                    filterButton.setText("Filter Availables");
+                    filterAvailable[0] = false;
                 }
-                else {
+                goodsListInit(addButton, countLabel, removeButton, purchaseButton, jojaMart, selectedNameLabel, itemsTable,
+                    selectedGoodType, selectedCount, filterAvailable, filterButton, info);
+
+            }
+        });
+
+        itemsTable.add(filterButton)
+            .fillX()
+            .pad(5)
+            .row();
+
+
+        goodsListInit(addButton, countLabel, removeButton, purchaseButton, jojaMart, selectedNameLabel, itemsTable,
+            selectedGoodType, selectedCount, filterAvailable, filterButton, info);
+
+        lastConstructionsForShop(info, counterPanel, selectedPanel, scrollPane, content);
+    }
+
+    private void stardropShop(TextButton addButton, Label countLabel, TextButton removeButton, TextButton purchaseButton,
+                              Label info, int tileX, int tileY, TheStarDropSaloon theStarDropSaloon, Label selectedNameLabel, Table itemsTable,
+                              Table counterPanel, Table selectedPanel, ScrollPane scrollPane, Table content) {
+
+        final GoodType[] selectedGoodType = {null};
+        final int[] selectedCount = {0};
+        final boolean[] filterAvailable = {false};
+
+        TextButton filterButton = new TextButton("Filter Availables", skin, "Earth");
+
+        addButton.addListener(new ChangeListener() {
+            @Override
+            public void changed(ChangeEvent event, Actor actor) {
+                if (selectedGoodType[0] != null) {
+                    selectedCount[0]++;
+                    countLabel.setText(String.valueOf(selectedCount[0]));
+                }
+            }
+        });
+
+        removeButton.addListener(new ChangeListener() {
+            @Override
+            public void changed(ChangeEvent event, Actor actor) {
+                if (selectedGoodType[0] != null && selectedCount[0] > 0) {
+                    selectedCount[0]--;
+                    countLabel.setText(String.valueOf(selectedCount[0]));
+                }
+            }
+        });
+
+
+        purchaseButton.addListener(new ChangeListener() {
+            @Override
+            public void changed(ChangeEvent changeEvent, Actor actor) {
+                if (selectedGoodType[0] != null) {
+                    Result result = controller.purchase(selectedGoodType[0].getName(), String.valueOf(selectedCount[0]),
+                        new Coordinate(tileX, tileY));
+                    System.out.println(result.message());
+                    info.setText(result.toString());
+                    info.setVisible(true);
+                }
+            }
+        });
+
+        filterButton.addListener(new ClickListener() {
+            @Override
+            public void clicked(InputEvent event, float x, float y) {
+                if (!filterAvailable[0]) {
+                    filterButton.setText("Filter All");
+                    filterAvailable[0] = true;
+                } else {
                     filterButton.setText("Filter Availables");
                     filterAvailable[0] = false;
                 }
@@ -1178,8 +1168,8 @@ public class GameView implements Screen, InputProcessor {
     }
 
     private void blacksmithShop(Window window, TextButton addButton, Label countLabel, TextButton removeButton, TextButton purchaseButton,
-                              Label info, int tileX, int tileY, Blacksmith blacksmith, Label selectedNameLabel, Table itemsTable,
-                              Table counterPanel, Table selectedPanel, ScrollPane scrollPane, Table content) {
+                                Label info, int tileX, int tileY, Blacksmith blacksmith, Label selectedNameLabel, Table itemsTable,
+                                Table counterPanel, Table selectedPanel, ScrollPane scrollPane, Table content) {
 
         final GoodType[] selectedGoodType = {null};
         final int[] selectedCount = {0};
@@ -1249,11 +1239,11 @@ public class GameView implements Screen, InputProcessor {
         });
         TextButton upgradeButton = new TextButton("Upgrade", skin);
         upgradeButton.addListener(new ClickListener() {
-           @Override
-           public void clicked(InputEvent event, float x, float y) {
-               blacksmithWindow.remove();
-               toolsUpgradeInit(upgradeWindow);
-           }
+            @Override
+            public void clicked(InputEvent event, float x, float y) {
+                blacksmithWindow.remove();
+                toolsUpgradeInit(upgradeWindow);
+            }
         });
         blacksmithTable.add(shopButton).fillX().expandX().center().row();
         blacksmithTable.add(upgradeButton).fillX().expandX().center().row();
@@ -1286,9 +1276,9 @@ public class GameView implements Screen, InputProcessor {
     }
 
     private void smithShop(Window window, TextButton addButton, Label countLabel, TextButton removeButton, TextButton purchaseButton,
-                                Label info, int tileX, int tileY, Blacksmith blacksmith, Label selectedNameLabel, Table itemsTable,
-                                Table counterPanel, Table selectedPanel, ScrollPane scrollPane, Table content,
-                                GoodType[] selectedGoodType, int[] selectedCount, boolean[] filterAvailable) {
+                           Label info, int tileX, int tileY, Blacksmith blacksmith, Label selectedNameLabel, Table itemsTable,
+                           Table counterPanel, Table selectedPanel, ScrollPane scrollPane, Table content,
+                           GoodType[] selectedGoodType, int[] selectedCount, boolean[] filterAvailable) {
         TextButton filterButton = new TextButton("Filter Availables", skin, "Earth");
         staticStage.addActor(window);
 
@@ -1332,8 +1322,7 @@ public class GameView implements Screen, InputProcessor {
                 if (!filterAvailable[0]) {
                     filterButton.setText("Filter All");
                     filterAvailable[0] = true;
-                }
-                else {
+                } else {
                     filterButton.setText("Filter Availables");
                     filterAvailable[0] = false;
                 }
@@ -1384,10 +1373,9 @@ public class GameView implements Screen, InputProcessor {
 
         if (v1 > 0) {
             ptr = (ptr + 1) % App.getCurrentGame().getCurrentPlayer().getInventory().getSize();
-        }
-        else if (v1 < 0){
+        } else if (v1 < 0) {
             ptr = (ptr - 1 + App.getCurrentGame().getCurrentPlayer().getInventory().getSize())
-            % App.getCurrentGame().getCurrentPlayer().getInventory().getSize();
+                % App.getCurrentGame().getCurrentPlayer().getInventory().getSize();
         }
 
         App.getCurrentGame().getCurrentPlayer().setInHandGood(
@@ -2136,8 +2124,8 @@ public class GameView implements Screen, InputProcessor {
     private Table mainTable;
 
 
-
     private Container<Window> windowContainer;
+
     public void initMainTable(int index) {
         ArrayList<Window> inventoryWindows = controller.getInventoryController().getInventoryWindows();
         mainInventoryElements = controller.getInventoryController().getMainInventoryElements();
@@ -2166,7 +2154,7 @@ public class GameView implements Screen, InputProcessor {
         setInputProcessor();
     }
 
-    public void switchWindow(Window newWindow ,int index) {
+    public void switchWindow(Window newWindow, int index) {
         controller.setCurrentTab(index);
         currentWindow = newWindow;
         windowContainer.setActor(currentWindow); // Replaces content without changing layout
@@ -2251,7 +2239,7 @@ public class GameView implements Screen, InputProcessor {
             StringBuilder stringBuilder = new StringBuilder();
             stringBuilder.append(product.getName());
             stringBuilder.append(" - ");
-            if(product.getSellPrice() <= 0)
+            if (product.getSellPrice() <= 0)
                 stringBuilder.append("Free");
             else
                 stringBuilder.append(product.getSellPrice());
@@ -2400,7 +2388,7 @@ public class GameView implements Screen, InputProcessor {
 
     }
 
-    public Window getCraftingWindow(){
+    public Window getCraftingWindow() {
         return craftingWindow;
     }
 
@@ -2415,6 +2403,7 @@ public class GameView implements Screen, InputProcessor {
 
     final Label tradeInfoLabel = new Label("", skin);
     final Label tradeWithGoodsLabel = new Label("", skin);
+
     private void initTradeWindow() {
         this.tradeWindow = new Window("Trade", skin, "Letter");
         this.tradeWindow.setSize(1000, 560);
@@ -2469,12 +2458,12 @@ public class GameView implements Screen, InputProcessor {
         tradeWindow.add(tradeTable);
         staticStage.addActor(tradeWindow);
     }
+
     private void closeTradeWindow() {
         tradeWindow.remove();
         tradeTable.remove();
         tradeWindow = null;
     }
-
 
 
     private void initPlayerTradeWithGoodsWindow(Player receiver) {
@@ -2565,7 +2554,7 @@ public class GameView implements Screen, InputProcessor {
 
                 TradeType type = TradeType.valueOf(tradeType);
 
-                if(goodsDropdown.isDisabled()){
+                if (goodsDropdown.isDisabled()) {
                     tradeWithGoodsLabel.setText("No good selected");
                 } else if (selectedItem == null || selectedItem.isEmpty()) {
                     tradeWithGoodsLabel.setText("Please select an item.");
@@ -2573,31 +2562,31 @@ public class GameView implements Screen, InputProcessor {
                 } else if (amountStr.isEmpty()) {
                     tradeWithGoodsLabel.setText("Please enter Amount.");
                     return;
-                } else if(demandItemStr.isEmpty()) {
+                } else if (demandItemStr.isEmpty()) {
                     tradeWithGoodsLabel.setText("Please enter Target Item.");
                     return;
-                } else if(demandAmountStr.isEmpty()) {
+                } else if (demandAmountStr.isEmpty()) {
                     tradeWithGoodsLabel.setText("Please enter Target Item Amount.");
                     return;
                 }
-                if(type == TradeType.OFFER) {
+                if (type == TradeType.OFFER) {
                     ArrayList<Good> goods = App.getCurrentGame().getCurrentPlayer().getInventory().isInInventory(selectedItem);
-                    if(goods == null){
+                    if (goods == null) {
                         tradeWithGoodsLabel.setText("Your don't have " + selectedItem + " in your inventory!");
                         return;
                     }
-                    if(goods.size() < Integer.parseInt(amountStr)){
+                    if (goods.size() < Integer.parseInt(amountStr)) {
                         tradeWithGoodsLabel.setText("Your don't have enough number of " + selectedItem + " in your inventory!");
                         return;
                     }
                 }
-                if(type == TradeType.REQUEST) {
+                if (type == TradeType.REQUEST) {
                     ArrayList<Good> goods = App.getCurrentGame().getCurrentPlayer().getInventory().isInInventory(demandItemStr);
-                    if (goods == null){
+                    if (goods == null) {
                         tradeWithGoodsLabel.setText("Your don't have " + demandItemStr + " in your inventory!");
                         return;
                     }
-                    if(goods.size() < Integer.parseInt(demandAmountStr)){
+                    if (goods.size() < Integer.parseInt(demandAmountStr)) {
                         tradeWithGoodsLabel.setText("Your don't have enough number of " + demandItemStr + " in your inventory!");
                         return;
                     }
@@ -2693,7 +2682,7 @@ public class GameView implements Screen, InputProcessor {
 
                 TradeType type = TradeType.valueOf(tradeType);
 
-                if(goodsDropdown.isDisabled()){
+                if (goodsDropdown.isDisabled()) {
                     tradeWithGoodsLabel.setText("No good selected");
                 } else if (selectedItem == null || selectedItem.isEmpty()) {
                     tradeWithGoodsLabel.setText("Please select an item.");
@@ -2701,20 +2690,20 @@ public class GameView implements Screen, InputProcessor {
                 } else if (amountStr.isEmpty()) {
                     tradeWithGoodsLabel.setText("Please enter Amount.");
                     return;
-                } else if(priceStr.isEmpty()) {
+                } else if (priceStr.isEmpty()) {
                     tradeWithGoodsLabel.setText("Please enter Target Item Amount.");
                     return;
                 }
-                if(type == TradeType.OFFER) {
+                if (type == TradeType.OFFER) {
                     ArrayList<Good> goods = App.getCurrentGame().getCurrentPlayer().getInventory().isInInventory(selectedItem);
-                    if(goods == null)
-                        tradeWithGoodsLabel.setText( "Your don't have " + selectedItem + " in your inventory!");
-                    if(goods.size() < Integer.parseInt(amountStr))
+                    if (goods == null)
+                        tradeWithGoodsLabel.setText("Your don't have " + selectedItem + " in your inventory!");
+                    if (goods.size() < Integer.parseInt(amountStr))
                         tradeWithGoodsLabel.setText("Your don't have enough number of " + selectedItem + " in your inventory!");
                 }
-                if(type == TradeType.REQUEST) {
-                    if(App.getCurrentGame().getCurrentPlayer().getWallet().getBalance() < Integer.parseInt(priceStr))
-                        tradeWithGoodsLabel.setText( "Your don't enough Money in your wallet!");
+                if (type == TradeType.REQUEST) {
+                    if (App.getCurrentGame().getCurrentPlayer().getWallet().getBalance() < Integer.parseInt(priceStr))
+                        tradeWithGoodsLabel.setText("Your don't enough Money in your wallet!");
                 }
 
                 Result result = tradeController.tradeWithMoney(receiver.getPlayerUsername(), tradeType, selectedItem, amountStr, priceStr);
@@ -2727,6 +2716,7 @@ public class GameView implements Screen, InputProcessor {
     }
 
     Label feedbackLabel = new Label("", skin);
+
     private void initTradeInboxWindow() {
         Window inboxWindow = new Window("Trade Inbox", skin, "Letter");
         inboxWindow.setSize(1350, 800); // smaller width and height for a popup
@@ -3164,8 +3154,7 @@ public class GameView implements Screen, InputProcessor {
                 if (!res.success()) {
                     buildMessage();
                     textFieldMessage.setText(res.message());
-                }
-                else {
+                } else {
                     intiRespondWindow(App.getCurrentGame().getCurrentPlayer());
                 }
                 closeFriend();
@@ -3269,12 +3258,12 @@ public class GameView implements Screen, InputProcessor {
         craftingUseTable.add(craftingUseButton).fillX().expandX().center().row();
         craftingMessageLabel = new Label("", skin);
         craftingUseButton.addListener(new ClickListener() {
-           @Override
-           public void clicked(InputEvent event, float x, float y) {
-               Result res = controller.artisanUse(goods.getLast().getName(), craftingSelectBox.get(0).getSelected(),
-                   craftingSelectBox.get(1).getSelected());
+            @Override
+            public void clicked(InputEvent event, float x, float y) {
+                Result res = controller.artisanUse(goods.getLast().getName(), craftingSelectBox.get(0).getSelected(),
+                    craftingSelectBox.get(1).getSelected());
                 craftingMessageLabel.setText(res.message());
-           }
+            }
         });
 
         craftingBackButton = new TextButton("Back", skin);
@@ -3314,8 +3303,8 @@ public class GameView implements Screen, InputProcessor {
         Array<String> goodsArray = new Array<>();
         Array<String> goodsCountArray = new Array<>();
         App.getCurrentGame().getCurrentPlayer().getInventory().getList().forEach(good -> {
-           if (!good.isEmpty())
-               goodsArray.add(good.getLast().getName());
+            if (!good.isEmpty())
+                goodsArray.add(good.getLast().getName());
         });
 
         goodsSelectBox.setItems(goodsArray);
@@ -3357,11 +3346,11 @@ public class GameView implements Screen, InputProcessor {
 
         TextButton sellBackButton = new TextButton("Back", skin);
         sellBackButton.addListener(new ClickListener() {
-           @Override
-           public void clicked(InputEvent event, float x, float y) {
-               shippingBinWindow.remove();
-               shippingBinTable.remove();
-           }
+            @Override
+            public void clicked(InputEvent event, float x, float y) {
+                shippingBinWindow.remove();
+                shippingBinTable.remove();
+            }
         });
 
         shippingBinTable.add(shippingBinLabel).fillX().expandX().center().row();
@@ -3383,11 +3372,11 @@ public class GameView implements Screen, InputProcessor {
 
         TextButton exitButton = new TextButton("Exit Game", skin);
         exitButton.addListener(new ClickListener() {
-           @Override
-           public void clicked(InputEvent event, float x, float y) {
-               Result res = controller.exitGame();
-               messageLabel.setText(res.message());
-           }
+            @Override
+            public void clicked(InputEvent event, float x, float y) {
+                Result res = controller.exitGame();
+                messageLabel.setText(res.message());
+            }
         });
 
         window.add(exitButton).fillX().expandX().center().row();
@@ -3400,11 +3389,115 @@ public class GameView implements Screen, InputProcessor {
                 initTerminateWindow(0);
             }
         });
+
         window.add(textButton).fillX().expandX().center().row();
         window.add(messageLabel).fillX().expandX().center().row();
 
+        TextButton removePlayerButton = new TextButton("Remove a player", skin);
+        removePlayerButton.addListener(new ClickListener() {
+            @Override
+            public void clicked(InputEvent event, float x, float y) {
+                closeMainTable();
+                initRemovePlayerWindow();
+            }
+        });
+
+        window.add(removePlayerButton).fillX().expandX().center().row();
+
 
     }
+
+    public void initRemovePlayerWindow() {
+        Window removePlayerWindow = new Window("", skin, "Letter");
+        removePlayerWindow.setSize(1000, 800);
+        removePlayerWindow.setPosition(
+            (staticStage.getWidth() - removePlayerWindow.getWidth()) / 2,
+            (staticStage.getHeight() - removePlayerWindow.getHeight()) / 2
+        );
+        for (Player player : App.getCurrentGame().getPlayers()) {
+            if (!Objects.equals(player.getPlayerUsername(), App.getCurrentGame().getCurrentPlayer().getPlayerUsername())) {
+                Table playerTable = new Table();
+                Label playerName = new Label(player.getPlayerUsername(), skin);
+                TextButton textButton = new TextButton("vote to remove", skin);
+                playerTable.add(playerName).fillX().expandX().center().row();
+                playerTable.add(textButton).fillX().expandX().center().row();
+                removePlayerWindow.add(playerTable);
+
+                textButton.addListener(new ClickListener() {
+                    int selectedNum = -1;
+
+                    public void clicked(InputEvent event, float x, float y) {
+                        for (int i = 0; i <= 3; i++) {
+                            if (Objects.equals(App.getCurrentGame().getPlayers().get(i).getPlayerUsername(), player.getPlayerUsername())) {
+                                selectedNum = i;
+                                break;
+                            }
+                        }
+                        if (selectedNum == 0) {
+                            initVoteToRemoveWindow(1, selectedNum);
+                        } else {
+                            initVoteToRemoveWindow(0, selectedNum);
+
+                        }
+                        removePlayerWindow.remove();
+                    }
+                });
+            }
+        }
+        staticStage.addActor(removePlayerWindow);
+    }
+
+    public void initVoteToRemoveWindow(int playerNumber, int selectedPlayer) {
+        if (playerNumber != selectedPlayer) {
+            App.getCurrentGame().setCurrentPlayer(App.getCurrentGame().getPlayers().get(playerNumber));
+            Player voter = App.getCurrentGame().getPlayers().get(playerNumber);
+            Player selected = App.getCurrentGame().getPlayers().get(selectedPlayer);
+
+            Window voteWindow = new Window("", skin, "Letter");
+            voteWindow.setSize(1000, 500);
+            voteWindow.setPosition(
+                (staticStage.getWidth() - voteWindow.getWidth()) / 2,
+                (staticStage.getHeight() - voteWindow.getHeight()) / 2
+            );
+
+            Label terminateMessageLabel = new Label(voter.getPlayerUsername() + ", Are you agree to kick " + selected.getPlayerUsername() + " ?", skin);
+            TextButton yesButton = new TextButton("Yes", skin);
+            TextButton noButton = new TextButton("No", skin);
+            TextButton backButton = new TextButton("Back", skin);
+
+            voteWindow.add(terminateMessageLabel).colspan(3).fillX().expandX().center().row();
+            voteWindow.add(yesButton).fillX().padTop(10);
+            voteWindow.add(noButton).fillX().padTop(10);
+            voteWindow.add(backButton).fillX().padTop(10).row();
+
+            yesButton.addListener(new ClickListener() {
+                @Override
+                public void clicked(InputEvent event, float x, float y) {
+                    voteWindow.remove();
+                    if (selectedPlayer == 3 && playerNumber == 2) {
+                        App.getCurrentGame().getPlayers().remove(selectedPlayer);
+                    } else if (playerNumber == 3) {
+                        App.getCurrentGame().getPlayers().remove(selectedPlayer);
+
+                    } else {
+                        initVoteToRemoveWindow(playerNumber + 1, selectedPlayer);
+                    }
+                }
+            });
+
+            noButton.addListener(new ClickListener() {
+                @Override
+                public void clicked(InputEvent event, float x, float y) {
+                    voteWindow.remove();
+                }
+            });
+
+            staticStage.addActor(voteWindow);
+        } else if (playerNumber <= 2) {
+            initVoteToRemoveWindow(playerNumber + 1, selectedPlayer);
+        }
+    }
+
 
     public void initTerminateWindow(int playerNumber) {
         App.getCurrentGame().setCurrentPlayer(App.getCurrentGame().getPlayers().get(playerNumber));
@@ -3427,30 +3520,30 @@ public class GameView implements Screen, InputProcessor {
         terminateWindow.add(backButton).fillX().padTop(10).row();
 
         yesButton.addListener(new ClickListener() {
-           @Override
-           public void clicked(InputEvent event, float x, float y) {
-               terminateWindow.remove();
-               if (playerNumber == 3)
-                   controller.forceTerminate();
-               else
-                   initTerminateWindow(playerNumber + 1);
-           }
+            @Override
+            public void clicked(InputEvent event, float x, float y) {
+                terminateWindow.remove();
+                if (playerNumber == 3)
+                    controller.forceTerminate();
+                else
+                    initTerminateWindow(playerNumber + 1);
+            }
         });
 
         noButton.addListener(new ClickListener() {
-           @Override
-           public void clicked(InputEvent event, float x, float y) {
-               terminateWindow.remove();
-           }
+            @Override
+            public void clicked(InputEvent event, float x, float y) {
+                terminateWindow.remove();
+            }
         });
 
         backButton.addListener(new ClickListener() {
-           @Override
-           public void clicked(InputEvent event, float x, float y) {
-               terminateWindow.remove();
-               if (playerNumber > 0)
-                   initTerminateWindow(playerNumber - 1);
-           }
+            @Override
+            public void clicked(InputEvent event, float x, float y) {
+                terminateWindow.remove();
+                if (playerNumber > 0)
+                    initTerminateWindow(playerNumber - 1);
+            }
         });
 
         staticStage.addActor(terminateWindow);
@@ -3492,6 +3585,7 @@ public class GameView implements Screen, InputProcessor {
         journalWindow = null;
         journalTable.remove();
     }
+
     public void chatWindow() {
         chatRoomWindow = new Window("Chat Room", skin);
         chatRoomWindow.setSize(1200, 700);
@@ -3681,7 +3775,6 @@ public class GameView implements Screen, InputProcessor {
     }
 
 
-
     public Window getJournalWindow() {
         return journalWindow;
     }
@@ -3709,6 +3802,7 @@ public class GameView implements Screen, InputProcessor {
 
     private Window emojiWindow;
     private Table emojiTable = new Table();
+
     public void initPopupReactionWindow() {
         emojiWindow = new Window("Reactions", skin);
         emojiWindow.setName("emojiWindow"); // Important for later reference
@@ -3722,7 +3816,7 @@ public class GameView implements Screen, InputProcessor {
         emojiTable.defaults().pad(10).size(80, 80);
 
         // Add the 7 selected emotes
-        for (int i = 0; i <  EmoteManager.selectedEmotes.size; i++) {
+        for (int i = 0; i < EmoteManager.selectedEmotes.size; i++) {
             String emoteName = EmoteManager.selectedEmotes.get(i);
             emojiTable.add(createEmoteButton(getTextureForEmote(emoteName), emoteName));
             if ((i + 1) % 4 == 0 && i != 6) emojiTable.row(); // 4 per row
@@ -3742,26 +3836,41 @@ public class GameView implements Screen, InputProcessor {
         emojiWindow.add(emojiTable).pad(10);
         staticStage.addActor(emojiWindow);
     }
-    public void closePopupReactionWindow(){
+
+    public void closePopupReactionWindow() {
         emojiWindow.remove();
         emojiWindow = null;
         emojiTable.remove();
     }
+
     private Texture getTextureForEmote(String emoteName) {
-        switch(emoteName) {
-            case "Like": return Assets.getInstance().getLike();
-            case "Dislike": return Assets.getInstance().getDislike();
-            case "Heart": return Assets.getInstance().getHeart();
-            case "Music": return Assets.getInstance().getSmile();
-            case "UwU": return Assets.getInstance().getUwu();
-            case "Question": return Assets.getInstance().getQuestion();
-            case "Angry": return Assets.getInstance().getAngry();
-            case "Speechless": return Assets.getInstance().getSpeechless();
-            case "Surprised": return Assets.getInstance().getSurprised();
-            case "Sleepy": return Assets.getInstance().getSleepy();
-            case "Not Sure": return Assets.getInstance().getNotSure();
-            case "Edit": return Assets.getInstance().getEdit();
-            default: return Assets.getInstance().getLike();
+        switch (emoteName) {
+            case "Like":
+                return Assets.getInstance().getLike();
+            case "Dislike":
+                return Assets.getInstance().getDislike();
+            case "Heart":
+                return Assets.getInstance().getHeart();
+            case "Music":
+                return Assets.getInstance().getSmile();
+            case "UwU":
+                return Assets.getInstance().getUwu();
+            case "Question":
+                return Assets.getInstance().getQuestion();
+            case "Angry":
+                return Assets.getInstance().getAngry();
+            case "Speechless":
+                return Assets.getInstance().getSpeechless();
+            case "Surprised":
+                return Assets.getInstance().getSurprised();
+            case "Sleepy":
+                return Assets.getInstance().getSleepy();
+            case "Not Sure":
+                return Assets.getInstance().getNotSure();
+            case "Edit":
+                return Assets.getInstance().getEdit();
+            default:
+                return Assets.getInstance().getLike();
         }
     }
 
@@ -3786,7 +3895,7 @@ public class GameView implements Screen, InputProcessor {
             checkBox.addListener(new ChangeListener() {
                 @Override
                 public void changed(ChangeEvent event, Actor actor) {
-                    if (((CheckBox)actor).isChecked()) {
+                    if (((CheckBox) actor).isChecked()) {
                         if (!EmoteManager.selectedEmotes.contains(emote, false)) {
                             EmoteManager.selectedEmotes.add(emote);
                         }
@@ -3889,16 +3998,17 @@ public class GameView implements Screen, InputProcessor {
         emoteStateTime = 0f;
         showEmote = true;
     }
+
     private void renderEmote(float deltaTime) {
         if (showEmote && emoteAnimation != null) {
             emoteStateTime += deltaTime;
             Texture currentFrame = emoteAnimation.getKeyFrame(emoteStateTime, false);
             // Calculate position for center
 
-            float x = (Gdx.graphics.getWidth() - currentFrame.getWidth())/2;
-            float y = (Gdx.graphics.getHeight() - currentFrame.getHeight())/2 + 90;
+            float x = (Gdx.graphics.getWidth() - currentFrame.getWidth()) / 2;
+            float y = (Gdx.graphics.getHeight() - currentFrame.getHeight()) / 2 + 90;
 
-            Main.getBatch().draw(currentFrame, x, y,64, 64);
+            Main.getBatch().draw(currentFrame, x, y, 64, 64);
 
             // Optionally hide animation when finished
             if (emoteAnimation.isAnimationFinished(emoteStateTime)) {
@@ -3911,6 +4021,7 @@ public class GameView implements Screen, InputProcessor {
     private Animation<Texture> thunderAnimation;
     private float thunderStateTime = 0f;
     private boolean showThunder = false;
+
     private void renderThunder(float deltaTime) {
 
         if (showThunder && thunderAnimation != null) {
@@ -3926,6 +4037,7 @@ public class GameView implements Screen, InputProcessor {
             }
         }
     }
+
     public void showThunder() {
         Texture thunder_1 = new Texture("GameAssets\\Thunder\\1.png");
         Texture thunder_2 = new Texture("GameAssets\\Thunder\\2.png");
@@ -3934,13 +4046,13 @@ public class GameView implements Screen, InputProcessor {
         Texture thunder_5 = new Texture("GameAssets\\Thunder\\5.png");
 
         thunderAnimation = new Animation<>(0.05f,
-            thunder_1,thunder_1,thunder_1,thunder_1,thunder_1,
-            thunder_1,thunder_2,thunder_2,thunder_2,thunder_2,
-            thunder_3,thunder_4,thunder_4,thunder_5,thunder_5,
-            thunder_1,thunder_1,thunder_5,thunder_5,thunder_1,
-            thunder_1,thunder_5,thunder_5,thunder_1,thunder_1,
-            thunder_5,thunder_2,thunder_2,thunder_3,thunder_3,
-            thunder_2,thunder_2,thunder_3,thunder_3
+            thunder_1, thunder_1, thunder_1, thunder_1, thunder_1,
+            thunder_1, thunder_2, thunder_2, thunder_2, thunder_2,
+            thunder_3, thunder_4, thunder_4, thunder_5, thunder_5,
+            thunder_1, thunder_1, thunder_5, thunder_5, thunder_1,
+            thunder_1, thunder_5, thunder_5, thunder_1, thunder_1,
+            thunder_5, thunder_2, thunder_2, thunder_3, thunder_3,
+            thunder_2, thunder_2, thunder_3, thunder_3
         );
         thunderAnimation.setPlayMode(Animation.PlayMode.NORMAL);
         playSFX("Audio/Sfx/Thunder.mp3");
@@ -3949,6 +4061,7 @@ public class GameView implements Screen, InputProcessor {
     }
 
     public static Music currentSfx;
+
     public static void playSFX(String path) {
         if (currentSfx != null) {
             currentSfx.stop();
