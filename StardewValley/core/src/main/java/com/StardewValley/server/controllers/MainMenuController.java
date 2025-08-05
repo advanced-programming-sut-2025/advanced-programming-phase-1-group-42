@@ -8,7 +8,11 @@ import com.StardewValley.client.views.LoginMenuView;
 import com.StardewValley.client.views.MainMenuView;
 import com.StardewValley.client.views.ProfileMenuView;
 import com.StardewValley.models.Message;
+import com.StardewValley.server.AppServer;
 import com.StardewValley.server.ClientHandler;
+
+import java.util.ArrayList;
+import java.util.HashMap;
 
 public class MainMenuController extends Controller {
     private ClientHandler clientHandler;
@@ -19,38 +23,52 @@ public class MainMenuController extends Controller {
 
     @Override
     public Message handleMessage(Message message) {
-        return null;
+        if (message.getType() == Message.Type.command) {
+            switch ((String) message.getFromBody("function")) {
+                case "updateOnlineUsers" -> {
+                    ArrayList<String> onlineString = new ArrayList<>();
+                    AppServer.getOnlineUsers().forEach(onlineUser -> {
+                        onlineString.add(onlineUser.getUsername() + ", " + onlineUser.getPlaying() + ", " +
+                            onlineUser.getEarnedPoints());
+                    });
+
+                    return new Message(new HashMap<>() {{
+                        put("success", true);
+                        put("message", onlineString);
+                    }}, Message.Type.response);
+                }
+            }
+        }
+        if (message.getType() == Message.Type.change) {
+            switch ((String) message.getFromBody("field")) {
+                case "controller" -> {
+                    if (message.getFromBody("change") == null)
+                        break;
+
+                    if (message.getFromBody("change").equals("GameMenuController")) {
+                        this.clientHandler.setCurrentController(new GameMenuController(clientHandler));
+                    }
+                    if (message.getFromBody("change").equals("ProfileMenuController")) {
+                        this.clientHandler.setCurrentController(new ProfileMenuController(clientHandler));
+                    }
+                    if (message.getFromBody("change").equals("LoginMenuController")) {
+                        AppServer.getOnlineUsers().remove(clientHandler.getClientUser());
+                        clientHandler.setClientUser(null);
+                        this.clientHandler.setCurrentController(new LoginMenuController(clientHandler));
+                    }
+
+                    return new Message(new HashMap<>() {{
+                        put("success", true);
+                        put("message", "");
+                    }}, Message.Type.response);
+                }
+            }
+        }
+
+        return new Message(new HashMap<>() {{
+            put("success", false);
+            put("message", "");
+        }}, Message.Type.response);
     }
 
-//    public void handleMainMenu() {
-//        if (view == null) {
-//            return;
-//        }
-//
-//        if (view.getGameButton().isChecked()) {
-//            view.getGameButton().setChecked(false);
-//
-//            Main.getMain().getScreen().dispose();
-//            Main.getMain().setScreen(new GameMenuView(new GameMenuController(), Assets.getInstance().getSkin()));
-//        }
-//        else if (view.getProfileButton().isChecked()) {
-//            view.getProfileButton().setChecked(false);
-//
-//            Main.getMain().getScreen().dispose();
-//            Main.getMain().setScreen(new ProfileMenuView(new ProfileMenuController(), Assets.getInstance().getSkin()));
-//        }
-//        else if (view.getLogoutButton().isChecked()) {
-//            view.getLogoutButton().setChecked(false);
-//
-//            if (AppClient.getCurrentUser().isStayLogin()) {
-////             DBInteractor.resetStayLogin();
-//            }
-//
-////          DBInteractor.saveUsers();
-//            AppClient.getCurrentUser().setStayLogin(false);
-//            AppClient.setCurrentUser(null);
-//            Main.getMain().getScreen().dispose();
-//            Main.getMain().setScreen(new LoginMenuView(Assets.getInstance().getSkin()));
-//        }
-//    }
 }

@@ -35,7 +35,7 @@ public class ProfileMenuView implements Screen {
     private TextButton backButton;
     private Label errorLabel;
 
-    public ProfileMenuView(ProfileMenuController controller, Skin skin) {
+    public ProfileMenuView(Skin skin) {
         this.skin = skin;
 
         this.usernameLabel = new Label("Username", skin);

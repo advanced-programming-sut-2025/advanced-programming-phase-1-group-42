@@ -8,66 +8,68 @@ import com.StardewValley.models.Result;
 import com.StardewValley.models.interactions.User;
 import com.StardewValley.client.views.MainMenuView;
 import com.StardewValley.client.views.ProfileMenuView;
+import com.StardewValley.server.ClientHandler;
 
 public class ProfileMenuController extends Controller {
-    private ProfileMenuView view;
+    private ClientHandler clientHandler;
+
+    public ProfileMenuController(ClientHandler clientHandler) {
+        this.clientHandler = clientHandler;
+    }
 
     @Override
     public Message handleMessage(Message message) {
         return null;
     }
 
-    public void setView(ProfileMenuView view) {
-        this.view = view;
-    }
 
     public void handleProfile() {
-        if (view == null) {
-            return;
-        }
-
-        if (view.getSaveButton().isChecked()) {
-            view.getSaveButton().setChecked(false);
-
-            if (view.getUsernameField().getText().equals(AppClient.getCurrentUser().getUsername())) {
-                Result res = changeUsername(view.getUsernameField().getText());
-                if (!res.success()) {
-                    view.getErrorLabel().setText(res.message());
-                    return;
-                }
-            }
-            if (view.getPasswordField().getText().equals(AppClient.getCurrentUser().getPassword())) {
-                Result res = changePassword(view.getPasswordField().getText());
-
-                if (!res.success()) {
-                    view.getErrorLabel().setText(res.message());
-                    return;
-                }
-            }
-            if (view.getEmailField().getText().equals(AppClient.getCurrentUser().getEmail())) {
-                Result res = changeEmail(view.getEmailField().getText());
-
-                if (!res.success()) {
-                    view.getErrorLabel().setText(res.message());
-                    return;
-                }
-            }
-            if (view.getNicknameField().getText().equals(AppClient.getCurrentUser().getNickname())) {
-                Result res = changeNickname(view.getNicknameField().getText());
-
-                if (!res.success()) {
-                    view.getErrorLabel().setText(res.message());
-                    return;
-                }
-            }
-
-        }
-        else if (view.getBackButton().isChecked()) {
-            view.getBackButton().setChecked(false);
-
-            Main.getMain().getScreen().dispose();
-            Main.getMain().setScreen(new MainMenuView(Assets.getInstance().getSkin()));
-        }
+//        if (view == null) {
+//            return;
+//        }
+//
+//        if (view.getSaveButton().isChecked()) {
+//            view.getSaveButton().setChecked(false);
+//
+//            if (view.getUsernameField().getText().equals(AppClient.getCurrentUser().getUsername())) {
+//                Result res = changeUsername(view.getUsernameField().getText());
+//                if (!res.success()) {
+//                    view.getErrorLabel().setText(res.message());
+//                    return;
+//                }
+//            }
+//            if (view.getPasswordField().getText().equals(AppClient.getCurrentUser().getPassword())) {
+//                Result res = changePassword(view.getPasswordField().getText());
+//
+//                if (!res.success()) {
+//                    view.getErrorLabel().setText(res.message());
+//                    return;
+//                }
+//            }
+//            if (view.getEmailField().getText().equals(AppClient.getCurrentUser().getEmail())) {
+//                Result res = changeEmail(view.getEmailField().getText());
+//
+//                if (!res.success()) {
+//                    view.getErrorLabel().setText(res.message());
+//                    return;
+//                }
+//            }
+//            if (view.getNicknameField().getText().equals(AppClient.getCurrentUser().getNickname())) {
+//                Result res = changeNickname(view.getNicknameField().getText());
+//
+//                if (!res.success()) {
+//                    view.getErrorLabel().setText(res.message());
+//                    return;
+//                }
+//            }
+//
+//        }
+//        else if (view.getBackButton().isChecked()) {
+//            view.getBackButton().setChecked(false);
+//
+//            Main.getMain().getScreen().dispose();
+//            Main.getMain().setScreen(new MainMenuView(Assets.getInstance().getSkin()));
+//        }
     }
 
     public Result changeUsername(String username) {

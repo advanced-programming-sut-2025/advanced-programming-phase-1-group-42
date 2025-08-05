@@ -147,4 +147,6 @@ public class User {
     public void setStayLogin(boolean stayLogin) {
         this.stayLogin = stayLogin;
     }
+
+
 }

@@ -20,6 +20,16 @@ public class ClientListener extends Thread {
     public void run() {
         threadPool = Executors.newCachedThreadPool();
 
+        Runtime.getRuntime().addShutdownHook(new Thread(() -> {
+            threadPool.shutdownNow();
+            try {
+                serverSocket.close();
+            } catch (IOException e) {
+                throw new RuntimeException(e);
+            }
+            System.exit(0);
+        }));
+
         while (!AppServer.isEnded()) {
             try {
                 Socket socket = serverSocket.accept();
@@ -40,11 +50,6 @@ public class ClientListener extends Thread {
             }
         }
 
-        try {
-            threadPool.shutdownNow();
-            serverSocket.close();
-        } catch (IOException e) {
-            throw new RuntimeException(e);
-        }
+
     }
 }

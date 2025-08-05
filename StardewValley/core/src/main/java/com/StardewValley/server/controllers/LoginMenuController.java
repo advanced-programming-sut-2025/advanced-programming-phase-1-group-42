@@ -102,7 +102,15 @@ public class LoginMenuController extends Controller {
                 put("success", false);
                 put("message", "Wrong password!");
             }}, Message.Type.response);
+        }
 
+        for (User onlineUser : AppServer.getOnlineUsers()) {
+            if (onlineUser.getUsername().equals(username)) {
+                return new Message(new HashMap<>() {{
+                    put("success", false);
+                    put("message", "This user is already logged in!");
+                }}, Message.Type.response);
+            }
         }
 
         if (stayLoggedIn) {

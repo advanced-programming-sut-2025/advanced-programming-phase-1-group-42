@@ -38,6 +38,7 @@ import com.StardewValley.client.views.GameMenuView;
 import com.StardewValley.client.views.GameView;
 import com.StardewValley.client.views.MainMenuView;
 import com.StardewValley.server.AppServer;
+import com.StardewValley.server.ClientHandler;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.graphics.Texture;
@@ -69,6 +70,8 @@ import java.util.List;
 import static java.lang.Math.abs;
 
 public class GameMenuController extends Controller {
+    private ClientHandler clientHandler;
+
     public ArrayList<Player> players;
     public int ptr;
     public ArrayList<Tile> tiles;
@@ -87,6 +90,10 @@ public class GameMenuController extends Controller {
     private FridgeController fridgeController;
     private CookingController cookingController;
     private CraftingController craftingController;
+
+    public GameMenuController(ClientHandler clientHandler) {
+        this.clientHandler = clientHandler;
+    }
 
     @Override
     public Message handleMessage(Message message) {
@@ -152,7 +159,7 @@ public class GameMenuController extends Controller {
             }
 
             Main.getMain().getScreen().dispose();
-            Main.getMain().setScreen(new GameView(new GameMenuController(), Assets.getInstance().getSkin()));
+            Main.getMain().setScreen(new GameView(new GameMenuController(clientHandler), Assets.getInstance().getSkin()));
         } else if (view.getNewGameButton().isChecked()) {
             view.getNewGameButton().setChecked(false);
 
@@ -909,7 +916,7 @@ public class GameMenuController extends Controller {
         AppClient.getCurrentGame().getMap().generateRandomGrassTrees(93);
 
         Main.getMain().getScreen().dispose();
-        Main.getMain().setScreen(new GameView(new GameMenuController(), Assets.getInstance().getSkin()));
+        Main.getMain().setScreen(new GameView(new GameMenuController(clientHandler), Assets.getInstance().getSkin()));
     }
 
     public Result loadGame() {

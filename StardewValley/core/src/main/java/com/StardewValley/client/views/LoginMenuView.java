@@ -318,7 +318,7 @@ public class LoginMenuView implements Screen {
             }}, Message.Type.command);
             Message responseMessage = AppClient.getServerHandler().sendAndWaitForResponse(message);
             if (methodUseMessage(message, responseMessage, errorLabel)) return;
-            AppClient.setCurrentUser(responseMessage.getFromBody("message"));
+            AppClient.setCurrentUser(JSONUtils.fromJsonUser(responseMessage.getFromBody("message")));
 
             Message message2 = new Message(new HashMap<>() {{
                 put("field", "controller");

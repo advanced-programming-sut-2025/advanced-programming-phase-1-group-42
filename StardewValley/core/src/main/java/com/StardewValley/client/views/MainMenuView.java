@@ -3,16 +3,22 @@ package com.StardewValley.client.views;
 import com.StardewValley.client.Main;
 import com.StardewValley.client.AppClient;
 import com.StardewValley.models.Assets;
+import com.StardewValley.models.Message;
+import com.StardewValley.server.ClientHandler;
+import com.StardewValley.server.controllers.GameMenuController;
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.InputMultiplexer;
+import com.badlogic.gdx.InputProcessor;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.scenes.scene2d.Stage;
-import com.badlogic.gdx.scenes.scene2d.ui.Label;
-import com.badlogic.gdx.scenes.scene2d.ui.Skin;
-import com.badlogic.gdx.scenes.scene2d.ui.Table;
-import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
+import com.badlogic.gdx.scenes.scene2d.ui.*;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
+
+import java.awt.font.MultipleMaster;
+import java.util.ArrayList;
+import java.util.HashMap;
 
 public class MainMenuView implements Screen {
     private Skin skin;
@@ -25,6 +31,10 @@ public class MainMenuView implements Screen {
     private Label usernameLabel;
     private Label earnedPointsLabel;
     private Label isPlayingLabel;
+
+    private Window onlineUsersWindow;
+    private ScrollPane onlineUsersScrollPane;
+    private Table onlineUsersTable;
 
     public MainMenuView(Skin skin) {
         this.skin = skin;
@@ -39,8 +49,6 @@ public class MainMenuView implements Screen {
         this.earnedPointsLabel.setFontScale(0.7f);
         this.isPlayingLabel = new Label("isPlaying: " + AppClient.getCurrentUser().getPlaying(), skin);
         this.isPlayingLabel.setFontScale(0.7f);
-
-
     }
 
     @Override
@@ -67,11 +75,22 @@ public class MainMenuView implements Screen {
         table.row();
 
 // Earned Points
-        table.add(gameButton).fillX().uniform().padRight(50).padTop(30).right();
-        table.add(profileButton).fillX().uniform().padRight(50).padTop(30).right();
-        table.add(logoutButton).fillX().uniform().padRight(50).padTop(30).right();
+        table.add(gameButton).fillX().uniform().padRight(50).right();
+        table.add(profileButton).fillX().uniform().padRight(50).right();
+        table.add(logoutButton).fillX().uniform().padRight(50).right();
         table.row();
 
+
+        // Setup online users table and scroll pane
+        onlineUsersTable = new Table(skin);
+        onlineUsersScrollPane = new ScrollPane(onlineUsersTable, skin);
+        onlineUsersScrollPane.setScrollingDisabled(false, true);
+        onlineUsersScrollPane.setFadeScrollBars(false);
+        loadOnlineUsers();  // Fill the table with online users
+
+        // Add scrollpane row
+        table.add(onlineUsersScrollPane).colspan(3).fillX().height(150).padTop(40);
+        table.row();
 
         stage.addActor(table);
     }
@@ -135,6 +154,86 @@ public class MainMenuView implements Screen {
     }
 
     private void handleMainMenu() {
+        loadOnlineUsers();
 
+        if (getGameButton().isChecked()) {
+            getGameButton().setChecked(false);
+
+            Message message2 = new Message(new HashMap<>() {{
+                put("field", "controller");
+                put("change", "GameMenuController");
+            }}, Message.Type.change);
+            Message responseMessage2 = AppClient.getServerHandler().sendAndWaitForResponse(message2);
+            if (!checkMessageValidity(responseMessage2, Message.Type.response)) {
+//                getErrorLabel().setText("Network error!");
+                return;
+            }
+
+//            Main.getMain().getScreen().dispose();
+//            Main.getMain().setScreen(new GameMenuView(new GameMenuController(new ClientHandler()), Assets.getInstance().getSkin()));
+        }
+        else if (getProfileButton().isChecked()) {
+            getProfileButton().setChecked(false);
+
+            Message message2 = new Message(new HashMap<>() {{
+                put("field", "controller");
+                put("change", "ProfileMenuController");
+            }}, Message.Type.change);
+            Message responseMessage2 = AppClient.getServerHandler().sendAndWaitForResponse(message2);
+            if (!checkMessageValidity(responseMessage2, Message.Type.response)) {
+//                getErrorLabel().setText("Network error!");
+                return;
+            }
+
+            Main.getMain().getScreen().dispose();
+            Main.getMain().setScreen(new ProfileMenuView(Assets.getInstance().getSkin()));
+        }
+        else if (getLogoutButton().isChecked()) {
+            getLogoutButton().setChecked(false);
+
+            if (AppClient.getCurrentUser().isStayLogin()) {
+////             DBInteractor.resetStayLogin();
+            }
+
+////          DBInteractor.saveUsers();
+
+            Message message2 = new Message(new HashMap<>() {{
+                put("field", "controller");
+                put("change", "LoginMenuController");
+            }}, Message.Type.change);
+            Message responseMessage2 = AppClient.getServerHandler().sendAndWaitForResponse(message2);
+            if (!checkMessageValidity(responseMessage2, Message.Type.response)) {
+//                getErrorLabel().setText("Network error!");
+                return;
+            }
+
+            AppClient.getCurrentUser().setStayLogin(false);
+            AppClient.setCurrentUser(null);
+            Main.getMain().getScreen().dispose();
+            Main.getMain().setScreen(new LoginMenuView(Assets.getInstance().getSkin()));
+        }
     }
+
+    private void loadOnlineUsers() {
+        onlineUsersTable.clear();  // Clear previous labels
+
+        Message message = new Message(new HashMap<>() {{
+            put("function", "updateOnlineUsers");
+            put("arguments", "");
+        }}, Message.Type.command);
+
+        Message responseMessage = AppClient.getServerHandler().sendAndWaitForResponse(message);
+        ArrayList<String> onlineUsers = responseMessage.getFromBody("message");
+
+        for (String user : onlineUsers) {
+            Label label = new Label(user, skin, "Bold");
+            label.setFontScale(0.8f);
+            onlineUsersTable.add(label).fillX().expandX().center().row();
+        }
+    }
+
+    public boolean checkMessageValidity(Message message, Message.Type type) {
+        return message.getType() == type;
+    }
+
 }
