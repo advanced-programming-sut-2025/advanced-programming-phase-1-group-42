@@ -19,19 +19,14 @@ import java.util.concurrent.atomic.AtomicBoolean;
 
 public class ClientHandler extends Thread {
 
-    protected final DataInputStream dataInputStream;
-    protected final DataOutputStream dataOutputStream;
+    protected DataInputStream dataInputStream;
+    protected DataOutputStream dataOutputStream;
     protected Socket socket;
     protected AtomicBoolean end;
     private Controller currentController;
 
     protected ClientHandler(Socket socket) throws IOException {
         this.socket = socket;
-        this.dataInputStream = new DataInputStream(socket.getInputStream());
-        this.dataOutputStream = new DataOutputStream(socket.getOutputStream());
-        this.end = new AtomicBoolean(false);
-        currentController = new RegisterMenuController(this);
-
     }
 
 //    public Message sendAndWaitForResponse(Message message) {
@@ -58,17 +53,27 @@ public class ClientHandler extends Thread {
 
     @Override
     public void run() {
+        try {
+            this.dataInputStream = new DataInputStream(socket.getInputStream());
+            this.dataOutputStream = new DataOutputStream(socket.getOutputStream());
+            this.end = new AtomicBoolean(false);
+            currentController = new RegisterMenuController(this);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
         while (!end.get()) {
             try {
                 String receivedStr = dataInputStream.readUTF();
                 Message message = JSONUtils.fromJson(receivedStr);
                 handleMessage(message);
             } catch (Exception e) {
-                e.printStackTrace();
-                break;
-            }
-            finally {
-                this.end.set(true);
+                try {
+                    socket.close();
+                    break;
+                } catch (IOException ex) {
+                    throw new RuntimeException(ex);
+                }
             }
         }
 

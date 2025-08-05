@@ -19,7 +19,8 @@ public class Main extends Game {
         main = this;
         batch = new SpriteBatch();
 
-        try (Socket socket = new Socket("localhost", 1111)) {
+        try {
+            Socket socket = new Socket("localhost", 1111);
             AppClient.setServerHandler(new ServerHandler(socket));
             System.out.println("Connected to server with port: " + socket.getPort());
         }

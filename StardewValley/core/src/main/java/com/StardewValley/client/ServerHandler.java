@@ -15,21 +15,19 @@ import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicBoolean;
 
 public class ServerHandler {
-    protected final DataInputStream dataInputStream;
-    protected final DataOutputStream dataOutputStream;
+    protected DataInputStream dataInputStream;
+    protected DataOutputStream dataOutputStream;
     protected Socket socket;
 
     public ServerHandler(Socket socket) throws IOException {
         this.socket = socket;
         this.dataInputStream = new DataInputStream(socket.getInputStream());
         this.dataOutputStream = new DataOutputStream(socket.getOutputStream());
-        this.dataOutputStream.writeUTF(JSONUtils.toJson(new Message(new HashMap<>(), Message.Type.request)));
     }
 
     public Message sendAndWaitForResponse(Message message) {
         sendMessage(message);
         try {
-            socket.setSoTimeout(0);
             return JSONUtils.fromJson(dataInputStream.readUTF());
         } catch (Exception e) {
             System.err.println("Request Timed out.");
@@ -39,6 +37,15 @@ public class ServerHandler {
 
     public void sendMessage(Message message) {
         String JSONString = JSONUtils.toJson(message);
+        if (socket.isClosed()) {
+            try {
+                socket = new Socket(socket.getInetAddress(), socket.getPort());
+                dataInputStream = new DataInputStream(socket.getInputStream());
+                dataOutputStream = new DataOutputStream(socket.getOutputStream());
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
 
         try {
             dataOutputStream.writeUTF(JSONString);
