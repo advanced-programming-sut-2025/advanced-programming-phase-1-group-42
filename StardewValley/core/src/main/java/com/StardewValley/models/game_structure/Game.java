@@ -1,5 +1,6 @@
 package com.StardewValley.models.game_structure;
 
+import com.StardewValley.controllers.GameMenuController;
 import com.StardewValley.models.App;
 import com.StardewValley.models.Pair;
 import com.StardewValley.models.enums.TileType;
@@ -40,6 +41,7 @@ public class Game {
     private final ArrayList<NPC> NPCs = new ArrayList<>();
     private int counter = 0;
     private ArrayList<Pair<Player, String>> publicChat = new ArrayList<>();
+    private GameMenuController controller;
 
     public static void writeIntoFile(String string) {
         try (FileWriter myWriter = new FileWriter("commands.txt", true)) {
@@ -404,4 +406,8 @@ public class Game {
     public ArrayList<Pair<Player, String>> getPublicChat() {
         return publicChat;
     }
+
+    public void setController(GameMenuController controller) {this.controller = controller;}
+
+    public GameMenuController getController() {return controller;}
 }

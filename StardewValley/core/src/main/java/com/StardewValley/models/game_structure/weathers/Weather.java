@@ -9,6 +9,7 @@ import com.StardewValley.models.goods.farmings.FarmingTree;
 import com.StardewValley.models.goods.farmings.FarmingTreeSapling;
 import com.StardewValley.models.goods.foragings.ForagingMineralType;
 import com.StardewValley.models.goods.foragings.ForagingTree;
+import com.StardewValley.views.GameMenu;
 
 import java.util.List;
 import java.util.stream.Collectors;
@@ -19,6 +20,7 @@ public abstract class Weather {
 
 
     public void thunder(int x, int y) {
+        App.getCurrentGame().getController().getGameView().showThunder();
         Coordinate coordinate = new Coordinate(x, y);
         if(App.getCurrentGame().getCurrentPlayer().getCoordinate().equals(coordinate)){
             System.out.println("You've Been Struck by Thunder!");

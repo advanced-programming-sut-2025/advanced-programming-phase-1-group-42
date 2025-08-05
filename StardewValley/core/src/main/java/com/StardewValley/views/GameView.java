@@ -34,6 +34,7 @@ import com.StardewValley.models.interactions.PlayerBuildings.FarmBuilding;
 import com.StardewValley.models.interactions.PlayerBuildings.FarmBuildingTypes;
 import com.StardewValley.models.interactions.game_buildings.*;
 import com.badlogic.gdx.*;
+import com.badlogic.gdx.audio.Music;
 import com.badlogic.gdx.files.FileHandle;
 import com.badlogic.gdx.graphics.*;
 import com.badlogic.gdx.graphics.g2d.Animation;
@@ -168,6 +169,7 @@ public class GameView implements Screen, InputProcessor {
     TradeManager tradeManager = new TradeManager();
     public GameView(GameMenuController controller, Skin skin) {
         this.controller = controller;
+        App.getCurrentGame().setController(controller);
 //        this.controller.initGameControllers();
         this.skin = skin;
         table = new Table(skin);
@@ -221,9 +223,6 @@ public class GameView implements Screen, InputProcessor {
             public void clicked(InputEvent event, float x, float y) {
                 if (tradeInboxWindow == null)
                     initTradeInboxWindow();
-                else{
-                    //TODO
-                }
 
             }
         });
@@ -307,22 +306,8 @@ public class GameView implements Screen, InputProcessor {
         controller.handleGame();
         setColorFunction();
 
-        if (showEmote && emoteAnimation != null) {
-            emoteStateTime += delta;
-            Texture currentFrame = emoteAnimation.getKeyFrame(emoteStateTime, false);
-            // Calculate position for center
-
-            float x = (Gdx.graphics.getWidth() - currentFrame.getWidth())/2;
-            float y = (Gdx.graphics.getHeight() - currentFrame.getHeight())/2 + 90;
-
-            Main.getBatch().draw(currentFrame, x, y,64, 64);
-
-            // Optionally hide animation when finished
-            if (emoteAnimation.isAnimationFinished(emoteStateTime)) {
-                showEmote = false;
-                closePopupReactionWindow();
-            }
-        }
+        renderEmote(Gdx.graphics.getDeltaTime());
+        renderThunder(Gdx.graphics.getDeltaTime());
 
         Main.getBatch().end();
 
@@ -3857,7 +3842,7 @@ public class GameView implements Screen, InputProcessor {
         return button;
     }
 
-    public class EmoteManager {
+    private class EmoteManager {
         public static final String[] ALL_EMOTES = {
             "Like", "Dislike", "Heart", "Music", "UwU",
             "Question", "Angry", "Speechless", "Surprised",
@@ -3904,8 +3889,78 @@ public class GameView implements Screen, InputProcessor {
         emoteStateTime = 0f;
         showEmote = true;
     }
+    private void renderEmote(float deltaTime) {
+        if (showEmote && emoteAnimation != null) {
+            emoteStateTime += deltaTime;
+            Texture currentFrame = emoteAnimation.getKeyFrame(emoteStateTime, false);
+            // Calculate position for center
 
+            float x = (Gdx.graphics.getWidth() - currentFrame.getWidth())/2;
+            float y = (Gdx.graphics.getHeight() - currentFrame.getHeight())/2 + 90;
 
+            Main.getBatch().draw(currentFrame, x, y,64, 64);
+
+            // Optionally hide animation when finished
+            if (emoteAnimation.isAnimationFinished(emoteStateTime)) {
+                showEmote = false;
+                closePopupReactionWindow();
+            }
+        }
+    }
+
+    private Animation<Texture> thunderAnimation;
+    private float thunderStateTime = 0f;
+    private boolean showThunder = false;
+    private void renderThunder(float deltaTime) {
+
+        if (showThunder && thunderAnimation != null) {
+            thunderStateTime += deltaTime;
+            Texture currentFrame = thunderAnimation.getKeyFrame(thunderStateTime, false);
+            // Calculate position for center
+
+            Main.getBatch().draw(currentFrame, 0, 0);
+
+            // Optionally hide animation when finished
+            if (thunderAnimation.isAnimationFinished(thunderStateTime)) {
+                showThunder = false;
+            }
+        }
+    }
+    public void showThunder() {
+        Texture thunder_1 = new Texture("GameAssets\\Thunder\\1.png");
+        Texture thunder_2 = new Texture("GameAssets\\Thunder\\2.png");
+        Texture thunder_3 = new Texture("GameAssets\\Thunder\\3.png");
+        Texture thunder_4 = new Texture("GameAssets\\Thunder\\4.png");
+        Texture thunder_5 = new Texture("GameAssets\\Thunder\\5.png");
+
+        thunderAnimation = new Animation<>(0.05f,
+            thunder_1,thunder_1,thunder_1,thunder_1,thunder_1,
+            thunder_1,thunder_2,thunder_2,thunder_2,thunder_2,
+            thunder_3,thunder_4,thunder_4,thunder_5,thunder_5,
+            thunder_1,thunder_1,thunder_5,thunder_5,thunder_1,
+            thunder_1,thunder_5,thunder_5,thunder_1,thunder_1,
+            thunder_5,thunder_2,thunder_2,thunder_3,thunder_3,
+            thunder_2,thunder_2,thunder_3,thunder_3
+        );
+        thunderAnimation.setPlayMode(Animation.PlayMode.NORMAL);
+        playSFX("Audio/Sfx/Thunder.mp3");
+        thunderStateTime = 0f;
+        showThunder = true;
+    }
+
+    public static Music currentSfx;
+    public static void playSFX(String path) {
+        if (currentSfx != null) {
+            currentSfx.stop();
+            currentSfx.dispose();
+        }
+        currentSfx = Gdx.audio.newMusic(Gdx.files.internal(path));
+        currentSfx.setLooping(true);
+        float volume = 0.5f;
+        currentSfx.setVolume(volume);
+        currentSfx.play();
+        currentSfx.setLooping(false);
+    }
 }
 
 

@@ -192,6 +192,8 @@ public class GameMenuController extends Controller {
         refreshLeaderBoard();
     }
 
+
+
     public void handleInput() {
         if (gameView.getCheatWindow() != null)
             return;
@@ -267,6 +269,11 @@ public class GameMenuController extends Controller {
             nextTurn();
             inventoryController.playerChangedInventory();
         }
+
+        if (Gdx.input.isKeyJustPressed(Input.Keys.J)) {
+                gameView.showThunder();
+        }
+
         if (Gdx.input.isKeyJustPressed(Input.Keys.C)) {
             gameView.touchDown(Gdx.input.getX(), Gdx.input.getY(), 0, Input.Buttons.LEFT);
         }
@@ -1143,7 +1150,6 @@ public class GameMenuController extends Controller {
     public Result cheatThunder(String x, String y) {
         x = x.trim();
         y = y.trim();
-
         int xInt = Integer.parseInt(x);
         int yInt = Integer.parseInt(y);
         App.getCurrentGame().getWeather().thunder(xInt, yInt);
@@ -2957,6 +2963,10 @@ public class GameMenuController extends Controller {
 
     public void setCurrentTab(int currentTab) {
         this.currentTab = currentTab;
+    }
+
+    public GameView getGameView() {
+        return gameView;
     }
 }
 

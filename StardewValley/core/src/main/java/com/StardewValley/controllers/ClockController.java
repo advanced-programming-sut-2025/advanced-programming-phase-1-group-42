@@ -1,8 +1,10 @@
 package com.StardewValley.controllers;
 
+import com.StardewValley.Main;
 import com.StardewValley.models.App;
 import com.StardewValley.models.Assets;
 import com.StardewValley.models.enums.Season;
+import com.StardewValley.models.enums.TileAssets;
 import com.StardewValley.models.game_structure.DateTime;
 import com.StardewValley.models.game_structure.Wallet;
 import com.StardewValley.models.game_structure.weathers.Weather;
@@ -124,7 +126,6 @@ public class ClockController extends Controller {
     }
 
     public void update() {
-
 
         clockHandImage.setRotation(180 - ((currentTime.getTime() - 9) * 14));
 
