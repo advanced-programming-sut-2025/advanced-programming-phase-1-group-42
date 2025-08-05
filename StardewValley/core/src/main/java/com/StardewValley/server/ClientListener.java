@@ -22,7 +22,7 @@ public class ClientListener extends Thread {
                 Socket socket = serverSocket.accept();
                 if (socket != null) {
                     new ClientHandler(socket).start();
-                    System.out.println("New client connected");
+                    System.out.println("New client connected with port " + port);
                 }
             }
             catch (IOException e) {
