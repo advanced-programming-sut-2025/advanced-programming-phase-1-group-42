@@ -38,16 +38,6 @@ public class ServerHandler {
 
     public void sendMessage(Message message) {
         String JSONString = JSONUtils.toJson(message);
-        if (socket.isClosed()) {
-            try {
-                socket = new Socket(socket.getInetAddress(), socket.getPort());
-                dataInputStream = new DataInputStream(socket.getInputStream());
-                dataOutputStream = new DataOutputStream(socket.getOutputStream());
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-        }
-
         try {
             dataOutputStream.writeUTF(JSONString);
             dataOutputStream.flush();

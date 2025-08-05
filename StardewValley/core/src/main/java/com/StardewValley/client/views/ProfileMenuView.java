@@ -227,43 +227,46 @@ public class ProfileMenuView implements Screen {
             if (!getUsernameField().getText().equals(AppClient.getCurrentUser().getUsername())) {
                 Message message = new Message(new HashMap<>() {{
                     put("function", "changeUsername");
-                    put("arguments", new ArrayList<>(Arrays.asList(
-                        getUsernameField().getText()
-                    )));
+                    put("arguments", getUsernameField().getText());
                 }}, Message.Type.command);
                 Message responseMessage = AppClient.getServerHandler().sendAndWaitForResponse(message);
                 if (methodUseMessage(responseMessage, errorLabel)) return;
+                errorLabel.setText(responseMessage.getFromBody("message"));
             }
             if (!getPasswordField().getText().equals(AppClient.getCurrentUser().getPassword())) {
                 Message message = new Message(new HashMap<>() {{
                     put("function", "changePassword");
-                    put("arguments", new ArrayList<>(Arrays.asList(
-                        getPasswordField().getText()
-                    )));
+                    put("arguments", getPasswordField().getText());
                 }}, Message.Type.command);
                 Message responseMessage = AppClient.getServerHandler().sendAndWaitForResponse(message);
                 if (methodUseMessage(responseMessage, errorLabel)) return;
+                errorLabel.setText(responseMessage.getFromBody("message"));
             }
             if (!getEmailField().getText().equals(AppClient.getCurrentUser().getEmail())) {
                 Message message = new Message(new HashMap<>() {{
                     put("function", "changeEmail");
-                    put("arguments", new ArrayList<>(Arrays.asList(
-                        getEmailField().getText()
-                    )));
+                    put("arguments", getEmailField().getText());
                 }}, Message.Type.command);
                 Message responseMessage = AppClient.getServerHandler().sendAndWaitForResponse(message);
                 if (methodUseMessage(responseMessage, errorLabel)) return;
+                errorLabel.setText(responseMessage.getFromBody("message"));
             }
             if (!getNicknameField().getText().equals(AppClient.getCurrentUser().getNickname())) {
                 Message message = new Message(new HashMap<>() {{
                     put("function", "changeNickname");
-                    put("arguments", new ArrayList<>(Arrays.asList(
-                        getNicknameField().getText()
-                    )));
+                    put("arguments", getNicknameField().getText());
                 }}, Message.Type.command);
                 Message responseMessage = AppClient.getServerHandler().sendAndWaitForResponse(message);
                 if (methodUseMessage(responseMessage, errorLabel)) return;
+                errorLabel.setText(responseMessage.getFromBody("message"));
             }
+
+            Message message = new Message(new HashMap<>() {{
+                put("function", "getClientUser");
+                put("arguments", "");
+            }}, Message.Type.command);
+            Message responseMessage = AppClient.getServerHandler().sendAndWaitForResponse(message);
+            AppClient.setCurrentUser(JSONUtils.fromJsonUser(responseMessage.getFromBody("message")));
 
         }
         else if (getBackButton().isChecked()) {

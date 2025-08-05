@@ -12,6 +12,7 @@ import com.badlogic.gdx.scenes.scene2d.ui.*;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
@@ -444,6 +445,11 @@ public class RegisterMenuView implements Screen {
         }
         else if (getExitButton().isChecked()) {
             getExitButton().setChecked(false);
+            try {
+                AppClient.getServerHandler().getSocket().close();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
             Main.getBatch().dispose();
         }
         else if (getLoginButton().isChecked()) {
