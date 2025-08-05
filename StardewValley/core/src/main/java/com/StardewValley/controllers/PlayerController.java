@@ -12,20 +12,22 @@ import com.badlogic.gdx.utils.Array;
 public class PlayerController {
     public void updatePlayer() {
         for (Player player : App.getCurrentGame().getPlayers()) {
-            player.getSprite().setPosition(player.getCoordinate().getX() * 40,
+            if(player.isRenderAble()) {
+                player.getSprite().setPosition(player.getCoordinate().getX() * 40,
                     player.getCoordinate().getY() * 40);
-            player.getSprite().draw(Main.getBatch());
+                player.getSprite().draw(Main.getBatch());
 
-            if (player.getPlayerDirection() != -1) {
-                if(player.getUser().getGender().getName().equals("Male")) {
-                    animation(player, player.getPlayerDirection());
-                } else {
-                    femaleAnimation(player, player.getPlayerDirection());
+                if (player.getPlayerDirection() != -1) {
+                    if (player.getUser().getGender().getName().equals("Male")) {
+                        animation(player, player.getPlayerDirection());
+                    } else {
+                        femaleAnimation(player, player.getPlayerDirection());
+                    }
                 }
+                player.getInHandGoodSprite().setSize(40, 40);
+                Main.getBatch().draw(player.getInHandGoodSprite(),
+                    player.getInHandGoodSprite().getX(), player.getInHandGoodSprite().getY());
             }
-            player.getInHandGoodSprite().setSize(40, 40);
-            Main.getBatch().draw(player.getInHandGoodSprite(),
-                player.getInHandGoodSprite().getX(), player.getInHandGoodSprite().getY());
         }
     }
 

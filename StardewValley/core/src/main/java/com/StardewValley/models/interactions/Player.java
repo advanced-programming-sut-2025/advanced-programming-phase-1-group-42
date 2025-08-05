@@ -46,6 +46,7 @@ public class Player {
     private Buff buff;
     private Buff rejectionBuff;
 
+    private boolean renderAble = true;
     // level-value
     private final HashMap<Player, Pair<Integer, Integer>> friendShips = new HashMap<>();
     private final HashMap<Player, Boolean> isInteracted;
@@ -367,5 +368,13 @@ public class Player {
 
     public ArrayList<Pair<Player, ArrayList<String>>> getPrivateChat() {
         return privateChat;
+    }
+
+    public boolean isRenderAble() {
+        return renderAble;
+    }
+
+    public void setRenderAble(boolean renderAble) {
+        this.renderAble = renderAble;
     }
 }

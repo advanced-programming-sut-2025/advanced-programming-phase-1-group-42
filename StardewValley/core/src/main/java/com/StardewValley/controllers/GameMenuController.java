@@ -92,7 +92,6 @@ public class GameMenuController extends Controller {
     private CookingController cookingController;
     private CraftingController craftingController;
 
-
     public void setView(GameMenuView view) {
         this.view = view;
     }
@@ -269,11 +268,13 @@ public class GameMenuController extends Controller {
             nextTurn();
             inventoryController.playerChangedInventory();
         }
-
+        //TESTES COMMANDS //////////////////////////////////////////////////
         if (Gdx.input.isKeyJustPressed(Input.Keys.J)) {
                 gameView.showThunder();
         }
-
+        if (Gdx.input.isKeyJustPressed(Input.Keys.L)) {
+        }
+        /// ///////////////////////////////////////////////////////////////
         if (Gdx.input.isKeyJustPressed(Input.Keys.C)) {
             gameView.touchDown(Gdx.input.getX(), Gdx.input.getY(), 0, Input.Buttons.LEFT);
         }
@@ -2504,6 +2505,7 @@ public class GameMenuController extends Controller {
 
         StringBuilder list = new StringBuilder();
         if (!App.getCurrentGame().getCurrentPlayer().getIsInteracted().get(player)) {
+            gameView.showHug(App.getCurrentGame().getCurrentPlayer(), player);
             if (App.getCurrentGame().getCurrentPlayer().getMarried() == player) {
                 App.getCurrentGame().getCurrentPlayer().getEnergy().increaseTurnEnergyLeft(50);
                 player.getEnergy().increaseTurnEnergyLeft(50);
