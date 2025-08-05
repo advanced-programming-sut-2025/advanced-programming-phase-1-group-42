@@ -2,6 +2,8 @@ package com.StardewValley.client.views;
 
 import com.StardewValley.client.Main;
 import com.StardewValley.client.AppClient;
+import com.StardewValley.models.JSONUtils;
+import com.StardewValley.models.Message;
 import com.StardewValley.server.controllers.ProfileMenuController;
 import com.StardewValley.models.Assets;
 import com.badlogic.gdx.Gdx;
@@ -9,6 +11,10 @@ import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.*;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
+
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.HashMap;
 
 public class ProfileMenuView implements Screen {
     private Skin skin;
@@ -215,6 +221,82 @@ public class ProfileMenuView implements Screen {
     }
 
     private void handleProfile() {
+        if (getSaveButton().isChecked()) {
+            getSaveButton().setChecked(false);
 
+            if (!getUsernameField().getText().equals(AppClient.getCurrentUser().getUsername())) {
+                Message message = new Message(new HashMap<>() {{
+                    put("function", "changeUsername");
+                    put("arguments", new ArrayList<>(Arrays.asList(
+                        getUsernameField().getText()
+                    )));
+                }}, Message.Type.command);
+                Message responseMessage = AppClient.getServerHandler().sendAndWaitForResponse(message);
+                if (methodUseMessage(responseMessage, errorLabel)) return;
+            }
+            if (!getPasswordField().getText().equals(AppClient.getCurrentUser().getPassword())) {
+                Message message = new Message(new HashMap<>() {{
+                    put("function", "changePassword");
+                    put("arguments", new ArrayList<>(Arrays.asList(
+                        getPasswordField().getText()
+                    )));
+                }}, Message.Type.command);
+                Message responseMessage = AppClient.getServerHandler().sendAndWaitForResponse(message);
+                if (methodUseMessage(responseMessage, errorLabel)) return;
+            }
+            if (!getEmailField().getText().equals(AppClient.getCurrentUser().getEmail())) {
+                Message message = new Message(new HashMap<>() {{
+                    put("function", "changeEmail");
+                    put("arguments", new ArrayList<>(Arrays.asList(
+                        getEmailField().getText()
+                    )));
+                }}, Message.Type.command);
+                Message responseMessage = AppClient.getServerHandler().sendAndWaitForResponse(message);
+                if (methodUseMessage(responseMessage, errorLabel)) return;
+            }
+            if (!getNicknameField().getText().equals(AppClient.getCurrentUser().getNickname())) {
+                Message message = new Message(new HashMap<>() {{
+                    put("function", "changeNickname");
+                    put("arguments", new ArrayList<>(Arrays.asList(
+                        getNicknameField().getText()
+                    )));
+                }}, Message.Type.command);
+                Message responseMessage = AppClient.getServerHandler().sendAndWaitForResponse(message);
+                if (methodUseMessage(responseMessage, errorLabel)) return;
+            }
+
+        }
+        else if (getBackButton().isChecked()) {
+            getBackButton().setChecked(false);
+
+            Message message = new Message(new HashMap<>() {{
+                put("field", "controller");
+                put("change", "MainMenuController");
+            }}, Message.Type.change);
+            Message responseMessage = AppClient.getServerHandler().sendAndWaitForResponse(message);
+            if (!checkMessageValidity(responseMessage, Message.Type.response)) {
+                getErrorLabel().setText("Network error!");
+                return;
+            }
+
+            Main.getMain().getScreen().dispose();
+            Main.getMain().setScreen(new MainMenuView(Assets.getInstance().getSkin()));
+        }
+    }
+
+    private boolean methodUseMessage(Message responseMessage, Label label) {
+        if (!checkMessageValidity(responseMessage, Message.Type.response)) {
+            label.setText("Network error!");
+            return true;
+        }
+        if(!responseMessage.getBooleanFromBody("success")) {
+            label.setText(responseMessage.getFromBody("message"));
+            return true;
+        }
+        return false;
+    }
+
+    public boolean checkMessageValidity(Message message, Message.Type type) {
+        return message.getType() == type;
     }
 }
