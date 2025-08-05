@@ -4,7 +4,6 @@ import com.StardewValley.models.game_structure.Game;
 
 
 public class User {
-    private Game game;
     private String username;
     private String password;
     private String nickname;
@@ -27,7 +26,6 @@ public class User {
         this.questionNumber = questionNumber;
         this.answer = answer;
         this.earnedPoints = 0;
-        this.game = null;
         this.isPlaying = false;
         this.maxPoints = 0;
         this.gamePlay = 0;
@@ -61,10 +59,6 @@ public class User {
         isPlaying = playing;
     }
 
-    public Game getGame() {
-        return game;
-    }
-
     public int getEarnedPoints() {
         return earnedPoints;
     }
@@ -91,10 +85,6 @@ public class User {
 
     public void setEmail(String email) {
         this.email = email;
-    }
-
-    public void setGame(Game game) {
-        this.game = game;
     }
 
     public void setEarnedPoints(int earnedPoints) {

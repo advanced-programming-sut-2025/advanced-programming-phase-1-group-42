@@ -60,10 +60,10 @@ public class GameMenuView implements Screen {
         this.titleSavedGameLabel.setFontScale(1.0f);
         this.detailsSavedGameLabel = new Label("", skin);
         if(AppClient.getCurrentUser().getPlaying()) {
-            this.detailsSavedGameLabel.setText("Details:\nDays: " + AppClient.getCurrentUser().getGame().getDateTime().getDays() +
-                "\nSeason: " + AppClient.getCurrentUser().getGame().getDateTime().getSeason() +
-                "\nYear: " + AppClient.getCurrentUser().getGame().getDateTime().getYear() +
-                "\nPoints: " + AppClient.getCurrentUser().getGame().findPlayer(AppClient.getCurrentUser().getUsername()).getPoints());
+            this.detailsSavedGameLabel.setText("Details:\nDays: " + AppClient.getCurrentGame().getDateTime().getDays() +
+                "\nSeason: " + AppClient.getCurrentGame().getDateTime().getSeason() +
+                "\nYear: " + AppClient.getCurrentGame().getDateTime().getYear() +
+                "\nPoints: " + AppClient.getCurrentGame().findPlayer(AppClient.getCurrentUser().getUsername()).getPoints());
         }
         this.detailsSavedGameLabel.setText("Details:\nDays: " +
             "\nSeason: " +

@@ -897,7 +897,6 @@ public class GameMenuController extends Controller {
         AppClient.setCurrentGame(game);
         AppServer.getGames().add(game);
         for (Player player : players) {
-            player.getUser().setGame(game);
             player.getUser().setPlaying(true);
             player.iniFriendships(players);
         }
@@ -922,7 +921,6 @@ public class GameMenuController extends Controller {
         for (Player player : game.getPlayers()) {
             if (player.getUser().getUsername().equals(AppClient.getCurrentUser().getUsername()))
                 AppClient.getCurrentGame().setGameAdmin(player);
-            player.getUser().setGame(game);
         }
 
         return new Result(true, "Your game has successfully loaded!");
@@ -961,7 +959,6 @@ public class GameMenuController extends Controller {
 
         for (Player player : AppClient.getCurrentGame().getPlayers()) {
             player.getUser().setPlaying(false);
-            player.getUser().setGame(null);
             player.getUser().increaseEarnedPoints(player.getPoints());
             player.getUser().maxMaxPoints(player.getPoints());
             player.getUser().increaseGamePlay(AppClient.getCurrentGame().getDateTime().getDays());

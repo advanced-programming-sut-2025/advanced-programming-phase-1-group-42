@@ -14,11 +14,12 @@ public class ClientListener extends Thread {
 
     public ClientListener(int port) throws IOException {
         serverSocket = new ServerSocket(port);
-        threadPool = Executors.newCachedThreadPool();
     }
 
     @Override
     public void run() {
+        threadPool = Executors.newCachedThreadPool();
+
         while (!AppServer.isEnded()) {
             try {
                 Socket socket = serverSocket.accept();
@@ -28,13 +29,22 @@ public class ClientListener extends Thread {
                 }
             }
             catch (IOException e) {
+                threadPool.shutdownNow();
+                try {
+                    serverSocket.close();
+                } catch (IOException ex) {
+                    throw new RuntimeException(ex);
+                }
                 e.printStackTrace();
                 break;
             }
         }
-    }
 
-    public static ExecutorService getThreadPool() {
-        return threadPool;
+        try {
+            threadPool.shutdownNow();
+            serverSocket.close();
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
     }
 }

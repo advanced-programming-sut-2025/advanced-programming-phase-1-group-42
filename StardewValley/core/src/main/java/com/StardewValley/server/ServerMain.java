@@ -8,6 +8,11 @@ public class ServerMain {
             return;
         }
 
+        Runtime.getRuntime().addShutdownHook(new Thread(() -> {
+            AppServer.setEnded(true);
+            System.exit(0);
+        }));
+
         try {
             int port = Integer.parseInt(args[1]);
             AppServer.setClientListener(new ClientListener(port));
@@ -18,12 +23,6 @@ public class ServerMain {
             e.printStackTrace();
         }
 
-        Runtime.getRuntime().addShutdownHook(new Thread() {
-            public void run() {
-                AppServer.setEnded(true);
-                AppServer.getClientListener().getThreadPool().shutdownNow();
-                System.exit(0);
-            }
-        });
+
     }
 }

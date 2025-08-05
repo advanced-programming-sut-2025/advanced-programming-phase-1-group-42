@@ -19,79 +19,15 @@ import java.util.concurrent.LinkedBlockingQueue;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicBoolean;
 
-public class ClientHandler extends Thread {
-    protected DataInputStream dataInputStream;
-    protected DataOutputStream dataOutputStream;
-    protected Socket socket;
-    protected AtomicBoolean end;
+public class ClientHandler extends ConnectionThread {
     private Controller currentController;
 
     private User clientUser;
     private Game clientGame;
 
     protected ClientHandler(Socket socket) throws IOException {
-        this.socket = socket;
-    }
-
-//    public Message sendAndWaitForResponse(Message message) {
-//        sendMessage(message);
-//        try {
-//            socket.setSoTimeout(0);
-//            return JSONUtils.fromJson(dataInputStream.readUTF());
-//        } catch (Exception e) {
-//            System.err.println("Request Timed out.");
-//            return null;
-//        }
-//    }
-
-    public synchronized void sendMessage(Message message) {
-        String JSONString = JSONUtils.toJson(message);
-
-        try {
-            dataOutputStream.writeUTF(JSONString);
-            dataOutputStream.flush();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-    }
-
-    @Override
-    public void run() {
-        while (!end.get()) {
-            try {
-                String receivedStr = dataInputStream.readUTF();
-                Message message = JSONUtils.fromJson(receivedStr);
-                handleMessage(message);
-            } catch (Exception e) {
-                try {
-                    socket.close();
-                    break;
-                } catch (IOException ex) {
-                    throw new RuntimeException(ex);
-                }
-            }
-        }
-
-        end();
-    }
-
-    public void end() {
-        end.set(true);
-        try {
-            socket.close();
-        } catch (IOException e) {}
-    }
-
-    public Socket getSocket() {
-        return socket;
-    }
-
-    public DataInputStream getDataInputStream() {
-        return dataInputStream;
-    }
-
-    public DataOutputStream getDataOutputStream() {
-        return dataOutputStream;
+        super(socket);
+        this.currentController = new RegisterMenuController(this);
     }
 
     protected boolean handleMessage(Message message) {
@@ -102,6 +38,11 @@ public class ClientHandler extends Thread {
             return true;
         }
         return false;
+    }
+
+    @Override
+    public boolean initialHandshake() {
+        return true;
     }
 
     public Controller getCurrentController() {

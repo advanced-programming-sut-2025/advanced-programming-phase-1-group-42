@@ -5,6 +5,7 @@ import com.StardewValley.client.Main;
 import com.StardewValley.client.views.LoginMenuView;
 import com.StardewValley.client.views.MainMenuView;
 import com.StardewValley.models.Assets;
+import com.StardewValley.models.JSONUtils;
 import com.StardewValley.models.Message;
 import com.StardewValley.models.Result;
 import com.StardewValley.models.interactions.User;
@@ -52,7 +53,10 @@ public class LoginMenuController extends Controller {
                     ArrayList<String> arguments = message.getFromBody("arguments");
                     return changePassword(arguments.get(0), arguments.get(1), arguments.get(2));
                 }
-
+                case "getUser" -> {
+                    ArrayList<String> arguments = message.getFromBody("arguments");
+                    return getUser(arguments.getFirst());
+                }
             }
         }
             return new Message(new HashMap<>() {{
@@ -62,7 +66,7 @@ public class LoginMenuController extends Controller {
     }
 
     private Message changePassword(String username, String newPassword, String confirmNewPassword) {
-        User user = getUser(username).getFromBody("message");
+        User user = JSONUtils.fromJsonUser(getUser(username).getFromBody("message"));
         if (user == null) {
             return new Message(new HashMap<>() {{
                 put("success", false);
@@ -110,7 +114,7 @@ public class LoginMenuController extends Controller {
         AppServer.getOnlineUsers().add(user);
         return new Message(new HashMap<>() {{
             put("success", true);
-            put("message", user);
+            put("message", JSONUtils.toJsonUser(user));
         }}, Message.Type.response);
     }
 
@@ -125,7 +129,7 @@ public class LoginMenuController extends Controller {
 
         return new Message(new HashMap<>() {{
             put("success", true);
-            put("message", user);
+            put("message", JSONUtils.toJsonUser(user));
         }}, Message.Type.response);
     }
 }

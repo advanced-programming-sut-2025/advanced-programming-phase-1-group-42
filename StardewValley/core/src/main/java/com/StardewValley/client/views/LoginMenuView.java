@@ -3,6 +3,7 @@ package com.StardewValley.client.views;
 import com.StardewValley.client.AppClient;
 import com.StardewValley.client.Main;
 import com.StardewValley.models.Assets;
+import com.StardewValley.models.JSONUtils;
 import com.StardewValley.models.Message;
 import com.StardewValley.models.interactions.User;
 import com.badlogic.gdx.Gdx;
@@ -405,7 +406,7 @@ public class LoginMenuView implements Screen {
         }}, Message.Type.command);
         Message responseMessage = AppClient.getServerHandler().sendAndWaitForResponse(message);
         if (methodUseMessage(message, responseMessage, forgetErrorLabel)) return null;
-        User user = responseMessage.getFromBody("message");
+        User user = JSONUtils.fromJsonUser(responseMessage.getFromBody("message"));
         return user;
     }
 

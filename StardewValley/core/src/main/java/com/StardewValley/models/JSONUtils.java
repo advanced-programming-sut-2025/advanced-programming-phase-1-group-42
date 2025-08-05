@@ -1,5 +1,6 @@
 package com.StardewValley.models;
 
+import com.StardewValley.models.interactions.User;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 
@@ -19,4 +20,14 @@ public class JSONUtils {
 	public synchronized static Message fromJson(String json) {
 		return gson.fromJson(json, Message.class);
 	}
+
+    public synchronized static User fromJsonUser(String json) {
+        return gson.fromJson(json, User.class);
+    }
+
+    public synchronized static String toJsonUser(User user) {
+        return gson.toJson(user, User.class);
+    }
+
+
 }

@@ -1,5 +1,7 @@
 package com.StardewValley.models;
 
+import com.StardewValley.models.interactions.User;
+
 import java.util.HashMap;
 
 public class Message {
@@ -30,6 +32,10 @@ public class Message {
 
     public boolean getBooleanFromBody(String fieldName) {
         return (boolean) body.get(fieldName);
+    }
+
+    public User getUserFromBody(String fieldName) {
+        return (User) body.get(fieldName);
     }
 
 	public enum Type {

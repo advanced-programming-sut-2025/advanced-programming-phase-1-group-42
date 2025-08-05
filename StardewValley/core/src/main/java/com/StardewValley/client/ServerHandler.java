@@ -3,6 +3,7 @@ package com.StardewValley.client;
 import com.StardewValley.models.ConnectionThread;
 import com.StardewValley.models.JSONUtils;
 import com.StardewValley.models.Message;
+import com.StardewValley.models.interactions.User;
 
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
@@ -30,7 +31,7 @@ public class ServerHandler {
         try {
             return JSONUtils.fromJson(dataInputStream.readUTF());
         } catch (Exception e) {
-            System.err.println("Request Timed out.");
+            e.printStackTrace();
             return null;
         }
     }
