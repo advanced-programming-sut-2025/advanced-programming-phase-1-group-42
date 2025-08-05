@@ -13,6 +13,7 @@ public class ClientListener extends Thread {
 
     public ClientListener(int port) throws IOException {
         serverSocket = new ServerSocket(port);
+        threadPool = Executors.newCachedThreadPool();
     }
 
     @Override
@@ -20,13 +21,14 @@ public class ClientListener extends Thread {
         while (!AppServer.isEnded()) {
             try {
                 Socket socket = serverSocket.accept();
-                if (socket != null) {
-                    new ClientHandler(socket).start();
-                    System.out.println("New client connected with port " + port);
+                if (socket != null && !socket.isClosed()) {
+                    threadPool.execute(new ClientHandler(socket));
+                    System.out.println("New client connected with port: " + socket.getPort());
                 }
             }
             catch (IOException e) {
                 e.printStackTrace();
+                break;
             }
         }
     }

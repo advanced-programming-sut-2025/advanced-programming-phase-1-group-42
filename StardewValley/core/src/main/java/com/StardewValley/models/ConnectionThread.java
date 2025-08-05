@@ -60,7 +60,7 @@ abstract public class ConnectionThread extends Thread {
 	public void run() {
 		initialized = false;
 		if (!initialHandshake()) {
-			System.err.println("Inital HandShake failed with remote device.");
+			System.err.println("Initial HandShake failed with remote device.");
 			end();
 			return;
 		}
@@ -75,7 +75,8 @@ abstract public class ConnectionThread extends Thread {
 					receivedMessagesQueue.put(message);
 				} catch (InterruptedException e) {}
 			} catch (Exception e) {
-				break;
+				e.printStackTrace();
+                break;
 			}
 		}
 
