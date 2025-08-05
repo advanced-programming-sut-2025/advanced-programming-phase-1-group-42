@@ -67,6 +67,9 @@ public class ClientHandler extends Thread {
                 e.printStackTrace();
                 break;
             }
+            finally {
+                this.end.set(true);
+            }
         }
 
         end();

@@ -23,6 +23,7 @@ public class ServerHandler {
         this.socket = socket;
         this.dataInputStream = new DataInputStream(socket.getInputStream());
         this.dataOutputStream = new DataOutputStream(socket.getOutputStream());
+        this.dataOutputStream.writeUTF(JSONUtils.toJson(new Message(new HashMap<>(), Message.Type.request)));
     }
 
     public Message sendAndWaitForResponse(Message message) {
