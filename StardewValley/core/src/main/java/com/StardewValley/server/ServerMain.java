@@ -17,5 +17,13 @@ public class ServerMain {
         catch (IOException e) {
             e.printStackTrace();
         }
+
+        Runtime.getRuntime().addShutdownHook(new Thread() {
+            public void run() {
+                AppServer.setEnded(true);
+                AppServer.getClientListener().getThreadPool().shutdownNow();
+                System.exit(0);
+            }
+        });
     }
 }

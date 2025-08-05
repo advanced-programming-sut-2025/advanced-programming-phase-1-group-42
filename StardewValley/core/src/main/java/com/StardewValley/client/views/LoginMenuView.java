@@ -1,12 +1,19 @@
 package com.StardewValley.client.views;
 
+import com.StardewValley.client.AppClient;
 import com.StardewValley.client.Main;
 import com.StardewValley.models.Assets;
+import com.StardewValley.models.Message;
+import com.StardewValley.models.interactions.User;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.*;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
+
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.HashMap;
 
 public class LoginMenuView implements Screen {
     private Stage stage;
@@ -276,6 +283,145 @@ public class LoginMenuView implements Screen {
     }
 
     private void handleLogin() {
+        if (getBackButton().isChecked()) {
+            getBackButton().setChecked(false);
 
+            Message message = new Message(new HashMap<>() {{
+                put("field", "controller");
+                put("change", "RegisterMenuController");
+            }}, Message.Type.change);
+            Message responseMessage = AppClient.getServerHandler().sendAndWaitForResponse(message);
+            if (!checkMessageValidity(responseMessage, Message.Type.response)) {
+                getErrorLabel().setText("Network error!");
+                return;
+            }
+
+            Main.getMain().getScreen().dispose();
+            Main.getMain().setScreen(new RegisterMenuView( Assets.getInstance().getSkin()));
+        }
+        else if (getForgetPasswordButton().isChecked()) {
+            getForgetPasswordButton().setChecked(false);
+
+            initForgetPasswordWindow();
+        }
+        else if (getLoginButton().isChecked()) {
+            getLoginButton().setChecked(false);
+
+            Message message = new Message(new HashMap<>() {{
+                put("function", "login");
+                put("arguments", new ArrayList<>(Arrays.asList(
+                        getUsernameField().getText(),
+                        getPasswordField().getText(),
+                        String.valueOf(getStayOnLoginCheckBox().isChecked())
+                )));
+            }}, Message.Type.command);
+            Message responseMessage = AppClient.getServerHandler().sendAndWaitForResponse(message);
+            if (methodUseMessage(message, responseMessage, errorLabel)) return;
+            AppClient.setCurrentUser(responseMessage.getFromBody("message"));
+
+            Message message2 = new Message(new HashMap<>() {{
+                put("field", "controller");
+                put("change", "MainMenuController");
+            }}, Message.Type.change);
+            Message responseMessage2 = AppClient.getServerHandler().sendAndWaitForResponse(message2);
+            if (!checkMessageValidity(responseMessage2, Message.Type.response)) {
+                getErrorLabel().setText("Network error!");
+                return;
+            }
+
+            Main.getMain().getScreen().dispose();
+            Main.getMain().setScreen(new MainMenuView(Assets.getInstance().getSkin()));
+        }
+        else if (getUsernameFindButton().isChecked()) {
+            getUsernameFindButton().setChecked(false);
+
+            User user = getUser();
+            if (user == null) return;
+
+            getSecurityQuestionLabel().setText("Question: " + AppClient.getSecurityQuestions().
+                get(user.getQuestionNumber()));
+            getForgetErrorLabel().setText("Welcome " + user.getUsername());
+        }
+        else if (getSecurityQuestionSubmitButton().isChecked()) {
+            getSecurityQuestionSubmitButton().setChecked(false);
+
+            User user = getUser();
+            if (user == null) return;
+
+            if (!getSecurityQuestionField().getText().equals(user.getAnswer())) {
+                getForgetErrorLabel().setText("Wrong answer to security question!");
+                return;
+            }
+
+            getForgetErrorLabel().setText("Please enter your new password!");
+        }
+        else if (getRandomNewPasswordButton().isChecked()) {
+            getRandomNewPasswordButton().setChecked(false);
+
+            Message message = new Message(new HashMap<>() {{
+                put("function", "generateRandomPassword");
+                put("arguments", null);
+            }}, Message.Type.command);
+
+            Message responseMessage = AppClient.getServerHandler().sendAndWaitForResponse(message);
+            if (!checkMessageValidity(responseMessage, Message.Type.response)) {
+                getForgetErrorLabel().setText("Network error!");
+            }
+            String randomPassword = responseMessage.getFromBody("message");
+
+            getNewPasswordField().setText(randomPassword);
+            getConfirmNewPasswordField().setText(randomPassword);
+        }
+        else if (getNewPasswordConfirmButton().isChecked()) {
+            getNewPasswordConfirmButton().setChecked(false);
+
+            Message message = new Message(new HashMap<>() {{
+                put("function", "changePassword");
+                put("arguments", new ArrayList<>(Arrays.asList(
+                        getUsernameForgetField().getText(),
+                        getNewPasswordField().getText(),
+                        getConfirmNewPasswordField().getText()
+                )));
+            }}, Message.Type.command);
+            Message responseMessage = AppClient.getServerHandler().sendAndWaitForResponse(message);
+            if (methodUseMessage(message, responseMessage, forgetErrorLabel)) return;
+
+            forgetErrorLabel.setText(responseMessage.getFromBody("message"));
+            getForgetPasswordWindow().setVisible(false);
+        }
+        else if (getForgetBackButton().isChecked()) {
+            getForgetBackButton().setChecked(false);
+
+            getForgetPasswordWindow().setVisible(false);
+        }
+    }
+
+    private User getUser() {
+        Message message = new Message(new HashMap<>() {{
+            put("function", "getUser");
+            put("arguments", new ArrayList<>(Arrays.asList(
+                    getUsernameForgetField().getText()
+            )));
+        }}, Message.Type.command);
+        Message responseMessage = AppClient.getServerHandler().sendAndWaitForResponse(message);
+        if (methodUseMessage(message, responseMessage, forgetErrorLabel)) return null;
+        User user = responseMessage.getFromBody("message");
+        return user;
+    }
+
+    private boolean methodUseMessage(Message message, Message responseMessage, Label label) {
+        if (!checkMessageValidity(responseMessage, Message.Type.response)) {
+            label.setText("Network error!");
+            return true;
+        }
+        if(!responseMessage.getBooleanFromBody("success")) {
+            label.setText(responseMessage.getFromBody("message"));
+            return true;
+        }
+        return false;
+    }
+
+    public boolean checkMessageValidity(Message message, Message.Type type) {
+        return message.getType() == type;
     }
 }

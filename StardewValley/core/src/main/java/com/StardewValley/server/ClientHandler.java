@@ -3,6 +3,8 @@ package com.StardewValley.server;
 import com.StardewValley.models.ConnectionThread;
 import com.StardewValley.models.JSONUtils;
 import com.StardewValley.models.Message;
+import com.StardewValley.models.game_structure.Game;
+import com.StardewValley.models.interactions.User;
 import com.StardewValley.server.controllers.Controller;
 import com.StardewValley.server.controllers.RegisterMenuController;
 
@@ -18,12 +20,14 @@ import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicBoolean;
 
 public class ClientHandler extends Thread {
-
     protected DataInputStream dataInputStream;
     protected DataOutputStream dataOutputStream;
     protected Socket socket;
     protected AtomicBoolean end;
     private Controller currentController;
+
+    private User clientUser;
+    private Game clientGame;
 
     protected ClientHandler(Socket socket) throws IOException {
         this.socket = socket;
@@ -53,15 +57,6 @@ public class ClientHandler extends Thread {
 
     @Override
     public void run() {
-        try {
-            this.dataInputStream = new DataInputStream(socket.getInputStream());
-            this.dataOutputStream = new DataOutputStream(socket.getOutputStream());
-            this.end = new AtomicBoolean(false);
-            currentController = new RegisterMenuController(this);
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-
         while (!end.get()) {
             try {
                 String receivedStr = dataInputStream.readUTF();
@@ -115,5 +110,13 @@ public class ClientHandler extends Thread {
 
     public void setCurrentController(Controller currentController) {
         this.currentController = currentController;
+    }
+
+    public User getClientUser() {
+        return clientUser;
+    }
+
+    public void setClientUser(User clientUser) {
+        this.clientUser = clientUser;
     }
 }

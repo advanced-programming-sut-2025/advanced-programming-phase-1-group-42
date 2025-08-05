@@ -18,7 +18,6 @@ import java.util.HashMap;
 public class RegisterMenuController extends Controller {
     private ClientHandler clientHandler;
 
-
     public RegisterMenuController(ClientHandler clientHandler) {
         this.clientHandler = clientHandler;
     }
@@ -28,7 +27,7 @@ public class RegisterMenuController extends Controller {
         if (message.getType() == Message.Type.change) {
             switch ((String) message.getFromBody("field")) {
                 case "controller" -> {
-                    this.clientHandler.setCurrentController(new LoginMenuController());
+                    this.clientHandler.setCurrentController(new LoginMenuController(clientHandler));
                     return new Message(new HashMap<>() {{
                         put("success", true);
                         put("message", "");
@@ -88,64 +87,6 @@ public class RegisterMenuController extends Controller {
         }}, Message.Type.response);
     }
 
-//    public void handleLogin() {
-//        if (loginMenuView.getBackButton().isChecked()) {
-//            loginMenuView.getBackButton().setChecked(false);
-//
-//            Main.getMain().getScreen().dispose();
-//            Main.getMain().setScreen(new RegisterMenuView( Assets.getInstance().getSkin()));
-//        }
-//        else if (loginMenuView.getForgetPasswordButton().isChecked()) {
-//            loginMenuView.getForgetPasswordButton().setChecked(false);
-//
-//            loginMenuView.initForgetPasswordWindow();
-//        }
-//        else if (loginMenuView.getLoginButton().isChecked()) {
-//            loginMenuView.getLoginButton().setChecked(false);
-//            login(loginMenuView);
-//        }
-//        else if (loginMenuView.getUsernameFindButton().isChecked()) {
-//            loginMenuView.getUsernameFindButton().setChecked(false);
-//
-//            User user = getUser(loginMenuView);
-//            if (user == null) return;
-//
-//
-//            loginMenuView.getSecurityQuestionLabel().setText("Question: " + AppClient.getSecurityQuestions().
-//                get(user.getQuestionNumber()));
-//            loginMenuView.getForgetErrorLabel().setText("Welcome " + user.getUsername());
-//        }
-//        else if (loginMenuView.getSecurityQuestionSubmitButton().isChecked()) {
-//            loginMenuView.getSecurityQuestionSubmitButton().setChecked(false);
-//
-//            User user = getUser(loginMenuView);
-//            if (user == null) return;
-//
-//            if (!loginMenuView.getSecurityQuestionField().getText().equals(user.getAnswer())) {
-//                loginMenuView.getForgetErrorLabel().setText("Wrong answer to security question!");
-//                return;
-//            }
-//
-//            loginMenuView.getForgetErrorLabel().setText("Please enter your new password!");
-//        }
-//        else if (loginMenuView.getRandomNewPasswordButton().isChecked()) {
-//            loginMenuView.getRandomNewPasswordButton().setChecked(false);
-//
-//            String randomPassword = generateRandomPassword();
-//            loginMenuView.getNewPasswordField().setText(randomPassword);
-//            loginMenuView.getConfirmNewPasswordField().setText(randomPassword);
-//        }
-//        else if (loginMenuView.getNewPasswordConfirmButton().isChecked()) {
-//            loginMenuView.getNewPasswordConfirmButton().setChecked(false);
-//
-//            changePassword(loginMenuView);
-//        }
-//        else if (loginMenuView.getForgetBackButton().isChecked()) {
-//            loginMenuView.getForgetBackButton().setChecked(false);
-//
-//            loginMenuView.getForgetPasswordWindow().setVisible(false);
-//        }
-//    }
 
     private void changePassword(LoginMenuView loginMenuView) {
         User user = getUser(loginMenuView);
