@@ -3943,24 +3943,12 @@ public class GameView implements Screen, InputProcessor {
             thunder_2,thunder_2,thunder_3,thunder_3
         );
         thunderAnimation.setPlayMode(Animation.PlayMode.NORMAL);
-        playSFX("Audio/Sfx/Thunder.mp3");
+        App.playSFX("Audio/Sfx/Thunder.mp3");
         thunderStateTime = 0f;
         showThunder = true;
     }
 
-    public static Music currentSfx;
-    public static void playSFX(String path) {
-        if (currentSfx != null) {
-            currentSfx.stop();
-            currentSfx.dispose();
-        }
-        currentSfx = Gdx.audio.newMusic(Gdx.files.internal(path));
-        currentSfx.setLooping(true);
-        float volume = 0.5f;
-        currentSfx.setVolume(volume);
-        currentSfx.play();
-        currentSfx.setLooping(false);
-    }
+
 }
 
 
