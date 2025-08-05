@@ -165,4 +165,18 @@ public class App {
         pixmap.dispose();
     }
 
+    public static Music currentSfx;
+    public static void playSFX(String path) {
+        if (currentSfx != null) {
+            currentSfx.stop();
+            currentSfx.dispose();
+        }
+        currentSfx = Gdx.audio.newMusic(Gdx.files.internal(path));
+        currentSfx.setLooping(true);
+        float volume = 0.5f;
+        currentSfx.setVolume(volume);
+        currentSfx.play();
+        currentSfx.setLooping(false);
+    }
+
 }

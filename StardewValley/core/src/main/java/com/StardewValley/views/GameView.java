@@ -316,6 +316,7 @@ public class GameView implements Screen, InputProcessor {
 
         renderEmote(Gdx.graphics.getDeltaTime());
         renderThunder(Gdx.graphics.getDeltaTime());
+        renderHug(Gdx.graphics.getDeltaTime());
 
         Main.getBatch().end();
 
@@ -535,6 +536,8 @@ public class GameView implements Screen, InputProcessor {
             info.setWidth(250);
             info.setFontScale(0.7f);
             info.setAlignment(Align.center);
+
+
 
 
             // MarnieRanch
@@ -2130,8 +2133,8 @@ public class GameView implements Screen, InputProcessor {
     private Table mainTable;
 
 
-    private Container<Window> windowContainer;
 
+    private Container<Window> windowContainer;
     public void initMainTable(int index) {
         ArrayList<Window> inventoryWindows = controller.getInventoryController().getInventoryWindows();
         mainInventoryElements = controller.getInventoryController().getMainInventoryElements();
@@ -2394,7 +2397,7 @@ public class GameView implements Screen, InputProcessor {
 
     }
 
-    public Window getCraftingWindow() {
+    public Window getCraftingWindow(){
         return craftingWindow;
     }
 
@@ -2425,31 +2428,33 @@ public class GameView implements Screen, InputProcessor {
         tradeInfoLabel.setColor(Color.RED);
         tradeWithGoodsLabel.setColor(Color.RED);
 
-        for (Player player : App.getCurrentGame().getCurrentPlayer().getFriendShips().keySet()) {
-            Pair<Integer, Integer> pair = App.getCurrentGame().getCurrentPlayer().getFriendShips().get(player);
-            Label label = new Label(player.getPlayerUsername() + "> Level: " + pair.first(), skin);
-            TextButton goodsButton = new TextButton("Goods", skin);
-            TextButton moneyButton = new TextButton("Money", skin);
-            goodsButton.addListener(new ClickListener() {
-                @Override
-                public void clicked(InputEvent event, float x, float y) {
-                    closeTradeWindow();
-                    initPlayerTradeWithGoodsWindow(player);
-                }
-            });
-            moneyButton.addListener(new ClickListener() {
-                @Override
-                public void clicked(InputEvent event, float x, float y) {
-                    closeTradeWindow();
-                    initPlayerTradeWithMoneyWindow(player);
-                }
-            });
+        for (Player player : App.getCurrentGame().getPlayers()) {
+            if(!player.equals(App.getCurrentGame().getCurrentPlayer())) {
+                Label label = new Label(player.getPlayerUsername() + "> Level: " +
+                    player.getFriendShips().get(App.getCurrentGame().getCurrentPlayer()).first(), skin);
+                TextButton goodsButton = new TextButton("Goods", skin);
+                TextButton moneyButton = new TextButton("Money", skin);
+                goodsButton.addListener(new ClickListener() {
+                    @Override
+                    public void clicked(InputEvent event, float x, float y) {
+                        closeTradeWindow();
+                        initPlayerTradeWithGoodsWindow(player);
+                    }
+                });
+                moneyButton.addListener(new ClickListener() {
+                    @Override
+                    public void clicked(InputEvent event, float x, float y) {
+                        closeTradeWindow();
+                        initPlayerTradeWithMoneyWindow(player);
+                    }
+                });
 
-            tradeTable.add(label).height(50).padRight(50);
-            tradeTable.add(goodsButton).height(70).width(150).height(70);
-            tradeTable.add(moneyButton).height(70).width(150).height(70);
-            tradeTable.row();
-            tradeTable.add(tradeInfoLabel).colspan(2).row();
+                tradeTable.add(label).height(50).padRight(50);
+                tradeTable.add(goodsButton).height(70).width(150).height(70);
+                tradeTable.add(moneyButton).height(70).width(150).height(70);
+                tradeTable.row();
+                tradeTable.add(tradeInfoLabel).colspan(2).row();
+            }
         }
 
         tradeBackButton = new TextButton("Back", skin);
@@ -2470,6 +2475,7 @@ public class GameView implements Screen, InputProcessor {
         tradeTable.remove();
         tradeWindow = null;
     }
+
 
 
     private void initPlayerTradeWithGoodsWindow(Player receiver) {
@@ -3658,7 +3664,6 @@ public class GameView implements Screen, InputProcessor {
         }
     }
 
-
     public void initTerminateWindow(int playerNumber) {
         App.getCurrentGame().setCurrentPlayer(App.getCurrentGame().getPlayers().get(playerNumber));
         Player player = App.getCurrentGame().getCurrentPlayer();
@@ -3935,6 +3940,7 @@ public class GameView implements Screen, InputProcessor {
     }
 
 
+
     public Window getJournalWindow() {
         return journalWindow;
     }
@@ -3996,13 +4002,11 @@ public class GameView implements Screen, InputProcessor {
         emojiWindow.add(emojiTable).pad(10);
         staticStage.addActor(emojiWindow);
     }
-
-    public void closePopupReactionWindow() {
+    public void closePopupReactionWindow(){
         emojiWindow.remove();
         emojiWindow = null;
         emojiTable.remove();
     }
-
     private Texture getTextureForEmote(String emoteName) {
         switch (emoteName) {
             case "Like":
@@ -4181,7 +4185,6 @@ public class GameView implements Screen, InputProcessor {
     private Animation<Texture> thunderAnimation;
     private float thunderStateTime = 0f;
     private boolean showThunder = false;
-
     private void renderThunder(float deltaTime) {
 
         if (showThunder && thunderAnimation != null) {
@@ -4215,25 +4218,85 @@ public class GameView implements Screen, InputProcessor {
             thunder_2, thunder_2, thunder_3, thunder_3
         );
         thunderAnimation.setPlayMode(Animation.PlayMode.NORMAL);
-        playSFX("Audio/Sfx/Thunder.mp3");
+        App.playSFX("Audio/Sfx/Thunder.mp3");
         thunderStateTime = 0f;
         showThunder = true;
     }
 
-    public static Music currentSfx;
+    private Animation<Texture> hugAnimation;
+    private float hugStateTime = 0f;
+    private boolean showHug = false;
+    private void renderHug(float deltaTime) {
 
-    public static void playSFX(String path) {
-        if (currentSfx != null) {
-            currentSfx.stop();
-            currentSfx.dispose();
+        if (showHug && hugAnimation != null) {
+            hugee.setRenderAble(false);
+            huger.setRenderAble(false);
+            hugStateTime += deltaTime;
+            Texture currentFrame = hugAnimation.getKeyFrame(hugStateTime, false);
+            // Calculate position for center
+
+            Main.getBatch().draw(currentFrame, (Gdx.graphics.getWidth()-100)/2,(Gdx.graphics.getHeight()-42)/2 );
+
+            // Optionally hide animation when finished
+            if (hugAnimation.isAnimationFinished(hugStateTime)) {
+                huger.setRenderAble(true);
+                hugee.setRenderAble(true);
+                showHug = false;
+            }
         }
-        currentSfx = Gdx.audio.newMusic(Gdx.files.internal(path));
-        currentSfx.setLooping(true);
-        float volume = 0.5f;
-        currentSfx.setVolume(volume);
-        currentSfx.play();
-        currentSfx.setLooping(false);
     }
+    private Player hugee;
+    private Player huger;
+    public void showHug(Player hugger, Player huggee) {
+        hugee = huggee;
+        huger = hugger;
+        Texture hug_1 = new Texture("GameAssets\\Animation\\Hug1.png");
+        Texture hug_2 = new Texture("GameAssets\\Animation\\Hug2.png");
+        Texture hug_3 = new Texture("GameAssets\\Animation\\Hug3.png");
+        Texture hug_4 = new Texture("GameAssets\\Animation\\Hug4.png");
+        Texture hug_5 = new Texture("GameAssets\\Animation\\Hug5.png");
+        Texture hug_6 = new Texture("GameAssets\\Animation\\Hug6.png");
+        Texture hug_7 = new Texture("GameAssets\\Animation\\Hug7.png");
+        Texture hug_8 = new Texture("GameAssets\\Animation\\Hug8.png");
+        Texture hug_9 = new Texture("GameAssets\\Animation\\Hug9.png");
+        Texture hug_10 = new Texture("GameAssets\\Animation\\Hug10.png");
+        Texture hug_11 = new Texture("GameAssets\\Animation\\Hug11.png");
+        Texture hug_12 = new Texture("GameAssets\\Animation\\Hug12.png");
+
+        Texture MMhug_1 = new Texture("GameAssets\\Animation\\MMHug\\MMHug1 (1).png");
+        Texture MMhug_2 = new Texture("GameAssets\\Animation\\MMHug\\MMHug1 (2).png");
+        Texture MMhug_3 = new Texture("GameAssets\\Animation\\MMHug\\MMHug1 (3).png");
+        Texture MMhug_4 = new Texture("GameAssets\\Animation\\MMHug\\MMHug1 (4).png");
+        Texture MMhug_5 = new Texture("GameAssets\\Animation\\MMHug\\MMHug1 (5).png");
+        Texture MMhug_6 = new Texture("GameAssets\\Animation\\MMHug\\MMHug1 (6).png");
+        Texture MMhug_7 = new Texture("GameAssets\\Animation\\MMHug\\MMHug1 (7).png");
+        Texture MMhug_8 = new Texture("GameAssets\\Animation\\MMHug\\MMHug1 (8).png");
+        Texture MMhug_9 = new Texture("GameAssets\\Animation\\MMHug\\MMHug1 (9).png");
+        Texture MMhug_10 = new Texture("GameAssets\\Animation\\MMHug\\MMHug1 (10).png");
+        Texture MMhug_11 = new Texture("GameAssets\\Animation\\MMHug\\MMHug1 (11).png");
+        Texture MMhug_12 = new Texture("GameAssets\\Animation\\MMHug\\MMHug1 (12).png");
+        Texture MMhug_13 = new Texture("GameAssets\\Animation\\MMHug\\MMHug1 (13).png");
+        if(!hugger.getUser().getGender().equals(huggee.getUser().getGender())) {
+            hugAnimation = new Animation<>(0.1f,
+                hug_1,hug_2,hug_3,hug_4,hug_5,hug_6,hug_7,hug_8,hug_9,hug_10,
+                hug_11,hug_12,hug_12,hug_12,hug_12,hug_12,hug_12,hug_12,hug_12,
+                hug_11,hug_10,hug_9,hug_8, hug_7,hug_6,hug_5,hug_4,hug_3,hug_2,hug_1
+            );
+        } else {
+            hugAnimation = new Animation<>(0.1f,
+                MMhug_1,MMhug_2,MMhug_3,MMhug_4,MMhug_5,MMhug_6,MMhug_7,MMhug_8,MMhug_9,MMhug_10,
+                MMhug_11,MMhug_12,MMhug_13,MMhug_13,MMhug_13,MMhug_13,MMhug_13,MMhug_13,MMhug_13,
+                MMhug_13,MMhug_12,MMhug_11,MMhug_10,MMhug_9,MMhug_8, MMhug_7,MMhug_6,MMhug_5,MMhug_4,
+                MMhug_3,MMhug_2,MMhug_1
+            );
+        }
+
+        hugAnimation.setPlayMode(Animation.PlayMode.NORMAL);
+
+        hugStateTime = 0f;
+        showHug = true;
+    }
+
 
     public Window getQuestWindow() {
         return questWindow;
