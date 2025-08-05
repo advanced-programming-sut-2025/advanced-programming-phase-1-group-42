@@ -4500,6 +4500,67 @@ public class GameView implements Screen, InputProcessor {
         showAcceptance = true;
     }
 
+    private Animation<Texture> flowerAnimation;
+    private float flowerStateTime = 0f;
+    private boolean showFlower = false;
+    private Player flowerer;
+    private Player floweree;
+    private void renderFlower(float deltaTime) {
+        if (showFlower && flowerAnimation != null) {
+            flowerer.setRenderAble(false);
+            floweree.setRenderAble(false);
+            flowerStateTime += deltaTime;
+            Texture currentFrame = flowerAnimation.getKeyFrame(flowerStateTime, false);
+            // Calculate position for center
+
+            Main.getBatch().draw(currentFrame, (Gdx.graphics.getWidth()-100)/2,(Gdx.graphics.getHeight()-42)/2 );
+
+            // Optionally hide animation when finished
+            if (flowerAnimation.isAnimationFinished(flowerStateTime)) {
+                flowerer.setRenderAble(true);
+                floweree.setRenderAble(true);
+                showFlower = false;
+            }
+        }
+    }
+
+    public void showFlower(Player rejjector, Player rejjectee) {
+        flowerer = rejjector;
+        floweree = rejjectee;
+        Texture propose_1 = new Texture("GameAssets\\Animation\\Propose\\Flower\\Flower (1).png");
+        Texture propose_2 = new Texture("GameAssets\\Animation\\Propose\\Flower\\Flower (2).png");
+        Texture propose_3 = new Texture("GameAssets\\Animation\\Propose\\Flower\\Flower (3).png");
+        Texture propose_4 = new Texture("GameAssets\\Animation\\Propose\\Flower\\Flower (4).png");
+        Texture propose_5 = new Texture("GameAssets\\Animation\\Propose\\Flower\\Flower (5).png");
+        Texture propose_6 = new Texture("GameAssets\\Animation\\Propose\\Flower\\Flower (6).png");
+        Texture propose_7 = new Texture("GameAssets\\Animation\\Propose\\Flower\\Flower (7).png");
+        Texture propose_8 = new Texture("GameAssets\\Animation\\Propose\\Flower\\Flower (8).png");
+        Texture propose_9 = new Texture("GameAssets\\Animation\\Propose\\Flower\\Flower (9).png");
+        Texture propose_10= new Texture("GameAssets\\Animation\\Propose\\Flower\\Flower (10).png");
+        Texture propose_11= new Texture("GameAssets\\Animation\\Propose\\Flower\\Flower (11).png");
+        Texture propose_12= new Texture("GameAssets\\Animation\\Propose\\Flower\\Flower (12).png");
+        Texture propose_13= new Texture("GameAssets\\Animation\\Propose\\Flower\\Flower (13).png");
+        Texture propose_14= new Texture("GameAssets\\Animation\\Propose\\Flower\\Flower (14).png");
+        Texture propose_15= new Texture("GameAssets\\Animation\\Propose\\Flower\\Flower (15).png");
+        Texture propose_16= new Texture("GameAssets\\Animation\\Propose\\Flower\\Flower (16).png");
+        Texture propose_17= new Texture("GameAssets\\Animation\\Propose\\Flower\\Flower (17).png");
+        Texture propose_18= new Texture("GameAssets\\Animation\\Propose\\Flower\\Flower (18).png");
+        Texture propose_19= new Texture("GameAssets\\Animation\\Propose\\Flower\\Flower (19).png");
+        Texture propose_20= new Texture("GameAssets\\Animation\\Propose\\Flower\\Flower (20).png");
+
+        flowerAnimation = new Animation<>(0.1f,
+            propose_1,propose_2,propose_3,propose_4,propose_5,propose_6,propose_7,
+            propose_8,propose_9,propose_10,propose_11,propose_12,propose_13,propose_14,
+            propose_15,propose_16,propose_17,propose_18,propose_19,propose_20
+        );
+
+        flowerAnimation.setPlayMode(Animation.PlayMode.NORMAL);
+
+        flowerStateTime = 0f;
+        showFlower = true;
+    }
+
+
     private void renderAnimations(float delta) {
         renderEmote(delta);
         renderThunder(delta);
@@ -4507,6 +4568,7 @@ public class GameView implements Screen, InputProcessor {
         renderPropose(delta);
         renderRejection(delta);
         renderAcceptance(delta);
+        renderFlower(delta);
     }
 }
 

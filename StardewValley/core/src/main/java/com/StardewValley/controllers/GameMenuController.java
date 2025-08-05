@@ -2596,7 +2596,7 @@ public class GameMenuController extends Controller {
             App.getCurrentGame().getCurrentPlayer().getIsInteracted().put(player, true);
             player.getIsInteracted().put(App.getCurrentGame().getCurrentPlayer(), true);
         }
-
+        gameView.showFlower(App.getCurrentGame().getCurrentPlayer(), player);
         list.append("Your have given a flower to " + username + "!");
         return new Result(true, list.toString());
     }

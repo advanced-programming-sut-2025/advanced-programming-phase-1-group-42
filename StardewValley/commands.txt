@@ -57,3 +57,4 @@ cheat add 1000 dollars
 cheat thor -l 1 1
 cheat Thor -l 1 1
 cheat Thor -l 1 1
+cheat add item -n Sunflower -c 1
