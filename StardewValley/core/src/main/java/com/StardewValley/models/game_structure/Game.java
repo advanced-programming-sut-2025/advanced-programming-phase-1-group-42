@@ -42,6 +42,7 @@ public class Game {
     private int counter = 0;
     private ArrayList<Pair<Player, String>> publicChat = new ArrayList<>();
     private GameMenuController controller;
+    private ArrayList<Quest> quests = new ArrayList<>();
 
     public static void writeIntoFile(String string) {
         try (FileWriter myWriter = new FileWriter("commands.txt", true)) {
@@ -410,4 +411,8 @@ public class Game {
     public void setController(GameMenuController controller) {this.controller = controller;}
 
     public GameMenuController getController() {return controller;}
+
+    public ArrayList<Quest> getQuests() {
+        return quests;
+    }
 }

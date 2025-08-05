@@ -389,6 +389,15 @@ public class GameMenuController extends Controller {
                 }
             }
 
+            if (Gdx.input.isKeyJustPressed(Input.Keys.DEL)) {
+                if (gameView.getQuestWindow()==null) {
+                    gameView.initQuestWindow();
+                } else {
+                    gameView.getQuestWindow().remove();
+                    gameView.setQuestWindow(null);
+                }
+            }
+
             ArrayList<Integer> arr = new ArrayList<>(Arrays.asList(
                 8, 9, 10, 11, 12, 13, 14, 15, 16, 7, 69, 70
             ));

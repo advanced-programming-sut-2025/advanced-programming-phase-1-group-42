@@ -163,6 +163,7 @@ public class GameView implements Screen, InputProcessor {
     private TextButton craftingUseButton;
     private TextButton craftingBackButton;
     private Label craftingMessageLabel;
+    private Window questWindow = null;
 
     private boolean isTabClicked = false;
 
@@ -275,6 +276,11 @@ public class GameView implements Screen, InputProcessor {
 
 
         selectedPlayer = null;
+
+        // add Quests
+        for (QuestType type : QuestType.values()) {
+            App.getCurrentGame().getQuests().add(new Quest(type));
+        }
 
     }
 
@@ -3365,6 +3371,160 @@ public class GameView implements Screen, InputProcessor {
         staticStage.addActor(shippingBinWindow);
     }
 
+    public void initQuestWindow() {
+        if (questWindow != null) {
+            questWindow.remove();
+        }
+
+        questWindow = new Window("Quests", skin, "Letter");
+        questWindow.setSize(1000, 600);
+        questWindow.setPosition(
+            (staticStage.getWidth() - questWindow.getWidth()) / 2,
+            (staticStage.getHeight() - questWindow.getHeight()) / 2
+        );
+
+        Table mainTable = new Table(skin);
+        int counter = 1;
+
+        for (Quest quest : App.getCurrentGame().getQuests()) {
+            Table questTable = new Table(skin);
+
+            Label name = new Label("Quest " + counter, skin);
+            name.setFontScale(0.8f);
+
+            Label description = new Label(
+                quest.getQuestType().getProductType().getName() + "\n" +
+                    quest.getQuestType().getTargetNum(), skin);
+            description.setFontScale(0.75f);
+
+            Label status = new Label("", skin);
+            status.setFontScale(0.75f);
+
+            int membersCount = quest.getMembers().size();
+            int capacity = quest.getQuestType().getCapacity();
+            int targetNum = quest.getQuestType().getTargetNum();
+            int collectedNum = quest.getCollectedNum();
+
+            Label detail = new Label(
+                collectedNum + " / " + targetNum + "\t users : " + membersCount + " of " + capacity , skin);
+            detail.setFontScale(0.75f);
+
+            boolean playerIsMember = false;
+            int playerContribution = 0;
+            for (Pair<Player, Integer> pair : quest.getMembers()) {
+                if (pair.first().equals(App.getCurrentGame().getCurrentPlayer())) {
+                    playerIsMember = true;
+                    playerContribution = pair.second();
+                    break;
+                }
+            }
+
+            if (playerIsMember) {
+                if (quest.isActive()) {
+                    status.setText("Active");
+                    status.setColor(Color.GREEN);
+                    detail.setText(
+                        collectedNum + " | " + targetNum + " ( user : " + playerContribution + " )" +
+                            "\t users : " + membersCount + " of " + capacity + "\ndays left :" + quest.getDayLeft()
+                    );
+
+                } else {
+                    status.setText("Not Active");
+                    status.setColor(Color.RED);
+                    detail.setText(
+                        collectedNum + " | " + targetNum + " ( user : " + playerContribution + " )" +
+                            "\t users : " + membersCount + " of " + capacity
+                    );
+
+                }
+
+
+                Label selectedLabel = new Label("selected", skin);
+                selectedLabel.setColor(Color.BLUE);
+                selectedLabel.setFontScale(0.75f);
+
+                questTable.add(name).fillX().expandX().center();
+                questTable.add(description).fillX().expandX().center();
+                questTable.add(status).fillX().expandX().center();
+                questTable.add(selectedLabel).fillX().expandX().center().row();
+                questTable.add(detail).fillX().expandX().center().row();
+
+            } else if (quest.isCompleted()) {
+                status.setText("Completed");
+                status.setColor(Color.GOLD);
+
+                TextButton addQuest = new TextButton("Add Quest", skin);
+                addQuest.setDisabled(true);
+
+                questTable.add(name).fillX().expandX().center();
+                questTable.add(description).fillX().expandX().center();
+                questTable.add(status).fillX().expandX().center();
+                questTable.add(addQuest).fillX().expandX().center().row();
+
+            } else {
+                detail.setText(
+                    collectedNum + " | " + targetNum +
+                        "\t users : " + membersCount + " of " + capacity
+                );
+
+                TextButton addQuest = new TextButton("Add Quest", skin);
+
+                if (!App.getCurrentGame().getCurrentPlayer().getPlayerQuests().contains(quest) &&
+                    App.getCurrentGame().getCurrentPlayer().getPlayerQuests().size() < 3 &&
+                    membersCount < capacity) {
+
+                    addQuest.addListener(new ClickListener() {
+                        public void clicked(InputEvent event, float x, float y) {
+                            if (quest.addMembers(App.getCurrentGame().getCurrentPlayer())) {
+                                App.getCurrentGame().getCurrentPlayer().getPlayerQuests().add(quest);
+                                questWindow.remove();
+                                initQuestWindow();
+                            }
+                        }
+                    });
+                } else {
+                    addQuest.setDisabled(true);
+                }
+
+                questTable.add(name).fillX().expandX().center();
+                questTable.add(description).fillX().expandX().center();
+                questTable.add(status).fillX().expandX().center();
+                questTable.add(addQuest).fillX().expandX().center().row();
+                questTable.add(detail).fillX().expandX().center().row();
+            }
+             if (quest.isCompleted()) {
+                 status.setText("completed");
+                 status.setColor(Color.GOLD);
+             }
+             else if (membersCount == capacity) {
+                status.setText("Active");
+                status.setColor(Color.GREEN);
+            }
+             else {
+                status.setText("Not Active");
+                status.setColor(Color.RED);
+            }
+
+            mainTable.add(questTable).fillX().expandX().pad(5).row();
+            counter++;
+        }
+
+        ScrollPane scrollPane = new ScrollPane(mainTable, skin);
+        scrollPane.setFadeScrollBars(false);
+        scrollPane.setScrollingDisabled(true, false);
+
+        questWindow.add(scrollPane).expand().fill();
+
+        staticStage.addActor(questWindow);
+    }
+
+
+
+
+
+
+
+
     public void initExitMenu(Window window) {
         window.add(new Label("Exit", skin)).left().padBottom(10);
         window.row();
@@ -4073,6 +4233,14 @@ public class GameView implements Screen, InputProcessor {
         currentSfx.setVolume(volume);
         currentSfx.play();
         currentSfx.setLooping(false);
+    }
+
+    public Window getQuestWindow() {
+        return questWindow;
+    }
+
+    public void setQuestWindow(Window questWindow) {
+        this.questWindow = questWindow;
     }
 }
 

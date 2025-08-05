@@ -45,6 +45,7 @@ public class Player {
     private ArrayList<Pair<Player, ArrayList<String>>> privateChat = new ArrayList<>();
     private Buff buff;
     private Buff rejectionBuff;
+    private ArrayList<Quest> playerQuests = new ArrayList<>();
 
     // level-value
     private final HashMap<Player, Pair<Integer, Integer>> friendShips = new HashMap<>();
@@ -367,5 +368,9 @@ public class Player {
 
     public ArrayList<Pair<Player, ArrayList<String>>> getPrivateChat() {
         return privateChat;
+    }
+
+    public ArrayList<Quest> getPlayerQuests() {
+        return playerQuests;
     }
 }
