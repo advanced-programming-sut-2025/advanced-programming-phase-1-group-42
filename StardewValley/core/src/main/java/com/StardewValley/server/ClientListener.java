@@ -3,6 +3,7 @@ package com.StardewValley.server;
 import java.io.IOException;
 import java.net.ServerSocket;
 import java.net.Socket;
+import java.util.ArrayList;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
@@ -34,7 +35,9 @@ public class ClientListener extends Thread {
             try {
                 Socket socket = serverSocket.accept();
                 if (socket != null && !socket.isClosed()) {
-                    threadPool.execute(new ClientHandler(socket));
+                    ClientHandler clientHandler = new ClientHandler(socket);
+                    threadPool.execute(clientHandler);
+                    AppServer.getClientHandlers().add(clientHandler);
                     System.out.println("New client connected with port: " + socket.getPort());
                 }
             }

@@ -1,19 +1,12 @@
 package com.StardewValley.client;
 
-import com.StardewValley.models.ConnectionThread;
 import com.StardewValley.models.JSONUtils;
 import com.StardewValley.models.Message;
-import com.StardewValley.models.interactions.User;
 
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
 import java.io.IOException;
 import java.net.Socket;
-import java.util.HashMap;
-import java.util.concurrent.BlockingQueue;
-import java.util.concurrent.LinkedBlockingQueue;
-import java.util.concurrent.TimeUnit;
-import java.util.concurrent.atomic.AtomicBoolean;
 
 public class ServerHandler {
     protected DataInputStream dataInputStream;

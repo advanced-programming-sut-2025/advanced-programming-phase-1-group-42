@@ -18,6 +18,8 @@ public class AppServer {
 
     private final static ArrayList<Game> games = new ArrayList<>();
 
+    private final static ArrayList<ClientHandler> clientHandlers = new ArrayList<>();
+
     public static void start() throws IOException {
         if (clientListener != null && !clientListener.isAlive())
             clientListener.start();
@@ -64,5 +66,8 @@ public class AppServer {
         AppServer.ended = ended;
     }
 
+    public static ArrayList<ClientHandler> getClientHandlers() {
+        return clientHandlers;
+    }
 
 }
