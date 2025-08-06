@@ -4,11 +4,7 @@ import com.StardewValley.client.Main;
 import com.StardewValley.client.AppClient;
 import com.StardewValley.models.Assets;
 import com.StardewValley.models.Message;
-import com.StardewValley.server.ClientHandler;
-import com.StardewValley.server.controllers.GameMenuController;
 import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.InputMultiplexer;
-import com.badlogic.gdx.InputProcessor;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
@@ -16,7 +12,6 @@ import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.*;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
 
-import java.awt.font.MultipleMaster;
 import java.util.ArrayList;
 import java.util.HashMap;
 
@@ -86,7 +81,7 @@ public class MainMenuView implements Screen {
         onlineUsersScrollPane = new ScrollPane(onlineUsersTable, skin);
         onlineUsersScrollPane.setScrollingDisabled(false, true);
         onlineUsersScrollPane.setFadeScrollBars(false);
-        loadOnlineUsers();  // Fill the table with online users
+        loadOnlineUsers();
 
         // Add scrollpane row
         table.add(onlineUsersScrollPane).colspan(3).fillX().height(150).padTop(40);
@@ -169,8 +164,8 @@ public class MainMenuView implements Screen {
                 return;
             }
 
-//            Main.getMain().getScreen().dispose();
-//            Main.getMain().setScreen(new GameMenuView(new GameMenuController(new ClientHandler()), Assets.getInstance().getSkin()));
+            Main.getMain().getScreen().dispose();
+            Main.getMain().setScreen(new GameMenuView(Assets.getInstance().getSkin()));
         }
         else if (getProfileButton().isChecked()) {
             getProfileButton().setChecked(false);

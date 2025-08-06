@@ -2,11 +2,16 @@ package com.StardewValley.client.views;
 
 import com.StardewValley.client.Main;
 import com.StardewValley.client.AppClient;
-import com.StardewValley.server.controllers.GameMenuController;
+import com.StardewValley.models.Labi;
+import com.StardewValley.models.Message;
+import com.StardewValley.models.Result;
+import com.StardewValley.models.interactions.User;
+import com.StardewValley.server.controllers.GameController;
 import com.StardewValley.models.Assets;
 import com.StardewValley.models.game_structure.Farm;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
+import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
@@ -15,31 +20,45 @@ import com.badlogic.gdx.scenes.scene2d.ui.*;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 
+import java.lang.reflect.Field;
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.HashMap;
 
 public class GameMenuView implements Screen {
     private Skin skin;
     private Stage stage;
-    private Table table;
+    private Table menuTable;
     private Window menuWindow;
     private TextButton newGameButton;
     private TextButton loadGameButton;
+    private TextButton refreshButton;
     private TextButton backButton;
-    private Label titleSavedGameLabel;
-    private Label detailsSavedGameLabel;
+    private TextField searchField;
+    private ScrollPane labiesScrollPane;
+    private Table labiesTable;
     private Label errorLabel;
 
-    private Window newGameWindow;
-    private Table newGameTable;
-    private Label addPlayerLabel;
-    private TextField addPlayerField;
-    private TextButton addPlayerButton;
-    private ArrayList<Label> playerLabels;
-    private ArrayList<String> playerUsernames;
-    private int playersPtr;
-    private TextButton startNewGameButton;
-    private TextButton backNewGameButton;
-    private Label newGameErrorLabel;
+    private Window newLabiWindow;
+    private Table newLabiTable;
+    private Label newLabiNameLabel;
+    private TextField newLabiNameField;
+    private CheckBox newLabiPrivateCheckBox;
+    private TextField newLabiPasswordField;
+    private CheckBox newLabiVisibleCheckBox;
+    private TextButton createNewLabiButton;
+    private TextButton newLabiBackButton;
+    private Label newLabiErrorLabel;
+
+    private Window labiWindow;
+    private Table labiTable;
+    private Label labiDetailsLabel;
+    private Label labiAdminUserLabel;
+    private Label labiUsersLabel;
+    private TextButton startGameButton;
+    private TextButton exitLabiButton;
+    private Label labiErrorLabel;
+    private Thread labiUpdateThread;
 
     private Window choiceFarmWindow;
     private Table choiceFarmTable;
@@ -49,55 +68,35 @@ public class GameMenuView implements Screen {
     private ArrayList<Table> farmButtons;
     private TextButton choiceFarmBackButton;
 
-    public GameMenuView(GameMenuController controller, Skin skin) {
+    private Window waitingWindow;
+    private Label waitingLabel;
+    private TextButton waitingBackButton;
+    private boolean waitingBoolean = true;
+
+    private Window passwordWindow;
+    private Label passwordLabel;
+    private TextField passwordField;
+    private TextButton passwordSubmitButton;
+    private TextButton passwordBackButton;
+
+    public GameMenuView(Skin skin) {
         this.skin = skin;
 
         this.menuWindow = new Window("Game Menu", skin);
-        this.newGameButton = new TextButton("New Game", skin);
+        this.menuTable = new Table(skin);
+        this.newGameButton = new TextButton("New Labi", skin);
         this.loadGameButton = new TextButton("Load Game", skin);
+        this.refreshButton = new TextButton("Refresh", skin);
         this.backButton = new TextButton("Back", skin);
-        this.titleSavedGameLabel = new Label("Saved Game: " + AppClient.getCurrentUser().getPlaying(), skin);
-        this.titleSavedGameLabel.setFontScale(1.0f);
-        this.detailsSavedGameLabel = new Label("", skin);
-        if(AppClient.getCurrentUser().getPlaying()) {
-            this.detailsSavedGameLabel.setText("Details:\nDays: " + AppClient.getCurrentGame().getDateTime().getDays() +
-                "\nSeason: " + AppClient.getCurrentGame().getDateTime().getSeason() +
-                "\nYear: " + AppClient.getCurrentGame().getDateTime().getYear() +
-                "\nPoints: " + AppClient.getCurrentGame().findPlayer(AppClient.getCurrentUser().getUsername()).getPoints());
-        }
-        this.detailsSavedGameLabel.setText("Details:\nDays: " +
-            "\nSeason: " +
-            "\nYear: " +
-            "\nPoints: ");
-        this.detailsSavedGameLabel.setFontScale(0.7f);
+        this.searchField = new TextField("", skin);
+        this.labiesScrollPane = new ScrollPane(labiesTable, skin);
+        this.labiesTable = new Table(skin);
         this.errorLabel = new Label("", skin);
         this.errorLabel.setFontScale(0.7f);
+        this.menuTable.setFillParent(true);
+        menuTable.padTop(50).defaults().padBottom(15);
 
-
-        this.newGameWindow = new Window("New Game", skin);
-        this.addPlayerLabel = new Label("Add Player(Username): ", skin);
-        this.addPlayerLabel.setFontScale(0.7f);
-        this.addPlayerField = new TextField("example: Parsa-374", skin);
-        this.addPlayerButton = new TextButton("Add Player", skin);
-        this.playerLabels = new ArrayList();
-        Label tempLabel = new Label("Player 1:\n" + AppClient.getCurrentUser().getUsername(), skin);
-        tempLabel.setFontScale(0.7f);
-        this.playerLabels.add(tempLabel);
-        this.playerUsernames = new ArrayList<>();
-        this.playerUsernames.add(AppClient.getCurrentUser().getUsername());
-        for (int i = 2; i < 5; i++) {
-            tempLabel = new Label("Player " + i + ":\nGuest " + (i - 1), skin);
-            tempLabel.setFontScale(0.7f);
-            this.playerLabels.add(tempLabel);
-            this.playerUsernames.add("Guest " + (i - 1));
-        }
-        this.playersPtr = 1;
-        this.startNewGameButton = new TextButton("Start New Game", skin);
-        this.backNewGameButton = new TextButton("Back", skin);
-        this.newGameErrorLabel = new Label("", skin);
-        this.newGameErrorLabel.setFontScale(0.7f);
-
-
+        Label tempLabel;
         this.choiceFarmWindow = new Window("Choice Farm", skin);
         this.playerUsernameLabel = new Label("", skin);
         this.playerUsernameLabel.setFontScale(0.7f);
@@ -124,57 +123,58 @@ public class GameMenuView implements Screen {
         this.farmButtons.getLast().row();
         this.choiceFarmBackButton = new TextButton("Back", skin);
 
-        this.imageButton1.addListener(new ClickListener() {
-            @Override
-            public void clicked(InputEvent event, float x, float y) {
-                choiceFarmWindow.setVisible(false);
-
-                Farm farm = new Farm(0, controller.ptr, controller.tiles);
-                controller.players.get(controller.ptr).setFarm(farm);
-                controller.farms.add(farm);
-
-                if (controller.ptr == 3) {
-                    controller.newGamePhase2();
-                    return;
-                }
-
-                controller.ptr++;
-                initChoiceFarmWindow(controller.players.get(controller.ptr).getPlayerUsername());
-            }
-        });
-
-        this.imageButton2.addListener(new ClickListener() {
-            @Override
-            public void clicked(InputEvent event, float x, float y) {
-                choiceFarmWindow.setVisible(false);
-
-                Farm farm = new Farm(1, controller.ptr, controller.tiles);
-                controller.players.get(controller.ptr).setFarm(farm);
-                controller.farms.add(farm);
-
-                if (controller.ptr == 3) {
-                    controller.newGamePhase2();
-                    return;
-                }
-                controller.ptr++;
-                initChoiceFarmWindow(controller.players.get(controller.ptr).getPlayerUsername());
-            }
-        });
-
-        this.choiceFarmBackButton.addListener(new ClickListener() {
-            @Override
-            public void clicked(InputEvent event, float x, float y) {
-                choiceFarmWindow.setVisible(false);
-                if (controller.ptr == 0) {
-                    newGameWindow.setVisible(true);
-                    return;
-                }
-
-                controller.farms.removeLast();
-                controller.ptr--;
-                initChoiceFarmWindow(controller.players.get(controller.ptr).getPlayerUsername());
-            }
-        });
+        this.waitingLabel = new Label("Waiting.", skin);
+//        this.imageButton1.addListener(new ClickListener() {
+//            @Override
+//            public void clicked(InputEvent event, float x, float y) {
+//                choiceFarmWindow.setVisible(false);
+//
+//                Farm farm = new Farm(0, controller.ptr, controller.tiles);
+//                controller.players.get(controller.ptr).setFarm(farm);
+//                controller.farms.add(farm);
+//
+//                if (controller.ptr == 3) {
+////                    controller.newGamePhase2();
+//                    return;
+//                }
+//
+//                controller.ptr++;
+//                initChoiceFarmWindow(controller.players.get(controller.ptr).getPlayerUsername());
+//            }
+//        });
+//
+//        this.imageButton2.addListener(new ClickListener() {
+//            @Override
+//            public void clicked(InputEvent event, float x, float y) {
+//                choiceFarmWindow.setVisible(false);
+//
+//                Farm farm = new Farm(1, controller.ptr, controller.tiles);
+//                controller.players.get(controller.ptr).setFarm(farm);
+//                controller.farms.add(farm);
+//
+//                if (controller.ptr == 3) {
+////                    controller.newGamePhase2();
+//                    return;
+//                }
+//                controller.ptr++;
+//                initChoiceFarmWindow(controller.players.get(controller.ptr).getPlayerUsername());
+//            }
+//        });
+//
+//        this.choiceFarmBackButton.addListener(new ClickListener() {
+//            @Override
+//            public void clicked(InputEvent event, float x, float y) {
+//                choiceFarmWindow.setVisible(false);
+//                if (controller.ptr == 0) {
+//                    newLabiWindow.setVisible(true);
+//                    return;
+//                }
+//
+//                controller.farms.removeLast();
+//                controller.ptr--;
+//                initChoiceFarmWindow(controller.players.get(controller.ptr).getPlayerUsername());
+//            }
+//        });
 
     }
 
@@ -183,79 +183,98 @@ public class GameMenuView implements Screen {
         stage = new Stage();
         Gdx.input.setInputProcessor(stage);
 
-        this.table = new Table(skin);
-        table.setFillParent(true);
-        table.pad(70).defaults().expandX().padBottom(15);
+        this.menuWindow.setMovable(false);
+        this.menuWindow.setResizable(false);
+        this.menuWindow.setSize(1200, 800);
+        this.menuWindow.setPosition(
+            (stage.getWidth() - menuWindow.getWidth()) / 2,
+            (stage.getHeight() - menuWindow.getHeight()) / 2
+        );
 
-        Table leftTable = new Table(skin);
-        leftTable.setFillParent(true);
-        table.add(newGameButton).width(250).height(70).expandX().fillX().row();
-        table.add(loadGameButton).width(250).height(70).expandX().fillX().row();
-        table.add(backButton).width(250).height(70).expandX().fillX().row();
+        this.menuTable.add(newGameButton).expandX().fillX().padTop(5).padRight(5).height(70).padLeft(-200);
+        this.menuTable.add(loadGameButton).expandX().fillX().padTop(5).height(70).padRight(400);
+        this.menuTable.row();
 
-        Table rightTable = new Table(skin);
-        rightTable.setFillParent(true);
-        rightTable.add(titleSavedGameLabel).expandX().fillX().row();
-        rightTable.add(detailsSavedGameLabel).expandX().fillX().row();
+        this.menuTable.add(refreshButton).expandX().fillX().padTop(5).padRight(5).height(70).padLeft(-200);
+        this.menuTable.add(backButton).expandX().fillX().padTop(5).height(70).padRight(400);
+        this.menuTable.row();
 
-// Row 1
-        table.add(leftTable).left();
-        table.add(rightTable).padLeft(30).left();
-        table.row();
+        this.menuTable.add(searchField).expandX().fillX().colspan(2).padTop(5).padRight(400).padLeft(-200).row();
+        menuWindow.add(menuTable).row();
+        initMenuWindow();
 
-// Error label in full-width row
-        table.add(errorLabel).colspan(2).center().padTop(-200);
-        table.row();
-
-        menuWindow.setSize(800, 450);
-        setWindowForTable(menuWindow, table, stage);
-        menuWindow.setVisible(true);
-
-        this.newGameTable = new Table(skin);
-        this.newGameTable.setFillParent(true);
-        this.newGameTable.pad(60).defaults().expandX().fillX().row();
-
-// Row 1: Add player input row
-        newGameTable.add(addPlayerLabel).left().padRight(30);
-        newGameTable.add(addPlayerField).fillX().width(420).left().height(50).padRight(30).row();
-        newGameTable.add(addPlayerButton).colspan(2).fillX().left().height(70).padRight(30);
-        newGameTable.row();
-
-// Row 2: Player labels (0 and 2)
-        newGameTable.add(playerLabels.get(0)).left().padRight(30).padTop(20);
-        newGameTable.add(playerLabels.get(2)).left().padRight(30).padTop(20);
-        newGameTable.row();
-
-// Row 3: Player labels (1 and 3)
-        newGameTable.add(playerLabels.get(1)).left().padRight(30).padTop(20);
-        newGameTable.add(playerLabels.get(3)).left().padRight(30).padTop(20);
-        newGameTable.row();
-
-// Row 4: Start / Back buttons
-        newGameTable.add(startNewGameButton).expandX().left().padRight(30).padTop(20).height(70);
-        newGameTable.add(backNewGameButton).expandX().left().padRight(30).padTop(20).height(70);
-        newGameTable.row();
-
-// Row 5: Error label (full width)
-        newGameTable.add(newGameErrorLabel).colspan(2).center().padTop(30);
-        newGameTable.row();
-
-        setWindowForTable(newGameWindow, newGameTable, stage);
-
-        choiceFarmTable = new Table(skin);
-        choiceFarmTable.setFillParent(true);
-        choiceFarmTable.pad(100).defaults().expandX().fillX().padLeft(-60).row();
-
-        choiceFarmTable.add(playerUsernameLabel).colspan(2).left().fillX().padBottom(20);
-        choiceFarmTable.row();
-
-        choiceFarmTable.add(farmButtons.get(0)).left().padLeft(-60).padRight(20);
-        choiceFarmTable.add(farmButtons.get(1)).right();
-        choiceFarmTable.row();
-
-        choiceFarmTable.add(choiceFarmBackButton).colspan(2).height(70).center().expandX().fillX().padTop(20).padLeft(-60).row();
-
-        setWindowForTable(choiceFarmWindow, choiceFarmTable, stage);
+        stage.addActor(menuWindow);
+//        this.menuTable = new Table(skin);
+//        menuTable.setFillParent(true);
+//        menuTable.pad(70).defaults().expandX().padBottom(15);
+//
+//        Table leftTable = new Table(skin);
+//        leftTable.setFillParent(true);
+//        menuTable.add(newGameButton).width(250).height(70).expandX().fillX().row();
+//        menuTable.add(loadGameButton).width(250).height(70).expandX().fillX().row();
+//        menuTable.add(backButton).width(250).height(70).expandX().fillX().row();
+//
+//        Table rightTable = new Table(skin);
+//        rightTable.setFillParent(true);
+//
+//// Row 1
+//        menuTable.add(leftTable).left();
+//        menuTable.add(rightTable).padLeft(30).left();
+//        menuTable.row();
+//
+//// Error label in full-width row
+//        menuTable.add(errorLabel).colspan(2).center().padTop(-200);
+//        menuTable.row();
+//
+//        menuWindow.setSize(800, 450);
+//        setWindowForTable(menuWindow, menuTable, stage);
+//        menuWindow.setVisible(true);
+//
+//        this.newLabiTable = new Table(skin);
+//        this.newLabiTable.setFillParent(true);
+//        this.newLabiTable.pad(60).defaults().expandX().fillX().row();
+//
+//// Row 1: Add player input row
+//        newLabiTable.add(addPlayerLabel).left().padRight(30);
+//        newLabiTable.add(addPlayerField).fillX().width(420).left().height(50).padRight(30).row();
+//        newLabiTable.add(addPlayerButton).colspan(2).fillX().left().height(70).padRight(30);
+//        newLabiTable.row();
+//
+//// Row 2: Player labels (0 and 2)
+//        newLabiTable.add(playerLabels.get(0)).left().padRight(30).padTop(20);
+//        newLabiTable.add(playerLabels.get(2)).left().padRight(30).padTop(20);
+//        newLabiTable.row();
+//
+//// Row 3: Player labels (1 and 3)
+//        newLabiTable.add(playerLabels.get(1)).left().padRight(30).padTop(20);
+//        newLabiTable.add(playerLabels.get(3)).left().padRight(30).padTop(20);
+//        newLabiTable.row();
+//
+//// Row 4: Start / Back buttons
+//        newLabiTable.add(startNewGameButton).expandX().left().padRight(30).padTop(20).height(70);
+//        newLabiTable.add(backNewGameButton).expandX().left().padRight(30).padTop(20).height(70);
+//        newLabiTable.row();
+//
+//// Row 5: Error label (full width)
+//        newLabiTable.add(newLabiErrorLabel).colspan(2).center().padTop(30);
+//        newLabiTable.row();
+//
+//        setWindowForTable(newLabiWindow, newLabiTable, stage);
+//
+//        choiceFarmTable = new Table(skin);
+//        choiceFarmTable.setFillParent(true);
+//        choiceFarmTable.pad(100).defaults().expandX().fillX().padLeft(-60).row();
+//
+//        choiceFarmTable.add(playerUsernameLabel).colspan(2).left().fillX().padBottom(20);
+//        choiceFarmTable.row();
+//
+//        choiceFarmTable.add(farmButtons.get(0)).left().padLeft(-60).padRight(20);
+//        choiceFarmTable.add(farmButtons.get(1)).right();
+//        choiceFarmTable.row();
+//
+//        choiceFarmTable.add(choiceFarmBackButton).colspan(2).height(70).center().expandX().fillX().padTop(20).padLeft(-60).row();
+//
+//        setWindowForTable(choiceFarmWindow, choiceFarmTable, stage);
     }
 
     static void setWindowForTable(Window window, Table table, Stage stage) {
@@ -280,12 +299,12 @@ public class GameMenuView implements Screen {
         Assets.getInstance().getMenuBackground2().setSize(Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
         Assets.getInstance().getMenuBackground2().setPosition(0, 0);
         Assets.getInstance().getMenuBackground2().draw(Main.getBatch());
+
         Main.getBatch().end();
 
+        handleGameMenu();
         stage.act(Math.min(Gdx.graphics.getDeltaTime(), 1 / 30f));
         stage.draw();
-
-        handleGameMenu();
     }
 
     @Override
@@ -329,60 +348,311 @@ public class GameMenuView implements Screen {
         return errorLabel;
     }
 
-    public TextField getAddPlayerField() {
-        return addPlayerField;
+    public Label getNewLabiErrorLabel() {
+        return newLabiErrorLabel;
     }
 
-    public TextButton getAddPlayerButton() {
-        return addPlayerButton;
-    }
+    public void initMenuWindow() {
+        menuWindow.setVisible(true);
+        Message message = new Message(new HashMap<>() {{
+            put("function", "getLabies");
+            put("arguments", searchField.getText());
+        }}, Message.Type.command);
+        Message responseMessage = AppClient.getServerHandler().sendAndWaitForResponse(message);
+        if (methodUseMessage(responseMessage, errorLabel)) return;
 
-    public ArrayList<Label> getPlayerLabels() {
-        return playerLabels;
-    }
+        this.labiesScrollPane.removeActor(this.labiesTable);
+        this.labiesTable.clear();
+        ArrayList<Labi> labies = responseMessage.getFromBody("message");
+        for (Labi labi : labies) {
+            StringBuilder stringBuilder = new StringBuilder();
+            stringBuilder.append("Labi : " + labi.getName() + ", Users (" + labi.getUsers().size() + ") : ");
+            for (int i = 0; i < labi.getUsers().size(); i++) {
+                User user = labi.getUsers().get(i);
+                stringBuilder.append(user.getNickname());
+                if (i != labi.getUsers().size() - 1)
+                    stringBuilder.append(", ");
+            }
+            Label labiLabel = new Label(stringBuilder.toString(), skin);
+            TextButton textButton = new TextButton("Enter", skin);
+            textButton.addListener(new ClickListener() {
+                @Override
+                public void clicked(InputEvent event, float x, float y) {
+                    if (labi.isPrivate()) {
+                        initPasswordWindow(labi);
+                    }
+                    else {
+                        Message message = new Message(new HashMap<>() {{
+                            put("function", "enterLabi");
+                            put("arguments", new ArrayList<>(Arrays.asList(labi.getID(),
+                                AppClient.getCurrentUser().getUsername(), "")));
+                        }}, Message.Type.command);
+                        Message responseMessage = AppClient.getServerHandler().sendAndWaitForResponse(message);
+                        if (methodUseMessage(responseMessage, errorLabel)) return;
 
-    public ArrayList<String> getPlayerUsernames() {
-        return playerUsernames;
-    }
+                        AppClient.setCurrentLabi(responseMessage.getFromBody("message"));
+                        initLabiWindow(false, labi);
+                    }
 
-    public int getPlayersPtr() {
-        return playersPtr;
-    }
+                }
+            });
 
-    public TextButton getStartNewGameButton() {
-        return startNewGameButton;
-    }
-
-    public TextButton getBackNewGameButton() {
-        return backNewGameButton;
-    }
-
-    public Label getNewGameErrorLabel() {
-        return newGameErrorLabel;
-    }
-
-    public void initNewGameWindow() {
-        this.addPlayerField.setText("example: Parsa-374");
-        this.playerLabels.getFirst().setText("Player 1:\n" + AppClient.getCurrentUser().getUsername());
-        this.playerUsernames.clear();
-        this.playerUsernames.add(AppClient.getCurrentUser().getUsername());
-        for (int i = 2; i < 5; i++) {
-            this.playerLabels.get(i - 1).setText("Player " + i + ":\nGuest " + (i - 1));
-            this.playerUsernames.add("Guest " + (i - 1));
+            labiesTable.add(labiLabel).width(700).fillX().padTop(5).padRight(5);
+            labiesTable.add(textButton).width(100).fillX().padTop(5).padRight(5);
+            labiesTable.row();
         }
-        this.playersPtr = 1;
-        this.newGameErrorLabel.setText("");
 
-        this.newGameWindow.setVisible(true);
-        this.newGameWindow.toFront();
+        this.labiesScrollPane.addActor(this.labiesTable);
     }
 
-    public Window getNewGameWindow() {
-        return newGameWindow;
+    private void initPasswordWindow(Labi labi) {
+        this.passwordWindow = new Window("", skin);
+        this.passwordLabel = new Label("Enter your password for " + labi.getName() + " labi :", skin);
+        this.passwordField = new TextField("", skin);
+        this.passwordBackButton = new TextButton("Back", skin);
+        this.passwordBackButton.addListener(new ClickListener() {
+           @Override
+           public void clicked(InputEvent event, float x, float y) {
+               passwordWindow.remove();
+           }
+        });
+        this.passwordSubmitButton = new TextButton("Submit", skin);
+        this.passwordSubmitButton.addListener(new ClickListener() {
+           @Override
+           public void clicked(InputEvent event, float x, float y) {
+               passwordWindow.remove();
+               if (!labi.getPassword().equals(passwordField.getText())) {
+                   errorLabel.setText("Wrong password for " + labi.getName() + " Labi");
+                   return;
+               }
+
+               initLabiWindow(false, labi);
+           }
+        });
+
+        passwordWindow.add(passwordLabel).fillX().expandX().row();
+        passwordWindow.add(passwordField).fillX().expandX().row();
+        passwordWindow.add(passwordSubmitButton).fillX().expandX().row();
+        passwordWindow.add(passwordBackButton).fillX().expandX().row();
+
+        stage.addActor(passwordWindow);
+        passwordWindow.top();
     }
 
-    public void increasePlayersPtr() {
-        playersPtr++;
+    private void initLabiWindow(boolean isAdmin, Labi labi) {
+        labiWindow = new Window(labi.getName() + " Labi", skin);
+        labiWindow.setMovable(false);
+        labiWindow.setResizable(false);
+        labiWindow.setSize(1000, 800);
+        labiWindow.setPosition(
+            (stage.getWidth() - labiWindow.getWidth()) / 2,
+            (stage.getHeight() - labiWindow.getHeight()) / 2
+        );
+
+        labiesTable = new Table(skin);
+        labiDetailsLabel = new Label("ID: " + labi.getID() +
+            ", isPrivate:" + labi.isPrivate() + ", isVisible" + labi.isVisible(), skin);
+
+        labiAdminUserLabel = new Label("Admin User: " + labi.getAdminUser().getUsername(), skin);
+        StringBuilder stringBuilder = new StringBuilder();
+        stringBuilder.append("Users: \n");
+        for (User user : labi.getUsers()) {
+            stringBuilder.append("\t" + user.getUsername() + "\n");
+        }
+        labiUsersLabel = new Label(stringBuilder.toString(), skin);
+        startGameButton = new TextButton("Start Game", skin);
+        if (!isAdmin)
+            startGameButton.setDisabled(true);
+        exitLabiButton = new TextButton("Exit Game", skin);
+
+        startGameButton.addListener(new ClickListener() {
+           @Override
+           public void clicked(InputEvent event, float x, float y) {
+               closeLabiWindow();
+               Message message = new Message(new HashMap<>() {{
+                   put("function", "startGame");
+                   put("arguments", labi.getID());
+               }}, Message.Type.command);
+               Message responseMessage = AppClient.getServerHandler().sendAndWaitForResponse(message);
+               if (methodUseMessage(responseMessage, labiErrorLabel)) return;
+
+//               initChoiceFarmWindow();
+               //TODO
+           }
+        });
+
+        exitLabiButton.addListener(new ClickListener() {
+            @Override
+            public void clicked(InputEvent event, float x, float y) {
+                Message message = new Message(new HashMap<>() {{
+                    put("function", "exitLabi");
+                    put("arguments", new ArrayList<>(Arrays.asList(labi.getID(),
+                        AppClient.getCurrentUser().getUsername()
+                    )));
+                }}, Message.Type.command);
+                Message responseMessage = AppClient.getServerHandler().sendAndWaitForResponse(message);
+                if (methodUseMessage(responseMessage, errorLabel)) return;
+
+                errorLabel.setText(responseMessage.getIntFromBody("message"));
+                AppClient.setCurrentLabi(null);
+                closeLabiWindow();
+                initMenuWindow();
+            }
+        });
+        labiErrorLabel = new Label("", skin);
+        labiUpdateThread = new Thread(() -> {
+            while (true) {
+                Message message = new Message(new HashMap<>() {{
+                    put("function", "updateLabi");
+                    put("arguments", labi.getID());
+                }}, Message.Type.command);
+                Message responseMessage = AppClient.getServerHandler().sendAndWaitForResponse(message);
+                if (methodUseMessage(responseMessage, labiErrorLabel)) return;
+
+                Labi updatedLabi = responseMessage.getFromBody("message");
+                labiAdminUserLabel.setText("Admin User: " + updatedLabi.getAdminUser().getUsername());
+                StringBuilder stringBuilder1 = new StringBuilder();
+                stringBuilder1.append("Users: \n");
+                for (User user : updatedLabi.getUsers()) {
+                    stringBuilder1.append("\t").append(user.getUsername()).append("\n");
+                }
+                labiUsersLabel.setText(stringBuilder1.toString());
+            }
+        });
+        labiUpdateThread.start();
+
+
+        labiTable.add(labiDetailsLabel).fillX().expandX().row();
+        labiTable.add(labiUsersLabel).fillX().expandX().row();
+        labiTable.add(startGameButton).fillX().expandX();
+        labiTable.add(exitLabiButton).fillX().expandX().row();
+        labiTable.add(labiErrorLabel).fillX().expandX().row();
+
+        labiWindow.add(labiTable);
+        stage.addActor(labiWindow);
+        labiWindow.top();
+    }
+
+    private void closeLabiWindow() {
+        labiUpdateThread.interrupt();
+        labiWindow.remove();
+        labiTable.remove();
+    }
+
+    private void initWaitWindow() {
+        Gdx.gl.glClearColor(0, 0, 0, 1);
+        Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
+
+        waitingWindow = new Window("", skin, "Letter");
+        waitingWindow.setMovable(false);
+        waitingWindow.setResizable(false);
+        waitingWindow.setSize(300, 100);
+        waitingWindow.setPosition(
+            (stage.getWidth() - waitingWindow.getWidth()) / 2,
+            (stage.getHeight() - waitingWindow.getHeight()) / 2
+        );
+
+        switch (waitingLabel.getText().toString()) {
+            case "Waiting.":
+                waitingLabel.setText("Waiting..");
+                break;
+            case "Waiting..":
+                waitingLabel.setText("Waiting...");
+                break;
+            case "Waiting...":
+                waitingLabel.setText("Waiting.");
+                break;
+        }
+
+        waitingWindow.add(waitingLabel).fillX().expandX().row();
+        waitingBackButton = new TextButton("Back", skin);
+        waitingBackButton.addListener(new ClickListener() {
+            @Override
+            public void clicked(InputEvent event, float x, float y) {
+                waitingBoolean = false;
+            }
+        });
+        waitingWindow.add(waitingBackButton).fillX().expandX().row();
+
+        stage.addActor(waitingWindow);
+        waitingWindow.top();
+    }
+
+    private void closeWaitWindow() {
+        waitingWindow.remove();
+    }
+
+    private void initNewLabiWindow() {
+        newLabiWindow = new Window("New Labi", skin);
+        newLabiWindow.setMovable(false);
+        newLabiWindow.setResizable(false);
+        newLabiWindow.setSize(1000, 800);
+        newLabiWindow.setPosition(
+            (stage.getWidth() - newLabiWindow.getWidth()) / 2,
+            (stage.getHeight() - newLabiWindow.getHeight()) / 2
+        );
+
+        newLabiTable = new Table(skin);
+        newLabiNameLabel = new Label("Labi name : ", skin);
+        newLabiNameField = new TextField("testLabi", skin);
+        newLabiPrivateCheckBox = new CheckBox("is Private ? ", skin);
+        newLabiPasswordField = new TextField("if labi is private", skin);
+        newLabiVisibleCheckBox = new CheckBox("is visible ? ", skin);
+        createNewLabiButton = new TextButton("Create New Labi", skin);
+        newLabiErrorLabel = new Label("", skin);
+        createNewLabiButton.addListener(new ClickListener() {
+            @Override
+            public void clicked(InputEvent event, float x, float y) {
+                closeNewLabiWindow();
+                Message message = new Message(new HashMap<>() {{
+                    put("function", "createNewLabi");
+                    put("arguments", new ArrayList<>(Arrays.asList(
+                        AppClient.getCurrentUser().getUsername(),
+                        newLabiNameField.getText(),
+                        newLabiPrivateCheckBox.isChecked(),
+                        (newLabiPrivateCheckBox.isChecked() ? newLabiPasswordField.getText() : ""),
+                        newLabiVisibleCheckBox.isChecked()
+                    )));
+                }}, Message.Type.command);
+                Message responseMessage = AppClient.getServerHandler().sendAndWaitForResponse(message);
+                if (methodUseMessage(responseMessage, newLabiErrorLabel)) return;
+
+                Labi labi = responseMessage.getFromBody("message");
+                closeNewLabiWindow();
+                initLabiWindow(true, labi);
+            }
+        });
+
+        newLabiBackButton = new TextButton("Back", skin);
+        newLabiBackButton.addListener(new ClickListener() {
+            @Override
+            public void clicked(InputEvent event, float x, float y) {
+                closeNewLabiWindow();
+                initMenuWindow();
+            }
+        });
+
+        newLabiTable.add(newLabiNameLabel).fillX().expandX().padRight(5);
+        newLabiTable.add(newLabiNameField).fillX().expandX().row();
+        newLabiTable.add(newLabiPrivateCheckBox).fillX().expandX().padRight(5);
+        newLabiTable.add(newLabiPasswordField).fillX().expandX().row();
+        newLabiTable.add(newLabiVisibleCheckBox).fillX().expandX().row();
+        newLabiTable.add(createNewLabiButton).fillX().expandX().padRight(5);
+        newLabiTable.add(newLabiBackButton).fillX().expandX().row();
+        newLabiTable.add(newLabiErrorLabel).fillX().expandX().row();
+
+        newLabiWindow.add(newLabiTable);
+        stage.addActor(newLabiWindow);
+        newLabiTable.top();
+    }
+
+    private void closeNewLabiWindow() {
+        newLabiWindow.remove();
+        newLabiTable.remove();
+    }
+
+    public Window getNewLabiWindow() {
+        return newLabiWindow;
     }
 
     public void initChoiceFarmWindow(String username) {
@@ -396,6 +666,96 @@ public class GameMenuView implements Screen {
     }
 
     private void handleGameMenu() {
+        if (getBackButton().isChecked()) {
+            getBackButton().setChecked(false);
 
+            Message message = new Message(new HashMap<>() {{
+                put("field", "controller");
+                put("change", "MainMenuController");
+            }}, Message.Type.change);
+            Message responseMessage = AppClient.getServerHandler().sendAndWaitForResponse(message);
+            if (methodUseMessage(responseMessage, errorLabel)) return;
+
+            Main.getMain().getScreen().dispose();
+            Main.getMain().setScreen(new MainMenuView(Assets.getInstance().getSkin()));
+        } else if (getLoadGameButton().isChecked()) {
+            getLoadGameButton().setChecked(false);
+
+            boolean flag = true;
+            waitingBoolean = true;
+            while (flag && waitingBoolean) {
+                Message message = new Message(new HashMap<>() {{
+                    put("function", "loadGame");
+                    put("arguments", new ArrayList<>(Arrays.asList(
+                        AppClient.getCurrentUser().getUsername()
+                    )));
+                }}, Message.Type.command);
+                Message responseMessage = AppClient.getServerHandler().sendAndWaitForResponse(message);
+                if (!checkMessageValidity(responseMessage, Message.Type.response)) {
+                    errorLabel.setText("Network error!");
+                    flag = false;
+                }
+                if(responseMessage.getBooleanFromBody("success")) {
+                    break;
+                }
+
+                initWaitWindow();
+            }
+
+            closeWaitWindow();
+            if (!flag || !waitingBoolean) {
+
+                return;
+            }
+
+            Main.getMain().getScreen().dispose();
+//            Main.getMain().setScreen(new GameView(new GameController(), Assets.getInstance().getSkin()));
+        } else if (getNewGameButton().isChecked()) {
+            getNewGameButton().setChecked(false);
+
+            menuWindow.setVisible(false);
+            initNewLabiWindow();
+        }
+        else if (refreshButton.isChecked()) {
+            refreshButton.setChecked(false);
+
+            initMenuWindow();
+        }
+//        else if (getBackNewGameButton().isChecked()) {
+//            getBackNewGameButton().setChecked(false);
+//
+//            getMenuWindow().setVisible(true);
+//            getNewLabiWindow().setVisible(false);
+//        } else if (getAddPlayerButton().isChecked()) {
+//            getAddPlayerButton().setChecked(false);
+//
+//            if (getPlayersPtr() >= 4) {
+//                getNewLabiErrorLabel().setText("At most 4 players can play the game!");
+//                return;
+//            }
+//
+//            addPlayerToNewGame();
+//        } else if (getStartNewGameButton().isChecked()) {
+//            getStartNewGameButton().setChecked(false);
+//
+//            getNewLabiWindow().setVisible(false);
+//            newGame(getPlayerUsernames());
+//        }
+    }
+
+    private boolean methodUseMessage(Message responseMessage, Label label) {
+        if (!checkMessageValidity(responseMessage, Message.Type.response)) {
+            label.setText("Network error!");
+            return true;
+        }
+        if(!responseMessage.getBooleanFromBody("success")) {
+            label.setText(responseMessage.getFromBody("message"));
+            return true;
+        }
+        return false;
+    }
+
+    public boolean checkMessageValidity(Message message, Message.Type type) {
+        return message.getType() == type;
     }
 }

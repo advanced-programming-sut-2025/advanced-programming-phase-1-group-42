@@ -1,12 +1,5 @@
 package com.StardewValley.server.controllers;
 
-import com.StardewValley.client.Main;
-import com.StardewValley.client.AppClient;
-import com.StardewValley.models.Assets;
-import com.StardewValley.client.views.GameMenuView;
-import com.StardewValley.client.views.LoginMenuView;
-import com.StardewValley.client.views.MainMenuView;
-import com.StardewValley.client.views.ProfileMenuView;
 import com.StardewValley.models.Message;
 import com.StardewValley.server.AppServer;
 import com.StardewValley.server.ClientHandler;
@@ -59,7 +52,7 @@ public class MainMenuController extends Controller {
 
                     return new Message(new HashMap<>() {{
                         put("success", true);
-                        put("message", "");
+                        put("message", "to " + message.getFromBody("change"));
                     }}, Message.Type.response);
                 }
             }

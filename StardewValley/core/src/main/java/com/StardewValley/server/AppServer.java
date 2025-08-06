@@ -1,5 +1,6 @@
 package com.StardewValley.server;
 
+import com.StardewValley.models.Labi;
 import com.StardewValley.models.game_structure.Game;
 import com.StardewValley.models.interactions.Player;
 import com.StardewValley.models.interactions.User;
@@ -17,6 +18,8 @@ public class AppServer {
     private final static ArrayList<User> onlineUsers = new ArrayList<>();
 
     private final static ArrayList<Game> games = new ArrayList<>();
+
+    private final static ArrayList<Labi> labies = new ArrayList<>();
 
     private final static ArrayList<ClientHandler> clientHandlers = new ArrayList<>();
 
@@ -70,4 +73,7 @@ public class AppServer {
         return clientHandlers;
     }
 
+    public static ArrayList<Labi> getLabies() {
+        return labies;
+    }
 }

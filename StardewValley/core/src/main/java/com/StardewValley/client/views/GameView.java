@@ -2,7 +2,7 @@ package com.StardewValley.client.views;
 
 import com.StardewValley.client.Main;
 import com.StardewValley.client.AppClient;
-import com.StardewValley.server.controllers.GameMenuController;
+import com.StardewValley.server.controllers.GameController;
 import com.StardewValley.models.Assets;
 import com.StardewValley.models.Pair;
 import com.StardewValley.models.Result;
@@ -61,7 +61,7 @@ import static java.lang.Math.min;
 
 public class GameView implements Screen, InputProcessor {
     private Skin skin = Assets.getInstance().getSkin();
-    private GameMenuController controller;
+    private GameController controller;
     private Stage stage;
     private Table table;
     private final OrthographicCamera camera;
@@ -143,7 +143,7 @@ public class GameView implements Screen, InputProcessor {
 
     private boolean isTabClicked = false;
 
-    public GameView(GameMenuController controller, Skin skin) {
+    public GameView(GameController controller, Skin skin) {
         this.controller = controller;
 //        this.controller.initGameControllers();
         this.skin = skin;
@@ -2780,8 +2780,8 @@ public class GameView implements Screen, InputProcessor {
         exitButton.addListener(new ClickListener() {
            @Override
            public void clicked(InputEvent event, float x, float y) {
-               Result res = controller.exitGame();
-               messageLabel.setText(res.message());
+//               Result res = controller.exitGame();
+//               messageLabel.setText(res.message());
            }
         });
 

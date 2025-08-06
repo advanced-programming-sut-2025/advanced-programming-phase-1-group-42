@@ -1,5 +1,6 @@
 package com.StardewValley.client;
 
+import com.StardewValley.models.Labi;
 import com.StardewValley.models.enums.Menu;
 import com.StardewValley.models.game_structure.Game;
 import com.StardewValley.models.interactions.User;
@@ -21,6 +22,8 @@ public class AppClient {
     private static Menu currentMenu = null;
 
     private static User currentUser = null;
+
+    private static Labi currentLabi = null;
 
     private static Game currentGame = null;
 
@@ -153,4 +156,11 @@ public class AppClient {
     }
 
 
+    public static Labi getCurrentLabi() {
+        return currentLabi;
+    }
+
+    public static void setCurrentLabi(Labi currentLabi) {
+        AppClient.currentLabi = currentLabi;
+    }
 }

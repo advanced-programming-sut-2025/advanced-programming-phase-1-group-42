@@ -22,6 +22,15 @@ public abstract class Controller {
         return null;
     }
 
+    protected User findAppOnlineUser(String username) {
+        for (User user : AppServer.getOnlineUsers()) {
+            if(user.getUsername().equals(username)) {
+                return user;
+            }
+        }
+        return null;
+    }
+
     protected boolean checkEmailFormat(String email) {
         // Check email format
         if(email.matches("\\s*([^@]*@){2,}.*") || email.matches("[^@]+"))
