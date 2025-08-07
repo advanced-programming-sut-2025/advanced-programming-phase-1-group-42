@@ -250,9 +250,9 @@ public class GameView implements Screen, InputProcessor {
 //        animal.setCoordinate(new Coordinate(54, 34));
 //        farmBuilding.addAnimal(animal);
 //
-//        App.getCurrentGame().getCurrentPlayer().getFridge().addItemToFridge(Good.newGood(FoodType.APPLE));
-//        App.getCurrentGame().getCurrentPlayer().getFridge().addItemToFridge(Good.newGood(FoodType.BEER));
-//        App.getCurrentGame().getCurrentPlayer().getInventory().addGoodByObject(Good.newGood(FoodType.WHEAT_FLOUR));
+        App.getCurrentGame().getCurrentPlayer().getFridge().addItemToFridge(Good.newGood(FoodType.APPLE));
+        App.getCurrentGame().getCurrentPlayer().getFridge().addItemToFridge(Good.newGood(FoodType.BEER));
+        App.getCurrentGame().getCurrentPlayer().getInventory().addGoodByObject(Good.newGood(FoodType.WHEAT_FLOUR));
 
 //        new Pair<>(ForagingMineralType.IRON_ORE, 4),
 //            new Pair<>(ForagingMineralType.COAL, 1);
@@ -1749,12 +1749,9 @@ public class GameView implements Screen, InputProcessor {
         if (fridgeWindow != null) {
             fridgeWindow.remove();
         }
+
         this.fridgeTable = new Table(skin);
         this.fridgeTable.setFillParent(true);
-
-        controller.getFridgeController().refreshFridgeElements();
-        controller.getFridgeController().updateFridge();
-
         fridgeTable.clearChildren();
         fridgeTable.clear();
 
@@ -1763,18 +1760,21 @@ public class GameView implements Screen, InputProcessor {
 
         ArrayList<ArrayList<Good>> fridgeItems = App.getCurrentGame().getCurrentPlayer().getFridge().getInFridgeItems();
 
-        for (Pair<Pair<ImageButton, Image>, Integer> pair : controller.getFridgeController().getFridgeElements()) {
-            ImageButton imageButtonBackground = pair.first().first();
-            Image image = pair.first().second();
-            int index = pair.second();
+        TextureRegionDrawable drawableSlot = Assets.getInstance().getDrawableSlot();
 
-            int quantity = 0;
-            ArrayList<Good> goods = fridgeItems.get(index);
+        for (int i = 0; i < fridgeItems.size(); i++) {
+            ArrayList<Good> goods = fridgeItems.get(i);
+
+            ImageButton imageButtonBackground = new ImageButton(drawableSlot);
+
+            Image image;
             if (!goods.isEmpty()) {
-                quantity = goods.size();
+                image = new Image(new TextureRegion(new Texture(goods.get(0).getType().imagePath())));
+            } else {
+                image = new Image(new TextureRegion(new Texture("GameAssets/null.png")));
             }
 
-            Label countLabel = new Label(String.valueOf(quantity), skin);
+            Label countLabel = new Label(String.valueOf(goods.size()), skin);
             countLabel.setFontScale(0.7f);
 
             Table itemTable = new Table();
@@ -1788,6 +1788,34 @@ public class GameView implements Screen, InputProcessor {
             if (count % columns == 0) {
                 fridgeTable.row();
             }
+
+            final int index = i;
+
+            imageButtonBackground.addListener(new ClickListener() {
+                @Override
+                public void clicked(InputEvent event, float x, float y) {
+                    ArrayList<Good> itemsInSlot = App.getCurrentGame().getCurrentPlayer().getFridge().getInFridgeItems().get(index);
+                    if (!itemsInSlot.isEmpty()) {
+                        Good good = itemsInSlot.getFirst();
+                        App.getCurrentGame().getCurrentPlayer().getFridge().removeItemsFromFridge(good.getType(), 1);
+                        App.getCurrentGame().getCurrentPlayer().getInventory().addGoodByObject(Good.newGood(good.getType()));
+                        initFridgeWindow();
+                    }
+                }
+            });
+
+            image.addListener(new ClickListener() {
+                @Override
+                public void clicked(InputEvent event, float x, float y) {
+                    imageButtonBackground.setChecked(true);
+                    imageButtonBackground.fire(new InputEvent() {{
+                        setType(Type.touchDown);
+                    }});
+                    imageButtonBackground.fire(new InputEvent() {{
+                        setType(Type.touchUp);
+                    }});
+                }
+            });
         }
 
         this.fridgeWindow = new Window("Fridge", skin, "Letter");
@@ -1804,6 +1832,7 @@ public class GameView implements Screen, InputProcessor {
         setInputProcessor();
     }
 
+
     // cooking
     public void initCookingWindow() {
         if (cookingWindow != null) {
@@ -1814,15 +1843,54 @@ public class GameView implements Screen, InputProcessor {
         cookingTable.top().left();
         cookingTable.setFillParent(false);
 
-        controller.getCookingController().refreshRecipes();
-        ArrayList<Pair<Pair<ImageButton, Image>, Integer>> cookingRecipes = controller.getCookingController().getCookingRecipe();
+        ArrayList<CookingRecipeType> unlockedRecipes = controller.getCookingController().getUnlockedRecipes();
+        CookingRecipeType[] allRecipes = controller.getCookingController().getAllRecipes();
 
         int columns = 5;
         int count = 0;
 
-        for (Pair<Pair<ImageButton, Image>, Integer> pair : cookingRecipes) {
-            ImageButton slotButton = pair.first().first();
-            Image itemImage = pair.first().second();
+        TextureRegionDrawable drawableSlot = Assets.getInstance().getDrawableSlot();
+
+        for (int i = 0; i < allRecipes.length; i++) {
+            CookingRecipeType type = allRecipes[i];
+            GoodType goodType = type.getGoodType();
+
+            ImageButton slotButton = new ImageButton(drawableSlot);
+            Image itemImage;
+
+            if (goodType != null) {
+                itemImage = new Image(new TextureRegion(new Texture(goodType.imagePath())));
+
+                final int index = i;
+
+                if (!unlockedRecipes.contains(type)) {
+                    itemImage.setColor(0.5f, 0.5f, 0.5f, 1f);
+                } else {
+                    slotButton.addListener(new ClickListener() {
+                        @Override
+                        public void clicked(InputEvent event, float x, float y) {
+                            if (!slotButton.isChecked()) slotButton.setChecked(true);
+                            CookingRecipeType clickedType = allRecipes[index];
+                            showRecipeDetails(clickedType);
+                        }
+                    });
+
+                    itemImage.addListener(new ClickListener() {
+                        @Override
+                        public void clicked(InputEvent event, float x, float y) {
+                            slotButton.setChecked(true);
+                            slotButton.fire(new InputEvent() {{
+                                setType(Type.touchDown);
+                            }});
+                            slotButton.fire(new InputEvent() {{
+                                setType(Type.touchUp);
+                            }});
+                        }
+                    });
+                }
+            } else {
+                itemImage = new Image(new TextureRegion(new Texture("GameAssets/null.png")));
+            }
 
             Table itemTable = new Table(skin);
             itemTable.add(slotButton).size(64, 64).padRight(5);
@@ -1851,6 +1919,7 @@ public class GameView implements Screen, InputProcessor {
         staticStage.addActor(cookingWindow);
         setInputProcessor();
     }
+
 
     public void showRecipeDetails(CookingRecipeType recipeType) {
         if (cookingRecipeWindow != null) {
@@ -1946,15 +2015,58 @@ public class GameView implements Screen, InputProcessor {
         craftingUseTable.top().left();
         craftingUseTable.setFillParent(false);
 
-        controller.getCraftingController().refreshRecipes();
-        ArrayList<Pair<Pair<ImageButton, Image>, Integer>> craftingRecipes = controller.getCraftingController().getCraftingRecipes();
+        CraftingRecipeType[] allRecipes = controller.getCraftingController().getAllRecipes();
+        ArrayList<CraftingRecipeType> unlockedRecipes = controller.getCraftingController().getUnlockedRecipes();
+
+        TextureRegionDrawable drawableSlot = Assets.getInstance().getDrawableSlot();
 
         int columns = 5;
         int count = 0;
 
-        for (Pair<Pair<ImageButton, Image>, Integer> pair : craftingRecipes) {
-            ImageButton slotButton = pair.first().first();
-            Image itemImage = pair.first().second();
+        for (int i = 0; i < allRecipes.length; i++) {
+            CraftingRecipeType type = allRecipes[i];
+            GoodType goodType = type.getCraftingType();
+
+            ImageButton slotButton = new ImageButton(drawableSlot);
+            slotButton.setProgrammaticChangeEvents(false);
+
+            Image itemImage;
+            if (goodType != null) {
+                itemImage = new Image(new TextureRegion(new Texture(goodType.imagePath())));
+                final int index = i;
+
+                if (!unlockedRecipes.contains(type)) {
+                    itemImage.setColor(0.5f, 0.5f, 0.5f, 1f);
+                } else {
+                    slotButton.addListener(new ClickListener() {
+                        @Override
+                        public void clicked(InputEvent event, float x, float y) {
+                            if (!slotButton.isChecked()) {
+                                slotButton.setChecked(true);
+                            }
+                            CraftingRecipeType clickedType = allRecipes[index];
+                            if (clickedType != null) {
+                                showCraftingRecipeDetails(clickedType);
+                            }
+                        }
+                    });
+
+                    itemImage.addListener(new ClickListener() {
+                        @Override
+                        public void clicked(InputEvent event, float x, float y) {
+                            slotButton.setChecked(true);
+                            slotButton.fire(new InputEvent() {{
+                                setType(Type.touchDown);
+                            }});
+                            slotButton.fire(new InputEvent() {{
+                                setType(Type.touchUp);
+                            }});
+                        }
+                    });
+                }
+            } else {
+                itemImage = new Image(new TextureRegion(new Texture("GameAssets/null.png")));
+            }
 
             Table itemTable = new Table(skin);
             itemTable.add(slotButton).size(64, 64).padRight(5);
@@ -1977,6 +2089,7 @@ public class GameView implements Screen, InputProcessor {
 
         setInputProcessor();
     }
+
 
 
     public void showCraftingRecipeDetails(CraftingRecipeType recipeType) {
