@@ -67,7 +67,6 @@ public class GameMenuView implements Screen {
     private ImageButton imageButton1;
     private ImageButton imageButton2;
     private ArrayList<Table> farmButtons;
-    private TextButton choiceFarmBackButton;
 
     private Window waitingWindow;
     private Label waitingLabel;
@@ -97,85 +96,8 @@ public class GameMenuView implements Screen {
         this.menuTable.setFillParent(true);
         menuTable.padTop(50).defaults().padBottom(15);
 
-        Label tempLabel;
-        this.choiceFarmWindow = new Window("Choice Farm", skin);
-        this.playerUsernameLabel = new Label("", skin);
-        this.playerUsernameLabel.setFontScale(0.7f);
-        this.farmButtons = new ArrayList();
-        this.farmButtons.add(new Table(skin));
-        tempLabel = new Label("Normal Farm", skin);
-        tempLabel.setFontScale(0.7f);
-        this.farmButtons.getLast().add(tempLabel);
-        this.farmButtons.getLast().row();
-        this.imageButton1 = new ImageButton(new TextureRegionDrawable(new TextureRegion(new Texture("Farm_1.png"))),
-            new TextureRegionDrawable(new TextureRegion(new Texture("Farm_1_Checked.png"))));
-        this.farmButtons.getLast().add(imageButton1).padTop(15);
-        this.farmButtons.getLast().setWidth(140);
-        this.farmButtons.getLast().row();
-        this.farmButtons.add(new Table(skin));
-        tempLabel = new Label("Aquatic Farm", skin);
-        tempLabel.setFontScale(0.7f);
-        this.farmButtons.getLast().add(tempLabel);
-        this.farmButtons.getLast().row();
-        this.imageButton2 = new ImageButton(new TextureRegionDrawable(new TextureRegion(new Texture("Farm_2.png"))),
-            new TextureRegionDrawable(new TextureRegion(new Texture("Farm_2_Checked.png"))));
-        this.farmButtons.getLast().add(imageButton2).padTop(15);
-        this.farmButtons.getLast().setWidth(140);
-        this.farmButtons.getLast().row();
-        this.choiceFarmBackButton = new TextButton("Back", skin);
-
         this.waitingLabel = new Label("Waiting.", skin);
-//        this.imageButton1.addListener(new ClickListener() {
-//            @Override
-//            public void clicked(InputEvent event, float x, float y) {
-//                choiceFarmWindow.setVisible(false);
-//
-//                Farm farm = new Farm(0, controller.ptr, controller.tiles);
-//                controller.players.get(controller.ptr).setFarm(farm);
-//                controller.farms.add(farm);
-//
-//                if (controller.ptr == 3) {
-////                    controller.newGamePhase2();
-//                    return;
-//                }
-//
-//                controller.ptr++;
-//                initChoiceFarmWindow(controller.players.get(controller.ptr).getPlayerUsername());
-//            }
-//        });
-//
-//        this.imageButton2.addListener(new ClickListener() {
-//            @Override
-//            public void clicked(InputEvent event, float x, float y) {
-//                choiceFarmWindow.setVisible(false);
-//
-//                Farm farm = new Farm(1, controller.ptr, controller.tiles);
-//                controller.players.get(controller.ptr).setFarm(farm);
-//                controller.farms.add(farm);
-//
-//                if (controller.ptr == 3) {
-////                    controller.newGamePhase2();
-//                    return;
-//                }
-//                controller.ptr++;
-//                initChoiceFarmWindow(controller.players.get(controller.ptr).getPlayerUsername());
-//            }
-//        });
-//
-//        this.choiceFarmBackButton.addListener(new ClickListener() {
-//            @Override
-//            public void clicked(InputEvent event, float x, float y) {
-//                choiceFarmWindow.setVisible(false);
-//                if (controller.ptr == 0) {
-//                    newLabiWindow.setVisible(true);
-//                    return;
-//                }
-//
-//                controller.farms.removeLast();
-//                controller.ptr--;
-//                initChoiceFarmWindow(controller.players.get(controller.ptr).getPlayerUsername());
-//            }
-//        });
+
 
     }
 
@@ -261,22 +183,9 @@ public class GameMenuView implements Screen {
 //        newLabiTable.add(newLabiErrorLabel).colspan(2).center().padTop(30);
 //        newLabiTable.row();
 //
-//        setWindowForTable(newLabiWindow, newLabiTable, stage);
+
 //
-//        choiceFarmTable = new Table(skin);
-//        choiceFarmTable.setFillParent(true);
-//        choiceFarmTable.pad(100).defaults().expandX().fillX().padLeft(-60).row();
-//
-//        choiceFarmTable.add(playerUsernameLabel).colspan(2).left().fillX().padBottom(20);
-//        choiceFarmTable.row();
-//
-//        choiceFarmTable.add(farmButtons.get(0)).left().padLeft(-60).padRight(20);
-//        choiceFarmTable.add(farmButtons.get(1)).right();
-//        choiceFarmTable.row();
-//
-//        choiceFarmTable.add(choiceFarmBackButton).colspan(2).height(70).center().expandX().fillX().padTop(20).padLeft(-60).row();
-//
-//        setWindowForTable(choiceFarmWindow, choiceFarmTable, stage);
+
     }
 
     static void setWindowForTable(Window window, Table table, Stage stage) {
@@ -384,7 +293,12 @@ public class GameMenuView implements Screen {
             textButton.addListener(new ClickListener() {
                 @Override
                 public void clicked(InputEvent event, float x, float y) {
+                    if (labi.getUsers().size() == 4) {
+                        errorLabel.setText("This labi is full!");
+                        return;
+                    }
                     if (labi.isPrivate()) {
+                        menuWindow.setVisible(false);
                         initPasswordWindow(labi);
                     }
                     else {
@@ -408,14 +322,15 @@ public class GameMenuView implements Screen {
                             labi = JSONUtils.fromJsonLabi(json);
                         }
                         AppClient.setCurrentLabi(labi);
+                        menuWindow.setVisible(false);
                         initLabiWindow(false, labi);
                     }
 
                 }
             });
 
-            labiesTable.add(labiLabel).width(700).fillX().padTop(5).padRight(5);
-            labiesTable.add(textButton).width(100).fillX().padTop(5).padRight(5);
+            labiesTable.add(labiLabel).width(800).fillX().padTop(5).padRight(5).left();
+            labiesTable.add(textButton).width(130).fillX().padTop(5).padRight(5).right();
             labiesTable.row();
         }
 
@@ -424,12 +339,20 @@ public class GameMenuView implements Screen {
 
     private void initPasswordWindow(Labi labi) {
         this.passwordWindow = new Window("", skin);
+        passwordWindow.setMovable(false);
+        passwordWindow.setResizable(false);
+        passwordWindow.setSize(800, 400);
+        passwordWindow.setPosition(
+            (stage.getWidth() - passwordWindow.getWidth()) / 2,
+            (stage.getHeight() - passwordWindow.getHeight()) / 2
+        );
         this.passwordLabel = new Label("Enter your password for " + labi.getName() + " labi :", skin);
         this.passwordField = new TextField("", skin);
         this.passwordBackButton = new TextButton("Back", skin);
         this.passwordBackButton.addListener(new ClickListener() {
            @Override
            public void clicked(InputEvent event, float x, float y) {
+               initMenuWindow();
                passwordWindow.remove();
            }
         });
@@ -440,9 +363,19 @@ public class GameMenuView implements Screen {
                passwordWindow.remove();
                if (!labi.getPassword().equals(passwordField.getText())) {
                    errorLabel.setText("Wrong password for " + labi.getName() + " Labi");
+                   initMenuWindow();
                    return;
                }
 
+               Message message = new Message(new HashMap<>() {{
+                   put("function", "enterLabi");
+                   put("arguments", new ArrayList<>(Arrays.asList(String.valueOf(labi.getID()),
+                           AppClient.getCurrentUser().getUsername(), "")));
+               }}, Message.Type.command);
+               Message responseMessage = AppClient.getServerHandler().sendAndWaitForResponse(message);
+               if (methodUseMessage(responseMessage, errorLabel)) return;
+
+               AppClient.setCurrentLabi(labi);
                initLabiWindow(false, labi);
            }
         });
@@ -479,7 +412,7 @@ public class GameMenuView implements Screen {
         labiUsersLabel = new Label(stringBuilder.toString(), skin);
         startGameButton = new TextButton("Start Game", skin);
         if (!isAdmin)
-            startGameButton.setDisabled(true);
+            startGameButton.setVisible(false);
         exitLabiButton = new TextButton("Exit Game", skin);
 
         startGameButton.addListener(new ClickListener() {
@@ -493,8 +426,7 @@ public class GameMenuView implements Screen {
                Message responseMessage = AppClient.getServerHandler().sendAndWaitForResponse(message);
                if (methodUseMessage(responseMessage, labiErrorLabel)) return;
 
-//               initChoiceFarmWindow();
-               //TODO
+               initChoiceFarmWindow();
            }
         });
 
@@ -627,6 +559,8 @@ public class GameMenuView implements Screen {
                     String json = JSONUtils.getGson().toJson(msgObj);
                     labi = JSONUtils.fromJsonLabi(json);
                 }
+
+                AppClient.setCurrentLabi(labi);
                 closeNewLabiWindow();
                 initLabiWindow(true, labi);
             }
@@ -664,10 +598,101 @@ public class GameMenuView implements Screen {
         return newLabiWindow;
     }
 
-    public void initChoiceFarmWindow(String username) {
-        this.playerUsernameLabel.setText(username + ", Please choice one farm: ");
+    public void initChoiceFarmWindow() {
+        Label tempLabel;
+        this.choiceFarmWindow = new Window("Choice Farm", skin);
+        this.playerUsernameLabel = new Label("", skin);
+        this.playerUsernameLabel.setFontScale(0.7f);
+        this.farmButtons = new ArrayList();
+        this.farmButtons.add(new Table(skin));
+        tempLabel = new Label("Normal Farm", skin);
+        tempLabel.setFontScale(0.7f);
+        this.farmButtons.getLast().add(tempLabel);
+        this.farmButtons.getLast().row();
+        this.imageButton1 = new ImageButton(new TextureRegionDrawable(new TextureRegion(new Texture("Farm_1.png"))),
+            new TextureRegionDrawable(new TextureRegion(new Texture("Farm_1_Checked.png"))));
+        this.farmButtons.getLast().add(imageButton1).padTop(15);
+        this.farmButtons.getLast().setWidth(140);
+        this.farmButtons.getLast().row();
+        this.farmButtons.add(new Table(skin));
+        tempLabel = new Label("Aquatic Farm", skin);
+        tempLabel.setFontScale(0.7f);
+        this.farmButtons.getLast().add(tempLabel);
+        this.farmButtons.getLast().row();
+        this.imageButton2 = new ImageButton(new TextureRegionDrawable(new TextureRegion(new Texture("Farm_2.png"))),
+            new TextureRegionDrawable(new TextureRegion(new Texture("Farm_2_Checked.png"))));
+        this.farmButtons.getLast().add(imageButton2).padTop(15);
+        this.farmButtons.getLast().setWidth(140);
+        this.farmButtons.getLast().row();
+        choiceFarmTable = new Table(skin);
+        choiceFarmTable.setFillParent(true);
+        choiceFarmTable.pad(100).defaults().expandX().fillX().padLeft(-60).row();
 
-        this.choiceFarmWindow.setVisible(true);
+        choiceFarmTable.add(playerUsernameLabel).colspan(2).left().fillX().padBottom(20);
+        choiceFarmTable.row();
+
+        choiceFarmTable.add(farmButtons.get(0)).left().padLeft(-60).padRight(20);
+        choiceFarmTable.add(farmButtons.get(1)).right();
+        choiceFarmTable.row();
+
+        choiceFarmWindow.setModal(true);
+        choiceFarmWindow.setMovable(true);
+        choiceFarmWindow.setResizable(false);
+
+        choiceFarmWindow.add(choiceFarmTable).grow().pad(10);
+        choiceFarmWindow.pack();
+        choiceFarmWindow.setPosition(
+            Gdx.graphics.getWidth() / 2f - choiceFarmWindow.getWidth() / 2f,
+            Gdx.graphics.getHeight() / 2f - choiceFarmWindow.getHeight() / 2f
+        );
+
+        this.playerUsernameLabel.setText(AppClient.getCurrentUser().getUsername() + ", Please choice one farm: ");
+        this.imageButton1.addListener(new ClickListener() {
+            @Override
+            public void clicked(InputEvent event, float x, float y) {
+                choiceFarmWindow.remove();
+                Message message2 = new Message(new HashMap<>() {{
+                    put("function", "choiceFarm");
+                    put("arguments", new ArrayList<>(Arrays.asList(
+                        AppClient.getCurrentUser().getUsername(),
+                        String.valueOf(AppClient.getCurrentLabi().getID()),
+                        String.valueOf(0)
+                    )));
+                }}, Message.Type.command);
+                Message responseMessage2 = AppClient.getServerHandler().sendAndWaitForResponse(message2);
+                if (!checkMessageValidity(responseMessage2, Message.Type.response)) {
+                    return;
+                }
+
+                //TODO
+            }
+        });
+
+        this.imageButton2.addListener(new ClickListener() {
+            @Override
+            public void clicked(InputEvent event, float x, float y) {
+                choiceFarmWindow.remove();
+                Message message2 = new Message(new HashMap<>() {{
+                    put("function", "choiceFarm");
+                    put("arguments", new ArrayList<>(Arrays.asList(
+                        AppClient.getCurrentUser().getUsername(),
+                        String.valueOf(AppClient.getCurrentLabi().getID()),
+                        String.valueOf(1)
+                    )));
+                }}, Message.Type.command);
+                Message responseMessage2 = AppClient.getServerHandler().sendAndWaitForResponse(message2);
+                if (!checkMessageValidity(responseMessage2, Message.Type.response)) {
+                    return;
+                }
+
+                //TODO
+
+            }
+        });
+
+        choiceFarmWindow.setVisible(true);
+        stage.addActor(choiceFarmWindow);
+        choiceFarmWindow.top();
     }
 
     public Window getMenuWindow() {
@@ -675,33 +700,7 @@ public class GameMenuView implements Screen {
     }
 
     private void handleGameMenu() {
-//        if (labiWindow != null) {
-//            Message message = new Message(new HashMap<>() {{
-//                put("function", "updateLabi");
-//                put("arguments", AppClient.getCurrentLabi().getID());
-//            }}, Message.Type.command);
-//            Message responseMessage = AppClient.getServerHandler().sendAndWaitForResponse(message);
-//            if (methodUseMessage(responseMessage, labiErrorLabel)) return;
-//
-//            Object msgObj = responseMessage.getFromBody("message");
-//            Labi updatedLabi;
-//
-//            if (msgObj instanceof String) {
-//                // ✅ Already a JSON string, just parse directly
-//                updatedLabi = JSONUtils.fromJsonLabi((String) msgObj);
-//            } else {
-//                // ✅ Not a string — convert to JSON string first
-//                String json = JSONUtils.getGson().toJson(msgObj);
-//                updatedLabi = JSONUtils.fromJsonLabi(json);
-//            }
-//            labiAdminUserLabel.setText("Admin User: " + updatedLabi.getAdminUser().getUsername());
-//            StringBuilder stringBuilder1 = new StringBuilder();
-//            stringBuilder1.append("Users: \n");
-//            for (User user : updatedLabi.getUsers()) {
-//                stringBuilder1.append("\t").append(user.getUsername()).append("\n");
-//            }
-//            labiUsersLabel.setText(stringBuilder1.toString());
-//        }
+        loadCurrentLabi();
 
         if (getBackButton().isChecked()) {
             getBackButton().setChecked(false);
@@ -778,6 +777,43 @@ public class GameMenuView implements Screen {
 //            getNewLabiWindow().setVisible(false);
 //            newGame(getPlayerUsernames());
 //        }
+    }
+
+    private void loadCurrentLabi() {
+        if (labiWindow != null && AppClient.getCurrentLabi() != null) {
+            Message message = new Message(new HashMap<>() {{
+                put("function", "updateLabi");
+                put("arguments", AppClient.getCurrentLabi().getID());
+            }}, Message.Type.command);
+            Message responseMessage = AppClient.getServerHandler().sendAndWaitForResponse(message);
+            if (methodUseMessage(responseMessage, labiErrorLabel)) return;
+
+            if (responseMessage.getFromBody("message").equals("choice farm")) {
+                closeLabiWindow();
+                initChoiceFarmWindow();
+                return;
+            }
+
+            Object msgObj = responseMessage.getFromBody("message");
+            Labi updatedLabi;
+
+            if (msgObj instanceof String) {
+                // ✅ Already a JSON string, just parse directly
+                updatedLabi = JSONUtils.fromJsonLabi((String) msgObj);
+            } else {
+                // ✅ Not a string — convert to JSON string first
+                String json = JSONUtils.getGson().toJson(msgObj);
+                updatedLabi = JSONUtils.fromJsonLabi(json);
+            }
+            labiAdminUserLabel.setText("Admin User: " + updatedLabi.getAdminUser().getUsername());
+            StringBuilder stringBuilder1 = new StringBuilder();
+            stringBuilder1.append("Users: \n");
+            for (User user : updatedLabi.getUsers()) {
+                stringBuilder1.append("\t").append(user.getUsername()).append("\n");
+            }
+            labiUsersLabel.setText(stringBuilder1.toString());
+        }
+        return;
     }
 
     private boolean methodUseMessage(Message responseMessage, Label label) {

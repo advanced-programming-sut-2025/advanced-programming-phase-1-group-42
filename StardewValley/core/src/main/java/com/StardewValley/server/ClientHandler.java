@@ -1,16 +1,22 @@
 package com.StardewValley.server;
 
+import com.StardewValley.client.AppClient;
 import com.StardewValley.models.JSONUtils;
+import com.StardewValley.models.Labi;
 import com.StardewValley.models.Message;
 import com.StardewValley.models.game_structure.Game;
 import com.StardewValley.models.interactions.User;
 import com.StardewValley.server.controllers.Controller;
+import com.StardewValley.server.controllers.GameMenuController;
 import com.StardewValley.server.controllers.RegisterMenuController;
 
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
 import java.io.IOException;
 import java.net.Socket;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.HashMap;
 import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.LinkedBlockingQueue;
 import java.util.concurrent.TimeUnit;
@@ -124,8 +130,23 @@ public class ClientHandler extends Thread {
     public void end() {
         end.set(true);
         try {
-            if (clientUser != null)
+            if (clientUser != null) {
+                if (currentController instanceof GameMenuController gameMenuController) {
+                    for (Labi labi : AppServer.getLabies()) {
+                        if (labi.getUsers().contains(clientUser)) {
+                            gameMenuController.exitLabi(new Message(new HashMap<>() {{
+                                put("function", "exitLabi");
+                                put("arguments", new ArrayList<>(Arrays.asList(String.valueOf(labi.getID()),
+                                        clientUser.getUsername()
+                                )));
+                            }}, Message.Type.command));
+                        }
+                    }
+                }
+
                 AppServer.getOnlineUsers().remove(clientUser);
+            }
+
             AppServer.getClientHandlers().remove(this);
             socket.close();
         } catch (IOException e) {}

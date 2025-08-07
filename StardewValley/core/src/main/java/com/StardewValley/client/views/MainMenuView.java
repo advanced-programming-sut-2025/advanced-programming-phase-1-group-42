@@ -149,7 +149,11 @@ public class MainMenuView implements Screen {
     }
 
     private void handleMainMenu() {
-        loadOnlineUsers();
+        try {
+            loadOnlineUsers();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
 
         if (getGameButton().isChecked()) {
             getGameButton().setChecked(false);

@@ -68,9 +68,25 @@ public class GameMenuController extends Controller {
         if (message.getType() == Message.Type.command) {
             switch ((String) message.getFromBody("function")) {
                 case "getLabies" -> {
+                    String search = message.getFromBody("arguments");
+                    ArrayList<Labi> sendingLabies = new ArrayList<>();
+                    if (search.equals("")) {
+                        for (Labi labi : AppServer.getLabies()) {
+                            if (labi.isVisible())
+                                sendingLabies.add(labi);
+                        }
+                    }
+                    else {
+                        for (Labi labi : AppServer.getLabies()) {
+                            if (labi.getID() == Integer.parseInt(search))
+                                sendingLabies.add(labi);
+                        }
+                    }
+
+                    ArrayList<Labi> finalSendingLabies = sendingLabies;
                     return new Message(new HashMap<>() {{
                         put("success", true);
-                        put("message", AppServer.getLabies());
+                        put("message", finalSendingLabies);
                     }}, Message.Type.response);
                 }
                 case "enterLabi" -> {
@@ -93,43 +109,24 @@ public class GameMenuController extends Controller {
                     }
                 }
                 case "startGame" -> {
-                    //TODO
-                }
-                case "exitLabi" -> {
-                    ArrayList<String> arguments = message.getFromBody("arguments");
+                    Integer labiID = message.getIntFromBody("arguments");
                     Labi selectedLabi = null;
                     for (Labi labi : AppServer.getLabies()) {
-                        if (labi.getID() == Integer.parseInt(arguments.get(0))) {
+                        if (labi.getID() == labiID) {
                             selectedLabi = labi;
                             break;
                         }
                     }
 
-                    if (selectedLabi.getUsers().size() == 1) {
-                        AppServer.getLabies().remove(selectedLabi);
-                        return new Message(new HashMap<>() {{
-                            put("success", true);
-                            put("message", "labi has been eliminated!");
-                        }}, Message.Type.response);
-                    }
-
-                    User user = null;
-                    for (User labiUser : selectedLabi.getUsers()) {
-                        if (labiUser.getUsername().equals(arguments.get(1))) {
-                            user = labiUser;
-                            break;
-                        }
-                    }
-
-                    selectedLabi.getUsers().remove(user);
-                    if (user.getUsername().equals(selectedLabi.getAdminUser().getUsername())) {
-                        selectedLabi.setAdminUser(selectedLabi.getUsers().getFirst());
-                    }
-
+                    AppServer.getLabies().remove(selectedLabi);
+                    AppServer.getWaitingLabies().add(new Pair<>(selectedLabi, new ArrayList<>()));
                     return new Message(new HashMap<>() {{
                         put("success", true);
-                        put("message", "You exit the labi!");
+                        put("message", "");
                     }}, Message.Type.response);
+                }
+                case "exitLabi" -> {
+                    return exitLabi(message);
                 }
                 case "updateLabi" -> {
                     for (Labi labi : AppServer.getLabies()) {
@@ -137,6 +134,15 @@ public class GameMenuController extends Controller {
                             return new Message(new HashMap<>() {{
                                 put("success", true);
                                 put("message", labi);
+                            }}, Message.Type.response);
+                        }
+                    }
+
+                    for (Pair<Labi, ArrayList<Pair<User, Integer>>> waitingLabi : AppServer.getWaitingLabies()) {
+                        if (waitingLabi.first().getID() == message.getIntFromBody("arguments")) {
+                            return new Message(new HashMap<>() {{
+                                put("success", true);
+                                put("message", "choice farm");
                             }}, Message.Type.response);
                         }
                     }
@@ -157,6 +163,19 @@ public class GameMenuController extends Controller {
                         put("success", true);
                         put("message", newLabi);
                     }}, Message.Type.response);
+                }
+                case "choiceFarm" -> {
+                    ArrayList<String> arguments = message.getFromBody("arguments");
+                    for (Pair<Labi, ArrayList<Pair<User, Integer>>> waitingLabi : AppServer.getWaitingLabies()) {
+                        if (waitingLabi.first().getID() == Integer.parseInt(arguments.get(1))) {
+                            User user = findAppOnlineUser(arguments.get(0));
+                            waitingLabi.second().add(new Pair<>(user, Integer.parseInt(arguments.get(2))));
+                            return new Message(new HashMap<>() {{
+                                put("success", true);
+                                put("message", "");
+                            }}, Message.Type.response);
+                        }
+                    }
                 }
             }
         }
@@ -179,6 +198,43 @@ public class GameMenuController extends Controller {
         return new Message(new HashMap<>() {{
             put("success", false);
             put("message", "");
+        }}, Message.Type.response);
+    }
+
+    public Message exitLabi(Message message) {
+        ArrayList<String> arguments = message.getFromBody("arguments");
+        Labi selectedLabi = null;
+        for (Labi labi : AppServer.getLabies()) {
+            if (labi.getID() == Integer.parseInt(arguments.get(0))) {
+                selectedLabi = labi;
+                break;
+            }
+        }
+
+        if (selectedLabi.getUsers().size() == 1) {
+            AppServer.getLabies().remove(selectedLabi);
+            return new Message(new HashMap<>() {{
+                put("success", true);
+                put("message", "labi has been eliminated!");
+            }}, Message.Type.response);
+        }
+
+        User user = null;
+        for (User labiUser : selectedLabi.getUsers()) {
+            if (labiUser.getUsername().equals(arguments.get(1))) {
+                user = labiUser;
+                break;
+            }
+        }
+
+        selectedLabi.getUsers().remove(user);
+        if (user.getUsername().equals(selectedLabi.getAdminUser().getUsername())) {
+            selectedLabi.setAdminUser(selectedLabi.getUsers().getFirst());
+        }
+
+        return new Message(new HashMap<>() {{
+            put("success", true);
+            put("message", "You exit the labi!");
         }}, Message.Type.response);
     }
 
