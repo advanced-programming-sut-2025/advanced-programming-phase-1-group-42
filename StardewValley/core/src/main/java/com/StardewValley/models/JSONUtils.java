@@ -29,5 +29,15 @@ public class JSONUtils {
         return gson.toJson(user, User.class);
     }
 
+    public synchronized static Labi fromJsonLabi(String json) {
+        return gson.fromJson(json, Labi.class);
+    }
 
+    public synchronized static String toJsonLabi(Labi labi) {
+        return gson.toJson(labi, Labi.class);
+    }
+
+    public synchronized static Gson getGson () {
+        return gson;
+    }
 }

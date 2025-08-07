@@ -34,8 +34,8 @@ public class Message {
         return (boolean) body.get(fieldName);
     }
 
-    public User getUserFromBody(String fieldName) {
-        return (User) body.get(fieldName);
+    public String getStringFromBody(String fieldName) {
+        return (String) body.get(fieldName);
     }
 
 	public enum Type {

@@ -2,12 +2,9 @@ package com.StardewValley.client.views;
 
 import com.StardewValley.client.Main;
 import com.StardewValley.client.AppClient;
-import com.StardewValley.models.Labi;
-import com.StardewValley.models.Message;
-import com.StardewValley.models.Result;
+import com.StardewValley.models.*;
 import com.StardewValley.models.interactions.User;
 import com.StardewValley.server.controllers.GameController;
-import com.StardewValley.models.Assets;
 import com.StardewValley.models.game_structure.Farm;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
@@ -19,8 +16,12 @@ import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.*;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
+import com.badlogic.gdx.utils.Json;
+import com.google.gson.internal.LinkedTreeMap;
+import com.google.gson.reflect.TypeToken;
 
 import java.lang.reflect.Field;
+import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
@@ -191,15 +192,16 @@ public class GameMenuView implements Screen {
             (stage.getHeight() - menuWindow.getHeight()) / 2
         );
 
-        this.menuTable.add(newGameButton).expandX().fillX().padTop(5).padRight(5).height(70).padLeft(-200);
-        this.menuTable.add(loadGameButton).expandX().fillX().padTop(5).height(70).padRight(400);
+        this.menuTable.add(newGameButton).expandX().fillX().padTop(5).padRight(5).height(70).padLeft(-100);
+        this.menuTable.add(loadGameButton).expandX().fillX().padTop(5).height(70).padRight(200);
         this.menuTable.row();
 
-        this.menuTable.add(refreshButton).expandX().fillX().padTop(5).padRight(5).height(70).padLeft(-200);
-        this.menuTable.add(backButton).expandX().fillX().padTop(5).height(70).padRight(400);
+        this.menuTable.add(refreshButton).expandX().fillX().padTop(5).padRight(5).height(70).padLeft(-100);
+        this.menuTable.add(backButton).expandX().fillX().padTop(5).height(70).padRight(200);
         this.menuTable.row();
 
-        this.menuTable.add(searchField).expandX().fillX().colspan(2).padTop(5).padRight(400).padLeft(-200).row();
+        this.menuTable.add(searchField).expandX().fillX().colspan(2).padTop(5).padRight(200).padLeft(-100).row();
+        this.menuTable.add(labiesScrollPane).expandX().fillX().colspan(2).padRight(200).padLeft(-100).row();
         menuWindow.add(menuTable).row();
         initMenuWindow();
 
@@ -361,10 +363,14 @@ public class GameMenuView implements Screen {
         Message responseMessage = AppClient.getServerHandler().sendAndWaitForResponse(message);
         if (methodUseMessage(responseMessage, errorLabel)) return;
 
-        this.labiesScrollPane.removeActor(this.labiesTable);
         this.labiesTable.clear();
-        ArrayList<Labi> labies = responseMessage.getFromBody("message");
-        for (Labi labi : labies) {
+
+        Object raw = responseMessage.getFromBody("message");
+        java.util.List<?> rawList = (java.util.List<?>) raw;
+
+        for (Object item : rawList) {
+            String json = JSONUtils.getGson().toJson(item);
+            Labi labi = JSONUtils.getGson().fromJson(json, Labi.class);
             StringBuilder stringBuilder = new StringBuilder();
             stringBuilder.append("Labi : " + labi.getName() + ", Users (" + labi.getUsers().size() + ") : ");
             for (int i = 0; i < labi.getUsers().size(); i++) {
@@ -384,13 +390,24 @@ public class GameMenuView implements Screen {
                     else {
                         Message message = new Message(new HashMap<>() {{
                             put("function", "enterLabi");
-                            put("arguments", new ArrayList<>(Arrays.asList(labi.getID(),
+                            put("arguments", new ArrayList<>(Arrays.asList(String.valueOf(labi.getID()),
                                 AppClient.getCurrentUser().getUsername(), "")));
                         }}, Message.Type.command);
                         Message responseMessage = AppClient.getServerHandler().sendAndWaitForResponse(message);
                         if (methodUseMessage(responseMessage, errorLabel)) return;
 
-                        AppClient.setCurrentLabi(responseMessage.getFromBody("message"));
+                        Object msgObj = responseMessage.getFromBody("message");
+                        Labi labi;
+
+                        if (msgObj instanceof String) {
+                            // ✅ Already a JSON string, just parse directly
+                            labi = JSONUtils.fromJsonLabi((String) msgObj);
+                        } else {
+                            // ✅ Not a string — convert to JSON string first
+                            String json = JSONUtils.getGson().toJson(msgObj);
+                            labi = JSONUtils.fromJsonLabi(json);
+                        }
+                        AppClient.setCurrentLabi(labi);
                         initLabiWindow(false, labi);
                     }
 
@@ -402,7 +419,7 @@ public class GameMenuView implements Screen {
             labiesTable.row();
         }
 
-        this.labiesScrollPane.addActor(this.labiesTable);
+        this.labiesScrollPane.setActor(this.labiesTable);
     }
 
     private void initPasswordWindow(Labi labi) {
@@ -449,7 +466,7 @@ public class GameMenuView implements Screen {
             (stage.getHeight() - labiWindow.getHeight()) / 2
         );
 
-        labiesTable = new Table(skin);
+        labiTable = new Table(skin);
         labiDetailsLabel = new Label("ID: " + labi.getID() +
             ", isPrivate:" + labi.isPrivate() + ", isVisible" + labi.isVisible(), skin);
 
@@ -484,42 +501,24 @@ public class GameMenuView implements Screen {
         exitLabiButton.addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y) {
+                closeLabiWindow();
+
                 Message message = new Message(new HashMap<>() {{
                     put("function", "exitLabi");
-                    put("arguments", new ArrayList<>(Arrays.asList(labi.getID(),
+                    put("arguments", new ArrayList<>(Arrays.asList(String.valueOf(labi.getID()),
                         AppClient.getCurrentUser().getUsername()
                     )));
                 }}, Message.Type.command);
                 Message responseMessage = AppClient.getServerHandler().sendAndWaitForResponse(message);
                 if (methodUseMessage(responseMessage, errorLabel)) return;
 
-                errorLabel.setText(responseMessage.getIntFromBody("message"));
+                errorLabel.setText(responseMessage.getFromBody("message"));
                 AppClient.setCurrentLabi(null);
-                closeLabiWindow();
+
                 initMenuWindow();
             }
         });
         labiErrorLabel = new Label("", skin);
-        labiUpdateThread = new Thread(() -> {
-            while (true) {
-                Message message = new Message(new HashMap<>() {{
-                    put("function", "updateLabi");
-                    put("arguments", labi.getID());
-                }}, Message.Type.command);
-                Message responseMessage = AppClient.getServerHandler().sendAndWaitForResponse(message);
-                if (methodUseMessage(responseMessage, labiErrorLabel)) return;
-
-                Labi updatedLabi = responseMessage.getFromBody("message");
-                labiAdminUserLabel.setText("Admin User: " + updatedLabi.getAdminUser().getUsername());
-                StringBuilder stringBuilder1 = new StringBuilder();
-                stringBuilder1.append("Users: \n");
-                for (User user : updatedLabi.getUsers()) {
-                    stringBuilder1.append("\t").append(user.getUsername()).append("\n");
-                }
-                labiUsersLabel.setText(stringBuilder1.toString());
-            }
-        });
-        labiUpdateThread.start();
 
 
         labiTable.add(labiDetailsLabel).fillX().expandX().row();
@@ -534,8 +533,8 @@ public class GameMenuView implements Screen {
     }
 
     private void closeLabiWindow() {
-        labiUpdateThread.interrupt();
         labiWindow.remove();
+        labiWindow = null;
         labiTable.remove();
     }
 
@@ -596,7 +595,7 @@ public class GameMenuView implements Screen {
         newLabiNameLabel = new Label("Labi name : ", skin);
         newLabiNameField = new TextField("testLabi", skin);
         newLabiPrivateCheckBox = new CheckBox("is Private ? ", skin);
-        newLabiPasswordField = new TextField("if labi is private", skin);
+        newLabiPasswordField = new TextField("pass", skin);
         newLabiVisibleCheckBox = new CheckBox("is visible ? ", skin);
         createNewLabiButton = new TextButton("Create New Labi", skin);
         newLabiErrorLabel = new Label("", skin);
@@ -609,15 +608,25 @@ public class GameMenuView implements Screen {
                     put("arguments", new ArrayList<>(Arrays.asList(
                         AppClient.getCurrentUser().getUsername(),
                         newLabiNameField.getText(),
-                        newLabiPrivateCheckBox.isChecked(),
+                        String.valueOf(newLabiPrivateCheckBox.isChecked()),
                         (newLabiPrivateCheckBox.isChecked() ? newLabiPasswordField.getText() : ""),
-                        newLabiVisibleCheckBox.isChecked()
+                        String.valueOf(newLabiVisibleCheckBox.isChecked())
                     )));
                 }}, Message.Type.command);
                 Message responseMessage = AppClient.getServerHandler().sendAndWaitForResponse(message);
                 if (methodUseMessage(responseMessage, newLabiErrorLabel)) return;
 
-                Labi labi = responseMessage.getFromBody("message");
+                Object msgObj = responseMessage.getFromBody("message");
+                Labi labi;
+
+                if (msgObj instanceof String) {
+                    // ✅ Already a JSON string, just parse directly
+                    labi = JSONUtils.fromJsonLabi((String) msgObj);
+                } else {
+                    // ✅ Not a string — convert to JSON string first
+                    String json = JSONUtils.getGson().toJson(msgObj);
+                    labi = JSONUtils.fromJsonLabi(json);
+                }
                 closeNewLabiWindow();
                 initLabiWindow(true, labi);
             }
@@ -666,6 +675,34 @@ public class GameMenuView implements Screen {
     }
 
     private void handleGameMenu() {
+//        if (labiWindow != null) {
+//            Message message = new Message(new HashMap<>() {{
+//                put("function", "updateLabi");
+//                put("arguments", AppClient.getCurrentLabi().getID());
+//            }}, Message.Type.command);
+//            Message responseMessage = AppClient.getServerHandler().sendAndWaitForResponse(message);
+//            if (methodUseMessage(responseMessage, labiErrorLabel)) return;
+//
+//            Object msgObj = responseMessage.getFromBody("message");
+//            Labi updatedLabi;
+//
+//            if (msgObj instanceof String) {
+//                // ✅ Already a JSON string, just parse directly
+//                updatedLabi = JSONUtils.fromJsonLabi((String) msgObj);
+//            } else {
+//                // ✅ Not a string — convert to JSON string first
+//                String json = JSONUtils.getGson().toJson(msgObj);
+//                updatedLabi = JSONUtils.fromJsonLabi(json);
+//            }
+//            labiAdminUserLabel.setText("Admin User: " + updatedLabi.getAdminUser().getUsername());
+//            StringBuilder stringBuilder1 = new StringBuilder();
+//            stringBuilder1.append("Users: \n");
+//            for (User user : updatedLabi.getUsers()) {
+//                stringBuilder1.append("\t").append(user.getUsername()).append("\n");
+//            }
+//            labiUsersLabel.setText(stringBuilder1.toString());
+//        }
+
         if (getBackButton().isChecked()) {
             getBackButton().setChecked(false);
 

@@ -41,10 +41,10 @@ public class MainMenuController extends Controller {
                     if (message.getFromBody("change").equals("GameMenuController")) {
                         this.clientHandler.setCurrentController(new GameMenuController(clientHandler));
                     }
-                    if (message.getFromBody("change").equals("ProfileMenuController")) {
+                    else if (message.getFromBody("change").equals("ProfileMenuController")) {
                         this.clientHandler.setCurrentController(new ProfileMenuController(clientHandler));
                     }
-                    if (message.getFromBody("change").equals("LoginMenuController")) {
+                    else if (message.getFromBody("change").equals("LoginMenuController")) {
                         AppServer.getOnlineUsers().remove(clientHandler.getClientUser());
                         clientHandler.setClientUser(null);
                         this.clientHandler.setCurrentController(new LoginMenuController(clientHandler));
@@ -52,7 +52,7 @@ public class MainMenuController extends Controller {
 
                     return new Message(new HashMap<>() {{
                         put("success", true);
-                        put("message", "to " + message.getFromBody("change"));
+                        put("message", "");
                     }}, Message.Type.response);
                 }
             }

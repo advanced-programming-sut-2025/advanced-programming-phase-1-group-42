@@ -133,7 +133,7 @@ public class GameMenuController extends Controller {
                 }
                 case "updateLabi" -> {
                     for (Labi labi : AppServer.getLabies()) {
-                        if (labi.getID() == Integer.parseInt(message.getFromBody("arguments"))) {
+                        if (labi.getID() == message.getIntFromBody("arguments")) {
                             return new Message(new HashMap<>() {{
                                 put("success", true);
                                 put("message", labi);
@@ -174,7 +174,6 @@ public class GameMenuController extends Controller {
                 }
             }
         }
-
 
 
         return new Message(new HashMap<>() {{
