@@ -4282,8 +4282,8 @@ public class GameView implements Screen, InputProcessor {
             Texture currentFrame = emoteAnimation.getKeyFrame(emoteStateTime, false);
             // Calculate position for center
 
-            float x = (Gdx.graphics.getWidth() - currentFrame.getWidth()) / 2;
-            float y = (Gdx.graphics.getHeight() - currentFrame.getHeight()) / 2 + 90;
+            float x = App.getCurrentGame().getCurrentPlayer().getCoordinate().getX()*40 - currentFrame.getWidth()/ 2;
+            float y = App.getCurrentGame().getCurrentPlayer().getCoordinate().getY()*40 - currentFrame.getHeight()/2 + 90;
 
             Main.getBatch().draw(currentFrame, x, y, 64, 64);
 
@@ -4305,7 +4305,9 @@ public class GameView implements Screen, InputProcessor {
             Texture currentFrame = thunderAnimation.getKeyFrame(thunderStateTime, false);
             // Calculate position for center
 
-            Main.getBatch().draw(currentFrame, 0, 0);
+            float x = App.getCurrentGame().getCurrentPlayer().getCoordinate().getX()*40 - Gdx.graphics.getWidth()/2 - 40;
+            float y = App.getCurrentGame().getCurrentPlayer().getCoordinate().getY()*40 - Gdx.graphics.getHeight()/2 - 40;
+            Main.getBatch().draw(currentFrame, x, y);
 
             // Optionally hide animation when finished
             if (thunderAnimation.isAnimationFinished(thunderStateTime)) {
@@ -4347,8 +4349,9 @@ public class GameView implements Screen, InputProcessor {
             hugStateTime += deltaTime;
             Texture currentFrame = hugAnimation.getKeyFrame(hugStateTime, false);
             // Calculate position for center
-
-            Main.getBatch().draw(currentFrame, (Gdx.graphics.getWidth()-100)/2,(Gdx.graphics.getHeight()-42)/2 );
+            float x = App.getCurrentGame().getCurrentPlayer().getCoordinate().getX()*40 - 50;
+            float y = App.getCurrentGame().getCurrentPlayer().getCoordinate().getY()*40 - 21;
+            Main.getBatch().draw(currentFrame, x,y);
 
             // Optionally hide animation when finished
             if (hugAnimation.isAnimationFinished(hugStateTime)) {
@@ -4431,8 +4434,9 @@ public class GameView implements Screen, InputProcessor {
             proposeStateTime += deltaTime;
             Texture currentFrame = proposeAnimation.getKeyFrame(proposeStateTime, false);
             // Calculate position for center
-
-            Main.getBatch().draw(currentFrame, (Gdx.graphics.getWidth()-100)/2,(Gdx.graphics.getHeight()-42)/2 );
+            float x = App.getCurrentGame().getCurrentPlayer().getCoordinate().getX()*40 - 50;
+            float y = App.getCurrentGame().getCurrentPlayer().getCoordinate().getY()*40 - 21;
+            Main.getBatch().draw(currentFrame, x,y);
 
             // Optionally hide animation when finished
             if (proposeAnimation.isAnimationFinished(proposeStateTime)) {
@@ -4502,8 +4506,9 @@ public class GameView implements Screen, InputProcessor {
             rejectionStateTime += deltaTime;
             Texture currentFrame = rejectionAnimation.getKeyFrame(rejectionStateTime, false);
             // Calculate position for center
-
-            Main.getBatch().draw(currentFrame, (Gdx.graphics.getWidth()-100)/2,(Gdx.graphics.getHeight()-42)/2 );
+            float x = App.getCurrentGame().getCurrentPlayer().getCoordinate().getX()*40 - 50;
+            float y = App.getCurrentGame().getCurrentPlayer().getCoordinate().getY()*40 - 21;
+            Main.getBatch().draw(currentFrame, x,y);
 
             // Optionally hide animation when finished
             if (rejectionAnimation.isAnimationFinished(rejectionStateTime)) {
@@ -4569,8 +4574,9 @@ public class GameView implements Screen, InputProcessor {
             acceptanceStateTime += deltaTime;
             Texture currentFrame = acceptanceAnimation.getKeyFrame(acceptanceStateTime, false);
             // Calculate position for center
-
-            Main.getBatch().draw(currentFrame, (Gdx.graphics.getWidth()-100)/2,(Gdx.graphics.getHeight()-42)/2 );
+            float x = App.getCurrentGame().getCurrentPlayer().getCoordinate().getX()*40 - 50;
+            float y = App.getCurrentGame().getCurrentPlayer().getCoordinate().getY()*40 - 21;
+            Main.getBatch().draw(currentFrame, x,y);
 
             // Optionally hide animation when finished
             if (acceptanceAnimation.isAnimationFinished(acceptanceStateTime)) {
@@ -4627,8 +4633,9 @@ public class GameView implements Screen, InputProcessor {
             flowerStateTime += deltaTime;
             Texture currentFrame = flowerAnimation.getKeyFrame(flowerStateTime, false);
             // Calculate position for center
-
-            Main.getBatch().draw(currentFrame, (Gdx.graphics.getWidth()-100)/2,(Gdx.graphics.getHeight()-42)/2 );
+            float x = App.getCurrentGame().getCurrentPlayer().getCoordinate().getX()*40 - 50;
+            float y = App.getCurrentGame().getCurrentPlayer().getCoordinate().getY()*40 - 21;
+            Main.getBatch().draw(currentFrame, x,y);
 
             // Optionally hide animation when finished
             if (flowerAnimation.isAnimationFinished(flowerStateTime)) {
