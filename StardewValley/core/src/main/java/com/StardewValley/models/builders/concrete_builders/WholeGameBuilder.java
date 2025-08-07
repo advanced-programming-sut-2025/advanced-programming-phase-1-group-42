@@ -86,4 +86,9 @@ public class WholeGameBuilder implements GameInterface {
         }
         this.game.setNPCs(npcs);
     }
+
+    @Override
+    public void setGameID(int gameID) {
+        this.game.setGameID(gameID);
+    }
 }

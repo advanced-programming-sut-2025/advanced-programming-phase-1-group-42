@@ -3,6 +3,7 @@ package com.StardewValley.client;
 import com.StardewValley.models.Labi;
 import com.StardewValley.models.enums.Menu;
 import com.StardewValley.models.game_structure.Game;
+import com.StardewValley.models.interactions.Player;
 import com.StardewValley.models.interactions.User;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.audio.Music;
@@ -26,6 +27,8 @@ public class AppClient {
     private static Labi currentLabi = null;
 
     private static Game currentGame = null;
+
+    private static Player currentPlayer = null;
 
 //    Game Graphics Fields
     private static Music backgroundMusic;
@@ -162,5 +165,13 @@ public class AppClient {
 
     public static void setCurrentLabi(Labi currentLabi) {
         AppClient.currentLabi = currentLabi;
+    }
+
+    public static Player getCurrentPlayer() {
+        return currentPlayer;
+    }
+
+    public static void setCurrentPlayer(Player currentPlayer) {
+        AppClient.currentPlayer = currentPlayer;
     }
 }

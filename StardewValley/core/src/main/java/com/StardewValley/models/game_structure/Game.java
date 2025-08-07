@@ -28,7 +28,7 @@ import java.util.Iterator;
 import java.util.List;
 
 public class Game {
-
+    private int gameID;
     private DateTime dateTime;
     private Weather weather;
     private Tomorrow tomorrow;
@@ -315,7 +315,7 @@ public class Game {
 
     public Player findPlayer(String playerName) {
         for (Player player : players) {
-            if (player.getUser().getUsername().equals(playerName))
+            if (player.getUsername().equals(playerName))
                 return player;
         }
         return null;
@@ -343,7 +343,7 @@ public class Game {
             }
             int numberOfCrows = (int) Math.floor((double) cropCounter / 16);
             int crowCounter = 0;
-            System.out.println("there is a chance " + crowCounter + " Crows would attack "+ player.getUser().getUsername() + " crops");
+            System.out.println("there is a chance " + crowCounter + " Crows would attack "+ player.getUsername() + " crops");
 
             while (numberOfCrows != crowCounter) {
                 int randomAttack = (int) Math.floor((Math.random() * 4));
@@ -397,5 +397,13 @@ public class Game {
 
     public void setNPCs(ArrayList<NPC> NPCs) {
         this.NPCs.addAll(NPCs);
+    }
+
+    public int getGameID() {
+        return gameID;
+    }
+
+    public void setGameID(int gameID) {
+        this.gameID = gameID;
     }
 }

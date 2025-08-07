@@ -5,6 +5,7 @@ import com.StardewValley.models.JSONUtils;
 import com.StardewValley.models.Labi;
 import com.StardewValley.models.Message;
 import com.StardewValley.models.game_structure.Game;
+import com.StardewValley.models.interactions.Player;
 import com.StardewValley.models.interactions.User;
 import com.StardewValley.server.controllers.Controller;
 import com.StardewValley.server.controllers.GameMenuController;
@@ -35,6 +36,7 @@ public class ClientHandler extends Thread {
 
     private User clientUser;
     private Game clientGame;
+    private Player clientPlayer;
 
     protected ClientHandler(Socket socket) throws IOException {
         this.socket = socket;
@@ -182,5 +184,21 @@ public class ClientHandler extends Thread {
 
     public void setClientUser(User clientUser) {
         this.clientUser = clientUser;
+    }
+
+    public Game getClientGame() {
+        return clientGame;
+    }
+
+    public void setClientGame(Game clientGame) {
+        this.clientGame = clientGame;
+    }
+
+    public Player getClientPlayer() {
+        return clientPlayer;
+    }
+
+    public void setClientPlayer(Player clientPlayer) {
+        this.clientPlayer = clientPlayer;
     }
 }

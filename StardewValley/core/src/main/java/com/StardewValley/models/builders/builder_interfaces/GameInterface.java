@@ -15,4 +15,5 @@ public interface GameInterface {
     public void setDateTime();
     public void setTomorrow();
     public void setNPCs();
+    public void setGameID(int gameID);
 }

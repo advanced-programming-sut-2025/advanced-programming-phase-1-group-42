@@ -520,7 +520,7 @@ public class GameController extends Controller {
 
                             row.add(npc_img).padRight(10).size(40, 40).left();
 
-                            String name = p.getUser().getNickname();
+                            String name = p.getUsername();
                             int basePadding = 180;
                             Label nameLabel = new Label(name, skin);
                             float adjustedPadding = Math.max(0, basePadding - nameLabel.getWidth());
@@ -803,12 +803,13 @@ public class GameController extends Controller {
 //                return new Result(false, "All players do not agree to terminate the game!");
 //        }
 
-        for (Player player : AppClient.getCurrentGame().getPlayers()) {
-            player.getUser().setPlaying(false);
-            player.getUser().increaseEarnedPoints(player.getPoints());
-            player.getUser().maxMaxPoints(player.getPoints());
-            player.getUser().increaseGamePlay(AppClient.getCurrentGame().getDateTime().getDays());
-        }
+//        for (Player player : AppClient.getCurrentGame().getPlayers()) {
+//            player.setPlaying(false);
+//            player.increaseEarnedPoints(player.getPoints());
+//            player.maxMaxPoints(player.getPoints());
+//            player.increaseGamePlay(AppClient.getCurrentGame().getDateTime().getDays());
+//        }
+        //TODO
 
         AppServer.getGames().remove(AppClient.getCurrentGame());
 //        String connectionString = "mongodb+srv://namoder123:passme@cluster01.unmuffl.mongodb.net/?retryWrites=true&w=majority&appName=Cluster01";
@@ -2044,7 +2045,7 @@ public class GameController extends Controller {
             if (AppClient.getCurrentGame().getCurrentPlayer().getFriendShips().get(player) == null)
                 continue;
 
-            list.append("\t").append(player.getUser().getUsername()).append(": \n");
+            list.append("\t").append(player.getUsername()).append(": \n");
             list.append("\t\tLevel: ").append(AppClient.getCurrentGame().getCurrentPlayer().getFriendShips().get(player).first()).append("\n");
             list.append("\t\tValue: ").append(AppClient.getCurrentGame().getCurrentPlayer().getFriendShips().get(player).second()).append("\n");
         }
@@ -2162,7 +2163,7 @@ public class GameController extends Controller {
         list.append("Gifts List:\n");
         int ptr = 1;
         for (Pair<Player, Gift> playerGiftPair : AppClient.getCurrentGame().getCurrentPlayer().getGiftList()) {
-            list.append("\t").append(ptr).append(". From <").append(playerGiftPair.first().getUser().getUsername()).append("> Good Name: ").
+            list.append("\t").append(ptr).append(". From <").append(playerGiftPair.first().getUsername()).append("> Good Name: ").
                 append(playerGiftPair.second().getList().getFirst().getName()).append(", Amount : ").
                 append(playerGiftPair.second().getList().size()).append("\n");
             ptr++;
@@ -2188,16 +2189,16 @@ public class GameController extends Controller {
         AppClient.getCurrentGame().getCurrentPlayer().getGiftList().remove(gift);
         AppClient.getCurrentGame().getCurrentPlayer().getInventory().addGood(gift.second().getList());
         AppClient.getCurrentGame().getCurrentPlayer().getGiftHistory().add(new Pair<>(gift.first(),
-            "A gift from " + gift.first().getUser().getUsername()
+            "A gift from " + gift.first().getUsername()
                 + " with " + gift.second().getList().size() + " amount of " + gift.second().getList().getFirst().getName() +
                 " \nhave been given to you! Your rate : " + giftRate + " !"));
 
         gift.first().getGiftHistory().add(new Pair<>(AppClient.getCurrentGame().getCurrentPlayer(),
             "A gift with " + gift.second().getList().size() +
                 " amount of " + gift.second().getList().getFirst().getName() +
-                " \nhave been given to " + AppClient.getCurrentGame().getCurrentPlayer().getUser().getUsername() + " from you! " +
-                AppClient.getCurrentGame().getCurrentPlayer().getUser().getUsername() + "'s rate : " + giftRate + " !"));
-        gift.first().getNews().add(AppClient.getCurrentGame().getCurrentPlayer().getUser().getUsername() + " has rated your gift with amount " +
+                " \nhave been given to " + AppClient.getCurrentGame().getCurrentPlayer().getUsername() + " from you! " +
+                AppClient.getCurrentGame().getCurrentPlayer().getUsername() + "'s rate : " + giftRate + " !"));
+        gift.first().getNews().add(AppClient.getCurrentGame().getCurrentPlayer().getUsername() + " has rated your gift with amount " +
             giftRate + " !");
 
         if (AppClient.getCurrentGame().getCurrentPlayer().getIsInteracted().get(gift.first()).equals(false)) {
@@ -2215,7 +2216,7 @@ public class GameController extends Controller {
 
                 gift.first().updateFriendShips(AppClient.getCurrentGame().getCurrentPlayer());
                 AppClient.getCurrentGame().getCurrentPlayer().updateFriendShips(gift.first());
-                System.out.println("Your friendship value with " + gift.first().getUser().getUsername() + " is increased to " +
+                System.out.println("Your friendship value with " + gift.first().getUsername() + " is increased to " +
                     AppClient.getCurrentGame().getCurrentPlayer().getFriendShips().get(gift.first()).second());
             }
 
@@ -2235,7 +2236,7 @@ public class GameController extends Controller {
         list.append("Gifts History:\n");
         int ptr = 1;
         for (Pair<Player, String> giftHistory : AppClient.getCurrentGame().getCurrentPlayer().getGiftHistory()) {
-            if (giftHistory.first().getUser().getUsername().equals(username)) {
+            if (giftHistory.first().getUsername().equals(username)) {
                 list.append("\t").append(ptr++).append(". ").append(giftHistory.second()).append("\n");
             }
         }
@@ -2352,20 +2353,20 @@ public class GameController extends Controller {
         //Errors
         if (player == null)
             return new Result(false, "Player not found!");
-        if (mainPlayer.getUser().getGender() == Gender.FEMALE)
-            return new Result(false, "Your gender should be male to ask marriage!");
+//        if (mainPlayer.getGender() == Gender.FEMALE)
+//            return new Result(false, "Your gender should be male to ask marriage!");
         if (mainPlayer.getFriendShips().get(player).first() != 3 ||
             player.getFriendShips().get(mainPlayer).first() != 3)
             return new Result(false, "You and " + username + " should have friendship level of 3!");
         if (mainPlayer.getCoordinate().distance(player.getCoordinate()) > 1)
             return new Result(false, "You should be neighbor to " + username + " to ask marriage!");
-        if (mainPlayer.getUser().getGender() == player.getUser().getGender())
-            return new Result(false, "Your gender should be opposite to " + username + " to ask marriage!");
+//        if (mainPlayer.getGender() == player.getGender())
+//            return new Result(false, "Your gender should be opposite to " + username + " to ask marriage!");
         if (player.getMarriageList().get(mainPlayer) != null)
             return new Result(false, "Your marriage is already in progress!");
         if (player.getMarried() != null)
             return new Result(false, username + " is already married with " +
-                player.getMarried().getUser().getUsername() + "!");
+                player.getMarried().getUsername() + "!");
 
         if (mainPlayer.getInHandGood().isEmpty() ||
             !mainPlayer.getInHandGood().getLast().getName().equals("Wedding_Ring"))
@@ -2376,7 +2377,7 @@ public class GameController extends Controller {
         if (goods == null)
             return new Result(false, "Your should have wedding ring in your inventory to ask marriage!");
 
-        player.getNews().add(mainPlayer.getUser().getUsername() + " asks you to marry him with Wedding_Ring!");
+        player.getNews().add(mainPlayer.getUsername() + " asks you to marry him with Wedding_Ring!");
         player.getMarriageList().put(mainPlayer, goods.getLast());
         goods.removeLast();
 
@@ -2391,8 +2392,9 @@ public class GameController extends Controller {
         Player mainPlayer = AppClient.getCurrentGame().getCurrentPlayer();
         if (player == null)
             return new Result(false, "Player not found!");
-        if (mainPlayer.getUser().getGender() == Gender.MALE)
-            return new Result(false, "Your gender should be female to respond!");
+//        if (mainPlayer.getUser().getGender() == Gender.MALE)
+//            return new Result(false, "Your gender should be female to respond!");
+        //TODO
         if (mainPlayer.getMarriageList().get(player) == null)
             return new Result(false, username + " has not been asked you to marry him!");
 
@@ -2415,13 +2417,13 @@ public class GameController extends Controller {
             mainPlayer.setMarried(player);
             player.setMarried(mainPlayer);
 
-            player.getNews().add(mainPlayer.getUser().getUsername() + " has accepted your marriage! Now you can live with her!");
+            player.getNews().add(mainPlayer.getUsername() + " has accepted your marriage! Now you can live with her!");
             mainPlayer.getMarriageList().remove(player);
 
             for (Player gamePlayer : AppClient.getCurrentGame().getPlayers()) {
                 if (mainPlayer.getMarriageList().get(gamePlayer) != null) {
                     gamePlayer.getInventory().addGood(new ArrayList<>(Arrays.asList(mainPlayer.getMarriageList().get(gamePlayer))));
-                    gamePlayer.getNews().add(mainPlayer.getUser().getUsername() + " has rejected your marriage and married with " + player.getUser().getUsername() + "!");
+                    gamePlayer.getNews().add(mainPlayer.getUsername() + " has rejected your marriage and married with " + player.getUsername() + "!");
                     gamePlayer.setBuff(new Buff(BuffType.REJECT_BUFF, 7, 100));
                 }
             }
@@ -2437,7 +2439,7 @@ public class GameController extends Controller {
             AppClient.getCurrentGame().getCurrentPlayer().updateFriendShips(player);
             player.setRejectionBuff(new Buff(BuffType.REJECT_BUFF, 7, 100));
             player.getInventory().addGood(new ArrayList<>(Arrays.asList(mainPlayer.getMarriageList().get(player))));
-            player.getNews().add(mainPlayer.getUser().getUsername() + " has rejected your marriage!");
+            player.getNews().add(mainPlayer.getUsername() + " has rejected your marriage!");
             mainPlayer.getFriendShips().remove(player);
             return new Result(true, "You have rejected your marriage from " + username + "!");
         } else
@@ -2452,7 +2454,7 @@ public class GameController extends Controller {
 
         System.out.println("Players: ");
         for (Player player : AppClient.getCurrentGame().getPlayers()) {
-            System.out.println(player.getUser().getUsername());
+            System.out.println(player.getUsername());
         }
         System.out.println("____________________________");
         System.out.println("You are now in Trade Menu!");

@@ -17,7 +17,7 @@ public class PlayerController {
             player.getSprite().draw(Main.getBatch());
 
             if (player.getPlayerDirection() != -1) {
-                if(player.getUser().getGender().getName().equals("Male")) {
+                if(AppClient.getCurrentUser().getGender().getName().equals("Male")) {
                     animation(player, player.getPlayerDirection());
                 } else {
                     femaleAnimation(player, player.getPlayerDirection());

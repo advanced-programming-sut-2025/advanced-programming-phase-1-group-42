@@ -3,6 +3,8 @@ package com.StardewValley.client.views;
 import com.StardewValley.client.Main;
 import com.StardewValley.client.AppClient;
 import com.StardewValley.models.*;
+import com.StardewValley.models.game_structure.Game;
+import com.StardewValley.models.interactions.Player;
 import com.StardewValley.models.interactions.User;
 import com.StardewValley.server.AppServer;
 import com.StardewValley.server.controllers.GameController;
@@ -419,6 +421,11 @@ public class GameMenuView implements Screen {
         startGameButton.addListener(new ClickListener() {
            @Override
            public void clicked(InputEvent event, float x, float y) {
+//               if (labi.getUsers().size() != 4) {
+//                   labiErrorLabel.setText("There should be exactly 4 users!");
+//                   return;
+//               }
+
                closeLabiWindow();
                Message message = new Message(new HashMap<>() {{
                    put("function", "startGame");
@@ -827,6 +834,35 @@ public class GameMenuView implements Screen {
             Message responseMessage = AppClient.getServerHandler().sendAndWaitForResponse(message);
             if (responseMessage.getBooleanFromBody("success")) {
                 AppClient.setCurrentLabi(null);
+                int gameID = responseMessage.getIntFromBody("message");
+                Message message2 = new Message(new HashMap<>() {{
+                    put("function", "getNewGame");
+                    put("arguments", new ArrayList<>(Arrays.asList(
+                            String.valueOf(gameID),
+                            AppClient.getCurrentUser().getUsername()
+                    )));
+                }}, Message.Type.command);
+                Message responseMessage2 = AppClient.getServerHandler().sendAndWaitForResponse(message2);
+                Object msgObj = responseMessage2.getFromBody("message");
+                Game userGame;
+                if (msgObj instanceof String) {
+                    userGame = JSONUtils.fromJsonGame((String) msgObj);
+                } else {
+                    String json = JSONUtils.getGson().toJson(msgObj);
+                    userGame = JSONUtils.fromJsonGame(json);
+                }
+
+                AppClient.setCurrentGame(userGame);
+                for (Player player : userGame.getPlayers()) {
+                    if (player.getUsername().equals(AppClient.getCurrentUser().getUsername())) {
+                        AppClient.setCurrentPlayer(player);
+                        break;
+                    }
+                }
+
+//                Main.getMain().getScreen().dispose();
+//                Main.getMain().setScreen(new GameView(new GameController(clientHandler), Assets.getInstance().getSkin()));
+
                 closeWaitWindow();
             }
             else {

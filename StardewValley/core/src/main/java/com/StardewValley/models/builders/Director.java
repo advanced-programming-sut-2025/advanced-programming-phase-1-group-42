@@ -9,8 +9,9 @@ import com.StardewValley.models.interactions.Player;
 import java.util.ArrayList;
 
 public class Director {
-    public void createNewGame(WholeGameBuilder wholeGameBuilder, ArrayList<Player> players, Player adminPlayer) {
+    public void createNewGame(WholeGameBuilder wholeGameBuilder, ArrayList<Player> players, Player adminPlayer, int gameID) {
         wholeGameBuilder.reset();
+        wholeGameBuilder.setGameID(gameID);
         wholeGameBuilder.setPlayers(players);
         wholeGameBuilder.setAdminPlayer(adminPlayer);
         wholeGameBuilder.setCurrentPlayer(adminPlayer);

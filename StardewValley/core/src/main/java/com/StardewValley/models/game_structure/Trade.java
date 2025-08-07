@@ -69,8 +69,8 @@ public class Trade {
     public void setShown(boolean Shown) { this.Shown = Shown; }
     @Override
     public String toString() {
-        return "Trade{id=" + id + ", type=" + type + ", sender=" + sender.getUser().getUsername() +
-                ", receiver=" + receiver.getUser().getUsername() +
+        return "Trade{id=" + id + ", type=" + type + ", sender=" + sender.getUsername() +
+                ", receiver=" + receiver.getUsername() +
                 ", item=" + item + ", amount=" + amount + ", price=" + price +
                 ", targetItem=" + targetItem + ", targetAmount=" + targetAmount + ", Acceptance=" + accepted + "}";
     }

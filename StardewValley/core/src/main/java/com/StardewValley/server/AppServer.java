@@ -48,7 +48,7 @@ public class AppServer {
     public static Game findGame(User user) {
         for (Game game : games) {
             for (Player player : game.getPlayers()) {
-                if(player.getUser().getUsername().equals(user.getUsername())) {
+                if(player.getUsername().equals(user.getUsername())) {
                     return game;
                 }
             }

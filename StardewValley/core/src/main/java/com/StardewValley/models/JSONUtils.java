@@ -1,5 +1,6 @@
 package com.StardewValley.models;
 
+import com.StardewValley.models.game_structure.Game;
 import com.StardewValley.models.interactions.User;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
@@ -35,6 +36,14 @@ public class JSONUtils {
 
     public synchronized static String toJsonLabi(Labi labi) {
         return gson.toJson(labi, Labi.class);
+    }
+
+    public synchronized static Game fromJsonGame(String json) {
+        return gson.fromJson(json, Game.class);
+    }
+
+    public synchronized static String toJsonLabi(Game game) {
+        return gson.toJson(game, Game.class);
     }
 
     public synchronized static Gson getGson () {

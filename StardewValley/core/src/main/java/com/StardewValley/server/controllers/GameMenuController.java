@@ -58,7 +58,6 @@ import static java.lang.Math.abs;
 
 public class GameMenuController extends Controller {
     public ArrayList<Player> players;
-    public int ptr;
     public ArrayList<Tile> tiles;
     public ArrayList<Farm> farms;
     public Game game;
@@ -201,13 +200,50 @@ public class GameMenuController extends Controller {
                             }
                         }
                     }
-                    AppServer.getWaitingLabies().remove(selectedLabi);
+                    int gameID = 0;
+                    if (selectedLabi != null) {
+                        AppServer.getWaitingLabies().remove(selectedLabi);
+                        gameID = newGame(selectedLabi);
+                    }
+                    else {
+                        for (Game game : AppServer.getGames()) {
+                            if (game.getGameID() == LabiID) {
+                                gameID = game.getGameID();
+                                break;
+                            }
+                        }
+                    }
 
-
+                    int finalGameID = gameID;
                     return new Message(new HashMap<>() {{
                         put("success", true);
-                        put("message", "");
+                        put("message", finalGameID);
                     }}, Message.Type.response);
+                }
+                case "getNewGame" -> {
+                    ArrayList<String> arguments = message.getFromBody("arguments");
+                    Game userGame = null;
+                    for (Game game : AppServer.getGames()) {
+                        if (game.getGameID() == Integer.parseInt(arguments.get(0))) {
+                            userGame = game;
+                            break;
+                        }
+                    }
+                    clientHandler.setClientGame(userGame);
+                    for (Player player : userGame.getPlayers()) {
+                        if (player.getUsername().equals(arguments.get(1))) {
+                            clientHandler.setClientPlayer(player);
+                            break;
+                        }
+                    }
+
+                    this.clientHandler.setCurrentController(new GameController(clientHandler));
+                    Game finalUserGame = userGame;
+                    return new Message(new HashMap<>() {{
+                        put("success", true);
+                        put("message", finalUserGame);
+                    }}, Message.Type.response);
+
                 }
             }
         }
@@ -359,30 +395,27 @@ public class GameMenuController extends Controller {
 
     // Nader
     //game setting methods
-    public void newGame(Pair<Labi, ArrayList<Pair<User, Integer>>> labi) {
+    public int newGame(Pair<Labi, ArrayList<Pair<User, Integer>>> labi) {
         players = new ArrayList<>();
         farms = new ArrayList<>();
-        for (Pair<User, Integer> username : labi.second()) {
-            players.add(new Player(username.first()));
-
-        }
-        Player adminPlayer = players.getFirst();
-
         director = new Director();
-        WholeGameBuilder wholeGameBuilder = new WholeGameBuilder();
-        director.createNewGame(wholeGameBuilder, players, adminPlayer);
-        game = wholeGameBuilder.getGame();
         tiles = createTiles();
 
+        for (Pair<User, Integer> username : labi.second()) {
+            players.add(new Player(username.first()));
+            farms.add(new Farm(username.second(), farms.size(), tiles));
+        }
+        Player adminPlayer = players.getFirst();
+        WholeGameBuilder wholeGameBuilder = new WholeGameBuilder();
+        game = wholeGameBuilder.getGame();
+        director.createNewGame(wholeGameBuilder, players, adminPlayer, labi.first().getID());
 
         WholeMapBuilder wholeMapBuilder = new WholeMapBuilder();
         director.createNewMap(wholeMapBuilder, farms, tiles);
         game.setMap(wholeMapBuilder.getMap());
 
-        AppClient.setCurrentGame(game);
         AppServer.getGames().add(game);
         for (Player player : players) {
-            player.getUser().setPlaying(true);
             player.iniFriendships(players);
         }
 
@@ -393,9 +426,8 @@ public class GameMenuController extends Controller {
         AppClient.getCurrentGame().getMap().generateRandomForagingTrees(93);
         AppClient.getCurrentGame().getMap().generateRandomGrassTrees(93);
 
-        Main.getMain().getScreen().dispose();
-        Main.getMain().setScreen(new GameView(new GameController(clientHandler), Assets.getInstance().getSkin()));
 
+        return game.getGameID();
     }
 
     public Result loadGame() {
@@ -405,7 +437,7 @@ public class GameMenuController extends Controller {
 
         AppClient.setCurrentGame(game);
         for (Player player : game.getPlayers()) {
-            if (player.getUser().getUsername().equals(AppClient.getCurrentUser().getUsername()))
+            if (player.getUsername().equals(AppClient.getCurrentUser().getUsername()))
                 AppClient.getCurrentGame().setGameAdmin(player);
         }
 
