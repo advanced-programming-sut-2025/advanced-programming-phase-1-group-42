@@ -57,6 +57,13 @@ import java.util.*;
 import static java.lang.Math.abs;
 
 public class GameMenuController extends Controller {
+    public ArrayList<Player> players;
+    public int ptr;
+    public ArrayList<Tile> tiles;
+    public ArrayList<Farm> farms;
+    public Game game;
+    private Director director;
+
     private ClientHandler clientHandler;
 
     public GameMenuController(ClientHandler clientHandler) {
@@ -176,6 +183,31 @@ public class GameMenuController extends Controller {
                             }}, Message.Type.response);
                         }
                     }
+                }
+                case "updateWait" -> {
+                    int LabiID = message.getIntFromBody("arguments");
+                    Pair<Labi, ArrayList<Pair<User, Integer>>> selectedLabi = null;
+                    for (Pair<Labi, ArrayList<Pair<User, Integer>>> waitingLabi : AppServer.getWaitingLabies()) {
+                        if (waitingLabi.first().getID() == LabiID) {
+                            if (waitingLabi.second().size() < 4) {
+                                return new Message(new HashMap<>() {{
+                                    put("success", false);
+                                    put("message", "");
+                                }}, Message.Type.response);
+                            }
+                            else {
+                                selectedLabi = waitingLabi;
+                                break;
+                            }
+                        }
+                    }
+                    AppServer.getWaitingLabies().remove(selectedLabi);
+
+
+                    return new Message(new HashMap<>() {{
+                        put("success", true);
+                        put("message", "");
+                    }}, Message.Type.response);
                 }
             }
         }
@@ -327,56 +359,44 @@ public class GameMenuController extends Controller {
 
     // Nader
     //game setting methods
-//    public void newGame(ArrayList<String> usernames) {
-//        players = new ArrayList<>();
-//
-//        for (String username : usernames) {
-//            User user = findAppUser(username);
-//
-//            if (user == null) {
-//                players.add(new Player(new User(username, null, username,
-//                    null, Gender.MALE, 0, null)));
-//            } else {
-//                players.add(new Player(user));
-//            }
-//        }
-//        Player adminPlayer = players.getFirst();
-//
-//
-//        director = new Director();
-//        WholeGameBuilder wholeGameBuilder = new WholeGameBuilder();
-//        director.createNewGame(wholeGameBuilder, players, adminPlayer);
-//        game = wholeGameBuilder.getGame();
-//        tiles = createTiles();
-//        ptr = 0;
-//        farms = new ArrayList<>();
-//
-//        view.getNewLabiWindow().setVisible(false);
-//        view.initChoiceFarmWindow(players.getFirst().getPlayerUsername());
-//    }
-//
-//    public void newGamePhase2() {
-//        WholeMapBuilder wholeMapBuilder = new WholeMapBuilder();
-//        director.createNewMap(wholeMapBuilder, farms, tiles);
-//        game.setMap(wholeMapBuilder.getMap());
-//
-//        AppClient.setCurrentGame(game);
-//        AppServer.getGames().add(game);
-//        for (Player player : players) {
-//            player.getUser().setPlaying(true);
-//            player.iniFriendships(players);
-//        }
-//
-////Goods generating
-//        AppClient.getCurrentGame().getMap().generateRandomForagingCrops(93);
-//        AppClient.getCurrentGame().getMap().generateRandomForagingSeed(93);
-//        AppClient.getCurrentGame().getMap().generateRandomMinerals(93);
-//        AppClient.getCurrentGame().getMap().generateRandomForagingTrees(93);
-//        AppClient.getCurrentGame().getMap().generateRandomGrassTrees(93);
-//
-//        Main.getMain().getScreen().dispose();
-//        Main.getMain().setScreen(new GameView(new GameController(clientHandler), Assets.getInstance().getSkin()));
-//    }
+    public void newGame(Pair<Labi, ArrayList<Pair<User, Integer>>> labi) {
+        players = new ArrayList<>();
+        farms = new ArrayList<>();
+        for (Pair<User, Integer> username : labi.second()) {
+            players.add(new Player(username.first()));
+
+        }
+        Player adminPlayer = players.getFirst();
+
+        director = new Director();
+        WholeGameBuilder wholeGameBuilder = new WholeGameBuilder();
+        director.createNewGame(wholeGameBuilder, players, adminPlayer);
+        game = wholeGameBuilder.getGame();
+        tiles = createTiles();
+
+
+        WholeMapBuilder wholeMapBuilder = new WholeMapBuilder();
+        director.createNewMap(wholeMapBuilder, farms, tiles);
+        game.setMap(wholeMapBuilder.getMap());
+
+        AppClient.setCurrentGame(game);
+        AppServer.getGames().add(game);
+        for (Player player : players) {
+            player.getUser().setPlaying(true);
+            player.iniFriendships(players);
+        }
+
+//Goods generating
+        AppClient.getCurrentGame().getMap().generateRandomForagingCrops(93);
+        AppClient.getCurrentGame().getMap().generateRandomForagingSeed(93);
+        AppClient.getCurrentGame().getMap().generateRandomMinerals(93);
+        AppClient.getCurrentGame().getMap().generateRandomForagingTrees(93);
+        AppClient.getCurrentGame().getMap().generateRandomGrassTrees(93);
+
+        Main.getMain().getScreen().dispose();
+        Main.getMain().setScreen(new GameView(new GameController(clientHandler), Assets.getInstance().getSkin()));
+
+    }
 
     public Result loadGame() {
         Game game = AppServer.findGame(AppClient.getCurrentUser());

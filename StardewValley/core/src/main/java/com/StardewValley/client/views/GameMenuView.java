@@ -4,6 +4,7 @@ import com.StardewValley.client.Main;
 import com.StardewValley.client.AppClient;
 import com.StardewValley.models.*;
 import com.StardewValley.models.interactions.User;
+import com.StardewValley.server.AppServer;
 import com.StardewValley.server.controllers.GameController;
 import com.StardewValley.models.game_structure.Farm;
 import com.badlogic.gdx.Gdx;
@@ -511,6 +512,7 @@ public class GameMenuView implements Screen {
 
     private void closeWaitWindow() {
         waitingWindow.remove();
+        waitingWindow = null;
     }
 
     private void initNewLabiWindow() {
@@ -664,7 +666,7 @@ public class GameMenuView implements Screen {
                     return;
                 }
 
-                //TODO
+                initWaitWindow();
             }
         });
 
@@ -685,8 +687,7 @@ public class GameMenuView implements Screen {
                     return;
                 }
 
-                //TODO
-
+                initWaitWindow();
             }
         });
 
@@ -701,6 +702,7 @@ public class GameMenuView implements Screen {
 
     private void handleGameMenu() {
         loadCurrentLabi();
+        loadWaitingWindow();
 
         if (getBackButton().isChecked()) {
             getBackButton().setChecked(false);
@@ -814,6 +816,23 @@ public class GameMenuView implements Screen {
             labiUsersLabel.setText(stringBuilder1.toString());
         }
         return;
+    }
+
+    private void loadWaitingWindow() {
+        if (waitingWindow != null) {
+            Message message = new Message(new HashMap<>() {{
+                put("function", "updateWait");
+                put("arguments", AppClient.getCurrentLabi().getID());
+            }}, Message.Type.command);
+            Message responseMessage = AppClient.getServerHandler().sendAndWaitForResponse(message);
+            if (responseMessage.getBooleanFromBody("success")) {
+                AppClient.setCurrentLabi(null);
+                closeWaitWindow();
+            }
+            else {
+                initWaitWindow();
+            }
+        }
     }
 
     private boolean methodUseMessage(Message responseMessage, Label label) {

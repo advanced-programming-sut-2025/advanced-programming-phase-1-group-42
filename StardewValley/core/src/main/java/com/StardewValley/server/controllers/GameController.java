@@ -72,13 +72,6 @@ import static java.lang.Math.abs;
 public class GameController extends Controller {
     private ClientHandler clientHandler;
 
-    public ArrayList<Player> players;
-    public int ptr;
-    public ArrayList<Tile> tiles;
-    public ArrayList<Farm> farms;
-    public Game game;
-    private Director director;
-
     private WorldController worldController;
     private PlayerController playerController;
     private InventoryController inventoryController;
