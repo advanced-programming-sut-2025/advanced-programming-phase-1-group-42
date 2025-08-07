@@ -58,3 +58,7 @@ cheat thor -l 1 1
 cheat Thor -l 1 1
 cheat Thor -l 1 1
 cheat add item -n Sunflower -c 1
+cheat add 1000 dollars
+cheat advance time 5h
+cheat advance date 4d
+cheat add 1222 dollars

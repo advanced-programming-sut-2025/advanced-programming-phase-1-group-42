@@ -83,7 +83,6 @@ public class GameMenuController extends Controller {
     private WorldController worldController;
     private PlayerController playerController;
     private InventoryController inventoryController;
-    private ClockController clockController;
     private FriendshipController friendshipController;
 
     private GameMenuView view;
@@ -101,7 +100,6 @@ public class GameMenuController extends Controller {
         worldController = new WorldController();
         playerController = new PlayerController();
         inventoryController = new InventoryController(gameView);
-        clockController = new ClockController();
         fridgeController = new FridgeController(gameView);
         cookingController = new CookingController(gameView);
         craftingController = new CraftingController(gameView);
@@ -184,7 +182,6 @@ public class GameMenuController extends Controller {
         worldController.updateWorld();
         playerController.updatePlayer();
         inventoryController.updateInventory();
-        clockController.update();
         fridgeController.updateFridge();
         friendshipController.update();
 
@@ -2913,10 +2910,6 @@ public class GameMenuController extends Controller {
         App.getCurrentGame().getCurrentPlayer().getInventory().addGood(newGoods);
 
         return new Result(true, "test");
-    }
-
-    public ClockController getClockController() {
-        return clockController;
     }
 
     private Table leaderboardTable;
