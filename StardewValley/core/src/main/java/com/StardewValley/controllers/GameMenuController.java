@@ -2591,7 +2591,7 @@ public class GameMenuController extends Controller {
             App.getCurrentGame().getCurrentPlayer().getIsInteracted().put(player, true);
             player.getIsInteracted().put(App.getCurrentGame().getCurrentPlayer(), true);
         }
-
+        gameView.showFlower(App.getCurrentGame().getCurrentPlayer(), player);
         list.append("Your have given a flower to " + username + "!");
         return new Result(true, list.toString());
     }
@@ -2633,6 +2633,7 @@ public class GameMenuController extends Controller {
         player.getMarriageList().put(mainPlayer, goods.getLast());
         goods.removeLast();
 
+        gameView.showPropose(App.getCurrentGame().getCurrentPlayer(),player);
         return new Result(true, "Your have asked marriage from " + username + " with Wedding_Ring!");
     }
 
@@ -2679,6 +2680,8 @@ public class GameMenuController extends Controller {
                 }
             }
             mainPlayer.getMarriageList().clear();
+
+            gameView.showPropose(App.getCurrentGame().getCurrentPlayer(),player);
             return new Result(true, "Your have accepted your marriage from " + username + "! Now you can live with him!");
         } else if (status.matches("\\s*-reject\\s*")) {
             mainPlayer.getFriendShips().computeIfPresent(player,
@@ -2692,6 +2695,8 @@ public class GameMenuController extends Controller {
             player.getInventory().addGood(new ArrayList<>(Arrays.asList(mainPlayer.getMarriageList().get(player))));
             player.getNews().add(mainPlayer.getUser().getUsername() + " has rejected your marriage!");
             mainPlayer.getFriendShips().remove(player);
+
+            gameView.showRejection(App.getCurrentGame().getCurrentPlayer(), player);
             return new Result(true, "You have rejected your marriage from " + username + "!");
         } else
             return new Result(false, "Invalid respond to marriage ask!");

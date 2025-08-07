@@ -314,9 +314,7 @@ public class GameView implements Screen, InputProcessor {
         controller.handleGame();
         setColorFunction();
 
-        renderEmote(Gdx.graphics.getDeltaTime());
-        renderThunder(Gdx.graphics.getDeltaTime());
-        renderHug(Gdx.graphics.getDeltaTime());
+        renderAnimations(Gdx.graphics.getDeltaTime());
 
         Main.getBatch().end();
 
@@ -4417,6 +4415,273 @@ public class GameView implements Screen, InputProcessor {
 
     public void setQuestWindow(Window questWindow) {
         this.questWindow = questWindow;
+    }
+
+    private Animation<Texture> proposeAnimation;
+    private Animation<Texture> kneelAnimation;
+    private float proposeStateTime = 0f;
+    private boolean showPropose = false;
+    private boolean showKneel = false;
+    private void renderPropose(float deltaTime) {
+        if (showPropose && proposeAnimation != null) {
+            proposer.setRenderAble(false);
+            proposee.setRenderAble(false);
+            proposeStateTime += deltaTime;
+            Texture currentFrame = proposeAnimation.getKeyFrame(proposeStateTime, false);
+            // Calculate position for center
+
+            Main.getBatch().draw(currentFrame, (Gdx.graphics.getWidth()-100)/2,(Gdx.graphics.getHeight()-42)/2 );
+
+            // Optionally hide animation when finished
+            if (proposeAnimation.isAnimationFinished(proposeStateTime)) {
+                showKneel = true;
+                showPropose = false;
+            }
+        }
+        if (showKneel && kneelAnimation != null) {
+            proposeStateTime += deltaTime;
+            Texture currentFrame = proposeAnimation.getKeyFrame(proposeStateTime, false);
+            Main.getBatch().draw(currentFrame, (Gdx.graphics.getWidth()-100)/2,(Gdx.graphics.getHeight()-42)/2 );
+        }
+    }
+    public void stopKneeling(){
+        showKneel = false;
+        proposer.setRenderAble(true);
+        proposee.setRenderAble(true);
+    }
+    private Player proposer;
+    private Player proposee;
+    public void showPropose(Player propposee, Player propposer) {
+        proposee = propposee;
+        proposer = propposer;
+        Texture propose_1 = new Texture("GameAssets\\Animation\\Propose\\Propose1.png");
+        Texture propose_2 = new Texture("GameAssets\\Animation\\Propose\\Propose2.png");
+        Texture propose_3 = new Texture("GameAssets\\Animation\\Propose\\Propose3.png");
+        Texture propose_4 = new Texture("GameAssets\\Animation\\Propose\\Propose4.png");
+        Texture propose_5 = new Texture("GameAssets\\Animation\\Propose\\Propose5.png");
+        Texture propose_6 = new Texture("GameAssets\\Animation\\Propose\\Propose6.png");
+        Texture propose_7 = new Texture("GameAssets\\Animation\\Propose\\Propose7.png");
+        Texture propose_8 = new Texture("GameAssets\\Animation\\Propose\\Propose8.png");
+        Texture propose_9 = new Texture("GameAssets\\Animation\\Propose\\Propose9.png");
+        Texture propose_10= new Texture("GameAssets\\Animation\\Propose\\Propose10.png");
+        Texture propose_11= new Texture("GameAssets\\Animation\\Propose\\Propose11.png");
+        Texture propose_12= new Texture("GameAssets\\Animation\\Propose\\Propose12.png");
+        Texture propose_13= new Texture("GameAssets\\Animation\\Propose\\Propose13.png");
+        Texture propose_14= new Texture("GameAssets\\Animation\\Propose\\Propose14.png");
+        Texture propose_15= new Texture("GameAssets\\Animation\\Propose\\Propose15.png");
+        Texture propose_16= new Texture("GameAssets\\Animation\\Propose\\Propose16.png");
+        Texture propose_17= new Texture("GameAssets\\Animation\\Propose\\Propose17.png");
+
+
+        proposeAnimation = new Animation<>(0.1f,
+            propose_1,propose_2,propose_3,propose_4,propose_5,propose_6,propose_7,
+            propose_8,propose_9,propose_10,propose_11,propose_12,propose_13,propose_14,
+            propose_15,propose_16,propose_17,propose_17,propose_17,propose_17
+        );
+        kneelAnimation = new Animation<>(0.1f,
+            propose_17,propose_17,propose_17,propose_17
+        );
+        hugAnimation.setPlayMode(Animation.PlayMode.NORMAL);
+        kneelAnimation.setPlayMode(Animation.PlayMode.LOOP);
+
+        proposeStateTime = 0f;
+        showPropose = true;
+    }
+
+    private Animation<Texture> rejectionAnimation;
+    private float rejectionStateTime = 0f;
+    private boolean showRejection = false;
+    private Player rejector;
+    private Player rejectee;
+    private void renderRejection(float deltaTime) {
+        if (showRejection && rejectionAnimation != null) {
+            rejector.setRenderAble(false);
+            rejectee.setRenderAble(false);
+            rejectionStateTime += deltaTime;
+            Texture currentFrame = rejectionAnimation.getKeyFrame(rejectionStateTime, false);
+            // Calculate position for center
+
+            Main.getBatch().draw(currentFrame, (Gdx.graphics.getWidth()-100)/2,(Gdx.graphics.getHeight()-42)/2 );
+
+            // Optionally hide animation when finished
+            if (rejectionAnimation.isAnimationFinished(rejectionStateTime)) {
+                rejector.setRenderAble(true);
+                rejectee.setRenderAble(true);
+                showRejection = false;
+            }
+        }
+    }
+
+    public void showRejection(Player rejjector, Player rejjectee) {
+        rejector = rejjector;
+        rejectee = rejjectee;
+        Texture propose_1 = new Texture("GameAssets\\Animation\\Propose\\Rejection\\Reject1.png");
+        Texture propose_2 = new Texture("GameAssets\\Animation\\Propose\\Rejection\\Reject2.png");
+        Texture propose_3 = new Texture("GameAssets\\Animation\\Propose\\Rejection\\Reject3.png");
+        Texture propose_4 = new Texture("GameAssets\\Animation\\Propose\\Rejection\\Reject4.png");
+        Texture propose_5 = new Texture("GameAssets\\Animation\\Propose\\Rejection\\Reject5.png");
+        Texture propose_6 = new Texture("GameAssets\\Animation\\Propose\\Rejection\\Reject6.png");
+        Texture propose_7 = new Texture("GameAssets\\Animation\\Propose\\Rejection\\Reject7.png");
+        Texture propose_8 = new Texture("GameAssets\\Animation\\Propose\\Rejection\\Reject8.png");
+        Texture propose_9 = new Texture("GameAssets\\Animation\\Propose\\Rejection\\Reject9.png");
+        Texture propose_10= new Texture("GameAssets\\Animation\\Propose\\Rejection\\Reject10.png");
+        Texture propose_11= new Texture("GameAssets\\Animation\\Propose\\Rejection\\Reject11.png");
+        Texture propose_12= new Texture("GameAssets\\Animation\\Propose\\Rejection\\Reject12.png");
+        Texture propose_13= new Texture("GameAssets\\Animation\\Propose\\Rejection\\Reject13.png");
+        Texture propose_14= new Texture("GameAssets\\Animation\\Propose\\Rejection\\Reject14.png");
+        Texture propose_15= new Texture("GameAssets\\Animation\\Propose\\Rejection\\Reject15.png");
+        Texture propose_16= new Texture("GameAssets\\Animation\\Propose\\Rejection\\Reject16.png");
+        Texture propose_17= new Texture("GameAssets\\Animation\\Propose\\Rejection\\Reject17.png");
+        Texture propose_18= new Texture("GameAssets\\Animation\\Propose\\Rejection\\Reject18.png");
+        Texture propose_19= new Texture("GameAssets\\Animation\\Propose\\Rejection\\Reject19.png");
+        Texture propose_20= new Texture("GameAssets\\Animation\\Propose\\Rejection\\Reject20.png");
+        Texture propose_21= new Texture("GameAssets\\Animation\\Propose\\Rejection\\Reject21.png");
+        Texture propose_22= new Texture("GameAssets\\Animation\\Propose\\Rejection\\Reject22.png");
+        Texture propose_23= new Texture("GameAssets\\Animation\\Propose\\Rejection\\Reject23.png");
+        Texture propose_24= new Texture("GameAssets\\Animation\\Propose\\Rejection\\Reject24.png");
+        Texture propose_25= new Texture("GameAssets\\Animation\\Propose\\Rejection\\Reject25.png");
+        Texture propose_26= new Texture("GameAssets\\Animation\\Propose\\Rejection\\Reject26.png");
+
+        rejectionAnimation = new Animation<>(0.1f,
+            propose_1,propose_2,propose_3,propose_4,propose_5,propose_6,propose_7,
+            propose_8,propose_9,propose_10,propose_11,propose_12,propose_13,propose_14,
+            propose_15,propose_16,propose_17,propose_18,propose_19,propose_20,propose_21,
+            propose_22,propose_23,propose_24,propose_25,propose_26
+        );
+
+        rejectionAnimation.setPlayMode(Animation.PlayMode.NORMAL);
+
+        rejectionStateTime = 0f;
+        showRejection = true;
+    }
+
+    private Animation<Texture> acceptanceAnimation;
+    private float acceptanceStateTime = 0f;
+    private boolean showAcceptance = false;
+    private Player acceptor;
+    private Player acceptee;
+    private void renderAcceptance(float deltaTime) {
+        if (showAcceptance && acceptanceAnimation != null) {
+            acceptor.setRenderAble(false);
+            acceptee.setRenderAble(false);
+            acceptanceStateTime += deltaTime;
+            Texture currentFrame = acceptanceAnimation.getKeyFrame(acceptanceStateTime, false);
+            // Calculate position for center
+
+            Main.getBatch().draw(currentFrame, (Gdx.graphics.getWidth()-100)/2,(Gdx.graphics.getHeight()-42)/2 );
+
+            // Optionally hide animation when finished
+            if (acceptanceAnimation.isAnimationFinished(acceptanceStateTime)) {
+                acceptor.setRenderAble(true);
+                acceptee.setRenderAble(true);
+                showAcceptance = false;
+            }
+        }
+    }
+
+    public void showAcceptance(Player rejjector, Player rejjectee) {
+        acceptor = rejjector;
+        acceptee = rejjectee;
+        Texture propose_0 = new Texture("GameAssets\\Animation\\Propose\\Acceptance\\Accept0.png");
+        Texture propose_1 = new Texture("GameAssets\\Animation\\Propose\\Acceptance\\Accept1.png");
+        Texture propose_2 = new Texture("GameAssets\\Animation\\Propose\\Acceptance\\Accept2.png");
+        Texture propose_3 = new Texture("GameAssets\\Animation\\Propose\\Acceptance\\Accept3.png");
+        Texture propose_4 = new Texture("GameAssets\\Animation\\Propose\\Acceptance\\Accept4.png");
+        Texture propose_5 = new Texture("GameAssets\\Animation\\Propose\\Acceptance\\Accept5.png");
+        Texture propose_6 = new Texture("GameAssets\\Animation\\Propose\\Acceptance\\Accept6.png");
+        Texture propose_7 = new Texture("GameAssets\\Animation\\Propose\\Acceptance\\Accept7.png");
+        Texture propose_8 = new Texture("GameAssets\\Animation\\Propose\\Acceptance\\Accept8.png");
+        Texture propose_9 = new Texture("GameAssets\\Animation\\Propose\\Acceptance\\Accept9.png");
+        Texture propose_10= new Texture("GameAssets\\Animation\\Propose\\Acceptance\\Accept10.png");
+        Texture propose_11= new Texture("GameAssets\\Animation\\Propose\\Acceptance\\Accept11.png");
+        Texture propose_12= new Texture("GameAssets\\Animation\\Propose\\Acceptance\\Accept12.png");
+        Texture propose_13= new Texture("GameAssets\\Animation\\Propose\\Acceptance\\Accept13.png");
+        Texture propose_14= new Texture("GameAssets\\Animation\\Propose\\Acceptance\\Accept14.png");
+        Texture propose_15= new Texture("GameAssets\\Animation\\Propose\\Acceptance\\Accept15.png");
+        Texture propose_16= new Texture("GameAssets\\Animation\\Propose\\Acceptance\\Accept16.png");
+        Texture propose_17= new Texture("GameAssets\\Animation\\Propose\\Acceptance\\Accept17.png");
+
+        acceptanceAnimation = new Animation<>(0.1f,
+            propose_0,propose_1,propose_2,propose_3,propose_4,propose_5,propose_6,propose_7,
+            propose_8,propose_9,propose_10,propose_11,propose_12,propose_13,propose_14,
+            propose_15,propose_16,propose_17
+        );
+
+        acceptanceAnimation.setPlayMode(Animation.PlayMode.NORMAL);
+
+        acceptanceStateTime = 0f;
+        showAcceptance = true;
+    }
+
+    private Animation<Texture> flowerAnimation;
+    private float flowerStateTime = 0f;
+    private boolean showFlower = false;
+    private Player flowerer;
+    private Player floweree;
+    private void renderFlower(float deltaTime) {
+        if (showFlower && flowerAnimation != null) {
+            flowerer.setRenderAble(false);
+            floweree.setRenderAble(false);
+            flowerStateTime += deltaTime;
+            Texture currentFrame = flowerAnimation.getKeyFrame(flowerStateTime, false);
+            // Calculate position for center
+
+            Main.getBatch().draw(currentFrame, (Gdx.graphics.getWidth()-100)/2,(Gdx.graphics.getHeight()-42)/2 );
+
+            // Optionally hide animation when finished
+            if (flowerAnimation.isAnimationFinished(flowerStateTime)) {
+                flowerer.setRenderAble(true);
+                floweree.setRenderAble(true);
+                showFlower = false;
+            }
+        }
+    }
+
+    public void showFlower(Player rejjector, Player rejjectee) {
+        flowerer = rejjector;
+        floweree = rejjectee;
+        Texture propose_1 = new Texture("GameAssets\\Animation\\Propose\\Flower\\Flower (1).png");
+        Texture propose_2 = new Texture("GameAssets\\Animation\\Propose\\Flower\\Flower (2).png");
+        Texture propose_3 = new Texture("GameAssets\\Animation\\Propose\\Flower\\Flower (3).png");
+        Texture propose_4 = new Texture("GameAssets\\Animation\\Propose\\Flower\\Flower (4).png");
+        Texture propose_5 = new Texture("GameAssets\\Animation\\Propose\\Flower\\Flower (5).png");
+        Texture propose_6 = new Texture("GameAssets\\Animation\\Propose\\Flower\\Flower (6).png");
+        Texture propose_7 = new Texture("GameAssets\\Animation\\Propose\\Flower\\Flower (7).png");
+        Texture propose_8 = new Texture("GameAssets\\Animation\\Propose\\Flower\\Flower (8).png");
+        Texture propose_9 = new Texture("GameAssets\\Animation\\Propose\\Flower\\Flower (9).png");
+        Texture propose_10= new Texture("GameAssets\\Animation\\Propose\\Flower\\Flower (10).png");
+        Texture propose_11= new Texture("GameAssets\\Animation\\Propose\\Flower\\Flower (11).png");
+        Texture propose_12= new Texture("GameAssets\\Animation\\Propose\\Flower\\Flower (12).png");
+        Texture propose_13= new Texture("GameAssets\\Animation\\Propose\\Flower\\Flower (13).png");
+        Texture propose_14= new Texture("GameAssets\\Animation\\Propose\\Flower\\Flower (14).png");
+        Texture propose_15= new Texture("GameAssets\\Animation\\Propose\\Flower\\Flower (15).png");
+        Texture propose_16= new Texture("GameAssets\\Animation\\Propose\\Flower\\Flower (16).png");
+        Texture propose_17= new Texture("GameAssets\\Animation\\Propose\\Flower\\Flower (17).png");
+        Texture propose_18= new Texture("GameAssets\\Animation\\Propose\\Flower\\Flower (18).png");
+        Texture propose_19= new Texture("GameAssets\\Animation\\Propose\\Flower\\Flower (19).png");
+        Texture propose_20= new Texture("GameAssets\\Animation\\Propose\\Flower\\Flower (20).png");
+
+        flowerAnimation = new Animation<>(0.1f,
+            propose_1,propose_2,propose_3,propose_4,propose_5,propose_6,propose_7,
+            propose_8,propose_9,propose_10,propose_11,propose_12,propose_13,propose_14,
+            propose_15,propose_16,propose_17,propose_18,propose_19,propose_20
+        );
+
+        flowerAnimation.setPlayMode(Animation.PlayMode.NORMAL);
+
+        flowerStateTime = 0f;
+        showFlower = true;
+    }
+
+
+    private void renderAnimations(float delta) {
+        renderEmote(delta);
+        renderThunder(delta);
+        renderHug(delta);
+        renderPropose(delta);
+        renderRejection(delta);
+        renderAcceptance(delta);
+        renderFlower(delta);
     }
 }
 
