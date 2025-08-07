@@ -88,7 +88,6 @@ public class GameMenuController extends Controller {
 
     private GameMenuView view;
     private GameView gameView;
-    private FridgeController fridgeController;
     private CookingController cookingController;
     private CraftingController craftingController;
 
@@ -102,9 +101,9 @@ public class GameMenuController extends Controller {
         playerController = new PlayerController();
         inventoryController = new InventoryController(gameView);
         clockController = new ClockController();
-        fridgeController = new FridgeController(gameView);
-        cookingController = new CookingController(gameView);
-        craftingController = new CraftingController(gameView);
+//        fridgeController = new FridgeController(gameView);
+        cookingController = new CookingController();
+        craftingController = new CraftingController();
         friendshipController = new FriendshipController(gameView);
     }
 
@@ -118,10 +117,6 @@ public class GameMenuController extends Controller {
 
     public InventoryController getInventoryController() {
         return inventoryController;
-    }
-
-    public FridgeController getFridgeController() {
-        return fridgeController;
     }
 
     public CookingController getCookingController() {
@@ -185,7 +180,7 @@ public class GameMenuController extends Controller {
         playerController.updatePlayer();
         inventoryController.updateInventory();
         clockController.update();
-        fridgeController.updateFridge();
+//        fridgeController.updateFridge();
         friendshipController.update();
 
         refreshLeaderBoard();

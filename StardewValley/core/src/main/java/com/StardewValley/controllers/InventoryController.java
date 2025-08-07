@@ -57,9 +57,13 @@ public class InventoryController {
                         quadruple.a.setChecked(false);
                         if (quadruple.b == finalImage) {
                             quadruple.a.setChecked(true);
-                            App.getCurrentGame().getCurrentPlayer().setInHandGood(
-                                    App.getCurrentGame().getCurrentPlayer().getInventory().getList().get(i)
-                            );
+                            if (gameView.getFridgeOpen()) {
+                                App.getCurrentGame().getCurrentPlayer().getFridge().addItemToFridge(App.getCurrentGame().getCurrentPlayer().getInventory().getList().get(i).getFirst());
+                            } else {
+                                App.getCurrentGame().getCurrentPlayer().setInHandGood(
+                                    App.getCurrentGame().getCurrentPlayer().getInventory().getList().get(i));
+                            }
+
                         }
                     }
                 }
