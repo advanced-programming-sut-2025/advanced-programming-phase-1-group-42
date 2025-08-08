@@ -62,3 +62,8 @@ cheat add 1000 dollars
 cheat advance time 5h
 cheat advance date 4d
 cheat add 1222 dollars
+cheat add item -n Carrot -c 12
+cheat add item -n Carrot -c 12
+cheat add item -n Carrot -c 12
+cheat add item -n Carrot -c 12
+cheat add 12 dollars

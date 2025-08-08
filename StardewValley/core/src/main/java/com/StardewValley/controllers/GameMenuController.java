@@ -535,6 +535,9 @@ public class GameMenuController extends Controller {
                         @Override
                         public void clicked(InputEvent event, float x, float y) {
                             if (cursorGoods != null && !cursorGoods.isEmpty()) {
+                                int totalPrice = cursorGoods.getLast().getSellPrice()*cursorGoods.size();
+                                int finalPrice = ToolFunctions.useTrashCan(App.getCurrentGame().getCurrentPlayer().getTrashCan(), totalPrice);
+                                App.getCurrentGame().getCurrentPlayer().getWallet().increaseBalance(finalPrice);
                                 cursorGoods.clear();
                                 cursorGoods = null;
                                 App.setCursor(); // Reset to default cursor
