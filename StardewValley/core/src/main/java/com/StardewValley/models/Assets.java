@@ -5,8 +5,10 @@ import com.badlogic.gdx.audio.Music;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
+import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 
@@ -21,45 +23,53 @@ public class Assets {
     private final Sprite menuBackground2 = new Sprite(new Texture("menu_background_2.png"));
     private final ArrayList<ArrayList<Texture>> playerTextures = new ArrayList<>(Arrays.asList(
         new ArrayList<>(Arrays.asList(
-            new Texture("GameAssets/Player_Movement/Male/Untitled-7.png"),
-            new Texture("GameAssets/Player_Movement/Male/Untitled-8.png"),
-            new Texture("GameAssets/Player_Movement/Male/Untitled-9.png")
+            new Texture("GameAssets/Player_Movement/Male/Male_walk (10).png"),
+            new Texture("GameAssets/Player_Movement/Male/Male_walk (11).png"),
+            new Texture("GameAssets/Player_Movement/Male/Male_walk (12).png"),
+            new Texture("GameAssets/Player_Movement/Male/Male_walk (9).png")
         )),
         new ArrayList<>(Arrays.asList(
-            new Texture("GameAssets/Player_Movement/Male/Untitled-4.png"),
-            new Texture("GameAssets/Player_Movement/Male/Untitled-5.png"),
-            new Texture("GameAssets/Player_Movement/Male/Untitled-6.png")
+            new Texture("GameAssets/Player_Movement/Male/Male_walk (14).png"),
+            new Texture("GameAssets/Player_Movement/Male/Male_walk (15).png"),
+            new Texture("GameAssets/Player_Movement/Male/Male_walk (16).png"),
+            new Texture("GameAssets/Player_Movement/Male/Male_walk (13).png")
         )),
         new ArrayList<>(Arrays.asList(
-            new Texture("GameAssets/Player_Movement/Male/Untitled-1.png"),
-            new Texture("GameAssets/Player_Movement/Male/Untitled-2.png"),
-            new Texture("GameAssets/Player_Movement/Male/Untitled-3.png")
+            new Texture("GameAssets/Player_Movement/Male/Male_walk (2).png"),
+            new Texture("GameAssets/Player_Movement/Male/Male_walk (3).png"),
+            new Texture("GameAssets/Player_Movement/Male/Male_walk (4).png"),
+            new Texture("GameAssets/Player_Movement/Male/Male_walk (1).png")
         )),
         new ArrayList<>(Arrays.asList(
-            new Texture("GameAssets/Player_Movement/Male/Untitled-10.png"),
-            new Texture("GameAssets/Player_Movement/Male/Untitled-11.png"),
-            new Texture("GameAssets/Player_Movement/Male/Untitled-12.png")
+            new Texture("GameAssets/Player_Movement/Male/Male_walk (6).png"),
+            new Texture("GameAssets/Player_Movement/Male/Male_walk (7).png"),
+            new Texture("GameAssets/Player_Movement/Male/Male_walk (8).png"),
+            new Texture("GameAssets/Player_Movement/Male/Male_walk (5).png")
         ))
     ));
     private final ArrayList<ArrayList<Texture>> femalePlayerTextures = new ArrayList<>(Arrays.asList(
         new ArrayList<>(Arrays.asList(
             new Texture("GameAssets/Player_Movement/Female/Untitled-7.png"),
             new Texture("GameAssets/Player_Movement/Female/Untitled-8.png"),
+            new Texture("GameAssets/Player_Movement/Female/Untitled-7.png"),
             new Texture("GameAssets/Player_Movement/Female/Untitled-9.png")
         )),
         new ArrayList<>(Arrays.asList(
             new Texture("GameAssets/Player_Movement/Female/Untitled-4.png"),
             new Texture("GameAssets/Player_Movement/Female/Untitled-5.png"),
+            new Texture("GameAssets/Player_Movement/Female/Untitled-4.png"),
             new Texture("GameAssets/Player_Movement/Female/Untitled-6.png")
         )),
         new ArrayList<>(Arrays.asList(
             new Texture("GameAssets/Player_Movement/Female/Untitled-1.png"),
             new Texture("GameAssets/Player_Movement/Female/Untitled-2.png"),
+            new Texture("GameAssets/Player_Movement/Female/Untitled-1.png"),
             new Texture("GameAssets/Player_Movement/Female/Untitled-3.png")
         )),
         new ArrayList<>(Arrays.asList(
             new Texture("GameAssets/Player_Movement/Female/Untitled-10.png"),
             new Texture("GameAssets/Player_Movement/Female/Untitled-11.png"),
+            new Texture("GameAssets/Player_Movement/Female/Untitled-10.png"),
             new Texture("GameAssets/Player_Movement/Female/Untitled-12.png")
         ))
     ));
@@ -118,5 +128,67 @@ public class Assets {
 
     public Texture getNight_background() {
         return night_background;
+    }
+
+
+    private Texture like = new Texture("GameAssets/Popup/like.png");
+    private Texture dislike = new Texture("GameAssets/Popup/dislike.png");
+    private Texture heart = new Texture("GameAssets/Popup/heart.png");
+    private Texture smile = new Texture("GameAssets/Popup/music.png");
+    private Texture uwu = new Texture("GameAssets/Popup/uwu.png");
+    private Texture question = new Texture("GameAssets/Popup/question.png");
+    private Texture angry = new Texture("GameAssets/Popup/angry.png");
+    private Texture speechless = new Texture("GameAssets/Popup/speechless.png");
+    private Texture surprised = new Texture("GameAssets/Popup/surprised.png");
+    private Texture sleepy = new Texture("GameAssets/Popup/sleepy.png");
+    private Texture notSure = new Texture("GameAssets/Popup/notsure.png");
+    private Texture edit = new Texture("GameAssets/Popup/edit.png");
+
+    public Texture getLike() {
+        return like;
+    }
+
+    public Texture getUwu() {
+        return uwu;
+    }
+
+    public Texture getDislike() {
+        return dislike;
+    }
+
+    public Texture getHeart() {
+        return heart;
+    }
+
+    public Texture getSmile() {
+        return smile;
+    }
+
+    public Texture getQuestion() {
+        return question;
+    }
+
+    public Texture getAngry() {
+        return angry;
+    }
+
+    public Texture getSpeechless() {
+        return speechless;
+    }
+
+    public Texture getSurprised() {
+        return surprised;
+    }
+
+    public Texture getSleepy() {
+        return sleepy;
+    }
+
+    public Texture getNotSure() {
+        return notSure;
+    }
+
+    public Texture getEdit() {
+        return edit;
     }
 }

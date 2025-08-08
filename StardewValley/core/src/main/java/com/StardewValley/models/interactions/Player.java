@@ -25,6 +25,7 @@ import java.util.List;
 
 public class Player {
     private Coordinate coordinate ;
+    private Coordinate lastCoordinate;
     private Inventory inventory ;
     private ArrayList<Good> inHandGood;
     private final ArrayList<CookingRecipe> cookingRecipes = new ArrayList<>(Arrays.asList(new CookingRecipe(CookingRecipeType.BREAD)));
@@ -40,10 +41,12 @@ public class Player {
     private Sprite sprite;
     private Sprite inHandGoodSprite;
     private float time;
-
+    private ArrayList<Pair<Player, ArrayList<String>>> privateChat = new ArrayList<>();
     private Buff buff;
     private Buff rejectionBuff;
+    private ArrayList<Quest> playerQuests = new ArrayList<>();
 
+    private boolean renderAble = true;
     // level-value
     private final HashMap<Player, Pair<Integer, Integer>> friendShips = new HashMap<>();
     private final HashMap<Player, Boolean> isInteracted;
@@ -100,6 +103,7 @@ public class Player {
         this.farm = null;
         this.isInteracted = new HashMap<>();
         this.coordinate = new Coordinate(0, 0);
+        this.lastCoordinate = coordinate;
         this.playerDirection = -1;
         if (user.getGender() != null && "Male".equals(user.getGender().getName())) {
             this.sprite = new Sprite(Assets.getInstance().getPlayerTextures().get(2).getFirst());
@@ -166,6 +170,12 @@ public class Player {
     public Coordinate getCoordinate() {
         int x = this.coordinate.getX();
         int y = this.coordinate.getY();
+        return new Coordinate(x, y);
+    }
+
+    public Coordinate getLastCoordinate() {
+        int x = this.lastCoordinate.getX();
+        int y = this.lastCoordinate.getY();
         return new Coordinate(x, y);
     }
 
@@ -346,5 +356,25 @@ public class Player {
 
     public void setInHandGoodSprite(Sprite inHandGoodSprite) {
         this.inHandGoodSprite = inHandGoodSprite;
+    }
+
+    public void setLastCoordinate(Coordinate lastCoordinate) {
+        this.lastCoordinate = lastCoordinate;
+    }
+
+    public ArrayList<Pair<Player, ArrayList<String>>> getPrivateChat() {
+        return privateChat;
+    }
+
+    public ArrayList<Quest> getPlayerQuests() {
+        return playerQuests;
+    }
+
+    public boolean isRenderAble() {
+        return renderAble;
+    }
+
+    public void setRenderAble(boolean renderAble) {
+        this.renderAble = renderAble;
     }
 }

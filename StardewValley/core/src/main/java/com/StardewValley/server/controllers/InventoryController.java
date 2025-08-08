@@ -54,9 +54,12 @@ public class InventoryController {
                         quadruple.a.setChecked(false);
                         if (quadruple.b == finalImage) {
                             quadruple.a.setChecked(true);
-                            AppClient.getCurrentGame().getCurrentPlayer().setInHandGood(
-                                    AppClient.getCurrentGame().getCurrentPlayer().getInventory().getList().get(i)
-                            );
+                            if (gameView.getFridgeOpen()) {
+                                App.getCurrentGame().getCurrentPlayer().getFridge().addItemToFridge(App.getCurrentGame().getCurrentPlayer().getInventory().getList().get(i).getFirst());
+                            } else {
+                                App.getCurrentGame().getCurrentPlayer().setInHandGood(
+                                    App.getCurrentGame().getCurrentPlayer().getInventory().getList().get(i));
+                            }
                         }
                     }
                 }
@@ -73,11 +76,11 @@ public class InventoryController {
 
 
 
-        for (int i = 0; i < 6; i++) {
+        for (int i = 0; i < 7; i++) {
             TextureRegionDrawable tabDrawable = new TextureRegionDrawable(new Texture("GameAssets/Main_Inventory/MainTable" + (i + 1) + ".png"));
             TextureRegionDrawable tabDrawableClicked = new TextureRegionDrawable(new Texture("GameAssets/Main_Inventory/MainTable" + (i + 1) + "Clicked.png"));
             ImageButton tabButton = new ImageButton(tabDrawable, tabDrawableClicked, tabDrawableClicked);
-            if (i == 5) {
+            if (i == 6) {
                 tabButton.addListener(new ClickListener() {
                     @Override
                     public void clicked(InputEvent event, float x, float y) {
@@ -103,22 +106,25 @@ public class InventoryController {
                                 imageButton.setChecked(true);
                                 switch (i){
                                     case 0:
-                                        gameView.switchWindow(inventoryWindows.get(0));
+                                        gameView.switchWindow(inventoryWindows.get(0),0);
                                         break;
                                     case 1:
-                                        gameView.switchWindow(inventoryWindows.get(1));
+                                        gameView.switchWindow(inventoryWindows.get(1),1);
                                         break;
                                     case 2:
-                                        gameView.switchWindow(inventoryWindows.get(2));
+                                        gameView.switchWindow(inventoryWindows.get(2),2);
                                         break;
                                     case 3:
-                                        gameView.switchWindow(inventoryWindows.get(3));
+                                        gameView.switchWindow(inventoryWindows.get(3),3);
                                         break;
                                     case 4:
-                                        gameView.switchWindow(inventoryWindows.get(4));
+                                        gameView.switchWindow(inventoryWindows.get(4),4);
+                                        break;
+                                    case 5:
+                                        gameView.switchWindow(inventoryWindows.get(5),5);
                                         break;
                                     default:
-                                        gameView.switchWindow(inventoryWindows.get(3));
+                                        gameView.switchWindow(inventoryWindows.get(3),3);
                                         break;
 
                                 }

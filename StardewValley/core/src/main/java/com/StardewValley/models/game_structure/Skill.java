@@ -13,7 +13,7 @@ public class Skill {
     private int miningLevel = 0;
     private int foragingLevel = 0;
 
-
+    private int overallSkillLevel = 0;
 
     public void increaseFarmingPoints(int value) {
         farmingPoints += value;
@@ -86,5 +86,10 @@ public class Skill {
 
     public void increaseFishingLevel() {
         this.fishingLevel++;
+    }
+
+    public int getOverallSkillLevel() {
+        overallSkillLevel = farmingPoints + cookingPoints + fishingPoints + miningPoints + foragingPoints;
+        return overallSkillLevel;
     }
 }

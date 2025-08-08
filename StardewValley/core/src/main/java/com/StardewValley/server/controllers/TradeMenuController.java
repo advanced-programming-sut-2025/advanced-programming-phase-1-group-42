@@ -107,9 +107,7 @@ public class TradeMenuController {
             accept = false;
         }
 
-        boolean realResponse = TradeManager.respondToTrade(currentPlayer, tradeIdInt, accept);
-
-        return new Result(true, realResponse ? "Trade accepted." : "Trade rejected.");
+        return TradeManager.respondToTrade(currentPlayer, tradeIdInt, accept);
     }
 
     public Result tradeHistory() {
