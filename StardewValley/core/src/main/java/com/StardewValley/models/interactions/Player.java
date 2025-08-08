@@ -31,6 +31,7 @@ public class Player {
     private final ArrayList<CookingRecipe> cookingRecipes = new ArrayList<>(Arrays.asList(new CookingRecipe(CookingRecipeType.BREAD)));
     private final ArrayList<CraftingRecipe> craftingRecipes = new ArrayList<>(Arrays.asList(new CraftingRecipe(CraftingRecipeType.BOMB)));
     private String username;
+    private Gender gender;
     private int points;
     private Wallet wallet;
     private Farm farm;
@@ -91,6 +92,7 @@ public class Player {
 
     public Player(User user) {
         this.username = user.getUsername();
+        this.gender = user.getGender();
         this.wallet =  new Wallet(0);
         this.points = 0;
         this.energy = new Energy();
@@ -376,5 +378,9 @@ public class Player {
 
     public void setRenderAble(boolean renderAble) {
         this.renderAble = renderAble;
+    }
+
+    public Gender getGender() {
+        return gender;
     }
 }

@@ -81,8 +81,8 @@ public class Trade {
         if(price == null){
             return String.format("Trade #%d: %s > %s | %d x %s > %d x %s",
                 id,
-                sender.getUser().getUsername(),
-                receiver.getUser().getUsername(),
+                sender.getUsername(),
+                receiver.getUsername(),
                 amount,
                 item,
                 targetAmount,
@@ -91,8 +91,8 @@ public class Trade {
         } else {
             return String.format("Trade #%d: %s > %s | %d x %s > %d each",
                 id,
-                sender.getUser().getUsername(),
-                receiver.getUser().getUsername(),
+                sender.getUsername(),
+                receiver.getUsername(),
                 amount,
                 item,
                 price
@@ -104,8 +104,8 @@ public class Trade {
         if(price == null){
             return String.format("Trade #%d: %s > %s | %d x %s > %d x %s | Responded %s | accepted %s",
                 id,
-                sender.getUser().getUsername(),
-                receiver.getUser().getUsername(),
+                sender.getUsername(),
+                receiver.getUsername(),
                 amount,
                 item,
                 targetAmount,
@@ -116,8 +116,8 @@ public class Trade {
         } else {
             return String.format("Trade #%d: %s > %s | %d x %s > %d each | Responded %s | accepted %s",
                 id,
-                sender.getUser().getUsername(),
-                receiver.getUser().getUsername(),
+                sender.getUsername(),
+                receiver.getUsername(),
                 amount,
                 item,
                 price,

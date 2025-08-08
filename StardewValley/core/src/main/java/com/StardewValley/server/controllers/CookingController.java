@@ -1,12 +1,10 @@
-package com.StardewValley.controllers;
+package com.StardewValley.server.controllers;
 
-import com.StardewValley.models.App;
 import com.StardewValley.models.Assets;
 import com.StardewValley.models.Pair;
 import com.StardewValley.models.goods.GoodType;
 import com.StardewValley.models.goods.recipes.CookingRecipe;
 import com.StardewValley.models.goods.recipes.CookingRecipeType;
-import com.StardewValley.views.GameView;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
