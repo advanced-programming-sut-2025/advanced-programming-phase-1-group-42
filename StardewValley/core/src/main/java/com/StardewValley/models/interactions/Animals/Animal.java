@@ -3,7 +3,9 @@ package com.StardewValley.models.interactions.Animals;
 import com.StardewValley.client.AppClient;
 import com.StardewValley.models.game_structure.Coordinate;
 import com.StardewValley.models.goods.products.ProductType;
+import com.StardewValley.models.interactions.Player;
 import com.StardewValley.models.interactions.PlayerBuildings.FarmBuilding;
+import com.StardewValley.server.ClientHandler;
 
 import java.util.ArrayList;
 
@@ -40,32 +42,33 @@ public class Animal {
         return coordinate;
     }
 
-    public ArrayList<AnimalProduct> getProducts() {
+    public ArrayList<AnimalProduct> getProducts(ClientHandler clientHandler) {
+        Player player = clientHandler.getClientPlayer();
         if (animalType.equals(AnimalTypes.COW)) {
-            if (AppClient.getCurrentGame().getCurrentPlayer().getInventory().isInInventoryBoolean(ProductType.MILK_PAIL)) {
+            if (player.getInventory().isInInventoryBoolean(ProductType.MILK_PAIL)) {
                 friendShip += 5;
-                AppClient.getCurrentGame().getCurrentPlayer().getInventory().removeItemsFromInventory(ProductType.MILK_PAIL, 1);
-                AppClient.getCurrentGame().getCurrentPlayer().getEnergy().decreaseTurnEnergyLeft(7);
+                player.getInventory().removeItemsFromInventory(ProductType.MILK_PAIL, 1);
+                player.getEnergy().decreaseTurnEnergyLeft(7, clientHandler);
                 return products;
             } else {
                 System.out.println("You need Milk Pail to get Milk");
                 return null;
             }
         } else if (animalType.equals(AnimalTypes.GOAT)) {
-            if (AppClient.getCurrentGame().getCurrentPlayer().getInventory().isInInventoryBoolean(ProductType.MILK_PAIL)) {
+            if (player.getInventory().isInInventoryBoolean(ProductType.MILK_PAIL)) {
                 friendShip += 5;
-                AppClient.getCurrentGame().getCurrentPlayer().getInventory().removeItemsFromInventory(ProductType.MILK_PAIL, 1);
-                AppClient.getCurrentGame().getCurrentPlayer().getEnergy().decreaseTurnEnergyLeft(7);
+                player.getInventory().removeItemsFromInventory(ProductType.MILK_PAIL, 1);
+                player.getEnergy().decreaseTurnEnergyLeft(7, clientHandler);
                 return products;
             } else {
                 System.out.println("You need Milk Pail to get Milk");
                 return null;
             }
         } else if (animalType.equals(AnimalTypes.SHEEP)) {
-            if (AppClient.getCurrentGame().getCurrentPlayer().getInventory().isInInventoryBoolean(ProductType.SHEARS)) {
+            if (player.getInventory().isInInventoryBoolean(ProductType.SHEARS)) {
                 friendShip += 5;
-                AppClient.getCurrentGame().getCurrentPlayer().getInventory().removeItemsFromInventory(ProductType.SHEARS, 1);
-                AppClient.getCurrentGame().getCurrentPlayer().getEnergy().decreaseTurnEnergyLeft(7);
+                player.getInventory().removeItemsFromInventory(ProductType.SHEARS, 1);
+                player.getEnergy().decreaseTurnEnergyLeft(7, clientHandler);
                 return products;
             } else {
                 System.out.println("You need Shear to get Sheep's wool");

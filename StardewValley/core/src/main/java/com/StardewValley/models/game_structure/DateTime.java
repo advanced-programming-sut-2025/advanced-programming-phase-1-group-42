@@ -7,6 +7,7 @@ import com.StardewValley.models.enums.TileType;
 import com.StardewValley.models.goods.Good;
 import com.StardewValley.models.goods.farmings.FarmingCrop;
 import com.StardewValley.models.interactions.Player;
+import com.StardewValley.server.ClientHandler;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -18,35 +19,36 @@ public class DateTime {
     private Season season = Season.SPRING;
 
     // A Function to change game base of the cycle of players and moves the game forward
-    public void timeFlow() {
+    public void timeFlow(ClientHandler clientHandler) {
         int difTime = 1;
         time++;
 
         if (time >= 22) {
-            AppClient.getCurrentGame().gameFlow();
+            AppClient.getCurrentGame().gameFlow(clientHandler);
             time = 9;
             difTime = 11;
             date++;
         }
 
-        if(AppClient.getCurrentGame().getCurrentPlayer().getBuff() != null){
-            AppClient.getCurrentGame().getCurrentPlayer().getBuff().setRemainEffectTime();
-            if(AppClient.getCurrentGame().getCurrentPlayer().getBuff().getRemainEffectTime() == 0){
-                AppClient.getCurrentGame().getCurrentPlayer().setBuff(null);
-                AppClient.getCurrentGame().getCurrentPlayer().getEnergy().setMaxDayEnergy(200);
-                AppClient.getCurrentGame().getCurrentPlayer().getEnergy().setDayEnergyLeft(200);
+        if(clientHandler.getClientPlayer().getBuff() != null){
+            clientHandler.getClientPlayer().getBuff().setRemainEffectTime();
+            if(clientHandler.getClientPlayer().getBuff().getRemainEffectTime() == 0){
+                clientHandler.getClientPlayer().setBuff(null);
+                clientHandler.getClientPlayer().getEnergy().setMaxDayEnergy(200);
+                clientHandler.getClientPlayer().getEnergy().setDayEnergyLeft(200);
             }
             else {
-                AppClient.getCurrentGame().getCurrentPlayer().getEnergy().setDayEnergyLeft(300);
-                AppClient.getCurrentGame().getCurrentPlayer().getEnergy().setMaxDayEnergy(300);
+                clientHandler.getClientPlayer().getEnergy().setDayEnergyLeft(300);
+                clientHandler.getClientPlayer().getEnergy().setMaxDayEnergy(300);
             }
         }
         for (Player player : AppClient.getCurrentGame().getPlayers()) {
             ArrayList<Pair<Integer, Good>> newArtisanGoods = new ArrayList<>();
             for (Pair<Integer, Good> integerGoodPair : player.getArtisansGoodTime()) {
                 if(integerGoodPair.first() - difTime <= 0) {
-                    AppClient.getCurrentGame().getCurrentPlayer().getInventory().addGood(new ArrayList<>(Arrays.asList(integerGoodPair.second())));
-                    AppClient.getCurrentGame().getCurrentPlayer().getNews().add(integerGoodPair.second().getName() + " has been added to the inventory");
+                    clientHandler.getClientPlayer().getInventory().addGood(new ArrayList<>(Arrays.asList(integerGoodPair.second())),
+                        clientHandler.getClientGame(), clientHandler.getClientPlayer());
+                    clientHandler.getClientPlayer().getNews().add(integerGoodPair.second().getName() + " has been added to the inventory");
                 }
                 else
                     newArtisanGoods.add(new Pair<>(integerGoodPair.first() - difTime, integerGoodPair.second()));

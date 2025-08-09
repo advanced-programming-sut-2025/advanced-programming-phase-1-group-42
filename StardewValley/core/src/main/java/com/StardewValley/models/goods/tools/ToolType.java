@@ -24,19 +24,7 @@ public enum ToolType implements GoodType {
 
     @Override
     public int getEnergy() {
-        int finalEnergy = this.energy;
-        finalEnergy -= this.getLevel().getLevelNumber();
-        if((this == HOE || this == WATERING_CAN) && AppClient.getCurrentGame().getCurrentPlayer().getSkill().getFarmingLevel() == 4)
-            finalEnergy--;
-        if((this == PICKAXE) && AppClient.getCurrentGame().getCurrentPlayer().getSkill().getMiningLevel() == 4)
-            finalEnergy--;
-        if((this == AXE) && AppClient.getCurrentGame().getCurrentPlayer().getSkill().getForagingLevel() == 4)
-            finalEnergy--;
-        if((this == TRAINING_FISHING_POLE || this == BAMBOO_FISHING_POLE || this == FIBERGLASS_FISHING_POLE ||
-                this == IRIDIUM_FISHING_POLE) && AppClient.getCurrentGame().getCurrentPlayer().getSkill().getFishingLevel() == 4)
-            finalEnergy--;
-
-        return Math.max(finalEnergy, 0);
+        return this.energy;
     }
 
     @Override

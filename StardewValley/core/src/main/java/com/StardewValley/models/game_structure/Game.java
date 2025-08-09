@@ -1,8 +1,6 @@
 package com.StardewValley.models.game_structure;
 
 import com.StardewValley.client.AppClient;
-import com.StardewValley.controllers.GameMenuController;
-import com.StardewValley.models.App;
 import com.StardewValley.models.Pair;
 import com.StardewValley.models.enums.TileType;
 import com.StardewValley.models.game_structure.weathers.Rain;
@@ -23,6 +21,7 @@ import com.StardewValley.models.interactions.NPCs.NPC;
 import com.StardewValley.models.interactions.NPCs.NPCFriendship;
 import com.StardewValley.models.interactions.Player;
 import com.StardewValley.models.interactions.PlayerBuildings.FarmBuilding;
+import com.StardewValley.server.ClientHandler;
 
 import java.io.FileWriter;
 import java.util.ArrayList;
@@ -36,14 +35,13 @@ public class Game {
     private Weather weather;
     private Tomorrow tomorrow;
     private final ArrayList<Player> players = new ArrayList<>();
-    private Player currentPlayer;
     private Player gameAdmin;
     private Map map = null;
     private final ArrayList<NPC> NPCs = new ArrayList<>();
     private int counter = 0;
     private ArrayList<Pair<Player, String>> publicChat = new ArrayList<>();
-    private GameMenuController controller;
     private ArrayList<Quest> quests = new ArrayList<>();
+    private final List<Trade> allTrades = new ArrayList<>();
 
     public static void writeIntoFile(String string) {
         try (FileWriter myWriter = new FileWriter("commands.txt", true)) {
@@ -75,24 +73,17 @@ public class Game {
         this.gameAdmin = gameAdmin;
     }
 
-    public Player getCurrentPlayer() {
-        return currentPlayer;
-    }
-
-    public void setCurrentPlayer(Player currentPlayer) {
-        this.currentPlayer = currentPlayer;
-    }
-
-    public void nextPlayer() {
+    public void nextPlayer(ClientHandler clientHandler) {
         counter++;
         if (counter >= players.size()) {
             counter = 0;
-            this.dateTime.timeFlow();
+            this.dateTime.timeFlow(clientHandler);
         }
         if (players.get(counter).getEnergy().isAwake()) {
-            currentPlayer = players.get(counter);
+//            currentPlayer = players.get(counter);
+            //TODO
         } else {
-            nextPlayer();
+            nextPlayer(clientHandler);
         }
     }
 
@@ -120,14 +111,14 @@ public class Game {
         return tomorrow;
     }
 
-    public void gameFlow() {
+    public void gameFlow(ClientHandler clientHandler) {
 
         // Weather setups for next day
         AppClient.getCurrentGame().getDateTime().setTime(9);
         this.weather = tomorrow.getWeather();
         tomorrow.setTomorrowWeather(this);
         if (this.weather instanceof Storm) {
-            ((Storm) this.weather).randomThunder();
+            ((Storm) this.weather).randomThunder(clientHandler);
             ((Storm) this.weather).waterAllTiles();
         }
         if (this.weather instanceof Rain) {
@@ -245,7 +236,7 @@ public class Game {
             addGoodToTile(tile, goodsToAdd);
         }
 
-        Coordinate coordinate = AppClient.getCurrentGame().getCurrentPlayer().getCoordinate();
+        Coordinate coordinate = clientHandler.getClientPlayer().getCoordinate();
         for (Tile tile : map.getTiles()) {
             for (Good good : tile.getGoods()) {
                 if (good instanceof Crafting) {
@@ -409,10 +400,6 @@ public class Game {
         return publicChat;
     }
 
-    public void setController(GameMenuController controller) {this.controller = controller;}
-
-    public GameMenuController getController() {return controller;}
-
     public ArrayList<Quest> getQuests() {
         return quests;
     }
@@ -424,4 +411,10 @@ public class Game {
     public void setGameID(int gameID) {
         this.gameID = gameID;
     }
+
+    public List<Trade> getAllTrades() {
+        return allTrades;
+    }
+
+
 }

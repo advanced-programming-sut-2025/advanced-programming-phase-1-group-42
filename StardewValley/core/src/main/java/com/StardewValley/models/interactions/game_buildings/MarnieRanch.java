@@ -1,6 +1,5 @@
 package com.StardewValley.models.interactions.game_buildings;
 
-import com.StardewValley.client.AppClient;
 import com.StardewValley.models.Pair;
 import com.StardewValley.models.Result;
 import com.StardewValley.models.enums.TileAssets;
@@ -14,6 +13,7 @@ import com.StardewValley.models.interactions.Animals.Animal;
 import com.StardewValley.models.interactions.Animals.AnimalTypes;
 import com.StardewValley.models.interactions.NPCs.NPC;
 import com.StardewValley.models.interactions.NPCs.NPCTypes;
+import com.StardewValley.server.ClientHandler;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -69,42 +69,45 @@ public class MarnieRanch extends GameBuilding {
     }
 
     @Override
-    public Result purchase(String productName, String count) {
+    public Result purchase(String productName, String count, ClientHandler clientHandler) {
         int countInt = Integer.parseInt(count);
         ProductType type = null;
         if (productName.equals("Hay")) {
             type = ProductType.HAY;
-            if (!(AppClient.getCurrentGame().getCurrentPlayer().getWallet().getBalance() > countInt * type.getSellPrice())) {
+            if (!(clientHandler.getClientPlayer().getWallet().getBalance() > countInt * type.getSellPrice())) {
                 return new Result(false, "You don't have enough money");
             } else {
-                if (!AppClient.getCurrentGame().getCurrentPlayer().getInventory().addGood((Good) new Product(ProductType.WOOD), countInt)) {
+                if (!clientHandler.getClientPlayer().getInventory().addGood((Good) new Product(ProductType.WOOD), countInt,
+                    clientHandler.getClientGame(), clientHandler.getClientPlayer())) {
                     return new Result(false, "Your inventory is full");
                 } else {
-                    AppClient.getCurrentGame().getCurrentPlayer().getWallet().decreaseBalance(countInt * type.getSellPrice());
+                    clientHandler.getClientPlayer().getWallet().decreaseBalance(countInt * type.getSellPrice());
                 }
                 return new Result(true, "You bought " + countInt + " Wood");
             }
         } else if (productName.equals("Shears")) {
             type = ProductType.SHEARS;
-            if (!(AppClient.getCurrentGame().getCurrentPlayer().getWallet().getBalance() > countInt * type.getSellPrice())) {
+            if (!(clientHandler.getClientPlayer().getWallet().getBalance() > countInt * type.getSellPrice())) {
                 return new Result(false, "You don't have enough money");
             } else {
-                if (!AppClient.getCurrentGame().getCurrentPlayer().getInventory().addGood((Good) new Product(ProductType.WOOD), countInt)) {
+                if (!clientHandler.getClientPlayer().getInventory().addGood((Good) new Product(ProductType.WOOD), countInt,
+                    clientHandler.getClientGame(), clientHandler.getClientPlayer())) {
                     return new Result(false, "Your inventory is full");
                 } else {
-                    AppClient.getCurrentGame().getCurrentPlayer().getWallet().decreaseBalance(countInt * type.getSellPrice());
+                    clientHandler.getClientPlayer().getWallet().decreaseBalance(countInt * type.getSellPrice());
                 }
                 return new Result(true, "You bought " + countInt + " Wood");
             }
         } else if (productName.equals("Milk Pail")) {
             type = ProductType.MILK_PAIL;
-            if (!(AppClient.getCurrentGame().getCurrentPlayer().getWallet().getBalance() > countInt * type.getSellPrice())) {
+            if (!(clientHandler.getClientPlayer().getWallet().getBalance() > countInt * type.getSellPrice())) {
                 return new Result(false, "You don't have enough money");
             } else {
-                if (!AppClient.getCurrentGame().getCurrentPlayer().getInventory().addGood((Good) new Product(ProductType.WOOD), countInt)) {
+                if (!clientHandler.getClientPlayer().getInventory().addGood((Good) new Product(ProductType.WOOD), countInt,
+                    clientHandler.getClientGame(), clientHandler.getClientPlayer())) {
                     return new Result(false, "Your inventory is full");
                 } else {
-                    AppClient.getCurrentGame().getCurrentPlayer().getWallet().decreaseBalance(countInt * type.getSellPrice());
+                    clientHandler.getClientPlayer().getWallet().decreaseBalance(countInt * type.getSellPrice());
                 }
                 return new Result(true, "You bought " + countInt + " Wood");
             }

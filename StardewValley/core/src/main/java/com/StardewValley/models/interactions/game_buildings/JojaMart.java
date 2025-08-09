@@ -1,6 +1,5 @@
 package com.StardewValley.models.interactions.game_buildings;
 
-import com.StardewValley.client.AppClient;
 import com.StardewValley.models.Pair;
 import com.StardewValley.models.Result;
 import com.StardewValley.models.enums.TileAssets;
@@ -13,6 +12,7 @@ import com.StardewValley.models.goods.foragings.ForagingSeedType;
 import com.StardewValley.models.goods.products.ProductType;
 import com.StardewValley.models.interactions.NPCs.NPC;
 import com.StardewValley.models.interactions.NPCs.NPCTypes;
+import com.StardewValley.server.ClientHandler;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -116,7 +116,7 @@ public class JojaMart extends GameBuilding {
     }
 
     @Override
-    public Result purchase(String productName, String count) {
+    public Result purchase(String productName, String count, ClientHandler clientHandler) {
         Pair<GoodType, Integer> productPair = null;
         int partNumber = 0;
         for (ArrayList<Pair<GoodType, Integer>> products : this.products) {
@@ -132,11 +132,11 @@ public class JojaMart extends GameBuilding {
         if(productPair == null)
             return new Result(false, "There is no Good of this type in JojaMart Shop!");
         if(partNumber != 0 &&
-                partNumber != AppClient.getCurrentGame().getDateTime().getSeasonOfYear().getValue())
+                partNumber != clientHandler.getClientGame().getDateTime().getSeasonOfYear().getValue())
             return new Result(false, "This product is not available in season " +
-                    AppClient.getCurrentGame().getDateTime().getSeasonOfYear().getName() + " in JojaMart Shop!");
+                    clientHandler.getClientGame().getDateTime().getSeasonOfYear().getName() + " in JojaMart Shop!");
 
-        return purchaseProduct(productName, count, productPair);
+        return purchaseProduct(productName, count, productPair, clientHandler);
     }
 
     @Override

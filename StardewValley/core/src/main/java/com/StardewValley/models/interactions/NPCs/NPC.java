@@ -4,6 +4,8 @@ import com.StardewValley.client.AppClient;
 import com.StardewValley.models.enums.Season;
 import com.StardewValley.models.game_structure.Coordinate;
 import com.StardewValley.models.goods.Good;
+import com.StardewValley.models.interactions.Player;
+import com.StardewValley.server.ClientHandler;
 
 import java.util.ArrayList;
 import java.util.Random;
@@ -38,11 +40,11 @@ public class NPC {
     }
 
 
-    public String  npcDialogs() {
+    public String npcDialogs(ClientHandler clientHandler) {
         for (NPCFriendship friendship : friendships) {
-            if (friendship.getPlayer().equals(AppClient.getCurrentGame().getCurrentPlayer())) {
+            if (friendship.getPlayer().equals(clientHandler.getClientPlayer())) {
                 if (friendship.getFirstMeetToday()){
-                    getFriendship().setFriendshipPoints(20);
+                    getFriendship(clientHandler.getClientPlayer()).setFriendshipPoints(20);
                     friendship.setFirstMeetToday();
                 }
             }
@@ -65,23 +67,23 @@ public class NPC {
         //talk about weather or season
         int seasonIndex = -1;
         int weatherIndex = -1;
-        if (AppClient.getCurrentGame().getDateTime().getSeasonOfYear().equals(Season.SPRING)) {
+        if (clientHandler.getClientGame().getDateTime().getSeasonOfYear().equals(Season.SPRING)) {
             seasonIndex = 2;
-        } else if (AppClient.getCurrentGame().getDateTime().getSeasonOfYear().equals(Season.SUMMER)) {
+        } else if (clientHandler.getClientGame().getDateTime().getSeasonOfYear().equals(Season.SUMMER)) {
             seasonIndex = 3;
-        } else if (AppClient.getCurrentGame().getDateTime().getSeasonOfYear().equals(Season.FALL)) {
+        } else if (clientHandler.getClientGame().getDateTime().getSeasonOfYear().equals(Season.FALL)) {
             seasonIndex = 4;
-        } else if (AppClient.getCurrentGame().getDateTime().getSeasonOfYear().equals(Season.WINTER)) {
+        } else if (clientHandler.getClientGame().getDateTime().getSeasonOfYear().equals(Season.WINTER)) {
             seasonIndex = 5;
         }
 
-        if (AppClient.getCurrentGame().getWeather().getName().equals("Sunny")) {
+        if (clientHandler.getClientGame().getWeather().getName().equals("Sunny")) {
             weatherIndex = 6;
-        } else if (AppClient.getCurrentGame().getWeather().getName().equals("Rainy")) {
+        } else if (clientHandler.getClientGame().getWeather().getName().equals("Rainy")) {
             weatherIndex = 7;
-        } else if (AppClient.getCurrentGame().getWeather().getName().equals("Storm")) {
+        } else if (clientHandler.getClientGame().getWeather().getName().equals("Storm")) {
             weatherIndex = 8;
-        } else if (AppClient.getCurrentGame().getWeather().getName().equals("Snowy")) {
+        } else if (clientHandler.getClientGame().getWeather().getName().equals("Snowy")) {
             weatherIndex = 9;
         }
 
@@ -99,44 +101,44 @@ public class NPC {
     }
 
 
-    public NPCFriendship getFriendship() {
+    public NPCFriendship getFriendship(Player player) {
         for (NPCFriendship friendship : friendships) {
-            if (friendship.getPlayer().equals(AppClient.getCurrentGame().getCurrentPlayer())) {
+            if (friendship.getPlayer().equals(player)) {
                 return friendship;
             }
         }
-        friendships.add(new NPCFriendship(AppClient.getCurrentGame().getCurrentPlayer(),this));
+        friendships.add(new NPCFriendship(player,this));
         for (NPCFriendship friendship : friendships) {
-            if (friendship.getPlayer().equals(AppClient.getCurrentGame().getCurrentPlayer())) {
+            if (friendship.getPlayer().equals(player)) {
                 return friendship;
             }
         }
         return null;
     }
 
-    public void finishQuest(int index) {
+    public void finishQuest(int index, Player player, ClientHandler clientHandler) {
         if (type.getName().equals("Sebastian")){
-            NPCRewardsFunctions.sebastianRewards(index,getFriendship());
+            NPCRewardsFunctions.sebastianRewards(index,getFriendship(player), clientHandler);
         } else if (type.getName().equals("Abigail")){
-            NPCRewardsFunctions.abigailRewards(index,getFriendship());
+            NPCRewardsFunctions.abigailRewards(index,getFriendship(player), clientHandler);
         } else if (type.getName().equals("Leah")){
-            NPCRewardsFunctions.leahRewards(index,getFriendship());
+            NPCRewardsFunctions.leahRewards(index,getFriendship(player), clientHandler);
         } else if (type.getName().equals("Harvey")){
-            NPCRewardsFunctions.harveyRewards(index,getFriendship());
+            NPCRewardsFunctions.harveyRewards(index,getFriendship(player), clientHandler);
         } else if (type.getName().equals("Robin")){
-            NPCRewardsFunctions.robinRewards(index,getFriendship());
+            NPCRewardsFunctions.robinRewards(index,getFriendship(player), clientHandler);
         }
     }
 
-    public void getGift(Good good) {
-        getFriendship().getGifts().add(good);
-        if (!getFriendship().getGotGiftToday()){
+    public void getGift(Good good, Player player) {
+        getFriendship(player).getGifts().add(good);
+        if (!getFriendship(player).getGotGiftToday()){
             if (type.getFavorites().contains(good.getType())){
-                getFriendship().setFriendshipPoints(200);
+                getFriendship(player).setFriendshipPoints(200);
             } else {
-                getFriendship().setFriendshipPoints(50);
+                getFriendship(player).setFriendshipPoints(50);
             }
-            getFriendship().setGotGiftToday();
+            getFriendship(player).setGotGiftToday();
         }
 
     }

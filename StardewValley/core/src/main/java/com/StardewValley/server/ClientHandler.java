@@ -201,4 +201,6 @@ public class ClientHandler extends Thread {
     public void setClientPlayer(Player clientPlayer) {
         this.clientPlayer = clientPlayer;
     }
+
+
 }

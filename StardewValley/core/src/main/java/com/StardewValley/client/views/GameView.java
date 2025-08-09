@@ -158,9 +158,6 @@ public class GameView implements Screen, InputProcessor {
 
     private boolean isTabClicked = false;
 
-    TradeMenuController tradeController = new TradeMenuController();
-    TradeManager tradeManager = new TradeManager();
-
     public GameView(Skin skin) {
 //        this.controller.initGameControllers();
         this.viewController = new GameViewController(this);
@@ -314,7 +311,7 @@ public class GameView implements Screen, InputProcessor {
                 animal.updateCounter();
             }
 
-            for (FarmBuilding farmBuilding : AppClient.getCurrentGame().getCurrentPlayer().getFarm().getFarmBuildings()) {
+            for (FarmBuilding farmBuilding : AppClient.getCurrentPlayer().getFarm().getFarmBuildings()) {
                 for (Animal animal : farmBuilding.getAnimals()) {
                     animal.updateCounter();
                 }
@@ -387,7 +384,7 @@ public class GameView implements Screen, InputProcessor {
         int tileX = (int) (touchPos.x / scaledSize);
         int tileY = (int) (touchPos.y / scaledSize);
 
-        Tile playerTile = Map.findTile(AppClient.getCurrentGame().getCurrentPlayer().getCoordinate());
+        Tile playerTile = Map.findTile(AppClient.getCurrentPlayer().getCoordinate());
         Coordinate coordinate = new Coordinate(tileX, tileY);
         Tile selectedTile = Map.findTile(coordinate);
         if (selectedTile == null || playerTile == null)
@@ -395,7 +392,7 @@ public class GameView implements Screen, InputProcessor {
 
         for (Player player : AppClient.getCurrentGame().getPlayers()) {
             if (player.getCoordinate().equals(coordinate) &&
-            player != AppClient.getCurrentGame().getCurrentPlayer()) {
+            player != AppClient.getCurrentPlayer()) {
                 selectedPlayer = player;
                 initFriend();
                 return true;
@@ -412,8 +409,8 @@ public class GameView implements Screen, InputProcessor {
             return true;
         }
 
-        if (!AppClient.getCurrentGame().getCurrentPlayer().getInHandGood().isEmpty() &&
-            AppClient.getCurrentGame().getCurrentPlayer().getInHandGood().getLast() instanceof Tool &&
+        if (!AppClient.getCurrentPlayer().getInHandGood().isEmpty() &&
+            AppClient.getCurrentPlayer().getInHandGood().getLast() instanceof Tool &&
             playerTile.getTileType() != TileType.PLAIN && selectedTile.getTileType() != TileType.GREEN_HOUSE &&
             playerTile.getTileType() != TileType.PLAYER_BUILDING) {
 
@@ -429,7 +426,7 @@ public class GameView implements Screen, InputProcessor {
         }
         if (petsClicking(button, tileX, tileY)) return true;
         if (selectedTile.getTileType() == TileType.GREEN_HOUSE &&
-            !AppClient.getCurrentGame().getCurrentPlayer().getFarm().getGreenHouse().isAvailable()) {
+            !AppClient.getCurrentPlayer().getFarm().getGreenHouse().isAvailable()) {
 
             initGreenHouseWindow();
         }
@@ -449,7 +446,7 @@ public class GameView implements Screen, InputProcessor {
             );
 
             Table header = new Table(skin);
-            Label title = new Label(String.valueOf(AppClient.getCurrentGame().getCurrentPlayer().getWallet().getBalance()), skin);
+            Label title = new Label(String.valueOf(AppClient.getCurrentPlayer().getWallet().getBalance()), skin);
             TextButton closeButton = new TextButton("X", skin);
             closeButton.pad(4);
             closeButton.addListener(new ChangeListener() {
@@ -577,7 +574,7 @@ public class GameView implements Screen, InputProcessor {
         // right click for pets
         if (button == Input.Buttons.RIGHT) {
             Animal animal = null;
-            for (FarmBuilding building : AppClient.getCurrentGame().getCurrentPlayer().getFarm().getFarmBuildings()) {
+            for (FarmBuilding building : AppClient.getCurrentPlayer().getFarm().getFarmBuildings()) {
                 for (Animal animal2 : building.getAnimals()) {
                     if (animal2.getCoordinate().getX() == tileX && animal2.getCoordinate().getY() == tileY) {
                         animal = animal2;
@@ -698,7 +695,7 @@ public class GameView implements Screen, InputProcessor {
                 }
 
             } else {
-                for (FarmBuilding building : AppClient.getCurrentGame().getCurrentPlayer().getFarm().getFarmBuildings()) {
+                for (FarmBuilding building : AppClient.getCurrentPlayer().getFarm().getFarmBuildings()) {
                     for (Animal animal2 : building.getAnimals()) {
                         if (animal2.getCoordinate().getX() == tileX && animal2.getCoordinate().getY() == tileY) {
                             selectedAnimal = animal2;
@@ -1259,7 +1256,7 @@ public class GameView implements Screen, InputProcessor {
         messageLabel = new Label("", skin);
         toolSelectBox = new SelectBox<>(skin);
         Array<String> tools = new Array<>();
-        for (ArrayList<Good> goods : AppClient.getCurrentGame().getCurrentPlayer().getInventory().getList()) {
+        for (ArrayList<Good> goods : AppClient.getCurrentPlayer().getInventory().getList()) {
             if (!goods.isEmpty() && goods.getLast() instanceof Tool)
                 tools.add(goods.getLast().getName());
         }
@@ -1324,7 +1321,7 @@ public class GameView implements Screen, InputProcessor {
     private void upgradeSelect() {
         String selectedToolName = toolSelectBox.getSelected();
         Tool selectedTool = null;
-        for (ArrayList<Good> goods : AppClient.getCurrentGame().getCurrentPlayer().getInventory().getList()) {
+        for (ArrayList<Good> goods : AppClient.getCurrentPlayer().getInventory().getList()) {
             if (!goods.isEmpty() && goods.getLast() instanceof Tool && goods.getLast().getName().equals(selectedToolName)) {
                 selectedTool = (Tool) goods.getLast();
                 break;
@@ -1450,35 +1447,35 @@ public class GameView implements Screen, InputProcessor {
     @Override
     public boolean scrolled(float v, float v1) {
         int ptr = -1;
-        for (int i = 0; i < AppClient.getCurrentGame().getCurrentPlayer().getInventory().getSize(); i++) {
-            ArrayList<Good> goods = AppClient.getCurrentGame().getCurrentPlayer().getInventory().getList().get(i);
-            if (goods == AppClient.getCurrentGame().getCurrentPlayer().getInHandGood())
+        for (int i = 0; i < AppClient.getCurrentPlayer().getInventory().getSize(); i++) {
+            ArrayList<Good> goods = AppClient.getCurrentPlayer().getInventory().getList().get(i);
+            if (goods == AppClient.getCurrentPlayer().getInHandGood())
                 ptr = i;
         }
 
         if (v1 > 0) {
-            ptr = (ptr + 1) % AppClient.getCurrentGame().getCurrentPlayer().getInventory().getSize();
+            ptr = (ptr + 1) % AppClient.getCurrentPlayer().getInventory().getSize();
         }
         else if (v1 < 0){
-            ptr = (ptr - 1 + AppClient.getCurrentGame().getCurrentPlayer().getInventory().getSize())
-            % AppClient.getCurrentGame().getCurrentPlayer().getInventory().getSize();
+            ptr = (ptr - 1 + AppClient.getCurrentPlayer().getInventory().getSize())
+            % AppClient.getCurrentPlayer().getInventory().getSize();
         }
 
-        AppClient.getCurrentGame().getCurrentPlayer().setInHandGood(
-            AppClient.getCurrentGame().getCurrentPlayer().getInventory().getList().get(ptr)
+        AppClient.getCurrentPlayer().setInHandGood(
+            AppClient.getCurrentPlayer().getInventory().getList().get(ptr)
         );
         return false;
     }
 
     private void updateCamera() {
-        camera.position.set((AppClient.getCurrentGame().getCurrentPlayer().getCoordinate().getX()) * scaledSize,
-            (AppClient.getCurrentGame().getCurrentPlayer().getCoordinate().getY()) * scaledSize, 0);
+        camera.position.set((AppClient.getCurrentPlayer().getCoordinate().getX()) * scaledSize,
+            (AppClient.getCurrentPlayer().getCoordinate().getY()) * scaledSize, 0);
         camera.update();
     }
 
     private void renderWorld() {
-        int midX = AppClient.getCurrentGame().getCurrentPlayer().getCoordinate().getX() * scaledSize;
-        int midY = AppClient.getCurrentGame().getCurrentPlayer().getCoordinate().getY() * scaledSize;
+        int midX = AppClient.getCurrentPlayer().getCoordinate().getX() * scaledSize;
+        int midY = AppClient.getCurrentPlayer().getCoordinate().getY() * scaledSize;
 
         for (int x = max((midX - Gdx.graphics.getWidth() / 2) / scaledSize - 5, 0); x < min((midX + Gdx.graphics.getWidth() / 2) / scaledSize + 1, 150); x++) {
             for (int y = max((midY - Gdx.graphics.getHeight() / 2) / scaledSize - 5, 0); y < min((midY + Gdx.graphics.getHeight() / 2) / scaledSize + 1, 160); y++) {
@@ -1554,13 +1551,13 @@ public class GameView implements Screen, InputProcessor {
                         Tile backTile = Map.findTile(new Coordinate(coordinate.getX() - 1, coordinate.getY()));
                         Tile upTile = Map.findTile(new Coordinate(coordinate.getX(), coordinate.getY() - 1));
                         if (backTile.getTileType() != TileType.GREEN_HOUSE && upTile.getTileType() != TileType.GREEN_HOUSE) {
-                            if (AppClient.getCurrentGame().getCurrentPlayer().getFarm().getGreenHouse().isAvailable())
+                            if (AppClient.getCurrentPlayer().getFarm().getGreenHouse().isAvailable())
                                 Main.getBatch().draw(TileAssets.GREEN_HOUSE.getTexture(), (x - 1) * scaledSize, (y) * scaledSize, 8 * scaledSize, 7 * scaledSize);
                             else
                                 Main.getBatch().draw(TileAssets.BROKEN_GREEN_HOUSE.getTexture(), (x) * scaledSize, (y) * scaledSize, 6 * scaledSize, 5 * scaledSize);
                         }
 
-                        if (AppClient.getCurrentGame().getCurrentPlayer().getFarm().getGreenHouse().isAvailable())
+                        if (AppClient.getCurrentPlayer().getFarm().getGreenHouse().isAvailable())
                             Main.getBatch().draw(TileAssets.FARM_ORDINARY.getTexture(), x * scaledSize, (y + 1) * scaledSize, scaledSize, scaledSize);
                     }
                 }
@@ -1647,8 +1644,8 @@ public class GameView implements Screen, InputProcessor {
                         Window infoWindow = new Window("NPC Info", skin);
                         infoWindow.getTitleLabel().setFontScale(0.7f);
 
-                        Label friendShip = new Label("Friendship: " + npc.getFriendship().getFriendshipLevel() + "\n" +
-                            "Points: " + npc.getFriendship().getFriendshipPoints(), skin);
+                        Label friendShip = new Label("Friendship: " + npc.getFriendship(AppClient.getCurrentPlayer()).getFriendshipLevel() + "\n" +
+                            "Points: " + npc.getFriendship(AppClient.getCurrentPlayer()).getFriendshipPoints(), skin);
                         infoWindow.pad(10);
                         infoWindow.add(label).row();
                         infoWindow.add(friendShip).left().padTop(5).row();
@@ -1704,14 +1701,14 @@ public class GameView implements Screen, InputProcessor {
                                         put("function", "giftNPC");
                                         put("arguments", new ArrayList<>(Arrays.asList(
                                             npc.getType().getName(),
-                                            AppClient.getCurrentGame().getCurrentPlayer().getInHandGood().getFirst().getName()
+                                            AppClient.getCurrentPlayer().getInHandGood().getFirst().getName()
                                         )));
                                     }}, Message.Type.command);
                                     Message responseMessage2 = AppClient.getServerHandler().sendAndWaitForResponse(message2);
                                     methodUseMessage(responseMessage);
 
 //                                    Result result = controller.giftNPC(npc.getType().getName(),
-//                                        AppClient.getCurrentGame().getCurrentPlayer().getInHandGood().getFirst().getName());
+//                                        AppClient.getCurrentPlayer().getInHandGood().getFirst().getName());
                                     buildMessage();
                                     textFieldMessage.setText(responseMessage2.getFromBody("message"));
                                 } else {
@@ -1758,7 +1755,7 @@ public class GameView implements Screen, InputProcessor {
     }
 
     public void buildMessage() {
-        lastCoordinate = AppClient.getCurrentGame().getCurrentPlayer().getCoordinate();
+        lastCoordinate = AppClient.getCurrentPlayer().getCoordinate();
         float screenWidth = stage.getViewport().getWorldWidth();
         if (textFieldMessage != null) {
             textFieldMessage.remove();
@@ -1782,8 +1779,8 @@ public class GameView implements Screen, InputProcessor {
 
     private void isPlayerMoved() {
         if (lastCoordinate != null) {
-            if (AppClient.getCurrentGame().getCurrentPlayer().getCoordinate().getX() != lastCoordinate.getX() ||
-                AppClient.getCurrentGame().getCurrentPlayer().getCoordinate().getY() != lastCoordinate.getY()) {
+            if (AppClient.getCurrentPlayer().getCoordinate().getX() != lastCoordinate.getX() ||
+                AppClient.getCurrentPlayer().getCoordinate().getY() != lastCoordinate.getY()) {
                 textFieldMessage.remove();
                 if (npcImage != null) {
                     npcImage.clear();
@@ -1851,7 +1848,7 @@ public class GameView implements Screen, InputProcessor {
         }
 
         viewController.getProgressBar().setValue(
-            AppClient.getCurrentGame().getCurrentPlayer().getEnergy().getDayEnergyLeft()
+            AppClient.getCurrentPlayer().getEnergy().getDayEnergyLeft()
         );
     }
 
@@ -1868,7 +1865,7 @@ public class GameView implements Screen, InputProcessor {
         int columns = 4;
         int count = 0;
 
-        ArrayList<ArrayList<Good>> fridgeItems = AppClient.getCurrentGame().getCurrentPlayer().getFridge().getInFridgeItems();
+        ArrayList<ArrayList<Good>> fridgeItems = AppClient.getCurrentPlayer().getFridge().getInFridgeItems();
 
         TextureRegionDrawable drawableSlot = Assets.getInstance().getDrawableSlot();
 
@@ -1904,11 +1901,13 @@ public class GameView implements Screen, InputProcessor {
             imageButtonBackground.addListener(new ClickListener() {
                 @Override
                 public void clicked(InputEvent event, float x, float y) {
-                    ArrayList<Good> itemsInSlot = AppClient.getCurrentGame().getCurrentPlayer().getFridge().getInFridgeItems().get(index);
+                    ArrayList<Good> itemsInSlot = AppClient.getCurrentPlayer().getFridge().getInFridgeItems().get(index);
                     if (!itemsInSlot.isEmpty()) {
                         Good good = itemsInSlot.getFirst();
-                        AppClient.getCurrentGame().getCurrentPlayer().getFridge().removeItemsFromFridge(good.getType(), 1);
-                        AppClient.getCurrentGame().getCurrentPlayer().getInventory().addGoodByObject(Good.newGood(good.getType()));
+                        //TODO Nader
+                        AppClient.getCurrentPlayer().getFridge().removeItemsFromFridge(good.getType(), 1);
+                        AppClient.getCurrentPlayer().getInventory().addGoodByObject(Good.newGood(good.getType()),
+                            AppClient.getCurrentGame(), AppClient.getCurrentPlayer());
                         initFridgeWindow();
                     }
                 }
@@ -1955,7 +1954,7 @@ public class GameView implements Screen, InputProcessor {
 
         Message message = new Message(new HashMap<>() {{
             put("function", "getUnlockedRecipes");
-            put("arguments", "");
+            put("arguments", "CookingController");
         }}, Message.Type.command);
         Message responseMessage = AppClient.getServerHandler().sendAndWaitForResponse(message);
         methodUseMessage(responseMessage);
@@ -2156,7 +2155,7 @@ public class GameView implements Screen, InputProcessor {
 
         message = new Message(new HashMap<>() {{
             put("function", "getUnlockedRecipes");
-            put("arguments", "");
+            put("arguments", "CraftingController");
         }}, Message.Type.command);
         responseMessage = AppClient.getServerHandler().sendAndWaitForResponse(message);
         methodUseMessage(responseMessage);
@@ -2333,7 +2332,7 @@ public class GameView implements Screen, InputProcessor {
         TextureRegionDrawable drawableHighlight = Assets.getInstance().getDrawableHighlight();
 
         for (int i = 0; i < viewController.getInventoryElements().size(); i++) {
-            ArrayList<Good> goods = AppClient.getCurrentGame().getCurrentPlayer().getInventory().getList().get(i);
+            ArrayList<Good> goods = AppClient.getCurrentPlayer().getInventory().getList().get(i);
             if (!goods.isEmpty() && goods.getLast() instanceof Tool) {
                 ImageButton imageButtonBackground = new ImageButton(drawableSlot, drawableSlot, drawableHighlight);
                 Image image = new Image(new TextureRegion(new Texture(goods.getFirst().getType().imagePath())));
@@ -2348,8 +2347,8 @@ public class GameView implements Screen, InputProcessor {
                             pair.first().first().setChecked(false);
                             if (pair.first().second() == finalImage) {
                                 pair.first().first().setChecked(true);
-                                AppClient.getCurrentGame().getCurrentPlayer().setInHandGood(
-                                    AppClient.getCurrentGame().getCurrentPlayer().getInventory().getList().get(pair.second())
+                                AppClient.getCurrentPlayer().setInHandGood(
+                                    AppClient.getCurrentPlayer().getInventory().getList().get(pair.second())
                                 );
                                 closeToolsWindow();
                             }
@@ -2393,7 +2392,6 @@ public class GameView implements Screen, InputProcessor {
 
     private ArrayList<ImageButton> mainInventoryElements;
     private Table mainTable;
-
 
 
     private Container<Window> windowContainer;
@@ -2466,8 +2464,9 @@ public class GameView implements Screen, InputProcessor {
         this.cheatButton.addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y) {
-                GameMenu gameMenu = new GameMenu();
-                gameMenu.check(cheatTextField.getText());
+//                GameMenu gameMenu = new GameMenu();
+//                gameMenu.check(cheatTextField.getText());
+                //TODO
                 closeCheatWindow();
             }
         });
@@ -2698,9 +2697,9 @@ public class GameView implements Screen, InputProcessor {
         tradeWithGoodsLabel.setColor(Color.RED);
 
         for (Player player : AppClient.getCurrentGame().getPlayers()) {
-            if(!player.equals(AppClient.getCurrentGame().getCurrentPlayer())) {
+            if(!player.equals(AppClient.getCurrentPlayer())) {
                 Label label = new Label(player.getPlayerUsername() + "> Level: " +
-                    player.getFriendShips().get(AppClient.getCurrentGame().getCurrentPlayer()).first(), skin);
+                    player.getFriendShips().get(AppClient.getCurrentPlayer()).first(), skin);
                 TextButton goodsButton = new TextButton("Goods", skin);
                 TextButton moneyButton = new TextButton("Money", skin);
                 goodsButton.addListener(new ClickListener() {
@@ -2765,7 +2764,7 @@ public class GameView implements Screen, InputProcessor {
 
         goodsDropdown = new SelectBox<>(skin);
         Array<String> inventoryNames = new Array<>();
-        for (ArrayList<Good> goods : AppClient.getCurrentGame().getCurrentPlayer().getInventory().getList()) {
+        for (ArrayList<Good> goods : AppClient.getCurrentPlayer().getInventory().getList()) {
             if (!goods.isEmpty())
                 inventoryNames.add(goods.getLast().getName());
 
@@ -2851,7 +2850,7 @@ public class GameView implements Screen, InputProcessor {
                     return;
                 }
                 if (type == TradeType.OFFER) {
-                    ArrayList<Good> goods = AppClient.getCurrentGame().getCurrentPlayer().getInventory().isInInventory(selectedItem);
+                    ArrayList<Good> goods = AppClient.getCurrentPlayer().getInventory().isInInventory(selectedItem);
                     if (goods == null) {
                         tradeWithGoodsLabel.setText("Your don't have " + selectedItem + " in your inventory!");
                         return;
@@ -2862,7 +2861,7 @@ public class GameView implements Screen, InputProcessor {
                     }
                 }
                 if (type == TradeType.REQUEST) {
-                    ArrayList<Good> goods = AppClient.getCurrentGame().getCurrentPlayer().getInventory().isInInventory(demandItemStr);
+                    ArrayList<Good> goods = AppClient.getCurrentPlayer().getInventory().isInInventory(demandItemStr);
                     if (goods == null) {
                         tradeWithGoodsLabel.setText("Your don't have " + demandItemStr + " in your inventory!");
                         return;
@@ -2873,8 +2872,17 @@ public class GameView implements Screen, InputProcessor {
                     }
                 }
 
-                Result result = tradeController.tradeWithGoods(receiver.getPlayerUsername(), tradeType, selectedItem, amountStr, demandItemStr, demandAmountStr);
-                tradeInfoLabel.setText(result.message());
+                Message message = new Message(new HashMap<>() {{
+                    put("function", "tradeWithGoods");
+                    put("arguments", new ArrayList<>(Arrays.asList(
+                        receiver.getPlayerUsername(), tradeType, selectedItem, amountStr, demandItemStr, demandAmountStr
+                    )));
+                }}, Message.Type.command);
+                Message responseMessage = AppClient.getServerHandler().sendAndWaitForResponse(message);
+                methodUseMessage(responseMessage);
+
+//                Result result = tradeController.tradeWithGoods(, );
+                tradeInfoLabel.setText(responseMessage.getFromBody("message"));
 
                 window.remove(); // close window on success
                 initTradeWindow();
@@ -2900,7 +2908,7 @@ public class GameView implements Screen, InputProcessor {
 
         goodsDropdown = new SelectBox<>(skin);
         Array<String> inventoryNames = new Array<>();
-        for (ArrayList<Good> goods : AppClient.getCurrentGame().getCurrentPlayer().getInventory().getList()) {
+        for (ArrayList<Good> goods : AppClient.getCurrentPlayer().getInventory().getList()) {
             if (!goods.isEmpty())
                 inventoryNames.add(goods.getLast().getName());
 
@@ -2976,19 +2984,28 @@ public class GameView implements Screen, InputProcessor {
                     return;
                 }
                 if (type == TradeType.OFFER) {
-                    ArrayList<Good> goods = AppClient.getCurrentGame().getCurrentPlayer().getInventory().isInInventory(selectedItem);
+                    ArrayList<Good> goods = AppClient.getCurrentPlayer().getInventory().isInInventory(selectedItem);
                     if (goods == null)
                         tradeWithGoodsLabel.setText("Your don't have " + selectedItem + " in your inventory!");
                     if (goods.size() < Integer.parseInt(amountStr))
                         tradeWithGoodsLabel.setText("Your don't have enough number of " + selectedItem + " in your inventory!");
                 }
                 if (type == TradeType.REQUEST) {
-                    if (AppClient.getCurrentGame().getCurrentPlayer().getWallet().getBalance() < Integer.parseInt(priceStr))
+                    if (AppClient.getCurrentPlayer().getWallet().getBalance() < Integer.parseInt(priceStr))
                         tradeWithGoodsLabel.setText("Your don't enough Money in your wallet!");
                 }
 
-                Result result = tradeController.tradeWithMoney(receiver.getPlayerUsername(), tradeType, selectedItem, amountStr, priceStr);
-                tradeInfoLabel.setText(result.message());
+                Message message = new Message(new HashMap<>() {{
+                    put("function", "tradeWithMoney");
+                    put("arguments", new ArrayList<>(Arrays.asList(
+                        receiver.getPlayerUsername(), tradeType, selectedItem, amountStr, priceStr
+                    )));
+                }}, Message.Type.command);
+                Message responseMessage = AppClient.getServerHandler().sendAndWaitForResponse(message);
+                methodUseMessage(responseMessage);
+
+//                Result result = tradeController.tradeWithMoney();
+                tradeInfoLabel.setText(responseMessage.getFromBody("message"));
 
                 window.remove(); // close window on success
                 initTradeWindow();
@@ -3010,14 +3027,14 @@ public class GameView implements Screen, InputProcessor {
 
         Table inboxTable = new Table(skin).pad(10);
 
-        java.util.List<Trade> tradeData = tradeManager.getRespondedTradesFor(AppClient.getCurrentGame().getCurrentPlayer());
+        java.util.List<Trade> tradeData = viewController.getRespondedTradesFor(AppClient.getCurrentPlayer());
 
         Table tradesListTable = new Table(skin); // this table holds trade rows
 
         boolean foundAny = false;
         for (Trade trade : tradeData) {
             // Only show trades for current player and not responded
-            if (trade.getReceiver().equals(AppClient.getCurrentGame().getCurrentPlayer()) && !trade.isResponded()) {
+            if (trade.getReceiver().equals(AppClient.getCurrentPlayer()) && !trade.isResponded()) {
                 foundAny = true;
 
                 Label tradeLabel = new Label(trade.shortTradeString(), skin);
@@ -3027,8 +3044,17 @@ public class GameView implements Screen, InputProcessor {
                 acceptButton.addListener(new ClickListener() {
                     @Override
                     public void clicked(InputEvent event, float x, float y) {
-                        Result result = tradeController.tradeResponse("–accept", String.valueOf(trade.getId()));
-                        feedbackLabel.setText(result.message());
+                        Message message = new Message(new HashMap<>() {{
+                            put("function", "tradeResponse");
+                            put("arguments", new ArrayList<>(Arrays.asList(
+                                "–accept", String.valueOf(trade.getId())
+                            )));
+                        }}, Message.Type.command);
+                        Message responseMessage = AppClient.getServerHandler().sendAndWaitForResponse(message);
+                        methodUseMessage(responseMessage);
+
+//                        Result result = tradeController.tradeResponse();
+                        feedbackLabel.setText(responseMessage.getFromBody("message"));
                         inboxWindow.remove();
                         reInitTradeInboxWindow();
                     }
@@ -3037,8 +3063,18 @@ public class GameView implements Screen, InputProcessor {
                 rejectButton.addListener(new ClickListener() {
                     @Override
                     public void clicked(InputEvent event, float x, float y) {
-                        Result result = tradeController.tradeResponse("–reject", String.valueOf(trade.getId()));
-                        feedbackLabel.setText(result.message());
+                        Message message = new Message(new HashMap<>() {{
+                            put("function", "tradeResponse");
+                            put("arguments", new ArrayList<>(Arrays.asList(
+                                "–reject", String.valueOf(trade.getId())
+                            )));
+                        }}, Message.Type.command);
+                        Message responseMessage = AppClient.getServerHandler().sendAndWaitForResponse(message);
+                        methodUseMessage(responseMessage);
+
+
+//                        Result result = tradeController.tradeResponse();
+                        feedbackLabel.setText(responseMessage.getFromBody("message"));
                         inboxWindow.remove();
                         reInitTradeInboxWindow();
                     }
@@ -3102,14 +3138,14 @@ public class GameView implements Screen, InputProcessor {
 
         Table inboxTable = new Table(skin).pad(10);
 
-        java.util.List<Trade> tradeData = tradeManager.getRespondedTradesFor(AppClient.getCurrentGame().getCurrentPlayer());
+        java.util.List<Trade> tradeData = viewController.getRespondedTradesFor(AppClient.getCurrentPlayer());
 
         Table tradesListTable = new Table(skin); // this table holds trade rows
 
         boolean foundAny = false;
         for (Trade trade : tradeData) {
             // Only show trades for current player and not responded
-            if (trade.getReceiver().equals(AppClient.getCurrentGame().getCurrentPlayer()) && !trade.isResponded()) {
+            if (trade.getReceiver().equals(AppClient.getCurrentPlayer()) && !trade.isResponded()) {
                 foundAny = true;
 
                 Label tradeLabel = new Label(trade.shortTradeString(), skin);
@@ -3119,8 +3155,19 @@ public class GameView implements Screen, InputProcessor {
                 acceptButton.addListener(new ClickListener() {
                     @Override
                     public void clicked(InputEvent event, float x, float y) {
-                        Result result = tradeController.tradeResponse("–accept", String.valueOf(trade.getId()));
-                        feedbackLabel.setText(result.message());
+                        Message message = new Message(new HashMap<>() {{
+                            put("function", "tradeResponse");
+                            put("arguments", new ArrayList<>(Arrays.asList(
+                                "–accept", String.valueOf(trade.getId())
+                            )));
+                        }}, Message.Type.command);
+                        Message responseMessage = AppClient.getServerHandler().sendAndWaitForResponse(message);
+                        methodUseMessage(responseMessage);
+
+                        feedbackLabel.setText(responseMessage.getFromBody("message"));
+//                        Result result = tradeController.tradeResponse("–accept", String.valueOf(trade.getId()));
+//                        feedbackLabel.setText(result.message());
+
                         inboxWindow.remove();
                         reInitTradeInboxWindow();
                     }
@@ -3129,8 +3176,18 @@ public class GameView implements Screen, InputProcessor {
                 rejectButton.addListener(new ClickListener() {
                     @Override
                     public void clicked(InputEvent event, float x, float y) {
-                        Result result = tradeController.tradeResponse("–reject", String.valueOf(trade.getId()));
-                        feedbackLabel.setText(result.message());
+                        Message message = new Message(new HashMap<>() {{
+                            put("function", "tradeResponse");
+                            put("arguments", new ArrayList<>(Arrays.asList(
+                                "–reject", String.valueOf(trade.getId())
+                            )));
+                        }}, Message.Type.command);
+                        Message responseMessage = AppClient.getServerHandler().sendAndWaitForResponse(message);
+                        methodUseMessage(responseMessage);
+                        feedbackLabel.setText(responseMessage.getFromBody("message"));
+
+//                        Result result = tradeController.tradeResponse("–reject", String.valueOf(trade.getId()));
+//                        feedbackLabel.setText(result.message());
                         inboxWindow.remove();
                         reInitTradeInboxWindow();
                     }
@@ -3191,7 +3248,7 @@ public class GameView implements Screen, InputProcessor {
             (staticStage.getHeight() - inboxWindow.getHeight()) / 2
         );
 
-        Player currentPlayer = AppClient.getCurrentGame().getCurrentPlayer();
+        Player currentPlayer = AppClient.getCurrentPlayer();
         java.util.List<Trade> history = currentPlayer.getTradeHistory();
 
         Table inboxTable = new Table(skin).pad(10);
@@ -3244,8 +3301,8 @@ public class GameView implements Screen, InputProcessor {
         friendsTable.setFillParent(true);
         friendsTable.pad(40).padRight(130);
 
-        for (Player player : AppClient.getCurrentGame().getCurrentPlayer().getFriendShips().keySet()) {
-            Pair<Integer, Integer> pair = AppClient.getCurrentGame().getCurrentPlayer().getFriendShips().get(player);
+        for (Player player : AppClient.getCurrentPlayer().getFriendShips().keySet()) {
+            Pair<Integer, Integer> pair = AppClient.getCurrentPlayer().getFriendShips().get(player);
             Label label = new Label(player.getPlayerUsername() + "> Level: " +
                 pair.first() + ", Value: " + pair.second(), skin);
             TextButton button = new TextButton("Send Gift", skin);
@@ -3298,7 +3355,7 @@ public class GameView implements Screen, InputProcessor {
         playerGiftTable.add(playerGiftLabel).padRight(10);
         playerGiftSelectBox = new SelectBox<>(skin);
         Array<String> inventoryNames = new Array<>();
-        for (ArrayList<Good> goods : AppClient.getCurrentGame().getCurrentPlayer().getInventory().getList()) {
+        for (ArrayList<Good> goods : AppClient.getCurrentPlayer().getInventory().getList()) {
             if (!goods.isEmpty())
                 inventoryNames.add(goods.getLast().getName());
 
@@ -3309,7 +3366,7 @@ public class GameView implements Screen, InputProcessor {
 
         playerCountGiftSelectBox = new SelectBox<>(skin);
         Array<Integer> counters = new Array<>();
-        int ptr = AppClient.getCurrentGame().getCurrentPlayer().getInventory().getFirstElementSize();
+        int ptr = AppClient.getCurrentPlayer().getInventory().getFirstElementSize();
         for (int i = 1; i <= ptr; i++) {
             counters.add(i);
         }
@@ -3319,7 +3376,7 @@ public class GameView implements Screen, InputProcessor {
             public void changed(ChangeEvent event, Actor actor) {
                 Array<Integer> counters = new Array<>();
                 String selected = playerGiftSelectBox.getSelected();
-                int ptr = AppClient.getCurrentGame().getCurrentPlayer().getInventory().isInInventory(selected).size();
+                int ptr = AppClient.getCurrentPlayer().getInventory().isInInventory(selected).size();
                 for (int i = 1; i <= ptr; i++) {
                     counters.add(i);
                 }
@@ -3353,7 +3410,7 @@ public class GameView implements Screen, InputProcessor {
 
         giftTable = new Table(skin);
         int giftListPtr = 1;
-        for (Pair<Player, Gift> playerGiftPair : AppClient.getCurrentGame().getCurrentPlayer().getGiftList()) {
+        for (Pair<Player, Gift> playerGiftPair : AppClient.getCurrentPlayer().getGiftList()) {
             if (!playerGiftPair.first().getPlayerUsername().equals(player.getPlayerUsername()))
                 continue;
 
@@ -3385,7 +3442,7 @@ public class GameView implements Screen, InputProcessor {
             giftTable.row();
         }
 
-        for (Pair<Player, String> playerStringPair : AppClient.getCurrentGame().getCurrentPlayer().getGiftHistory()) {
+        for (Pair<Player, String> playerStringPair : AppClient.getCurrentPlayer().getGiftHistory()) {
             if (player.getPlayerUsername().equals(playerStringPair.first().getPlayerUsername())) {
                 Label label = new Label(giftListPtr++ + ". " + playerStringPair.second(), skin);
                 giftTable.add(label).row();
@@ -3429,6 +3486,10 @@ public class GameView implements Screen, InputProcessor {
 
 //                Result res = controller.hug();
                 buildMessage();
+                if (responseMessage.getFromBody("success"))
+                    showHug(AppClient.getCurrentPlayer(),
+                        AppClient.getCurrentGame().findPlayer(selectedPlayer.getPlayerUsername()));
+
                 textFieldMessage.setText(responseMessage.getFromBody("message"));
                 closeFriend();
             }
@@ -3450,6 +3511,10 @@ public class GameView implements Screen, InputProcessor {
 
 //                Result res = controller.flower();
                 buildMessage();
+                if (responseMessage.getFromBody("success"))
+                    showFlower(AppClient.getCurrentPlayer(),
+                        AppClient.getCurrentGame().findPlayer(selectedPlayer.getPlayerUsername())
+                    );
                 textFieldMessage.setText(responseMessage.getFromBody("message"));
                 closeFriend();
             }
@@ -3474,7 +3539,11 @@ public class GameView implements Screen, InputProcessor {
                     buildMessage();
                     textFieldMessage.setText(responseMessage.getFromBody("message"));
                 } else {
-                    intiRespondWindow(AppClient.getCurrentGame().getCurrentPlayer());
+                    //TODO
+                    showPropose(AppClient.getCurrentPlayer(),
+                        AppClient.getCurrentGame().findPlayer(selectedPlayer.getPlayerUsername())
+                    );
+                    intiRespondWindow(AppClient.getCurrentPlayer());
                 }
                 closeFriend();
             }
@@ -3502,7 +3571,6 @@ public class GameView implements Screen, InputProcessor {
     }
 
     private void intiRespondWindow(Player askedPlayer) {
-        AppClient.getCurrentGame().setCurrentPlayer(selectedPlayer);
         Window window = new Window("Respond to " + askedPlayer.getPlayerUsername(), skin, "Letter");
         window.setSize(1200, 200);
         window.setPosition(
@@ -3536,6 +3604,14 @@ public class GameView implements Screen, InputProcessor {
 
 //                Result res = controller.respond();
                 buildMessage();
+                if (responseMessage.getFromBody("success"))
+                    showPropose(AppClient.getCurrentPlayer(),
+                        AppClient.getCurrentGame().findPlayer(askedPlayer.getPlayerUsername())
+                    );
+                else
+                    showRejection(AppClient.getCurrentPlayer(),
+                        AppClient.getCurrentGame().findPlayer(askedPlayer.getPlayerUsername())
+                    );
                 textFieldMessage.setText(responseMessage.getFromBody("message"));
 
             }
@@ -3573,7 +3649,7 @@ public class GameView implements Screen, InputProcessor {
         craftingSelectBox.add(new SelectBox<>(skin));
         for (SelectBox<String> selectBox : craftingSelectBox) {
             Array<String> craftingArray = new Array<>();
-            for (ArrayList<Good> goodArrayList : AppClient.getCurrentGame().getCurrentPlayer().getInventory().getList()) {
+            for (ArrayList<Good> goodArrayList : AppClient.getCurrentPlayer().getInventory().getList()) {
                 if (!goodArrayList.isEmpty())
                     craftingArray.add(goodArrayList.getLast().getName());
             }
@@ -3640,7 +3716,7 @@ public class GameView implements Screen, InputProcessor {
         SelectBox<String> goodsCountSelectBox = new SelectBox<>(skin);
         Array<String> goodsArray = new Array<>();
         Array<String> goodsCountArray = new Array<>();
-        AppClient.getCurrentGame().getCurrentPlayer().getInventory().getList().forEach(good -> {
+        AppClient.getCurrentPlayer().getInventory().getList().forEach(good -> {
             if (!good.isEmpty())
                 goodsArray.add(good.getLast().getName());
         });
@@ -3648,7 +3724,7 @@ public class GameView implements Screen, InputProcessor {
         goodsSelectBox.setItems(goodsArray);
         goodsSelectBox.setSelectedIndex(0);
 
-        for (int i = 1; i <= AppClient.getCurrentGame().getCurrentPlayer().getInventory().getFirstElementSize(); i++) {
+        for (int i = 1; i <= AppClient.getCurrentPlayer().getInventory().getFirstElementSize(); i++) {
             goodsCountArray.add(String.valueOf(i));
         }
         goodsCountSelectBox.setItems(goodsCountArray);
@@ -3658,7 +3734,7 @@ public class GameView implements Screen, InputProcessor {
             @Override
             public void changed(ChangeEvent changeEvent, Actor actor) {
                 String selected = goodsSelectBox.getSelected();
-                for (ArrayList<Good> good : AppClient.getCurrentGame().getCurrentPlayer().getInventory().getList()) {
+                for (ArrayList<Good> good : AppClient.getCurrentPlayer().getInventory().getList()) {
                     if (!good.isEmpty() && good.getLast().getName().equals(selected)) {
                         goodsCountArray.clear();
                         for (int i = 1; i <= good.size(); i++) {
@@ -3753,7 +3829,7 @@ public class GameView implements Screen, InputProcessor {
             boolean playerIsMember = false;
             int playerContribution = 0;
             for (Pair<Player, Integer> pair : quest.getMembers()) {
-                if (pair.first().equals(AppClient.getCurrentGame().getCurrentPlayer())) {
+                if (pair.first().equals(AppClient.getCurrentPlayer())) {
                     playerIsMember = true;
                     playerContribution = pair.second();
                     break;
@@ -3810,14 +3886,14 @@ public class GameView implements Screen, InputProcessor {
 
                 TextButton addQuest = new TextButton("Add Quest", skin);
 
-                if (!AppClient.getCurrentGame().getCurrentPlayer().getPlayerQuests().contains(quest) &&
-                    AppClient.getCurrentGame().getCurrentPlayer().getPlayerQuests().size() < 3 &&
+                if (!AppClient.getCurrentPlayer().getPlayerQuests().contains(quest) &&
+                    AppClient.getCurrentPlayer().getPlayerQuests().size() < 3 &&
                     membersCount < capacity) {
 
                     addQuest.addListener(new ClickListener() {
                         public void clicked(InputEvent event, float x, float y) {
-                            if (quest.addMembers(AppClient.getCurrentGame().getCurrentPlayer())) {
-                                AppClient.getCurrentGame().getCurrentPlayer().getPlayerQuests().add(quest);
+                            if (quest.addMembers(AppClient.getCurrentPlayer())) {
+                                AppClient.getCurrentPlayer().getPlayerQuests().add(quest);
                                 questWindow.remove();
                                 initQuestWindow();
                             }
@@ -3909,7 +3985,7 @@ public class GameView implements Screen, InputProcessor {
             (staticStage.getHeight() - removePlayerWindow.getHeight()) / 2
         );
         for (Player player : AppClient.getCurrentGame().getPlayers()) {
-            if (!Objects.equals(player.getPlayerUsername(), AppClient.getCurrentGame().getCurrentPlayer().getPlayerUsername())) {
+            if (!Objects.equals(player.getPlayerUsername(), AppClient.getCurrentPlayer().getPlayerUsername())) {
                 Table playerTable = new Table();
                 Label playerName = new Label(player.getPlayerUsername(), skin);
                 TextButton textButton = new TextButton("vote to remove", skin);
@@ -3943,7 +4019,8 @@ public class GameView implements Screen, InputProcessor {
 
     public void initVoteToRemoveWindow(int playerNumber, int selectedPlayer) {
         if (playerNumber != selectedPlayer) {
-            AppClient.getCurrentGame().setCurrentPlayer(AppClient.getCurrentGame().getPlayers().get(playerNumber));
+            //TODO
+//            AppClient.getCurrentGame().setCurrentPlayer(AppClient.getCurrentGame().getPlayers().get(playerNumber));
             Player voter = AppClient.getCurrentGame().getPlayers().get(playerNumber);
             Player selected = AppClient.getCurrentGame().getPlayers().get(selectedPlayer);
 
@@ -3993,8 +4070,9 @@ public class GameView implements Screen, InputProcessor {
     }
 
     public void initTerminateWindow(int playerNumber) {
-        AppClient.getCurrentGame().setCurrentPlayer(AppClient.getCurrentGame().getPlayers().get(playerNumber));
-        Player player = AppClient.getCurrentGame().getCurrentPlayer();
+//        AppClient.getCurrentGame().setCurrentPlayer(AppClient.getCurrentGame().getPlayers().get(playerNumber));
+        //TODO
+        Player player = AppClient.getCurrentPlayer();
         Window terminateWindow = new Window("", skin, "Letter");
         terminateWindow.setSize(1000, 500);
         terminateWindow.setPosition(
@@ -4055,8 +4133,8 @@ public class GameView implements Screen, InputProcessor {
         journalTable = new Table(skin);
         journalWindow.add(new Label("Your news:", skin, "Bold")).fillX().expandX().center().row();
         int ctr = 1;
-        for (int i = AppClient.getCurrentGame().getCurrentPlayer().getNews().size() - 1; i >= 0; i--) {
-            String s = AppClient.getCurrentGame().getCurrentPlayer().getNews().get(i);
+        for (int i = AppClient.getCurrentPlayer().getNews().size() - 1; i >= 0; i--) {
+            String s = AppClient.getCurrentPlayer().getNews().get(i);
             journalTable.add(new Label(ctr++ + ". \n" + s, skin)).fillX().expandX().center().padTop(10).row();
         }
 
@@ -4089,7 +4167,7 @@ public class GameView implements Screen, InputProcessor {
             (staticStage.getHeight() - chatRoomWindow.getHeight()) / 2
         );
 
-        final Player currentPlayer = AppClient.getCurrentGame().getCurrentPlayer();
+        final Player currentPlayer = AppClient.getCurrentPlayer();
         final Player[] selectedPrivateReceiver = {null};
         final boolean[] isPublicMode = {true};
 
@@ -4499,8 +4577,8 @@ public class GameView implements Screen, InputProcessor {
             Texture currentFrame = emoteAnimation.getKeyFrame(emoteStateTime, false);
             // Calculate position for center
 
-            float x = AppClient.getCurrentGame().getCurrentPlayer().getCoordinate().getX()*40 - currentFrame.getWidth()/ 2;
-            float y = AppClient.getCurrentGame().getCurrentPlayer().getCoordinate().getY()*40 - currentFrame.getHeight()/2 + 90;
+            float x = AppClient.getCurrentPlayer().getCoordinate().getX()*40 - currentFrame.getWidth()/ 2;
+            float y = AppClient.getCurrentPlayer().getCoordinate().getY()*40 - currentFrame.getHeight()/2 + 90;
 
             Main.getBatch().draw(currentFrame, x, y, 64, 64);
 
@@ -4522,8 +4600,8 @@ public class GameView implements Screen, InputProcessor {
             Texture currentFrame = thunderAnimation.getKeyFrame(thunderStateTime, false);
             // Calculate position for center
 
-            float x = AppClient.getCurrentGame().getCurrentPlayer().getCoordinate().getX()*40 - Gdx.graphics.getWidth()/2 - 40;
-            float y = AppClient.getCurrentGame().getCurrentPlayer().getCoordinate().getY()*40 - Gdx.graphics.getHeight()/2 - 40;
+            float x = AppClient.getCurrentPlayer().getCoordinate().getX()*40 - Gdx.graphics.getWidth()/2 - 40;
+            float y = AppClient.getCurrentPlayer().getCoordinate().getY()*40 - Gdx.graphics.getHeight()/2 - 40;
             Main.getBatch().draw(currentFrame, x, y);
 
             // Optionally hide animation when finished
@@ -4566,8 +4644,8 @@ public class GameView implements Screen, InputProcessor {
             hugStateTime += deltaTime;
             Texture currentFrame = hugAnimation.getKeyFrame(hugStateTime, false);
             // Calculate position for center
-            float x = AppClient.getCurrentGame().getCurrentPlayer().getCoordinate().getX()*40 - 50;
-            float y = AppClient.getCurrentGame().getCurrentPlayer().getCoordinate().getY()*40 - 21;
+            float x = AppClient.getCurrentPlayer().getCoordinate().getX()*40 - 50;
+            float y = AppClient.getCurrentPlayer().getCoordinate().getY()*40 - 21;
             Main.getBatch().draw(currentFrame, x,y);
 
             // Optionally hide animation when finished
@@ -4609,7 +4687,7 @@ public class GameView implements Screen, InputProcessor {
         Texture MMhug_11 = new Texture("GameAssets\\Animation\\MMHug\\MMHug1 (11).png");
         Texture MMhug_12 = new Texture("GameAssets\\Animation\\MMHug\\MMHug1 (12).png");
         Texture MMhug_13 = new Texture("GameAssets\\Animation\\MMHug\\MMHug1 (13).png");
-        if(!hugger.getUser().getGender().equals(huggee.getUser().getGender())) {
+        if(!hugger.getGender().equals(huggee.getGender())) {
             hugAnimation = new Animation<>(0.1f,
                 hug_1,hug_2,hug_3,hug_4,hug_5,hug_6,hug_7,hug_8,hug_9,hug_10,
                 hug_11,hug_12,hug_12,hug_12,hug_12,hug_12,hug_12,hug_12,hug_12,
@@ -4651,8 +4729,8 @@ public class GameView implements Screen, InputProcessor {
             proposeStateTime += deltaTime;
             Texture currentFrame = proposeAnimation.getKeyFrame(proposeStateTime, false);
             // Calculate position for center
-            float x = AppClient.getCurrentGame().getCurrentPlayer().getCoordinate().getX()*40 - 50;
-            float y = AppClient.getCurrentGame().getCurrentPlayer().getCoordinate().getY()*40 - 21;
+            float x = AppClient.getCurrentPlayer().getCoordinate().getX()*40 - 50;
+            float y = AppClient.getCurrentPlayer().getCoordinate().getY()*40 - 21;
             Main.getBatch().draw(currentFrame, x,y);
 
             // Optionally hide animation when finished
@@ -4723,8 +4801,8 @@ public class GameView implements Screen, InputProcessor {
             rejectionStateTime += deltaTime;
             Texture currentFrame = rejectionAnimation.getKeyFrame(rejectionStateTime, false);
             // Calculate position for center
-            float x = AppClient.getCurrentGame().getCurrentPlayer().getCoordinate().getX()*40 - 50;
-            float y = AppClient.getCurrentGame().getCurrentPlayer().getCoordinate().getY()*40 - 21;
+            float x = AppClient.getCurrentPlayer().getCoordinate().getX()*40 - 50;
+            float y = AppClient.getCurrentPlayer().getCoordinate().getY()*40 - 21;
             Main.getBatch().draw(currentFrame, x,y);
 
             // Optionally hide animation when finished
@@ -4791,8 +4869,8 @@ public class GameView implements Screen, InputProcessor {
             acceptanceStateTime += deltaTime;
             Texture currentFrame = acceptanceAnimation.getKeyFrame(acceptanceStateTime, false);
             // Calculate position for center
-            float x = AppClient.getCurrentGame().getCurrentPlayer().getCoordinate().getX()*40 - 50;
-            float y = AppClient.getCurrentGame().getCurrentPlayer().getCoordinate().getY()*40 - 21;
+            float x = AppClient.getCurrentPlayer().getCoordinate().getX()*40 - 50;
+            float y = AppClient.getCurrentPlayer().getCoordinate().getY()*40 - 21;
             Main.getBatch().draw(currentFrame, x,y);
 
             // Optionally hide animation when finished
@@ -4850,8 +4928,8 @@ public class GameView implements Screen, InputProcessor {
             flowerStateTime += deltaTime;
             Texture currentFrame = flowerAnimation.getKeyFrame(flowerStateTime, false);
             // Calculate position for center
-            float x = AppClient.getCurrentGame().getCurrentPlayer().getCoordinate().getX()*40 - 50;
-            float y = AppClient.getCurrentGame().getCurrentPlayer().getCoordinate().getY()*40 - 21;
+            float x = AppClient.getCurrentPlayer().getCoordinate().getX()*40 - 50;
+            float y = AppClient.getCurrentPlayer().getCoordinate().getY()*40 - 21;
             Main.getBatch().draw(currentFrame, x,y);
 
             // Optionally hide animation when finished
@@ -4953,7 +5031,7 @@ public class GameView implements Screen, InputProcessor {
     public void Clock() {
         currentTime = AppClient.getCurrentGame().getDateTime();
         currentWeather = AppClient.getCurrentGame().getWeather();
-        currentWallet = AppClient.getCurrentGame().getCurrentPlayer().getWallet();
+        currentWallet = AppClient.getCurrentPlayer().getWallet();
 
         lastNetWorth = currentWallet.getBalance();
         a = new Texture(Gdx.files.internal("GameAssets/Clock/Nan.png"));
@@ -5058,7 +5136,7 @@ public class GameView implements Screen, InputProcessor {
         String currentDayOfWeek = AppClient.getCurrentGame().getDateTime().getDayOfWeek();
         int currentDayOfMonth = AppClient.getCurrentGame().getDateTime().getDayOfSeason();
         int currentTimeOfDay = AppClient.getCurrentGame().getDateTime().getTime();
-        int currentNetWorth = AppClient.getCurrentGame().getCurrentPlayer().getWallet().getBalance();
+        int currentNetWorth = AppClient.getCurrentPlayer().getWallet().getBalance();
 
 
         if(currentNetWorth != lastNetWorth) {

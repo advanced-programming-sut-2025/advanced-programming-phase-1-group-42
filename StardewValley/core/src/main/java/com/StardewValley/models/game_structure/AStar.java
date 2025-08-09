@@ -102,20 +102,20 @@ public class AStar {
             return false;
 
         Farm farm = map.findFarm(new Coordinate(x, y));
-        if(farm != null &&
-                !(AppClient.getCurrentGame().getCurrentPlayer().getFarm() == farm ||
-                        (AppClient.getCurrentGame().getCurrentPlayer().getMarried() != null && AppClient.getCurrentGame().getCurrentPlayer().getMarried().getFarm() == farm)))
-            return false;
-
-        try {
-            if(tile.getTileType() == TileType.WATER || tile.getTileType() == TileType.STONE_WALL ||
-                    (tile.getTileType() == TileType.GREEN_HOUSE && !AppClient.getCurrentGame().getCurrentPlayer().getFarm().getGreenHouse().isAvailable()) ||
-                    (tile.getTileType() == TileType.GAME_BUILDING &&
-                            !AppClient.getCurrentGame().getMap().findGameBuilding(new Coordinate(x, y)).isInWorkingHours()))
-                return false;
-        }  catch (Exception e) {
-            System.out.println(new Coordinate(x, y));
-        }
+//        if(farm != null &&
+//                !(AppClient.getCurrentGame().getCurrentPlayer().getFarm() == farm ||
+//                        (AppClient.getCurrentGame().getCurrentPlayer().getMarried() != null && AppClient.getCurrentGame().getCurrentPlayer().getMarried().getFarm() == farm)))
+//            return false;
+//
+//        try {
+//            if(tile.getTileType() == TileType.WATER || tile.getTileType() == TileType.STONE_WALL ||
+//                    (tile.getTileType() == TileType.GREEN_HOUSE && !AppClient.getCurrentGame().getCurrentPlayer().getFarm().getGreenHouse().isAvailable()) ||
+//                    (tile.getTileType() == TileType.GAME_BUILDING &&
+//                            !AppClient.getCurrentGame().getMap().findGameBuilding(new Coordinate(x, y)).isInWorkingHours()))
+//                return false;
+//        }  catch (Exception e) {
+//            System.out.println(new Coordinate(x, y));
+//        }
 
 
 

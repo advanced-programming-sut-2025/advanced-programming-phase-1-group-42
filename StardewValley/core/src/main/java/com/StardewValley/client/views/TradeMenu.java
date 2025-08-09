@@ -17,29 +17,27 @@ public class TradeMenu implements AppMenu {
         }
 
         Matcher matcher;
-
-
-        //Trading
-         if ((matcher = TradeMenuCommands.TRADE_WITH_MONEY.matcher(input)) != null) {
-            System.out.println(controller.tradeWithMoney(matcher.group("receiver"), matcher.group("tradeType")
-                    , matcher.group("item"), matcher.group("amount"), matcher.group("price")));
-         } else if ((matcher = TradeMenuCommands.TRADE_WITH_GOODS.matcher(input)) != null) {
-            System.out.print(controller.tradeWithGoods(matcher.group("receiver"), matcher.group("tradeType")
-                    , matcher.group("item"), matcher.group("amount"), matcher.group("targetItem")
-                    , matcher.group("targetAmount")));
-         } else if ((matcher = TradeMenuCommands.TRADE_SYNTAX_ERROR.matcher(input)) != null) {
-            System.out.print(controller.tradeError());
-         } else if ((matcher = TradeMenuCommands.TRADE_LIST.matcher(input)) != null) {
-             System.out.print(controller.tradeList());
-         }  else if ((matcher = TradeMenuCommands.TRADE_RESPONSE.matcher(input)) != null) {
-            System.out.println(controller.tradeResponse(matcher.group("status"), matcher.group("id")));
-         } else if ((matcher = TradeMenuCommands.TRADE_HISTORY.matcher(input)) != null) {
-            System.out.print(controller.tradeHistory());
-         } else if ((matcher = TradeMenuCommands.EXIT_TRADE.matcher(input)) != null) {
-             System.out.print(controller.exitTradeMenu());
-         } else {
-             System.out.println("Invalid input");
-         }
+//        //Trading
+//         if ((matcher = TradeMenuCommands.TRADE_WITH_MONEY.matcher(input)) != null) {
+//            System.out.println(controller.tradeWithMoney(matcher.group("receiver"), matcher.group("tradeType")
+//                    , matcher.group("item"), matcher.group("amount"), matcher.group("price")));
+//         } else if ((matcher = TradeMenuCommands.TRADE_WITH_GOODS.matcher(input)) != null) {
+//            System.out.print(controller.tradeWithGoods(matcher.group("receiver"), matcher.group("tradeType")
+//                    , matcher.group("item"), matcher.group("amount"), matcher.group("targetItem")
+//                    , matcher.group("targetAmount")));
+//         } else if ((matcher = TradeMenuCommands.TRADE_SYNTAX_ERROR.matcher(input)) != null) {
+//            System.out.print(controller.tradeError());
+//         } else if ((matcher = TradeMenuCommands.TRADE_LIST.matcher(input)) != null) {
+//             System.out.print(controller.tradeList());
+//         }  else if ((matcher = TradeMenuCommands.TRADE_RESPONSE.matcher(input)) != null) {
+//            System.out.println(controller.tradeResponse(matcher.group("status"), matcher.group("id")));
+//         } else if ((matcher = TradeMenuCommands.TRADE_HISTORY.matcher(input)) != null) {
+//            System.out.print(controller.tradeHistory());
+//         } else if ((matcher = TradeMenuCommands.EXIT_TRADE.matcher(input)) != null) {
+//             System.out.print(controller.exitTradeMenu());
+//         } else {
+//             System.out.println("Invalid input");
+//         }
 
 
     }

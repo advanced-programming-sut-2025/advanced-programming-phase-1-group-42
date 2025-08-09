@@ -1,6 +1,5 @@
 package com.StardewValley.models.interactions.game_buildings;
 
-import com.StardewValley.client.AppClient;
 import com.StardewValley.models.Pair;
 import com.StardewValley.models.Result;
 import com.StardewValley.models.enums.TileAssets;
@@ -16,6 +15,7 @@ import com.StardewValley.models.goods.tools.ToolType;
 import com.StardewValley.models.interactions.NPCs.NPC;
 import com.StardewValley.models.interactions.NPCs.NPCTypes;
 import com.StardewValley.models.interactions.Player;
+import com.StardewValley.server.ClientHandler;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -66,8 +66,8 @@ public class Blacksmith extends GameBuilding {
         ));
     }
 
-    public boolean upgradeTool(Tool tool) {
-        Player player = AppClient.getCurrentGame().getCurrentPlayer();
+    public boolean upgradeTool(Tool tool, ClientHandler clientHandler) {
+        Player player = clientHandler.getClientPlayer();
         int nextLevel = ((ToolType) tool.getType()).getLevel().getLevelNumber();
 
         ArrayList<Good> goods = player.getInventory().isInInventory(upgradeIngredients.get(nextLevel).first());
@@ -125,7 +125,7 @@ public class Blacksmith extends GameBuilding {
     }
 
     @Override
-    public Result purchase(String productName, String count) {
+    public Result purchase(String productName, String count, ClientHandler clientHandler) {
         Pair<GoodType, Integer> productPair = null;
         for (Pair<GoodType, Integer> goodTypeIntegerPair : stock) {
             if(goodTypeIntegerPair.first().getName().equals(productName)) {
@@ -136,7 +136,7 @@ public class Blacksmith extends GameBuilding {
 
         if(productPair == null)
             return new Result(false, "There is no Good of this type in Blacksmith Shop!");
-        return purchaseProduct(productName, count, productPair);
+        return purchaseProduct(productName, count, productPair, clientHandler);
     }
 
     @Override

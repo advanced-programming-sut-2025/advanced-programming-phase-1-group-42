@@ -1,6 +1,5 @@
 package com.StardewValley.models.interactions.game_buildings;
 
-import com.StardewValley.client.AppClient;
 import com.StardewValley.models.Pair;
 import com.StardewValley.models.Result;
 import com.StardewValley.models.enums.TileAssets;
@@ -16,6 +15,7 @@ import com.StardewValley.models.goods.products.ProductType;
 import com.StardewValley.models.goods.recipes.CraftingRecipeType;
 import com.StardewValley.models.interactions.NPCs.NPC;
 import com.StardewValley.models.interactions.NPCs.NPCTypes;
+import com.StardewValley.server.ClientHandler;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -136,7 +136,7 @@ public class PierreGeneralStore extends GameBuilding {
     }
 
     @Override
-    public Result purchase(String productName, String count) {
+    public Result purchase(String productName, String count, ClientHandler clientHandler) {
         Pair<GoodType, Integer> productPair = null;
         int partNumber = 0;
         for (ArrayList<Pair<GoodType, Integer>> products : products) {
@@ -152,9 +152,9 @@ public class PierreGeneralStore extends GameBuilding {
         if(productPair == null)
             return new Result(false, "There is no Good of this type in Pierre's General Store!");
         if(partNumber != 0 && partNumber != 5 &&
-        partNumber != AppClient.getCurrentGame().getDateTime().getSeasonOfYear().getValue())
+        partNumber != clientHandler.getClientGame().getDateTime().getSeasonOfYear().getValue())
             return new Result(false, "This product is not available in season " +
-                    AppClient.getCurrentGame().getDateTime().getSeasonOfYear().getName() + " in Pierre's General Store!");
+                     clientHandler.getClientGame().getDateTime().getSeasonOfYear().getName() + " in Pierre's General Store!");
 
         if(partNumber == 5) {
             if(!count.matches("-?\\d+") && !count.isEmpty())
@@ -164,22 +164,22 @@ public class PierreGeneralStore extends GameBuilding {
             if(productPair.second() < quantity)
                 return new Result(false, productName + "'s stock is less than the quantity you want!");
 
-            if(quantity * productPair.first().getSellPrice() > AppClient.getCurrentGame().getCurrentPlayer().getWallet().getBalance()) {
+            if(quantity * productPair.first().getSellPrice() > clientHandler.getClientPlayer().getWallet().getBalance()) {
                 return new Result(false, "You don't have enough money in your wallet to purchase this product(s)!");
             }
 
             if(productPair.first() == ProductType.LARGE_PACK) {
-                AppClient.getCurrentGame().getCurrentPlayer().getInventory().increaseCapacity();
+                clientHandler.getClientPlayer().getInventory().increaseCapacity();
             }
 
             if(productPair.first() == ProductType.DELUXE_PACK) {
-                if(AppClient.getCurrentGame().getCurrentPlayer().getInventory().getSize() != 12)
+                if(clientHandler.getClientPlayer().getInventory().getSize() != 12)
                     return new Result(false, "Your inventory should be large to make your inventory deluxe!");
-                AppClient.getCurrentGame().getCurrentPlayer().getInventory().increaseCapacity();
+                clientHandler.getClientPlayer().getInventory().increaseCapacity();
             }
 
             int totalPrice = quantity * productPair.first().getSellPrice();
-            AppClient.getCurrentGame().getCurrentPlayer().getWallet().decreaseBalance(totalPrice);
+            clientHandler.getClientPlayer().getWallet().decreaseBalance(totalPrice);
             if(productPair.second() != Integer.MAX_VALUE)
                 productPair.setSecond(productPair.second() - quantity);
 
@@ -187,7 +187,7 @@ public class PierreGeneralStore extends GameBuilding {
 
         }
         else {
-            return purchaseProduct(productName, count, productPair);
+            return purchaseProduct(productName, count, productPair, clientHandler);
         }
     }
 

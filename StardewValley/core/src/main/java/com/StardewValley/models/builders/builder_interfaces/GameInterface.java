@@ -10,7 +10,6 @@ public interface GameInterface {
     public Game getGame();
     public void setPlayers(ArrayList<Player> players);
     public void setAdminPlayer(Player player);
-    public void setCurrentPlayer(Player player);
     public void setWeather();
     public void setDateTime();
     public void setTomorrow();

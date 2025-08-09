@@ -15,6 +15,7 @@ import com.StardewValley.models.goods.tools.Tool;
 import com.StardewValley.models.goods.tools.ToolType;
 import com.StardewValley.models.interactions.Animals.Animal;
 import com.StardewValley.models.interactions.PlayerBuildings.FarmBuilding;
+import com.StardewValley.server.ClientHandler;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 
@@ -128,20 +129,20 @@ public class Player {
     }
 
     // Function for eat
-    public void eat(Good food) {
-        AppClient.getCurrentGame().getCurrentPlayer().getEnergy().increaseTurnEnergyLeft(Good.newGoodType(food.getName()).getEnergy());
+    public void eat(Good food, ClientHandler clientHandler) {
+        clientHandler.getClientPlayer().getEnergy().increaseTurnEnergyLeft(Good.newGoodType(food.getName()).getEnergy());
         if (food instanceof Food) {
             FoodType type = (FoodType) food.getType();
             Buff currentBuff = type.getBuff();
             if (currentBuff != null) {
-                AppClient.getCurrentGame().getCurrentPlayer().setBuff(currentBuff);
+                clientHandler.getClientPlayer().setBuff(currentBuff);
                 if (currentBuff.getType() == BuffType.ENERGY_BUFF) {
-                    AppClient.getCurrentGame().getCurrentPlayer().getEnergy().setDayEnergyLeft(300);
-                    AppClient.getCurrentGame().getCurrentPlayer().getEnergy().setMaxDayEnergy(300);
+                    clientHandler.getClientPlayer().getEnergy().setDayEnergyLeft(300);
+                    clientHandler.getClientPlayer().getEnergy().setMaxDayEnergy(300);
                 }
             }
         }
-        AppClient.getCurrentGame().getCurrentPlayer().getInventory().removeItemsFromInventory(food.getType(),1);
+        clientHandler.getClientPlayer().getInventory().removeItemsFromInventory(food.getType(),1);
     }
 
     public Inventory getInventory() {

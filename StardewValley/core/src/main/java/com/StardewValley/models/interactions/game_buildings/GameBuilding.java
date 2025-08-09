@@ -10,6 +10,8 @@ import com.StardewValley.models.goods.Good;
 import com.StardewValley.models.goods.GoodType;
 import com.StardewValley.models.interactions.Building;
 import com.StardewValley.models.interactions.NPCs.NPC;
+import com.StardewValley.models.interactions.Player;
+import com.StardewValley.server.ClientHandler;
 import com.badlogic.gdx.graphics.Texture;
 
 import java.util.ArrayList;
@@ -21,7 +23,7 @@ public abstract class GameBuilding extends Building {
 
     public abstract ArrayList<GoodType> showAllProducts();
     public abstract ArrayList<GoodType> showProducts();
-    public abstract Result purchase(String productName, String count);
+    public abstract Result purchase(String productName, String count, ClientHandler clientHandler);
     public abstract Pair<GoodType, Integer> findProduct(GoodType goodType);
 
 
@@ -80,7 +82,7 @@ public abstract class GameBuilding extends Building {
         list.append("\n");
     }
 
-    protected static Result purchaseProduct(String productName, String count, Pair<GoodType, Integer> productPair) {
+    protected static Result purchaseProduct(String productName, String count, Pair<GoodType, Integer> productPair, ClientHandler clientHandler) {
         if(!count.matches("-?\\d+") && !count.isEmpty())
             return new Result(false, "Invalid Quantity format!");
 
@@ -88,16 +90,17 @@ public abstract class GameBuilding extends Building {
         if(productPair.second() < quantity)
             return new Result(false, productName + "'s stock is less than the quantity you want!");
 
-        if(quantity * productPair.first().getSellPrice() > AppClient.getCurrentGame().getCurrentPlayer().getWallet().getBalance()) {
+        if(quantity * productPair.first().getSellPrice() > clientHandler.getClientPlayer().getWallet().getBalance()) {
             return new Result(false, "You don't have enough money in your wallet to purchase this product(s)!");
         }
-        if(AppClient.getCurrentGame().getCurrentPlayer().getInventory().isInInventory(productName) == null &&
-                AppClient.getCurrentGame().getCurrentPlayer().getInventory().isFull())
+        if(clientHandler.getClientPlayer().getInventory().isInInventory(productName) == null &&
+                clientHandler.getClientPlayer().getInventory().isFull())
             return new Result(false, "Your inventory is full to purchase this product(s)!");
 
         int totalPrice = quantity * productPair.first().getSellPrice();
-        AppClient.getCurrentGame().getCurrentPlayer().getWallet().decreaseBalance(totalPrice);
-        AppClient.getCurrentGame().getCurrentPlayer().getInventory().addGood(Good.newGoods(productPair.first(), quantity));
+        clientHandler.getClientPlayer().getWallet().decreaseBalance(totalPrice);
+        clientHandler.getClientPlayer().getInventory().addGood(Good.newGoods(productPair.first(), quantity),
+            clientHandler.getClientGame(), clientHandler.getClientPlayer());
 
 
         if(productPair.second() != Integer.MAX_VALUE)

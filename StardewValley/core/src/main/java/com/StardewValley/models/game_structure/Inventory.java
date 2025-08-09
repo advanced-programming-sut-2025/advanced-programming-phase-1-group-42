@@ -1,6 +1,5 @@
 package com.StardewValley.models.game_structure;
 
-import com.StardewValley.models.App;
 import com.StardewValley.models.Pair;
 import com.StardewValley.models.goods.Good;
 import com.StardewValley.models.goods.GoodType;
@@ -64,17 +63,17 @@ public class Inventory {
         return null;
     }
 
-    public boolean addGoodByObject(Good good) {
+    public boolean addGoodByObject(Good good, Game game, Player player) {
         for (ArrayList<Good> goods : list) {
             if (!goods.isEmpty() && goods.get(0).getName().equals(good.getName())) {
                 goods.add(good);
-                if (App.getCurrentGame() != null) {
+                if (game != null) {
 
-                    for (Quest quest : App.getCurrentGame().getCurrentPlayer().getPlayerQuests()) {
+                    for (Quest quest : player.getPlayerQuests()) {
                         if (quest.getQuestType().getProductType().getName().equals(good.getType().getName())) {
                             quest.setCollectedNum(1);
                             for (Pair<Player, Integer> pair : quest.getMembers()) {
-                                if (pair.first().equals(App.getCurrentGame().getCurrentPlayer())) {
+                                if (pair.first().equals(player)) {
                                     pair.setSecond(pair.second() + 1);
                                     return true;
                                 }
@@ -90,12 +89,12 @@ public class Inventory {
         for (ArrayList<Good> goods : list) {
             if (goods.isEmpty()) {
                 goods.add(good);
-                if (App.getCurrentGame() != null) {
-                    for (Quest quest : App.getCurrentGame().getCurrentPlayer().getPlayerQuests()) {
+                if (game != null) {
+                    for (Quest quest : player.getPlayerQuests()) {
                         if (quest.getQuestType().getProductType().getName().equals(good.getType().getName())) {
                             quest.setCollectedNum(1);
                             for (Pair<Player, Integer> pair : quest.getMembers()) {
-                                if (pair.first().equals(App.getCurrentGame().getCurrentPlayer())) {
+                                if (pair.first().equals(player)) {
                                     pair.setSecond(pair.second() + 1);
                                     return true;
                                 }
@@ -130,7 +129,7 @@ public class Inventory {
     }
 
 
-    public boolean addGood(ArrayList<Good> addingGood) {
+    public boolean addGood(ArrayList<Good> addingGood, Game game, Player player) {
         if (addingGood == null || addingGood.isEmpty()) {
             return false; // یا پرتاب استثنا: throw new IllegalArgumentException("addingGood cannot be null or empty");
         }
@@ -145,12 +144,12 @@ public class Inventory {
                 Good firstGood = goods.getFirst();
                 if (firstGood != null && firstGood.getName().equals(firstAddingGood.getName())) {
                     goods.addAll(addingGood);
-                    if (App.getCurrentGame() != null) {
-                        for (Quest quest : App.getCurrentGame().getCurrentPlayer().getPlayerQuests()) {
+                    if (game != null) {
+                        for (Quest quest : player.getPlayerQuests()) {
                             if (quest.getQuestType().getProductType().getName().equals(firstAddingGood.getName())) {
                                 quest.setCollectedNum(list.size());
                                 for (Pair<Player, Integer> pair : quest.getMembers()) {
-                                    if (pair.first().equals(App.getCurrentGame().getCurrentPlayer())) {
+                                    if (pair.first().equals(player)) {
                                         pair.setSecond(pair.second() + list.size());
                                         return true;
                                     }
@@ -167,13 +166,13 @@ public class Inventory {
         for (ArrayList<Good> goods : list) {
             if (goods.isEmpty()) {
                 goods.addAll(addingGood);
-                if (App.getCurrentGame() != null) {
+                if (game != null) {
 
-                    for (Quest quest : App.getCurrentGame().getCurrentPlayer().getPlayerQuests()) {
+                    for (Quest quest : player.getPlayerQuests()) {
                         if (quest.getQuestType().getProductType().getName().equals(firstAddingGood.getName())) {
                             quest.setCollectedNum(list.size());
                             for (Pair<Player, Integer> pair : quest.getMembers()) {
-                                if (pair.first().equals(App.getCurrentGame().getCurrentPlayer())) {
+                                if (pair.first().equals(player)) {
                                     pair.setSecond(pair.second() + list.size());
                                     return true;
                                 }
@@ -197,20 +196,20 @@ public class Inventory {
         return true;
     }
 
-    public boolean addGood(Good good, int count) {
+    public boolean addGood(Good good, int count, Game game, Player player) {
         for (ArrayList<Good> goods : list) {
             if (!goods.isEmpty()) {
                 for (Good g : goods) {
                     if (g.getType() == good.getType()) {
                         for (int i = 0; i < count; i++) {
                             goods.add(Good.newGood(good.getType()));
-                            if (App.getCurrentGame() != null) {
+                            if (game != null) {
 
-                                for (Quest quest : App.getCurrentGame().getCurrentPlayer().getPlayerQuests()) {
+                                for (Quest quest : player.getPlayerQuests()) {
                                     if (quest.getQuestType().getProductType().getName().equals(good.getType().getName())) {
                                         quest.setCollectedNum(count);
                                         for (Pair<Player, Integer> pair : quest.getMembers()) {
-                                            if (pair.first().equals(App.getCurrentGame().getCurrentPlayer())) {
+                                            if (pair.first().equals(player)) {
                                                 pair.setSecond(pair.second() + count);
                                                 return true;
                                             }
@@ -230,13 +229,13 @@ public class Inventory {
             if (goods.isEmpty()) {
                 for (int i = 0; i < count; i++) {
                     goods.add(Good.newGood(good.getType()));
-                    if (App.getCurrentGame() != null) {
+                    if (game != null) {
 
-                        for (Quest quest : App.getCurrentGame().getCurrentPlayer().getPlayerQuests()) {
+                        for (Quest quest : player.getPlayerQuests()) {
                             if (quest.getQuestType().getProductType().getName().equals(good.getName())) {
                                 quest.setCollectedNum(count);
                                 for (Pair<Player, Integer> pair : quest.getMembers()) {
-                                    if (pair.first().equals(App.getCurrentGame().getCurrentPlayer())) {
+                                    if (pair.first().equals(player)) {
                                         pair.setSecond(pair.second() + count);
                                         return true;
                                     }

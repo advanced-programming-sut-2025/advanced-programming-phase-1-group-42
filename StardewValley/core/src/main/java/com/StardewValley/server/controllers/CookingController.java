@@ -5,6 +5,7 @@ import com.StardewValley.models.Pair;
 import com.StardewValley.models.goods.GoodType;
 import com.StardewValley.models.goods.recipes.CookingRecipe;
 import com.StardewValley.models.goods.recipes.CookingRecipeType;
+import com.StardewValley.server.ClientHandler;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
@@ -20,9 +21,9 @@ public class CookingController {
     public CookingController() {
     }
 
-    public ArrayList<CookingRecipeType> getUnlockedRecipes() {
+    public ArrayList<CookingRecipeType> getUnlockedRecipes(ClientHandler clientHandler) {
         ArrayList<CookingRecipeType> unlocked = new ArrayList<>();
-        for (CookingRecipe recipe : App.getCurrentGame().getCurrentPlayer().getCookingRecipes()) {
+        for (CookingRecipe recipe : clientHandler.getClientPlayer().getCookingRecipes()) {
             unlocked.add(recipe.getType());
         }
         return unlocked;

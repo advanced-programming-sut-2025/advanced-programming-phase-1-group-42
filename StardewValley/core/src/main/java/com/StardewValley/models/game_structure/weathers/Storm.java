@@ -3,6 +3,7 @@ package com.StardewValley.models.game_structure.weathers;
 import com.StardewValley.client.AppClient;
 import com.StardewValley.models.enums.TileType;
 import com.StardewValley.models.game_structure.Tile;
+import com.StardewValley.server.ClientHandler;
 
 public class Storm extends Weather {
     double weatherEffectingEnergy ;
@@ -31,7 +32,7 @@ public class Storm extends Weather {
         }
     }
 
-    public void randomThunder() {
+    public void randomThunder(ClientHandler handler) {
         int[][] x = new int[4][5];
         int[][] y = new int[4][5];
 
@@ -55,7 +56,7 @@ public class Storm extends Weather {
 
         for (int i = 0; i < 3; i++) {
             for (int j = 0; j < 4; j++) {
-                AppClient.getCurrentGame().getWeather().thunder(x[i][j] , y[i][j]);
+                AppClient.getCurrentGame().getWeather().thunder(x[i][j] , y[i][j], handler);
             }
         }
     }

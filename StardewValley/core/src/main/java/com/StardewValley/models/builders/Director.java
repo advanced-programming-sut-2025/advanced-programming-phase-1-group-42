@@ -14,7 +14,6 @@ public class Director {
         wholeGameBuilder.setGameID(gameID);
         wholeGameBuilder.setPlayers(players);
         wholeGameBuilder.setAdminPlayer(adminPlayer);
-        wholeGameBuilder.setCurrentPlayer(adminPlayer);
         wholeGameBuilder.setWeather();
         wholeGameBuilder.setDateTime();
         wholeGameBuilder.setTomorrow();

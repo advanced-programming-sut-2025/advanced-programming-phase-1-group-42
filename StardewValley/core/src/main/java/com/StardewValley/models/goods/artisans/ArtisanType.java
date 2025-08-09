@@ -364,6 +364,7 @@ public enum ArtisanType implements GoodType {
         else {
             return (int) (goodType.getEnergy() * energyEquation.first()) + energyEquation.second();
         }
+        //TODO
     }
 
     public int getSellPrice(GoodType goodType) {

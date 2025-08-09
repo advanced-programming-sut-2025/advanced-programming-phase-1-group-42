@@ -1,6 +1,6 @@
 package com.StardewValley.models.interactions.game_buildings;
 
-import com.StardewValley.client.AppClient;
+
 import com.StardewValley.models.Pair;
 import com.StardewValley.models.Result;
 import com.StardewValley.models.enums.TileAssets;
@@ -12,6 +12,7 @@ import com.StardewValley.models.goods.recipes.CraftingRecipeType;
 import com.StardewValley.models.goods.tools.ToolType;
 import com.StardewValley.models.interactions.NPCs.NPC;
 import com.StardewValley.models.interactions.NPCs.NPCTypes;
+import com.StardewValley.server.ClientHandler;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -66,7 +67,7 @@ public class FishShop extends GameBuilding {
     }
 
     @Override
-    public Result purchase(String productName, String count) {
+    public Result purchase(String productName, String count, ClientHandler clientHandler) {
         Pair<GoodType, Integer> productPair = null;
         for(Pair<GoodType, Integer> pair : products) {
             if(pair.first().getName().equals(productName)) {
@@ -81,13 +82,13 @@ public class FishShop extends GameBuilding {
 
         if(productPair.first() == CraftingRecipeType.FISH_SMOKER ||
             productPair.first() == ProductType.TROUT_SOUP) {
-                return purchaseProduct(productName, count, productPair);
+                return purchaseProduct(productName, count, productPair, clientHandler);
         }
         else {
-            if(AppClient.getCurrentGame().getCurrentPlayer().getInventory().isInInventory(productPair.first()) != null)
+            if(clientHandler.getClientPlayer().getInventory().isInInventory(productPair.first()) != null)
                 return new Result(false, "You have this Pole in your inventory!");
 
-            return purchaseProduct(productName, count, productPair);
+            return purchaseProduct(productName, count, productPair, clientHandler);
         }
     }
 

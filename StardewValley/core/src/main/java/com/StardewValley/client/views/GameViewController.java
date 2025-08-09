@@ -3,12 +3,14 @@ package com.StardewValley.client.views;
 import com.StardewValley.client.AppClient;
 import com.StardewValley.client.Main;
 import com.StardewValley.models.Assets;
+import com.StardewValley.models.Message;
 import com.StardewValley.models.Pair;
 import com.StardewValley.models.enums.LeaderboardSortType;
 import com.StardewValley.models.enums.TileType;
 import com.StardewValley.models.game_structure.Coordinate;
 import com.StardewValley.models.game_structure.Skill;
 import com.StardewValley.models.game_structure.Tile;
+import com.StardewValley.models.game_structure.Trade;
 import com.StardewValley.models.goods.Good;
 import com.StardewValley.models.interactions.Animals.Animal;
 import com.StardewValley.models.interactions.NPCs.NPC;
@@ -32,6 +34,7 @@ import com.badlogic.gdx.utils.Scaling;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Comparator;
+import java.util.HashMap;
 
 import static java.lang.Math.abs;
 
@@ -58,7 +61,7 @@ public class GameViewController {
         TextureRegionDrawable drawableHighlight = Assets.getInstance().getDrawableHighlight();
 
         int ctr = 1;
-        for (ArrayList<Good> goods : AppClient.getCurrentGame().getCurrentPlayer().getInventory().getList()) {
+        for (ArrayList<Good> goods : AppClient.getCurrentPlayer().getInventory().getList()) {
             ImageButton imageButtonBackground = new ImageButton(drawableSlot, drawableSlot, drawableHighlight);
             Image image = new Image(new TextureRegion(new Texture("GameAssets/null.png")));
             if (!goods.isEmpty())
@@ -77,11 +80,27 @@ public class GameViewController {
                         quadruple.a.setChecked(false);
                         if (quadruple.b == finalImage) {
                             quadruple.a.setChecked(true);
+                            int finalI = i;
                             if (gameView.getFridgeOpen()) {
-                                AppClient.getCurrentGame().getCurrentPlayer().getFridge().addItemToFridge(AppClient.getCurrentGame().getCurrentPlayer().getInventory().getList().get(i).getFirst());
+
+                                Message message = new Message(new HashMap<>() {{
+                                    put("function", "addItemToFridge");
+                                    put("arguments", String.valueOf(finalI));
+                                }}, Message.Type.command);
+                                Message responseMessage = AppClient.getServerHandler().sendAndWaitForResponse(message);
+                                methodUseMessage(responseMessage);
+
+//                                AppClient.getCurrentGame().getCurrentPlayer().getFridge().addItemToFridge();
                             } else {
-                                AppClient.getCurrentGame().getCurrentPlayer().setInHandGood(
-                                    AppClient.getCurrentGame().getCurrentPlayer().getInventory().getList().get(i));
+                                Message message = new Message(new HashMap<>() {{
+                                    put("function", "setInHandGood");
+                                    put("arguments", String.valueOf(finalI));
+                                }}, Message.Type.command);
+                                Message responseMessage = AppClient.getServerHandler().sendAndWaitForResponse(message);
+                                methodUseMessage(responseMessage);
+
+//                                AppClient.getCurrentGame().getCurrentPlayer().setInHandGood(
+//                                    AppClient.getCurrentGame().getCurrentPlayer().getInventory().getList().get(i));
                             }
                         }
                     }
@@ -92,7 +111,7 @@ public class GameViewController {
         }
 
         progressBar = new ProgressBar(0, 200, 1, true, Assets.getInstance().getSkin());
-        progressBar.setValue(AppClient.getCurrentGame().getCurrentPlayer().getEnergy().getDayEnergyLeft());
+        progressBar.setValue(AppClient.getCurrentPlayer().getEnergy().getDayEnergyLeft());
 
         toolsElements = new ArrayList<>();
         mainInventoryElements = new ArrayList<>();
@@ -162,10 +181,26 @@ public class GameViewController {
 
     public void handleInput() {
 
-        player.setPlayerDirection(-1);
+        Player player = AppClient.getCurrentPlayer();
+        Message message = new Message(new HashMap<>() {{
+            put("function", "setPlayerDirection");
+            put("arguments", String.valueOf(-1));
+        }}, Message.Type.command);
+        Message responseMessage = AppClient.getServerHandler().sendAndWaitForResponse(message);
+        methodUseMessage(responseMessage);
+
+//        player.setPlayerDirection(-1);
 
         if(Gdx.input.isKeyJustPressed(Input.Keys.U)) {
-            AppClient.getCurrentGame().getCurrentPlayer().getWallet().increaseBalance(1000);
+            message = new Message(new HashMap<>() {{
+                put("function", "increaseBalance");
+                put("arguments", String.valueOf(1000));
+            }}, Message.Type.command);
+            responseMessage = AppClient.getServerHandler().sendAndWaitForResponse(message);
+            methodUseMessage(responseMessage);
+
+
+//            AppClient.getCurrentGame().getCurrentPlayer().getWallet().increaseBalance(1000);
         }
         if(Gdx.input.isKeyJustPressed(Input.Keys.BACKSLASH)){
             if (gameView.getChatRoomWindow() == null)
@@ -179,15 +214,29 @@ public class GameViewController {
 
         if (gameView.getChatRoomWindow()==null) {
             if(Gdx.input.isKeyJustPressed(Input.Keys.U)) {
-                AppClient.getCurrentGame().getCurrentPlayer().getWallet().increaseBalance(1000);
+                message = new Message(new HashMap<>() {{
+                    put("function", "increaseBalance");
+                    put("arguments", String.valueOf(1000));
+                }}, Message.Type.command);
+                responseMessage = AppClient.getServerHandler().sendAndWaitForResponse(message);
+                methodUseMessage(responseMessage);
+
+
+//                AppClient.getCurrentGame().getCurrentPlayer().getWallet().increaseBalance(1000);
             }
 
             boolean flag = false;
             if (Gdx.input.isKeyPressed(Input.Keys.W)) {
                 if (tileValidity(AppClient.getCurrentGame().getMap().findTileByXY(player.getCoordinate().getX(), player.getCoordinate().getY() + 1))) {
-                    player.setLastCoordinate(new Coordinate(player.getCoordinate().getX(), player.getCoordinate().getY()));
-                    player.setCoordinate(new Coordinate(player.getCoordinate().getX(), player.getCoordinate().getY() + 1));
-                    player.setPlayerDirection(0);
+                    sendLastCoordinate(player);
+
+                    sendCoordinate(message, (new Coordinate(player.getCoordinate().getX(),
+                        player.getCoordinate().getY() + 1)).toString(), responseMessage);
+//                    player.setCoordinate(new Coordinate(player.getCoordinate().getX(), player.getCoordinate().getY() + 1));
+
+                    setPlayerDirection(String.valueOf(0));
+//                    player.setPlayerDirection(0);
+
                     player.getInHandGoodSprite().setPosition(player.getCoordinate().getX() * gameView.getScaledSize(),
                         player.getCoordinate().getY() * gameView.getScaledSize() + 23);
                 }
@@ -196,9 +245,15 @@ public class GameViewController {
             }
             if (Gdx.input.isKeyPressed(Input.Keys.A)) {
                 if (tileValidity(AppClient.getCurrentGame().getMap().findTileByXY(player.getCoordinate().getX() - 1, player.getCoordinate().getY()))) {
-                    player.setLastCoordinate(new Coordinate(player.getCoordinate().getX(), player.getCoordinate().getY()));
-                    player.setCoordinate(new Coordinate(player.getCoordinate().getX() - 1, player.getCoordinate().getY()));
-                    player.setPlayerDirection(1);
+                    sendLastCoordinate(player);
+
+                    sendCoordinate(message, (new Coordinate(player.getCoordinate().getX() - 1, player.getCoordinate().getY())).toString(),
+                        responseMessage);
+//                    player.setCoordinate(new Coordinate(player.getCoordinate().getX() - 1, player.getCoordinate().getY()));
+
+                    setPlayerDirection(String.valueOf(1));
+//                    player.setPlayerDirection(1);
+
                     player.getInHandGoodSprite().setPosition(player.getCoordinate().getX() * gameView.getScaledSize() - 20,
                         player.getCoordinate().getY() * gameView.getScaledSize() + 23);
                     if (!player.getInHandGoodSprite().isFlipX())
@@ -209,9 +264,17 @@ public class GameViewController {
             }
             if (Gdx.input.isKeyPressed(Input.Keys.S)) {
                 if (tileValidity(AppClient.getCurrentGame().getMap().findTileByXY(player.getCoordinate().getX(), player.getCoordinate().getY() - 1))) {
-                    player.setLastCoordinate(new Coordinate(player.getCoordinate().getX(), player.getCoordinate().getY()));
-                    player.setCoordinate(new Coordinate(player.getCoordinate().getX(), player.getCoordinate().getY() - 1));
-                    player.setPlayerDirection(2);
+                    sendLastCoordinate(player);
+
+                    sendCoordinate(message, (new Coordinate(player.getCoordinate().getX(), player.getCoordinate().getY() - 1)).toString(),
+                        responseMessage);
+
+                    setPlayerDirection(String.valueOf(2));
+
+//                    player.setLastCoordinate(new Coordinate(player.getCoordinate().getX(), player.getCoordinate().getY()));
+//                    player.setCoordinate(new Coordinate(player.getCoordinate().getX(), player.getCoordinate().getY() - 1));
+//                    player.setPlayerDirection(2);
+
                     player.getInHandGoodSprite().setPosition(player.getCoordinate().getX() * gameView.getScaledSize(),
                         player.getCoordinate().getY() * gameView.getScaledSize() + 23);
                 }
@@ -220,9 +283,19 @@ public class GameViewController {
             }
             if (Gdx.input.isKeyPressed(Input.Keys.D)) {
                 if (tileValidity(AppClient.getCurrentGame().getMap().findTileByXY(player.getCoordinate().getX() + 1, player.getCoordinate().getY()))) {
-                    player.setLastCoordinate(new Coordinate(player.getCoordinate().getX(), player.getCoordinate().getY()));
-                    player.setCoordinate(new Coordinate(player.getCoordinate().getX() + 1, player.getCoordinate().getY()));
-                    player.setPlayerDirection(3);
+                    sendLastCoordinate(player);
+
+                    sendCoordinate(message, (new Coordinate(player.getCoordinate().getX() + 1, player.getCoordinate().getY())).toString(),
+                        responseMessage);
+//                    player.setCoordinate(new Coordinate(player.getCoordinate().getX() + 1, player.getCoordinate().getY()));
+
+                    setPlayerDirection(String.valueOf(3));
+//                    player.setPlayerDirection(1);
+
+//                    player.setLastCoordinate(new Coordinate(player.getCoordinate().getX(), player.getCoordinate().getY()));
+//                    player.setCoordinate(new Coordinate(player.getCoordinate().getX() + 1, player.getCoordinate().getY()));
+//                    player.setPlayerDirection(3);
+
                     player.getInHandGoodSprite().setPosition(player.getCoordinate().getX() * gameView.getScaledSize() + 20,
                         player.getCoordinate().getY() * gameView.getScaledSize() + 23);
                     if (player.getInHandGoodSprite().isFlipX())
@@ -231,10 +304,10 @@ public class GameViewController {
                 flag = true;
                 AppClient.getCurrentGame().getMap().updateMap();
             }
-            if (Gdx.input.isKeyJustPressed(Input.Keys.P)) {
-                nextTurn();
-                playerChangedInventory();
-            }
+//            if (Gdx.input.isKeyJustPressed(Input.Keys.P)) {
+//                nextTurn();
+//                playerChangedInventory();
+//            }
             //TESTES COMMANDS //////////////////////////////////////////////////
             if (Gdx.input.isKeyJustPressed(Input.Keys.J)) {
                 gameView.showThunder();
@@ -242,6 +315,7 @@ public class GameViewController {
             if (Gdx.input.isKeyJustPressed(Input.Keys.L)) {
             }
             /// ///////////////////////////////////////////////////////////////
+
             if (Gdx.input.isKeyJustPressed(Input.Keys.C)) {
                 gameView.touchDown(Gdx.input.getX(), Gdx.input.getY(), 0, Input.Buttons.LEFT);
             }
@@ -262,7 +336,6 @@ public class GameViewController {
                 else
                     gameView.closeJournalWindow();
             }
-
 
 
             if (Gdx.input.isKeyJustPressed(Input.Keys.M)) {
@@ -303,13 +376,24 @@ public class GameViewController {
                     gameView.closeCheatWindow();
             }
             if (Gdx.input.isKeyJustPressed(Input.Keys.O)) {
-                for (FarmBuilding building : AppClient.getCurrentGame().getCurrentPlayer().getFarm().getFarmBuildings()) {
+                for (FarmBuilding building : AppClient.getCurrentPlayer().getFarm().getFarmBuildings()) {
                     for (Animal animal : building.getAnimals()) {
                         if ((abs(animal.getCoordinate().getX() -
-                            AppClient.getCurrentGame().getCurrentPlayer().getCoordinate().getX()) <= 2) &&
+                            AppClient.getCurrentPlayer().getCoordinate().getX()) <= 2) &&
                             (abs(animal.getCoordinate().getY() -
-                                AppClient.getCurrentGame().getCurrentPlayer().getCoordinate().getY()) <= 2)) {
-                            animal.petAnimal();
+                                AppClient.getCurrentPlayer().getCoordinate().getY()) <= 2)) {
+
+                            message = new Message(new HashMap<>() {{
+                                put("function", "petAnimal");
+                                put("arguments", new ArrayList<>(Arrays.asList(
+                                    animal.getName(), building.getName()
+                                )));
+                            }}, Message.Type.command);
+                            responseMessage = AppClient.getServerHandler().sendAndWaitForResponse(message);
+                            methodUseMessage(responseMessage);
+                            //TODO
+
+//                            animal.petAnimal();
                             gameView.buildMessage();
                             gameView.getTextFieldMessage().setText("You petted " + animal.getName());
                         }
@@ -319,8 +403,8 @@ public class GameViewController {
                 gameView.getTextFieldMessage().setText("Please approach an animal to pet");
             }
             if (Gdx.input.isKeyJustPressed(Input.Keys.G)) {
-                Tile selectedTile = AppClient.getCurrentGame().getMap().findTileByXY(AppClient.getCurrentGame().getCurrentPlayer().getCoordinate().getX()
-                    , AppClient.getCurrentGame().getCurrentPlayer().getCoordinate().getY());
+                Tile selectedTile = AppClient.getCurrentGame().getMap().findTileByXY(AppClient.getCurrentPlayer().getCoordinate().getX()
+                    , AppClient.getCurrentPlayer().getCoordinate().getY());
 
                 if (selectedTile.getTileType() == TileType.PLAYER_BUILDING) {
                     if (!gameView.getFridgeOpen()) {
@@ -332,8 +416,8 @@ public class GameViewController {
                 }
             }
             if (Gdx.input.isKeyJustPressed(Input.Keys.K)) {
-                Tile selectedTile = AppClient.getCurrentGame().getMap().findTileByXY(AppClient.getCurrentGame().getCurrentPlayer().getCoordinate().getX()
-                    , AppClient.getCurrentGame().getCurrentPlayer().getCoordinate().getY());
+                Tile selectedTile = AppClient.getCurrentGame().getMap().findTileByXY(AppClient.getCurrentPlayer().getCoordinate().getX()
+                    , AppClient.getCurrentPlayer().getCoordinate().getY());
                 if (selectedTile.getTileType() == TileType.PLAYER_BUILDING) {
                     if (!gameView.getCookingOpen()) {
                         gameView.initCookingWindow();
@@ -345,8 +429,8 @@ public class GameViewController {
             }
 
             if (Gdx.input.isKeyJustPressed(Input.Keys.B)) {
-                Tile selectedTile = AppClient.getCurrentGame().getMap().findTileByXY(AppClient.getCurrentGame().getCurrentPlayer().getCoordinate().getX()
-                    , AppClient.getCurrentGame().getCurrentPlayer().getCoordinate().getY());
+                Tile selectedTile = AppClient.getCurrentGame().getMap().findTileByXY(AppClient.getCurrentPlayer().getCoordinate().getX()
+                    , AppClient.getCurrentPlayer().getCoordinate().getY());
                 if (selectedTile.getTileType() == TileType.PLAYER_BUILDING) {
                     if (!gameView.getIsCraftingOpen()) {
                         gameView.initCraftingWindow();
@@ -371,16 +455,66 @@ public class GameViewController {
             ));
             for (int i = 0; i < arr.size(); i++) {
                 if (Gdx.input.isKeyJustPressed(arr.get(i))) {
-                    AppClient.getCurrentGame().getCurrentPlayer().setInHandGood(
-                        AppClient.getCurrentGame().getCurrentPlayer().getInventory().getList().get(i));
+                    int finalI = i;
+                    message = new Message(new HashMap<>() {{
+                        put("function", "setInHandGood");
+                        put("arguments", String.valueOf(finalI));
+                    }}, Message.Type.command);
+                    responseMessage = AppClient.getServerHandler().sendAndWaitForResponse(message);
+                    methodUseMessage(responseMessage);
+
+//                    AppClient.getCurrentGame().getCurrentPlayer().setInHandGood(
+//                        AppClient.getCurrentGame().getCurrentPlayer().getInventory().getList().get(i));
                     break;
                 }
             }
 
-            if (flag)
-                AppClient.getCurrentGame().getCurrentPlayer().getEnergy().decreaseTurnEnergyLeft(0.25);
+            if (flag) {
+                message = new Message(new HashMap<>() {{
+                    put("function", "decreaseTurnEnergyLeft");
+                    put("arguments", String.valueOf(0.25));
+                }}, Message.Type.command);
+                responseMessage = AppClient.getServerHandler().sendAndWaitForResponse(message);
+                methodUseMessage(responseMessage);
+
+//                AppClient.getCurrentGame().getCurrentPlayer().getEnergy().decreaseTurnEnergyLeft(0.25, );
+            }
+
         }
     }
+
+    private void setPlayerDirection(String value) {
+        Message message = new Message(new HashMap<>() {{
+            put("function", "setPlayerDirection");
+            put("arguments", value);
+        }}, Message.Type.command);
+        Message responseMessage = AppClient.getServerHandler().sendAndWaitForResponse(message);
+        methodUseMessage(responseMessage);
+    }
+
+    private void sendCoordinate(Message message, String setCoordinate, Message responseMessage) {
+        message = new Message(new HashMap<>() {{
+            put("function", "setCoordinate");
+            put("arguments",
+                setCoordinate);
+        }}, Message.Type.command);
+        responseMessage = AppClient.getServerHandler().sendAndWaitForResponse(message);
+        methodUseMessage(responseMessage);
+    }
+
+    private void sendLastCoordinate(Player player) {
+        Message responseMessage;
+        Message message;
+        message = new Message(new HashMap<>() {{
+            put("function", "setLastCoordinate");
+            put("arguments",
+                (new Coordinate(player.getCoordinate().getX(), player.getCoordinate().getY())).toString());
+        }}, Message.Type.command);
+        responseMessage = AppClient.getServerHandler().sendAndWaitForResponse(message);
+        methodUseMessage(responseMessage);
+//                    player.setLastCoordinate(new Coordinate(player.getCoordinate().getX(), player.getCoordinate().getY()));
+    }
+
     public ArrayList<Window> getInventoryWindows() {
         return inventoryWindows;
     }
@@ -410,8 +544,8 @@ public class GameViewController {
                     TextureRegionDrawable drawableSlot = Assets.getInstance().getDrawableSlot();
                     TextureRegionDrawable drawableHighlight = Assets.getInstance().getDrawableHighlight();
 
-                    int inventorySize = AppClient.getCurrentGame().getCurrentPlayer().getInventory().getSize();
-                    ArrayList<ArrayList<Good>> inventoryData = AppClient.getCurrentGame().getCurrentPlayer().getInventory().getList();
+                    int inventorySize = AppClient.getCurrentPlayer().getInventory().getSize();
+                    ArrayList<ArrayList<Good>> inventoryData = AppClient.getCurrentPlayer().getInventory().getList();
                     ArrayList<Quadruple<ImageButton, Image, Label, Label>> inventoryElements = new ArrayList<>();
                     final int[] selectedSlotIndex = {-1};
 
@@ -545,7 +679,8 @@ public class GameViewController {
                         Texture npcTxr = new Texture("GameAssets\\Main_Inventory\\" + npc.getType().getName() + ".png");
                         Image npc_img = new Image(npcTxr);
 
-                        Texture hearts = new Texture("GameAssets\\Main_Inventory\\" + npc.getFriendship().getFriendshipLevel() + ".png");
+                        Texture hearts = new Texture("GameAssets\\Main_Inventory\\" + npc.getFriendship(
+                            AppClient.getCurrentPlayer()).getFriendshipLevel() + ".png");
                         Image hearts_img = new Image(hearts);
                         int newWidth = hearts.getWidth() * 2;
                         int newHeight = hearts.getHeight() * 2;
@@ -565,14 +700,14 @@ public class GameViewController {
 
                     Table rightSideTable = new Table().top().right();
                     for (Player p : AppClient.getCurrentGame().getPlayers()) {
-                        if (!p.equals(AppClient.getCurrentGame().getCurrentPlayer())) {
+                        if (!p.equals(AppClient.getCurrentPlayer())) {
                             rightSideTable.row().padBottom(12);
                             Table row = new Table().right();
 
                             Texture playerTxr = new Texture("GameAssets\\Main_Inventory\\Player.png");
                             Image npc_img = new Image(playerTxr);
 
-                            Pair<Integer, Integer> friendship = p.getFriendShips().get(AppClient.getCurrentGame().getCurrentPlayer());
+                            Pair<Integer, Integer> friendship = p.getFriendShips().get(AppClient.getCurrentPlayer());
                             int friendshipLevel = friendship != null ? friendship.second() : 0;
 
                             Texture hearts = new Texture("GameAssets\\Main_Inventory\\" + friendshipLevel + ".png");
@@ -610,7 +745,7 @@ public class GameViewController {
                     window.row();
 
                     Table skillsTable = new Table().top().left();
-                    Skill skill = AppClient.getCurrentGame().getCurrentPlayer().getSkill();
+                    Skill skill = AppClient.getCurrentPlayer().getSkill();
                     String[] skillNames = {"Farming", "Mining", "Cooking", "Foraging", "Fishing"};
                     String[] skillDescription  = {"Gives Higher Quality Goods\nLess Energy Per Hoe Swing",
                         "Can Mine More Minerals with each Swing\nLess Energy Per Pickaxe Swing" , "Unlocks More Recipes To Cook", "Better Chance of\ngetting Better Goods\nLess Energy Per Picking Ups" ,
@@ -747,8 +882,8 @@ public class GameViewController {
         inventoryTable.clear();
         inventoryElements.clear();
 
-        int inventorySize = AppClient.getCurrentGame().getCurrentPlayer().getInventory().getSize();
-        ArrayList<ArrayList<Good>> inventoryData = AppClient.getCurrentGame().getCurrentPlayer().getInventory().getList();
+        int inventorySize = AppClient.getCurrentPlayer().getInventory().getSize();
+        ArrayList<ArrayList<Good>> inventoryData = AppClient.getCurrentPlayer().getInventory().getList();
 
         int itemIndex = 0;
 
@@ -837,7 +972,7 @@ public class GameViewController {
         if (tile.getTileType() == TileType.STONE_WALL ||
             tile.getTileType() == TileType.WATER ||
             tile.getTileType() == TileType.GAME_BUILDING ||
-            (tile.getTileType() == TileType.GREEN_HOUSE && !AppClient.getCurrentGame().getCurrentPlayer().getFarm().getGreenHouse().isAvailable()))
+            (tile.getTileType() == TileType.GREEN_HOUSE && !AppClient.getCurrentPlayer().getFarm().getGreenHouse().isAvailable()))
             return false;
         return true;
     }
@@ -877,7 +1012,7 @@ public class GameViewController {
                 case 1 -> Color.GOLD;
                 case 2 -> Color.LIGHT_GRAY;
                 case 3 -> new Color(0.8f, 0.5f, 0.2f, 1); // bronze-ish
-                default -> AppClient.getCurrentGame().getCurrentPlayer().equals(p) ? Color.SKY : Color.WHITE;
+                default -> AppClient.getCurrentPlayer().equals(p) ? Color.SKY : Color.WHITE;
             };
 
             Label.LabelStyle style = new Label.LabelStyle(skin.get(Label.LabelStyle.class).font, rowColor);
@@ -910,11 +1045,11 @@ public class GameViewController {
     public void updateInventory() {
         try {
             for (int i = 0; i < 12; i++) {
-                ArrayList<Good> goods = AppClient.getCurrentGame().getCurrentPlayer().getInventory().getList().get(i);
+                ArrayList<Good> goods = AppClient.getCurrentPlayer().getInventory().getList().get(i);
                 Quadruple<ImageButton, Image, Label, Label> quadruple = inventoryElements.get(i);
-                if (!AppClient.getCurrentGame().getCurrentPlayer().getInventory().getList().get(i).isEmpty()) {
+                if (!AppClient.getCurrentPlayer().getInventory().getList().get(i).isEmpty()) {
                     quadruple.b.setDrawable(new TextureRegionDrawable(new Texture(
-                        AppClient.getCurrentGame().getCurrentPlayer().getInventory().getList().get(i).getLast().getType().imagePath()
+                        AppClient.getCurrentPlayer().getInventory().getList().get(i).getLast().getType().imagePath()
                     )));
                 } else {
                     quadruple.b.setDrawable(new TextureRegionDrawable(new Texture("GameAssets/null.png")));
@@ -922,8 +1057,8 @@ public class GameViewController {
 
 
                 if (!gameView.isTabClicked()) {
-                    if (AppClient.getCurrentGame().getCurrentPlayer().getInventory().getList().get(i) ==
-                        AppClient.getCurrentGame().getCurrentPlayer().getInHandGood())
+                    if (AppClient.getCurrentPlayer().getInventory().getList().get(i) ==
+                        AppClient.getCurrentPlayer().getInHandGood())
                         quadruple.a.setChecked(true);
                     else
                         quadruple.a.setChecked(false);
@@ -935,20 +1070,20 @@ public class GameViewController {
             e.printStackTrace();
         }
 
-        progressBar.setValue(AppClient.getCurrentGame().getCurrentPlayer().getEnergy().getDayEnergyLeft());
+        progressBar.setValue(AppClient.getCurrentPlayer().getEnergy().getDayEnergyLeft());
     }
 
-    public void playerChangedInventory() {
-        for (int i = 0; i < inventoryElements.size(); i++) {
-            Quadruple<ImageButton, Image, Label, Label> quadruple = inventoryElements.get(i);
-            if (AppClient.getCurrentGame().getCurrentPlayer().getInventory().getList().get(i) ==
-                AppClient.getCurrentGame().getCurrentPlayer().getInHandGood())
-                quadruple.a.setChecked(true);
-            else
-                quadruple.a.setChecked(false);
-        }
-
-    }
+//    public void playerChangedInventory() {
+//        for (int i = 0; i < inventoryElements.size(); i++) {
+//            Quadruple<ImageButton, Image, Label, Label> quadruple = inventoryElements.get(i);
+//            if (AppClient.getCurrentGame().getCurrentPlayer().getInventory().getList().get(i) ==
+//                AppClient.getCurrentGame().getCurrentPlayer().getInHandGood())
+//                quadruple.a.setChecked(true);
+//            else
+//                quadruple.a.setChecked(false);
+//        }
+//
+//    }
 
     public ArrayList<Quadruple<ImageButton, Image, Label, Label>> getInventoryElements() {
         return inventoryElements;
@@ -1019,5 +1154,24 @@ public class GameViewController {
         }
 
         animation.setPlayMode(Animation.PlayMode.LOOP);
+    }
+
+    public static java.util.List<Trade> getRespondedTradesFor(Player player) {
+        java.util.List<Trade> list = new ArrayList<>();
+        for (Trade trade : AppClient.getCurrentGame().getAllTrades()) {
+            if (trade.getReceiver().equals(player) && !trade.isResponded()) {
+                list.add(trade);
+            }
+        }
+        return list;
+    }
+
+    private boolean methodUseMessage(Message responseMessage) {
+        //            label.setText("Network error!");
+        return !checkMessageValidity(responseMessage, Message.Type.response) || !responseMessage.getBooleanFromBody("success");
+    }
+
+    public boolean checkMessageValidity(Message message, Message.Type type) {
+        return message.getType() == type;
     }
 }

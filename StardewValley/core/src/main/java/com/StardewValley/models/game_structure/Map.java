@@ -461,9 +461,9 @@ public class Map {
         }
     }
     public void updateMap() {
-        if (mapCells[App.getCurrentGame().getCurrentPlayer().getCoordinate().getX()][App.getCurrentGame().getCurrentPlayer().getCoordinate().getY()] != null) {
-            updateMapAround(App.getCurrentGame().getCurrentPlayer().getLastCoordinate().getX() , App.getCurrentGame().getCurrentPlayer().getLastCoordinate().getY());
-            updateMapAround(App.getCurrentGame().getCurrentPlayer().getCoordinate().getX() , App.getCurrentGame().getCurrentPlayer().getCoordinate().getY());
+        if (mapCells[AppClient.getCurrentPlayer().getCoordinate().getX()][AppClient.getCurrentPlayer().getCoordinate().getY()] != null) {
+            updateMapAround(AppClient.getCurrentPlayer().getLastCoordinate().getX() , AppClient.getCurrentPlayer().getLastCoordinate().getY());
+            updateMapAround(AppClient.getCurrentPlayer().getCoordinate().getX() , AppClient.getCurrentPlayer().getCoordinate().getY());
         }
     }
     private void updateMapAround(int x , int y) {
@@ -495,13 +495,13 @@ public class Map {
                         else if ("Grass".equals(good.getName())) fg = tree_img;
                     }
 
-                    for (Player player : App.getCurrentGame().getPlayers()) {
+                    for (Player player : AppClient.getCurrentGame().getPlayers()) {
                         if (player.getCoordinate().equals(coord)) {
                             fg = player_img;
                         }
                     }
 
-                    for (NPC npc : App.getCurrentGame().getNPCs()) {
+                    for (NPC npc : AppClient.getCurrentGame().getNPCs()) {
                         if (npc.getType().getCoordinate().equals(coord)) {
                             fg = switch (npc.getType().getName()) {
                                 case "Abigail" -> abigail_img;
@@ -520,7 +520,7 @@ public class Map {
                         }
                     }
 
-                    for (Animal animal : App.getCurrentGame().getMap().allAnimals()) {
+                    for (Animal animal : AppClient.getCurrentGame().getMap().allAnimals()) {
                         if (animal.getCoordinate().equals(coord)) {
                             fg = mushroomTree_img;
                         }

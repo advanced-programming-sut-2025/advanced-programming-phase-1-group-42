@@ -10,6 +10,7 @@ import com.StardewValley.models.goods.foods.FoodType;
 import com.StardewValley.models.goods.recipes.CookingRecipeType;
 import com.StardewValley.models.interactions.NPCs.NPC;
 import com.StardewValley.models.interactions.NPCs.NPCTypes;
+import com.StardewValley.server.ClientHandler;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -62,7 +63,7 @@ public class TheStarDropSaloon extends GameBuilding {
     }
 
     @Override
-    public Result purchase(String productName, String count) {
+    public Result purchase(String productName, String count, ClientHandler clientHandler) {
         Pair<GoodType, Integer> productPair = null;
         for (Pair<GoodType, Integer> pair : products) {
             if(pair.first().getName().equals(productName)) {
@@ -74,7 +75,7 @@ public class TheStarDropSaloon extends GameBuilding {
         if(productPair == null)
             return new Result(false, "There is no Good of this type in The StarDrop Saloon!");
 
-        return purchaseProduct(productName, count, productPair);
+        return purchaseProduct(productName, count, productPair, clientHandler);
     }
 
     @Override

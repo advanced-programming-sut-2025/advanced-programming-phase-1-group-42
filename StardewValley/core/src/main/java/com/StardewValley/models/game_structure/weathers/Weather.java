@@ -3,13 +3,14 @@ package com.StardewValley.models.game_structure.weathers;
 import com.StardewValley.client.AppClient;
 import com.StardewValley.models.enums.TileType;
 import com.StardewValley.models.game_structure.Coordinate;
+import com.StardewValley.models.game_structure.Game;
 import com.StardewValley.models.game_structure.Tile;
 import com.StardewValley.models.goods.Good;
 import com.StardewValley.models.goods.farmings.FarmingTree;
 import com.StardewValley.models.goods.farmings.FarmingTreeSapling;
 import com.StardewValley.models.goods.foragings.ForagingMineralType;
 import com.StardewValley.models.goods.foragings.ForagingTree;
-import com.StardewValley.views.GameMenu;
+import com.StardewValley.server.ClientHandler;
 
 import java.util.List;
 import java.util.stream.Collectors;
@@ -19,19 +20,20 @@ public abstract class Weather {
     double fishChance;
 
 
-    public void thunder(int x, int y) {
-        App.getCurrentGame().getController().getGameView().showThunder();
+    public void thunder(int x, int y, ClientHandler handler) {
+//        App.getCurrentGame().getController().getGameView().showThunder();
+        // TODO Parsa
         Coordinate coordinate = new Coordinate(x, y);
-        if(AppClient.getCurrentGame().getCurrentPlayer().getCoordinate().equals(coordinate)){
+        if(handler.getClientPlayer().getCoordinate().equals(coordinate)){
             System.out.println("You've Been Struck by Thunder!");
         } else {
             // Null checks first
-            if (AppClient.getCurrentGame() == null || AppClient.getCurrentGame().getMap() == null) {
+            if (handler.getClientGame() == null || handler.getClientGame().getMap() == null) {
                 System.err.println("Error: Game or map not loaded.");
                 return;
             }
 
-            Tile tile = AppClient.getCurrentGame().getMap().findTile(coordinate);
+            Tile tile = handler.getClientGame().getMap().findTile(coordinate);
             if (tile == null) {
                 System.err.println("Error: Tile not found at coordinate " + coordinate);
                 return;

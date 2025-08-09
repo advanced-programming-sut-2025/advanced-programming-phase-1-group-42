@@ -1,6 +1,5 @@
 package com.StardewValley.models.goods.artisans;
 
-import com.StardewValley.client.AppClient;
 import com.StardewValley.models.Pair;
 import com.StardewValley.models.Result;
 import com.StardewValley.models.game_structure.Coordinate;
@@ -12,13 +11,16 @@ import com.StardewValley.models.goods.craftings.CraftingType;
 import com.StardewValley.models.goods.farmings.FarmingTreeSaplingType;
 import com.StardewValley.models.goods.products.ProductType;
 import com.StardewValley.models.interactions.game_buildings.Quadruple;
+import com.StardewValley.server.ClientHandler;
 
 import java.util.ArrayList;
 import java.util.Arrays;
 
 public class ArtisanFunctions {
-    public static Result useArtisan(String artisanName, ArrayList<String> ourIngredients) {
-        ArrayList<Good> goods = AppClient.getCurrentGame().getCurrentPlayer().getInventory().isInInventory(artisanName);
+    private static ClientHandler clientHandler;
+    public static Result useArtisan(String artisanName, ArrayList<String> ourIngredients, ClientHandler clientHandler) {
+        ArtisanFunctions.clientHandler = clientHandler;
+        ArrayList<Good> goods = clientHandler.getClientPlayer().getInventory().isInInventory(artisanName);
         Crafting crafting = null;
         if(goods != null && !goods.isEmpty()) {
             crafting = (Crafting) goods.getLast();
@@ -113,7 +115,7 @@ public class ArtisanFunctions {
             k < coordinate.getY() + (i * Coordinate.coordinates.get(3).getY()); k++) {
                 Coordinate coordinate1 = new Coordinate(j, k);
 
-                Tile tile = AppClient.getCurrentGame().getMap().findTile(coordinate1);
+                Tile tile = clientHandler.getClientGame().getMap().findTile(coordinate1);
                 if(tile != null) {
                     tile.getGoods().clear();
                 }
@@ -126,7 +128,7 @@ public class ArtisanFunctions {
         if(ourIngredients.isEmpty())
             return new Result(false, "You should input your desired ingredients!");
 
-        ArrayList<Good> goods = AppClient.getCurrentGame().getCurrentPlayer().getInventory().isInInventory(ourIngredients.getFirst());
+        ArrayList<Good> goods = clientHandler.getClientPlayer().getInventory().isInInventory(ourIngredients.getFirst());
         ArtisanType artisanTypeOriginal = null;
         boolean flag = false;
         Quadruple<GoodType, Integer, Double, Double> ingredient = null;
@@ -154,7 +156,7 @@ public class ArtisanFunctions {
         }
 
 
-        AppClient.getCurrentGame().getCurrentPlayer().getArtisansGoodTime().add(new Pair<>(artisanTypeOriginal.getProcessingHour(), good));
+        clientHandler.getClientPlayer().getArtisansGoodTime().add(new Pair<>(artisanTypeOriginal.getProcessingHour(), good));
         return new Result(true, "You will extract " + good.getName() + " by " + crafting.getName() + " in " + artisanTypeOriginal.getProcessingHour() + " hours!");
     }
 
@@ -162,8 +164,8 @@ public class ArtisanFunctions {
         if(ourIngredients.size() < 2)
             return new Result(false, "You should input your desired ingredients!");
 
-        ArrayList<Good> goods1 = AppClient.getCurrentGame().getCurrentPlayer().getInventory().isInInventory(ourIngredients.getFirst());
-        ArrayList<Good> goods2 = AppClient.getCurrentGame().getCurrentPlayer().getInventory().isInInventory(ourIngredients.get(1));
+        ArrayList<Good> goods1 = clientHandler.getClientPlayer().getInventory().isInInventory(ourIngredients.getFirst());
+        ArrayList<Good> goods2 = clientHandler.getClientPlayer().getInventory().isInInventory(ourIngredients.get(1));
         if(goods1 == null || goods2 == null)
             return new Result(false, "You don't have enough ingredients in your inventory");
 
@@ -178,7 +180,7 @@ public class ArtisanFunctions {
 
         Good good = Good.newGood(ingredient1);
         ((Artisan) good).setGoodType(goods1.getFirst().getType());
-        AppClient.getCurrentGame().getCurrentPlayer().getArtisansGoodTime().add(new Pair<>(ingredient1.getProcessingHour(), good));
+        clientHandler.getClientPlayer().getArtisansGoodTime().add(new Pair<>(ingredient1.getProcessingHour(), good));
 
         goods2.removeLast();
         for (int i = 0; i < metalIngredient.b; i++)
@@ -188,7 +190,7 @@ public class ArtisanFunctions {
     }
 
     private static Result useCherryBomb(Crafting crafting) {
-        Coordinate coordinate = AppClient.getCurrentGame().getCurrentPlayer().getCoordinate();
+        Coordinate coordinate = clientHandler.getClientPlayer().getCoordinate();
 
         for (int i = 1; i <= 3; i++) {
             eliminateTileGoods(coordinate, i);
@@ -198,7 +200,7 @@ public class ArtisanFunctions {
     }
 
     private static Result useBomb(Crafting crafting) {
-        Coordinate coordinate = AppClient.getCurrentGame().getCurrentPlayer().getCoordinate();
+        Coordinate coordinate = clientHandler.getClientPlayer().getCoordinate();
 
         for (int i = 1; i <= 5; i++) {
             eliminateTileGoods(coordinate, i);
@@ -208,7 +210,7 @@ public class ArtisanFunctions {
     }
 
     private static Result useMegaBomb(Crafting crafting) {
-        Coordinate coordinate = AppClient.getCurrentGame().getCurrentPlayer().getCoordinate();
+        Coordinate coordinate = clientHandler.getClientPlayer().getCoordinate();
 
         for (int i = 1; i <= 7; i++) {
             eliminateTileGoods(coordinate, i);
@@ -219,21 +221,21 @@ public class ArtisanFunctions {
 
 
     private static Result useSprinkler(Crafting crafting) {
-        Tile tile = AppClient.getCurrentGame().getMap().findTile(AppClient.getCurrentGame().getCurrentPlayer().getCoordinate());
+        Tile tile = clientHandler.getClientGame().getMap().findTile(clientHandler.getClientPlayer().getCoordinate());
         tile.getGoods().add(crafting);
 
         return new Result(true, crafting.getName() + " has been added to tile " + tile.getCordinate());
     }
 
     private static Result useQualitySprinkler(Crafting crafting) {
-        Tile tile = AppClient.getCurrentGame().getMap().findTile(AppClient.getCurrentGame().getCurrentPlayer().getCoordinate());
+        Tile tile = clientHandler.getClientGame().getMap().findTile(clientHandler.getClientPlayer().getCoordinate());
         tile.getGoods().add(crafting);
 
         return new Result(true, crafting.getName() + " has been added to tile " + tile.getCordinate());
     }
 
     private static Result useIridiumSprinkler(Crafting crafting) {
-        Tile tile = AppClient.getCurrentGame().getMap().findTile(AppClient.getCurrentGame().getCurrentPlayer().getCoordinate());
+        Tile tile = clientHandler.getClientGame().getMap().findTile(clientHandler.getClientPlayer().getCoordinate());
         tile.getGoods().add(crafting);
 
         return new Result(true, crafting.getName() + " has been added to tile " + tile.getCordinate());
@@ -245,7 +247,7 @@ public class ArtisanFunctions {
         if(ourIngredients.isEmpty())
             return new Result(false, "You should input your desired ingredients!");
 
-        ArrayList<Good> goods = AppClient.getCurrentGame().getCurrentPlayer().getInventory().isInInventory(ourIngredients.getFirst());
+        ArrayList<Good> goods = clientHandler.getClientPlayer().getInventory().isInInventory(ourIngredients.getFirst());
         if(goods == null || goods.getFirst().getType() != ingredient.a || goods.size() < ingredient.b) {
             return new Result(false, "You don't have " + ingredient.b + " number of " + ingredient.a.getName() + " in your inventory");
         }
@@ -253,7 +255,7 @@ public class ArtisanFunctions {
         for (int i = 0; i < ingredient.b; i++)
             goods.removeLast();
 
-        AppClient.getCurrentGame().getCurrentPlayer().getArtisansGoodTime().add(new Pair<>(ArtisanType.COAL.getProcessingHour(), Good.newGood(ArtisanType.COAL)));
+        clientHandler.getClientPlayer().getArtisansGoodTime().add(new Pair<>(ArtisanType.COAL.getProcessingHour(), Good.newGood(ArtisanType.COAL)));
         return new Result(true, crafting.getName() + " has been used & A " + ArtisanType.COAL.getName() +
                 " has will be added to your inventory in " + ArtisanType.COAL.getProcessingHour() + " hours!");
     }
@@ -263,26 +265,26 @@ public class ArtisanFunctions {
     }
 
     private static Result useScarecrow(Crafting crafting) {
-        Tile tile = AppClient.getCurrentGame().getMap().findTile(AppClient.getCurrentGame().getCurrentPlayer().getCoordinate());
+        Tile tile = clientHandler.getClientGame().getMap().findTile(clientHandler.getClientPlayer().getCoordinate());
         tile.getGoods().add(crafting);
 
-        return new Result(true, crafting.getName() + " has been added to " + AppClient.getCurrentGame().getCurrentPlayer().getCoordinate());
+        return new Result(true, crafting.getName() + " has been added to " + clientHandler.getClientPlayer().getCoordinate());
     }
 
     private static Result useDeluxeScarecrow(Crafting crafting) {
-        Tile tile = AppClient.getCurrentGame().getMap().findTile(AppClient.getCurrentGame().getCurrentPlayer().getCoordinate());
+        Tile tile = clientHandler.getClientGame().getMap().findTile(clientHandler.getClientPlayer().getCoordinate());
         tile.getGoods().add(crafting);
 
-        return new Result(true, crafting.getName() + " has been added to " + AppClient.getCurrentGame().getCurrentPlayer().getCoordinate());
+        return new Result(true, crafting.getName() + " has been added to " + clientHandler.getClientPlayer().getCoordinate());
     }
 
     private static Result useBeeHouse(Crafting crafting) {
-        Tile tile = AppClient.getCurrentGame().getCurrentPlayer().getFarm().findTile(AppClient.getCurrentGame().getCurrentPlayer().getCoordinate());
+        Tile tile = clientHandler.getClientPlayer().getFarm().findTile(clientHandler.getClientPlayer().getCoordinate());
         if(tile == null)
             return new Result(false, "You should be in your farm to use " + crafting.getName() + "!");
 
         Good good = Good.newGood(ArtisanType.HONEY);
-        AppClient.getCurrentGame().getCurrentPlayer().getArtisansGoodTime().add(new Pair<>(ArtisanType.HONEY.getProcessingHour(), good));
+        clientHandler.getClientPlayer().getArtisansGoodTime().add(new Pair<>(ArtisanType.HONEY.getProcessingHour(), good));
         return new Result(true, "You will extract Honey by " + crafting.getName() + " in " + ArtisanType.HONEY.getProcessingHour() + " hours!");
     }
 
@@ -290,7 +292,7 @@ public class ArtisanFunctions {
         if(ourIngredients.isEmpty())
             return new Result(false, "You should input your desired ingredients!");
 
-        ArrayList<Good> milks = AppClient.getCurrentGame().getCurrentPlayer().getInventory().isInInventory(ourIngredients.getFirst());
+        ArrayList<Good> milks = clientHandler.getClientPlayer().getInventory().isInInventory(ourIngredients.getFirst());
         ArtisanType artisanType = null;
         if(milks == null)
             return new Result(false, "You don't have " + ourIngredients.getFirst() + " in your inventory");
@@ -313,7 +315,7 @@ public class ArtisanFunctions {
         for (int i = 0; i < milkIngredient.b; i++)
             milks.removeLast();
 
-        AppClient.getCurrentGame().getCurrentPlayer().getArtisansGoodTime().add(new Pair<>(artisanType.getProcessingHour(), good));
+        clientHandler.getClientPlayer().getArtisansGoodTime().add(new Pair<>(artisanType.getProcessingHour(), good));
         return new Result(true, "You will extract " + good.getName() + " by " + crafting.getName() + " in " + artisanType.getProcessingHour() + " hours!");
     }
 
@@ -335,7 +337,7 @@ public class ArtisanFunctions {
         if(ourIngredients.isEmpty())
             return new Result(false, "You should input your desired ingredients!");
 
-        ArrayList<Good> goods = AppClient.getCurrentGame().getCurrentPlayer().getInventory().isInInventory(ourIngredients.getFirst());
+        ArrayList<Good> goods = clientHandler.getClientPlayer().getInventory().isInInventory(ourIngredients.getFirst());
         if(goods == null)
             return new Result(false, "You don't have " + ourIngredients.getFirst() + " in your inventory!");
 
@@ -351,7 +353,7 @@ public class ArtisanFunctions {
             goods.removeLast();
         }
 
-        AppClient.getCurrentGame().getCurrentPlayer().getArtisansGoodTime().add(new Pair<>(ArtisanType.CLOTH.getProcessingHour(), good));
+        clientHandler.getClientPlayer().getArtisansGoodTime().add(new Pair<>(ArtisanType.CLOTH.getProcessingHour(), good));
         return new Result(true, "You will extract " + good.getName() + " by " + crafting.getName() + " in " + ArtisanType.CLOTH.getProcessingHour() + " hours!");
     }
 
@@ -391,18 +393,18 @@ public class ArtisanFunctions {
     }
 
     private static Result useMysticTreeSeed(Crafting crafting) {
-        Tile tile = AppClient.getCurrentGame().getMap().findTile(AppClient.getCurrentGame().getCurrentPlayer().getCoordinate());
+        Tile tile = clientHandler.getClientGame().getMap().findTile(clientHandler.getClientPlayer().getCoordinate());
         tile.getGoods().add(Good.newGood(FarmingTreeSaplingType.MYSTIC_SAPLING));
 
         return new Result(true, "A Mystic_Sapling has been added to " +
-                AppClient.getCurrentGame().getCurrentPlayer().getCoordinate() + " with your " + crafting.getName() + "!");
+                clientHandler.getClientPlayer().getCoordinate() + " with your " + crafting.getName() + "!");
     }
 
     private static Result useCask(Crafting crafting, ArrayList<String> ourIngredients) {
         if(ourIngredients.isEmpty())
             return new Result(false, "You should input your desired ingredients!");
 
-        ArrayList<Good> goods = AppClient.getCurrentGame().getCurrentPlayer().getInventory().isInInventory(ourIngredients.getFirst());
+        ArrayList<Good> goods = clientHandler.getClientPlayer().getInventory().isInInventory(ourIngredients.getFirst());
         if(goods == null)
             return new Result(false, "You don't have " + ourIngredients.getFirst() + " in your inventory!");
 
@@ -418,16 +420,16 @@ public class ArtisanFunctions {
             goods.removeLast();
         }
 
-        AppClient.getCurrentGame().getCurrentPlayer().getArtisansGoodTime().add(new Pair<>(ArtisanType.VINEGAR.getProcessingHour(), good));
+        clientHandler.getClientPlayer().getArtisansGoodTime().add(new Pair<>(ArtisanType.VINEGAR.getProcessingHour(), good));
         return new Result(true, "You will extract " + ArtisanType.VINEGAR.getName() + " by " + crafting.getName() + " in " + ArtisanType.VINEGAR.getProcessingHour() + " hours!");
     }
 
     private static Result useGrassStarter(Crafting crafting) {
-        Tile tile = AppClient.getCurrentGame().getMap().findTile(AppClient.getCurrentGame().getCurrentPlayer().getCoordinate());
+        Tile tile = clientHandler.getClientGame().getMap().findTile(clientHandler.getClientPlayer().getCoordinate());
         tile.getGoods().add(Good.newGood(ProductType.GRASS));
 
         return new Result(true, "A Grass has been added to " +
-                AppClient.getCurrentGame().getCurrentPlayer().getCoordinate() + " with your " + crafting.getName() + "!");
+                clientHandler.getClientPlayer().getCoordinate() + " with your " + crafting.getName() + "!");
     }
 }
 
