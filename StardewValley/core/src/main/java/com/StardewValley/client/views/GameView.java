@@ -1381,7 +1381,7 @@ public class GameView implements Screen, InputProcessor {
             public void changed(ChangeEvent changeEvent, Actor actor) {
                 if (selectedGoodType[0] != null) {
                     Message message = new Message(new HashMap<>() {{
-                        put("function", "toolsUpgrade");
+                        put("function", "purchase");
                         put("arguments", new ArrayList<>(Arrays.asList(
                             selectedGoodType[0].getName(), String.valueOf(selectedCount[0]),
                             (new Coordinate(tileX, tileY)).toString()
@@ -1962,7 +1962,7 @@ public class GameView implements Screen, InputProcessor {
         ArrayList<CookingRecipeType> unlockedRecipes = responseMessage.getFromBody("message");
         message = new Message(new HashMap<>() {{
             put("function", "getAllRecipes");
-            put("arguments", "");
+            put("arguments", "CookingController");
         }}, Message.Type.command);
         responseMessage = AppClient.getServerHandler().sendAndWaitForResponse(message);
         methodUseMessage(responseMessage);
@@ -2147,7 +2147,7 @@ public class GameView implements Screen, InputProcessor {
 
         Message message = new Message(new HashMap<>() {{
             put("function", "getAllRecipes");
-            put("arguments", "");
+            put("arguments", "CraftingController");
         }}, Message.Type.command);
         Message responseMessage = AppClient.getServerHandler().sendAndWaitForResponse(message);
         methodUseMessage(responseMessage);

@@ -76,20 +76,253 @@ public class GameController extends Controller {
 
     private CookingController cookingController;
     private CraftingController craftingController;
-    private TradeMenuController tradeController = new TradeMenuController();
+    private TradeMenuController tradeController;
 
     public GameController(ClientHandler clientHandler) {
         cookingController = new CookingController();
         craftingController = new CraftingController(clientHandler);
-
+        tradeController = new TradeMenuController();
 
         this.clientHandler = clientHandler;
     }
 
     @Override
     public Message handleMessage(Message message) {
+        if (message.getType() == Message.Type.command) {
+            switch ((String) message.getFromBody("function")) {
+                case "toolsUse" -> {
+                    Coordinate coordinate = message.getFromBody("arguments");
+                    return sendResultMessage(toolsUse(coordinate));
+                }
+                case "sellAnimal" -> {
+                    String name = message.getFromBody("arguments");
+                    return sendResultMessage(sellAnimal(name));
+                }
+                case "feedHay" -> {
+                    String name = message.getFromBody("arguments");
+                    return sendResultMessage(feedHay(name));
+                }
+                case "collectProduct" -> {
+                    String name = message.getFromBody("arguments");
+                    return sendResultMessage(collectProduct(name));
+                }
+                case "buyAnimal" -> {
+                    ArrayList<String> arguments = message.getFromBody("arguments");
+                    return sendResultMessage(buyAnimal(arguments.get(0), arguments.get(1)));
+                }
+                case "purchase" -> {
+                    ArrayList<String> arguments = message.getFromBody("arguments");
+                    return sendResultMessage(purchase(arguments.get(0), arguments.get(1), Coordinate.fromString(arguments.get(2))));
+                }
+                case "toolsUpgrade" -> {
+                    String toolName = message.getFromBody("arguments");
+                    return sendResultMessage(toolsUpgrade(toolName));
+                }
+                case "meetNPC" -> {
+                    String name = message.getFromBody("arguments");
+                    return sendResultMessage(meetNPC(name));
+                }
+                case "isCloseEnough" -> {
+                    String name = message.getFromBody("arguments");
+                    return sendResultMessage(isCloseEnough(name));
+                }
+                case "giftNPC" -> {
+                    ArrayList<String> arguments = message.getFromBody("arguments");
+                    return sendResultMessage(giftNPC(arguments.get(0), arguments.get(1)));
+                }
+                case "getQuests" -> {
+                    String name = message.getFromBody("arguments");
+                    return sendResultMessage(new Result(true, getQuests(name)));
+                }
+                case "getUnlockedRecipes" -> {
+                    String controller = message.getFromBody("arguments");
+                    if (controller.equals("CookingController")) {
+                        ArrayList<CookingRecipeType> recipeTypes = cookingController.getUnlockedRecipes(clientHandler);
+                        return new Message(new HashMap<>() {{
+                            put("success", true);
+                            put("message", recipeTypes);
+                        }}, Message.Type.response);
+                    }
+                    if (controller.equals("CraftingController")) {
+                        ArrayList<CraftingRecipeType> recipeTypes = craftingController.getUnlockedRecipes();
+                        return new Message(new HashMap<>() {{
+                            put("success", true);
+                            put("message", recipeTypes);
+                        }}, Message.Type.response);
+                    }
+                }
+                case "getAllRecipes" -> {
+                    String controller = message.getFromBody("arguments");
+                    if (controller.equals("CookingController")) {
+                        CookingRecipeType[] cookingRecipeTypes = cookingController.getAllRecipes();
+                        return new Message(new HashMap<>() {{
+                            put("success", true);
+                            put("message", cookingRecipeTypes);
+                        }}, Message.Type.response);
+                    }
+                    if (controller.equals("CraftingController")) {
+                        CraftingRecipeType[] craftingRecipeTypes = craftingController.getAllRecipes();
+                        return new Message(new HashMap<>() {{
+                            put("success", true);
+                            put("message", craftingRecipeTypes);
+                        }}, Message.Type.response);
+                    }
+                }
+                case "cookingPrepare" -> {
+                    String name = message.getFromBody("arguments");
+                    return sendResultMessage(cookingPrepare(name));
+                }
+                case "craftingCraft" -> {
+                    String name = message.getFromBody("arguments");
+                    return sendResultMessage(craftingCraft(name));
+                }
+                case "greenHouseBuild" -> {
+                    return sendResultMessage(greenHouseBuild());
+                }
+                case "tradeWithGoods" -> {
+                    ArrayList<String> arguments = message.getFromBody("arguments");
+                    return sendResultMessage(tradeController.tradeWithGoods(
+                        arguments.get(0),
+                        arguments.get(1),
+                        arguments.get(2),
+                        arguments.get(3),
+                        arguments.get(4),
+                        arguments.get(5),
+                        clientHandler
+                    ));
+                }
+                case "tradeWithMoney" -> {
+                    ArrayList<String> arguments = message.getFromBody("arguments");
+                    return sendResultMessage(tradeController.tradeWithMoney(
+                        arguments.get(0),
+                        arguments.get(1),
+                        arguments.get(2),
+                        arguments.get(3),
+                        arguments.get(4),
+                        clientHandler
+                    ));
+                }
+                case "tradeResponse" -> {
+                    ArrayList<String> arguments = message.getFromBody("arguments");
+                    return sendResultMessage(tradeController.tradeResponse(
+                        arguments.get(0),
+                        arguments.get(1),
+                        clientHandler
+                    ));
+                }
+                case "gift" -> {
+                    ArrayList<String> arguments = message.getFromBody("arguments");
+                    return sendResultMessage(gift(arguments.get(0), arguments.get(1), arguments.get(2)));
+                }
+                case "giftRate" -> {
+                    ArrayList<String> arguments = message.getFromBody("arguments");
+                    return sendResultMessage(giftRate(arguments.get(0), arguments.get(1)));
+                }
+                case "hug" -> {
+                    String name = message.getFromBody("arguments");
+                    return sendResultMessage(hug(name));
+                }
+                case "flower" -> {
+                    String name = message.getFromBody("arguments");
+                    return sendResultMessage(flower(name));
+                }
+                case "askMarriage" -> {
+                    String name = message.getFromBody("arguments");
+                    return sendResultMessage(askMarriage(name));
+                }
+                case "respond" -> {
+                    ArrayList<String> arguments = message.getFromBody("arguments");
+                    return sendResultMessage(respond(arguments.get(0), arguments.get(1)));
+                }
+                case "artisanUse" -> {
+                    ArrayList<String> arguments = message.getFromBody("arguments");
+                    return sendResultMessage(artisanUse(
+                        arguments.get(0),
+                        arguments.get(1),
+                        arguments.get(1)
+                    ));
+                }
+                case "sell" -> {
+                    ArrayList<String> arguments = message.getFromBody("arguments");
+                    return sendResultMessage(sell(arguments.get(0), arguments.get(1)));
+                }
+                case "addItemToFridge" -> {
+                    String ptr = message.getFromBody("arguments");
+                    clientHandler.getClientPlayer().getFridge().addItemToFridge(
+                        clientHandler.getClientPlayer().getInventory().getList().get(Integer.parseInt(ptr)).getFirst()
+                    );
+                    return sendResultMessage(new Result(true, ""));
+                }
+                case "setInHandGood" -> {
+                    String ptr = message.getFromBody("arguments");
+                    clientHandler.getClientPlayer().setInHandGood(
+                        clientHandler.getClientPlayer().getInventory().getList().get(Integer.parseInt(ptr))
+                    );
+                    return sendResultMessage(new Result(true, ""));
+                }
+                case "setPlayerDirection" -> {
+                    String ptr = message.getFromBody("arguments");
+                    clientHandler.getClientPlayer().setPlayerDirection(Integer.parseInt(ptr));
+                    return sendResultMessage(new Result(true, ""));
+                }
+                case "increaseBalance" -> {
+                    String ptr = message.getFromBody("arguments");
+                    clientHandler.getClientPlayer().getWallet().increaseBalance(Integer.parseInt(ptr));
+                    return sendResultMessage(new Result(true, ""));
+                }
+                case "petAnimal" -> {
+                    ArrayList<String> arguments = message.getFromBody("arguments");
+                    boolean flag = false;
+                    for (FarmBuilding farmBuilding : clientHandler.getClientPlayer().getFarm().getFarmBuildings()) {
+                        if (farmBuilding.getName().equals(arguments.get(1))) {
+                            for (Animal animal : farmBuilding.getAnimals()) {
+                                if (animal.getName().equals(arguments.get(0))) {
+                                    flag = true;
+                                    animal.petAnimal();
+                                    break;
+                                }
+                            }
+                        }
+                        if (flag)
+                            break;
+                    }
+                    return sendResultMessage(new Result(flag, ""));
+                }
+                case "decreaseTurnEnergyLeft" -> {
+                    String ptr = message.getFromBody("arguments");
+                    clientHandler.getClientPlayer().getEnergy().decreaseTurnEnergyLeft(Double.parseDouble(ptr), clientHandler);
+                    return sendResultMessage(new Result(true, ""));
+                }
+                case "setCoordinate" -> {
+                    String coordinate = message.getFromBody("arguments");
+                    clientHandler.getClientPlayer().setCoordinate(Coordinate.fromString(coordinate));
+                    return sendResultMessage(new Result(true, ""));
+                }
+                case "setLastCoordinate" -> {
+                    String coordinate = message.getFromBody("arguments");
+                    clientHandler.getClientPlayer().setLastCoordinate(Coordinate.fromString(coordinate));
+                    return sendResultMessage(new Result(true, ""));
+                }
+                case "useTrashCan" -> {
+                    String price = message.getFromBody("arguments");
+                    int finalPrice = ToolFunctions.useTrashCan(
+                        clientHandler.getClientPlayer().getTrashCan(), Integer.parseInt(price)
+                    );
+                    return sendResultMessage(new Result(true, String.valueOf(finalPrice)));
+                }
+            }
+        }
+        return new Message(new HashMap<>() {{
+            put("success", false);
+            put("message", "");
+        }}, Message.Type.response);
+    }
 
-        return null;
+    public Message sendResultMessage(Result result) {
+        return new Message(new HashMap<>() {{
+            put("success", result.message());
+            put("message", result.message());
+        }}, Message.Type.response);
     }
 
 
@@ -1797,7 +2030,6 @@ public class GameController extends Controller {
     // Trading methods
     public Result startTrade() {
 //        clientHandler.set(Menu.TradeMenu);
-        //TODO Parsa
 
         System.out.println("Players: ");
         for (Player player : clientHandler.getClientGame().getPlayers()) {
@@ -1834,7 +2066,7 @@ public class GameController extends Controller {
 
         for (NPC npc : clientHandler.getClientGame().getNPCs()) {
             if (npc.getType().getName().equals(npcName)) {
-                if (isCloseEnough(npcName)) {
+                if (isCloseEnough(npcName).success()) {
                     npc.getFriendship(clientHandler.getClientPlayer());
                     String talk = npc.npcDialogs(clientHandler);
                     return new Result(true, talk);
@@ -1844,7 +2076,7 @@ public class GameController extends Controller {
         return new Result(true, "Too far away. Approach the NPC to speak.");
     }
 
-    public Boolean isCloseEnough(String npcName) {
+    public Result isCloseEnough(String npcName) {
         for (NPC npc : clientHandler.getClientGame().getNPCs()) {
             if (npc.getType().getName().equals(npcName)) {
                 if ((abs(npc.getType().getCoordinate().getX() -
@@ -1856,11 +2088,11 @@ public class GameController extends Controller {
                         clientHandler.getClientPlayer().getCoordinate().getY()) == 1 ||
                         abs(npc.getType().getCoordinate().getY() -
                             clientHandler.getClientPlayer().getCoordinate().getY()) == 0)) {
-                    return true;
+                    return new Result(true, "");
                 }
             }
         }
-        return false;
+        return new Result(false, "");
     }
 
     public Result giftNPC(String npcName, String itemName) {
@@ -1961,7 +2193,7 @@ public class GameController extends Controller {
         NPC targetNPC = null;
         boolean found = false;
         for (NPC npc : clientHandler.getClientGame().getNPCs()) {
-            if (isCloseEnough(npc.getType().getName())) {
+            if (isCloseEnough(npc.getType().getName()).success()) {
                 targetNPC = npc;
                 found = true;
                 break;

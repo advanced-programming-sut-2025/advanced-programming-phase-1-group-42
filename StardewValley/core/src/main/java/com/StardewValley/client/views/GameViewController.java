@@ -653,7 +653,7 @@ public class GameViewController {
                                 }}, Message.Type.command);
                                 Message responseMessage = AppClient.getServerHandler().sendAndWaitForResponse(message);
                                 methodUseMessage(responseMessage);
-                                int finalPrice = responseMessage.getIntFromBody("message");
+                                int finalPrice = Integer.parseInt(responseMessage.getFromBody("message"));
 
 //                                int finalPrice = ToolFunctions.useTrashCan(App.getCurrentGame().getCurrentPlayer().getTrashCan(), totalPrice);
                                 AppClient.getCurrentPlayer().getWallet().increaseBalance(finalPrice);
