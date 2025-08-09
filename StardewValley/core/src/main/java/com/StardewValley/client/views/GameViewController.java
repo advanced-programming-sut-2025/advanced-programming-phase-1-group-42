@@ -644,6 +644,20 @@ public class GameViewController {
                         @Override
                         public void clicked(InputEvent event, float x, float y) {
                             if (cursorGoods != null && !cursorGoods.isEmpty()) {
+                                int totalPrice = cursorGoods.getLast().getSellPrice()*cursorGoods.size();
+                                Message message = new Message(new HashMap<>() {{
+                                    put("function", "useTrashCan");
+                                    put("arguments", new ArrayList<>(Arrays.asList(
+                                        String.valueOf(totalPrice)
+                                    )));
+                                }}, Message.Type.command);
+                                Message responseMessage = AppClient.getServerHandler().sendAndWaitForResponse(message);
+                                methodUseMessage(responseMessage);
+                                int finalPrice = responseMessage.getIntFromBody("message");
+
+//                                int finalPrice = ToolFunctions.useTrashCan(App.getCurrentGame().getCurrentPlayer().getTrashCan(), totalPrice);
+                                AppClient.getCurrentPlayer().getWallet().increaseBalance(finalPrice);
+
                                 cursorGoods.clear();
                                 cursorGoods = null;
                                 AppClient.setCursor(); // Reset to default cursor
