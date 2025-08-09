@@ -829,8 +829,8 @@ public class GameViewController {
                     window.add(new Label("Map", skin)).left().padBottom(10);
                     window.row();
 
-                    ScrollPane mapPane = AppClient.getCurrentGame().getMap().createGraphicalMap();
-                    window.add(mapPane).expand().fill().colspan(2);
+//                    ScrollPane mapPane = AppClient.getCurrentGame().getMap().createGraphicalMap();
+//                    window.add(mapPane).expand().fill().colspan(2);
                     window.row();
 
                     break;

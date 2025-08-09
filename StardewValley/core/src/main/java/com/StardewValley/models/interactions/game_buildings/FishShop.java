@@ -13,6 +13,7 @@ import com.StardewValley.models.goods.tools.ToolType;
 import com.StardewValley.models.interactions.NPCs.NPC;
 import com.StardewValley.models.interactions.NPCs.NPCTypes;
 import com.StardewValley.server.ClientHandler;
+import com.badlogic.gdx.graphics.Texture;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -32,7 +33,7 @@ public class FishShop extends GameBuilding {
                 new Pair<>(9, 17),
                 new Coordinate(120, 60),
                 new Coordinate(130, 70),
-                TileAssets.FISH_SHOP.getTexture());
+                (TileAssets.FISH_SHOP.getImagePath()));
 
         this.products = new ArrayList<>(Arrays.asList(
                 new Pair<>(CraftingRecipeType.FISH_SMOKER, 1),

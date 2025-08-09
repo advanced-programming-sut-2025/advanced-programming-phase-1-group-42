@@ -16,10 +16,6 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 public abstract class Weather {
-    double weatherEffectingEnergy;
-    double fishChance;
-
-
     public void thunder(int x, int y, ClientHandler handler) {
 //        App.getCurrentGame().getController().getGameView().showThunder();
         // TODO Parsa
@@ -33,7 +29,7 @@ public abstract class Weather {
                 return;
             }
 
-            Tile tile = handler.getClientGame().getMap().findTile(coordinate);
+            Tile tile = handler.getClientGame().getMap().findTile(coordinate, handler.getClientGame());
             if (tile == null) {
                 System.err.println("Error: Tile not found at coordinate " + coordinate);
                 return;

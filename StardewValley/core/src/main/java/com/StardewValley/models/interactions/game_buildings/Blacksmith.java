@@ -16,6 +16,7 @@ import com.StardewValley.models.interactions.NPCs.NPC;
 import com.StardewValley.models.interactions.NPCs.NPCTypes;
 import com.StardewValley.models.interactions.Player;
 import com.StardewValley.server.ClientHandler;
+import com.badlogic.gdx.graphics.Texture;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -47,7 +48,7 @@ public class Blacksmith extends GameBuilding {
                 new Pair<>(9, 16),
                 new Coordinate(10, 60),
                 new Coordinate(20, 70),
-                TileAssets.BLACKSMITH.getTexture());
+                (TileAssets.BLACKSMITH.getImagePath()));
 
         upgradeToolCost.addAll(Arrays.asList(2000, 5000, 10000, 25000));
         upgradeTrashCanCost.addAll(Arrays.asList(1000, 2500, 5000, 12500));

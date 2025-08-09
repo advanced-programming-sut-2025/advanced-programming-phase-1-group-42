@@ -420,8 +420,8 @@ public class GameMenuController extends Controller {
         }
         Player adminPlayer = players.getFirst();
         WholeGameBuilder wholeGameBuilder = new WholeGameBuilder();
-        game = wholeGameBuilder.getGame();
         director.createNewGame(wholeGameBuilder, players, adminPlayer, labi.first().getID());
+        game = wholeGameBuilder.getGame();
 
         WholeMapBuilder wholeMapBuilder = new WholeMapBuilder();
         director.createNewMap(wholeMapBuilder, farms, tiles);
@@ -432,27 +432,28 @@ public class GameMenuController extends Controller {
             player.iniFriendships(players);
         }
 
+        clientHandler.setClientGame(game);
 //Goods generating
-        AppClient.getCurrentGame().getMap().generateRandomForagingCrops(93);
-        AppClient.getCurrentGame().getMap().generateRandomForagingSeed(93);
-        AppClient.getCurrentGame().getMap().generateRandomMinerals(93);
-        AppClient.getCurrentGame().getMap().generateRandomForagingTrees(93);
-        AppClient.getCurrentGame().getMap().generateRandomGrassTrees(93);
+        game.getMap().generateRandomForagingCrops(93, clientHandler);
+        game.getMap().generateRandomForagingSeed(93, clientHandler);
+        game.getMap().generateRandomMinerals(93, clientHandler);
+        game.getMap().generateRandomForagingTrees(93, clientHandler);
+        game.getMap().generateRandomGrassTrees(93, clientHandler);
 
         return game.getGameID();
     }
 
     public Result loadGame() {
-        Game game = AppServer.findGame(AppClient.getCurrentUser());
-        if (game == null || !AppClient.getCurrentUser().getPlaying())
-            return new Result(false, "You have no game to load!");
-
-        AppClient.setCurrentGame(game);
-        for (Player player : game.getPlayers()) {
-            if (player.getUsername().equals(AppClient.getCurrentUser().getUsername()))
-                AppClient.getCurrentGame().setGameAdmin(player);
-        }
-
+//        Game game = AppServer.findGame(AppClient.getCurrentUser());
+//        if (game == null || !AppClient.getCurrentUser().getPlaying())
+//            return new Result(false, "You have no game to load!");
+//
+//        AppClient.setCurrentGame(game);
+//        for (Player player : game.getPlayers()) {
+//            if (player.getUsername().equals(AppClient.getCurrentUser().getUsername()))
+//                AppClient.getCurrentGame().setGameAdmin(player);
+//        }
+//
         return new Result(true, "Your game has successfully loaded!");
     }
 

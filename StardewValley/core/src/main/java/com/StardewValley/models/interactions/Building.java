@@ -8,7 +8,7 @@ import java.util.ArrayList;
 public abstract class Building {
     protected Coordinate startCoordinate;
     protected Coordinate endCoordinate;
-    private ArrayList<Tile> tiles;
+    protected ArrayList<Tile> tiles;
     private String name;
 
 

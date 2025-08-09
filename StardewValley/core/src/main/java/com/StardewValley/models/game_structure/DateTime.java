@@ -116,11 +116,11 @@ public class DateTime {
         return season;
     }
 
-    public void farmingSeasonChange() {
+    public void farmingSeasonChange(Game game) {
         for (int i = 0 ; i < 140 ; i++) {
             for (int j = 0; j < 160; j++) {
                 Coordinate coordinate = new Coordinate(i, j);
-                Tile tile = AppClient.getCurrentGame().getMap().findTile(coordinate);
+                Tile tile = AppClient.getCurrentGame().getMap().findTile(coordinate, game);
                 if(!tile.getTileType().equals(TileType.GREEN_HOUSE)) {
                     Iterator<Good> iterator = tile.getGoods().iterator();
                     while (iterator.hasNext()) {

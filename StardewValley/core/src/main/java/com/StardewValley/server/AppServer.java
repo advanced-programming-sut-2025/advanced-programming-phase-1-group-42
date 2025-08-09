@@ -27,8 +27,6 @@ public class AppServer {
 
     private final static ArrayList<ClientHandler> clientHandlers = new ArrayList<>();
 
-    private final static Assets assets = new Assets();
-
     public static void start() throws IOException {
         if (clientListener != null && !clientListener.isAlive())
             clientListener.start();
@@ -87,7 +85,4 @@ public class AppServer {
         return waitingLabies;
     }
 
-    public static Assets getAssets() {
-        return assets;
-    }
 }

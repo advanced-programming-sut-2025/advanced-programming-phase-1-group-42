@@ -11,6 +11,7 @@ import com.StardewValley.models.goods.recipes.CookingRecipeType;
 import com.StardewValley.models.interactions.NPCs.NPC;
 import com.StardewValley.models.interactions.NPCs.NPCTypes;
 import com.StardewValley.server.ClientHandler;
+import com.badlogic.gdx.graphics.Texture;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -29,7 +30,7 @@ public class TheStarDropSaloon extends GameBuilding {
                 new Pair<>(12, 24),
                 new Coordinate(80, 90),
                 new Coordinate(90, 100),
-                TileAssets.THE_STARDROP_SALOON.getTexture());
+                (TileAssets.THE_STARDROP_SALOON.getImagePath()));
 
         // Permanent Products
         this.products = new ArrayList<>(Arrays.asList(

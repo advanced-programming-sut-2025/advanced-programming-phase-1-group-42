@@ -13,6 +13,7 @@ import com.StardewValley.models.goods.products.ProductType;
 import com.StardewValley.models.interactions.NPCs.NPC;
 import com.StardewValley.models.interactions.NPCs.NPCTypes;
 import com.StardewValley.server.ClientHandler;
+import com.badlogic.gdx.graphics.Texture;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -32,7 +33,7 @@ public class JojaMart extends GameBuilding {
                 new Pair<>(9, 23),
                 new Coordinate(50, 60),
                 new Coordinate(60, 70),
-                TileAssets.JOJAMART.getTexture());
+                (TileAssets.JOJAMART.getImagePath()));
 
         this.products = new ArrayList<>();
         //Permanent Stock

@@ -101,12 +101,12 @@ public class Player {
         this.lastCoordinate = coordinate;
         this.playerDirection = -1;
         if (user.getGender() != null && "Male".equals(user.getGender().getName())) {
-            this.spritePath = AppServer.getAssets().getPlayerTextureStrings().get(2).getFirst();
+            this.spritePath = playerTextureStrings.get(2).getFirst();
         } else {
-            this.spritePath = AppServer.getAssets().getFemalePlayerTextureStrings().get(2).getFirst();
+            this.spritePath = femalePlayerTextureStrings.get(2).getFirst();
         }
 
-        this.inHandGoodSpritePath = AppServer.getAssets().getNullPNGPath();
+        this.inHandGoodSpritePath = nullPNGPath;
 //        this.inHandGoodSpritePath.setPosition(coordinate.getX() * 40,
 //            coordinate.getY() * 40);
     }
@@ -376,4 +376,59 @@ public class Player {
     public void setInHandGoodSpritePath(String inHandGoodSpritePath) {
         this.inHandGoodSpritePath = inHandGoodSpritePath;
     }
+
+    private final ArrayList<ArrayList<String>> playerTextureStrings = new ArrayList<>(Arrays.asList(
+        new ArrayList<>(Arrays.asList(
+            "GameAssets/Player_Movement/Male/Male_walk (10).png",
+            "GameAssets/Player_Movement/Male/Male_walk (11).png",
+            "GameAssets/Player_Movement/Male/Male_walk (12).png",
+            "GameAssets/Player_Movement/Male/Male_walk (9).png"
+        )),
+        new ArrayList<>(Arrays.asList(
+            "GameAssets/Player_Movement/Male/Male_walk (14).png",
+            "GameAssets/Player_Movement/Male/Male_walk (15).png",
+            "GameAssets/Player_Movement/Male/Male_walk (16).png",
+            "GameAssets/Player_Movement/Male/Male_walk (13).png"
+        )),
+        new ArrayList<>(Arrays.asList(
+            "GameAssets/Player_Movement/Male/Male_walk (2).png",
+            "GameAssets/Player_Movement/Male/Male_walk (3).png",
+            "GameAssets/Player_Movement/Male/Male_walk (4).png",
+            "GameAssets/Player_Movement/Male/Male_walk (1).png"
+        )),
+        new ArrayList<>(Arrays.asList(
+            "GameAssets/Player_Movement/Male/Male_walk (6).png",
+            "GameAssets/Player_Movement/Male/Male_walk (7).png",
+            "GameAssets/Player_Movement/Male/Male_walk (8).png",
+            "GameAssets/Player_Movement/Male/Male_walk (5).png"
+        ))
+    ));
+    private final ArrayList<ArrayList<String>> femalePlayerTextureStrings = new ArrayList<>(Arrays.asList(
+        new ArrayList<>(Arrays.asList(
+            "GameAssets/Player_Movement/Female/Untitled-7.png",
+            "GameAssets/Player_Movement/Female/Untitled-8.png",
+            "GameAssets/Player_Movement/Female/Untitled-7.png",
+            "GameAssets/Player_Movement/Female/Untitled-9.png"
+        )),
+        new ArrayList<>(Arrays.asList(
+            "GameAssets/Player_Movement/Female/Untitled-4.png",
+            "GameAssets/Player_Movement/Female/Untitled-5.png",
+            "GameAssets/Player_Movement/Female/Untitled-4.png",
+            "GameAssets/Player_Movement/Female/Untitled-6.png"
+        )),
+        new ArrayList<>(Arrays.asList(
+            "GameAssets/Player_Movement/Female/Untitled-1.png",
+            "GameAssets/Player_Movement/Female/Untitled-2.png",
+            "GameAssets/Player_Movement/Female/Untitled-1.png",
+            "GameAssets/Player_Movement/Female/Untitled-3.png"
+        )),
+        new ArrayList<>(Arrays.asList(
+            "GameAssets/Player_Movement/Female/Untitled-10.png",
+            "GameAssets/Player_Movement/Female/Untitled-11.png",
+            "GameAssets/Player_Movement/Female/Untitled-10.png",
+            "GameAssets/Player_Movement/Female/Untitled-12.png"
+        ))
+    ));
+
+    private final String nullPNGPath = "GameAssets/null.png";
 }

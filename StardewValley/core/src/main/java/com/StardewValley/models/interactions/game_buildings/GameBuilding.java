@@ -10,7 +10,6 @@ import com.StardewValley.models.goods.Good;
 import com.StardewValley.models.goods.GoodType;
 import com.StardewValley.models.interactions.Building;
 import com.StardewValley.models.interactions.NPCs.NPC;
-import com.StardewValley.models.interactions.Player;
 import com.StardewValley.server.ClientHandler;
 import com.badlogic.gdx.graphics.Texture;
 
@@ -19,7 +18,7 @@ import java.util.ArrayList;
 public abstract class GameBuilding extends Building {
     private NPC shopkeeper;
     private final Pair<Integer, Integer> hours;
-    private final Texture texture;
+    private final String imagePath;
 
     public abstract ArrayList<GoodType> showAllProducts();
     public abstract ArrayList<GoodType> showProducts();
@@ -35,11 +34,11 @@ public abstract class GameBuilding extends Building {
     }
 
     public GameBuilding(ArrayList<Tile> tiles, String name, NPC shopkeeper, Pair<Integer, Integer> hours,
-                        Coordinate startCoordinate, Coordinate endCoordinate, Texture texture) {
+                        Coordinate startCoordinate, Coordinate endCoordinate, String imagePath) {
         super(startCoordinate, endCoordinate, tiles, name);
         this.shopkeeper = shopkeeper;
         this.hours = hours;
-        this.texture = texture;
+        this.imagePath = imagePath;
     }
 
     public boolean isInBuilding(Coordinate coordinate) {
@@ -51,8 +50,8 @@ public abstract class GameBuilding extends Building {
         return false;
     }
 
-    public Texture getTexture() {
-        return texture;
+    public String getImagePath() {
+        return imagePath;
     }
 
     public Pair<Integer, Integer> getHours() {

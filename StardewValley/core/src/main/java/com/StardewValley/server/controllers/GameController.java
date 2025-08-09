@@ -533,7 +533,7 @@ public class GameController extends Controller {
             return new Result(false, "Invalid Coordinate input!");
 
         Coordinate goal = new Coordinate(Integer.parseInt(x), Integer.parseInt(y));
-        Tile tile = clientHandler.getClientGame().getMap().findTile(goal);
+        Tile tile = clientHandler.getClientGame().getMap().findTile(goal, clientHandler.getClientGame());
         if (tile == null)
             return new Result(false, "Goal tile not found!");
 
@@ -586,7 +586,7 @@ public class GameController extends Controller {
         int IntX = Integer.parseInt(x);
         int IntY = Integer.parseInt(y);
         int IntSize = Integer.parseInt(size);
-        clientHandler.getClientGame().getMap().printMap(IntX, IntY, IntSize);
+//        clientHandler.getClientGame().getMap().printMap(IntX, IntY, IntSize);
         return new Result(true, "");
     }
 
@@ -747,7 +747,8 @@ public class GameController extends Controller {
 
             if (clientHandler.getClientPlayer().getEnergy().getDayEnergyLeft() < tool.getType().getEnergy())
                 return new Result(false, "You don't have enough energy to use " + tool.getName() + "!");
-            if (clientHandler.getClientGame().getMap().findTile(coordinate) == null)
+            if (clientHandler.getClientGame().getMap().findTile(coordinate,
+                clientHandler.getClientGame()) == null)
                 return new Result(false, "Tile not found");
 
             clientHandler.getClientPlayer().getEnergy().decreaseTurnEnergyLeft(tool.getEnergy(
@@ -1161,7 +1162,7 @@ public class GameController extends Controller {
     // Animals & Fishing methods
     public Result buildBuilding(String buildingName, String x, String y) {
         Coordinate coordinate = clientHandler.getClientPlayer().getCoordinate();
-        Tile tile = clientHandler.getClientGame().getMap().findTile(coordinate);
+        Tile tile = clientHandler.getClientGame().getMap().findTile(coordinate, clientHandler.getClientGame());
         if (tile.getTileType() != TileType.GAME_BUILDING)
             return new Result(false, "You should be in a game building to show all products!");
         if (!clientHandler.getClientGame().getMap().findGameBuilding(coordinate).isInWorkingHours()) {
@@ -1250,7 +1251,7 @@ public class GameController extends Controller {
 
     public Result buyAnimal(String animalType, String animalName) {
         Coordinate coordinate = clientHandler.getClientPlayer().getCoordinate();
-        Tile tile = clientHandler.getClientGame().getMap().findTile(coordinate);
+        Tile tile = clientHandler.getClientGame().getMap().findTile(coordinate, clientHandler.getClientGame());
         if (tile.getTileType() != TileType.GAME_BUILDING)
             return new Result(false, "You should be in a game building to show all products!");
         if (!clientHandler.getClientGame().getMap().findGameBuilding(coordinate).isInWorkingHours()) {
@@ -1454,7 +1455,7 @@ public class GameController extends Controller {
         }
         for (Coordinate coordinate : Coordinate.coordinates) {
             Coordinate c = Coordinate.checkAround(clientHandler.getClientPlayer().getCoordinate(), coordinate);
-            Tile tile = clientHandler.getClientGame().getMap().findTile(c);
+            Tile tile = clientHandler.getClientGame().getMap().findTile(c, clientHandler.getClientGame());
             if (tile.getTileType() == TileType.WATER) {
                 Weather weather = clientHandler.getClientGame().getWeather();
                 Skill skill = clientHandler.getClientPlayer().getSkill();
@@ -1516,7 +1517,7 @@ public class GameController extends Controller {
     // buy & sell methods
     public Result showAllProducts() {
         Coordinate coordinate = clientHandler.getClientPlayer().getCoordinate();
-        Tile tile = clientHandler.getClientGame().getMap().findTile(coordinate);
+        Tile tile = clientHandler.getClientGame().getMap().findTile(coordinate, clientHandler.getClientGame());
         if (tile.getTileType() != TileType.GAME_BUILDING)
             return new Result(false, "You should be in a game building to show all products!");
         if (!clientHandler.getClientGame().getMap().findGameBuilding(coordinate).isInWorkingHours()) {
@@ -1529,7 +1530,8 @@ public class GameController extends Controller {
 
     public Result showAllAvailableProducts() {
         Coordinate coordinate = clientHandler.getClientPlayer().getCoordinate();
-        Tile tile = clientHandler.getClientGame().getMap().findTile(clientHandler.getClientPlayer().getCoordinate());
+        Tile tile = clientHandler.getClientGame().getMap().findTile(clientHandler.getClientPlayer().getCoordinate(),
+            clientHandler.getClientGame());
         if (tile.getTileType() != TileType.GAME_BUILDING)
             return new Result(false, "You should be in a game building to show all available products!");
         if (!clientHandler.getClientGame().getMap().findGameBuilding(coordinate).isInWorkingHours()) {
@@ -1582,7 +1584,7 @@ public class GameController extends Controller {
                 clientHandler.getClientPlayer().getCoordinate().getX() + Coordinate.coordinates.get(i).getX(),
                 clientHandler.getClientPlayer().getCoordinate().getY() + Coordinate.coordinates.get(i).getY());
 
-            Tile tile = clientHandler.getClientGame().getMap().findTile(coordinate);
+            Tile tile = clientHandler.getClientGame().getMap().findTile(coordinate, clientHandler.getClientGame());
             if (tile != null && tile.findGood("ShippingBin") != null) {
                 ArrayList<Good> newGoods = new ArrayList<>(goods);
                 for (int j = 0; j < quantity; j++) {

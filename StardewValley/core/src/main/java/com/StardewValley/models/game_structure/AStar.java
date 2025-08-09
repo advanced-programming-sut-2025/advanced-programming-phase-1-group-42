@@ -97,7 +97,8 @@ public class AStar {
         if(!flag)
             return false;
 
-        Tile tile = map.findTile(new Coordinate(x, y));
+        Tile tile = null;
+//            map.findTile(new Coordinate(x, y));
         if(tile == null)
             return false;
 

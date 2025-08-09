@@ -14,6 +14,7 @@ import com.StardewValley.models.interactions.Animals.AnimalTypes;
 import com.StardewValley.models.interactions.NPCs.NPC;
 import com.StardewValley.models.interactions.NPCs.NPCTypes;
 import com.StardewValley.server.ClientHandler;
+import com.badlogic.gdx.graphics.Texture;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -51,7 +52,7 @@ public class MarnieRanch extends GameBuilding {
                 new Pair<>(9, 16),
                 new Coordinate(50, 90),
                 new Coordinate(60, 100),
-            TileAssets.MARNIE_RANCH.getTexture());
+            (TileAssets.MARNIE_RANCH.getImagePath()));
     }
 
 

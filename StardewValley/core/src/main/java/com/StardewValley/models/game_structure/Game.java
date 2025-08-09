@@ -145,18 +145,18 @@ public class Game {
         }
 
         crowAttack();
-        AppClient.getCurrentGame().getMap().generateRandomForagingCrops(99);
-        AppClient.getCurrentGame().getMap().generateRandomForagingSeed(99);
-        AppClient.getCurrentGame().getMap().generateRandomMinerals(99);
+        AppClient.getCurrentGame().getMap().generateRandomForagingCrops(99, clientHandler);
+        AppClient.getCurrentGame().getMap().generateRandomForagingSeed(99, clientHandler);
+        AppClient.getCurrentGame().getMap().generateRandomMinerals(99, clientHandler);
 
-        AppClient.getCurrentGame().getMap().Fertilize();
+        AppClient.getCurrentGame().getMap().Fertilize(clientHandler);
 
         for (ShippingBin shippingBin : AppClient.getCurrentGame().getMap().getShippingBins()) {
             shippingBin.emptyShippingBin();
         }
 
         if (AppClient.getCurrentGame().getDateTime().getDayOfSeason() == 1) {
-            AppClient.getCurrentGame().getDateTime().farmingSeasonChange();
+            AppClient.getCurrentGame().getDateTime().farmingSeasonChange(clientHandler.getClientGame());
         }
 
         //for animals
@@ -247,7 +247,7 @@ public class Game {
                             Coordinate coordinate1 = new Coordinate(coordinate.getX() + Coordinate.coordinates.get(i).getX(),
                                 coordinate.getY() + Coordinate.coordinates.get(i).getY());
 
-                            Tile t = AppClient.getCurrentGame().getMap().findTile(coordinate1);
+                            Tile t = AppClient.getCurrentGame().getMap().findTile(coordinate1, clientHandler.getClientGame());
                             if (t != null) {
                                 t.setWatered(true);
                             }
@@ -257,7 +257,7 @@ public class Game {
                             Coordinate coordinate1 = new Coordinate(coordinate.getX() + Coordinate.coordinates.get(i).getX(),
                                 coordinate.getY() + Coordinate.coordinates.get(i).getY());
 
-                            Tile t = AppClient.getCurrentGame().getMap().findTile(coordinate1);
+                            Tile t = AppClient.getCurrentGame().getMap().findTile(coordinate1, clientHandler.getClientGame());
                             if (t != null) {
                                 t.setWatered(true);
                             }
@@ -268,7 +268,7 @@ public class Game {
                                 Coordinate coordinate1 = new Coordinate(coordinate.getX() + j * Coordinate.coordinates.get(i).getX(),
                                     coordinate.getY() + j * Coordinate.coordinates.get(i).getY());
 
-                                Tile t = AppClient.getCurrentGame().getMap().findTile(coordinate1);
+                                Tile t = AppClient.getCurrentGame().getMap().findTile(coordinate1, clientHandler.getClientGame());
                                 if (t != null) {
                                     t.setWatered(true);
                                 }

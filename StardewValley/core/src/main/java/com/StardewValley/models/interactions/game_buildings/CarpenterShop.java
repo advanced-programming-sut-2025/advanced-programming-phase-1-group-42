@@ -14,6 +14,7 @@ import com.StardewValley.models.interactions.NPCs.NPCTypes;
 import com.StardewValley.models.interactions.PlayerBuildings.FarmBuilding;
 import com.StardewValley.models.interactions.PlayerBuildings.FarmBuildingTypes;
 import com.StardewValley.server.ClientHandler;
+import com.badlogic.gdx.graphics.Texture;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -36,7 +37,7 @@ public class CarpenterShop extends GameBuilding {
                 new Pair<>(9, 20),
                 new Coordinate(10, 90),
                 new Coordinate(20, 100),
-                TileAssets.CARPENTER_SHOP.getTexture());
+                (TileAssets.CARPENTER_SHOP.getImagePath()));
     }
 
     @Override

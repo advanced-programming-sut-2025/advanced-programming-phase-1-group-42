@@ -231,7 +231,7 @@ public class ToolFunctions {
     }
 
     private static Result useWateringCan(Tool tool, Coordinate coordinate) {
-        Tile tile = AppClient.getCurrentGame().getMap().findTile(coordinate);
+        Tile tile = AppClient.getCurrentGame().getMap().findTile(coordinate, clientHandler.getClientGame());
         if(tile == null)
             return new Result(false, "Tile not found!");
 

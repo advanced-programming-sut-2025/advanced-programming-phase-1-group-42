@@ -7,7 +7,6 @@ import java.util.ArrayList;
 
 public class GreenHouse extends Building {
     private Coordinate size;
-    private ArrayList<Tile> tiles;
     private boolean isAvailable;
 
     public GreenHouse(Coordinate startCoordinate, Coordinate endCoordinate, ArrayList<Tile> tiles) {

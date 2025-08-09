@@ -2,10 +2,8 @@ package com.StardewValley.client.views;
 
 import com.StardewValley.client.Main;
 import com.StardewValley.client.AppClient;
-import com.StardewValley.models.Assets;
 import com.StardewValley.models.Message;
 import com.StardewValley.models.Pair;
-import com.StardewValley.models.Result;
 import com.StardewValley.models.enums.Season;
 import com.StardewValley.models.enums.TileAssets;
 import com.StardewValley.models.enums.TileType;
@@ -26,7 +24,6 @@ import com.StardewValley.models.interactions.Animals.AnimalTypes;
 import com.StardewValley.models.interactions.PlayerBuildings.FarmBuilding;
 import com.StardewValley.models.interactions.PlayerBuildings.FarmBuildingTypes;
 import com.StardewValley.models.interactions.game_buildings.*;
-import com.StardewValley.server.controllers.TradeMenuController;
 import com.badlogic.gdx.*;
 import com.badlogic.gdx.graphics.*;
 import com.badlogic.gdx.graphics.g2d.Animation;
@@ -401,9 +398,10 @@ public class GameView implements Screen, InputProcessor {
         int tileX = (int) (touchPos.x / scaledSize);
         int tileY = (int) (touchPos.y / scaledSize);
 
-        Tile playerTile = Map.findTile(AppClient.getCurrentPlayer().getCoordinate());
+        Tile playerTile = Map.findTile(AppClient.getCurrentPlayer().getCoordinate(),
+            AppClient.getCurrentGame());
         Coordinate coordinate = new Coordinate(tileX, tileY);
-        Tile selectedTile = Map.findTile(coordinate);
+        Tile selectedTile = Map.findTile(coordinate, AppClient.getCurrentGame());
         if (selectedTile == null || playerTile == null)
             return false;
 
@@ -431,7 +429,7 @@ public class GameView implements Screen, InputProcessor {
             playerTile.getTileType() != TileType.PLAIN && selectedTile.getTileType() != TileType.GREEN_HOUSE &&
             playerTile.getTileType() != TileType.PLAYER_BUILDING) {
 
-            Tile tile = Map.findTile(coordinate);
+            Tile tile = Map.findTile(coordinate, AppClient.getCurrentGame());
 
             assert tile != null;
             Message message = new Message(new HashMap<>() {{
@@ -1497,46 +1495,46 @@ public class GameView implements Screen, InputProcessor {
         for (int x = max((midX - Gdx.graphics.getWidth() / 2) / scaledSize - 5, 0); x < min((midX + Gdx.graphics.getWidth() / 2) / scaledSize + 1, 150); x++) {
             for (int y = max((midY - Gdx.graphics.getHeight() / 2) / scaledSize - 5, 0); y < min((midY + Gdx.graphics.getHeight() / 2) / scaledSize + 1, 160); y++) {
                 Coordinate coordinate = new Coordinate(x, y);
-                Tile tile = Map.findTile(coordinate);
+                Tile tile = Map.findTile(coordinate, AppClient.getCurrentGame());
                 switch (tile.getTileType()) {
                     case TileType.QUARRY -> {
-                        Main.getBatch().draw(TileAssets.QUARRY.getTexture(), x * scaledSize, y * scaledSize, scaledSize, scaledSize);
+                        Main.getBatch().draw(new Texture(TileAssets.QUARRY.getImagePath()), x * scaledSize, y * scaledSize, scaledSize, scaledSize);
                     }
                     case TileType.FARM, TileType.PLAYER_BUILDING, TileType.GREEN_HOUSE -> {
                         if (AppClient.getCurrentGame().getDateTime().getSeason() == Season.WINTER)
-                            Main.getBatch().draw(TileAssets.FARM_WINTER.getTexture(), x * scaledSize, y * scaledSize, scaledSize, scaledSize);
+                            Main.getBatch().draw(new Texture(TileAssets.FARM_WINTER.getImagePath()), x * scaledSize, y * scaledSize, scaledSize, scaledSize);
                         else
-                            Main.getBatch().draw(TileAssets.FARM_ORDINARY.getTexture(), x * scaledSize, y * scaledSize, scaledSize, scaledSize);
+                            Main.getBatch().draw(new Texture(TileAssets.FARM_ORDINARY.getImagePath()), x * scaledSize, y * scaledSize, scaledSize, scaledSize);
                     }
                     case TileType.PLOWED_FARM -> {
                         if (tile.isWatered()) {
-                            Main.getBatch().draw(TileAssets.FARM_WET.getTexture(), x * scaledSize, y * scaledSize, scaledSize, scaledSize);
+                            Main.getBatch().draw(new Texture(TileAssets.FARM_WET.getImagePath()), x * scaledSize, y * scaledSize, scaledSize, scaledSize);
                         } else
-                            Main.getBatch().draw(TileAssets.FARM_PLOWED.getTexture(), x * scaledSize, y * scaledSize, scaledSize, scaledSize);
+                            Main.getBatch().draw(new Texture(TileAssets.FARM_PLOWED.getImagePath()), x * scaledSize, y * scaledSize, scaledSize, scaledSize);
                     }
                     case TileType.WATER -> {
-                        Main.getBatch().draw(TileAssets.WATER.getTexture(), x * scaledSize, y * scaledSize, scaledSize, scaledSize);
+                        Main.getBatch().draw(new Texture(TileAssets.WATER.getImagePath()), x * scaledSize, y * scaledSize, scaledSize, scaledSize);
                     }
                     case TileType.PLAIN, TileType.GAME_BUILDING -> {
                         if (AppClient.getCurrentGame().getDateTime().getSeason() == Season.WINTER)
-                            Main.getBatch().draw(TileAssets.FARM_WINTER.getTexture(), x * scaledSize, y * scaledSize, scaledSize, scaledSize);
+                            Main.getBatch().draw(new Texture(TileAssets.FARM_WINTER.getImagePath()), x * scaledSize, y * scaledSize, scaledSize, scaledSize);
                         else
-                            Main.getBatch().draw(TileAssets.GRASS.getTexture(), x * scaledSize, y * scaledSize, scaledSize, scaledSize);
+                            Main.getBatch().draw(new Texture(TileAssets.GRASS.getImagePath()), x * scaledSize, y * scaledSize, scaledSize, scaledSize);
                     }
                     case TileType.ROAD -> {
-                        Main.getBatch().draw(TileAssets.ROAD.getTexture(), x * scaledSize, y * scaledSize, scaledSize, scaledSize);
+                        Main.getBatch().draw(new Texture(TileAssets.ROAD.getImagePath()), x * scaledSize, y * scaledSize, scaledSize, scaledSize);
                     }
                     case TileType.STONE_WALL -> {
-                        Main.getBatch().draw(TileAssets.STONE_WALL.getTexture(), x * scaledSize, y * scaledSize, scaledSize, scaledSize);
+                        Main.getBatch().draw(new Texture(TileAssets.STONE_WALL.getImagePath()), x * scaledSize, y * scaledSize, scaledSize, scaledSize);
                     }
                     case TileType.SQUARE -> {
-                        Main.getBatch().draw(TileAssets.SQUARE.getTexture(), x * scaledSize, y * scaledSize, scaledSize, scaledSize);
+                        Main.getBatch().draw(new Texture(TileAssets.SQUARE.getImagePath()), x * scaledSize, y * scaledSize, scaledSize, scaledSize);
                     }
                     case TileType.BEACH -> {
-                        Main.getBatch().draw(TileAssets.BEACH.getTexture(), x * scaledSize, y * scaledSize, scaledSize, scaledSize);
+                        Main.getBatch().draw(new Texture(TileAssets.BEACH.getImagePath()), x * scaledSize, y * scaledSize, scaledSize, scaledSize);
                     }
                     case TileType.SHIPPING_BIN -> {
-                        Main.getBatch().draw(TileAssets.SHIPPING_BIN.getTexture(), x * scaledSize, y * scaledSize, scaledSize, scaledSize);
+                        Main.getBatch().draw(new Texture(TileAssets.SHIPPING_BIN.getImagePath()), x * scaledSize, y * scaledSize, scaledSize, scaledSize);
                     }
                 }
             }
@@ -1545,37 +1543,43 @@ public class GameView implements Screen, InputProcessor {
         for (int x = max((midX - Gdx.graphics.getWidth() / 2) / scaledSize - 5, 0); x < min((midX + Gdx.graphics.getWidth() / 2) / scaledSize + 1, 150); x++) {
             for (int y = max((midY - Gdx.graphics.getHeight() / 2) / scaledSize - 5, 0); y < min((midY + Gdx.graphics.getHeight() / 2) / scaledSize + 1, 160); y++) {
                 Coordinate coordinate = new Coordinate(x, y);
-                Tile tile = Map.findTile(coordinate);
+                Tile tile = Map.findTile(coordinate, AppClient.getCurrentGame());
                 switch (tile.getTileType()) {
                     case TileType.GAME_BUILDING -> {
-                        Tile backTile = Map.findTile(new Coordinate(coordinate.getX() - 1, coordinate.getY()));
-                        Tile upTile = Map.findTile(new Coordinate(coordinate.getX(), coordinate.getY() - 1));
+                        Tile backTile = Map.findTile(new Coordinate(coordinate.getX() - 1, coordinate.getY()),
+                            AppClient.getCurrentGame());
+                        Tile upTile = Map.findTile(new Coordinate(coordinate.getX(), coordinate.getY() - 1),
+                            AppClient.getCurrentGame());
                         if (backTile.getTileType() != TileType.GAME_BUILDING && upTile.getTileType() != TileType.GAME_BUILDING) {
                             GameBuilding gameBuilding = AppClient.getCurrentGame().getMap().findGameBuilding(coordinate);
                             Coordinate size = new Coordinate(gameBuilding.getEndCordinate().getX() - gameBuilding.getStartCordinate().getX(),
                                 gameBuilding.getEndCordinate().getY() - gameBuilding.getStartCordinate().getY());
-                            Main.getBatch().draw(gameBuilding.getTexture(), x * scaledSize, y * scaledSize, size.getX() * scaledSize, size.getY() * scaledSize);
+                            Main.getBatch().draw(new Texture(gameBuilding.getImagePath()), x * scaledSize, y * scaledSize, size.getX() * scaledSize, size.getY() * scaledSize);
                         }
                     }
                     case TileType.PLAYER_BUILDING -> {
-                        Tile backTile = Map.findTile(new Coordinate(coordinate.getX() - 1, coordinate.getY()));
-                        Tile upTile = Map.findTile(new Coordinate(coordinate.getX(), coordinate.getY() - 1));
+                        Tile backTile = Map.findTile(new Coordinate(coordinate.getX() - 1, coordinate.getY()),
+                            AppClient.getCurrentGame());
+                        Tile upTile = Map.findTile(new Coordinate(coordinate.getX(), coordinate.getY() - 1),
+                            AppClient.getCurrentGame());
                         if (backTile.getTileType() != TileType.PLAYER_BUILDING && upTile.getTileType() != TileType.PLAYER_BUILDING) {
-                            Main.getBatch().draw(TileAssets.HOUSE.getTexture(), x * scaledSize, y * scaledSize, 10 * scaledSize, 10 * scaledSize);
+                            Main.getBatch().draw(new Texture(TileAssets.HOUSE.getImagePath()), x * scaledSize, y * scaledSize, 10 * scaledSize, 10 * scaledSize);
                         }
                     }
                     case TileType.GREEN_HOUSE -> {
-                        Tile backTile = Map.findTile(new Coordinate(coordinate.getX() - 1, coordinate.getY()));
-                        Tile upTile = Map.findTile(new Coordinate(coordinate.getX(), coordinate.getY() - 1));
+                        Tile backTile = Map.findTile(new Coordinate(coordinate.getX() - 1, coordinate.getY()),
+                            AppClient.getCurrentGame());
+                        Tile upTile = Map.findTile(new Coordinate(coordinate.getX(), coordinate.getY() - 1),
+                            AppClient.getCurrentGame());
                         if (backTile.getTileType() != TileType.GREEN_HOUSE && upTile.getTileType() != TileType.GREEN_HOUSE) {
                             if (AppClient.getCurrentPlayer().getFarm().getGreenHouse().isAvailable())
-                                Main.getBatch().draw(TileAssets.GREEN_HOUSE.getTexture(), (x - 1) * scaledSize, (y) * scaledSize, 8 * scaledSize, 7 * scaledSize);
+                                Main.getBatch().draw(new Texture(TileAssets.GREEN_HOUSE.getImagePath()), (x - 1) * scaledSize, (y) * scaledSize, 8 * scaledSize, 7 * scaledSize);
                             else
-                                Main.getBatch().draw(TileAssets.BROKEN_GREEN_HOUSE.getTexture(), (x) * scaledSize, (y) * scaledSize, 6 * scaledSize, 5 * scaledSize);
+                                Main.getBatch().draw(new Texture(TileAssets.BROKEN_GREEN_HOUSE.getImagePath()), (x) * scaledSize, (y) * scaledSize, 6 * scaledSize, 5 * scaledSize);
                         }
 
                         if (AppClient.getCurrentPlayer().getFarm().getGreenHouse().isAvailable())
-                            Main.getBatch().draw(TileAssets.FARM_ORDINARY.getTexture(), x * scaledSize, (y + 1) * scaledSize, scaledSize, scaledSize);
+                            Main.getBatch().draw(new Texture(TileAssets.FARM_ORDINARY.getImagePath()), x * scaledSize, (y + 1) * scaledSize, scaledSize, scaledSize);
                     }
                 }
             }
@@ -1584,7 +1588,7 @@ public class GameView implements Screen, InputProcessor {
         for (int x = min((midX + Gdx.graphics.getWidth() / 2) / scaledSize + 1, 150) - 1; x >= max((midX - Gdx.graphics.getWidth() / 2) / scaledSize - 5, 0); x--) {
             for (int y = min((midY + Gdx.graphics.getHeight() / 2) / scaledSize + 1, 160) - 1; y >= max((midY - Gdx.graphics.getHeight() / 2) / scaledSize - 5, 0); y--) {
                 Coordinate coordinate = new Coordinate(x, y);
-                Tile tile = Map.findTile(coordinate);
+                Tile tile = Map.findTile(coordinate, AppClient.getCurrentGame());
                 switch (tile.getTileType()) {
                     case TileType.FARM, TileType.PLOWED_FARM, TileType.PLAIN -> {
                         drawGood(tile);

@@ -16,6 +16,7 @@ import com.StardewValley.models.goods.recipes.CraftingRecipeType;
 import com.StardewValley.models.interactions.NPCs.NPC;
 import com.StardewValley.models.interactions.NPCs.NPCTypes;
 import com.StardewValley.server.ClientHandler;
+import com.badlogic.gdx.graphics.Texture;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -35,7 +36,7 @@ public class PierreGeneralStore extends GameBuilding {
                 new Pair<>(9, 17),
                 new Coordinate(80, 60),
                 new Coordinate(90, 70),
-                TileAssets.PIERRE_SHOP.getTexture());
+                (TileAssets.PIERRE_SHOP.getImagePath()));
 
         stockParts = new ArrayList<>(Arrays.asList(
                 "Year-Round Stock", "Spring", "Summer", "Fall", "Winter", "BackPacks"

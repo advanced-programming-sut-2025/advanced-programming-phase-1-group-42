@@ -15,6 +15,7 @@ import com.StardewValley.models.interactions.Animals.Animal;
 import com.StardewValley.models.interactions.NPCs.NPC;
 import com.StardewValley.models.interactions.Player;
 import com.StardewValley.models.interactions.game_buildings.GameBuilding;
+import com.StardewValley.server.ClientHandler;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.scenes.scene2d.ui.*;
 import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
@@ -33,65 +34,65 @@ public class Map {
 
 
 
-    //Textures
-    Texture farm_Background;
-    Texture empty;
-    Texture null_txr;
-    Texture wall;
-    Texture water;
-    Texture greenhouse;
-    Texture playerBuilding;
-    Texture quarry ;
-    Texture road;
-    Texture beach ;
-    Texture square ;
-    Texture wateredFarm;
-    Texture tree ;
-    Texture seed ;
-    Texture Crop ;
-    Texture playerTexture;
-    Texture mushroomTree;
-    Texture plain ;
-    Texture abigail ;
-    Texture clint ;
-    Texture gus ;
-    Texture harvey ;
-    Texture leah ;
-    Texture marnie ;
-    Texture morris;
-    Texture pierre;
-    Texture robin ;
-    Texture sebastian ;
-    Texture willy ;
-    Image farm_Background_img;
-    Image empty_img ;
-    Image null_img;
-    Image wall_img ;
-    Image water_img ;
-    Image greenhouse_img;
-    Image playerBuilding_img;
-    Image quarry_img;
-    Image road_img ;
-    Image beach_img ;
-    Image square_img ;
-    Image wateredFarm_img;
-    Image tree_img ;
-    Image seed_img ;
-    Image Crop_img ;
-    Image player_img ;
-    Image mushroomTree_img;
-    Image plain_img ;
-    Image abigail_img ;
-    Image clint_img ;
-    Image gus_img ;
-    Image harvey_img;
-    Image leah_img ;
-    Image marnie_img ;
-    Image morris_img ;
-    Image pierre_img ;
-    Image robin_img ;
-    Image sebastian_img;
-    Image willy_img ;
+//    //Textures
+//    Texture farm_Background;
+//    Texture empty;
+//    Texture null_txr;
+//    Texture wall;
+//    Texture water;
+//    Texture greenhouse;
+//    Texture playerBuilding;
+//    Texture quarry ;
+//    Texture road;
+//    Texture beach ;
+//    Texture square ;
+//    Texture wateredFarm;
+//    Texture tree ;
+//    Texture seed ;
+//    Texture Crop ;
+//    Texture playerTexture;
+//    Texture mushroomTree;
+//    Texture plain ;
+//    Texture abigail ;
+//    Texture clint ;
+//    Texture gus ;
+//    Texture harvey ;
+//    Texture leah ;
+//    Texture marnie ;
+//    Texture morris;
+//    Texture pierre;
+//    Texture robin ;
+//    Texture sebastian ;
+//    Texture willy ;
+//    Image farm_Background_img;
+//    Image empty_img ;
+//    Image null_img;
+//    Image wall_img ;
+//    Image water_img ;
+//    Image greenhouse_img;
+//    Image playerBuilding_img;
+//    Image quarry_img;
+//    Image road_img ;
+//    Image beach_img ;
+//    Image square_img ;
+//    Image wateredFarm_img;
+//    Image tree_img ;
+//    Image seed_img ;
+//    Image Crop_img ;
+//    Image player_img ;
+//    Image mushroomTree_img;
+//    Image plain_img ;
+//    Image abigail_img ;
+//    Image clint_img ;
+//    Image gus_img ;
+//    Image harvey_img;
+//    Image leah_img ;
+//    Image marnie_img ;
+//    Image morris_img ;
+//    Image pierre_img ;
+//    Image robin_img ;
+//    Image sebastian_img;
+//    Image willy_img ;
 
     static final HashMap<String, String> colorMap = new HashMap<String, String>() {{
         // Reset
@@ -168,7 +169,7 @@ public class Map {
     public Map() {
         this.startingCoordinate = new Coordinate(0, 0);
         this.endingCoordinate = new Coordinate(150, 160);
-        declareTextures();
+//        declareTextures();
 
     }
 
@@ -181,7 +182,8 @@ public class Map {
                 boolean printedPlayer = false;
                 boolean printedNPC = false;
                 Coordinate coordinate = new Coordinate(x + i,y + j);
-                Tile tile = findTile(coordinate);
+                Tile tile = null;
+//                    findTile(coordinate);
 
                 if(!printedPlayer && !printedNPC) {
                     if (tile == null) {
@@ -306,7 +308,8 @@ public class Map {
         for(int j = 0 ; j < size; j++) {
             for (int i = 0; i < size; i++) {
                 Coordinate coordinate = new Coordinate(x + i,y + j);
-                Tile tile = findTile(coordinate);
+                Tile tile = null;
+//                    findTile(coordinate);
                 if (tile != null) {
                     if(tile.isWatered()) {
                         map[i][j] =  colorMap.get("Teal_Background") + " " + colorMap.get("Reset");
@@ -375,273 +378,274 @@ public class Map {
     }
 
 
-    private Table mapTable;
-    private Stack[][] mapCells = new Stack[160][170];
-    public ScrollPane createGraphicalMap() {
-        mapTable = new Table(); // use the field instead of a local variable
-        mapTable.defaults().width(6).height(6);
-
-        rebuildMapTable(); // extract the build logic into a reusable method
-
-        ScrollPane scrollPane = new ScrollPane(mapTable, AppClient.getAssets().getSkin());
-        scrollPane.setFadeScrollBars(false);
-        scrollPane.setScrollingDisabled(true, false);
-        scrollPane.setForceScroll(false, true);
-        scrollPane.setSize(980, 780);
-
-        return scrollPane;
-    }
-    private void rebuildMapTable() {
-        mapTable.clear();
-
-        for (int j = 1; j < 161; j++) {
-            mapTable.row();
-            for (int i = 0; i < 150; i++) {
-                Coordinate coordinate = new Coordinate(i, 160 - j);
-                Tile tile = findTile(coordinate);
-                Image img = null_img;
-
-                if (tile == null) {
-                    img = empty_img;
-                } else {
-                    if (tile.isWatered()) {
-                        img = wateredFarm_img;
-                    }
-
-                    for (Good good : tile.getGoods()) {
-                        if (good instanceof ForagingCrop) img = Crop_img;
-                        else if (good instanceof ForagingSeed) img = seed_img;
-                        else if ("Grass".equals(good.getName())) img = tree_img;
-                    }
-
-                    for (Player player : AppClient.getCurrentGame().getPlayers()) {
-                        if (player.getCoordinate().equals(coordinate)) img = player_img;
-                    }
-
-                    for (NPC npc : AppClient.getCurrentGame().getNPCs()) {
-                        if (npc.getType().getCoordinate().equals(coordinate)) {
-                            img = switch (npc.getType().getName()) {
-                                case "Abigail" -> abigail_img;
-                                case "Clint" -> clint_img;
-                                case "Gus" -> gus_img;
-                                case "Harvey" -> harvey_img;
-                                case "Leah" -> leah_img;
-                                case "Marnie" -> marnie_img;
-                                case "Morris" -> morris_img;
-                                case "Pierre" -> pierre_img;
-                                case "Robin" -> robin_img;
-                                case "Sebastian" -> sebastian_img;
-                                case "Willy" -> willy_img;
-                                default -> mushroomTree_img;
-                            };
-                        }
-                    }
-
-                    for (Animal animal : AppClient.getCurrentGame().getMap().allAnimals()) {
-                        if (animal.getCoordinate().equals(coordinate)) {
-                            img = mushroomTree_img;
-                        }
-                    }
-                }
-
-                Stack cellStack = new Stack();
-                Image bg = new Image(determineTileBackground(tile).getDrawable());
-                Image fg = new Image(img.getDrawable());
-
-                bg.setSize(6, 6);
-                fg.setSize(6, 6);
-
-                cellStack.add(bg);
-                cellStack.add(fg);
-
-
-                mapCells[i][160 - j] = cellStack;
-                mapTable.add(cellStack).width(6).height(6);
-            }
-        }
-    }
+//    private Table mapTable;
+//    private Stack[][] mapCells = new Stack[160][170];
+    //TODO Parsa
+//    public ScrollPane createGraphicalMap() {
+//        mapTable = new Table(); // use the field instead of a local variable
+//        mapTable.defaults().width(6).height(6);
+//
+////        rebuildMapTable(); // extract the build logic into a reusable method
+//
+//        ScrollPane scrollPane = new ScrollPane(mapTable, AppClient.getAssets().getSkin());
+//        scrollPane.setFadeScrollBars(false);
+//        scrollPane.setScrollingDisabled(true, false);
+//        scrollPane.setForceScroll(false, true);
+//        scrollPane.setSize(980, 780);
+//
+//        return scrollPane;
+//    }
+//    private void rebuildMapTable() {
+//        mapTable.clear();
+//
+//        for (int j = 1; j < 161; j++) {
+//            mapTable.row();
+//            for (int i = 0; i < 150; i++) {
+//                Coordinate coordinate = new Coordinate(i, 160 - j);
+//                Tile tile = findTile(coordinate);
+//                Image img = null_img;
+//
+//                if (tile == null) {
+//                    img = empty_img;
+//                } else {
+//                    if (tile.isWatered()) {
+//                        img = wateredFarm_img;
+//                    }
+//
+//                    for (Good good : tile.getGoods()) {
+//                        if (good instanceof ForagingCrop) img = Crop_img;
+//                        else if (good instanceof ForagingSeed) img = seed_img;
+//                        else if ("Grass".equals(good.getName())) img = tree_img;
+//                    }
+//
+//                    for (Player player : AppClient.getCurrentGame().getPlayers()) {
+//                        if (player.getCoordinate().equals(coordinate)) img = player_img;
+//                    }
+//
+//                    for (NPC npc : AppClient.getCurrentGame().getNPCs()) {
+//                        if (npc.getType().getCoordinate().equals(coordinate)) {
+//                            img = switch (npc.getType().getName()) {
+//                                case "Abigail" -> abigail_img;
+//                                case "Clint" -> clint_img;
+//                                case "Gus" -> gus_img;
+//                                case "Harvey" -> harvey_img;
+//                                case "Leah" -> leah_img;
+//                                case "Marnie" -> marnie_img;
+//                                case "Morris" -> morris_img;
+//                                case "Pierre" -> pierre_img;
+//                                case "Robin" -> robin_img;
+//                                case "Sebastian" -> sebastian_img;
+//                                case "Willy" -> willy_img;
+//                                default -> mushroomTree_img;
+//                            };
+//                        }
+//                    }
+//
+//                    for (Animal animal : AppClient.getCurrentGame().getMap().allAnimals()) {
+//                        if (animal.getCoordinate().equals(coordinate)) {
+//                            img = mushroomTree_img;
+//                        }
+//                    }
+//                }
+//
+//                Stack cellStack = new Stack();
+//                Image bg = new Image(determineTileBackground(tile).getDrawable());
+//                Image fg = new Image(img.getDrawable());
+//
+//                bg.setSize(6, 6);
+//                fg.setSize(6, 6);
+//
+//                cellStack.add(bg);
+//                cellStack.add(fg);
+//
+//
+//                mapCells[i][160 - j] = cellStack;
+//                mapTable.add(cellStack).width(6).height(6);
+//            }
+//        }
+//    }
     public void updateMap() {
-        if (mapCells[AppClient.getCurrentPlayer().getCoordinate().getX()][AppClient.getCurrentPlayer().getCoordinate().getY()] != null) {
-            updateMapAround(AppClient.getCurrentPlayer().getLastCoordinate().getX() , AppClient.getCurrentPlayer().getLastCoordinate().getY());
-            updateMapAround(AppClient.getCurrentPlayer().getCoordinate().getX() , AppClient.getCurrentPlayer().getCoordinate().getY());
-        }
+//        if (mapCells[AppClient.getCurrentPlayer().getCoordinate().getX()][AppClient.getCurrentPlayer().getCoordinate().getY()] != null) {
+////            updateMapAround(AppClient.getCurrentPlayer().getLastCoordinate().getX() , AppClient.getCurrentPlayer().getLastCoordinate().getY());
+////            updateMapAround(AppClient.getCurrentPlayer().getCoordinate().getX() , AppClient.getCurrentPlayer().getCoordinate().getY());
+//        }
     }
-    private void updateMapAround(int x , int y) {
-
-                Stack cellStack = mapCells[x][y];
-                cellStack.clearChildren(); // Remove all previous images in the stack
-
-                Coordinate coord = new Coordinate(x,  y);
-                Tile tile = findTile(coord);
-
-                // Background image
-                Image bg = new Image(determineTileBackground(tile).getDrawable());
-                bg.setSize(6, 6);
-                cellStack.add(bg);
-
-                // Determine what foreground image to show:
-                Image fg = null_img; // default
-
-                if (tile == null) {
-                    fg = empty_img;
-                } else {
-                    if (tile.isWatered()) {
-                        fg = wateredFarm_img;
-                    }
-
-                    for (Good good : tile.getGoods()) {
-                        if (good instanceof ForagingCrop) fg = Crop_img;
-                        else if (good instanceof ForagingSeed) fg = seed_img;
-                        else if ("Grass".equals(good.getName())) fg = tree_img;
-                    }
-
-                    for (Player player : AppClient.getCurrentGame().getPlayers()) {
-                        if (player.getCoordinate().equals(coord)) {
-                            fg = player_img;
-                        }
-                    }
-
-                    for (NPC npc : AppClient.getCurrentGame().getNPCs()) {
-                        if (npc.getType().getCoordinate().equals(coord)) {
-                            fg = switch (npc.getType().getName()) {
-                                case "Abigail" -> abigail_img;
-                                case "Clint" -> clint_img;
-                                case "Gus" -> gus_img;
-                                case "Harvey" -> harvey_img;
-                                case "Leah" -> leah_img;
-                                case "Marnie" -> marnie_img;
-                                case "Morris" -> morris_img;
-                                case "Pierre" -> pierre_img;
-                                case "Robin" -> robin_img;
-                                case "Sebastian" -> sebastian_img;
-                                case "Willy" -> willy_img;
-                                default -> mushroomTree_img;
-                            };
-                        }
-                    }
-
-                    for (Animal animal : AppClient.getCurrentGame().getMap().allAnimals()) {
-                        if (animal.getCoordinate().equals(coord)) {
-                            fg = mushroomTree_img;
-                        }
-                    }
-                }
-
-                fg.setSize(6, 6);
-                cellStack.add(fg);
-
-    }
-    private Image determineTileBackground(Tile tile) {
-        if (tile == null) return empty_img;
-        if (tile.isWatered()) return wateredFarm_img;
-
-        return switch (tile.getTileType()) {
-            case FARM -> farm_Background_img;
-            case WATER -> water_img;
-            case GREEN_HOUSE -> greenhouse_img;
-            case PLAYER_BUILDING -> playerBuilding_img;
-            case ROAD -> road_img;
-            case QUARRY -> quarry_img;
-            case BEACH -> beach_img;
-            case SQUARE -> square_img;
-            case STONE_WALL -> wall_img;
-            default -> plain_img;
-        };
-    }
-    public void declareTextures(){
-        farm_Background = new Texture("GameAssets/Map/Farm.png");
-        empty = new Texture("GameAssets/Map/Border.png");
-        null_txr = new Texture("GameAssets/Map/Null.png");
-        wall = new Texture("GameAssets/Map/Wall.png");
-        water = new Texture("GameAssets/Map/Water.png");
-        greenhouse = new Texture("GameAssets/Map/Greenhouse.png");
-        playerBuilding = new Texture("GameAssets/Map/House.png");
-        quarry = new Texture("GameAssets/Map/Quarry.png");
-        road = new Texture("GameAssets/Map/Road.png");
-        beach = new Texture("GameAssets/Map/Beach.png");
-        square = new Texture("GameAssets/Map/Square.png");
-        wateredFarm = new Texture("GameAssets/Map/WateredFarm.png");
-        tree = new Texture("GameAssets/Map/Tree.png");
-        seed = new Texture("GameAssets/Map/Seed.png");
-        Crop = new Texture("GameAssets/Map/Crop.png");
-        playerTexture = new Texture("GameAssets/Map/Player.png");
-        mushroomTree = new Texture("GameAssets/Map/MushroomTree.png");
-        plain = new Texture("GameAssets/Map/Plain.png");
-        abigail = new Texture("GameAssets/Map/Abigail.png");
-        clint = new Texture("GameAssets/Map/Clint.png");
-        gus = new Texture("GameAssets/Map/Gus.png");
-        harvey = new Texture("GameAssets/Map/Harvey.png");
-        leah = new Texture("GameAssets/Map/Leah.png");
-        marnie = new Texture("GameAssets/Map/Marnie.png");
-        morris = new Texture("GameAssets/Map/Morris.png");
-        pierre = new Texture("GameAssets/Map/Pierre.png");
-        robin = new Texture("GameAssets/Map/Robin.png");
-        sebastian = new Texture("GameAssets/Map/Sebastian.png");
-        willy = new Texture("GameAssets/Map/Willy.png");
-
-// Create Image objects for all textures
-        farm_Background_img = new Image(new TextureRegionDrawable(farm_Background));
-        empty_img = new Image(new TextureRegionDrawable(empty));
-        null_img = new Image(new TextureRegionDrawable(null_txr));
-        wall_img = new Image(new TextureRegionDrawable(wall));
-        water_img = new Image(new TextureRegionDrawable(water));
-        greenhouse_img = new Image(new TextureRegionDrawable(greenhouse));
-        playerBuilding_img = new Image(new TextureRegionDrawable(playerBuilding));
-        quarry_img = new Image(new TextureRegionDrawable(quarry));
-        road_img = new Image(new TextureRegionDrawable(road));
-        beach_img = new Image(new TextureRegionDrawable(beach));
-        square_img = new Image(new TextureRegionDrawable(square));
-        wateredFarm_img = new Image(new TextureRegionDrawable(wateredFarm));
-        tree_img = new Image(new TextureRegionDrawable(tree));
-        seed_img = new Image(new TextureRegionDrawable(seed));
-        Crop_img = new Image(new TextureRegionDrawable(Crop));
-        player_img = new Image(new TextureRegionDrawable(playerTexture));
-        mushroomTree_img = new Image(new TextureRegionDrawable(mushroomTree));
-        plain_img = new Image(new TextureRegionDrawable(plain));
-        abigail_img = new Image(new TextureRegionDrawable(abigail));
-        clint_img = new Image(new TextureRegionDrawable(clint));
-        gus_img = new Image(new TextureRegionDrawable(gus));
-        harvey_img = new Image(new TextureRegionDrawable(harvey));
-        leah_img = new Image(new TextureRegionDrawable(leah));
-        marnie_img = new Image(new TextureRegionDrawable(marnie));
-        morris_img = new Image(new TextureRegionDrawable(morris));
-        pierre_img = new Image(new TextureRegionDrawable(pierre));
-        robin_img = new Image(new TextureRegionDrawable(robin));
-        sebastian_img = new Image(new TextureRegionDrawable(sebastian));
-        willy_img = new Image(new TextureRegionDrawable(willy));
-
-// Set sizes for all images (6x6)
-        int n = 8;
-        farm_Background_img.setSize(n, n);
-        empty_img.setSize(n, n);
-        null_img.setSize(n, n);
-        wall_img.setSize(n, n);
-        water_img.setSize(n, n);
-        greenhouse_img.setSize(n, n);
-        playerBuilding_img.setSize(n, n);
-        quarry_img.setSize(n, n);
-        road_img.setSize(n, n);
-        beach_img.setSize(n, n);
-        square_img.setSize(n, n);
-        wateredFarm_img.setSize(n, n);
-        tree_img.setSize(n, n);
-        seed_img.setSize(n, n);
-        Crop_img.setSize(n, n);
-        player_img.setSize(n, n);
-        mushroomTree_img.setSize(n, n);
-        plain_img.setSize(n, n);
-        abigail_img.setSize(n, n);
-        clint_img.setSize(n, n);
-        gus_img.setSize(n, n);
-        harvey_img.setSize(n, n);
-        leah_img.setSize(n, n);
-        marnie_img.setSize(n, n);
-        morris_img.setSize(n, n);
-        pierre_img.setSize(n, n);
-        robin_img.setSize(n, n);
-        sebastian_img.setSize(n ,n);
-        willy_img.setSize(n, n);
-    }
+//    private void updateMapAround(int x , int y) {
+//
+//                Stack cellStack = mapCells[x][y];
+//                cellStack.clearChildren(); // Remove all previous images in the stack
+//
+//                Coordinate coord = new Coordinate(x,  y);
+//                Tile tile = findTile(coord);
+//
+//                // Background image
+//                Image bg = new Image(determineTileBackground(tile).getDrawable());
+//                bg.setSize(6, 6);
+//                cellStack.add(bg);
+//
+//                // Determine what foreground image to show:
+//                Image fg = null_img; // default
+//
+//                if (tile == null) {
+//                    fg = empty_img;
+//                } else {
+//                    if (tile.isWatered()) {
+//                        fg = wateredFarm_img;
+//                    }
+//
+//                    for (Good good : tile.getGoods()) {
+//                        if (good instanceof ForagingCrop) fg = Crop_img;
+//                        else if (good instanceof ForagingSeed) fg = seed_img;
+//                        else if ("Grass".equals(good.getName())) fg = tree_img;
+//                    }
+//
+//                    for (Player player : AppClient.getCurrentGame().getPlayers()) {
+//                        if (player.getCoordinate().equals(coord)) {
+//                            fg = player_img;
+//                        }
+//                    }
+//
+//                    for (NPC npc : AppClient.getCurrentGame().getNPCs()) {
+//                        if (npc.getType().getCoordinate().equals(coord)) {
+//                            fg = switch (npc.getType().getName()) {
+//                                case "Abigail" -> abigail_img;
+//                                case "Clint" -> clint_img;
+//                                case "Gus" -> gus_img;
+//                                case "Harvey" -> harvey_img;
+//                                case "Leah" -> leah_img;
+//                                case "Marnie" -> marnie_img;
+//                                case "Morris" -> morris_img;
+//                                case "Pierre" -> pierre_img;
+//                                case "Robin" -> robin_img;
+//                                case "Sebastian" -> sebastian_img;
+//                                case "Willy" -> willy_img;
+//                                default -> mushroomTree_img;
+//                            };
+//                        }
+//                    }
+//
+//                    for (Animal animal : AppClient.getCurrentGame().getMap().allAnimals()) {
+//                        if (animal.getCoordinate().equals(coord)) {
+//                            fg = mushroomTree_img;
+//                        }
+//                    }
+//                }
+//
+//                fg.setSize(6, 6);
+//                cellStack.add(fg);
+//
+//    }
+//    private Image determineTileBackground(Tile tile) {
+//        if (tile == null) return empty_img;
+//        if (tile.isWatered()) return wateredFarm_img;
+//
+//        return switch (tile.getTileType()) {
+//            case FARM -> farm_Background_img;
+//            case WATER -> water_img;
+//            case GREEN_HOUSE -> greenhouse_img;
+//            case PLAYER_BUILDING -> playerBuilding_img;
+//            case ROAD -> road_img;
+//            case QUARRY -> quarry_img;
+//            case BEACH -> beach_img;
+//            case SQUARE -> square_img;
+//            case STONE_WALL -> wall_img;
+//            default -> plain_img;
+//        };
+//    }
+//    public void declareTextures(){
+//        farm_Background = new Texture("GameAssets/Map/Farm.png");
+//        empty = new Texture("GameAssets/Map/Border.png");
+//        null_txr = new Texture("GameAssets/Map/Null.png");
+//        wall = new Texture("GameAssets/Map/Wall.png");
+//        water = new Texture("GameAssets/Map/Water.png");
+//        greenhouse = new Texture("GameAssets/Map/Greenhouse.png");
+//        playerBuilding = new Texture("GameAssets/Map/House.png");
+//        quarry = new Texture("GameAssets/Map/Quarry.png");
+//        road = new Texture("GameAssets/Map/Road.png");
+//        beach = new Texture("GameAssets/Map/Beach.png");
+//        square = new Texture("GameAssets/Map/Square.png");
+//        wateredFarm = new Texture("GameAssets/Map/WateredFarm.png");
+//        tree = new Texture("GameAssets/Map/Tree.png");
+//        seed = new Texture("GameAssets/Map/Seed.png");
+//        Crop = new Texture("GameAssets/Map/Crop.png");
+//        playerTexture = new Texture("GameAssets/Map/Player.png");
+//        mushroomTree = new Texture("GameAssets/Map/MushroomTree.png");
+//        plain = new Texture("GameAssets/Map/Plain.png");
+//        abigail = new Texture("GameAssets/Map/Abigail.png");
+//        clint = new Texture("GameAssets/Map/Clint.png");
+//        gus = new Texture("GameAssets/Map/Gus.png");
+//        harvey = new Texture("GameAssets/Map/Harvey.png");
+//        leah = new Texture("GameAssets/Map/Leah.png");
+//        marnie = new Texture("GameAssets/Map/Marnie.png");
+//        morris = new Texture("GameAssets/Map/Morris.png");
+//        pierre = new Texture("GameAssets/Map/Pierre.png");
+//        robin = new Texture("GameAssets/Map/Robin.png");
+//        sebastian = new Texture("GameAssets/Map/Sebastian.png");
+//        willy = new Texture("GameAssets/Map/Willy.png");
+//
+//// Create Image objects for all textures
+//        farm_Background_img = new Image(new TextureRegionDrawable(farm_Background));
+//        empty_img = new Image(new TextureRegionDrawable(empty));
+//        null_img = new Image(new TextureRegionDrawable(null_txr));
+//        wall_img = new Image(new TextureRegionDrawable(wall));
+//        water_img = new Image(new TextureRegionDrawable(water));
+//        greenhouse_img = new Image(new TextureRegionDrawable(greenhouse));
+//        playerBuilding_img = new Image(new TextureRegionDrawable(playerBuilding));
+//        quarry_img = new Image(new TextureRegionDrawable(quarry));
+//        road_img = new Image(new TextureRegionDrawable(road));
+//        beach_img = new Image(new TextureRegionDrawable(beach));
+//        square_img = new Image(new TextureRegionDrawable(square));
+//        wateredFarm_img = new Image(new TextureRegionDrawable(wateredFarm));
+//        tree_img = new Image(new TextureRegionDrawable(tree));
+//        seed_img = new Image(new TextureRegionDrawable(seed));
+//        Crop_img = new Image(new TextureRegionDrawable(Crop));
+//        player_img = new Image(new TextureRegionDrawable(playerTexture));
+//        mushroomTree_img = new Image(new TextureRegionDrawable(mushroomTree));
+//        plain_img = new Image(new TextureRegionDrawable(plain));
+//        abigail_img = new Image(new TextureRegionDrawable(abigail));
+//        clint_img = new Image(new TextureRegionDrawable(clint));
+//        gus_img = new Image(new TextureRegionDrawable(gus));
+//        harvey_img = new Image(new TextureRegionDrawable(harvey));
+//        leah_img = new Image(new TextureRegionDrawable(leah));
+//        marnie_img = new Image(new TextureRegionDrawable(marnie));
+//        morris_img = new Image(new TextureRegionDrawable(morris));
+//        pierre_img = new Image(new TextureRegionDrawable(pierre));
+//        robin_img = new Image(new TextureRegionDrawable(robin));
+//        sebastian_img = new Image(new TextureRegionDrawable(sebastian));
+//        willy_img = new Image(new TextureRegionDrawable(willy));
+//
+//// Set sizes for all images (6x6)
+//        int n = 8;
+//        farm_Background_img.setSize(n, n);
+//        empty_img.setSize(n, n);
+//        null_img.setSize(n, n);
+//        wall_img.setSize(n, n);
+//        water_img.setSize(n, n);
+//        greenhouse_img.setSize(n, n);
+//        playerBuilding_img.setSize(n, n);
+//        quarry_img.setSize(n, n);
+//        road_img.setSize(n, n);
+//        beach_img.setSize(n, n);
+//        square_img.setSize(n, n);
+//        wateredFarm_img.setSize(n, n);
+//        tree_img.setSize(n, n);
+//        seed_img.setSize(n, n);
+//        Crop_img.setSize(n, n);
+//        player_img.setSize(n, n);
+//        mushroomTree_img.setSize(n, n);
+//        plain_img.setSize(n, n);
+//        abigail_img.setSize(n, n);
+//        clint_img.setSize(n, n);
+//        gus_img.setSize(n, n);
+//        harvey_img.setSize(n, n);
+//        leah_img.setSize(n, n);
+//        marnie_img.setSize(n, n);
+//        morris_img.setSize(n, n);
+//        pierre_img.setSize(n, n);
+//        robin_img.setSize(n, n);
+//        sebastian_img.setSize(n ,n);
+//        willy_img.setSize(n, n);
+//    }
 
 
     public void setFarms(ArrayList<Farm> farms) {
@@ -680,8 +684,8 @@ public class Map {
         return tiles;
     }
 
-    public static Tile findTile(Coordinate coordinate) {
-        for (Tile tile : AppClient.getCurrentGame().getMap().getTiles()) {
+    public static Tile findTile(Coordinate coordinate, Game game) {
+        for (Tile tile : game.getMap().getTiles()) {
             if(tile.getCordinate().equals(coordinate))
                 return tile;
         }
@@ -742,17 +746,17 @@ public class Map {
         return null;
     }
 
-    public void generateRandomForagingCrops(int probability) {
+    public void generateRandomForagingCrops(int probability, ClientHandler clientHandler) {
         for (int i = 0 ; i < 140 ; i++){
             for(int j = 0 ; j < 160 ; j++){
                 int random = (int)Math.floor((Math.random()*100));
                 Coordinate coordinate = new Coordinate(i , j);
-                Tile tile = findTile(coordinate);
+                Tile tile = findTile(coordinate, clientHandler.getClientGame());
                 if(tile != null){
                     if(tile.getTileType().equals(TileType.FARM) || tile.getTileType().equals(TileType.PLAIN)){
                         if(random >= probability){
                             int randomForaging = (int)Math.floor((Math.random()*9));
-                            switch (AppClient.getCurrentGame().getDateTime().getSeasonOfYear().getName()){
+                            switch (clientHandler.getClientGame().getDateTime().getSeasonOfYear().getName()){
                                 case "Spring":
                                     switch(randomForaging) {
                                         case 1:
@@ -852,17 +856,17 @@ public class Map {
         }
     }
 
-    public void generateRandomForagingSeed(int probability) {
+    public void generateRandomForagingSeed(int probability, ClientHandler clientHandler) {
         for (int i = 0; i < 140; i++) {
             for (int j = 0; j < 160; j++) {
                 int random = (int) Math.floor((Math.random() * 100));
                 Coordinate coordinate = new Coordinate(i, j);
-                Tile tile = findTile(coordinate);
+                Tile tile = findTile(coordinate, clientHandler.getClientGame());
 
                 if (tile != null && tile.getTileType().equals(TileType.PLOWED_FARM)) {
                     if (random >= probability) {
                         int randomForaging = (int) Math.floor((Math.random() * 9));
-                        String season = AppClient.getCurrentGame().getDateTime().getSeasonOfYear().getName();
+                        String season = clientHandler.getClientGame().getDateTime().getSeasonOfYear().getName();
 
                         switch (season) {
                             case "Spring":
@@ -963,12 +967,12 @@ public class Map {
             }
         }
     }
-    public void generateRandomMinerals(int probability) {
+    public void generateRandomMinerals(int probability, ClientHandler clientHandler) {
         for (int i = 0; i < 140; i++) {
             for (int j = 0; j < 160; j++) {
                 int random = (int) Math.floor((Math.random() * 100));
                 Coordinate coordinate = new Coordinate(i, j);
-                Tile tile = findTile(coordinate);
+                Tile tile = findTile(coordinate, clientHandler.getClientGame());
 
                 if (tile != null && tile.getTileType().equals(TileType.QUARRY)) {
                     if (random >= probability) {
@@ -1034,12 +1038,12 @@ public class Map {
         }
     }
 
-    public void generateRandomForagingTrees(int probability) {
+    public void generateRandomForagingTrees(int probability, ClientHandler clientHandler) {
         for (int i = 0 ; i < 140 ; i++){
             for(int j = 0 ; j < 160 ; j++){
                 int random = (int)Math.floor((Math.random()*100));
                 Coordinate coordinate = new Coordinate(i , j);
-                Tile tile = findTile(coordinate);
+                Tile tile = findTile(coordinate, clientHandler.getClientGame());
                 if(tile != null){
                     if(tile.getTileType().equals(TileType.FARM) || tile.getTileType().equals(TileType.PLAIN)  ){
                         if(random >= probability){
@@ -1069,11 +1073,11 @@ public class Map {
         }
     }
 
-    public void Fertilize(){
+    public void Fertilize(ClientHandler clientHandler) {
         for (int i = 0; i < 140; i++) {
             for (int j = 0; j < 160; j++) {
                 Coordinate coordinate = new Coordinate(i, j);
-                Tile tile = findTile(coordinate);
+                Tile tile = findTile(coordinate, clientHandler.getClientGame());
                 Iterator<Good> iterator = tile.getGoods().iterator();
 
                 while (iterator.hasNext()) {
@@ -1135,12 +1139,12 @@ public class Map {
         }
     }
 
-    public void generateRandomGrassTrees(int probability) {
-        for (int i = 0 ; i < 140 ; i++){
+    public void generateRandomGrassTrees(int probability, ClientHandler clientHandler) {
+        for (int i = 0 ; i < 140 ; i++) {
             for(int j = 0 ; j < 160 ; j++){
                 int random = (int)Math.floor((Math.random()*100));
                 Coordinate coordinate = new Coordinate(i , j);
-                Tile tile = findTile(coordinate);
+                Tile tile = findTile(coordinate, clientHandler.getClientGame());
                 if(tile != null){
                     if(tile.getTileType().equals(TileType.FARM) || tile.getTileType().equals(TileType.PLAIN)  ){
                         if(random >= probability){

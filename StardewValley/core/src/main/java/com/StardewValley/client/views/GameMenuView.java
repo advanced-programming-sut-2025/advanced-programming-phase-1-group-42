@@ -708,8 +708,13 @@ public class GameMenuView implements Screen {
     }
 
     private void handleGameMenu() {
-        loadCurrentLabi();
-        loadWaitingWindow();
+        try {
+            loadCurrentLabi();
+            loadWaitingWindow();
+        } catch (Exception e) {
+            e.printStackTrace();
+            System.exit(0);
+        }
 
         if (getBackButton().isChecked()) {
             getBackButton().setChecked(false);
@@ -832,7 +837,7 @@ public class GameMenuView implements Screen {
                 put("arguments", AppClient.getCurrentLabi().getID());
             }}, Message.Type.command);
             Message responseMessage = AppClient.getServerHandler().sendAndWaitForResponse(message);
-            if (responseMessage.getBooleanFromBody("success")) {
+            if (responseMessage.getFromBody("success")) {
                 AppClient.setCurrentLabi(null);
 
                 int gameID = responseMessage.getIntFromBody("message");

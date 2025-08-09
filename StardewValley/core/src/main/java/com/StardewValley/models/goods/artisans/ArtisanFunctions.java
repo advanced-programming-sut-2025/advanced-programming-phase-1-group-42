@@ -115,7 +115,7 @@ public class ArtisanFunctions {
             k < coordinate.getY() + (i * Coordinate.coordinates.get(3).getY()); k++) {
                 Coordinate coordinate1 = new Coordinate(j, k);
 
-                Tile tile = clientHandler.getClientGame().getMap().findTile(coordinate1);
+                Tile tile = clientHandler.getClientGame().getMap().findTile(coordinate1, clientHandler.getClientGame());
                 if(tile != null) {
                     tile.getGoods().clear();
                 }
@@ -221,21 +221,24 @@ public class ArtisanFunctions {
 
 
     private static Result useSprinkler(Crafting crafting) {
-        Tile tile = clientHandler.getClientGame().getMap().findTile(clientHandler.getClientPlayer().getCoordinate());
+        Tile tile = clientHandler.getClientGame().getMap().findTile(clientHandler.getClientPlayer().getCoordinate(),
+            clientHandler.getClientGame());
         tile.getGoods().add(crafting);
 
         return new Result(true, crafting.getName() + " has been added to tile " + tile.getCordinate());
     }
 
     private static Result useQualitySprinkler(Crafting crafting) {
-        Tile tile = clientHandler.getClientGame().getMap().findTile(clientHandler.getClientPlayer().getCoordinate());
+        Tile tile = clientHandler.getClientGame().getMap().findTile(clientHandler.getClientPlayer().getCoordinate(),
+            clientHandler.getClientGame());
         tile.getGoods().add(crafting);
 
         return new Result(true, crafting.getName() + " has been added to tile " + tile.getCordinate());
     }
 
     private static Result useIridiumSprinkler(Crafting crafting) {
-        Tile tile = clientHandler.getClientGame().getMap().findTile(clientHandler.getClientPlayer().getCoordinate());
+        Tile tile = clientHandler.getClientGame().getMap().findTile(clientHandler.getClientPlayer().getCoordinate(),
+            clientHandler.getClientGame());
         tile.getGoods().add(crafting);
 
         return new Result(true, crafting.getName() + " has been added to tile " + tile.getCordinate());
@@ -265,14 +268,16 @@ public class ArtisanFunctions {
     }
 
     private static Result useScarecrow(Crafting crafting) {
-        Tile tile = clientHandler.getClientGame().getMap().findTile(clientHandler.getClientPlayer().getCoordinate());
+        Tile tile = clientHandler.getClientGame().getMap().findTile(clientHandler.getClientPlayer().getCoordinate(),
+            clientHandler.getClientGame());
         tile.getGoods().add(crafting);
 
         return new Result(true, crafting.getName() + " has been added to " + clientHandler.getClientPlayer().getCoordinate());
     }
 
     private static Result useDeluxeScarecrow(Crafting crafting) {
-        Tile tile = clientHandler.getClientGame().getMap().findTile(clientHandler.getClientPlayer().getCoordinate());
+        Tile tile = clientHandler.getClientGame().getMap().findTile(clientHandler.getClientPlayer().getCoordinate(),
+            clientHandler.getClientGame());
         tile.getGoods().add(crafting);
 
         return new Result(true, crafting.getName() + " has been added to " + clientHandler.getClientPlayer().getCoordinate());
@@ -393,7 +398,8 @@ public class ArtisanFunctions {
     }
 
     private static Result useMysticTreeSeed(Crafting crafting) {
-        Tile tile = clientHandler.getClientGame().getMap().findTile(clientHandler.getClientPlayer().getCoordinate());
+        Tile tile = clientHandler.getClientGame().getMap().findTile(clientHandler.getClientPlayer().getCoordinate(),
+            clientHandler.getClientGame());
         tile.getGoods().add(Good.newGood(FarmingTreeSaplingType.MYSTIC_SAPLING));
 
         return new Result(true, "A Mystic_Sapling has been added to " +
@@ -425,7 +431,8 @@ public class ArtisanFunctions {
     }
 
     private static Result useGrassStarter(Crafting crafting) {
-        Tile tile = clientHandler.getClientGame().getMap().findTile(clientHandler.getClientPlayer().getCoordinate());
+        Tile tile = clientHandler.getClientGame().getMap().findTile(clientHandler.getClientPlayer().getCoordinate(),
+            clientHandler.getClientGame());
         tile.getGoods().add(Good.newGood(ProductType.GRASS));
 
         return new Result(true, "A Grass has been added to " +
