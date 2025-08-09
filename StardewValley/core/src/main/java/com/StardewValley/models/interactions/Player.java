@@ -1,6 +1,5 @@
 package com.StardewValley.models.interactions;
 
-import com.StardewValley.client.AppClient;
 import com.StardewValley.models.Assets;
 import com.StardewValley.models.Pair;
 import com.StardewValley.models.game_structure.*;
@@ -15,9 +14,8 @@ import com.StardewValley.models.goods.tools.Tool;
 import com.StardewValley.models.goods.tools.ToolType;
 import com.StardewValley.models.interactions.Animals.Animal;
 import com.StardewValley.models.interactions.PlayerBuildings.FarmBuilding;
+import com.StardewValley.server.AppServer;
 import com.StardewValley.server.ClientHandler;
-import com.badlogic.gdx.graphics.Texture;
-import com.badlogic.gdx.graphics.g2d.Sprite;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -40,8 +38,8 @@ public class Player {
     private Tool trashCan;
     private Skill skill;
     private int playerDirection;
-    private Sprite sprite;
-    private Sprite inHandGoodSprite;
+    private String spritePath;
+    private String inHandGoodSpritePath;
     private float time;
     private ArrayList<Pair<Player, ArrayList<String>>> privateChat = new ArrayList<>();
     private Buff buff;
@@ -75,8 +73,6 @@ public class Player {
         this.coordinate = new Coordinate(farm.getFarmBuildings().getFirst().getStartCordinate().getX() + 5,
                 farm.getFarmBuildings().getFirst().getStartCordinate().getY() + 2);
         this.inHandGood = inventory.getList().getFirst();
-        this.inHandGoodSprite.setPosition((this.coordinate.getX()) * 40,
-            (this.coordinate.getY()) * 40);
     }
 
     public Farm getFarm() {
@@ -85,10 +81,6 @@ public class Player {
 
     public void setInHandGood(ArrayList<Good> inHandGood) {
         this.inHandGood = inHandGood;
-        if (!inHandGood.isEmpty())
-            inHandGoodSprite.setRegion(new Texture(inHandGood.getFirst().getType().imagePath()));
-        else
-            inHandGoodSprite.setRegion(new Texture(Assets.getInstance().getNullPNGPath()));
     }
 
     public Player(User user) {
@@ -109,14 +101,14 @@ public class Player {
         this.lastCoordinate = coordinate;
         this.playerDirection = -1;
         if (user.getGender() != null && "Male".equals(user.getGender().getName())) {
-            this.sprite = new Sprite(Assets.getInstance().getPlayerTextures().get(2).getFirst());
+            this.spritePath = AppServer.getAssets().getPlayerTextureStrings().get(2).getFirst();
         } else {
-            this.sprite = new Sprite(Assets.getInstance().getFemalePlayerTextures().get(2).getFirst());
+            this.spritePath = AppServer.getAssets().getFemalePlayerTextureStrings().get(2).getFirst();
         }
-        this.sprite.setPosition(coordinate.getX(), coordinate.getY());
-        this.inHandGoodSprite = new Sprite(new Texture(Assets.getInstance().getNullPNGPath()));
-        this.inHandGoodSprite.setPosition(coordinate.getX() * 40,
-            coordinate.getY() * 40);
+
+        this.inHandGoodSpritePath = AppServer.getAssets().getNullPNGPath();
+//        this.inHandGoodSpritePath.setPosition(coordinate.getX() * 40,
+//            coordinate.getY() * 40);
     }
 
     public void iniFriendships(ArrayList<Player> players) {
@@ -337,28 +329,12 @@ public class Player {
         this.playerDirection = playerDirection;
     }
 
-    public Sprite getSprite() {
-        return sprite;
-    }
-
-    public void setSprite(Sprite sprite) {
-        this.sprite = sprite;
-    }
-
     public float getTime() {
         return time;
     }
 
     public void setTime(float time) {
         this.time = time;
-    }
-
-    public Sprite getInHandGoodSprite() {
-        return inHandGoodSprite;
-    }
-
-    public void setInHandGoodSprite(Sprite inHandGoodSprite) {
-        this.inHandGoodSprite = inHandGoodSprite;
     }
 
     public void setLastCoordinate(Coordinate lastCoordinate) {
@@ -383,5 +359,21 @@ public class Player {
 
     public Gender getGender() {
         return gender;
+    }
+
+    public String getSpritePath() {
+        return spritePath;
+    }
+
+    public void setSpritePath(String spritePath) {
+        this.spritePath = spritePath;
+    }
+
+    public String getInHandGoodSpritePath() {
+        return inHandGoodSpritePath;
+    }
+
+    public void setInHandGoodSpritePath(String inHandGoodSpritePath) {
+        this.inHandGoodSpritePath = inHandGoodSpritePath;
     }
 }

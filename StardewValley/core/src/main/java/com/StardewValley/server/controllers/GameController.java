@@ -406,8 +406,8 @@ public class GameController extends Controller {
 //            System.out.println("Error while setting is Playing  user.");
 //        }
         clientHandler.setClientGame(null);
-        Main.getMain().getScreen().dispose();
-        Main.getMain().setScreen(new MainMenuView(Assets.getInstance().getSkin()));
+//        Main.getMain().getScreen().dispose();
+//        Main.getMain().setScreen(new MainMenuView(Assets.getInstance().getSkin()));
         return new Result(true, "Game terminated successfully!");
 
     }

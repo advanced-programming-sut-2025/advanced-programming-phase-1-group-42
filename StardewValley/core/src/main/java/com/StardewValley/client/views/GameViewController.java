@@ -22,6 +22,7 @@ import com.badlogic.gdx.Input;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Animation;
+import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.Touchable;
@@ -51,14 +52,14 @@ public class GameViewController {
     private Table leaderboardTable;
 
     public GameViewController(GameView gameView) {
-        skin = Assets.getInstance().getSkin();
+        skin = AppClient.getAssets().getSkin();
         this.gameView = gameView;
     }
 
     public void initInventory() {
         inventoryElements = new ArrayList<>();
-        TextureRegionDrawable drawableSlot = Assets.getInstance().getDrawableSlot();
-        TextureRegionDrawable drawableHighlight = Assets.getInstance().getDrawableHighlight();
+        TextureRegionDrawable drawableSlot = AppClient.getAssets().getDrawableSlot();
+        TextureRegionDrawable drawableHighlight = AppClient.getAssets().getDrawableHighlight();
 
         int ctr = 1;
         for (ArrayList<Good> goods : AppClient.getCurrentPlayer().getInventory().getList()) {
@@ -110,7 +111,7 @@ public class GameViewController {
             inventoryElements.add(new Quadruple<>(imageButtonBackground, image, counterLabel, quantityLabel));
         }
 
-        progressBar = new ProgressBar(0, 200, 1, true, Assets.getInstance().getSkin());
+        progressBar = new ProgressBar(0, 200, 1, true, AppClient.getAssets().getSkin());
         progressBar.setValue(AppClient.getCurrentPlayer().getEnergy().getDayEnergyLeft());
 
         toolsElements = new ArrayList<>();
@@ -180,8 +181,17 @@ public class GameViewController {
     }
 
     public void handleInput() {
-
         Player player = AppClient.getCurrentPlayer();
+        Pair<Sprite, Sprite> playerSprite = null;
+        int ptr = 0;
+        for (Player eachPlayer : AppClient.getCurrentGame().getPlayers()) {
+            if (eachPlayer.getPlayerUsername().equals(player.getPlayerUsername())) {
+                playerSprite = gameView.getPlayersSprite().get(ptr);
+                break;
+            }
+            ptr++;
+        }
+
         Message message = new Message(new HashMap<>() {{
             put("function", "setPlayerDirection");
             put("arguments", String.valueOf(-1));
@@ -237,7 +247,7 @@ public class GameViewController {
                     setPlayerDirection(String.valueOf(0));
 //                    player.setPlayerDirection(0);
 
-                    player.getInHandGoodSprite().setPosition(player.getCoordinate().getX() * gameView.getScaledSize(),
+                    playerSprite.second().setPosition(player.getCoordinate().getX() * gameView.getScaledSize(),
                         player.getCoordinate().getY() * gameView.getScaledSize() + 23);
                 }
                 flag = true;
@@ -254,10 +264,10 @@ public class GameViewController {
                     setPlayerDirection(String.valueOf(1));
 //                    player.setPlayerDirection(1);
 
-                    player.getInHandGoodSprite().setPosition(player.getCoordinate().getX() * gameView.getScaledSize() - 20,
+                    playerSprite.second().setPosition(player.getCoordinate().getX() * gameView.getScaledSize() - 20,
                         player.getCoordinate().getY() * gameView.getScaledSize() + 23);
-                    if (!player.getInHandGoodSprite().isFlipX())
-                        player.getInHandGoodSprite().flip(true, false);
+                    if (!playerSprite.second().isFlipX())
+                        playerSprite.second().flip(true, false);
                 }
                 flag = true;
                 AppClient.getCurrentGame().getMap().updateMap();
@@ -275,7 +285,7 @@ public class GameViewController {
 //                    player.setCoordinate(new Coordinate(player.getCoordinate().getX(), player.getCoordinate().getY() - 1));
 //                    player.setPlayerDirection(2);
 
-                    player.getInHandGoodSprite().setPosition(player.getCoordinate().getX() * gameView.getScaledSize(),
+                    playerSprite.second().setPosition(player.getCoordinate().getX() * gameView.getScaledSize(),
                         player.getCoordinate().getY() * gameView.getScaledSize() + 23);
                 }
                 flag = true;
@@ -296,10 +306,10 @@ public class GameViewController {
 //                    player.setCoordinate(new Coordinate(player.getCoordinate().getX() + 1, player.getCoordinate().getY()));
 //                    player.setPlayerDirection(3);
 
-                    player.getInHandGoodSprite().setPosition(player.getCoordinate().getX() * gameView.getScaledSize() + 20,
+                    playerSprite.second().setPosition(player.getCoordinate().getX() * gameView.getScaledSize() + 20,
                         player.getCoordinate().getY() * gameView.getScaledSize() + 23);
-                    if (player.getInHandGoodSprite().isFlipX())
-                        player.getInHandGoodSprite().flip(true, false);
+                    if (playerSprite.second().isFlipX())
+                        playerSprite.second().flip(true, false);
                 }
                 flag = true;
                 AppClient.getCurrentGame().getMap().updateMap();
@@ -526,7 +536,7 @@ public class GameViewController {
         ArrayList<Window> inventoryWindows = new ArrayList<>();
         for (int i = 0; i < 6; i++) {
             final int index = i;
-            Skin skin = Assets.getInstance().getSkin();
+            Skin skin = AppClient.getAssets().getSkin();
             Window window = new Window("", skin);
             int width = 1000;
             int height = 800;
@@ -541,8 +551,8 @@ public class GameViewController {
                     Table inventoryTable = new Table();
                     Texture lockedSlotTexture = new Texture("GameAssets/Inventory_Table/locked.png");
                     Texture trashTexture = new Texture("GameAssets/Inventory_Table/Trash_Can_Gold.png");
-                    TextureRegionDrawable drawableSlot = Assets.getInstance().getDrawableSlot();
-                    TextureRegionDrawable drawableHighlight = Assets.getInstance().getDrawableHighlight();
+                    TextureRegionDrawable drawableSlot = AppClient.getAssets().getDrawableSlot();
+                    TextureRegionDrawable drawableHighlight = AppClient.getAssets().getDrawableHighlight();
 
                     int inventorySize = AppClient.getCurrentPlayer().getInventory().getSize();
                     ArrayList<ArrayList<Good>> inventoryData = AppClient.getCurrentPlayer().getInventory().getList();
@@ -908,9 +918,9 @@ public class GameViewController {
                 if (itemIndex < inventorySize) {
                     ArrayList<Good> goods = inventoryData.get(itemIndex);
                     ImageButton imageButtonBackground = new ImageButton(
-                        Assets.getInstance().getDrawableSlot(),
-                        Assets.getInstance().getDrawableSlot(),
-                        Assets.getInstance().getDrawableHighlight()
+                        AppClient.getAssets().getDrawableSlot(),
+                        AppClient.getAssets().getDrawableSlot(),
+                        AppClient.getAssets().getDrawableHighlight()
                     );
 
                     Texture goodTexture = new Texture("GameAssets/null.png");
@@ -959,7 +969,7 @@ public class GameViewController {
                         }
                     });
 
-                    Label quantityLabel = new Label(goods.isEmpty() ? "" : String.valueOf(goods.size()), Assets.getInstance().getSkin(), "Bold");
+                    Label quantityLabel = new Label(goods.isEmpty() ? "" : String.valueOf(goods.size()), AppClient.getAssets().getSkin(), "Bold");
                     quantityLabel.setFontScale(0.4f);
 
                     inventoryElements.add(new Quadruple<>(imageButtonBackground, itemImage, null, quantityLabel));
@@ -996,7 +1006,7 @@ public class GameViewController {
 
     private void refreshLeaderboardTable() {
         ArrayList<Player> players = new ArrayList<>(AppClient.getCurrentGame().getPlayers());
-        Skin skin = Assets.getInstance().getSkin();
+        Skin skin = AppClient.getAssets().getSkin();
 
         // Sort by current type
         switch (currentSortType) {
@@ -1115,33 +1125,43 @@ public class GameViewController {
         return mainInventoryElements;
     }
 
+
     public void updatePlayer() {
+        int ptr = 0;
         for (Player player : AppClient.getCurrentGame().getPlayers()) {
             if(player.isRenderAble()) {
-                player.getSprite().setPosition(player.getCoordinate().getX() * 40,
+                Pair<Sprite, Sprite> playerSprite = gameView.getPlayersSprite().get(ptr++);
+
+                playerSprite.first().setPosition(player.getCoordinate().getX() * 40,
                     player.getCoordinate().getY() * 40);
-                player.getSprite().draw(Main.getBatch());
+                playerSprite.first().draw(Main.getBatch());
 
                 if (player.getPlayerDirection() != -1) {
                     if (player.getGender().getName().equals("Male")) {
-                        animation(player, player.getPlayerDirection());
+                        animation(player, player.getPlayerDirection(), playerSprite.first());
                     } else {
-                        femaleAnimation(player, player.getPlayerDirection());
+                        femaleAnimation(player, player.getPlayerDirection(), playerSprite.first());
                     }
                 }
-                player.getInHandGoodSprite().setSize(40, 40);
-                Main.getBatch().draw(player.getInHandGoodSprite(),
-                    player.getInHandGoodSprite().getX(), player.getInHandGoodSprite().getY());
+
+                if (!player.getInHandGood().isEmpty())
+                    playerSprite.second().setRegion(new Texture(player.getInHandGood().getFirst().getType().imagePath()));
+                else
+                    playerSprite.second().setRegion(new Texture(AppClient.getAssets().getNullPNGPath()));
+
+                playerSprite.second().setSize(40, 40);
+                Main.getBatch().draw(playerSprite.second(),
+                    playerSprite.second().getX(), playerSprite.second().getY());
             }
         }
     }
 
-    private void animation(Player player, int i) {
-        Array<Texture> regions = new Array<>(Assets.getInstance().getPlayerTextures().getFirst().size());
-        Assets.getInstance().getPlayerTextures().get(i).forEach(regions::add);
+    private void animation(Player player, int i, Sprite playerSprite) {
+        Array<Texture> regions = new Array<>(AppClient.getAssets().getPlayerTextures().getFirst().size());
+        AppClient.getAssets().getPlayerTextures().get(i).forEach(regions::add);
         Animation<Texture> animation = new Animation<>(0.1f, regions);
 
-        player.getSprite().setRegion(animation.getKeyFrame(player.getTime()));
+        playerSprite.setRegion(animation.getKeyFrame(player.getTime()));
 
         if(!animation.isAnimationFinished(player.getTime())) {
             player.setTime(player.getTime() + Gdx.graphics.getDeltaTime());
@@ -1153,12 +1173,12 @@ public class GameViewController {
         animation.setPlayMode(Animation.PlayMode.LOOP);
     }
 
-    private void femaleAnimation(Player player, int i) {
-        Array<Texture> regions = new Array<>(Assets.getInstance().getFemalePlayerTextures().getFirst().size());
-        Assets.getInstance().getFemalePlayerTextures().get(i).forEach(regions::add);
+    private void femaleAnimation(Player player, int i, Sprite playerSprite) {
+        Array<Texture> regions = new Array<>(AppClient.getAssets().getFemalePlayerTextures().getFirst().size());
+        AppClient.getAssets().getFemalePlayerTextures().get(i).forEach(regions::add);
         Animation<Texture> animation = new Animation<>(0.1f, regions);
 
-        player.getSprite().setRegion(animation.getKeyFrame(player.getTime()));
+        playerSprite.setRegion(animation.getKeyFrame(player.getTime()));
 
         if(!animation.isAnimationFinished(player.getTime())) {
             player.setTime(player.getTime() + Gdx.graphics.getDeltaTime());

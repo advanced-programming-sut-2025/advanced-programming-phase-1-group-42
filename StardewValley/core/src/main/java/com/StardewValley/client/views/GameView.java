@@ -62,7 +62,7 @@ import static java.lang.Math.min;
 
 
 public class GameView implements Screen, InputProcessor {
-    private Skin skin = Assets.getInstance().getSkin();
+    private Skin skin = AppClient.getAssets().getSkin();
     private Stage stage;
     private Table table;
     private GameViewController viewController;
@@ -157,6 +157,7 @@ public class GameView implements Screen, InputProcessor {
     private Window questWindow = null;
 
     private boolean isTabClicked = false;
+    private ArrayList<Pair<Sprite, Sprite>> playersSprite;
 
     public GameView(Skin skin) {
 //        this.controller.initGameControllers();
@@ -225,7 +226,7 @@ public class GameView implements Screen, InputProcessor {
         this.table.row();
 
 
-        fridgeWindow = new Window("Fridge", Assets.getInstance().getSkin());
+        fridgeWindow = new Window("Fridge", AppClient.getAssets().getSkin());
 
         viewController.initInventory();
 
@@ -268,6 +269,22 @@ public class GameView implements Screen, InputProcessor {
         for (QuestType type : QuestType.values()) {
             AppClient.getCurrentGame().getQuests().add(new Quest(type));
         }
+
+        playersSprite = new ArrayList<>();
+        for (Player player : AppClient.getCurrentGame().getPlayers()) {
+            Pair<Sprite, Sprite> playerSprite = new Pair<>(
+                new Sprite(new Texture(player.getSpritePath())), new Sprite(new Texture(player.getInHandGoodSpritePath()))
+            );
+            playersSprite.add(playerSprite);
+
+            playerSprite.second().setPosition((player.getCoordinate().getX()) * 40,
+                (player.getCoordinate().getY()) * 40);
+
+        }
+    }
+
+    public ArrayList<Pair<Sprite, Sprite>> getPlayersSprite() {
+        return playersSprite;
     }
 
     @Override
@@ -331,7 +348,7 @@ public class GameView implements Screen, InputProcessor {
     public void setColorFunction() {
         int time = AppClient.getCurrentGame().getDateTime().getTime();
         if (time >= 19) {
-            Sprite sprite = new Sprite(Assets.getInstance().getNight_background());
+            Sprite sprite = new Sprite(AppClient.getAssets().getNight_background());
             sprite.draw(Main.getBatch());
         }
     }
@@ -1867,7 +1884,7 @@ public class GameView implements Screen, InputProcessor {
 
         ArrayList<ArrayList<Good>> fridgeItems = AppClient.getCurrentPlayer().getFridge().getInFridgeItems();
 
-        TextureRegionDrawable drawableSlot = Assets.getInstance().getDrawableSlot();
+        TextureRegionDrawable drawableSlot = AppClient.getAssets().getDrawableSlot();
 
         for (int i = 0; i < fridgeItems.size(); i++) {
             ArrayList<Good> goods = fridgeItems.get(i);
@@ -1972,7 +1989,7 @@ public class GameView implements Screen, InputProcessor {
         int columns = 5;
         int count = 0;
 
-        TextureRegionDrawable drawableSlot = Assets.getInstance().getDrawableSlot();
+        TextureRegionDrawable drawableSlot = AppClient.getAssets().getDrawableSlot();
 
         for (int i = 0; i < allRecipes.length; i++) {
             CookingRecipeType type = allRecipes[i];
@@ -2161,7 +2178,7 @@ public class GameView implements Screen, InputProcessor {
         methodUseMessage(responseMessage);
         ArrayList<CraftingRecipeType> unlockedRecipes = responseMessage.getFromBody("message");
 
-        TextureRegionDrawable drawableSlot = Assets.getInstance().getDrawableSlot();
+        TextureRegionDrawable drawableSlot = AppClient.getAssets().getDrawableSlot();
 
         int columns = 5;
         int count = 0;
@@ -2328,8 +2345,8 @@ public class GameView implements Screen, InputProcessor {
         this.toolsTable.setFillParent(true);
 
         viewController.getToolsElements().clear();
-        TextureRegionDrawable drawableSlot = Assets.getInstance().getDrawableSlot();
-        TextureRegionDrawable drawableHighlight = Assets.getInstance().getDrawableHighlight();
+        TextureRegionDrawable drawableSlot = AppClient.getAssets().getDrawableSlot();
+        TextureRegionDrawable drawableHighlight = AppClient.getAssets().getDrawableHighlight();
 
         for (int i = 0; i < viewController.getInventoryElements().size(); i++) {
             ArrayList<Good> goods = AppClient.getCurrentPlayer().getInventory().getList().get(i);
@@ -4418,31 +4435,31 @@ public class GameView implements Screen, InputProcessor {
     private Texture getTextureForEmote(String emoteName) {
         switch (emoteName) {
             case "Like":
-                return Assets.getInstance().getLike();
+                return AppClient.getAssets().getLike();
             case "Dislike":
-                return Assets.getInstance().getDislike();
+                return AppClient.getAssets().getDislike();
             case "Heart":
-                return Assets.getInstance().getHeart();
+                return AppClient.getAssets().getHeart();
             case "Music":
-                return Assets.getInstance().getSmile();
+                return AppClient.getAssets().getSmile();
             case "UwU":
-                return Assets.getInstance().getUwu();
+                return AppClient.getAssets().getUwu();
             case "Question":
-                return Assets.getInstance().getQuestion();
+                return AppClient.getAssets().getQuestion();
             case "Angry":
-                return Assets.getInstance().getAngry();
+                return AppClient.getAssets().getAngry();
             case "Speechless":
-                return Assets.getInstance().getSpeechless();
+                return AppClient.getAssets().getSpeechless();
             case "Surprised":
-                return Assets.getInstance().getSurprised();
+                return AppClient.getAssets().getSurprised();
             case "Sleepy":
-                return Assets.getInstance().getSleepy();
+                return AppClient.getAssets().getSleepy();
             case "Not Sure":
-                return Assets.getInstance().getNotSure();
+                return AppClient.getAssets().getNotSure();
             case "Edit":
-                return Assets.getInstance().getEdit();
+                return AppClient.getAssets().getEdit();
             default:
-                return Assets.getInstance().getLike();
+                return AppClient.getAssets().getLike();
         }
     }
 

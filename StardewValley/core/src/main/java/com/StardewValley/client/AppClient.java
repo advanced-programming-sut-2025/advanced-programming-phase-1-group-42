@@ -1,5 +1,6 @@
 package com.StardewValley.client;
 
+import com.StardewValley.models.Assets;
 import com.StardewValley.models.Labi;
 import com.StardewValley.models.enums.Menu;
 import com.StardewValley.models.game_structure.Game;
@@ -34,6 +35,8 @@ public class AppClient {
     private static Music backgroundMusic;
 
     private static Cursor cursor;
+
+    private final static Assets assets = new Assets();
 
     private static ArrayList<String> securityQuestions = new ArrayList<>(Arrays.asList(
             "What was the make and model of your first car?",
@@ -187,5 +190,9 @@ public class AppClient {
         currentSfx.setVolume(volume);
         currentSfx.play();
         currentSfx.setLooping(false);
+    }
+
+    public static Assets getAssets() {
+        return assets;
     }
 }

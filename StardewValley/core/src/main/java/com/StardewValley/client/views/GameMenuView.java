@@ -210,9 +210,9 @@ public class GameMenuView implements Screen {
     @Override
     public void render(float v) {
         Main.getBatch().begin();
-        Assets.getInstance().getMenuBackground2().setSize(Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
-        Assets.getInstance().getMenuBackground2().setPosition(0, 0);
-        Assets.getInstance().getMenuBackground2().draw(Main.getBatch());
+        AppClient.getAssets().getMenuBackground2().setSize(Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
+        AppClient.getAssets().getMenuBackground2().setPosition(0, 0);
+        AppClient.getAssets().getMenuBackground2().draw(Main.getBatch());
 
         Main.getBatch().end();
 
@@ -722,7 +722,7 @@ public class GameMenuView implements Screen {
             if (methodUseMessage(responseMessage, errorLabel)) return;
 
             Main.getMain().getScreen().dispose();
-            Main.getMain().setScreen(new MainMenuView(Assets.getInstance().getSkin()));
+            Main.getMain().setScreen(new MainMenuView(AppClient.getAssets().getSkin()));
         } else if (getLoadGameButton().isChecked()) {
             getLoadGameButton().setChecked(false);
 
@@ -754,7 +754,7 @@ public class GameMenuView implements Screen {
             }
 
             Main.getMain().getScreen().dispose();
-//            Main.getMain().setScreen(new GameView(new GameController(), Assets.getInstance().getSkin()));
+//            Main.getMain().setScreen(new GameView(new GameController(), AppClient.getAssets().getSkin()));
         } else if (getNewGameButton().isChecked()) {
             getNewGameButton().setChecked(false);
 
@@ -834,6 +834,7 @@ public class GameMenuView implements Screen {
             Message responseMessage = AppClient.getServerHandler().sendAndWaitForResponse(message);
             if (responseMessage.getBooleanFromBody("success")) {
                 AppClient.setCurrentLabi(null);
+
                 int gameID = responseMessage.getIntFromBody("message");
                 Message message2 = new Message(new HashMap<>() {{
                     put("function", "getNewGame");
@@ -860,10 +861,9 @@ public class GameMenuView implements Screen {
                     }
                 }
 
-//                Main.getMain().getScreen().dispose();
-//                Main.getMain().setScreen(new GameView(new GameController(clientHandler), Assets.getInstance().getSkin()));
-
                 closeWaitWindow();
+                Main.getMain().getScreen().dispose();
+                Main.getMain().setScreen(new GameView(AppClient.getAssets().getSkin()));
             }
             else {
                 initWaitWindow();

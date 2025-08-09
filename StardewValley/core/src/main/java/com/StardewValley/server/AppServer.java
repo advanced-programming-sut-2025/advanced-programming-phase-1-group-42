@@ -1,5 +1,6 @@
 package com.StardewValley.server;
 
+import com.StardewValley.models.Assets;
 import com.StardewValley.models.Labi;
 import com.StardewValley.models.Pair;
 import com.StardewValley.models.game_structure.Game;
@@ -25,6 +26,8 @@ public class AppServer {
     private final static ArrayList<Pair<Labi, ArrayList<Pair<User, Integer>>>> waitingLabies = new ArrayList<>();
 
     private final static ArrayList<ClientHandler> clientHandlers = new ArrayList<>();
+
+    private final static Assets assets = new Assets();
 
     public static void start() throws IOException {
         if (clientListener != null && !clientListener.isAlive())
@@ -82,5 +85,9 @@ public class AppServer {
 
     public static ArrayList<Pair<Labi, ArrayList<Pair<User, Integer>>>> getWaitingLabies() {
         return waitingLabies;
+    }
+
+    public static Assets getAssets() {
+        return assets;
     }
 }

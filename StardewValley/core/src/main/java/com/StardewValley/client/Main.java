@@ -28,10 +28,10 @@ public class Main extends Game {
             e.printStackTrace();
         }
 
-        AppClient.setBackgroundMusic(Assets.getInstance().getStardewMusic());
+        AppClient.setBackgroundMusic(AppClient.getAssets().getStardewMusic());
         AppClient.setCursor();
 
-        main.setScreen(new RegisterMenuView(Assets.getInstance().getSkin()));
+        main.setScreen(new RegisterMenuView(AppClient.getAssets().getSkin()));
     }
 
     @Override

@@ -160,9 +160,9 @@ public class LoginMenuView implements Screen {
     @Override
     public void render(float v) {
         Main.getBatch().begin();
-        Assets.getInstance().getMenuBackground().setSize(Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
-        Assets.getInstance().getMenuBackground().setPosition(0, 0);
-        Assets.getInstance().getMenuBackground().draw(Main.getBatch());
+        AppClient.getAssets().getMenuBackground().setSize(Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
+        AppClient.getAssets().getMenuBackground().setPosition(0, 0);
+        AppClient.getAssets().getMenuBackground().draw(Main.getBatch());
         Main.getBatch().end();
 
         stage.act(Math.min(Gdx.graphics.getDeltaTime(), 1 / 30f));
@@ -298,7 +298,7 @@ public class LoginMenuView implements Screen {
             }
 
             Main.getMain().getScreen().dispose();
-            Main.getMain().setScreen(new RegisterMenuView( Assets.getInstance().getSkin()));
+            Main.getMain().setScreen(new RegisterMenuView( AppClient.getAssets().getSkin()));
         }
         else if (getForgetPasswordButton().isChecked()) {
             getForgetPasswordButton().setChecked(false);
@@ -331,7 +331,7 @@ public class LoginMenuView implements Screen {
             }
 
             Main.getMain().getScreen().dispose();
-            Main.getMain().setScreen(new MainMenuView(Assets.getInstance().getSkin()));
+            Main.getMain().setScreen(new MainMenuView(AppClient.getAssets().getSkin()));
         }
         else if (getUsernameFindButton().isChecked()) {
             getUsernameFindButton().setChecked(false);

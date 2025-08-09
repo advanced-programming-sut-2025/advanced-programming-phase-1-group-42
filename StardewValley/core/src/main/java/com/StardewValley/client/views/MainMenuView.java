@@ -100,9 +100,9 @@ public class MainMenuView implements Screen {
         Main.getBatch().setProjectionMatrix(defaultCamera.combined);
 
         Main.getBatch().begin();
-        Assets.getInstance().getMenuBackground().setSize(Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
-        Assets.getInstance().getMenuBackground().setPosition(0, 0);
-        Assets.getInstance().getMenuBackground().draw(Main.getBatch());
+        AppClient.getAssets().getMenuBackground().setSize(Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
+        AppClient.getAssets().getMenuBackground().setPosition(0, 0);
+        AppClient.getAssets().getMenuBackground().draw(Main.getBatch());
         Main.getBatch().end();
 
         stage.act(Math.min(Gdx.graphics.getDeltaTime(), 1 / 30f));
@@ -169,7 +169,7 @@ public class MainMenuView implements Screen {
             }
 
             Main.getMain().getScreen().dispose();
-            Main.getMain().setScreen(new GameMenuView(Assets.getInstance().getSkin()));
+            Main.getMain().setScreen(new GameMenuView(AppClient.getAssets().getSkin()));
         }
         else if (getProfileButton().isChecked()) {
             getProfileButton().setChecked(false);
@@ -185,7 +185,7 @@ public class MainMenuView implements Screen {
             }
 
             Main.getMain().getScreen().dispose();
-            Main.getMain().setScreen(new ProfileMenuView(Assets.getInstance().getSkin()));
+            Main.getMain().setScreen(new ProfileMenuView(AppClient.getAssets().getSkin()));
         }
         else if (getLogoutButton().isChecked()) {
             getLogoutButton().setChecked(false);
@@ -209,7 +209,7 @@ public class MainMenuView implements Screen {
             AppClient.getCurrentUser().setStayLogin(false);
             AppClient.setCurrentUser(null);
             Main.getMain().getScreen().dispose();
-            Main.getMain().setScreen(new LoginMenuView(Assets.getInstance().getSkin()));
+            Main.getMain().setScreen(new LoginMenuView(AppClient.getAssets().getSkin()));
         }
     }
 

@@ -318,9 +318,9 @@ public class RegisterMenuView implements Screen {
     @Override
     public void render(float v) {
         Main.getBatch().begin();
-        Assets.getInstance().getMenuBackground().setSize(Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
-        Assets.getInstance().getMenuBackground().setPosition(0, 0);
-        Assets.getInstance().getMenuBackground().draw(Main.getBatch());
+        AppClient.getAssets().getMenuBackground().setSize(Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
+        AppClient.getAssets().getMenuBackground().setPosition(0, 0);
+        AppClient.getAssets().getMenuBackground().draw(Main.getBatch());
         Main.getBatch().end();
 
         stage.act(Math.min(Gdx.graphics.getDeltaTime(), 1 / 30f));
@@ -466,7 +466,7 @@ public class RegisterMenuView implements Screen {
             }
 
             Main.getMain().getScreen().dispose();
-            Main.getMain().setScreen(new LoginMenuView(Assets.getInstance().getSkin()));
+            Main.getMain().setScreen(new LoginMenuView(AppClient.getAssets().getSkin()));
         }
         else if (getRegisterButton().isChecked()) {
             getRegisterButton().setChecked(false);

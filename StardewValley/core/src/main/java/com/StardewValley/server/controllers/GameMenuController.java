@@ -202,8 +202,8 @@ public class GameMenuController extends Controller {
                     }
                     int gameID = 0;
                     if (selectedLabi != null) {
-                        AppServer.getWaitingLabies().remove(selectedLabi);
                         gameID = newGame(selectedLabi);
+                        AppServer.getWaitingLabies().remove(selectedLabi);
                     }
                     else {
                         for (Game game : AppServer.getGames()) {
@@ -213,6 +213,19 @@ public class GameMenuController extends Controller {
                             }
                         }
                     }
+
+//                    for (Game userGame : AppServer.getGames()) {
+//                        if (userGame.getGameID() == gameID) {
+//                            clientHandler.setClientGame(userGame);
+//                            for (Player player : userGame.getPlayers()) {
+//                                if (player.getUsername().equals(clientHandler.getClientUser().getUsername())) {
+//                                    clientHandler.setClientPlayer(player);
+//                                    break;
+//                                }
+//                            }
+//                        }
+//                    }
+//                    this.clientHandler.setCurrentController(new GameController(clientHandler));
 
                     int finalGameID = gameID;
                     return new Message(new HashMap<>() {{
@@ -425,7 +438,6 @@ public class GameMenuController extends Controller {
         AppClient.getCurrentGame().getMap().generateRandomMinerals(93);
         AppClient.getCurrentGame().getMap().generateRandomForagingTrees(93);
         AppClient.getCurrentGame().getMap().generateRandomGrassTrees(93);
-
 
         return game.getGameID();
     }

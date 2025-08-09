@@ -383,7 +383,7 @@ public class Map {
 
         rebuildMapTable(); // extract the build logic into a reusable method
 
-        ScrollPane scrollPane = new ScrollPane(mapTable, Assets.getInstance().getSkin());
+        ScrollPane scrollPane = new ScrollPane(mapTable, AppClient.getAssets().getSkin());
         scrollPane.setFadeScrollBars(false);
         scrollPane.setScrollingDisabled(true, false);
         scrollPane.setForceScroll(false, true);

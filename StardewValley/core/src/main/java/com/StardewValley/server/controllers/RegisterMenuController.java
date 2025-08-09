@@ -120,8 +120,8 @@ public class RegisterMenuController extends Controller {
         //TODO: STAY LOGIN should be fixed
 
         AppClient.setCurrentUser(user);
-        Main.getMain().getScreen().dispose();
-        Main.getMain().setScreen(new MainMenuView(Assets.getInstance().getSkin()));
+//        Main.getMain().getScreen().dispose();
+//        Main.getMain().setScreen(new MainMenuView(Assets.getInstance().getSkin()));
     }
 
     private User getUser(LoginMenuView loginMenuView) {
