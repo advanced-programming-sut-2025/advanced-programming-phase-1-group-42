@@ -11,6 +11,7 @@ import com.StardewValley.models.enums.TileAssets;
 import com.StardewValley.models.enums.TileType;
 import com.StardewValley.models.game_structure.*;
 import com.StardewValley.models.game_structure.Game;
+import com.StardewValley.models.game_structure.weathers.Storm;
 import com.StardewValley.models.game_structure.weathers.Weather;
 import com.StardewValley.models.goods.Good;
 import com.StardewValley.models.goods.GoodType;
@@ -477,6 +478,8 @@ public class GameView implements Screen, InputProcessor {
 //            updateGameObject();
 //        }
 
+
+
         Main.getBatch().begin();
 
         renderWorld();
@@ -503,7 +506,6 @@ public class GameView implements Screen, InputProcessor {
         }
 
         stage.act(min(Gdx.graphics.getDeltaTime(), 1 / 30f));
-        staticStage.act(min(Gdx.graphics.getDeltaTime(), 1 / 30f));
         stage.draw();
         staticStage.act(min(Gdx.graphics.getDeltaTime(), 1 / 30f));
         staticStage.draw();
@@ -1801,12 +1803,14 @@ public class GameView implements Screen, InputProcessor {
                 talk.setSize((float) scaledSize, (float) (0.5 * scaledSize));
                 talk.getLabel().setFontScale(0.6f);
                 talk.setPosition(x + scaledSize + 10, y);
+                stage.addActor(talk);
 
                 TextButton info = npcSprite.second().second();
                 info.getLabel().setColor(Color.BLACK);
                 info.setSize((float) scaledSize, (float) (0.5 * scaledSize));
                 info.getLabel().setFontScale(0.6f);
                 info.setPosition(x + scaledSize + 10, y + 22);
+                stage.addActor(info);
 
             }
         }
@@ -1963,10 +1967,28 @@ public class GameView implements Screen, InputProcessor {
                     ArrayList<Good> itemsInSlot = AppClient.getCurrentPlayer().getFridge().getInFridgeItems().get(index);
                     if (!itemsInSlot.isEmpty()) {
                         Good good = itemsInSlot.getFirst();
-                        //TODO Nader
-                        AppClient.getCurrentPlayer().getFridge().removeItemsFromFridge(good.getType(), 1);
-                        AppClient.getCurrentPlayer().getInventory().addGoodByObject(Good.newGood(good.getType()),
-                            AppClient.getCurrentGame(), AppClient.getCurrentPlayer());
+
+                        Message message = new Message(new HashMap<>() {{
+                            put("function", "removeItemsFromFridge");
+                            put("arguments", new ArrayList<>(Arrays.asList(
+                                    good.getType().getName(),
+                                    String.valueOf(1)
+                            )));
+                        }}, Message.Type.command);
+                        Message responseMessage = AppClient.getServerHandler().sendAndWaitForResponse(message);
+                        methodUseMessage(responseMessage);
+
+//                        AppClient.getCurrentPlayer().getFridge().removeItemsFromFridge(, 1);
+
+                        message = new Message(new HashMap<>() {{
+                            put("function", "addGoodByObject");
+                            put("arguments", good.getType().getName());
+                        }}, Message.Type.command);
+                        responseMessage = AppClient.getServerHandler().sendAndWaitForResponse(message);
+                        methodUseMessage(responseMessage);
+
+//                        AppClient.getCurrentPlayer().getInventory().addGoodByObject(Good.newGood(good.getType()),
+//                            AppClient.getCurrentGame(), AppClient.getCurrentPlayer());
                         initFridgeWindow();
                     }
                 }
@@ -5185,7 +5207,6 @@ public class GameView implements Screen, InputProcessor {
 
     public void renderClock() {
 
-        clockHandImage.setRotation(180 - ((currentTime.getTime() - 9) * 14));
 
         String currentWeatherName = AppClient.getCurrentGame().getWeather().getName();
         String currentSeasonName = AppClient.getCurrentGame().getDateTime().getSeason().getName();
@@ -5194,7 +5215,7 @@ public class GameView implements Screen, InputProcessor {
         int currentTimeOfDay = AppClient.getCurrentGame().getDateTime().getTime();
         int currentNetWorth = AppClient.getCurrentPlayer().getWallet().getBalance();
 
-
+        clockHandImage.setRotation(180 - ((currentTimeOfDay - 9) * 14));
         if(currentNetWorth != lastNetWorth) {
             int netWorth = currentNetWorth;
             int num;
@@ -5266,15 +5287,14 @@ public class GameView implements Screen, InputProcessor {
                 }
             }
         }
-
         else if (!currentWeatherName.equals(lastWeatherName)) {
             lastWeatherName = currentWeatherName;
-            weatherTexture.dispose();
+//            weatherTexture.dispose();
             weatherImage.setDrawable(AppClient.getAssets().getClockWeather(currentWeatherName));
         }
         else if (!currentSeasonName.equals(lastSeasonName)) {
             lastSeasonName = currentSeasonName;
-            seasonTexture.dispose();
+//            seasonTexture.dispose();
             seasonImage.setDrawable(AppClient.getAssets().getClockSeason(currentSeasonName));
         }
         else if (!currentDayOfWeek.equals(lastDayOfWeekName)) {
@@ -5317,11 +5337,13 @@ public class GameView implements Screen, InputProcessor {
 
     }
 
+
     public void updateGame() {
         viewController.handleInput();
         viewController.updateInventory();
         viewController.refreshLeaderBoard();
         viewController.updatePlayer();
+        updateThunder();
 
     }
     private boolean methodUseMessage(Message responseMessage) {
@@ -5365,6 +5387,17 @@ public class GameView implements Screen, InputProcessor {
 
     public void setPlayerTime(float playerTime) {
         this.playerTime = playerTime;
+    }
+
+    public void updateThunder() {
+        if (AppClient.getCurrentGame().getDateTime().getTime() == 9 &&
+            AppClient.getCurrentGame().getWeather() instanceof Storm storm) {
+            for (int i = 0; i < 3; i++) {
+                for (int j = 0; j < 4; j++) {
+                    AppClient.getCurrentGame().getWeather().thunder(storm.x[i][j] , storm.y[i][j]);
+                }
+            }
+        }
     }
 }
 

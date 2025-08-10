@@ -42,7 +42,7 @@ public class DateTime {
                 clientHandler.getClientPlayer().getEnergy().setMaxDayEnergy(300);
             }
         }
-        for (Player player : AppClient.getCurrentGame().getPlayers()) {
+        for (Player player : clientHandler.getClientGame().getPlayers()) {
             ArrayList<Pair<Integer, Good>> newArtisanGoods = new ArrayList<>();
             for (Pair<Integer, Good> integerGoodPair : player.getArtisansGoodTime()) {
                 if(integerGoodPair.first() - difTime <= 0) {

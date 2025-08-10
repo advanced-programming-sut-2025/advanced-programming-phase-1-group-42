@@ -78,6 +78,7 @@ public class GameController extends Controller {
     private CookingController cookingController;
     private CraftingController craftingController;
     private TradeMenuController tradeController;
+    private boolean isControllerEnded = false;
 
     public GameController(ClientHandler clientHandler) {
         cookingController = new CookingController();
@@ -85,12 +86,41 @@ public class GameController extends Controller {
         tradeController = new TradeMenuController();
 
         this.clientHandler = clientHandler;
+
+        Thread timeFlowThread = new Thread(() -> {
+            while(!isControllerEnded) {
+                try {
+                    Thread.sleep(60000);
+                } catch (InterruptedException e) {
+                    throw new RuntimeException(e);
+                }
+
+                clientHandler.getClientGame().getDateTime().timeFlow(clientHandler);
+            }
+        });
+        timeFlowThread.start();
     }
 
     @Override
     public Message handleMessage(Message message) {
         if (message.getType() == Message.Type.command) {
             switch ((String) message.getFromBody("function")) {
+                case "removeItemsFromFridge" -> {
+                    ArrayList<String> arguments = message.getFromBody("arguments");
+                    clientHandler.getClientPlayer().getFridge().removeItemsFromFridge(
+                            Good.newGoodType(arguments.get(0)), Integer.parseInt(arguments.get(1))
+                    );
+                    return sendResultMessage(new Result(true, ""));
+                }
+                case "addGoodByObject" -> {
+                    String arguments = message.getFromBody("arguments");
+                    clientHandler.getClientPlayer().getInventory().addGoodByObject(
+                            Good.newGood(Good.newGoodType(arguments)),
+                            clientHandler.getClientGame(),
+                            clientHandler.getClientPlayer()
+                    );
+                    return sendResultMessage(new Result(true, ""));
+                }
                 case "cheat" -> {
                     GameMenu gameMenu = new GameMenu(this);
                     gameMenu.check(message.getFromBody("arguments"));
@@ -481,7 +511,8 @@ public class GameController extends Controller {
         y = y.trim();
         int xInt = Integer.parseInt(x);
         int yInt = Integer.parseInt(y);
-        clientHandler.getClientGame().getWeather().thunder(xInt, yInt, clientHandler);
+        // TODO parsa
+//        clientHandler.getClientGame().getWeather().thunder(xInt, yInt, clientHandler);
         return new Result(true, "");
     }
 

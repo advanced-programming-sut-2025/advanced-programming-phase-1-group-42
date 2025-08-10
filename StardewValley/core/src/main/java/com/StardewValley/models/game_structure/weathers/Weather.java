@@ -16,20 +16,19 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 public abstract class Weather {
-    public void thunder(int x, int y, ClientHandler handler) {
+    public void thunder(int x, int y) {
 //        App.getCurrentGame().getController().getGameView().showThunder();
-        // TODO Parsa
         Coordinate coordinate = new Coordinate(x, y);
-        if(handler.getClientPlayer().getCoordinate().equals(coordinate)){
+        if(AppClient.getCurrentPlayer().getCoordinate().equals(coordinate)){
             System.out.println("You've Been Struck by Thunder!");
         } else {
             // Null checks first
-            if (handler.getClientGame() == null || handler.getClientGame().getMap() == null) {
+            if (AppClient.getCurrentGame() == null || AppClient.getCurrentGame().getMap() == null) {
                 System.err.println("Error: Game or map not loaded.");
                 return;
             }
 
-            Tile tile = handler.getClientGame().getMap().findTile(coordinate, handler.getClientGame());
+            Tile tile = AppClient.getCurrentGame().getMap().findTile(coordinate, AppClient.getCurrentGame());
             if (tile == null) {
                 System.err.println("Error: Tile not found at coordinate " + coordinate);
                 return;

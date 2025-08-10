@@ -8,6 +8,8 @@ import com.StardewValley.server.ClientHandler;
 public class Storm extends Weather {
     double weatherEffectingEnergy ;
     double fishChance ;
+    public int[][] x;
+    public int[][] y;
 
     public double getWeatherEffectingEnergy() {
         return weatherEffectingEnergy;
@@ -33,8 +35,8 @@ public class Storm extends Weather {
     }
 
     public void randomThunder(ClientHandler handler) {
-        int[][] x = new int[4][5];
-        int[][] y = new int[4][5];
+        x = new int[4][5];
+        y = new int[4][5];
 
         for (int i = 0; i < 5; i++) {
             for (int j = 0; j < 3; j++) {
@@ -51,12 +53,6 @@ public class Storm extends Weather {
                     x[i][j] = (int) (Math.random() * 70) + 70;
                     y[i][j] = (int) (Math.random() * 50) + 110;
                 }
-            }
-        }
-
-        for (int i = 0; i < 3; i++) {
-            for (int j = 0; j < 4; j++) {
-                AppClient.getCurrentGame().getWeather().thunder(x[i][j] , y[i][j], handler);
             }
         }
     }
