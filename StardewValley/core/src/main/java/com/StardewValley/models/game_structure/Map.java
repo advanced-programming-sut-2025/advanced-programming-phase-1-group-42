@@ -3,7 +3,6 @@ package com.StardewValley.models.game_structure;
 
 
 import com.StardewValley.client.AppClient;
-import com.StardewValley.models.Assets;
 import com.StardewValley.models.enums.TileType;
 import com.StardewValley.models.goods.Good;
 import com.StardewValley.models.goods.farmings.FarmingCrop;
@@ -16,15 +15,12 @@ import com.StardewValley.models.interactions.NPCs.NPC;
 import com.StardewValley.models.interactions.Player;
 import com.StardewValley.models.interactions.game_buildings.GameBuilding;
 import com.StardewValley.server.ClientHandler;
-import com.badlogic.gdx.graphics.Texture;
-import com.badlogic.gdx.scenes.scene2d.ui.*;
-import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
 
-public class Map {
+public class Map<S, I extends Number> {
     private final ArrayList<Tile> tiles = new ArrayList<>();
     private final ArrayList<Farm> farms = new ArrayList<>();
     private final ArrayList<GameBuilding> gameBuildings = new ArrayList<>();

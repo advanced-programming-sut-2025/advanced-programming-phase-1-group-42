@@ -13,16 +13,16 @@ import java.util.Arrays;
 import java.util.HashMap;
 
 public class WholeMapBuilder implements MapInterface {
-    private Map map;
+    private Map<S, Number> map;
 
     @Override
     public void reset() {
-        this.map = new Map();
+        this.map = new Map<S, Number>();
     }
 
     @Override
-    public Map getMap() {
-        Map finalMap = this.map;
+    public Map<S, Number> getMap() {
+        Map<S, Number> finalMap = this.map;
         this.reset();
         return finalMap;
     }

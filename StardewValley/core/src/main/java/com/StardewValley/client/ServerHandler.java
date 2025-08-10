@@ -3,26 +3,45 @@ package com.StardewValley.client;
 import com.StardewValley.models.JSONUtils;
 import com.StardewValley.models.Message;
 
-import java.io.DataInputStream;
-import java.io.DataOutputStream;
-import java.io.IOException;
+import java.io.*;
 import java.net.Socket;
+import java.nio.charset.StandardCharsets;
 
 public class ServerHandler {
-    protected DataInputStream dataInputStream;
-    protected DataOutputStream dataOutputStream;
-    protected Socket socket;
+    private final DataInputStream  dataInputStream;
+    private final DataOutputStream dataOutputStream;
+    private final Socket socket;
 
     public ServerHandler(Socket socket) throws IOException {
         this.socket = socket;
-        this.dataInputStream = new DataInputStream(socket.getInputStream());
-        this.dataOutputStream = new DataOutputStream(socket.getOutputStream());
+        // Buffering is optional but recommended
+        this.dataInputStream  = new DataInputStream(new BufferedInputStream(socket.getInputStream()));
+        this.dataOutputStream = new DataOutputStream(new BufferedOutputStream(socket.getOutputStream()));
     }
+
+    /* ---------------- length‑prefixed UTF‑8 helpers ---------------- */
+
+    private static void writeString(DataOutputStream out, String s) throws IOException {
+        byte[] bytes = s.getBytes(StandardCharsets.UTF_8);
+        out.writeInt(bytes.length);   // 4‑byte length prefix
+        out.write(bytes);             // payload
+        out.flush();
+    }
+
+    private static String readString(DataInputStream in) throws IOException {
+        int len = in.readInt();       // blocks until 4 bytes read
+        byte[] buf = new byte[len];
+        in.readFully(buf);            // blocks until len bytes read
+        return new String(buf, StandardCharsets.UTF_8);
+    }
+
+    /* ---------------------------------------------------------------- */
 
     public Message sendAndWaitForResponse(Message message) {
         sendMessage(message);
         try {
-            return JSONUtils.fromJson(dataInputStream.readUTF());
+            String json = readString(dataInputStream);
+            return JSONUtils.fromJson(json);
         } catch (Exception e) {
             e.printStackTrace();
             return null;
@@ -30,26 +49,19 @@ public class ServerHandler {
     }
 
     public void sendMessage(Message message) {
-        String JSONString = JSONUtils.toJson(message);
+        String json = JSONUtils.toJson(message);
         try {
-            dataOutputStream.writeUTF(JSONString);
-            dataOutputStream.flush();
-
-
+            writeString(dataOutputStream, json);
         } catch (IOException e) {
             e.printStackTrace();
         }
     }
 
-    public Socket getSocket() {
-        return socket;
-    }
+    public Socket getSocket() { return socket; }
+    public DataInputStream getDataInputStream() { return dataInputStream; }
+    public DataOutputStream getDataOutputStream() { return dataOutputStream; }
 
-    public DataInputStream getDataInputStream() {
-        return dataInputStream;
-    }
-
-    public DataOutputStream getDataOutputStream() {
-        return dataOutputStream;
+    public void closeQuietly() {
+        try { socket.close(); } catch (IOException ignored) {}
     }
 }

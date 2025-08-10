@@ -8,7 +8,7 @@ import java.util.ArrayList;
 
 public interface MapInterface {
     public void reset();
-    public Map getMap();
+    public Map<S, Number> getMap();
     public void setTiles(ArrayList<Tile> tiles);
     public void setFarms(ArrayList<Farm> farms);
     public void setGameBuildings(ArrayList<Tile> tiles);

@@ -36,7 +36,7 @@ public class Game {
     private Tomorrow tomorrow;
     private final ArrayList<Player> players = new ArrayList<>();
     private Player gameAdmin;
-    private Map map = null;
+    private Map<S, Number> map = null;
     private final ArrayList<NPC> NPCs = new ArrayList<>();
     private int counter = 0;
     private ArrayList<Pair<Player, String>> publicChat = new ArrayList<>();
@@ -61,7 +61,7 @@ public class Game {
         return players;
     }
 
-    public void setMap(Map map) {
+    public void setMap(Map<S, Number> map) {
         this.map = map;
     }
 
@@ -87,7 +87,7 @@ public class Game {
         }
     }
 
-    public Map getMap() {
+    public Map<S, Number> getMap() {
         return map;
     }
 

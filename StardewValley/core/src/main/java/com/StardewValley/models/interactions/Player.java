@@ -1,6 +1,5 @@
 package com.StardewValley.models.interactions;
 
-import com.StardewValley.models.Assets;
 import com.StardewValley.models.Pair;
 import com.StardewValley.models.game_structure.*;
 import com.StardewValley.models.goods.Good;
@@ -14,13 +13,21 @@ import com.StardewValley.models.goods.tools.Tool;
 import com.StardewValley.models.goods.tools.ToolType;
 import com.StardewValley.models.interactions.Animals.Animal;
 import com.StardewValley.models.interactions.PlayerBuildings.FarmBuilding;
-import com.StardewValley.server.AppServer;
 import com.StardewValley.server.ClientHandler;
+import com.google.gson.Gson;
+import com.google.gson.TypeAdapter;
+import com.google.gson.annotations.JsonAdapter;
+import com.google.gson.reflect.TypeToken;
+import com.google.gson.stream.JsonWriter;
 
+import java.io.IOException;
+import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
+
+import static java.lang.System.out;
 
 public class Player {
     private Coordinate coordinate ;
@@ -48,7 +55,8 @@ public class Player {
 
     private boolean renderAble = true;
     // level-value
-    private final HashMap<Player, Pair<Integer, Integer>> friendShips = new HashMap<>();
+//    @JsonAdapter(ObjectOrStringMapAdapter.class)
+    private final HashMap<String, Pair<Integer, Integer>> friendShips = new HashMap<>();
     private final HashMap<Player, Boolean> isInteracted;
     private final ArrayList<Pair<Player, String>> talkHistory = new ArrayList<>();
 
@@ -114,7 +122,7 @@ public class Player {
     public void iniFriendships(ArrayList<Player> players) {
         for (Player player : players) {
             if(!player.getUsername().equals(username)) {
-                this.friendShips.put(player, new Pair<>(0, 0));
+                this.friendShips.put(player.getUsername(), new Pair<>(0, 0));
                 this.isInteracted.put(player, false);
             }
         }
@@ -194,9 +202,6 @@ public class Player {
         return wallet;
     }
 
-    public HashMap<Player, Pair<Integer, Integer>> getFriendShips() {
-        return friendShips;
-    }
 
     public HashMap<Player, Boolean> getIsInteracted() {
         return isInteracted;
@@ -244,14 +249,14 @@ public class Player {
 
     public void showAnimals(){
         for (FarmBuilding farmBuilding : farm.getFarmBuildings()) {
-            System.out.println(farmBuilding.getName());
+            out.println(farmBuilding.getName());
             for (Animal animal : farmBuilding.getAnimals()) {
-                System.out.println(" "+animal.getAnimalType().getName() + " > " + animal.getName());
-                System.out.println("\tFriendShip: " + animal.getFriendship());
-                System.out.println("\tPetted: " + animal.isPetted());
-                System.out.println("\tFed: " + animal.isFed());
+                out.println(" "+animal.getAnimalType().getName() + " > " + animal.getName());
+                out.println("\tFriendShip: " + animal.getFriendship());
+                out.println("\tPetted: " + animal.isPetted());
+                out.println("\tFed: " + animal.isFed());
             }
-            System.out.println("------------------------------");
+            out.println("------------------------------");
         }
     }
 
@@ -290,17 +295,19 @@ public class Player {
         return getUsername();
     }
 
+
+
     public void updateFriendShips(Player player) {
-        Pair<Integer, Integer> friendship = friendShips.get(player);
+        Pair<Integer, Integer> friendship = friendShips.get(player.getUsername());
         int points = 0;
         for (int i = 0; i < friendship.first(); i++) {
             points += (i + 1) * 100;
         }
 
         if(friendship.second() - points >= ((friendship.first() + 1) * 100)) {
-            friendShips.computeIfPresent(player,
+            friendShips.computeIfPresent(player.getUsername(),
                     (k, pair) -> new Pair<>(pair.first() + 1, friendship.second()));
-            player.getFriendShips().computeIfPresent(this,
+            player.friendShips.computeIfPresent(this.getUsername(),
                     (k, pair) -> new Pair<>(pair.first() + 1, friendship.second()));
         }
 //        else if(friendship.second() < points) {
@@ -431,4 +438,32 @@ public class Player {
     ));
 
     private final String nullPNGPath = "GameAssets/null.png";
+
+    public HashMap<String, Pair<Integer, Integer>> getFriendShips() {
+        return friendShips;
+    }
 }
+
+
+//// Adapter
+//final class ObjectOrStringMapAdapter extends TypeAdapter<Map<String,Integer>> {
+//    private static final Gson G = new com.google.gson.Gson();
+//    private static final Type T =
+//        new TypeToken<Map<String,Integer>>(){}.getType();
+//
+//    @Override
+//    public void write(JsonWriter jsonWriter, Map<String, Integer> value) throws IOException {
+//        G.getAdapter(TypeToken.get(T)).write(out, value);
+//    }
+//
+//    @Override public Map<String,Integer> read(com.google.gson.stream.JsonReader in)
+//        throws java.io.IOException {
+//        com.google.gson.stream.JsonToken tok = in.peek();
+//        if (tok == com.google.gson.stream.JsonToken.STRING) {
+//            String s = in.nextString();
+//            return G.fromJson(s, T); // parse inner JSON string
+//        }
+//        return G.fromJson(in, T);   // normal object
+//    }
+//}
+

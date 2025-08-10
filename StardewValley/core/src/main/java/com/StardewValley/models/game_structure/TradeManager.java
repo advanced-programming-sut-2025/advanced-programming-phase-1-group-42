@@ -39,10 +39,10 @@ public class TradeManager {
                         if (trade.getType() == TradeType.OFFER) {
                             if (trade.getAmount() > trade.getReceiver().getWallet().getBalance()) {
                                 System.out.println("You dont have enough money!, Dumbass");
-                                clientHandler.getClientPlayer().getFriendShips().computeIfPresent(trade.getSender(),
+                                clientHandler.getClientPlayer().getFriendShips().computeIfPresent(trade.getSender().getUsername(),
 
                                         (k, pair) -> new Pair<>(pair.first(), pair.second() - 30));
-                                trade.getSender().getFriendShips().computeIfPresent(clientHandler.getClientPlayer(),
+                                trade.getSender().getFriendShips().computeIfPresent(clientHandler.getClientPlayer().getUsername(),
                                         (k, pair) -> new Pair<>(pair.first(), pair.second() - 30));
                                 trade.setAccepted(false);
                                 trade.setResponded(true);
@@ -55,9 +55,9 @@ public class TradeManager {
                                 trade.getReceiver().getInventory().addGood(Good.newGood(Good.newGoodType(trade.getItem())),
                                     trade.getAmount(), clientHandler.getClientGame(), clientHandler.getClientPlayer());
 
-                                clientHandler.getClientPlayer().getFriendShips().computeIfPresent(trade.getSender(),
+                                clientHandler.getClientPlayer().getFriendShips().computeIfPresent(trade.getSender().getUsername(),
                                         (k, pair) -> new Pair<>(pair.first(), pair.second() + 30));
-                                trade.getSender().getFriendShips().computeIfPresent(clientHandler.getClientPlayer(),
+                                trade.getSender().getFriendShips().computeIfPresent(clientHandler.getClientPlayer().getUsername(),
                                         (k, pair) -> new Pair<>(pair.first(), pair.second() + 30));
                                 trade.setAccepted(true);
                                 trade.setResponded(true);
@@ -67,10 +67,10 @@ public class TradeManager {
                         if (trade.getType() == TradeType.REQUEST) {
                             if (trade.getReceiver().getInventory().howManyInInventoryByType(Good.newGoodType(trade.getItem())) < trade.getAmount()) {
                                 System.out.println("You dont have enough Material!, Dumbass");
-                                clientHandler.getClientPlayer().getFriendShips().computeIfPresent(trade.getSender(),
+                                clientHandler.getClientPlayer().getFriendShips().computeIfPresent(trade.getSender().getUsername(),
 
                                         (k, pair) -> new Pair<>(pair.first(), pair.second() - 30));
-                                trade.getSender().getFriendShips().computeIfPresent(clientHandler.getClientPlayer(),
+                                trade.getSender().getFriendShips().computeIfPresent(clientHandler.getClientPlayer().getUsername(),
                                         (k, pair) -> new Pair<>(pair.first(), pair.second() - 30));
                                 trade.setAccepted(false);
                                 trade.setResponded(true);
@@ -83,9 +83,9 @@ public class TradeManager {
                                 trade.getSender().getInventory().addGood(Good.newGood(Good.newGoodType(trade.getItem())), trade.getAmount(),
                                     clientHandler.getClientGame(), clientHandler.getClientPlayer());
 
-                                clientHandler.getClientPlayer().getFriendShips().computeIfPresent(trade.getSender(),
+                                clientHandler.getClientPlayer().getFriendShips().computeIfPresent(trade.getSender().getUsername(),
                                         (k, pair) -> new Pair<>(pair.first(), pair.second() + 30));
-                                trade.getSender().getFriendShips().computeIfPresent(clientHandler.getClientPlayer(),
+                                trade.getSender().getFriendShips().computeIfPresent(clientHandler.getClientPlayer().getUsername(),
                                         (k, pair) -> new Pair<>(pair.first(), pair.second() + 30));
                                 trade.setAccepted(true);
                                 trade.setResponded(true);
@@ -96,9 +96,9 @@ public class TradeManager {
                         if (trade.getType() == TradeType.OFFER) {
                             if (trade.getReceiver().getInventory().howManyInInventoryByType(Good.newGoodType(trade.getItem())) < trade.getAmount()) {
                                 System.out.println("You dont have enough Material!, Dumbass");
-                                clientHandler.getClientPlayer().getFriendShips().computeIfPresent(trade.getSender(),
+                                clientHandler.getClientPlayer().getFriendShips().computeIfPresent(trade.getSender().getUsername(),
                                         (k, pair) -> new Pair<>(pair.first(), pair.second() - 30));
-                                trade.getSender().getFriendShips().computeIfPresent(clientHandler.getClientPlayer(),
+                                trade.getSender().getFriendShips().computeIfPresent(clientHandler.getClientPlayer().getUsername(),
                                         (k, pair) -> new Pair<>(pair.first(), pair.second() - 30));
                                 trade.setAccepted(false);
                                 trade.setResponded(true);
@@ -111,9 +111,9 @@ public class TradeManager {
                                 trade.getSender().getInventory().addGood(Good.newGood(Good.newGoodType(trade.getTargetItem())), trade.getTargetAmount(),
                                     clientHandler.getClientGame(), clientHandler.getClientPlayer());
 
-                                clientHandler.getClientPlayer().getFriendShips().computeIfPresent(trade.getSender(),
+                                clientHandler.getClientPlayer().getFriendShips().computeIfPresent(trade.getSender().getUsername(),
                                         (k, pair) -> new Pair<>(pair.first(), pair.second() + 30));
-                                trade.getSender().getFriendShips().computeIfPresent(clientHandler.getClientPlayer(),
+                                trade.getSender().getFriendShips().computeIfPresent(clientHandler.getClientPlayer().getUsername(),
                                         (k, pair) -> new Pair<>(pair.first(), pair.second() + 30));
                                 trade.setAccepted(true);
                                 trade.setResponded(true);
@@ -123,9 +123,9 @@ public class TradeManager {
                         if (trade.getType() == TradeType.REQUEST) {
                             if (trade.getReceiver().getInventory().howManyInInventoryByType(Good.newGoodType(trade.getItem())) < trade.getAmount()) {
                                 System.out.println("You dont have enough Material!, Dumbass");
-                                clientHandler.getClientPlayer().getFriendShips().computeIfPresent(trade.getSender(),
+                                clientHandler.getClientPlayer().getFriendShips().computeIfPresent(trade.getSender().getUsername(),
                                         (k, pair) -> new Pair<>(pair.first(), pair.second() - 30));
-                                trade.getSender().getFriendShips().computeIfPresent(clientHandler.getClientPlayer(),
+                                trade.getSender().getFriendShips().computeIfPresent(clientHandler.getClientPlayer().getUsername(),
                                         (k, pair) -> new Pair<>(pair.first(), pair.second() - 30));
                                 trade.setAccepted(false);
                                 trade.setResponded(true);
@@ -138,9 +138,9 @@ public class TradeManager {
                                 trade.getReceiver().getInventory().addGood(Good.newGood(Good.newGoodType(trade.getTargetItem())), trade.getTargetAmount(),
                                     clientHandler.getClientGame(), clientHandler.getClientPlayer());
 
-                                clientHandler.getClientPlayer().getFriendShips().computeIfPresent(trade.getSender(),
+                                clientHandler.getClientPlayer().getFriendShips().computeIfPresent(trade.getSender().getUsername(),
                                         (k, pair) -> new Pair<>(pair.first(), pair.second() + 30));
-                                trade.getSender().getFriendShips().computeIfPresent(clientHandler.getClientPlayer(),
+                                trade.getSender().getFriendShips().computeIfPresent(clientHandler.getClientPlayer().getUsername(),
                                         (k, pair) -> new Pair<>(pair.first(), pair.second() + 30));
                                 trade.setAccepted(true);
                                 trade.setResponded(true);
@@ -149,9 +149,9 @@ public class TradeManager {
                         }
                     }
                 } else {
-                    clientHandler.getClientPlayer().getFriendShips().computeIfPresent(trade.getSender(),
+                    clientHandler.getClientPlayer().getFriendShips().computeIfPresent(trade.getSender().getUsername(),
                             (k, pair) -> new Pair<>(pair.first(), pair.second() - 30));
-                    trade.getSender().getFriendShips().computeIfPresent(clientHandler.getClientPlayer(),
+                    trade.getSender().getFriendShips().computeIfPresent(clientHandler.getClientPlayer().getUsername(),
                             (k, pair) -> new Pair<>(pair.first(), pair.second() - 30));
                     trade.setAccepted(false);
                     trade.setResponded(true);

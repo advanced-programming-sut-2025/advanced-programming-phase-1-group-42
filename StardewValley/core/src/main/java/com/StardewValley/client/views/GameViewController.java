@@ -731,7 +731,7 @@ public class GameViewController {
                             Texture playerTxr = new Texture("GameAssets\\Main_Inventory\\Player.png");
                             Image npc_img = new Image(playerTxr);
 
-                            Pair<Integer, Integer> friendship = p.getFriendShips().get(AppClient.getCurrentPlayer());
+                            Pair<Integer, Integer> friendship = p.getFriendShips().get(AppClient.getCurrentPlayer().getUsername());
                             int friendshipLevel = friendship != null ? friendship.second() : 0;
 
                             Texture hearts = new Texture("GameAssets\\Main_Inventory\\" + friendshipLevel + ".png");

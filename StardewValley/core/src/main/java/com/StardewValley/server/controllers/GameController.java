@@ -1615,8 +1615,8 @@ public class GameController extends Controller {
                 continue;
 
             list.append("\t").append(player.getUsername()).append(": \n");
-            list.append("\t\tLevel: ").append(clientHandler.getClientPlayer().getFriendShips().get(player).first()).append("\n");
-            list.append("\t\tValue: ").append(clientHandler.getClientPlayer().getFriendShips().get(player).second()).append("\n");
+            list.append("\t\tLevel: ").append(clientHandler.getClientPlayer().getFriendShips().get(player.getUsername()).first()).append("\n");
+            list.append("\t\tValue: ").append(clientHandler.getClientPlayer().getFriendShips().get(player.getUsername()).second()).append("\n");
         }
         return new Result(true, list.toString());
     }
@@ -1660,9 +1660,9 @@ public class GameController extends Controller {
 
                 System.out.println("You and your partner got 50 extra energy!");
             } else {
-                player.getFriendShips().computeIfPresent(clientHandler.getClientPlayer(),
+                player.getFriendShips().computeIfPresent(clientHandler.getClientPlayer().getPlayerUsername(),
                     (k, pair) -> new Pair<>(pair.first(), pair.second() + 20));
-                clientHandler.getClientPlayer().getFriendShips().computeIfPresent(player,
+                clientHandler.getClientPlayer().getFriendShips().computeIfPresent(player.getPlayerUsername(),
                     (k, pair) -> new Pair<>(pair.first(), pair.second() + 20));
 
                 player.updateFriendShips(clientHandler.getClientPlayer());
@@ -1779,9 +1779,9 @@ public class GameController extends Controller {
                 System.out.println("You and your partner got 50 extra energy!");
             } else {
                 int value = (giftRate - 3) * 30 + 15;
-                clientHandler.getClientPlayer().getFriendShips().computeIfPresent(gift.first(),
+                clientHandler.getClientPlayer().getFriendShips().computeIfPresent(gift.first().getUsername(),
                     (k, pair) -> new Pair<>(pair.first(), pair.second() + value));
-                gift.first().getFriendShips().computeIfPresent(clientHandler.getClientPlayer(),
+                gift.first().getFriendShips().computeIfPresent(clientHandler.getClientPlayer().getUsername(),
                     (k, pair) -> new Pair<>(pair.first(), pair.second() + value));
 
                 gift.first().updateFriendShips(clientHandler.getClientPlayer());
@@ -1835,9 +1835,9 @@ public class GameController extends Controller {
 
                 list.append("You and your partner got 50 extra energy!\n");
             } else {
-                clientHandler.getClientPlayer().getFriendShips().computeIfPresent(player,
+                clientHandler.getClientPlayer().getFriendShips().computeIfPresent(player.getUsername(),
                     (k, pair) -> new Pair<>(pair.first(), pair.second() + 60));
-                player.getFriendShips().computeIfPresent(clientHandler.getClientPlayer(),
+                player.getFriendShips().computeIfPresent(clientHandler.getClientPlayer().getUsername(),
                     (k, pair) -> new Pair<>(pair.first(), pair.second() + 60));
 
                 player.updateFriendShips(clientHandler.getClientPlayer());
@@ -1899,9 +1899,9 @@ public class GameController extends Controller {
 
                 list.append("You and your partner got 50 extra energy!\n");
             } else {
-                clientHandler.getClientPlayer().getFriendShips().computeIfPresent(player,
+                clientHandler.getClientPlayer().getFriendShips().computeIfPresent(player.getUsername(),
                     (k, pair) -> new Pair<>(pair.first() + 1, pair.second()));
-                player.getFriendShips().computeIfPresent(clientHandler.getClientPlayer(),
+                player.getFriendShips().computeIfPresent(clientHandler.getClientPlayer().getPlayerUsername(),
                     (k, pair) -> new Pair<>(pair.first() + 1, pair.second()));
 
                 player.updateFriendShips(clientHandler.getClientPlayer());
@@ -1977,9 +1977,9 @@ public class GameController extends Controller {
                 clientHandler.getClientGame(), clientHandler.getClientPlayer());
 
             // Friendship level increased to 4
-            mainPlayer.getFriendShips().computeIfPresent(player,
+            mainPlayer.getFriendShips().computeIfPresent(player.getUsername(),
                 (k, pair) -> new Pair<>(4, pair.second()));
-            player.getFriendShips().computeIfPresent(mainPlayer,
+            player.getFriendShips().computeIfPresent(mainPlayer.getUsername(),
                 (k, pair) -> new Pair<>(4, pair.second()));
 
             player.updateFriendShips(clientHandler.getClientPlayer());
@@ -2008,9 +2008,9 @@ public class GameController extends Controller {
 
             return new Result(true, "Your have accepted your marriage from " + username + "! Now you can live with him!");
         } else if (status.matches("\\s*-reject\\s*")) {
-            mainPlayer.getFriendShips().computeIfPresent(player,
+            mainPlayer.getFriendShips().computeIfPresent(player.getUsername(),
                 (k, pair) -> new Pair<>(0, pair.second()));
-            player.getFriendShips().computeIfPresent(mainPlayer,
+            player.getFriendShips().computeIfPresent(mainPlayer.getUsername(),
                 (k, pair) -> new Pair<>(0, pair.second()));
 
             player.updateFriendShips(clientHandler.getClientPlayer());
