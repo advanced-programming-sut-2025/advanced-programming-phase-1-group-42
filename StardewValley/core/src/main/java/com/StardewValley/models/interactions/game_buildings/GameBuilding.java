@@ -26,9 +26,9 @@ public abstract class GameBuilding extends Building {
     public abstract Pair<GoodType, Integer> findProduct(GoodType goodType);
 
 
-    public boolean isInWorkingHours() {
-        if(AppClient.getCurrentGame().getDateTime().getTime() < getHours().second()
-                || AppClient.getCurrentGame().getDateTime().getTime() > getHours().first())
+    public boolean isInWorkingHours(ClientHandler clientHandler) {
+        if(clientHandler.getClientGame().getDateTime().getTime() < getHours().second()
+                || clientHandler.getClientGame().getDateTime().getTime() > getHours().first())
             return true;
         return false;
     }

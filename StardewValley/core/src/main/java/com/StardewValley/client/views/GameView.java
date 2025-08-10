@@ -159,6 +159,10 @@ public class GameView implements Screen, InputProcessor {
     private boolean isTabClicked = false;
     private ArrayList<Pair<Sprite, Sprite>> playersSprite;
 
+    private float playerTime = 0;
+    private ArrayList<Pair<Sprite, Pair<TextButton, TextButton>>> npcSprites;
+    private HashMap<String, Texture> gameBuildingTextures;
+
     public GameView(Skin skin) {
 //        this.controller.initGameControllers();
         this.viewController = new GameViewController(this);
@@ -282,6 +286,163 @@ public class GameView implements Screen, InputProcessor {
                 (player.getCoordinate().getY()) * 40);
 
         }
+
+        NPCTypes[] validNPC = new NPCTypes[]{
+            NPCTypes.ABIGAIL,
+            NPCTypes.HARVEY,
+            NPCTypes.ROBIN,
+            NPCTypes.SEBASTIAN,
+            NPCTypes.LEAH
+        };
+        npcSprites = new ArrayList<>();
+        for (NPC npc : AppClient.getCurrentGame().getNPCs()) {
+            Pair<Sprite, Pair<TextButton, TextButton>> npcSprite = new Pair<>(
+                new Sprite(new Texture(npc.getType().getImagePath())),
+                new Pair<>(new TextButton("Talk", style), new TextButton("info", style))
+            );
+            npcSprites.add(npcSprite);
+
+            if (Arrays.asList(validNPC).contains(npc.getType())) {
+                TextButton talk = npcSprite.second().first();
+                TextButton info = npcSprite.second().second();
+
+                talk.addListener(new ClickListener() {
+                    public void clicked(InputEvent event, float x, float y) {
+                        Texture texture = new Texture(Gdx.files.internal(npc.getType().getAvatarPath()));
+                        npcImage = new Image(texture);
+                        buildMessage();
+                        Message message = new Message(new HashMap<>() {{
+                            put("function", "meetNPC");
+                            put("arguments", npc.getType().getName());
+                        }}, Message.Type.command);
+                        Message responseMessage = AppClient.getServerHandler().sendAndWaitForResponse(message);
+                        methodUseMessage(responseMessage);
+
+                        textFieldMessage.setText(responseMessage.getFromBody("message"));
+                    }
+                });
+                final Window[] questsWindow = {null};
+
+                info.addListener(new ClickListener() {
+                    public void clicked(InputEvent event, float x, float y) {
+                        Label label = new Label(npc.getType().getName(), skin);
+                        Window infoWindow = new Window("NPC Info", skin);
+                        infoWindow.getTitleLabel().setFontScale(0.7f);
+
+                        Label friendShip = new Label("Friendship: " + npc.getFriendship(AppClient.getCurrentPlayer()).getFriendshipLevel() + "\n" +
+                            "Points: " + npc.getFriendship(AppClient.getCurrentPlayer()).getFriendshipPoints(), skin);
+                        infoWindow.pad(10);
+                        infoWindow.add(label).row();
+                        infoWindow.add(friendShip).left().padTop(5).row();
+                        label.setFontScale(0.5f);
+                        friendShip.setFontScale(0.5f);
+
+                        infoWindow.setSize(6 * scaledSize, 5 * scaledSize);
+                        infoWindow.setPosition(info.getX(), info.getY() + info.getHeight() + 10);
+                        infoWindow.pad(6);
+
+                        TextButton closeButton = new TextButton("X", style);
+                        closeButton.setWidth(scaledSize);
+                        closeButton.setHeight(scaledSize);
+                        closeButton.getLabel().setFontScale(1f);
+                        closeButton.setColor(Color.YELLOW);
+                        closeButton.getLabel().setColor(Color.BLACK);
+                        closeButton.addListener(new ClickListener() {
+                            public void clicked(InputEvent event, float x, float y) {
+                                infoWindow.remove();
+                                if (questsWindow[0] != null) {
+                                    questsWindow[0].remove();
+                                    questsWindow[0] = null;
+                                }
+                            }
+                        });
+
+                        closeButton.setPosition(infoWindow.getWidth() - closeButton.getWidth(),
+                            infoWindow.getHeight() - closeButton.getHeight());
+                        infoWindow.addActor(closeButton);
+
+                        TextButton gift = new TextButton("send gift", style);
+                        gift.getLabel().setColor(Color.BLACK);
+                        gift.setSize((float) 2 * scaledSize, (float) (0.7 * scaledSize));
+                        gift.pad(7);
+                        infoWindow.add(gift).center().padTop(7).padBottom(5).row();
+
+                        TextButton quest = new TextButton("quests", style);
+                        quest.getLabel().setColor(Color.BLACK);
+                        quest.setSize((float) 2 * scaledSize, (float) (0.7 * scaledSize));
+                        quest.pad(7);
+                        infoWindow.add(quest).center().padTop(7).row();
+
+                        gift.addListener(new ClickListener() {
+                            public void clicked(InputEvent event, float x, float y) {
+                                Message message = new Message(new HashMap<>() {{
+                                    put("function", "isCloseEnough");
+                                    put("arguments", npc.getType().getName());
+                                }}, Message.Type.command);
+                                Message responseMessage = AppClient.getServerHandler().sendAndWaitForResponse(message);
+
+                                if (!methodUseMessage(responseMessage)) {
+                                    Message message2 = new Message(new HashMap<>() {{
+                                        put("function", "giftNPC");
+                                        put("arguments", new ArrayList<>(Arrays.asList(
+                                            npc.getType().getName(),
+                                            AppClient.getCurrentPlayer().getInHandGood().getFirst().getName()
+                                        )));
+                                    }}, Message.Type.command);
+                                    Message responseMessage2 = AppClient.getServerHandler().sendAndWaitForResponse(message2);
+                                    methodUseMessage(responseMessage);
+
+//                                    Result result = controller.giftNPC(npc.getType().getName(),
+//                                        AppClient.getCurrentPlayer().getInHandGood().getFirst().getName());
+                                    buildMessage();
+                                    textFieldMessage.setText(responseMessage2.getFromBody("message"));
+                                } else {
+                                    buildMessage();
+                                    textFieldMessage.setText("Too far away. Approach the NPC to send a gift.");
+                                }
+                            }
+                        });
+
+                        quest.addListener(new ClickListener() {
+                            public void clicked(InputEvent event, float x, float y) {
+                                if (questsWindow[0] != null) {
+                                    questsWindow[0].remove();
+                                    questsWindow[0] = null;
+                                }
+                                questsWindow[0] = new Window("Quests", skin);
+                                questsWindow[0].getTitleLabel().setFontScale(0.5f);
+                                questsWindow[0].pad(10);
+                                questsWindow[0].setSize(6 * scaledSize, 4 * scaledSize);
+                                questsWindow[0].setPosition(infoWindow.getX() + infoWindow.getWidth() + 10, infoWindow.getY());
+
+                                Message message = new Message(new HashMap<>() {{
+                                    put("function", "getQuests");
+                                    put("arguments", npc.getType().getName());
+                                }}, Message.Type.command);
+                                Message responseMessage = AppClient.getServerHandler().sendAndWaitForResponse(message);
+                                methodUseMessage(responseMessage);
+
+//                                String result = controller.getQuests();
+                                Label labelQuest = new Label(responseMessage.getFromBody("message"), skin);
+                                labelQuest.setFontScale(0.5f);
+                                questsWindow[0].add(labelQuest);
+                                stage.addActor(questsWindow[0]);
+                            }
+                        });
+
+                        stage.addActor(infoWindow);
+                    }
+                });
+
+
+            }
+        }
+
+        gameBuildingTextures = new HashMap<>();
+        for (GameBuilding gameBuilding : AppClient.getCurrentGame().getMap().getGameBuildings()) {
+            gameBuildingTextures.put(gameBuilding.getName(), new Texture(
+                gameBuilding.getImagePath()));
+        }
     }
 
     public ArrayList<Pair<Sprite, Sprite>> getPlayersSprite() {
@@ -311,6 +472,10 @@ public class GameView implements Screen, InputProcessor {
         updateCamera();
         Main.getBatch().setProjectionMatrix(camera.combined);
 
+//        framePtr++;
+//        if (framePtr %  == 0) {
+//            updateGameObject();
+//        }
 
         Main.getBatch().begin();
 
@@ -443,10 +608,11 @@ public class GameView implements Screen, InputProcessor {
             Message responseMessage = AppClient.getServerHandler().sendAndWaitForResponse(message);
             methodUseMessage(responseMessage);
         }
-        if (petsClicking(button, tileX, tileY)) return true;
+        if (petsClicking(button, tileX, tileY)) {
+            return true;
+        }
         if (selectedTile.getTileType() == TileType.GREEN_HOUSE &&
             !AppClient.getCurrentPlayer().getFarm().getGreenHouse().isAvailable()) {
-
             initGreenHouseWindow();
         }
 
@@ -583,9 +749,9 @@ public class GameView implements Screen, InputProcessor {
 //            multiplexer.addProcessor(stage);
 //            multiplexer.addProcessor(this);
 //            Gdx.input.setInputProcessor(multiplexer);
-
             return true;
         }
+        updateGameObject();
         return false;
     }
 
@@ -1502,43 +1668,43 @@ public class GameView implements Screen, InputProcessor {
                 Tile tile = Map.findTile(coordinate, AppClient.getCurrentGame());
                 switch (tile.getTileType()) {
                     case TileType.QUARRY -> {
-                        Main.getBatch().draw(new Texture(TileAssets.QUARRY.getImagePath()), x * scaledSize, y * scaledSize, scaledSize, scaledSize);
+                        Main.getBatch().draw(TileTextures.QUARRY.getImage(), x * scaledSize, y * scaledSize, scaledSize, scaledSize);
                     }
                     case TileType.FARM, TileType.PLAYER_BUILDING, TileType.GREEN_HOUSE -> {
                         if (AppClient.getCurrentGame().getDateTime().getSeason() == Season.WINTER)
-                            Main.getBatch().draw(new Texture(TileAssets.FARM_WINTER.getImagePath()), x * scaledSize, y * scaledSize, scaledSize, scaledSize);
+                            Main.getBatch().draw(TileTextures.FARM_WINTER.getImage(), x * scaledSize, y * scaledSize, scaledSize, scaledSize);
                         else
-                            Main.getBatch().draw(new Texture(TileAssets.FARM_ORDINARY.getImagePath()), x * scaledSize, y * scaledSize, scaledSize, scaledSize);
+                            Main.getBatch().draw(TileTextures.FARM_ORDINARY.getImage(), x * scaledSize, y * scaledSize, scaledSize, scaledSize);
                     }
                     case TileType.PLOWED_FARM -> {
                         if (tile.isWatered()) {
-                            Main.getBatch().draw(new Texture(TileAssets.FARM_WET.getImagePath()), x * scaledSize, y * scaledSize, scaledSize, scaledSize);
+                            Main.getBatch().draw(TileTextures.FARM_WET.getImage(), x * scaledSize, y * scaledSize, scaledSize, scaledSize);
                         } else
-                            Main.getBatch().draw(new Texture(TileAssets.FARM_PLOWED.getImagePath()), x * scaledSize, y * scaledSize, scaledSize, scaledSize);
+                            Main.getBatch().draw(TileTextures.FARM_PLOWED.getImage(), x * scaledSize, y * scaledSize, scaledSize, scaledSize);
                     }
                     case TileType.WATER -> {
-                        Main.getBatch().draw(new Texture(TileAssets.WATER.getImagePath()), x * scaledSize, y * scaledSize, scaledSize, scaledSize);
+                        Main.getBatch().draw(TileTextures.WATER.getImage(), x * scaledSize, y * scaledSize, scaledSize, scaledSize);
                     }
                     case TileType.PLAIN, TileType.GAME_BUILDING -> {
                         if (AppClient.getCurrentGame().getDateTime().getSeason() == Season.WINTER)
-                            Main.getBatch().draw(new Texture(TileAssets.FARM_WINTER.getImagePath()), x * scaledSize, y * scaledSize, scaledSize, scaledSize);
+                            Main.getBatch().draw(TileTextures.FARM_WINTER.getImage(), x * scaledSize, y * scaledSize, scaledSize, scaledSize);
                         else
-                            Main.getBatch().draw(new Texture(TileAssets.GRASS.getImagePath()), x * scaledSize, y * scaledSize, scaledSize, scaledSize);
+                            Main.getBatch().draw(TileTextures.GRASS.getImage(), x * scaledSize, y * scaledSize, scaledSize, scaledSize);
                     }
                     case TileType.ROAD -> {
-                        Main.getBatch().draw(new Texture(TileAssets.ROAD.getImagePath()), x * scaledSize, y * scaledSize, scaledSize, scaledSize);
+                        Main.getBatch().draw(TileTextures.ROAD.getImage(), x * scaledSize, y * scaledSize, scaledSize, scaledSize);
                     }
                     case TileType.STONE_WALL -> {
-                        Main.getBatch().draw(new Texture(TileAssets.STONE_WALL.getImagePath()), x * scaledSize, y * scaledSize, scaledSize, scaledSize);
+                        Main.getBatch().draw(TileTextures.STONE_WALL.getImage(), x * scaledSize, y * scaledSize, scaledSize, scaledSize);
                     }
                     case TileType.SQUARE -> {
-                        Main.getBatch().draw(new Texture(TileAssets.SQUARE.getImagePath()), x * scaledSize, y * scaledSize, scaledSize, scaledSize);
+                        Main.getBatch().draw(TileTextures.SQUARE.getImage(), x * scaledSize, y * scaledSize, scaledSize, scaledSize);
                     }
                     case TileType.BEACH -> {
-                        Main.getBatch().draw(new Texture(TileAssets.BEACH.getImagePath()), x * scaledSize, y * scaledSize, scaledSize, scaledSize);
+                        Main.getBatch().draw(TileTextures.BEACH.getImage(), x * scaledSize, y * scaledSize, scaledSize, scaledSize);
                     }
                     case TileType.SHIPPING_BIN -> {
-                        Main.getBatch().draw(new Texture(TileAssets.SHIPPING_BIN.getImagePath()), x * scaledSize, y * scaledSize, scaledSize, scaledSize);
+                        Main.getBatch().draw(TileTextures.SHIPPING_BIN.getImage(), x * scaledSize, y * scaledSize, scaledSize, scaledSize);
                     }
                 }
             }
@@ -1558,7 +1724,7 @@ public class GameView implements Screen, InputProcessor {
                             GameBuilding gameBuilding = AppClient.getCurrentGame().getMap().findGameBuilding(coordinate);
                             Coordinate size = new Coordinate(gameBuilding.getEndCordinate().getX() - gameBuilding.getStartCordinate().getX(),
                                 gameBuilding.getEndCordinate().getY() - gameBuilding.getStartCordinate().getY());
-                            Main.getBatch().draw(new Texture(gameBuilding.getImagePath()), x * scaledSize, y * scaledSize, size.getX() * scaledSize, size.getY() * scaledSize);
+                            Main.getBatch().draw(gameBuildingTextures.get(gameBuilding.getName()), x * scaledSize, y * scaledSize, size.getX() * scaledSize, size.getY() * scaledSize);
                         }
                     }
                     case TileType.PLAYER_BUILDING -> {
@@ -1567,7 +1733,7 @@ public class GameView implements Screen, InputProcessor {
                         Tile upTile = Map.findTile(new Coordinate(coordinate.getX(), coordinate.getY() - 1),
                             AppClient.getCurrentGame());
                         if (backTile.getTileType() != TileType.PLAYER_BUILDING && upTile.getTileType() != TileType.PLAYER_BUILDING) {
-                            Main.getBatch().draw(new Texture(TileAssets.HOUSE.getImagePath()), x * scaledSize, y * scaledSize, 10 * scaledSize, 10 * scaledSize);
+                            Main.getBatch().draw(TileTextures.HOUSE.getImage(), x * scaledSize, y * scaledSize, 10 * scaledSize, 10 * scaledSize);
                         }
                     }
                     case TileType.GREEN_HOUSE -> {
@@ -1577,13 +1743,13 @@ public class GameView implements Screen, InputProcessor {
                             AppClient.getCurrentGame());
                         if (backTile.getTileType() != TileType.GREEN_HOUSE && upTile.getTileType() != TileType.GREEN_HOUSE) {
                             if (AppClient.getCurrentPlayer().getFarm().getGreenHouse().isAvailable())
-                                Main.getBatch().draw(new Texture(TileAssets.GREEN_HOUSE.getImagePath()), (x - 1) * scaledSize, (y) * scaledSize, 8 * scaledSize, 7 * scaledSize);
+                                Main.getBatch().draw(TileTextures.GREEN_HOUSE.getImage(), (x - 1) * scaledSize, (y) * scaledSize, 8 * scaledSize, 7 * scaledSize);
                             else
-                                Main.getBatch().draw(new Texture(TileAssets.BROKEN_GREEN_HOUSE.getImagePath()), (x) * scaledSize, (y) * scaledSize, 6 * scaledSize, 5 * scaledSize);
+                                Main.getBatch().draw(TileTextures.BROKEN_GREEN_HOUSE.getImage(), x * scaledSize, (y) * scaledSize, 6 * scaledSize, 5 * scaledSize);
                         }
 
                         if (AppClient.getCurrentPlayer().getFarm().getGreenHouse().isAvailable())
-                            Main.getBatch().draw(new Texture(TileAssets.FARM_ORDINARY.getImagePath()), x * scaledSize, (y + 1) * scaledSize, scaledSize, scaledSize);
+                            Main.getBatch().draw(TileTextures.FARM_ORDINARY.getImage(), x * scaledSize, (y + 1) * scaledSize, scaledSize, scaledSize);
                     }
                 }
             }
@@ -1601,8 +1767,6 @@ public class GameView implements Screen, InputProcessor {
             }
         }
 
-
-        drawInventory();
         drawNPCs();
         isPlayerMoved();
         drawFarmingBuilding();
@@ -1620,160 +1784,29 @@ public class GameView implements Screen, InputProcessor {
             NPCTypes.LEAH
         };
 
+        int ptr = 0;
         for (NPC npc : AppClient.getCurrentGame().getNPCs()) {
-            Sprite sprite = new Sprite(new Texture(npc.getType().getImagePath()));
+            Pair<Sprite, Pair<TextButton, TextButton>> npcSprite = npcSprites.get(ptr++);
             float x = npc.getType().getCoordinate().getX() * scaledSize;
             float y = npc.getType().getCoordinate().getY() * scaledSize;
 
-            sprite.setPosition(x, y);
-            sprite.draw(Main.getBatch());
+            npcSprite.first().setPosition(x, y);
+            npcSprite.first().draw(Main.getBatch());
 
             if (Arrays.asList(validNPC).contains(npc.getType())) {
 
 
-                TextButton talk = new TextButton("Talk", style);
+                TextButton talk = npcSprite.second().first();
                 talk.getLabel().setColor(Color.BLACK);
                 talk.setSize((float) scaledSize, (float) (0.5 * scaledSize));
                 talk.getLabel().setFontScale(0.6f);
                 talk.setPosition(x + scaledSize + 10, y);
-                stage.addActor(talk);
 
-                TextButton info = new TextButton("info", style);
+                TextButton info = npcSprite.second().second();
                 info.getLabel().setColor(Color.BLACK);
                 info.setSize((float) scaledSize, (float) (0.5 * scaledSize));
                 info.getLabel().setFontScale(0.6f);
                 info.setPosition(x + scaledSize + 10, y + 22);
-                stage.addActor(info);
-
-
-                talk.addListener(new ClickListener() {
-                    public void clicked(InputEvent event, float x, float y) {
-                        Texture texture = new Texture(Gdx.files.internal(npc.getType().getAvatarPath()));
-                        npcImage = new Image(texture);
-                        buildMessage();
-                        Message message = new Message(new HashMap<>() {{
-                            put("function", "meetNPC");
-                            put("arguments", npc.getType().getName());
-                        }}, Message.Type.command);
-                        Message responseMessage = AppClient.getServerHandler().sendAndWaitForResponse(message);
-                        methodUseMessage(responseMessage);
-
-                        textFieldMessage.setText(responseMessage.getFromBody("message"));
-                    }
-                });
-                final Window[] questsWindow = {null};
-
-                info.addListener(new ClickListener() {
-                    public void clicked(InputEvent event, float x, float y) {
-                        Label label = new Label(npc.getType().getName(), skin);
-                        Window infoWindow = new Window("NPC Info", skin);
-                        infoWindow.getTitleLabel().setFontScale(0.7f);
-
-                        Label friendShip = new Label("Friendship: " + npc.getFriendship(AppClient.getCurrentPlayer()).getFriendshipLevel() + "\n" +
-                            "Points: " + npc.getFriendship(AppClient.getCurrentPlayer()).getFriendshipPoints(), skin);
-                        infoWindow.pad(10);
-                        infoWindow.add(label).row();
-                        infoWindow.add(friendShip).left().padTop(5).row();
-                        label.setFontScale(0.5f);
-                        friendShip.setFontScale(0.5f);
-
-                        infoWindow.setSize(6 * scaledSize, 5 * scaledSize);
-                        infoWindow.setPosition(info.getX(), info.getY() + info.getHeight() + 10);
-                        infoWindow.pad(6);
-
-                        TextButton closeButton = new TextButton("X", style);
-                        closeButton.setWidth(scaledSize);
-                        closeButton.setHeight(scaledSize);
-                        closeButton.getLabel().setFontScale(1f);
-                        closeButton.setColor(Color.YELLOW);
-                        closeButton.getLabel().setColor(Color.BLACK);
-                        closeButton.addListener(new ClickListener() {
-                            public void clicked(InputEvent event, float x, float y) {
-                                infoWindow.remove();
-                                if (questsWindow[0] != null) {
-                                    questsWindow[0].remove();
-                                    questsWindow[0] = null;
-                                }
-                            }
-                        });
-
-                        closeButton.setPosition(infoWindow.getWidth() - closeButton.getWidth(),
-                            infoWindow.getHeight() - closeButton.getHeight());
-                        infoWindow.addActor(closeButton);
-
-                        TextButton gift = new TextButton("send gift", style);
-                        gift.getLabel().setColor(Color.BLACK);
-                        gift.setSize((float) 2 * scaledSize, (float) (0.7 * scaledSize));
-                        gift.pad(7);
-                        infoWindow.add(gift).center().padTop(7).padBottom(5).row();
-
-                        TextButton quest = new TextButton("quests", style);
-                        quest.getLabel().setColor(Color.BLACK);
-                        quest.setSize((float) 2 * scaledSize, (float) (0.7 * scaledSize));
-                        quest.pad(7);
-                        infoWindow.add(quest).center().padTop(7).row();
-
-                        gift.addListener(new ClickListener() {
-                            public void clicked(InputEvent event, float x, float y) {
-                                Message message = new Message(new HashMap<>() {{
-                                    put("function", "isCloseEnough");
-                                    put("arguments", npc.getType().getName());
-                                }}, Message.Type.command);
-                                Message responseMessage = AppClient.getServerHandler().sendAndWaitForResponse(message);
-
-                                if (!methodUseMessage(responseMessage)) {
-                                    Message message2 = new Message(new HashMap<>() {{
-                                        put("function", "giftNPC");
-                                        put("arguments", new ArrayList<>(Arrays.asList(
-                                            npc.getType().getName(),
-                                            AppClient.getCurrentPlayer().getInHandGood().getFirst().getName()
-                                        )));
-                                    }}, Message.Type.command);
-                                    Message responseMessage2 = AppClient.getServerHandler().sendAndWaitForResponse(message2);
-                                    methodUseMessage(responseMessage);
-
-//                                    Result result = controller.giftNPC(npc.getType().getName(),
-//                                        AppClient.getCurrentPlayer().getInHandGood().getFirst().getName());
-                                    buildMessage();
-                                    textFieldMessage.setText(responseMessage2.getFromBody("message"));
-                                } else {
-                                    buildMessage();
-                                    textFieldMessage.setText("Too far away. Approach the NPC to send a gift.");
-                                }
-                            }
-                        });
-
-                        quest.addListener(new ClickListener() {
-                            public void clicked(InputEvent event, float x, float y) {
-                                if (questsWindow[0] != null) {
-                                    questsWindow[0].remove();
-                                    questsWindow[0] = null;
-                                }
-                                questsWindow[0] = new Window("Quests", skin);
-                                questsWindow[0].getTitleLabel().setFontScale(0.5f);
-                                questsWindow[0].pad(10);
-                                questsWindow[0].setSize(6 * scaledSize, 4 * scaledSize);
-                                questsWindow[0].setPosition(infoWindow.getX() + infoWindow.getWidth() + 10, infoWindow.getY());
-
-                                Message message = new Message(new HashMap<>() {{
-                                    put("function", "getQuests");
-                                    put("arguments", npc.getType().getName());
-                                }}, Message.Type.command);
-                                Message responseMessage = AppClient.getServerHandler().sendAndWaitForResponse(message);
-                                methodUseMessage(responseMessage);
-
-//                                String result = controller.getQuests();
-                                Label labelQuest = new Label(responseMessage.getFromBody("message"), skin);
-                                labelQuest.setFontScale(0.5f);
-                                questsWindow[0].add(labelQuest);
-                                stage.addActor(questsWindow[0]);
-                            }
-                        });
-
-                        stage.addActor(infoWindow);
-                    }
-                });
-
 
             }
         }
@@ -1863,6 +1896,7 @@ public class GameView implements Screen, InputProcessor {
     }
 
     public void drawInventory() {
+        inventoryTable.clearChildren();
         for (Quadruple<ImageButton, Image, Label, Label> quadruple : viewController.getInventoryElements()) {
             Table table = new Table();
             table.add(quadruple.a);
@@ -2372,9 +2406,22 @@ public class GameView implements Screen, InputProcessor {
                             pair.first().first().setChecked(false);
                             if (pair.first().second() == finalImage) {
                                 pair.first().first().setChecked(true);
-                                AppClient.getCurrentPlayer().setInHandGood(
-                                    AppClient.getCurrentPlayer().getInventory().getList().get(pair.second())
-                                );
+
+//                                AppClient.getCurrentPlayer().setInHandGood(
+//                                    AppClient.getCurrentPlayer().getInventory().getList().get(pair.second())
+//                                );
+
+                                Message message = new Message(new HashMap<>() {{
+                                    put("function", "setInHandGood");
+                                    put("arguments", String.valueOf(pair.second()));
+                                }}, Message.Type.command);
+                                Message responseMessage = AppClient.getServerHandler().sendAndWaitForResponse(message);
+                                methodUseMessage(responseMessage);
+                                viewController.setInHandGoodPtr(pair.second());
+                                updateGameObject();
+                                viewController.playerChangedInventory();
+
+
                                 closeToolsWindow();
                             }
                         }
@@ -2491,7 +2538,15 @@ public class GameView implements Screen, InputProcessor {
             public void clicked(InputEvent event, float x, float y) {
 //                GameMenu gameMenu = new GameMenu();
 //                gameMenu.check(cheatTextField.getText());
-                //TODO
+
+                Message message = new Message(new HashMap<>() {{
+                    put("function", "cheat");
+                    put("arguments", cheatTextField.getText());
+                }}, Message.Type.command);
+                Message responseMessage = AppClient.getServerHandler().sendAndWaitForResponse(message);
+                methodUseMessage(responseMessage);
+                updateGameObject();
+
                 closeCheatWindow();
             }
         });
@@ -5291,6 +5346,8 @@ public class GameView implements Screen, InputProcessor {
             userGame = JSONUtils.fromJsonGame(json);
         }
 
+        AppClient.setCurrentGame(null);
+        System.gc();
         AppClient.setCurrentGame(userGame);
         for (Player player1 : userGame.getPlayers()) {
             if (player1.getUsername().equals(AppClient.getCurrentUser().getUsername())) {
@@ -5300,6 +5357,49 @@ public class GameView implements Screen, InputProcessor {
         }
     }
 
+    public float getPlayerTime() {
+        return playerTime;
+    }
+
+    public void setPlayerTime(float playerTime) {
+        this.playerTime = playerTime;
+    }
+}
+
+enum TileTextures {
+    GRASS(new Texture("GameAssets/Flooring/Flooring_50.png")),
+    FARM_ORDINARY(new Texture("GameAssets/Flooring/Flooring_14.png")),
+    FARM_WINTER(new Texture("GameAssets/Flooring/Flooring_38.png")),
+    FARM_PLOWED(new Texture("GameAssets/Flooring/Flooring_21.png")),
+    FARM_WET(new Texture("GameAssets/Flooring/Flooring_62.png")),
+    WATER(new Texture("GameAssets/Flooring/Flooring_26.png")),
+    BEACH(new Texture("GameAssets/Flooring/Flooring_25.png")),
+    GREEN_HOUSE(new Texture("GameAssets/Greenhouse/greenhouse.png")),
+    QUARRY(new Texture("GameAssets/Flooring/Flooring_52.png")),
+    STONE_WALL(new Texture("GameAssets/Flooring/Flooring_35.png")),
+    SQUARE(new Texture("GameAssets/Flooring/Flooring_16.png")),
+    ROAD(new Texture("GameAssets/Flooring/Flooring_48.png")),
+    SHIPPING_BIN(new Texture("GameAssets/Shipping_Bin/Shipping_Bin.png")),
+    HOUSE(new Texture("GameAssets/Player_Building/House.png")),
+    JOJAMART(new Texture("GameAssets/Game_Buildings/Jojamart.png")),
+    MARNIE_RANCH(new Texture("GameAssets/Game_Buildings/Ranch.png")),
+    PIERRE_SHOP(new Texture("GameAssets/Game_Buildings/Pierres_shop.png")),
+    THE_STARDROP_SALOON(new Texture("GameAssets/Game_Buildings/Saloon.png")),
+    BLACKSMITH(new Texture("GameAssets/Game_Buildings/Blacksmith.png")),
+    CARPENTER_SHOP(new Texture("GameAssets/Game_Buildings/Carpenter_Shop.png")),
+    FISH_SHOP(new Texture("GameAssets/Game_Buildings/Fish_Shop.png")),
+    BROKEN_GREEN_HOUSE(new Texture("GameAssets/Greenhouse/Broken_Greenhouse.png")),
+    THUNDER(new Texture("GameAssets/Thunder/Thunder.png"));
+
+    private final Texture image;
+
+    TileTextures(Texture image) {
+        this.image = image;
+    }
+
+    public Texture getImage() {
+        return image;
+    }
 }
 
 

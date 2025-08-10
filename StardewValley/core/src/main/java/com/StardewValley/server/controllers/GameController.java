@@ -1,6 +1,7 @@
 package com.StardewValley.server.controllers;
 
 import com.StardewValley.client.Main;
+import com.StardewValley.client.views.GameMenu;
 import com.StardewValley.models.Assets;
 import com.StardewValley.models.Message;
 import com.StardewValley.models.Pair;
@@ -90,6 +91,11 @@ public class GameController extends Controller {
     public Message handleMessage(Message message) {
         if (message.getType() == Message.Type.command) {
             switch ((String) message.getFromBody("function")) {
+                case "cheat" -> {
+                    GameMenu gameMenu = new GameMenu(this);
+                    gameMenu.check(message.getFromBody("arguments"));
+                    return sendResultMessage(new Result(true, ""));
+                }
                 case "toolsUse" -> {
                     Coordinate coordinate = Coordinate.fromString(message.getFromBody("arguments"));
                     return sendResultMessage(toolsUse(coordinate));
@@ -545,7 +551,7 @@ public class GameController extends Controller {
             return new Result(false, "Goal tile not found!");
 
         if (tile.getTileType() == TileType.GAME_BUILDING &&
-            !clientHandler.getClientGame().getMap().findGameBuilding(goal).isInWorkingHours()) {
+            !clientHandler.getClientGame().getMap().findGameBuilding(goal).isInWorkingHours(clientHandler)) {
             return new Result(false, clientHandler.getClientGame().getMap().findGameBuilding(goal).getName() + " hours have ended for today!");
         }
 
@@ -1172,7 +1178,7 @@ public class GameController extends Controller {
         Tile tile = clientHandler.getClientGame().getMap().findTile(coordinate, clientHandler.getClientGame());
         if (tile.getTileType() != TileType.GAME_BUILDING)
             return new Result(false, "You should be in a game building to show all products!");
-        if (!clientHandler.getClientGame().getMap().findGameBuilding(coordinate).isInWorkingHours()) {
+        if (!clientHandler.getClientGame().getMap().findGameBuilding(coordinate).isInWorkingHours(clientHandler)) {
             return new Result(false, clientHandler.getClientGame().getMap().findGameBuilding(coordinate).getName() + " hours have ended for today!");
         }
 
@@ -1181,7 +1187,7 @@ public class GameController extends Controller {
         y = y.trim();
 
         CarpenterShop carpenterShop = (CarpenterShop) clientHandler.getClientGame().getMap().getCarpenterShop();
-        if (carpenterShop.isInWorkingHours()) {
+        if (carpenterShop.isInWorkingHours(clientHandler)) {
             FarmBuildingTypes targetType = null;
             for (FarmBuildingTypes type : carpenterShop.getProducts()) {
                 if (type.getName().equals(buildingName)) {
@@ -1261,7 +1267,7 @@ public class GameController extends Controller {
         Tile tile = clientHandler.getClientGame().getMap().findTile(coordinate, clientHandler.getClientGame());
         if (tile.getTileType() != TileType.GAME_BUILDING)
             return new Result(false, "You should be in a game building to show all products!");
-        if (!clientHandler.getClientGame().getMap().findGameBuilding(coordinate).isInWorkingHours()) {
+        if (!clientHandler.getClientGame().getMap().findGameBuilding(coordinate).isInWorkingHours(clientHandler)) {
             return new Result(false, clientHandler.getClientGame().getMap().findGameBuilding(coordinate).getName() + " hours have ended for today!");
         }
 
@@ -1273,7 +1279,7 @@ public class GameController extends Controller {
         animalName = animalName.trim();
 
         MarnieRanch marnieRanch = (MarnieRanch) clientHandler.getClientGame().getMap().getMarnieRanch();
-        if (!marnieRanch.isInWorkingHours()) {
+        if (!marnieRanch.isInWorkingHours(clientHandler)) {
             return new Result(false, "Store is not Open!\nWorking Time: " + marnieRanch.getHours().first()
                 + " ~ " + (marnieRanch.getHours().second()));
         }
@@ -1334,7 +1340,7 @@ public class GameController extends Controller {
     }
 
     public String isStoreOpen(GameBuilding gameBuilding) {
-        if (!gameBuilding.isInWorkingHours()) {
+        if (!gameBuilding.isInWorkingHours(clientHandler)) {
             return "Store is not Open!\nWorking Time: " + gameBuilding.getHours().first()
                 + " ~ " + (gameBuilding.getHours().second());
         } else {
@@ -1527,7 +1533,7 @@ public class GameController extends Controller {
         Tile tile = clientHandler.getClientGame().getMap().findTile(coordinate, clientHandler.getClientGame());
         if (tile.getTileType() != TileType.GAME_BUILDING)
             return new Result(false, "You should be in a game building to show all products!");
-        if (!clientHandler.getClientGame().getMap().findGameBuilding(coordinate).isInWorkingHours()) {
+        if (!clientHandler.getClientGame().getMap().findGameBuilding(coordinate).isInWorkingHours(clientHandler)) {
             return new Result(false, clientHandler.getClientGame().getMap().findGameBuilding(coordinate).getName() + " hours have ended for today!");
         }
 
@@ -1541,7 +1547,7 @@ public class GameController extends Controller {
             clientHandler.getClientGame());
         if (tile.getTileType() != TileType.GAME_BUILDING)
             return new Result(false, "You should be in a game building to show all available products!");
-        if (!clientHandler.getClientGame().getMap().findGameBuilding(coordinate).isInWorkingHours()) {
+        if (!clientHandler.getClientGame().getMap().findGameBuilding(coordinate).isInWorkingHours(clientHandler)) {
             return new Result(false, clientHandler.getClientGame().getMap().findGameBuilding(coordinate).getName() + " hours have ended for today!");
         }
 
@@ -1554,7 +1560,7 @@ public class GameController extends Controller {
         count = count.trim();
 
 
-        if (!clientHandler.getClientGame().getMap().findGameBuilding(coordinate).isInWorkingHours()) {
+        if (!clientHandler.getClientGame().getMap().findGameBuilding(coordinate).isInWorkingHours(clientHandler)) {
             return new Result(false, clientHandler.getClientGame().getMap().findGameBuilding(coordinate).getName() + " hours have ended for today!");
         }
 
@@ -2244,7 +2250,8 @@ public class GameController extends Controller {
         return new Result(true, "test");
     }
 
-
-
+    public ClientHandler getClientHandler() {
+        return clientHandler;
+    }
 }
 

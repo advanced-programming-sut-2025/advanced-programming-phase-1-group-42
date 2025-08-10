@@ -9,10 +9,10 @@ public class AppView {
 
     public void run() {
 //        Scanner scanner = new Scanner(System.in);
-
-        do {
-            AppClient.getCurrentMenu().checkCommand();
-        } while (AppClient.getCurrentMenu() != Menu.ExitMenu);
+//
+//        do {
+//            AppClient.getCurrentMenu().checkCommand();
+//        } while (AppClient.getCurrentMenu() != Menu.ExitMenu);
 
     }
 }
