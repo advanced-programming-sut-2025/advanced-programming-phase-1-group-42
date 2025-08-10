@@ -713,6 +713,10 @@ public class Map {
         return null;
     }
 
+    public ArrayList<GameBuilding> getGameBuildings() {
+        return gameBuildings;
+    }
+
     public Coordinate getStartingCoordinate() {
         return startingCoordinate;
     }

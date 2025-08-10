@@ -160,6 +160,7 @@ public class GameView implements Screen, InputProcessor {
 
     private float playerTime = 0;
     private ArrayList<Pair<Sprite, Pair<TextButton, TextButton>>> npcSprites;
+    private HashMap<String, Texture> gameBuildingTextures;
 
     public GameView(Skin skin) {
 //        this.controller.initGameControllers();
@@ -434,6 +435,12 @@ public class GameView implements Screen, InputProcessor {
 
 
             }
+        }
+
+        gameBuildingTextures = new HashMap<>();
+        for (GameBuilding gameBuilding : AppClient.getCurrentGame().getMap().getGameBuildings()) {
+            gameBuildingTextures.put(gameBuilding.getName(), new Texture(
+                gameBuilding.getImagePath()));
         }
     }
 
@@ -1716,7 +1723,7 @@ public class GameView implements Screen, InputProcessor {
                             GameBuilding gameBuilding = AppClient.getCurrentGame().getMap().findGameBuilding(coordinate);
                             Coordinate size = new Coordinate(gameBuilding.getEndCordinate().getX() - gameBuilding.getStartCordinate().getX(),
                                 gameBuilding.getEndCordinate().getY() - gameBuilding.getStartCordinate().getY());
-                            Main.getBatch().draw(new Texture(gameBuilding.getImagePath()), x * scaledSize, y * scaledSize, size.getX() * scaledSize, size.getY() * scaledSize);
+                            Main.getBatch().draw(gameBuildingTextures.get(gameBuilding.getName()), x * scaledSize, y * scaledSize, size.getX() * scaledSize, size.getY() * scaledSize);
                         }
                     }
                     case TileType.PLAYER_BUILDING -> {
@@ -1725,7 +1732,7 @@ public class GameView implements Screen, InputProcessor {
                         Tile upTile = Map.findTile(new Coordinate(coordinate.getX(), coordinate.getY() - 1),
                             AppClient.getCurrentGame());
                         if (backTile.getTileType() != TileType.PLAYER_BUILDING && upTile.getTileType() != TileType.PLAYER_BUILDING) {
-                            Main.getBatch().draw(new Texture(TileAssets.HOUSE.getImagePath()), x * scaledSize, y * scaledSize, 10 * scaledSize, 10 * scaledSize);
+                            Main.getBatch().draw(TileTextures.HOUSE.getImage(), x * scaledSize, y * scaledSize, 10 * scaledSize, 10 * scaledSize);
                         }
                     }
                     case TileType.GREEN_HOUSE -> {
@@ -1735,13 +1742,13 @@ public class GameView implements Screen, InputProcessor {
                             AppClient.getCurrentGame());
                         if (backTile.getTileType() != TileType.GREEN_HOUSE && upTile.getTileType() != TileType.GREEN_HOUSE) {
                             if (AppClient.getCurrentPlayer().getFarm().getGreenHouse().isAvailable())
-                                Main.getBatch().draw(new Texture(TileAssets.GREEN_HOUSE.getImagePath()), (x - 1) * scaledSize, (y) * scaledSize, 8 * scaledSize, 7 * scaledSize);
+                                Main.getBatch().draw(TileTextures.GREEN_HOUSE.getImage(), (x - 1) * scaledSize, (y) * scaledSize, 8 * scaledSize, 7 * scaledSize);
                             else
-                                Main.getBatch().draw(new Texture(TileAssets.BROKEN_GREEN_HOUSE.getImagePath()), (x) * scaledSize, (y) * scaledSize, 6 * scaledSize, 5 * scaledSize);
+                                Main.getBatch().draw(TileTextures.BROKEN_GREEN_HOUSE.getImage(), x * scaledSize, (y) * scaledSize, 6 * scaledSize, 5 * scaledSize);
                         }
 
                         if (AppClient.getCurrentPlayer().getFarm().getGreenHouse().isAvailable())
-                            Main.getBatch().draw(new Texture(TileAssets.FARM_ORDINARY.getImagePath()), x * scaledSize, (y + 1) * scaledSize, scaledSize, scaledSize);
+                            Main.getBatch().draw(TileTextures.FARM_ORDINARY.getImage(), x * scaledSize, (y + 1) * scaledSize, scaledSize, scaledSize);
                     }
                 }
             }

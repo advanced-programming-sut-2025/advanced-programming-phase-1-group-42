@@ -21,6 +21,7 @@ import com.StardewValley.models.interactions.NPCs.NPC;
 import com.StardewValley.models.interactions.NPCs.NPCFriendship;
 import com.StardewValley.models.interactions.Player;
 import com.StardewValley.models.interactions.PlayerBuildings.FarmBuilding;
+import com.StardewValley.models.interactions.game_buildings.GameBuilding;
 import com.StardewValley.server.ClientHandler;
 
 import java.io.FileWriter;
@@ -90,6 +91,7 @@ public class Game {
     public Map getMap() {
         return map;
     }
+
 
     public DateTime getDateTime() {
         return dateTime;
