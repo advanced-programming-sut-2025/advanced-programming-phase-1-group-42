@@ -4503,7 +4503,9 @@ public class GameView implements Screen, InputProcessor {
             });
 
             mainTable.add(checkBox).left().pad(5).width(150);
-            mainTable.add(createEmoteButton(getTextureForEmote(emote), emote)).pad(5).size(60, 60);
+            Texture texture = getTextureForEmote(emote);
+            Image emoteImage = new Image(new TextureRegionDrawable(new TextureRegion(texture)));
+            mainTable.add(emoteImage).pad(5).size(60, 60);
             mainTable.row();
         }
 
