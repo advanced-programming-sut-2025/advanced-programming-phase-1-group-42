@@ -91,7 +91,7 @@ public class GameController extends Controller {
         if (message.getType() == Message.Type.command) {
             switch ((String) message.getFromBody("function")) {
                 case "toolsUse" -> {
-                    Coordinate coordinate = message.getFromBody("arguments");
+                    Coordinate coordinate = Coordinate.fromString(message.getFromBody("arguments"));
                     return sendResultMessage(toolsUse(coordinate));
                 }
                 case "sellAnimal" -> {
@@ -310,32 +310,15 @@ public class GameController extends Controller {
                     );
                     return sendResultMessage(new Result(true, String.valueOf(finalPrice)));
                 }
+                case "getUpdatedGame" -> {
+                    return new Message(new HashMap<>() {{
+                        put("success", true);
+                        put("message", clientHandler.getClientGame());
+                    }}, Message.Type.response);
+                }
             }
         }
-        if (message.getType() == Message.Type.update) {
-            ArrayList<String> arguments = message.getFromBody("arguments");
-            Game userGame = null;
-            for (Game game : AppServer.getGames()) {
-                if (game.getGameID() == Integer.parseInt(arguments.get(0))) {
-                    userGame = game;
-                    break;
-                }
-            }
-            clientHandler.setClientGame(userGame);
-            for (Player player : userGame.getPlayers()) {
-                if (player.getUsername().equals(arguments.get(1))) {
-                    clientHandler.setClientPlayer(player);
-                    break;
-                }
-            }
 
-            this.clientHandler.setCurrentController(new GameController(clientHandler));
-            Game finalUserGame = userGame;
-            return new Message(new HashMap<>() {{
-                put("success", true);
-                put("message", finalUserGame);
-            }}, Message.Type.response);
-        }
         return new Message(new HashMap<>() {{
             put("success", false);
             put("message", "");
@@ -344,7 +327,7 @@ public class GameController extends Controller {
 
     public Message sendResultMessage(Result result) {
         return new Message(new HashMap<>() {{
-            put("success", result.message());
+            put("success", result.success());
             put("message", result.message());
         }}, Message.Type.response);
     }
@@ -1635,7 +1618,7 @@ public class GameController extends Controller {
         StringBuilder list = new StringBuilder();
         list.append("FriendShips:\n");
         for (Player player : clientHandler.getClientGame().getPlayers()) {
-            if (clientHandler.getClientPlayer().getFriendShips().get(player) == null)
+            if (clientHandler.getClientPlayer().getFriendShips().get(player.getPlayerUsername()) == null)
                 continue;
 
             list.append("\t").append(player.getUsername()).append(": \n");
@@ -1668,14 +1651,14 @@ public class GameController extends Controller {
         ));
 
         try {
-            if (clientHandler.getClientPlayer().getIsInteracted().get(player).equals(true)) {
+            if (clientHandler.getClientPlayer().getIsInteracted().get(player.getPlayerUsername()).equals(true)) {
 
             }
         } catch (Exception e) {
             return new Result(false, "You are not interacted!");
         }
 
-        if (clientHandler.getClientPlayer().getIsInteracted().get(player).equals(false)) {
+        if (clientHandler.getClientPlayer().getIsInteracted().get(player.getPlayerUsername()).equals(false)) {
 
             // If they are couple
             if (clientHandler.getClientPlayer().getMarried() == player) {
@@ -1692,7 +1675,7 @@ public class GameController extends Controller {
                 player.updateFriendShips(clientHandler.getClientPlayer());
                 clientHandler.getClientPlayer().updateFriendShips(player);
                 System.out.println("Your friendship value with " + username + " is increased to " +
-                    clientHandler.getClientPlayer().getFriendShips().get(player).second());
+                    clientHandler.getClientPlayer().getFriendShips().get(player.getPlayerUsername()).second());
             }
 
             clientHandler.getClientPlayer().getIsInteracted().put(player.getPlayerUsername(), true);
@@ -1728,7 +1711,7 @@ public class GameController extends Controller {
         if (clientHandler.getClientPlayer().getCoordinate().distance(player.getCoordinate()) > 1)
             return new Result(false, "You should be neighbor to " + username + " for sending gift!");
 
-        if (clientHandler.getClientPlayer().getFriendShips().get(player).first() < 1)
+        if (clientHandler.getClientPlayer().getFriendShips().get(player.getPlayerUsername()).first() < 1)
             return new Result(false, "Your friendship level with " + username + " should be more than 0");
 
         ArrayList<Good> goods = clientHandler.getClientPlayer().getInventory().isInInventory(item);
@@ -1795,7 +1778,7 @@ public class GameController extends Controller {
         gift.first().getNews().add(clientHandler.getClientPlayer().getUsername() + " has rated your gift with amount " +
             giftRate + " !");
 
-        if (clientHandler.getClientPlayer().getIsInteracted().get(gift.first()).equals(false)) {
+        if (clientHandler.getClientPlayer().getIsInteracted().get(gift.first().getPlayerUsername()).equals(false)) {
             if (clientHandler.getClientPlayer().getMarried() == gift.first()) {
                 clientHandler.getClientPlayer().getEnergy().increaseTurnEnergyLeft(50);
                 gift.first().getEnergy().increaseTurnEnergyLeft(50);
@@ -1811,7 +1794,7 @@ public class GameController extends Controller {
                 gift.first().updateFriendShips(clientHandler.getClientPlayer());
                 clientHandler.getClientPlayer().updateFriendShips(gift.first());
                 System.out.println("Your friendship value with " + gift.first().getUsername() + " is increased to " +
-                    clientHandler.getClientPlayer().getFriendShips().get(gift.first()).second());
+                    clientHandler.getClientPlayer().getFriendShips().get(gift.first().getPlayerUsername()).second());
             }
 
             clientHandler.getClientPlayer().getIsInteracted().put(gift.first().getPlayerUsername(), true);
@@ -1851,7 +1834,7 @@ public class GameController extends Controller {
 
 
         StringBuilder list = new StringBuilder();
-        if (!clientHandler.getClientPlayer().getIsInteracted().get(player)) {
+        if (!clientHandler.getClientPlayer().getIsInteracted().get(player.getPlayerUsername())) {
 
             if (clientHandler.getClientPlayer().getMarried() == player) {
                 clientHandler.getClientPlayer().getEnergy().increaseTurnEnergyLeft(50);
@@ -1867,7 +1850,7 @@ public class GameController extends Controller {
                 player.updateFriendShips(clientHandler.getClientPlayer());
                 clientHandler.getClientPlayer().updateFriendShips(player);
                 list.append("Your friendship value with " + username + " is increased to " +
-                    clientHandler.getClientPlayer().getFriendShips().get(player).second() + "\n");
+                    clientHandler.getClientPlayer().getFriendShips().get(player.getPlayerUsername()).second() + "\n");
             }
 
             clientHandler.getClientPlayer().getIsInteracted().put(player.getPlayerUsername(), true);
@@ -1890,8 +1873,8 @@ public class GameController extends Controller {
         if (clientHandler.getClientPlayer().getCoordinate().distance(player.getCoordinate()) > 1)
             return new Result(false, "You should be neighbor to " + username + " to give flower!");
 
-        if (clientHandler.getClientPlayer().getFriendShips().get(player).first() != 2 ||
-            player.getFriendShips().get(clientHandler.getClientPlayer()).first() != 2)
+        if (clientHandler.getClientPlayer().getFriendShips().get(player.getPlayerUsername()).first() != 2 ||
+            player.getFriendShips().get(clientHandler.getClientPlayer().getPlayerUsername()).first() != 2)
             return new Result(false, "You and " + username + " should have friendship level of 2!");
 
         boolean flag = false;
@@ -1916,7 +1899,7 @@ public class GameController extends Controller {
         StringBuilder list = new StringBuilder();
         if (!flag)
             return new Result(false, "Your don't have any flower in your inventory to give to someone!");
-        else if (!clientHandler.getClientPlayer().getIsInteracted().get(player)) {
+        else if (!clientHandler.getClientPlayer().getIsInteracted().get(player.getPlayerUsername())) {
             if (clientHandler.getClientPlayer().getMarried() == player) {
                 clientHandler.getClientPlayer().getEnergy().increaseTurnEnergyLeft(50);
                 player.getEnergy().increaseTurnEnergyLeft(50);
@@ -1953,8 +1936,8 @@ public class GameController extends Controller {
             return new Result(false, "Player not found!");
         if (mainPlayer.getGender() == Gender.FEMALE)
             return new Result(false, "Your gender should be male to ask marriage!");
-        if (mainPlayer.getFriendShips().get(player).first() != 3 ||
-            player.getFriendShips().get(mainPlayer).first() != 3)
+        if (mainPlayer.getFriendShips().get(player.getPlayerUsername()).first() != 3 ||
+            player.getFriendShips().get(mainPlayer.getPlayerUsername()).first() != 3)
             return new Result(false, "You and " + username + " should have friendship level of 3!");
         if (mainPlayer.getCoordinate().distance(player.getCoordinate()) > 1)
             return new Result(false, "You should be neighbor to " + username + " to ask marriage!");
@@ -2043,7 +2026,7 @@ public class GameController extends Controller {
             player.getInventory().addGood(new ArrayList<>(Arrays.asList(mainPlayer.getMarriageList().get(player))),
                 clientHandler.getClientGame(), clientHandler.getClientPlayer());
             player.getNews().add(mainPlayer.getUsername() + " has rejected your marriage!");
-            mainPlayer.getFriendShips().remove(player);
+            mainPlayer.getFriendShips().remove(player.getPlayerUsername());
 
 
             return new Result(true, "You have rejected your marriage from " + username + "!");

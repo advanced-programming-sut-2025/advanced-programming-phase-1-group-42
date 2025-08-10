@@ -51,7 +51,7 @@ public class ToolFunctions {
 
 
     public static Result tooluse(Tool tool, Coordinate coordinate, ClientHandler clientHandler) {
-        clientHandler = clientHandler;
+        ToolFunctions.clientHandler = clientHandler;
         switch ((ToolType) tool.getType()){
             case ToolType.HOE -> {
                 if(clientHandler.getClientPlayer().getBuff() != null) {

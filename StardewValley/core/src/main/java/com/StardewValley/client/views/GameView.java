@@ -437,7 +437,7 @@ public class GameView implements Screen, InputProcessor {
             assert tile != null;
             Message message = new Message(new HashMap<>() {{
                 put("function", "toolsUse");
-                put("arguments", Coordinate.getDirection(playerTile.getCordinate(), tile.getCordinate()));
+                put("arguments", Coordinate.getDirection(playerTile.getCordinate(), tile.getCordinate()).toString());
             }}, Message.Type.command);
             Message responseMessage = AppClient.getServerHandler().sendAndWaitForResponse(message);
             methodUseMessage(responseMessage);
@@ -2723,7 +2723,7 @@ public class GameView implements Screen, InputProcessor {
         for (Player player : AppClient.getCurrentGame().getPlayers()) {
             if(!player.equals(AppClient.getCurrentPlayer())) {
                 Label label = new Label(player.getPlayerUsername() + "> Level: " +
-                    player.getFriendShips().get(AppClient.getCurrentPlayer()).first(), skin);
+                    player.getFriendShips().get(AppClient.getCurrentPlayer().getPlayerUsername()).first(), skin);
                 TextButton goodsButton = new TextButton("Goods", skin);
                 TextButton moneyButton = new TextButton("Money", skin);
                 goodsButton.addListener(new ClickListener() {
@@ -3327,7 +3327,7 @@ public class GameView implements Screen, InputProcessor {
 
         for (String playerName : AppClient.getCurrentPlayer().getFriendShips().keySet()) {
             Player player = AppClient.getCurrentGame().findPlayer(playerName);
-            Pair<Integer, Integer> pair = AppClient.getCurrentPlayer().getFriendShips().get(player);
+            Pair<Integer, Integer> pair = AppClient.getCurrentPlayer().getFriendShips().get(player.getPlayerUsername());
             Label label = new Label(player.getPlayerUsername() + "> Level: " +
                 pair.first() + ", Value: " + pair.second(), skin);
             TextButton button = new TextButton("Send Gift", skin);
@@ -5326,24 +5326,26 @@ public class GameView implements Screen, InputProcessor {
     }
 
     public void updateGame() {
-//        updateGameObject();
-
         viewController.handleInput();
         viewController.updateInventory();
         viewController.refreshLeaderBoard();
         viewController.updatePlayer();
 
     }
+    private boolean methodUseMessage(Message responseMessage) {
+        //            label.setText("Network error!");
+        return !checkMessageValidity(responseMessage, Message.Type.response) || !responseMessage.getBooleanFromBody("success");
+    }
 
-    private static void updateGameObject() {
-        int gameID = AppClient.getCurrentGame().getGameID();
+    public boolean checkMessageValidity(Message message, Message.Type type) {
+        return message.getType() == type;
+    }
+
+    public void updateGameObject() {
         Message message2 = new Message(new HashMap<>() {{
             put("function", "getUpdatedGame");
-            put("arguments", new ArrayList<>(Arrays.asList(
-                String.valueOf(gameID),
-                AppClient.getCurrentUser().getUsername()
-            )));
-        }}, Message.Type.update);
+            put("arguments", "");
+        }}, Message.Type.command);
         Message responseMessage2 = AppClient.getServerHandler().sendAndWaitForResponse(message2);
         Object msgObj = responseMessage2.getFromBody("message");
         Game userGame;
@@ -5355,23 +5357,13 @@ public class GameView implements Screen, InputProcessor {
         }
 
         AppClient.setCurrentGame(userGame);
-        for (Player player : userGame.getPlayers()) {
-            if (player.getUsername().equals(AppClient.getCurrentUser().getUsername())) {
-                AppClient.setCurrentPlayer(player);
+        for (Player player1 : userGame.getPlayers()) {
+            if (player1.getUsername().equals(AppClient.getCurrentUser().getUsername())) {
+                AppClient.setCurrentPlayer(player1);
                 break;
             }
         }
     }
-
-    private boolean methodUseMessage(Message responseMessage) {
-        //            label.setText("Network error!");
-        return !checkMessageValidity(responseMessage, Message.Type.response) || !responseMessage.getBooleanFromBody("success");
-    }
-
-    public boolean checkMessageValidity(Message message, Message.Type type) {
-        return message.getType() == type;
-    }
-
 
 }
 

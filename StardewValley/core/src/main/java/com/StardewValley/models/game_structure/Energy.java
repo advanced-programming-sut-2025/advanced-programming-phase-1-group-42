@@ -31,8 +31,8 @@ public class Energy {
     }
 
     public void decreaseTurnEnergyLeft(double value, ClientHandler clientHandler) {
-        this.dayEnergyLeft -= (AppClient.getCurrentGame().getWeather().getWeatherEffectingEnergy() * value);
-        this.turnValueLeft -= (AppClient.getCurrentGame().getWeather().getWeatherEffectingEnergy() * value);
+        this.dayEnergyLeft -= (clientHandler.getClientGame().getWeather().getWeatherEffectingEnergy() * value);
+        this.turnValueLeft -= (clientHandler.getClientGame().getWeather().getWeatherEffectingEnergy() * value);
         if(this.dayEnergyLeft <= 0){
             this.isAwake = false;
         }

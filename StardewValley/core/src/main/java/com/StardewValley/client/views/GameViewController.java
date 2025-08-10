@@ -3,14 +3,12 @@ package com.StardewValley.client.views;
 import com.StardewValley.client.AppClient;
 import com.StardewValley.client.Main;
 import com.StardewValley.models.Assets;
+import com.StardewValley.models.JSONUtils;
 import com.StardewValley.models.Message;
 import com.StardewValley.models.Pair;
 import com.StardewValley.models.enums.LeaderboardSortType;
 import com.StardewValley.models.enums.TileType;
-import com.StardewValley.models.game_structure.Coordinate;
-import com.StardewValley.models.game_structure.Skill;
-import com.StardewValley.models.game_structure.Tile;
-import com.StardewValley.models.game_structure.Trade;
+import com.StardewValley.models.game_structure.*;
 import com.StardewValley.models.goods.Good;
 import com.StardewValley.models.interactions.Animals.Animal;
 import com.StardewValley.models.interactions.NPCs.NPC;
@@ -199,6 +197,7 @@ public class GameViewController {
         Message responseMessage = AppClient.getServerHandler().sendAndWaitForResponse(message);
         methodUseMessage(responseMessage);
 
+
 //        player.setPlayerDirection(-1);
 
         if(Gdx.input.isKeyJustPressed(Input.Keys.U)) {
@@ -246,9 +245,6 @@ public class GameViewController {
 
                     setPlayerDirection(String.valueOf(0));
 //                    player.setPlayerDirection(0);
-
-                    playerSprite.second().setPosition(player.getCoordinate().getX() * gameView.getScaledSize(),
-                        player.getCoordinate().getY() * gameView.getScaledSize() + 23);
                 }
                 flag = true;
                 AppClient.getCurrentGame().getMap().updateMap();
@@ -264,10 +260,7 @@ public class GameViewController {
                     setPlayerDirection(String.valueOf(1));
 //                    player.setPlayerDirection(1);
 
-                    playerSprite.second().setPosition(player.getCoordinate().getX() * gameView.getScaledSize() - 20,
-                        player.getCoordinate().getY() * gameView.getScaledSize() + 23);
-                    if (!playerSprite.second().isFlipX())
-                        playerSprite.second().flip(true, false);
+
                 }
                 flag = true;
                 AppClient.getCurrentGame().getMap().updateMap();
@@ -285,8 +278,7 @@ public class GameViewController {
 //                    player.setCoordinate(new Coordinate(player.getCoordinate().getX(), player.getCoordinate().getY() - 1));
 //                    player.setPlayerDirection(2);
 
-                    playerSprite.second().setPosition(player.getCoordinate().getX() * gameView.getScaledSize(),
-                        player.getCoordinate().getY() * gameView.getScaledSize() + 23);
+
                 }
                 flag = true;
                 AppClient.getCurrentGame().getMap().updateMap();
@@ -305,19 +297,18 @@ public class GameViewController {
 //                    player.setLastCoordinate(new Coordinate(player.getCoordinate().getX(), player.getCoordinate().getY()));
 //                    player.setCoordinate(new Coordinate(player.getCoordinate().getX() + 1, player.getCoordinate().getY()));
 //                    player.setPlayerDirection(3);
-
-                    playerSprite.second().setPosition(player.getCoordinate().getX() * gameView.getScaledSize() + 20,
-                        player.getCoordinate().getY() * gameView.getScaledSize() + 23);
-                    if (playerSprite.second().isFlipX())
-                        playerSprite.second().flip(true, false);
                 }
                 flag = true;
                 AppClient.getCurrentGame().getMap().updateMap();
             }
-//            if (Gdx.input.isKeyJustPressed(Input.Keys.P)) {
+            if (Gdx.input.isKeyJustPressed(Input.Keys.P)) {
+
+                    gameView.updateGameObject();
 //                nextTurn();
 //                playerChangedInventory();
-//            }
+
+
+            }
             //TESTES COMMANDS //////////////////////////////////////////////////
             if (Gdx.input.isKeyJustPressed(Input.Keys.J)) {
                 gameView.showThunder();
@@ -491,6 +482,8 @@ public class GameViewController {
             }
 
         }
+
+        gameView.updateGameObject();
     }
 
     private void setPlayerDirection(String value) {
@@ -505,8 +498,7 @@ public class GameViewController {
     private void sendCoordinate(Message message, String setCoordinate, Message responseMessage) {
         message = new Message(new HashMap<>() {{
             put("function", "setCoordinate");
-            put("arguments",
-                setCoordinate);
+            put("arguments", setCoordinate);
         }}, Message.Type.command);
         responseMessage = AppClient.getServerHandler().sendAndWaitForResponse(message);
         methodUseMessage(responseMessage);
@@ -1131,6 +1123,24 @@ public class GameViewController {
         for (Player player : AppClient.getCurrentGame().getPlayers()) {
             if(player.isRenderAble()) {
                 Pair<Sprite, Sprite> playerSprite = gameView.getPlayersSprite().get(ptr++);
+                switch (player.getPlayerDirection()) {
+                    case 0, 2 -> {
+                        playerSprite.second().setPosition(player.getCoordinate().getX() * gameView.getScaledSize(),
+                            player.getCoordinate().getY() * gameView.getScaledSize() + 23);
+                    }
+                    case 1 -> {
+                        playerSprite.second().setPosition(player.getCoordinate().getX() * gameView.getScaledSize() - 20,
+                            player.getCoordinate().getY() * gameView.getScaledSize() + 23);
+                        if (!playerSprite.second().isFlipX())
+                            playerSprite.second().flip(true, false);
+                    }
+                    case 3 -> {
+                        playerSprite.second().setPosition(player.getCoordinate().getX() * gameView.getScaledSize() + 20,
+                            player.getCoordinate().getY() * gameView.getScaledSize() + 23);
+                        if (playerSprite.second().isFlipX())
+                            playerSprite.second().flip(true, false);
+                    }
+                }
 
                 playerSprite.first().setPosition(player.getCoordinate().getX() * 40,
                     player.getCoordinate().getY() * 40);

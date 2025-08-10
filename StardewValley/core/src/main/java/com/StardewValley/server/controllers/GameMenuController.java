@@ -188,7 +188,7 @@ public class GameMenuController extends Controller {
                     Pair<Labi, ArrayList<Pair<User, Integer>>> selectedLabi = null;
                     for (Pair<Labi, ArrayList<Pair<User, Integer>>> waitingLabi : AppServer.getWaitingLabies()) {
                         if (waitingLabi.first().getID() == LabiID) {
-                            if (waitingLabi.second().size() < 4) {
+                            if (waitingLabi.second().size() < 1) {
                                 return new Message(new HashMap<>() {{
                                     put("success", false);
                                     put("message", "");
@@ -419,6 +419,14 @@ public class GameMenuController extends Controller {
             farms.add(new Farm(username.second(), farms.size(), tiles));
             players.getLast().setFarm(farms.getLast());
         }
+
+        for (int i = 0; i < 4 - players.size(); i++) {
+            players.add(new Player(new User("Guest", "Guest", "Guest",
+                "Guest", Gender.FEMALE, 1, "yes")));
+            farms.add(new Farm(0, farms.size(), tiles));
+            players.getLast().setFarm(farms.getLast());
+        }
+
         Player adminPlayer = players.getFirst();
         WholeGameBuilder wholeGameBuilder = new WholeGameBuilder();
         director.createNewGame(wholeGameBuilder, players, adminPlayer, labi.first().getID());
