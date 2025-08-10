@@ -2,6 +2,7 @@ package com.StardewValley.client.views;
 
 import com.StardewValley.client.Main;
 import com.StardewValley.client.AppClient;
+import com.StardewValley.models.Assets;
 import com.StardewValley.models.JSONUtils;
 import com.StardewValley.models.Message;
 import com.StardewValley.models.Pair;
@@ -3685,7 +3686,7 @@ public class GameView implements Screen, InputProcessor {
 //                Result res = controller.respond();
                 buildMessage();
                 if (responseMessage.getFromBody("success"))
-                    showPropose(AppClient.getCurrentPlayer(),
+                    showAcceptance(AppClient.getCurrentPlayer(),
                         AppClient.getCurrentGame().findPlayer(askedPlayer.getPlayerUsername())
                     );
                 else
@@ -4558,7 +4559,9 @@ public class GameView implements Screen, InputProcessor {
             });
 
             mainTable.add(checkBox).left().pad(5).width(150);
-            mainTable.add(createEmoteButton(getTextureForEmote(emote), emote)).pad(5).size(60, 60);
+            Texture texture = getTextureForEmote(emote);
+            Image emoteImage = new Image(new TextureRegionDrawable(new TextureRegion(texture)));
+            mainTable.add(emoteImage).pad(5).size(60, 60);
             mainTable.row();
         }
 
@@ -5075,8 +5078,6 @@ public class GameView implements Screen, InputProcessor {
     private Texture handTexture;
     private Image clockFaceImage;
     private Image clockHandImage;
-    private Texture seasonTexture;
-    private Texture weatherTexture;
     private Image seasonImage;
     private Image weatherImage;
     private String lastWeatherName;
@@ -5091,22 +5092,15 @@ public class GameView implements Screen, InputProcessor {
     private Label dayOfWeekLabel;
     private Label dayOfMonthLabel;
     private Label timeOfDayLabel;
-    private Texture a;
-    private Texture b;
-    private Texture c;
-    private Texture d;
-    private Texture e;
-    private Texture f;
-    private Texture g;
-    private Texture h;
-    private Image A;
-    private Image B;
-    private Image C;
-    private Image D;
-    private Image E;
-    private Image F;
-    private Image G;
-    private Image H;
+    private final Image A = AppClient.getAssets().getA();
+    private final Image B = AppClient.getAssets().getB();
+    private final Image C = AppClient.getAssets().getC();
+    private final Image D = AppClient.getAssets().getD();
+    private final Image E = AppClient.getAssets().getE();
+    private final Image F = AppClient.getAssets().getF();
+    private final Image G = AppClient.getAssets().getG();
+    private final Image H = AppClient.getAssets().getH();
+
     int x = Gdx.graphics.getWidth() - 72*3;
     public void Clock() {
         currentTime = AppClient.getCurrentGame().getDateTime();
@@ -5114,22 +5108,6 @@ public class GameView implements Screen, InputProcessor {
         currentWallet = AppClient.getCurrentPlayer().getWallet();
 
         lastNetWorth = currentWallet.getBalance();
-        a = new Texture(Gdx.files.internal("GameAssets/Clock/Nan.png"));
-        b = new Texture(Gdx.files.internal("GameAssets/Clock/Nan.png"));
-        c = new Texture(Gdx.files.internal("GameAssets/Clock/Nan.png"));
-        d = new Texture(Gdx.files.internal("GameAssets/Clock/Nan.png"));
-        e = new Texture(Gdx.files.internal("GameAssets/Clock/Nan.png"));
-        f = new Texture(Gdx.files.internal("GameAssets/Clock/Nan.png"));
-        g = new Texture(Gdx.files.internal("GameAssets/Clock/Nan.png"));
-        h = new Texture(Gdx.files.internal("GameAssets/Clock/0.png"));
-        A = new Image(new TextureRegionDrawable(a));
-        B = new Image(new TextureRegionDrawable(b));
-        C = new Image(new TextureRegionDrawable(c));
-        D = new Image(new TextureRegionDrawable(d));
-        E = new Image(new TextureRegionDrawable(e));
-        F = new Image(new TextureRegionDrawable(f));
-        G = new Image(new TextureRegionDrawable(g));
-        H = new Image(new TextureRegionDrawable(h));
 
         A.setSize(A.getWidth() * 3, A.getHeight() * 3);
         B.setSize(B.getWidth() * 3, B.getHeight() * 3);
@@ -5162,12 +5140,10 @@ public class GameView implements Screen, InputProcessor {
         staticStage.addActor(H);
     }
     public void setWeatherAndSeason(){
-        seasonTexture = new Texture("GameAssets/Clock/" + currentTime.getSeason().getName() + ".png");
-        weatherTexture = new Texture("GameAssets/Clock/" + currentWeather.getName() + ".png");
         lastWeatherName = currentWeather.getName();
         lastSeasonName = currentTime.getSeason().getName();
-        seasonImage = new Image(new TextureRegionDrawable(new TextureRegion(seasonTexture)));
-        weatherImage = new Image(new TextureRegionDrawable(new TextureRegion(weatherTexture)));
+        seasonImage = new Image(AppClient.getAssets().getClockSeason(currentTime.getSeason().getName()));
+        weatherImage = new Image(AppClient.getAssets().getClockSeason(currentWeather.getName()));
         seasonImage.setSize(seasonImage.getWidth() * 3, seasonImage.getHeight() * 3);
         seasonImage.setPosition(29*3 + x, Gdx.graphics.getHeight() - 24*3);
         weatherImage.setSize(weatherImage.getWidth() * 3, weatherImage.getHeight() * 3);
@@ -5229,49 +5205,31 @@ public class GameView implements Screen, InputProcessor {
                 netWorth = netWorth / 10;
                 switch (count) {
                     case 0:
-                        h.dispose();
-                        h = new Texture("GameAssets/Clock/" + num + ".png");
-                        H.setDrawable(new TextureRegionDrawable(h));
+                        H.setDrawable(AppClient.getAssets().getClockNumber(num));
                         break;
                     case 1:
-                        g.dispose();
-                        g = new Texture("GameAssets/Clock/" + num + ".png");
-                        G.setDrawable(new TextureRegionDrawable(g));
+                        G.setDrawable(AppClient.getAssets().getClockNumber(num));
                         break;
                     case 2:
-                        f.dispose();
-                        f = new Texture("GameAssets/Clock/" + num + ".png");
-                        F.setDrawable(new TextureRegionDrawable(f));
+                        F.setDrawable(AppClient.getAssets().getClockNumber(num));
                         break;
                     case 3:
-                        e.dispose();
-                        e = new Texture("GameAssets/Clock/" + num + ".png");
-                        E.setDrawable(new TextureRegionDrawable(e));
+                        E.setDrawable(AppClient.getAssets().getClockNumber(num));
                         break;
                     case 4:
-                        d.dispose();
-                        d = new Texture("GameAssets/Clock/" + num + ".png");
-                        D.setDrawable(new TextureRegionDrawable(d));
+                        D.setDrawable(AppClient.getAssets().getClockNumber(num));
                         break;
                     case 5:
-                        c.dispose();
-                        c = new Texture("GameAssets/Clock/" + num + ".png");
-                        C.setDrawable(new TextureRegionDrawable(c));
+                        C.setDrawable(AppClient.getAssets().getClockNumber(num));
                         break;
                     case 6:
-                        b.dispose();
-                        b = new Texture("GameAssets/Clock/" + num + ".png");
-                        B.setDrawable(new TextureRegionDrawable(b));
+                        B.setDrawable(AppClient.getAssets().getClockNumber(num));
                         break;
                     case 7:
-                        a.dispose();
-                        a = new Texture("GameAssets/Clock/" + num + ".png");
-                        A.setDrawable(new TextureRegionDrawable(a));
+                        A.setDrawable(AppClient.getAssets().getClockNumber(num));
                         break;
                     default:
-                        a.dispose();
-                        a = new Texture("GameAssets/Clock/" + num + ".png");
-                        A.setDrawable(new TextureRegionDrawable(a));
+                        A.setDrawable(AppClient.getAssets().getClockNumber(num));
                         break;
                 }
                 count++;
@@ -5279,50 +5237,31 @@ public class GameView implements Screen, InputProcessor {
             for(; count < 8; count++) {
                 switch (count) {
                     case 0:
-                        h.dispose();
-                        weatherTexture.dispose();
-                        h = new Texture("GameAssets/Clock/" + "Nan" + ".png");
-                        H.setDrawable(new TextureRegionDrawable(h));
+                        H.setDrawable(AppClient.getAssets().getTRNan());
                         break;
                     case 1:
-                        g.dispose();
-                        g = new Texture("GameAssets/Clock/" + "Nan" + ".png");
-                        G.setDrawable(new TextureRegionDrawable(g));
+                        G.setDrawable(AppClient.getAssets().getTRNan());
                         break;
                     case 2:
-                        f.dispose();
-                        f = new Texture("GameAssets/Clock/" + "Nan" + ".png");
-                        F.setDrawable(new TextureRegionDrawable(f));
+                        F.setDrawable(AppClient.getAssets().getTRNan());
                         break;
                     case 3:
-                        e.dispose();
-                        e = new Texture("GameAssets/Clock/" + "Nan" + ".png");
-                        E.setDrawable(new TextureRegionDrawable(e));
+                        E.setDrawable(AppClient.getAssets().getTRNan());
                         break;
                     case 4:
-                        d.dispose();
-                        d = new Texture("GameAssets/Clock/" + "Nan" + ".png");
-                        D.setDrawable(new TextureRegionDrawable(d));
+                        D.setDrawable(AppClient.getAssets().getTRNan());
                         break;
                     case 5:
-                        c.dispose();
-                        c = new Texture("GameAssets/Clock/" + "Nan" + ".png");
-                        C.setDrawable(new TextureRegionDrawable(c));
+                        C.setDrawable(AppClient.getAssets().getTRNan());
                         break;
                     case 6:
-                        b.dispose();
-                        b = new Texture("GameAssets/Clock/" + "Nan" + ".png");
-                        B.setDrawable(new TextureRegionDrawable(b));
+                        B.setDrawable(AppClient.getAssets().getTRNan());
                         break;
                     case 7:
-                        a.dispose();
-                        a = new Texture("GameAssets/Clock/" + "Nan" + ".png");
-                        A.setDrawable(new TextureRegionDrawable(a));
+                        A.setDrawable(AppClient.getAssets().getTRNan());
                         break;
                     default:
-                        a.dispose();
-                        a = new Texture("GameAssets/Clock/" + "Nan" + ".png");
-                        A.setDrawable(new TextureRegionDrawable(a));
+                        A.setDrawable(AppClient.getAssets().getTRNan());
                         break;
                 }
             }
@@ -5331,14 +5270,12 @@ public class GameView implements Screen, InputProcessor {
         else if (!currentWeatherName.equals(lastWeatherName)) {
             lastWeatherName = currentWeatherName;
             weatherTexture.dispose();
-            weatherTexture = new Texture("GameAssets/Clock/" + currentWeatherName + ".png");
-            weatherImage.setDrawable(new TextureRegionDrawable(new TextureRegion(weatherTexture)));
+            weatherImage.setDrawable(AppClient.getAssets().getClockWeather(currentWeatherName));
         }
         else if (!currentSeasonName.equals(lastSeasonName)) {
             lastSeasonName = currentSeasonName;
             seasonTexture.dispose();
-            seasonTexture = new Texture("GameAssets/Clock/" + currentSeasonName + ".png");
-            seasonImage.setDrawable(new TextureRegionDrawable(new TextureRegion(seasonTexture)));
+            seasonImage.setDrawable(AppClient.getAssets().getClockSeason(currentSeasonName));
         }
         else if (!currentDayOfWeek.equals(lastDayOfWeekName)) {
             lastDayOfWeekName = currentDayOfWeek;
