@@ -1097,6 +1097,7 @@ public class GameViewController {
     }
 
     public void playerChangedInventory() {
+        gameView.drawInventory();
         for (int i = 0; i < inventoryElements.size(); i++) {
             Quadruple<ImageButton, Image, Label, Label> quadruple = inventoryElements.get(i);
             if (i == inHandGoodPtr)
