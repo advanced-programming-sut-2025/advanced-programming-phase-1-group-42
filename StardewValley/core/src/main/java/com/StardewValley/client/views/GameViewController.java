@@ -41,6 +41,7 @@ public class GameViewController {
     private Skin skin;
     private GameView gameView;
 
+    private int inHandGoodPtr = 0;
     private ArrayList<Quadruple<ImageButton, Image, Label, Label>> inventoryElements;
     private ArrayList<Pair<Pair<ImageButton, Image>, Integer>> toolsElements;
     private ArrayList<ImageButton> mainInventoryElements;
@@ -61,7 +62,7 @@ public class GameViewController {
 
         int ctr = 1;
         for (ArrayList<Good> goods : AppClient.getCurrentPlayer().getInventory().getList()) {
-            ImageButton imageButtonBackground = new ImageButton(drawableSlot, drawableSlot, drawableHighlight);
+            ImageButton imageButtonBackground = new ImageButton(drawableSlot, drawableHighlight, drawableHighlight);
             Image image = new Image(new TextureRegion(new Texture("GameAssets/null.png")));
             if (!goods.isEmpty())
                 image = new Image(new TextureRegion(new Texture(goods.getFirst().getType().imagePath())));
@@ -97,7 +98,10 @@ public class GameViewController {
                                 }}, Message.Type.command);
                                 Message responseMessage = AppClient.getServerHandler().sendAndWaitForResponse(message);
                                 methodUseMessage(responseMessage);
+                                inHandGoodPtr = finalI;
 
+                                 playerChangedInventory();
+                                gameView.updateGameObject();
 //                                AppClient.getCurrentGame().getCurrentPlayer().setInHandGood(
 //                                    AppClient.getCurrentGame().getCurrentPlayer().getInventory().getList().get(i));
                             }
@@ -179,6 +183,9 @@ public class GameViewController {
     }
 
     public void handleInput() {
+        if (gameView.getCheatWindow() != null)
+            return;
+
         Player player = AppClient.getCurrentPlayer();
         Pair<Sprite, Sprite> playerSprite = null;
         int ptr = 0;
@@ -196,6 +203,8 @@ public class GameViewController {
         }}, Message.Type.command);
         Message responseMessage = AppClient.getServerHandler().sendAndWaitForResponse(message);
         methodUseMessage(responseMessage);
+        if (player.getPlayerDirection() != -1)
+            gameView.updateGameObject();
 
 
 //        player.setPlayerDirection(-1);
@@ -207,7 +216,7 @@ public class GameViewController {
             }}, Message.Type.command);
             responseMessage = AppClient.getServerHandler().sendAndWaitForResponse(message);
             methodUseMessage(responseMessage);
-
+            gameView.updateGameObject();
 
 //            AppClient.getCurrentGame().getCurrentPlayer().getWallet().increaseBalance(1000);
         }
@@ -303,17 +312,14 @@ public class GameViewController {
             }
             if (Gdx.input.isKeyJustPressed(Input.Keys.P)) {
 
-                    gameView.updateGameObject();
-//                nextTurn();
-//                playerChangedInventory();
-
-
             }
             //TESTES COMMANDS //////////////////////////////////////////////////
             if (Gdx.input.isKeyJustPressed(Input.Keys.J)) {
                 gameView.showThunder();
+                gameView.updateGameObject();
             }
             if (Gdx.input.isKeyJustPressed(Input.Keys.L)) {
+                gameView.updateGameObject();
             }
             /// ///////////////////////////////////////////////////////////////
 
@@ -392,6 +398,7 @@ public class GameViewController {
                             }}, Message.Type.command);
                             responseMessage = AppClient.getServerHandler().sendAndWaitForResponse(message);
                             methodUseMessage(responseMessage);
+                            gameView.updateGameObject();
                             //TODO
 
 //                            animal.petAnimal();
@@ -463,9 +470,11 @@ public class GameViewController {
                     }}, Message.Type.command);
                     responseMessage = AppClient.getServerHandler().sendAndWaitForResponse(message);
                     methodUseMessage(responseMessage);
-
+                    playerChangedInventory();
+                    inHandGoodPtr = finalI;
+                    gameView.updateGameObject();
 //                    AppClient.getCurrentGame().getCurrentPlayer().setInHandGood(
-//                        AppClient.getCurrentGame().getCurrentPlayer().getInventory().getList().get(i));
+//                        AppClient.getCurrentGame().getCurrentPlayer().getInventory().getList().get(i));                               gameView.updateGameObject();
                     break;
                 }
             }
@@ -477,13 +486,12 @@ public class GameViewController {
                 }}, Message.Type.command);
                 responseMessage = AppClient.getServerHandler().sendAndWaitForResponse(message);
                 methodUseMessage(responseMessage);
-
+                gameView.updateGameObject();
 //                AppClient.getCurrentGame().getCurrentPlayer().getEnergy().decreaseTurnEnergyLeft(0.25, );
             }
 
         }
 
-        gameView.updateGameObject();
     }
 
     private void setPlayerDirection(String value) {
@@ -1073,8 +1081,7 @@ public class GameViewController {
 
 
                 if (!gameView.isTabClicked()) {
-                    if (AppClient.getCurrentPlayer().getInventory().getList().get(i) ==
-                        AppClient.getCurrentPlayer().getInHandGood())
+                    if (i == inHandGoodPtr)
                         quadruple.a.setChecked(true);
                     else
                         quadruple.a.setChecked(false);
@@ -1089,17 +1096,24 @@ public class GameViewController {
         progressBar.setValue(AppClient.getCurrentPlayer().getEnergy().getDayEnergyLeft());
     }
 
-//    public void playerChangedInventory() {
-//        for (int i = 0; i < inventoryElements.size(); i++) {
-//            Quadruple<ImageButton, Image, Label, Label> quadruple = inventoryElements.get(i);
-//            if (AppClient.getCurrentGame().getCurrentPlayer().getInventory().getList().get(i) ==
-//                AppClient.getCurrentGame().getCurrentPlayer().getInHandGood())
-//                quadruple.a.setChecked(true);
-//            else
-//                quadruple.a.setChecked(false);
-//        }
-//
-//    }
+    public void playerChangedInventory() {
+        for (int i = 0; i < inventoryElements.size(); i++) {
+            Quadruple<ImageButton, Image, Label, Label> quadruple = inventoryElements.get(i);
+            if (i == inHandGoodPtr)
+                quadruple.a.setChecked(true);
+            else
+                quadruple.a.setChecked(false);
+        }
+
+    }
+
+    public int getInHandGoodPtr() {
+        return inHandGoodPtr;
+    }
+
+    public void setInHandGoodPtr(int inHandGoodPtr) {
+        this.inHandGoodPtr = inHandGoodPtr;
+    }
 
     public ArrayList<Quadruple<ImageButton, Image, Label, Label>> getInventoryElements() {
         return inventoryElements;
@@ -1123,6 +1137,23 @@ public class GameViewController {
         for (Player player : AppClient.getCurrentGame().getPlayers()) {
             if(player.isRenderAble()) {
                 Pair<Sprite, Sprite> playerSprite = gameView.getPlayersSprite().get(ptr++);
+                playerSprite.first().setPosition(player.getCoordinate().getX() * 40,
+                    player.getCoordinate().getY() * 40);
+                playerSprite.first().draw(Main.getBatch());
+
+                if (player.getPlayerDirection() != -1) {
+                    if (player.getGender().getName().equals("Male")) {
+                        animation(player, player.getPlayerDirection(), playerSprite.first());
+                    } else {
+                        femaleAnimation(player, player.getPlayerDirection(), playerSprite.first());
+                    }
+                }
+
+                if (!player.getInHandGood().isEmpty())
+                    playerSprite.second().setRegion(new Texture(player.getInHandGood().getFirst().getType().imagePath()));
+                else
+                    playerSprite.second().setRegion(new Texture(AppClient.getAssets().getNullPNGPath()));
+
                 switch (player.getPlayerDirection()) {
                     case 0, 2 -> {
                         playerSprite.second().setPosition(player.getCoordinate().getX() * gameView.getScaledSize(),
@@ -1142,22 +1173,6 @@ public class GameViewController {
                     }
                 }
 
-                playerSprite.first().setPosition(player.getCoordinate().getX() * 40,
-                    player.getCoordinate().getY() * 40);
-                playerSprite.first().draw(Main.getBatch());
-
-                if (player.getPlayerDirection() != -1) {
-                    if (player.getGender().getName().equals("Male")) {
-                        animation(player, player.getPlayerDirection(), playerSprite.first());
-                    } else {
-                        femaleAnimation(player, player.getPlayerDirection(), playerSprite.first());
-                    }
-                }
-
-                if (!player.getInHandGood().isEmpty())
-                    playerSprite.second().setRegion(new Texture(player.getInHandGood().getFirst().getType().imagePath()));
-                else
-                    playerSprite.second().setRegion(new Texture(AppClient.getAssets().getNullPNGPath()));
 
                 playerSprite.second().setSize(40, 40);
                 Main.getBatch().draw(playerSprite.second(),
@@ -1171,13 +1186,13 @@ public class GameViewController {
         AppClient.getAssets().getPlayerTextures().get(i).forEach(regions::add);
         Animation<Texture> animation = new Animation<>(0.1f, regions);
 
-        playerSprite.setRegion(animation.getKeyFrame(player.getTime()));
+        playerSprite.setRegion(animation.getKeyFrame(gameView.getPlayerTime()));
 
-        if(!animation.isAnimationFinished(player.getTime())) {
-            player.setTime(player.getTime() + Gdx.graphics.getDeltaTime());
+        if(!animation.isAnimationFinished(gameView.getPlayerTime())) {
+            gameView.setPlayerTime(gameView.getPlayerTime() + Gdx.graphics.getDeltaTime());
         }
         else {
-            player.setTime(0);
+            gameView.setPlayerTime(0);
         }
 
         animation.setPlayMode(Animation.PlayMode.LOOP);
@@ -1188,13 +1203,13 @@ public class GameViewController {
         AppClient.getAssets().getFemalePlayerTextures().get(i).forEach(regions::add);
         Animation<Texture> animation = new Animation<>(0.1f, regions);
 
-        playerSprite.setRegion(animation.getKeyFrame(player.getTime()));
+        playerSprite.setRegion(animation.getKeyFrame(gameView.getPlayerTime()));
 
-        if(!animation.isAnimationFinished(player.getTime())) {
-            player.setTime(player.getTime() + Gdx.graphics.getDeltaTime());
+        if(!animation.isAnimationFinished(gameView.getPlayerTime())) {
+            gameView.setPlayerTime(gameView.getPlayerTime() + Gdx.graphics.getDeltaTime());
         }
         else {
-            player.setTime(0);
+            gameView.setPlayerTime(0);
         }
 
         animation.setPlayMode(Animation.PlayMode.LOOP);

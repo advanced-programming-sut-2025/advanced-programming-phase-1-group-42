@@ -1,6 +1,7 @@
 package com.StardewValley.server.controllers;
 
 import com.StardewValley.client.Main;
+import com.StardewValley.client.views.GameMenu;
 import com.StardewValley.models.Assets;
 import com.StardewValley.models.Message;
 import com.StardewValley.models.Pair;
@@ -90,6 +91,11 @@ public class GameController extends Controller {
     public Message handleMessage(Message message) {
         if (message.getType() == Message.Type.command) {
             switch ((String) message.getFromBody("function")) {
+                case "cheat" -> {
+                    GameMenu gameMenu = new GameMenu(this);
+                    gameMenu.check(message.getFromBody("arguments"));
+                    return sendResultMessage(new Result(true, ""));
+                }
                 case "toolsUse" -> {
                     Coordinate coordinate = Coordinate.fromString(message.getFromBody("arguments"));
                     return sendResultMessage(toolsUse(coordinate));
@@ -2244,7 +2250,8 @@ public class GameController extends Controller {
         return new Result(true, "test");
     }
 
-
-
+    public ClientHandler getClientHandler() {
+        return clientHandler;
+    }
 }
 

@@ -83,7 +83,7 @@ public class ToolFunctions {
                         clientHandler.getClientPlayer().getEnergy().increaseTurnEnergyLeft(1);
                     }
                 }
-                return useWateringCan(tool, coordinate);
+                return useWateringCan(tool, coordinate, clientHandler);
             }
             case ToolType.SCYTHE -> {
                 return useScythe(tool, coordinate);
@@ -230,8 +230,9 @@ public class ToolFunctions {
         return new Result(true, ((ToolType) tool.getType()).getName() + " used!");
     }
 
-    private static Result useWateringCan(Tool tool, Coordinate coordinate) {
-        Tile tile = AppClient.getCurrentGame().getMap().findTile(coordinate, clientHandler.getClientGame());
+    private static Result useWateringCan(Tool tool, Coordinate coordinate, ClientHandler clientHandler) {
+        ToolFunctions.clientHandler = clientHandler;
+        Tile tile = clientHandler.getClientGame().getMap().findTile(coordinate, clientHandler.getClientGame());
         if(tile == null)
             return new Result(false, "Tile not found!");
 

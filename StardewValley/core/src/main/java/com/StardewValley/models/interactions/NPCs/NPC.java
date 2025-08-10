@@ -3,6 +3,7 @@ package com.StardewValley.models.interactions.NPCs;
 import com.StardewValley.client.AppClient;
 import com.StardewValley.models.enums.Season;
 import com.StardewValley.models.game_structure.Coordinate;
+import com.StardewValley.models.game_structure.Game;
 import com.StardewValley.models.goods.Good;
 import com.StardewValley.models.interactions.Player;
 import com.StardewValley.server.ClientHandler;
@@ -107,6 +108,7 @@ public class NPC {
                 return friendship;
             }
         }
+        //TODO Nader
         friendships.add(new NPCFriendship(player,this));
         for (NPCFriendship friendship : friendships) {
             if (friendship.getPlayer().equals(player)) {

@@ -1,6 +1,7 @@
 package com.StardewValley.models.interactions.NPCs;
 
 import com.StardewValley.client.AppClient;
+import com.StardewValley.models.game_structure.Game;
 import com.StardewValley.models.goods.Good;
 import com.StardewValley.models.interactions.Player;
 

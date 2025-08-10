@@ -82,6 +82,7 @@ public class GameMenuView implements Screen {
     private TextButton passwordSubmitButton;
     private TextButton passwordBackButton;
 
+
     public GameMenuView(Skin skin) {
         this.skin = skin;
 

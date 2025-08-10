@@ -47,7 +47,6 @@ public class Player {
     private int playerDirection;
     private String spritePath;
     private String inHandGoodSpritePath;
-    private float time;
     private ArrayList<Pair<Player, ArrayList<String>>> privateChat = new ArrayList<>();
     private Buff buff;
     private Buff rejectionBuff;
@@ -336,13 +335,6 @@ public class Player {
         this.playerDirection = playerDirection;
     }
 
-    public float getTime() {
-        return time;
-    }
-
-    public void setTime(float time) {
-        this.time = time;
-    }
 
     public void setLastCoordinate(Coordinate lastCoordinate) {
         this.lastCoordinate = lastCoordinate;

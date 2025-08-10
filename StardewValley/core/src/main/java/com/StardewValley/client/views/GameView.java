@@ -158,6 +158,8 @@ public class GameView implements Screen, InputProcessor {
     private boolean isTabClicked = false;
     private ArrayList<Pair<Sprite, Sprite>> playersSprite;
 
+    private float playerTime = 0;
+
     public GameView(Skin skin) {
 //        this.controller.initGameControllers();
         this.viewController = new GameViewController(this);
@@ -310,6 +312,10 @@ public class GameView implements Screen, InputProcessor {
         updateCamera();
         Main.getBatch().setProjectionMatrix(camera.combined);
 
+//        framePtr++;
+//        if (framePtr %  == 0) {
+//            updateGameObject();
+//        }
 
         Main.getBatch().begin();
 
@@ -442,10 +448,11 @@ public class GameView implements Screen, InputProcessor {
             Message responseMessage = AppClient.getServerHandler().sendAndWaitForResponse(message);
             methodUseMessage(responseMessage);
         }
-        if (petsClicking(button, tileX, tileY)) return true;
+        if (petsClicking(button, tileX, tileY)) {
+            return true;
+        }
         if (selectedTile.getTileType() == TileType.GREEN_HOUSE &&
             !AppClient.getCurrentPlayer().getFarm().getGreenHouse().isAvailable()) {
-
             initGreenHouseWindow();
         }
 
@@ -582,9 +589,9 @@ public class GameView implements Screen, InputProcessor {
 //            multiplexer.addProcessor(stage);
 //            multiplexer.addProcessor(this);
 //            Gdx.input.setInputProcessor(multiplexer);
-
             return true;
         }
+        updateGameObject();
         return false;
     }
 
@@ -2371,9 +2378,22 @@ public class GameView implements Screen, InputProcessor {
                             pair.first().first().setChecked(false);
                             if (pair.first().second() == finalImage) {
                                 pair.first().first().setChecked(true);
-                                AppClient.getCurrentPlayer().setInHandGood(
-                                    AppClient.getCurrentPlayer().getInventory().getList().get(pair.second())
-                                );
+
+//                                AppClient.getCurrentPlayer().setInHandGood(
+//                                    AppClient.getCurrentPlayer().getInventory().getList().get(pair.second())
+//                                );
+
+                                Message message = new Message(new HashMap<>() {{
+                                    put("function", "setInHandGood");
+                                    put("arguments", String.valueOf(pair.second()));
+                                }}, Message.Type.command);
+                                Message responseMessage = AppClient.getServerHandler().sendAndWaitForResponse(message);
+                                methodUseMessage(responseMessage);
+                                viewController.setInHandGoodPtr(pair.second());
+                                updateGameObject();
+                                viewController.playerChangedInventory();
+
+
                                 closeToolsWindow();
                             }
                         }
@@ -2490,7 +2510,15 @@ public class GameView implements Screen, InputProcessor {
             public void clicked(InputEvent event, float x, float y) {
 //                GameMenu gameMenu = new GameMenu();
 //                gameMenu.check(cheatTextField.getText());
-                //TODO
+
+                Message message = new Message(new HashMap<>() {{
+                    put("function", "cheat");
+                    put("arguments", cheatTextField.getText());
+                }}, Message.Type.command);
+                Message responseMessage = AppClient.getServerHandler().sendAndWaitForResponse(message);
+                methodUseMessage(responseMessage);
+                updateGameObject();
+
                 closeCheatWindow();
             }
         });
@@ -5365,6 +5393,13 @@ public class GameView implements Screen, InputProcessor {
         }
     }
 
+    public float getPlayerTime() {
+        return playerTime;
+    }
+
+    public void setPlayerTime(float playerTime) {
+        this.playerTime = playerTime;
+    }
 }
 
 
