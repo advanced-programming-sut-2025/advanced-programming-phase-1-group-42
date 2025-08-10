@@ -46,7 +46,7 @@ public class AStar {
             new Coordinate(0, 1), new Coordinate(-1, 0), new Coordinate(1, 0)));
     private static ArrayList<Direction> directionTurns = new ArrayList<>(Arrays.asList(Direction.values()));
 
-    public static ArrayList<Pair<Integer, Coordinate>> findPath(Map<S, Number> map, Coordinate start, Coordinate goal) {
+    public static ArrayList<Pair<Integer, Coordinate>> findPath(Map map, Coordinate start, Coordinate goal) {
         PriorityQueue<Node> openList = new PriorityQueue<>(Comparator.comparingInt(Node::f));
         Set<String> closedSet = new HashSet<>();
 
@@ -90,7 +90,7 @@ public class AStar {
         return null;
     }
 
-    private static boolean isValid(Map<S, Number> map, int x, int y) {
+    private static boolean isValid(Map map, int x, int y) {
         boolean flag = x >= 0 && y >= 0 && x < map.getEndingCoordinate().getX() && y < map.getEndingCoordinate().getY();
         if(!flag)
             return false;

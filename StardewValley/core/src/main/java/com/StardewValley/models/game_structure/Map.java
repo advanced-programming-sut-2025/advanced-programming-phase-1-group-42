@@ -20,7 +20,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
 
-public class Map<S, I extends Number> {
+public class Map {
     private final ArrayList<Tile> tiles = new ArrayList<>();
     private final ArrayList<Farm> farms = new ArrayList<>();
     private final ArrayList<GameBuilding> gameBuildings = new ArrayList<>();

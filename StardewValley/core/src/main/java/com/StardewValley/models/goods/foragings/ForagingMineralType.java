@@ -69,12 +69,4 @@ public enum ForagingMineralType implements GoodType {
     public String imagePath() {
         return imagePath;
     }
-
-    @Override
-    public String toString() {
-        StringBuilder list =  new StringBuilder();
-        list.append("Name: ").append(name).append("\n");
-        list.append("SellPrice: ").append(getSellPrice()).append("\n");
-        return list.toString();
-    }
 }

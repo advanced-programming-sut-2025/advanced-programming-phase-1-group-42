@@ -36,7 +36,7 @@ public class Game {
     private Tomorrow tomorrow;
     private final ArrayList<Player> players = new ArrayList<>();
     private Player gameAdmin;
-    private Map<S, Number> map = null;
+    private Map map = null;
     private final ArrayList<NPC> NPCs = new ArrayList<>();
     private int counter = 0;
     private ArrayList<Pair<Player, String>> publicChat = new ArrayList<>();
@@ -61,7 +61,7 @@ public class Game {
         return players;
     }
 
-    public void setMap(Map<S, Number> map) {
+    public void setMap(Map map) {
         this.map = map;
     }
 
@@ -87,7 +87,7 @@ public class Game {
         }
     }
 
-    public Map<S, Number> getMap() {
+    public Map getMap() {
         return map;
     }
 
@@ -210,7 +210,7 @@ public class Game {
         }
 
         for (Player player : players) {
-            HashMap<Player, Boolean> interaction = player.getIsInteracted();
+            HashMap<String, Boolean> interaction = player.getIsInteracted();
             interaction.replaceAll((p, v) -> false);
         }
 

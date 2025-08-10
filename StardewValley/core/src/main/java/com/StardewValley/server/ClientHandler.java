@@ -15,6 +15,8 @@ import java.io.*;
 import java.net.Socket;
 import java.net.SocketException;
 import java.nio.charset.StandardCharsets;
+import java.nio.file.Files;
+import java.nio.file.Paths;
 import java.util.*;
 import java.util.concurrent.*;
 import java.util.concurrent.atomic.AtomicBoolean;
@@ -93,6 +95,13 @@ public class ClientHandler extends Thread {
 
     public synchronized void sendMessage(Message message) {
         String json = JSONUtils.toJson(message);
+
+        try {
+            Files.write(Paths.get("testtest.txt"), json.getBytes());
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
         try {
             writeString(dataOutputStream, json);
         } catch (IOException e) {

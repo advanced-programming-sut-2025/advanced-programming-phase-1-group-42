@@ -33,6 +33,28 @@ public abstract class Good {
     protected String name;
 
 
+    /** A stable id to put in JSON (backed by your GoodType enums). */
+    public String getTypeId() {
+        // All your GoodType enums expose getName(), so use that.
+        return getClass().getSimpleName();
+//        try {
+//            return getType().getName();
+//        } catch (Exception e) {
+//            System.out.println(this.name);
+//
+//        }
+    }
+
+    /** Rebuild a Good from a short id string, e.g. "COPPER_ORE". */
+    public static Good fromId(String id) {
+        GoodType t = newGoodType(id);   // you already have this helper
+        if (t == null) {
+            throw new IllegalArgumentException("Unknown Good id: " + id);
+        }
+        return newGood(t);              // you already have this factory
+    }
+
+
     public static Good newGood(GoodType type) {
         if(type instanceof CraftingType)
             return new Crafting((CraftingType)type);
@@ -99,9 +121,24 @@ public abstract class Good {
         return goods;
     }
 
+    public static String toTitleCaseUnderscore(String input) {
+        String[] parts = input.split("_");
+        StringBuilder sb = new StringBuilder();
+        for (int i = 0; i < parts.length; i++) {
+            if (parts[i].length() > 0) {
+                sb.append(parts[i].substring(0, 1).toUpperCase())  // First letter uppercase
+                    .append(parts[i].substring(1).toLowerCase());    // Rest lowercase
+            }
+            if (i < parts.length - 1) {
+                sb.append("_");
+            }
+        }
+        return sb.toString();
+    }
+
     public static GoodType newGoodType(String typeName) {
 
-        typeName = typeName.trim();
+        typeName = toTitleCaseUnderscore(typeName.trim());
 
 
         for (ForagingMineralType value : ForagingMineralType.values()) {

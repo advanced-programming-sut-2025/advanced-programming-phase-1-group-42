@@ -312,6 +312,30 @@ public class GameController extends Controller {
                 }
             }
         }
+        if (message.getType() == Message.Type.update) {
+            ArrayList<String> arguments = message.getFromBody("arguments");
+            Game userGame = null;
+            for (Game game : AppServer.getGames()) {
+                if (game.getGameID() == Integer.parseInt(arguments.get(0))) {
+                    userGame = game;
+                    break;
+                }
+            }
+            clientHandler.setClientGame(userGame);
+            for (Player player : userGame.getPlayers()) {
+                if (player.getUsername().equals(arguments.get(1))) {
+                    clientHandler.setClientPlayer(player);
+                    break;
+                }
+            }
+
+            this.clientHandler.setCurrentController(new GameController(clientHandler));
+            Game finalUserGame = userGame;
+            return new Message(new HashMap<>() {{
+                put("success", true);
+                put("message", finalUserGame);
+            }}, Message.Type.response);
+        }
         return new Message(new HashMap<>() {{
             put("success", false);
             put("message", "");
@@ -1671,8 +1695,8 @@ public class GameController extends Controller {
                     clientHandler.getClientPlayer().getFriendShips().get(player).second());
             }
 
-            clientHandler.getClientPlayer().getIsInteracted().put(player, true);
-            player.getIsInteracted().put(clientHandler.getClientPlayer(), true);
+            clientHandler.getClientPlayer().getIsInteracted().put(player.getPlayerUsername(), true);
+            player.getIsInteracted().put(clientHandler.getClientPlayer().getPlayerUsername(), true);
         }
 
         return new Result(true, "You talked with " + username + "!");
@@ -1790,8 +1814,8 @@ public class GameController extends Controller {
                     clientHandler.getClientPlayer().getFriendShips().get(gift.first()).second());
             }
 
-            clientHandler.getClientPlayer().getIsInteracted().put(gift.first(), true);
-            gift.first().getIsInteracted().put(clientHandler.getClientPlayer(), true);
+            clientHandler.getClientPlayer().getIsInteracted().put(gift.first().getPlayerUsername(), true);
+            gift.first().getIsInteracted().put(clientHandler.getClientPlayer().getPlayerUsername(), true);
 
         }
 
@@ -1846,8 +1870,8 @@ public class GameController extends Controller {
                     clientHandler.getClientPlayer().getFriendShips().get(player).second() + "\n");
             }
 
-            clientHandler.getClientPlayer().getIsInteracted().put(player, true);
-            player.getIsInteracted().put(clientHandler.getClientPlayer(), true);
+            clientHandler.getClientPlayer().getIsInteracted().put(player.getPlayerUsername(), true);
+            player.getIsInteracted().put(clientHandler.getClientPlayer().getPlayerUsername(), true);
 
         }
 
@@ -1909,8 +1933,8 @@ public class GameController extends Controller {
                 list.append("Your friendship level with " + username + " has been increased to 3!\n");
             }
 
-            clientHandler.getClientPlayer().getIsInteracted().put(player, true);
-            player.getIsInteracted().put(clientHandler.getClientPlayer(), true);
+            clientHandler.getClientPlayer().getIsInteracted().put(player.getPlayerUsername(), true);
+            player.getIsInteracted().put(clientHandler.getClientPlayer().getPlayerUsername(), true);
         }
 
 

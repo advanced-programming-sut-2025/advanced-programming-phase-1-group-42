@@ -57,7 +57,7 @@ public class Player {
     // level-value
 //    @JsonAdapter(ObjectOrStringMapAdapter.class)
     private final HashMap<String, Pair<Integer, Integer>> friendShips = new HashMap<>();
-    private final HashMap<Player, Boolean> isInteracted;
+    private final HashMap<String, Boolean> isInteracted;
     private final ArrayList<Pair<Player, String>> talkHistory = new ArrayList<>();
 
     private final ArrayList<Pair<Player, Gift>> giftList = new ArrayList<>();
@@ -123,7 +123,7 @@ public class Player {
         for (Player player : players) {
             if(!player.getUsername().equals(username)) {
                 this.friendShips.put(player.getUsername(), new Pair<>(0, 0));
-                this.isInteracted.put(player, false);
+                this.isInteracted.put(player.getUsername(), false);
             }
         }
     }
@@ -203,7 +203,7 @@ public class Player {
     }
 
 
-    public HashMap<Player, Boolean> getIsInteracted() {
+    public HashMap<String, Boolean> getIsInteracted() {
         return isInteracted;
     }
 

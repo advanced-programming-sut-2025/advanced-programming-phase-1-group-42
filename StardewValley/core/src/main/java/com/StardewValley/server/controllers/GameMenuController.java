@@ -417,6 +417,7 @@ public class GameMenuController extends Controller {
         for (Pair<User, Integer> username : labi.second()) {
             players.add(new Player(username.first()));
             farms.add(new Farm(username.second(), farms.size(), tiles));
+            players.getLast().setFarm(farms.getLast());
         }
         Player adminPlayer = players.getFirst();
         WholeGameBuilder wholeGameBuilder = new WholeGameBuilder();
@@ -426,6 +427,7 @@ public class GameMenuController extends Controller {
         WholeMapBuilder wholeMapBuilder = new WholeMapBuilder();
         director.createNewMap(wholeMapBuilder, farms, tiles);
         game.setMap(wholeMapBuilder.getMap());
+
 
         AppServer.getGames().add(game);
         for (Player player : players) {

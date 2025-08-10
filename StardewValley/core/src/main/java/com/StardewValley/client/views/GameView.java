@@ -2,12 +2,14 @@ package com.StardewValley.client.views;
 
 import com.StardewValley.client.Main;
 import com.StardewValley.client.AppClient;
+import com.StardewValley.models.JSONUtils;
 import com.StardewValley.models.Message;
 import com.StardewValley.models.Pair;
 import com.StardewValley.models.enums.Season;
 import com.StardewValley.models.enums.TileAssets;
 import com.StardewValley.models.enums.TileType;
 import com.StardewValley.models.game_structure.*;
+import com.StardewValley.models.game_structure.Game;
 import com.StardewValley.models.game_structure.weathers.Weather;
 import com.StardewValley.models.goods.Good;
 import com.StardewValley.models.goods.GoodType;
@@ -168,6 +170,7 @@ public class GameView implements Screen, InputProcessor {
         viewport = new FitViewport(Gdx.graphics.getWidth(), Gdx.graphics.getHeight(), camera);
         scaledSize = 40;
 
+        viewController.initInventory();
         this.inventoryTable = new Table(skin);
         this.inventoryTable.setFillParent(true);
         drawInventory();
@@ -225,7 +228,7 @@ public class GameView implements Screen, InputProcessor {
 
         fridgeWindow = new Window("Fridge", AppClient.getAssets().getSkin());
 
-        viewController.initInventory();
+
 
         //TODO testing animals
 //        FarmBuilding farmBuilding = new FarmBuilding(FarmBuildingTypes.BARN, new Coordinate(50, 30));
@@ -3322,7 +3325,8 @@ public class GameView implements Screen, InputProcessor {
         friendsTable.setFillParent(true);
         friendsTable.pad(40).padRight(130);
 
-        for (Player player : AppClient.getCurrentPlayer().getFriendShips().keySet()) {
+        for (String playerName : AppClient.getCurrentPlayer().getFriendShips().keySet()) {
+            Player player = AppClient.getCurrentGame().findPlayer(playerName);
             Pair<Integer, Integer> pair = AppClient.getCurrentPlayer().getFriendShips().get(player);
             Label label = new Label(player.getPlayerUsername() + "> Level: " +
                 pair.first() + ", Value: " + pair.second(), skin);
@@ -5322,11 +5326,41 @@ public class GameView implements Screen, InputProcessor {
     }
 
     public void updateGame() {
+//        updateGameObject();
+
         viewController.handleInput();
         viewController.updateInventory();
         viewController.refreshLeaderBoard();
         viewController.updatePlayer();
 
+    }
+
+    private static void updateGameObject() {
+        int gameID = AppClient.getCurrentGame().getGameID();
+        Message message2 = new Message(new HashMap<>() {{
+            put("function", "getUpdatedGame");
+            put("arguments", new ArrayList<>(Arrays.asList(
+                String.valueOf(gameID),
+                AppClient.getCurrentUser().getUsername()
+            )));
+        }}, Message.Type.update);
+        Message responseMessage2 = AppClient.getServerHandler().sendAndWaitForResponse(message2);
+        Object msgObj = responseMessage2.getFromBody("message");
+        Game userGame;
+        if (msgObj instanceof String) {
+            userGame = JSONUtils.fromJsonGame((String) msgObj);
+        } else {
+            String json = JSONUtils.getGson().toJson(msgObj);
+            userGame = JSONUtils.fromJsonGame(json);
+        }
+
+        AppClient.setCurrentGame(userGame);
+        for (Player player : userGame.getPlayers()) {
+            if (player.getUsername().equals(AppClient.getCurrentUser().getUsername())) {
+                AppClient.setCurrentPlayer(player);
+                break;
+            }
+        }
     }
 
     private boolean methodUseMessage(Message responseMessage) {
