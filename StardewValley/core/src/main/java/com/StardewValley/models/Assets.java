@@ -5,6 +5,7 @@ import com.badlogic.gdx.audio.Music;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
+import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 
@@ -243,5 +244,140 @@ public class Assets {
 
     public ArrayList<ArrayList<Texture>> getFemalePlayerTextures() {
         return femalePlayerTextures;
+    }
+
+
+
+    private Texture a = new Texture(Gdx.files.internal("GameAssets/Clock/Nan.png"));
+    private Texture b = new Texture(Gdx.files.internal("GameAssets/Clock/Nan.png"));
+    private Texture c = new Texture(Gdx.files.internal("GameAssets/Clock/Nan.png"));
+    private Texture d = new Texture(Gdx.files.internal("GameAssets/Clock/Nan.png"));
+    private Texture e = new Texture(Gdx.files.internal("GameAssets/Clock/Nan.png"));
+    private Texture f = new Texture(Gdx.files.internal("GameAssets/Clock/Nan.png"));
+    private Texture g = new Texture(Gdx.files.internal("GameAssets/Clock/Nan.png"));
+    private Texture h = new Texture(Gdx.files.internal("GameAssets/Clock/0.png"));
+
+    private Image A = new Image(new TextureRegionDrawable(a));
+    private Image B = new Image(new TextureRegionDrawable(b));
+    private Image C = new Image(new TextureRegionDrawable(c));
+    private Image D = new Image(new TextureRegionDrawable(d));
+    private Image E = new Image(new TextureRegionDrawable(e));
+    private Image F = new Image(new TextureRegionDrawable(f));
+    private Image G = new Image(new TextureRegionDrawable(g));
+    private Image H = new Image(new TextureRegionDrawable(h));
+
+    public Image getA() {
+        return A;
+    }
+
+    public Image getB() {
+        return B;
+    }
+
+    public Image getC() {
+        return C;
+    }
+
+    public Image getD() {
+        return D;
+    }
+
+    public Image getE() {
+        return E;
+    }
+
+    public Image getF() {
+        return F;
+    }
+
+    public Image getG() {
+        return G;
+    }
+
+    public Image getH() {
+        return H;
+    }
+
+    private TextureRegionDrawable TR0 = new TextureRegionDrawable(new Texture("GameAssets/Clock/0.png"));
+    private TextureRegionDrawable TR1 = new TextureRegionDrawable(new Texture("GameAssets/Clock/1.png"));
+    private TextureRegionDrawable TR2 = new TextureRegionDrawable(new Texture("GameAssets/Clock/2.png"));
+    private TextureRegionDrawable TR3 = new TextureRegionDrawable(new Texture("GameAssets/Clock/3.png"));
+    private TextureRegionDrawable TR4 = new TextureRegionDrawable(new Texture("GameAssets/Clock/4.png"));
+    private TextureRegionDrawable TR5 = new TextureRegionDrawable(new Texture("GameAssets/Clock/5.png"));
+    private TextureRegionDrawable TR6 = new TextureRegionDrawable(new Texture("GameAssets/Clock/6.png"));
+    private TextureRegionDrawable TR7 = new TextureRegionDrawable(new Texture("GameAssets/Clock/7.png"));
+    private TextureRegionDrawable TR8 = new TextureRegionDrawable(new Texture("GameAssets/Clock/8.png"));
+    private TextureRegionDrawable TR9 = new TextureRegionDrawable(new Texture("GameAssets/Clock/9.png"));
+    private TextureRegionDrawable TRNan = new TextureRegionDrawable(new Texture("GameAssets/Clock/Nan.png"));
+
+    public TextureRegionDrawable getTRNan() {
+        return TRNan;
+    }
+
+    public TextureRegionDrawable getClockNumber(int num) {
+        switch (num) {
+            case 0:
+                return TR0;
+                case 1:
+                    return TR1;
+                    case 2:
+                        return TR2;
+                        case 3:
+                            return TR3;
+                            case 4:
+                                return TR4;
+                                case 5:
+                                    return TR5;
+                                    case 6:
+                                        return TR6;
+                                        case 7:
+                                            return TR7;
+                                            case 8:
+                                                return TR8;
+                                                case 9:
+                                                    return TR9;
+                                                    default:
+                                                        return TR0;
+        }
+    }
+
+    private final TextureRegionDrawable spring = new TextureRegionDrawable(new Texture("GameAssets/Clock/Spring.png"));
+    private final TextureRegionDrawable fall = new TextureRegionDrawable(new Texture("GameAssets/Clock/Fall.png"));
+    private final TextureRegionDrawable summer = new TextureRegionDrawable(new Texture("GameAssets/Clock/Summer.png"));
+    private final TextureRegionDrawable winter = new TextureRegionDrawable(new Texture("GameAssets/Clock/Winter.png"));
+
+    private final TextureRegionDrawable snow = new TextureRegionDrawable(new Texture("GameAssets/Clock/Snow.png"));
+    private final TextureRegionDrawable sunny = new TextureRegionDrawable(new Texture("GameAssets/Clock/Sunny.png"));
+    private final TextureRegionDrawable rain = new TextureRegionDrawable(new Texture("GameAssets/Clock/Rain.png"));
+    private final TextureRegionDrawable storm = new TextureRegionDrawable(new Texture("GameAssets/Clock/Storm.png"));
+
+    public TextureRegionDrawable getClockSeason(String season) {
+        switch (season) {
+            case "Spring":
+                return spring;
+            case "Fall":
+                return fall;
+            case "Summer":
+                return summer;
+            case "Winter":
+                return winter;
+            default:
+                return spring;
+        }
+    }
+
+    public TextureRegionDrawable getClockWeather(String weather) {
+        switch (weather) {
+            case "Snow":
+                return snow;
+            case "Sunny":
+                return sunny;
+            case "Rain":
+                return rain;
+            case "Storm":
+                return storm;
+            default:
+                return sunny;
+        }
     }
 }
