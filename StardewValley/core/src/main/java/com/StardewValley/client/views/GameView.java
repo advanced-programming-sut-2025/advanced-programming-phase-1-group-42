@@ -5214,12 +5214,10 @@ public class GameView implements Screen, InputProcessor {
 
         else if (!currentWeatherName.equals(lastWeatherName)) {
             lastWeatherName = currentWeatherName;
-            weatherTexture.dispose();
             weatherImage.setDrawable(AppClient.getAssets().getClockWeather(currentWeatherName));
         }
         else if (!currentSeasonName.equals(lastSeasonName)) {
             lastSeasonName = currentSeasonName;
-            seasonTexture.dispose();
             seasonImage.setDrawable(AppClient.getAssets().getClockSeason(currentSeasonName));
         }
         else if (!currentDayOfWeek.equals(lastDayOfWeekName)) {
