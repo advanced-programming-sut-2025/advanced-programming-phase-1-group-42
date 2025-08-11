@@ -14,6 +14,9 @@ import com.StardewValley.models.game_structure.weathers.Weather;
 import com.StardewValley.models.goods.Good;
 import com.StardewValley.models.goods.GoodType;
 import com.StardewValley.models.goods.craftings.Crafting;
+import com.StardewValley.models.goods.farmings.Farming;
+import com.StardewValley.models.goods.foods.Food;
+import com.StardewValley.models.goods.foragings.Foraging;
 import com.StardewValley.models.goods.recipes.CookingRecipeType;
 import com.StardewValley.models.goods.recipes.CraftingRecipeType;
 import com.StardewValley.models.goods.tools.Tool;
@@ -582,6 +585,19 @@ public class GameView implements Screen, InputProcessor {
                 initCraftingWindow(player.getInHandGood());
                 return true;
             }
+            else if (player.getCoordinate().equals(coordinate) &&
+                !player.getInHandGood().isEmpty() &&
+                player.getInHandGood().getLast() instanceof Food) {
+
+                Message message = new Message(new HashMap<>() {{
+                    put("function", "eat");
+                    put("arguments", AppClient.getCurrentPlayer().getInHandGood().getLast().getName());
+                }}, Message.Type.command);
+                Message responseMessage = AppClient.getServerHandler().sendAndWaitForResponse(message);
+                methodUseMessage(responseMessage);
+                return true;
+            }
+
         }
 
         if (selectedTile.findGood("ShippingBin") != null) {
@@ -590,20 +606,67 @@ public class GameView implements Screen, InputProcessor {
         }
 
         if (!AppClient.getCurrentPlayer().getInHandGood().isEmpty() &&
-            AppClient.getCurrentPlayer().getInHandGood().getLast() instanceof Tool &&
             playerTile.getTileType() != TileType.PLAIN && selectedTile.getTileType() != TileType.GREEN_HOUSE &&
             playerTile.getTileType() != TileType.PLAYER_BUILDING) {
 
-            Tile tile = Map.findTile(coordinate, AppClient.getCurrentGame());
+            if (AppClient.getCurrentPlayer().getInHandGood().getLast() instanceof Tool) {
+                Tile tile = Map.findTile(coordinate, AppClient.getCurrentGame());
 
-            assert tile != null;
-            Message message = new Message(new HashMap<>() {{
-                put("function", "toolsUse");
-                put("arguments", Coordinate.getDirection(playerTile.getCordinate(), tile.getCordinate()).toString());
-            }}, Message.Type.command);
-            Message responseMessage = AppClient.getServerHandler().sendAndWaitForResponse(message);
-            methodUseMessage(responseMessage);
+                assert tile != null;
+                Message message = new Message(new HashMap<>() {{
+                    put("function", "toolsUse");
+                    put("arguments", Coordinate.getDirection(playerTile.getCordinate(), tile.getCordinate()).toString());
+                }}, Message.Type.command);
+                Message responseMessage = AppClient.getServerHandler().sendAndWaitForResponse(message);
+                methodUseMessage(responseMessage);
+            }
+            else if (AppClient.getCurrentPlayer().getInHandGood().getLast() instanceof Farming ||
+                AppClient.getCurrentPlayer().getInHandGood().getLast() instanceof Foraging) {
+                Tile tile = Map.findTile(coordinate, AppClient.getCurrentGame());
+
+                assert tile != null;
+                Message message = new Message(new HashMap<>() {{
+                    put("function", "plantSeed");
+                    put("arguments", new ArrayList<>(Arrays.asList(
+                        AppClient.getCurrentPlayer().getInHandGood().getLast().getName(),
+                        Coordinate.getDirection(playerTile.getCordinate(), tile.getCordinate()).toString())));
+                }}, Message.Type.command);
+                Message responseMessage = AppClient.getServerHandler().sendAndWaitForResponse(message);
+                methodUseMessage(responseMessage);
+            }
+            else if (AppClient.getCurrentPlayer().getInHandGood().getLast().getType() == ProductType.SPEED_GRO ||
+                AppClient.getCurrentPlayer().getInHandGood().getLast().getType() == ProductType.BASIC_RETAINING_SOIL ||
+                AppClient.getCurrentPlayer().getInHandGood().getLast().getType() == ProductType.QUALITY_RETAINING_SOIL ||
+                AppClient.getCurrentPlayer().getInHandGood().getLast().getType() == ProductType.DELUXE_RETAINING_SOIL) {
+
+                Tile tile = Map.findTile(coordinate, AppClient.getCurrentGame());
+
+                assert tile != null;
+                Message message = new Message(new HashMap<>() {{
+                    put("function", "fertilize");
+                    put("arguments", new ArrayList<>(Arrays.asList(
+                        AppClient.getCurrentPlayer().getInHandGood().getLast().getName(),
+                        Coordinate.getDirection(playerTile.getCordinate(), tile.getCordinate()).toString())));
+                }}, Message.Type.command);
+                Message responseMessage = AppClient.getServerHandler().sendAndWaitForResponse(message);
+                methodUseMessage(responseMessage);
+            }
+            else {
+                Tile tile = Map.findTile(coordinate, AppClient.getCurrentGame());
+
+                assert tile != null;
+                Message message = new Message(new HashMap<>() {{
+                    put("function", "placeItem");
+                    put("arguments", new ArrayList<>(Arrays.asList(
+                        AppClient.getCurrentPlayer().getInHandGood().getLast().getName(),
+                        Coordinate.getDirection(playerTile.getCordinate(), tile.getCordinate()).toString())));
+                }}, Message.Type.command);
+                Message responseMessage = AppClient.getServerHandler().sendAndWaitForResponse(message);
+                methodUseMessage(responseMessage);
+            }
         }
+
+
         if (petsClicking(button, tileX, tileY)) {
             return true;
         }
@@ -1756,7 +1819,7 @@ public class GameView implements Screen, InputProcessor {
                 Coordinate coordinate = new Coordinate(x, y);
                 Tile tile = Map.findTile(coordinate, AppClient.getCurrentGame());
                 switch (tile.getTileType()) {
-                    case TileType.FARM, TileType.PLOWED_FARM, TileType.PLAIN -> {
+                    case TileType.FARM, TileType.PLOWED_FARM, TileType.PLAIN, TileType.QUARRY -> {
                         drawGood(tile);
                     }
                 }
@@ -1851,7 +1914,9 @@ public class GameView implements Screen, InputProcessor {
         if ((good = tile.doesHasTree()) != null ||
             (good = tile.doesHasMineral()) != null ||
             (good = tile.doesHasTreeSapling()) != null ||
-            (good = tile.doesHasSeed()) != null) {
+            (good = tile.doesHasSeed()) != null ||
+            (good = tile.doesHasFood()) != null ||
+            (good = tile.doesHasProduct()) != null) {
             Texture texture = new Texture(good.getType().imagePath());
             Main.getBatch().draw(texture, coordinate.getX() * scaledSize,
                 coordinate.getY() * scaledSize, texture.getWidth(), texture.getHeight());
@@ -4041,8 +4106,21 @@ public class GameView implements Screen, InputProcessor {
         exitButton.addListener(new ClickListener() {
            @Override
            public void clicked(InputEvent event, float x, float y) {
-//               Result res = controller.exitGame();
-//               messageLabel.setText(res.message());
+               if (!AppClient.getCurrentPlayer().getPlayerUsername().equals(
+                       AppClient.getCurrentGame().getGameAdmin().getUsername()
+               )) {
+                   messageLabel.setText("Admin player can just exit the game!");
+                   return;
+               }
+
+               Message message = new Message(new HashMap<>() {{
+                   put("function", "exitGame");
+                   put("arguments", "Admin");
+               }}, Message.Type.command);
+               Message responseMessage = AppClient.getServerHandler().sendAndWaitForResponse(message);
+               methodUseMessage(responseMessage);
+
+               messageLabel.setText(responseMessage.getFromBody("message"));
            }
         });
 
@@ -4052,8 +4130,24 @@ public class GameView implements Screen, InputProcessor {
         textButton.addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y) {
+                if (!AppClient.getCurrentPlayer().getPlayerUsername().equals(
+                        AppClient.getCurrentGame().getGameAdmin().getUsername()
+                )) {
+                    messageLabel.setText("Admin player can just start the force terminate the game!");
+                    return;
+                }
+
+                Message message = new Message(new HashMap<>() {{
+                    put("function", "forceTerminate");
+                    put("arguments", "Admin");
+                }}, Message.Type.command);
+                Message responseMessage = AppClient.getServerHandler().sendAndWaitForResponse(message);
+                methodUseMessage(responseMessage);
+
+                messageLabel.setText(responseMessage.getFromBody("message"));
+
                 closeMainTable();
-                initTerminateWindow(0);
+                initTerminateWindow();
             }
         });
 
@@ -4064,8 +4158,9 @@ public class GameView implements Screen, InputProcessor {
         removePlayerButton.addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y) {
+                //TODO NADER
                 closeMainTable();
-                initRemovePlayerWindow();
+//                initRemovePlayerWindow();
             }
         });
 
@@ -4166,11 +4261,12 @@ public class GameView implements Screen, InputProcessor {
         }
     }
 
-    public void initTerminateWindow(int playerNumber) {
+    Window terminateWindow = null;
+    public void initTerminateWindow() {
 //        AppClient.getCurrentGame().setCurrentPlayer(AppClient.getCurrentGame().getPlayers().get(playerNumber));
         //TODO
         Player player = AppClient.getCurrentPlayer();
-        Window terminateWindow = new Window("", skin, "Letter");
+        terminateWindow = new Window("", skin, "Letter");
         terminateWindow.setSize(1000, 500);
         terminateWindow.setPosition(
             (staticStage.getWidth() - terminateWindow.getWidth()) / 2,
@@ -4180,43 +4276,67 @@ public class GameView implements Screen, InputProcessor {
         Label terminateMessageLabel = new Label(player.getPlayerUsername() + ", Are you agree to terminate the game?", skin);
         TextButton yesButton = new TextButton("Yes", skin);
         TextButton noButton = new TextButton("No", skin);
-        TextButton backButton = new TextButton("Back", skin);
 
-        terminateWindow.add(terminateMessageLabel).colspan(3).fillX().expandX().center().row();
+        terminateWindow.add(terminateMessageLabel).colspan(2).fillX().expandX().center().row();
         terminateWindow.add(yesButton).fillX().padTop(10);
         terminateWindow.add(noButton).fillX().padTop(10);
-        terminateWindow.add(backButton).fillX().padTop(10).row();
 
         yesButton.addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y) {
+                Message message = new Message(new HashMap<>() {{
+                    put("function", "forceTerminate");
+                    put("arguments", "YES");
+                }}, Message.Type.command);
+                Message responseMessage = AppClient.getServerHandler().sendAndWaitForResponse(message);
+                methodUseMessage(responseMessage);
+
                 terminateWindow.remove();
-                if (playerNumber == 3) {
-                    //TODO
-                    //controller.forceTerminate();
-                }
-                else
-                    initTerminateWindow(playerNumber + 1);
+                terminateWindow = null;
+                updateTerminate();
             }
         });
 
         noButton.addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y) {
-                terminateWindow.remove();
-            }
-        });
+                Message message = new Message(new HashMap<>() {{
+                    put("function", "forceTerminate");
+                    put("arguments", "NO");
+                }}, Message.Type.command);
+                Message responseMessage = AppClient.getServerHandler().sendAndWaitForResponse(message);
+                methodUseMessage(responseMessage);
 
-        backButton.addListener(new ClickListener() {
-            @Override
-            public void clicked(InputEvent event, float x, float y) {
                 terminateWindow.remove();
-                if (playerNumber > 0)
-                    initTerminateWindow(playerNumber - 1);
+                terminateWindow = null;
+                updateTerminate();
             }
         });
 
         staticStage.addActor(terminateWindow);
+    }
+
+    public void updateTerminate() {
+        while(true) {
+            Message message = new Message(new HashMap<>() {{
+                put("function", "getUpdatedTermination");
+                put("arguments", "");
+            }}, Message.Type.command);
+            Message responseMessage = AppClient.getServerHandler().sendAndWaitForResponse(message);
+            methodUseMessage(responseMessage);
+
+            if (responseMessage.getFromBody("message").equals("Game will be alive!")) {
+                break;
+            }
+            if (responseMessage.getFromBody("message").equals("Game is terminated!")) {
+                AppClient.setCurrentGame(null);
+                AppClient.setCurrentPlayer(null);
+
+                Main.getMain().getScreen().dispose();
+                Main.getMain().setScreen(new GameMenuView(skin));
+                break;
+            }
+        }
     }
 
     public void initJournalWindow() {
@@ -5357,11 +5477,34 @@ public class GameView implements Screen, InputProcessor {
     }
 
     public void updateGameObject() {
+        if (terminateWindow != null)
+            return;
+
         Message message2 = new Message(new HashMap<>() {{
             put("function", "getUpdatedGame");
             put("arguments", "");
         }}, Message.Type.command);
         Message responseMessage2 = AppClient.getServerHandler().sendAndWaitForResponse(message2);
+
+        if (responseMessage2.getFromBody("message").equals("exitGame")) {
+            Message message = new Message(new HashMap<>() {{
+                put("function", "exitGame");
+                put("arguments", "");
+            }}, Message.Type.command);
+            Message responseMessage = AppClient.getServerHandler().sendAndWaitForResponse(message);
+            methodUseMessage(responseMessage);
+
+            AppClient.setCurrentGame(null);
+            AppClient.setCurrentPlayer(null);
+            Main.getMain().getScreen().dispose();
+            Main.getMain().setScreen(new GameMenuView(skin));
+            return;
+        }
+        if (responseMessage2.getFromBody("message").equals("forceTerminate")) {
+            initTerminateWindow();
+            return;
+        }
+
         Object msgObj = responseMessage2.getFromBody("message");
         Game userGame;
         if (msgObj instanceof String) {

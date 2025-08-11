@@ -9,6 +9,7 @@ import com.StardewValley.models.interactions.User;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.HashMap;
 
 public class AppServer {
     private static ClientListener clientListener;
@@ -21,11 +22,17 @@ public class AppServer {
 
     private final static ArrayList<Game> games = new ArrayList<>();
 
+    private final static ArrayList<Game> offlineGames = new ArrayList<>();
+
+    private final static HashMap<Game, ArrayList<Boolean>> waitTerminateGames = new HashMap<>();
+
     private final static ArrayList<Labi> labies = new ArrayList<>();
 
     private final static ArrayList<Pair<Labi, ArrayList<Pair<User, Integer>>>> waitingLabies = new ArrayList<>();
 
     private final static ArrayList<ClientHandler> clientHandlers = new ArrayList<>();
+
+    private final static Object lock = new Object();
 
     public static void start() throws IOException {
         if (clientListener != null && !clientListener.isAlive())
@@ -85,4 +92,15 @@ public class AppServer {
         return waitingLabies;
     }
 
+    public static ArrayList<Game> getOfflineGames() {
+        return offlineGames;
+    }
+
+    public static Object getLock() {
+        return lock;
+    }
+
+    public static HashMap<Game, ArrayList<Boolean>> getWaitTerminateGames() {
+        return waitTerminateGames;
+    }
 }
