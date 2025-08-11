@@ -17,7 +17,6 @@ import java.util.stream.Collectors;
 
 public abstract class Weather {
     public void thunder(int x, int y, ClientHandler handler) {
-//        App.getCurrentGame().getController().getGameView().showThunder();
         // TODO Parsa
         Coordinate coordinate = new Coordinate(x, y);
         if(handler.getClientPlayer().getCoordinate().equals(coordinate)){

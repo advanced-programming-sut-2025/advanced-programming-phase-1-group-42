@@ -5185,7 +5185,7 @@ public class GameView implements Screen, InputProcessor {
 
     public void renderClock() {
 
-        clockHandImage.setRotation(180 - ((currentTime.getTime() - 9) * 14));
+
 
         String currentWeatherName = AppClient.getCurrentGame().getWeather().getName();
         String currentSeasonName = AppClient.getCurrentGame().getDateTime().getSeason().getName();
@@ -5194,6 +5194,7 @@ public class GameView implements Screen, InputProcessor {
         int currentTimeOfDay = AppClient.getCurrentGame().getDateTime().getTime();
         int currentNetWorth = AppClient.getCurrentPlayer().getWallet().getBalance();
 
+        clockHandImage.setRotation(180 - ((currentTimeOfDay - 9) * 14));
 
         if(currentNetWorth != lastNetWorth) {
             int netWorth = currentNetWorth;
