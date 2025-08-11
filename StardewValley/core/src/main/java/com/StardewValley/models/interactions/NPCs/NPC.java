@@ -116,7 +116,6 @@ public class NPC {
             }
         }
 
-        //TODO Nader
 //        friendships.add(new NPCFriendship(player,this));
 //        for (NPCFriendship friendship : friendships) {
 //            if (friendship.getPlayer().equals(player)) {

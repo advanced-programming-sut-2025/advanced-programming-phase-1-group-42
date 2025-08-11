@@ -96,6 +96,7 @@ public class GameController extends Controller {
                 }
 
                 clientHandler.getClientGame().getDateTime().timeFlow(clientHandler);
+                clientHandler.getClientGame().getPlayers().forEach(player -> {player.setShowEmote("");});
             }
         });
         timeFlowThread.start();
@@ -105,6 +106,11 @@ public class GameController extends Controller {
     public Message handleMessage(Message message) {
         if (message.getType() == Message.Type.command) {
             switch ((String) message.getFromBody("function")) {
+                case "showEmote" -> {
+                    String emote = message.getFromBody("function");
+                    clientHandler.getClientPlayer().setShowEmote(emote);
+                    return sendResultMessage(new Result(true, ""));
+                }
                 case "removeItemsFromFridge" -> {
                     ArrayList<String> arguments = message.getFromBody("arguments");
                     clientHandler.getClientPlayer().getFridge().removeItemsFromFridge(
@@ -511,8 +517,8 @@ public class GameController extends Controller {
         y = y.trim();
         int xInt = Integer.parseInt(x);
         int yInt = Integer.parseInt(y);
-        // TODO parsa
-//        clientHandler.getClientGame().getWeather().thunder(xInt, yInt, clientHandler);
+
+        //        clientHandler.getClientGame().getWeather().thunder(xInt, yInt, clientHandler);
         return new Result(true, "");
     }
 

@@ -74,12 +74,21 @@ public class Player {
     private Fridge fridge = new Fridge();
 
     private ArrayList<Pair<Integer, Good>> artisansGoodTime = new ArrayList<>();
+    private String showEmote = "";
 
     public void setFarm(Farm farm) {
         this.farm = farm;
         this.coordinate = new Coordinate(farm.getFarmBuildings().getFirst().getStartCordinate().getX() + 5,
                 farm.getFarmBuildings().getFirst().getStartCordinate().getY() + 2);
         this.inHandGood = inventory.getList().getFirst();
+    }
+
+    public String getShowEmote() {
+        return showEmote;
+    }
+
+    public void setShowEmote(String showEmote) {
+        this.showEmote = showEmote;
     }
 
     public Farm getFarm() {

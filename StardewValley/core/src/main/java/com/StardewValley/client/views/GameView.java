@@ -2,12 +2,10 @@ package com.StardewValley.client.views;
 
 import com.StardewValley.client.Main;
 import com.StardewValley.client.AppClient;
-import com.StardewValley.models.Assets;
 import com.StardewValley.models.JSONUtils;
 import com.StardewValley.models.Message;
 import com.StardewValley.models.Pair;
 import com.StardewValley.models.enums.Season;
-import com.StardewValley.models.enums.TileAssets;
 import com.StardewValley.models.enums.TileType;
 import com.StardewValley.models.game_structure.*;
 import com.StardewValley.models.game_structure.Game;
@@ -271,10 +269,6 @@ public class GameView implements Screen, InputProcessor {
 
         selectedPlayer = null;
 
-        // add Quests
-        for (QuestType type : QuestType.values()) {
-            AppClient.getCurrentGame().getQuests().add(new Quest(type));
-        }
 
         playersSprite = new ArrayList<>();
         for (Player player : AppClient.getCurrentGame().getPlayers()) {
@@ -3894,7 +3888,9 @@ public class GameView implements Screen, InputProcessor {
     public void initQuestWindow() {
         if (questWindow != null) {
             questWindow.remove();
+            questWindow = null;
         }
+
 
         questWindow = new Window("Quests", skin, "Letter");
         questWindow.setSize(1000, 600);
@@ -4620,8 +4616,14 @@ public class GameView implements Screen, InputProcessor {
         button.addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y) {
-                //TODO Parsa
-                showEmote(emoteName);
+                Message message = new Message(new HashMap<>() {{
+                    put("function", "showEmote");
+                    put("arguments", emoteName);
+                }}, Message.Type.command);
+                Message responseMessage = AppClient.getServerHandler().sendAndWaitForResponse(message);
+                methodUseMessage(responseMessage);
+
+//                showEmote(emoteName);
                 button.getStage().getRoot().findActor("emojiWindow").remove(); // Close window
             }
         });
@@ -4649,7 +4651,7 @@ public class GameView implements Screen, InputProcessor {
     private float emoteStateTime = 0f;
     private boolean showEmote = false;
 
-    private void showEmote(String emoteName) {
+    public void showEmote(String emoteName) {
         Texture popup_1Frame = new Texture("assets/GameAssets/Popup/popup1.png");
         Texture popup_2Frame = new Texture("assets/GameAssets/Popup/popup2.png");
         Texture popup_3Frame = new Texture("assets/GameAssets/Popup/popup3.png");
@@ -5343,7 +5345,7 @@ public class GameView implements Screen, InputProcessor {
         viewController.handleInput();
         viewController.updateInventory();
         viewController.refreshLeaderBoard();
-        viewController.updatePlayer();
+        viewController.updatePlayers();
         updateThunder();
 
     }

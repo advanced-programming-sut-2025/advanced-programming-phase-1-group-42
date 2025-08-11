@@ -2,8 +2,6 @@ package com.StardewValley.client.views;
 
 import com.StardewValley.client.AppClient;
 import com.StardewValley.client.Main;
-import com.StardewValley.models.Assets;
-import com.StardewValley.models.JSONUtils;
 import com.StardewValley.models.Message;
 import com.StardewValley.models.Pair;
 import com.StardewValley.models.enums.LeaderboardSortType;
@@ -227,7 +225,7 @@ public class GameViewController {
                 gameView.getChatRoomWindow().remove();
                 gameView.setChatRoomWindow(null);
             }
-
+            return;
         }
 
         if (gameView.getChatRoomWindow()==null) {
@@ -1133,10 +1131,14 @@ public class GameViewController {
     }
 
 
-    public void updatePlayer() {
+    public void updatePlayers() {
         int ptr = 0;
         for (Player player : AppClient.getCurrentGame().getPlayers()) {
             if(player.isRenderAble()) {
+                if (!player.getShowEmote().isEmpty()) {
+                    gameView.showEmote(player.getShowEmote());
+                }
+
                 Pair<Sprite, Sprite> playerSprite = gameView.getPlayersSprite().get(ptr++);
                 playerSprite.first().setPosition(player.getCoordinate().getX() * 40,
                     player.getCoordinate().getY() * 40);
