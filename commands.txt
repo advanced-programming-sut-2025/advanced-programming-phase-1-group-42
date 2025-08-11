@@ -1,2 +1,8 @@
 
 
+cheat add item -m bread -c 1
+cheat add item -m bread -c 1
+cheat add item -m bread -c 1
+cheat add item -n bread -c 1
+cheat add item -n bread -c 1
+cheat add item -n Bread -c 1

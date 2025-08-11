@@ -243,8 +243,8 @@ public class GameView implements Screen, InputProcessor {
         this.table.add(journalButton).padLeft(-400).height(70).padTop(5).width(250).row();
         this.table.add(tradeButton).padLeft(-525).height(70).padTop(6).width(125);
         this.table.add(tradeInboxButton).padLeft(-1650).height(70).width(125).row();
-        this.table.add(inventoryTable).padTop(995).padBottom(-200).padLeft(-50);
-        this.table.add(controller.getInventoryController().getProgressBar()).padTop(300).padLeft(800);
+        this.table.add(inventoryTable).padTop(895).padBottom(-200).padLeft(-50);
+        this.table.add(controller.getInventoryController().getProgressBar()).padTop(200).padLeft(800);
         this.table.row();
 
 
@@ -711,6 +711,26 @@ public class GameView implements Screen, InputProcessor {
                         textFieldMessage.setText(result.message());
                     }
                 });
+
+                TextButton outButton = new TextButton("Out", style);
+                outButton.setHeight(scaledSize);
+                outButton.pad(5);
+                animalWindow.add(outButton).expandX().fillX().pad(3).padTop(1).row();
+
+                Animal finalAnimal = animal;
+                outButton.addListener(new ChangeListener() {
+                    @Override
+                    public void changed(ChangeEvent event, Actor actor) {
+                        if (!finalAnimal.isOutside()) {
+                            finalAnimal.setCoordinate(new Coordinate(finalAnimal.getCoordinate().getX()+12, finalAnimal.getCoordinate().getY()+12));
+                        } else {
+                            finalAnimal.setWentOutside(true);
+                            finalAnimal.setCoordinate(new Coordinate(finalAnimal.getCoordinate().getX()-12, finalAnimal.getCoordinate().getY()-12));
+                        }
+                    }
+                });
+
+
 
                 animalWindow.setPosition(
                     animal.getCoordinate().getX() * scaledSize + 30,
@@ -1568,7 +1588,6 @@ public class GameView implements Screen, InputProcessor {
         }
 
         drawFarmingBuilding();
-        drawAnimals();
 
         for (int x = min((midX + Gdx.graphics.getWidth() / 2) / scaledSize + 1, 150) - 1; x >= max((midX - Gdx.graphics.getWidth() / 2) / scaledSize - 5, 0); x--) {
             for (int y = min((midY + Gdx.graphics.getHeight() / 2) / scaledSize + 1, 160) - 1; y >= max((midY - Gdx.graphics.getHeight() / 2) / scaledSize - 5, 0); y--) {
@@ -1585,6 +1604,7 @@ public class GameView implements Screen, InputProcessor {
 
         drawInventory();
         drawNPCs();
+        drawAnimals();
         isPlayerMoved();
 
     }
