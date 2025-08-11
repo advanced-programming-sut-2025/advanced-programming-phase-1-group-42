@@ -5,19 +5,19 @@ import com.badlogic.gdx.graphics.Texture;
 
 public enum FarmBuildingTypes {
 
-    HOME("Home", -1, new Pair<>(20, 20), -1, -1, -1, new Texture("GameAssets/Flooring/Flooring_14.png")
+    HOME("Home", -1, new Pair<>(20, 20), -1, -1, -1, new Texture("GameAssets/Player_Building/House.png")
     , new Texture("GameAssets/Flooring/Flooring_16.png")),
-    BARN("Barn", 4, new Pair<>(7, 4), 6000, 350, 150, new Texture("GameAssets/FarmBuildings/Barn.png"),
+    BARN("Barn", 4, new Pair<>(7, 4), 6000, 350, 150, new Texture("GameAssets/FarmBuildings/Nan.png"),
         new Texture("GameAssets/FarmBuildings/interior/Barn_Interior.png")),
-    BIG_BARN("Big_Barn", 8, new Pair<>(7, 4), 12000, 450, 200, new Texture("GameAssets/FarmBuildings/Big_Barn.png"),
+    BIG_BARN("Big_Barn", 8, new Pair<>(7, 4), 12000, 450, 200, new Texture("GameAssets/FarmBuildings/Nan.png"),
         new Texture("GameAssets/FarmBuildings/interior/Big_Barn_Interior.png")),
-    DELUXE_BARN("Deluxe_Barn", 12, new Pair<>(7, 4), 25000, 550, 300, new Texture("GameAssets/FarmBuildings/Deluxe_Barn.png"),
+    DELUXE_BARN("Deluxe_Barn", 12, new Pair<>(7, 4), 25000, 550, 300, new Texture("GameAssets/FarmBuildings/Nan.png"),
         new Texture("GameAssets/FarmBuildings/interior/Deluxe_Barn_Interior.png")),
-    COOP("Coop", 4, new Pair<>(6, 3), 4000, 300, 100, new Texture("GameAssets/FarmBuildings/Coop.png"),
+    COOP("Coop", 4, new Pair<>(6, 3), 4000, 300, 100, new Texture("GameAssets/FarmBuildings/Nan.png"),
         new Texture("GameAssets/FarmBuildings/interior/Coop_interior.png")),
-    BIG_COOP("Big_Coop", 8, new Pair<>(6, 3), 10000, 400, 150, new Texture("GameAssets/FarmBuildings/Big_Coop.png"),
+    BIG_COOP("Big_Coop", 8, new Pair<>(6, 3), 10000, 400, 150, new Texture("GameAssets/FarmBuildings/Nan.png"),
         new Texture("GameAssets/FarmBuildings/interior/Big_Coop_Interior.png")),
-    DELUXE_COOP("Deluxe_Coop", 12, new Pair<>(6, 3), 20000, 500, 200, new Texture("GameAssets/FarmBuildings/Deluxe_Coop.png"),
+    DELUXE_COOP("Deluxe_Coop", 12, new Pair<>(6, 3), 20000, 500, 200, new Texture("GameAssets/FarmBuildings/Nan.png"),
         new Texture("GameAssets/FarmBuildings/interior/Deluxe_Coop_Interior.png"));
 
     private final String name;

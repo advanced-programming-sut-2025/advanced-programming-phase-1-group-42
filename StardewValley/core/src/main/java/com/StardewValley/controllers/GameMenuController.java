@@ -205,6 +205,8 @@ public class GameMenuController extends Controller {
         if (gameView.getChatRoomWindow()==null) {
             if(Gdx.input.isKeyJustPressed(Input.Keys.U)) {
                 App.getCurrentGame().getCurrentPlayer().getWallet().increaseBalance(1000);
+                cheatAddItem("Wood" , String.valueOf(1000));
+                cheatAddItem("Stone" , String.valueOf(1000));
             }
 
         boolean flag = false;
@@ -265,6 +267,7 @@ public class GameMenuController extends Controller {
                 gameView.showThunder();
         }
         if (Gdx.input.isKeyJustPressed(Input.Keys.L)) {
+            App.getCurrentGame().getDateTime().timeFlow();
         }
         /// ///////////////////////////////////////////////////////////////
         if (Gdx.input.isKeyJustPressed(Input.Keys.C)) {
@@ -1811,20 +1814,20 @@ public class GameMenuController extends Controller {
 
 
     public Result eat(String foodName) {
-        foodName = foodName.trim();
-        Good food = null;
-        for (ArrayList<Good> goodArrayList : App.getCurrentGame().getCurrentPlayer().getInventory().getList()) {
-            Iterator<Good> iterator = goodArrayList.iterator();
-            while (iterator.hasNext()) {
-                food = iterator.next();
-                if (food.getName().equals(foodName)) {
-                    if (food instanceof Food) {
-                        iterator.remove();
-                        break;
-                    }
-                }
-            }
-        }
+//        foodName = foodName.trim();
+        Good food = App.getCurrentGame().getCurrentPlayer().getInHandGood().removeLast();
+//        for (ArrayList<Good> goodArrayList : App.getCurrentGame().getCurrentPlayer().getInventory().getList()) {
+//            Iterator<Good> iterator = goodArrayList.iterator();
+//            while (iterator.hasNext()) {
+//                food = iterator.next();
+//                if (food.getName().equals(foodName)) {
+//                    if (food instanceof Food) {
+//                        iterator.remove();
+//                        break;
+//                    }
+//                }
+//            }
+//        }
         if (food == null) {
             return new Result(false, "This item is not eatable!");
         }
@@ -1842,16 +1845,15 @@ public class GameMenuController extends Controller {
     }
 
 
-    // Parsa
     // Animals & Fishing methods
     public Result buildBuilding(String buildingName, String x, String y) {
         Coordinate coordinate = App.getCurrentGame().getCurrentPlayer().getCoordinate();
         Tile tile = App.getCurrentGame().getMap().findTile(coordinate);
-        if (tile.getTileType() != TileType.GAME_BUILDING)
-            return new Result(false, "You should be in a game building to show all products!");
-        if (!App.getCurrentGame().getMap().findGameBuilding(coordinate).isInWorkingHours()) {
-            return new Result(false, App.getCurrentGame().getMap().findGameBuilding(coordinate).getName() + " hours have ended for today!");
-        }
+//        if (tile.getTileType() != TileType.GAME_BUILDING)
+//            return new Result(false, "You should be in a game building to show all products!");
+//        if (!App.getCurrentGame().getMap().findGameBuilding(coordinate).isInWorkingHours()) {
+//            return new Result(false, App.getCurrentGame().getMap().findGameBuilding(coordinate).getName() + " hours have ended for today!");
+//        }
 
         buildingName = buildingName.trim();
         x = x.trim();

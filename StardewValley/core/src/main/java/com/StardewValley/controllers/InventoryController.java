@@ -58,7 +58,12 @@ public class InventoryController {
                         if (quadruple.b == finalImage) {
                             quadruple.a.setChecked(true);
                             if (gameView.getFridgeOpen()) {
-                                App.getCurrentGame().getCurrentPlayer().getFridge().addItemToFridge(App.getCurrentGame().getCurrentPlayer().getInventory().getList().get(i).getFirst());
+                                if(!App.getCurrentGame().getCurrentPlayer().getInventory().getList().get(i).getFirst().getName().isEmpty()) {
+                                    App.getCurrentGame().getCurrentPlayer().getFridge().addItemToFridge(App.getCurrentGame().getCurrentPlayer().getInventory().getList().get(i).getFirst());
+                                    App.getCurrentGame().getCurrentPlayer().getInventory().removeItemsFromInventory
+                                        (App.getCurrentGame().getCurrentPlayer().getInventory().getList().get(i).getFirst().getType(), 1);
+                                    gameView.initFridgeWindow();
+                                }
                             } else {
                                 App.getCurrentGame().getCurrentPlayer().setInHandGood(
                                     App.getCurrentGame().getCurrentPlayer().getInventory().getList().get(i));

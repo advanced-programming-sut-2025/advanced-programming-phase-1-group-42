@@ -67,3 +67,25 @@ cheat add item -n Carrot -c 12
 cheat add item -n Carrot -c 12
 cheat add item -n Carrot -c 12
 cheat add 12 dollars
+cheat add item -n Wood -c 500
+cheat give item -n Carrot_Seed -c 1
+cheat add item -n Coal -c 200
+cheat add item -n Coal -c 100
+cheat add -n Coal -c 200
+cheat add item -n Coal -c 200
+ 
+cheat add item -n Carrot_seeds -c 5
+cheat add item -n Blueberry_Seeds -c 4
+cheat add -n Bomb -c 2
+cheat add item -n Wheat_Flour -c 4
+cheat add item -n Wheat_Flour -c 10
+cheat add item -n Bread -c 4
+ 
+cheat add item -n Stone -c 1000
+cheat add item -n Wood -c 2000
+cheat add item -n Stone -c 1000
+cheat add item -n Wood -c 1000
+cheat add item -n Stone -c 1000
+cheat add item -n Wood -c 1000
+cheat add item -n Stone -c 1000
+cheat add item -n Wood -c 1000

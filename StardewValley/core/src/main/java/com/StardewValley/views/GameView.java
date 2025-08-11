@@ -16,8 +16,11 @@ import com.StardewValley.models.goods.Good;
 import com.StardewValley.models.goods.GoodType;
 import com.StardewValley.models.goods.craftings.Crafting;
 import com.StardewValley.models.goods.craftings.CraftingType;
+import com.StardewValley.models.goods.farmings.Farming;
 import com.StardewValley.models.goods.fishs.Fish;
+import com.StardewValley.models.goods.foods.Food;
 import com.StardewValley.models.goods.foods.FoodType;
+import com.StardewValley.models.goods.foragings.Foraging;
 import com.StardewValley.models.goods.foragings.ForagingMineralType;
 import com.StardewValley.models.goods.recipes.CookingRecipeType;
 import com.StardewValley.models.goods.recipes.CraftingRecipeType;
@@ -415,7 +418,14 @@ public class GameView implements Screen, InputProcessor {
                 player.getInHandGood().getLast() instanceof Crafting) {
                 initCraftingWindow(player.getInHandGood());
                 return true;
+            } else if (player.getCoordinate().equals(coordinate) &&
+                !player.getInHandGood().isEmpty() &&
+                player.getInHandGood().getLast() instanceof Food) {
+
+                controller.eat(player.getInHandGood().getLast().getName());
+                return true;
             }
+
         }
 
         if (selectedTile.findGood("ShippingBin") != null) {
@@ -424,15 +434,45 @@ public class GameView implements Screen, InputProcessor {
         }
 
         if (!App.getCurrentGame().getCurrentPlayer().getInHandGood().isEmpty() &&
-            App.getCurrentGame().getCurrentPlayer().getInHandGood().getLast() instanceof Tool &&
             playerTile.getTileType() != TileType.PLAIN && selectedTile.getTileType() != TileType.GREEN_HOUSE &&
             playerTile.getTileType() != TileType.PLAYER_BUILDING) {
 
-            Tile tile = Map.findTile(coordinate);
+            if (App.getCurrentGame().getCurrentPlayer().getInHandGood().getLast() instanceof Tool) {
+                Tile tile = Map.findTile(coordinate);
 
-            assert tile != null;
-            controller.toolsUse(Coordinate.getDirection(playerTile.getCordinate(), tile.getCordinate()));
+                assert tile != null;
+                controller.toolsUse(Coordinate.getDirection(playerTile.getCordinate(), tile.getCordinate()));
+
+            }
+            else if (App.getCurrentGame().getCurrentPlayer().getInHandGood().getLast() instanceof Farming ||
+                App.getCurrentGame().getCurrentPlayer().getInHandGood().getLast() instanceof Foraging) {
+                Tile tile = Map.findTile(coordinate);
+
+                assert tile != null;
+                controller.plantSeed(App.getCurrentGame().getCurrentPlayer().getInHandGood().getLast().getName(),
+                    Coordinate.getDirection(playerTile.getCordinate(), tile.getCordinate()).toString());
+            }
+            else if (App.getCurrentGame().getCurrentPlayer().getInHandGood().getLast().getType() == ProductType.SPEED_GRO ||
+                App.getCurrentGame().getCurrentPlayer().getInHandGood().getLast().getType() == ProductType.BASIC_RETAINING_SOIL ||
+                App.getCurrentGame().getCurrentPlayer().getInHandGood().getLast().getType() == ProductType.QUALITY_RETAINING_SOIL ||
+                App.getCurrentGame().getCurrentPlayer().getInHandGood().getLast().getType() == ProductType.DELUXE_RETAINING_SOIL) {
+
+                Tile tile = Map.findTile(coordinate);
+
+                assert tile != null;
+                controller.fertilize(App.getCurrentGame().getCurrentPlayer().getInHandGood().getLast().getName(),
+                    Coordinate.getDirection(playerTile.getCordinate(), tile.getCordinate()).toString());
+            }
+            else {
+                Tile tile = Map.findTile(coordinate);
+
+                assert tile != null;
+                controller.placeItem(App.getCurrentGame().getCurrentPlayer().getInHandGood().getLast().getName(),
+                    Coordinate.getDirection(playerTile.getCordinate(), tile.getCordinate()).toString());
+
+            }
         }
+
         if (petsClicking(button, tileX, tileY)) return true;
         if (selectedTile.getTileType() == TileType.GREEN_HOUSE &&
             !App.getCurrentGame().getCurrentPlayer().getFarm().getGreenHouse().isAvailable()) {
@@ -705,13 +745,33 @@ public class GameView implements Screen, InputProcessor {
                                Table counterPanel, Label info, Table selectedPanel, ScrollPane scrollPane, Table content) {
         final FarmBuildingTypes[] selectedBuilding = {null};
 
+        final Result[] result = {new Result(false, "")};
+        Label text = new Label("" , skin);
+        text.setFontScale(0.4f);
+        // Table for X and Y input
+        Table coordTable = new Table();
+
+        Label xLabel = new Label("X:", skin);
+        TextField xField = new TextField("", skin);
+
+        Label yLabel = new Label("Y:", skin);
+        TextField yField = new TextField("", skin);
+
+        coordTable.add(xLabel).pad(5);
+        coordTable.add(xField).pad(5).row();
+
+        coordTable.add(yLabel).pad(5);
+        coordTable.add(yField).pad(5).row();
+
+        coordTable.add(text).pad(5).row();
+
+        selectedPanel.add(coordTable).row();
+
         purchaseButton.addListener(new ChangeListener() {
             @Override
             public void changed(ChangeEvent changeEvent, Actor actor) {
-
-                //TODO
-                //window
-
+                result[0] = controller.buildBuilding(selectedBuilding[0].getName(), xField.getText(), yField.getText());
+                text.setText(result[0].message());
             }
         });
 
@@ -726,7 +786,6 @@ public class GameView implements Screen, InputProcessor {
                         "required stone: " + farmBuildingType.getStone() + "\n" + "required wood: " + farmBuildingType.getWood());
                     selectedNameLabel.setFontScale(0.7f);
                     purchaseButton.setVisible(true);
-
                 }
             });
 
@@ -735,6 +794,7 @@ public class GameView implements Screen, InputProcessor {
                 .pad(5)
                 .row();
         }
+
         counterPanel.add(info)
             .width(250)
             .pad(5)
@@ -747,7 +807,6 @@ public class GameView implements Screen, InputProcessor {
             .center()
             .padBottom(40)
             .row();
-
 
         Table mainTable = new Table();
         mainTable.setFillParent(true);
@@ -780,6 +839,8 @@ public class GameView implements Screen, InputProcessor {
         final AnimalTypes[] selectedAnimal = {null};
         final ProductType[] selectedProductType = {null};
         final int[] selectedCount = {0};
+        TextField XField = new TextField(" " , skin);
+        TextField YField = new TextField(" " , skin);
 
         TextField animalName = new TextField("", skin);
 
@@ -1467,9 +1528,18 @@ public class GameView implements Screen, InputProcessor {
                     case TileType.PLAYER_BUILDING -> {
                         Tile backTile = Map.findTile(new Coordinate(coordinate.getX() - 1, coordinate.getY()));
                         Tile upTile = Map.findTile(new Coordinate(coordinate.getX(), coordinate.getY() - 1));
+//                        if (backTile.getTileType() != TileType.PLAYER_BUILDING && upTile.getTileType() != TileType.PLAYER_BUILDING) {
+//                            Main.getBatch().draw(TileAssets.HOUSE.getTexture(), x * scaledSize, y * scaledSize, 10 * scaledSize, 10 * scaledSize);
+//                        }
                         if (backTile.getTileType() != TileType.PLAYER_BUILDING && upTile.getTileType() != TileType.PLAYER_BUILDING) {
-                            Main.getBatch().draw(TileAssets.HOUSE.getTexture(), x * scaledSize, y * scaledSize, 10 * scaledSize, 10 * scaledSize);
+                            for (FarmBuilding farmBuilding : App.getCurrentGame().getCurrentPlayer().getFarm().getFarmBuildings()) {
+                                if (farmBuilding.isInsideBuilding(tile.getCordinate())) {
+                                    Main.getBatch().draw(farmBuilding.getType().getTexture(), x * scaledSize, y * scaledSize, 10 * scaledSize, 10 * scaledSize);
+                                }
+                            }
+                            //TileTextures.HOUSE.getImage()
                         }
+
                     }
                     case TileType.GREEN_HOUSE -> {
                         Tile backTile = Map.findTile(new Coordinate(coordinate.getX() - 1, coordinate.getY()));
@@ -1493,7 +1563,7 @@ public class GameView implements Screen, InputProcessor {
                 Coordinate coordinate = new Coordinate(x, y);
                 Tile tile = Map.findTile(coordinate);
                 switch (tile.getTileType()) {
-                    case TileType.FARM, TileType.PLOWED_FARM, TileType.PLAIN -> {
+                    case TileType.FARM, TileType.PLOWED_FARM, TileType.PLAIN , TileType.QUARRY -> {
                         drawGood(tile);
                     }
                 }
@@ -1690,12 +1760,15 @@ public class GameView implements Screen, InputProcessor {
         if ((good = tile.doesHasTree()) != null ||
             (good = tile.doesHasMineral()) != null ||
             (good = tile.doesHasTreeSapling()) != null ||
-            (good = tile.doesHasSeed()) != null) {
+            (good = tile.doesHasSeed()) != null ||
+            (good = tile.doesHasFood()) != null ||
+            (good = tile.doesHasProduct()) != null) {
             Texture texture = new Texture(good.getType().imagePath());
             Main.getBatch().draw(texture, coordinate.getX() * scaledSize,
                 coordinate.getY() * scaledSize, texture.getWidth(), texture.getHeight());
         }
     }
+
 
     private void drawAnimals() {
         for (Player player : App.getCurrentGame().getPlayers()) {
@@ -4833,6 +4906,8 @@ public class GameView implements Screen, InputProcessor {
         staticStage.addActor(dayOfMonthLabel);
         staticStage.addActor(timeOfDayLabel);
     }
+
+    Label buffError = new Label("",skin);
 
     public void renderClock() {
 

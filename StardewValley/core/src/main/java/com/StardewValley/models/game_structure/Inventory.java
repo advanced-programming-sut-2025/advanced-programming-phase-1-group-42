@@ -171,10 +171,10 @@ public class Inventory {
 
                     for (Quest quest : App.getCurrentGame().getCurrentPlayer().getPlayerQuests()) {
                         if (quest.getQuestType().getProductType().getName().equals(firstAddingGood.getName())) {
-                            quest.setCollectedNum(list.size());
+                            quest.setCollectedNum(addingGood.size());
                             for (Pair<Player, Integer> pair : quest.getMembers()) {
                                 if (pair.first().equals(App.getCurrentGame().getCurrentPlayer())) {
-                                    pair.setSecond(pair.second() + list.size());
+                                    pair.setSecond(pair.second() + addingGood.size());
                                     return true;
                                 }
                             }
