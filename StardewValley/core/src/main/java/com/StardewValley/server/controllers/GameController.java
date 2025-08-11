@@ -1301,19 +1301,7 @@ public class GameController extends Controller {
 
     public Result eat(String foodName) {
         foodName = foodName.trim();
-        Good food = null;
-        for (ArrayList<Good> goodArrayList : clientHandler.getClientPlayer().getInventory().getList()) {
-            Iterator<Good> iterator = goodArrayList.iterator();
-            while (iterator.hasNext()) {
-                food = iterator.next();
-                if (food.getName().equals(foodName)) {
-                    if (food instanceof Food) {
-                        iterator.remove();
-                        break;
-                    }
-                }
-            }
-        }
+        Good food = clientHandler.getClientPlayer().getInHandGood().removeLast();
         if (food == null) {
             return new Result(false, "This item is not eatable!");
         }
