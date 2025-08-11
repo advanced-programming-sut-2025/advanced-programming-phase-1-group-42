@@ -27,7 +27,7 @@ public class Blacksmith extends GameBuilding {
     private final ArrayList<Pair<ProductType, Integer>> upgradeIngredients = new ArrayList<>();
     private final ArrayList<Integer> dailyToolUpgradeLimit = new ArrayList<>();
     private final ArrayList<Integer> dailyTrashCanUpgradeLimit = new ArrayList<>();
-    private final ArrayList<Pair<GoodType, Integer>> stock = new ArrayList<>();
+    private final ArrayList<Pair<String, Integer>> stock = new ArrayList<>();
     private final static ArrayList<String> upgradeDescription = new ArrayList<>(
         Arrays.asList(
             "Copper Tool requirements:\nCopper_Bar: 5x",
@@ -60,10 +60,10 @@ public class Blacksmith extends GameBuilding {
         dailyTrashCanUpgradeLimit.addAll(Arrays.asList(1, 1, 1, 1));
 
         stock.addAll(Arrays.asList(
-            new Pair<>(ForagingMineralType.COPPER_ORE, Integer.MAX_VALUE),
-            new Pair<>(ForagingMineralType.IRON_ORE, Integer.MAX_VALUE),
-                new Pair<>(ProductType.COAL, Integer.MAX_VALUE),
-                new Pair<>(ForagingMineralType.GOLD_ORE, Integer.MAX_VALUE)
+            new Pair<>(ForagingMineralType.COPPER_ORE.getName(), Integer.MAX_VALUE),
+            new Pair<>(ForagingMineralType.IRON_ORE.getName(), Integer.MAX_VALUE),
+                new Pair<>(ProductType.COAL.getName(), Integer.MAX_VALUE),
+                new Pair<>(ForagingMineralType.GOLD_ORE.getName(), Integer.MAX_VALUE)
         ));
     }
 
@@ -127,9 +127,9 @@ public class Blacksmith extends GameBuilding {
 
     @Override
     public Result purchase(String productName, String count, ClientHandler clientHandler) {
-        Pair<GoodType, Integer> productPair = null;
-        for (Pair<GoodType, Integer> goodTypeIntegerPair : stock) {
-            if(goodTypeIntegerPair.first().getName().equals(productName)) {
+        Pair<String, Integer> productPair = null;
+        for (Pair<String, Integer> goodTypeIntegerPair : stock) {
+            if(goodTypeIntegerPair.first().equals(productName)) {
                 productPair = goodTypeIntegerPair;
                 break;
             }
@@ -142,9 +142,9 @@ public class Blacksmith extends GameBuilding {
 
     @Override
     public Pair<GoodType, Integer> findProduct(GoodType goodType) {
-        for (Pair<GoodType, Integer> goodTypeIntegerPair : stock) {
-            if (goodTypeIntegerPair.first().equals(goodType)) {
-                return goodTypeIntegerPair;
+        for (Pair<String, Integer> goodTypeIntegerPair : stock) {
+            if (goodTypeIntegerPair.first().equals(goodType.getName())) {
+                return new Pair<>(goodType, goodTypeIntegerPair.second());
             }
         }
         return null;

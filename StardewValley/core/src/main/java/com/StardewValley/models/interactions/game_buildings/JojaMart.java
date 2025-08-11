@@ -5,6 +5,7 @@ import com.StardewValley.models.Result;
 import com.StardewValley.models.enums.TileAssets;
 import com.StardewValley.models.game_structure.Coordinate;
 import com.StardewValley.models.game_structure.Tile;
+import com.StardewValley.models.goods.Good;
 import com.StardewValley.models.goods.GoodType;
 import com.StardewValley.models.goods.craftings.CraftingType;
 import com.StardewValley.models.goods.foods.FoodType;
@@ -20,7 +21,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 
 public class JojaMart extends GameBuilding {
-    private final ArrayList<ArrayList<Pair<GoodType, Integer>>> products;
+    private final ArrayList<ArrayList<Pair<String, Integer>>> products;
     private final ArrayList<String> stockParts;
 
     public static ArrayList<Tile> getExpectedTiles(ArrayList<Tile> tiles) {
@@ -39,66 +40,66 @@ public class JojaMart extends GameBuilding {
         this.products = new ArrayList<>();
         //Permanent Stock
         this.products.add(new ArrayList<>(Arrays.asList(
-                new Pair<>(ProductType.JOJA_MART, Integer.MAX_VALUE),
-                new Pair<>(ForagingSeedType.ANCIENT_SEEDS, 1),
-                new Pair<>(CraftingType.GRASS_STARTER, Integer.MAX_VALUE),
-                new Pair<>(FoodType.SUGAR, Integer.MAX_VALUE),
-                new Pair<>(FoodType.WHEAT_FLOUR, Integer.MAX_VALUE),
-                new Pair<>(FoodType.RICE, Integer.MAX_VALUE)
+                new Pair<>(ProductType.JOJA_MART.getName(), Integer.MAX_VALUE),
+                new Pair<>(ForagingSeedType.ANCIENT_SEEDS.getName(), 1),
+                new Pair<>(CraftingType.GRASS_STARTER.getName(), Integer.MAX_VALUE),
+                new Pair<>(FoodType.SUGAR.getName(), Integer.MAX_VALUE),
+                new Pair<>(FoodType.WHEAT_FLOUR.getName(), Integer.MAX_VALUE),
+                new Pair<>(FoodType.RICE.getName(), Integer.MAX_VALUE)
         )));
 
         // Spring Stock
         this.products.add(new ArrayList<>(Arrays.asList(
-                new Pair<>(ForagingSeedType.PARSNIP_SEEDS, 5),
-                new Pair<>(ForagingSeedType.BEAN_STARTER, 5),
-                new Pair<>(ForagingSeedType.CAULIFLOWER_SEEDS, 5),
-                new Pair<>(ForagingSeedType.POTATO_SEEDS, 5),
-                new Pair<>(ForagingSeedType.STRAWBERRY_SEEDS, 5),
-                new Pair<>(ForagingSeedType.TULIP_BULB, 5),
-                new Pair<>(ForagingSeedType.KALE_SEEDS, 5),
-                new Pair<>(ForagingSeedType.COFFEE_BEAN_SEEDS, 1),
-                new Pair<>(ForagingSeedType.CARROT_SEEDS, 10),
-                new Pair<>(ForagingSeedType.RHUBARB_SEEDS, 5),
-                new Pair<>(ForagingSeedType.JAZZ_SEEDS, 5)
+                new Pair<>(ForagingSeedType.PARSNIP_SEEDS.getName(), 5),
+                new Pair<>(ForagingSeedType.BEAN_STARTER.getName(), 5),
+                new Pair<>(ForagingSeedType.CAULIFLOWER_SEEDS.getName(), 5),
+                new Pair<>(ForagingSeedType.POTATO_SEEDS.getName(), 5),
+                new Pair<>(ForagingSeedType.STRAWBERRY_SEEDS.getName(), 5),
+                new Pair<>(ForagingSeedType.TULIP_BULB.getName(), 5),
+                new Pair<>(ForagingSeedType.KALE_SEEDS.getName(), 5),
+                new Pair<>(ForagingSeedType.COFFEE_BEAN_SEEDS.getName(), 1),
+                new Pair<>(ForagingSeedType.CARROT_SEEDS.getName(), 10),
+                new Pair<>(ForagingSeedType.RHUBARB_SEEDS.getName(), 5),
+                new Pair<>(ForagingSeedType.JAZZ_SEEDS.getName(), 5)
         )));
 
         // Summer Stock
         this.products.add(new ArrayList<>(Arrays.asList(
-                new Pair<>(ForagingSeedType.TOMATO_SEEDS, 5),
-                new Pair<>(ForagingSeedType.PEPPER_SEEDS, 5),
-                new Pair<>(ForagingSeedType.WHEAT_SEEDS, 10),
-                new Pair<>(ForagingSeedType.SUMMER_SQUASH_SEEDS, 10),
-                new Pair<>(ForagingSeedType.RADISH_SEEDS, 5),
-                new Pair<>(ForagingSeedType.MELON_SEEDS, 5),
-                new Pair<>(ForagingSeedType.HOPS_STARTER, 5),
-                new Pair<>(ForagingSeedType.POPPY_SEEDS, 5),
-                new Pair<>(ForagingSeedType.SPANGLE_SEEDS, 5),
-                new Pair<>(ForagingSeedType.STARFRUIT_SEEDS, 5),
-                new Pair<>(ForagingSeedType.COFFEE_BEAN_SEEDS, 1),
-                new Pair<>(ForagingSeedType.SUNFLOWER_SEEDS, 5)
+            new Pair<>(ForagingSeedType.TOMATO_SEEDS.getName(), 5),
+            new Pair<>(ForagingSeedType.PEPPER_SEEDS.getName(), 5),
+            new Pair<>(ForagingSeedType.WHEAT_SEEDS.getName(), 10),
+            new Pair<>(ForagingSeedType.SUMMER_SQUASH_SEEDS.getName(), 10),
+            new Pair<>(ForagingSeedType.RADISH_SEEDS.getName(), 5),
+            new Pair<>(ForagingSeedType.MELON_SEEDS.getName(), 5),
+            new Pair<>(ForagingSeedType.HOPS_STARTER.getName(), 5),
+            new Pair<>(ForagingSeedType.POPPY_SEEDS.getName(), 5),
+            new Pair<>(ForagingSeedType.SPANGLE_SEEDS.getName(), 5),
+            new Pair<>(ForagingSeedType.STARFRUIT_SEEDS.getName(), 5),
+            new Pair<>(ForagingSeedType.COFFEE_BEAN_SEEDS.getName(), 1),
+            new Pair<>(ForagingSeedType.SUNFLOWER_SEEDS.getName(), 5)
         )));
 
-        // Fall Stock
+// Fall Stock
         this.products.add(new ArrayList<>(Arrays.asList(
-                new Pair<>(ForagingSeedType.CORN_SEEDS, 5),
-                new Pair<>(ForagingSeedType.EGGPLANT_SEEDS, 5),
-                new Pair<>(ForagingSeedType.PUMPKIN_SEEDS, 5),
-                new Pair<>(ForagingSeedType.BROCCOLI_SEEDS, 5),
-                new Pair<>(ForagingSeedType.AMARANTH_SEEDS, 5),
-                new Pair<>(ForagingSeedType.GRAPE_STARTER, 5),
-                new Pair<>(ForagingSeedType.BEET_SEEDS, 5),
-                new Pair<>(ForagingSeedType.YAM_SEEDS, 5),
-                new Pair<>(ForagingSeedType.BOK_CHOY_SEEDS, 5),
-                new Pair<>(ForagingSeedType.CRANBERRY_SEEDS, 5),
-                new Pair<>(ForagingSeedType.SUNFLOWER_SEEDS, 5),
-                new Pair<>(ForagingSeedType.FAIRY_SEEDS, 5),
-                new Pair<>(ForagingSeedType.RARE_SEED, 1),
-                new Pair<>(ForagingSeedType.WHEAT_SEEDS, 5)
+            new Pair<>(ForagingSeedType.CORN_SEEDS.getName(), 5),
+            new Pair<>(ForagingSeedType.EGGPLANT_SEEDS.getName(), 5),
+            new Pair<>(ForagingSeedType.PUMPKIN_SEEDS.getName(), 5),
+            new Pair<>(ForagingSeedType.BROCCOLI_SEEDS.getName(), 5),
+            new Pair<>(ForagingSeedType.AMARANTH_SEEDS.getName(), 5),
+            new Pair<>(ForagingSeedType.GRAPE_STARTER.getName(), 5),
+            new Pair<>(ForagingSeedType.BEET_SEEDS.getName(), 5),
+            new Pair<>(ForagingSeedType.YAM_SEEDS.getName(), 5),
+            new Pair<>(ForagingSeedType.BOK_CHOY_SEEDS.getName(), 5),
+            new Pair<>(ForagingSeedType.CRANBERRY_SEEDS.getName(), 5),
+            new Pair<>(ForagingSeedType.SUNFLOWER_SEEDS.getName(), 5),
+            new Pair<>(ForagingSeedType.FAIRY_SEEDS.getName(), 5),
+            new Pair<>(ForagingSeedType.RARE_SEED.getName(), 1),
+            new Pair<>(ForagingSeedType.WHEAT_SEEDS.getName(), 5)
         )));
 
-        // Winter Stock
+// Winter Stock
         this.products.add(new ArrayList<>(Arrays.asList(
-                new Pair<>(ForagingSeedType.POWDERMELON_SEEDS, 10)
+            new Pair<>(ForagingSeedType.POWDERMELON_SEEDS.getName(), 10)
         )));
 
         this.stockParts = new ArrayList<>(Arrays.asList(
@@ -119,11 +120,11 @@ public class JojaMart extends GameBuilding {
 
     @Override
     public Result purchase(String productName, String count, ClientHandler clientHandler) {
-        Pair<GoodType, Integer> productPair = null;
+        Pair<String, Integer> productPair = null;
         int partNumber = 0;
-        for (ArrayList<Pair<GoodType, Integer>> products : this.products) {
-            for (Pair<GoodType, Integer> product : products) {
-                if(product.first().getName().equals(productName)) {
+        for (ArrayList<Pair<String, Integer>> products : this.products) {
+            for (Pair<String, Integer> product : products) {
+                if(product.first().equals(productName)) {
                     productPair = product;
                     break;
                 }
@@ -143,10 +144,10 @@ public class JojaMart extends GameBuilding {
 
     @Override
     public Pair<GoodType, Integer> findProduct(GoodType goodType) {
-        for (ArrayList<Pair<GoodType, Integer>> products : this.products) {
-            for (Pair<GoodType, Integer> product : products) {
-                if (product.first().getName().equals(goodType.getName())) {
-                    return product;
+        for (ArrayList<Pair<String, Integer>> products : this.products) {
+            for (Pair<String, Integer> product : products) {
+                if (product.first().equals(goodType.getName())) {
+                    return new Pair<>(Good.newGoodType(product.first()), product.second());
                 }
             }
         }

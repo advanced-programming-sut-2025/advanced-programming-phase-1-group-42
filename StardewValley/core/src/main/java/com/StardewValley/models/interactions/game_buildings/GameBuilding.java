@@ -81,7 +81,7 @@ public abstract class GameBuilding extends Building {
         list.append("\n");
     }
 
-    protected static Result purchaseProduct(String productName, String count, Pair<GoodType, Integer> productPair, ClientHandler clientHandler) {
+    protected static Result purchaseProduct(String productName, String count, Pair<String, Integer> productPair, ClientHandler clientHandler) {
         if(!count.matches("-?\\d+") && !count.isEmpty())
             return new Result(false, "Invalid Quantity format!");
 
@@ -89,16 +89,17 @@ public abstract class GameBuilding extends Building {
         if(productPair.second() < quantity)
             return new Result(false, productName + "'s stock is less than the quantity you want!");
 
-        if(quantity * productPair.first().getSellPrice() > clientHandler.getClientPlayer().getWallet().getBalance()) {
+        if(quantity * Good.newGoodType(productPair.first()).getSellPrice() > clientHandler.getClientPlayer().getWallet().getBalance()) {
             return new Result(false, "You don't have enough money in your wallet to purchase this product(s)!");
         }
         if(clientHandler.getClientPlayer().getInventory().isInInventory(productName) == null &&
                 clientHandler.getClientPlayer().getInventory().isFull())
             return new Result(false, "Your inventory is full to purchase this product(s)!");
 
-        int totalPrice = quantity * productPair.first().getSellPrice();
+        int totalPrice = quantity * Good.newGoodType(productPair.first()).getSellPrice();
         clientHandler.getClientPlayer().getWallet().decreaseBalance(totalPrice);
-        clientHandler.getClientPlayer().getInventory().addGood(Good.newGoods(productPair.first(), quantity),
+        clientHandler.getClientPlayer().getInventory().addGood(Good.newGoods(Good.newGoodType(productPair.first()),
+                quantity),
             clientHandler.getClientGame(), clientHandler.getClientPlayer());
 
 
@@ -119,34 +120,34 @@ public abstract class GameBuilding extends Building {
         return upgradeTiles;
     }
 
-    static ArrayList<GoodType> getGoodTypes(ArrayList<ArrayList<Pair<GoodType, Integer>>> products) {
+    static ArrayList<GoodType> getGoodTypes(ArrayList<ArrayList<Pair<String, Integer>>> products) {
         ArrayList<GoodType> goodTypes = new ArrayList<>();
-        for (ArrayList<Pair<GoodType, Integer>> seasonProducts : products) {
-            for (Pair<GoodType, Integer> product : seasonProducts) {
-                goodTypes.add(product.first());
+        for (ArrayList<Pair<String, Integer>> seasonProducts : products) {
+            for (Pair<String, Integer> product : seasonProducts) {
+                goodTypes.add(Good.newGoodType(product.first()));
             }
         }
 
         return goodTypes;
     }
 
-    static ArrayList<GoodType> getSeasonProducts(ArrayList<ArrayList<Pair<GoodType, Integer>>> products) {
+    static ArrayList<GoodType> getSeasonProducts(ArrayList<ArrayList<Pair<String, Integer>>> products) {
         ArrayList<GoodType> goodTypes = new ArrayList<>();
-        for (Pair<GoodType, Integer> goodTypeIntegerPair : products.get(0)) {
-            goodTypes.add(goodTypeIntegerPair.first());
+        for (Pair<String, Integer> goodTypeIntegerPair : products.get(0)) {
+            goodTypes.add(Good.newGoodType(goodTypeIntegerPair.first()));
         }
-        for (Pair<GoodType, Integer> goodTypeIntegerPair : products.get(
+        for (Pair<String, Integer> goodTypeIntegerPair : products.get(
             AppClient.getCurrentGame().getDateTime().getSeasonOfYear().getValue())) {
-            goodTypes.add(goodTypeIntegerPair.first());
+            goodTypes.add(Good.newGoodType(goodTypeIntegerPair.first()));
         }
 
         return goodTypes;
     }
 
-    static ArrayList<GoodType> getWholeGoodType(ArrayList<Pair<GoodType, Integer>> products) {
+    static ArrayList<GoodType> getWholeGoodType(ArrayList<Pair<String, Integer>> products) {
         ArrayList<GoodType> goodTypes = new ArrayList<>();
-        for (Pair<GoodType, Integer> product : products) {
-            goodTypes.add(product.first());
+        for (Pair<String, Integer> product : products) {
+            goodTypes.add(Good.newGoodType(product.first()));
         }
         return goodTypes;
     }

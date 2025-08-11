@@ -1790,8 +1790,6 @@ public class GameView implements Screen, InputProcessor {
             npcSprite.first().draw(Main.getBatch());
 
             if (Arrays.asList(validNPC).contains(npc.getType())) {
-
-
                 TextButton talk = npcSprite.second().first();
                 talk.getLabel().setColor(Color.BLACK);
                 talk.setSize((float) scaledSize, (float) (0.5 * scaledSize));
