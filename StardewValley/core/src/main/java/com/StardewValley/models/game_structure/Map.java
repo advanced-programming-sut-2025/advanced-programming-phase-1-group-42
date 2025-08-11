@@ -15,6 +15,12 @@ import com.StardewValley.models.interactions.NPCs.NPC;
 import com.StardewValley.models.interactions.Player;
 import com.StardewValley.models.interactions.game_buildings.GameBuilding;
 import com.StardewValley.server.ClientHandler;
+import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.scenes.scene2d.ui.Image;
+import com.badlogic.gdx.scenes.scene2d.ui.ScrollPane;
+import com.badlogic.gdx.scenes.scene2d.ui.Stack;
+import com.badlogic.gdx.scenes.scene2d.ui.Table;
+import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -28,67 +34,6 @@ public class Map {
     private final Coordinate startingCoordinate, endingCoordinate;
     private final ArrayList<ShippingBin> shippingBins = new ArrayList<>();
 
-
-
-//    //Textures
-//    Texture farm_Background;
-//    Texture empty;
-//    Texture null_txr;
-//    Texture wall;
-//    Texture water;
-//    Texture greenhouse;
-//    Texture playerBuilding;
-//    Texture quarry ;
-//    Texture road;
-//    Texture beach ;
-//    Texture square ;
-//    Texture wateredFarm;
-//    Texture tree ;
-//    Texture seed ;
-//    Texture Crop ;
-//    Texture playerTexture;
-//    Texture mushroomTree;
-//    Texture plain ;
-//    Texture abigail ;
-//    Texture clint ;
-//    Texture gus ;
-//    Texture harvey ;
-//    Texture leah ;
-//    Texture marnie ;
-//    Texture morris;
-//    Texture pierre;
-//    Texture robin ;
-//    Texture sebastian ;
-//    Texture willy ;
-//    Image farm_Background_img;
-//    Image empty_img ;
-//    Image null_img;
-//    Image wall_img ;
-//    Image water_img ;
-//    Image greenhouse_img;
-//    Image playerBuilding_img;
-//    Image quarry_img;
-//    Image road_img ;
-//    Image beach_img ;
-//    Image square_img ;
-//    Image wateredFarm_img;
-//    Image tree_img ;
-//    Image seed_img ;
-//    Image Crop_img ;
-//    Image player_img ;
-//    Image mushroomTree_img;
-//    Image plain_img ;
-//    Image abigail_img ;
-//    Image clint_img ;
-//    Image gus_img ;
-//    Image harvey_img;
-//    Image leah_img ;
-//    Image marnie_img ;
-//    Image morris_img ;
-//    Image pierre_img ;
-//    Image robin_img ;
-//    Image sebastian_img;
-//    Image willy_img ;
 
     static final HashMap<String, String> colorMap = new HashMap<String, String>() {{
         // Reset
@@ -165,8 +110,6 @@ public class Map {
     public Map() {
         this.startingCoordinate = new Coordinate(0, 0);
         this.endingCoordinate = new Coordinate(150, 160);
-//        declareTextures();
-
     }
 
     // A function to print map
@@ -376,7 +319,7 @@ public class Map {
 
 //    private Table mapTable;
 //    private Stack[][] mapCells = new Stack[160][170];
-    //TODO Parsa
+//  //TODO Parsa
 //    public ScrollPane createGraphicalMap() {
 //        mapTable = new Table(); // use the field instead of a local variable
 //        mapTable.defaults().width(6).height(6);
@@ -460,12 +403,12 @@ public class Map {
 //            }
 //        }
 //    }
-    public void updateMap() {
+//  public void updateMap() {
 //        if (mapCells[AppClient.getCurrentPlayer().getCoordinate().getX()][AppClient.getCurrentPlayer().getCoordinate().getY()] != null) {
-////            updateMapAround(AppClient.getCurrentPlayer().getLastCoordinate().getX() , AppClient.getCurrentPlayer().getLastCoordinate().getY());
+//            //updateMapAround(AppClient.getCurrentPlayer().getLastCoordinate().getX() , AppClient.getCurrentPlayer().getLastCoordinate().getY());
 ////            updateMapAround(AppClient.getCurrentPlayer().getCoordinate().getX() , AppClient.getCurrentPlayer().getCoordinate().getY());
 //        }
-    }
+//  }
 //    private void updateMapAround(int x , int y) {
 //
 //                Stack cellStack = mapCells[x][y];
@@ -548,100 +491,7 @@ public class Map {
 //            default -> plain_img;
 //        };
 //    }
-//    public void declareTextures(){
-//        farm_Background = new Texture("GameAssets/Map/Farm.png");
-//        empty = new Texture("GameAssets/Map/Border.png");
-//        null_txr = new Texture("GameAssets/Map/Null.png");
-//        wall = new Texture("GameAssets/Map/Wall.png");
-//        water = new Texture("GameAssets/Map/Water.png");
-//        greenhouse = new Texture("GameAssets/Map/Greenhouse.png");
-//        playerBuilding = new Texture("GameAssets/Map/House.png");
-//        quarry = new Texture("GameAssets/Map/Quarry.png");
-//        road = new Texture("GameAssets/Map/Road.png");
-//        beach = new Texture("GameAssets/Map/Beach.png");
-//        square = new Texture("GameAssets/Map/Square.png");
-//        wateredFarm = new Texture("GameAssets/Map/WateredFarm.png");
-//        tree = new Texture("GameAssets/Map/Tree.png");
-//        seed = new Texture("GameAssets/Map/Seed.png");
-//        Crop = new Texture("GameAssets/Map/Crop.png");
-//        playerTexture = new Texture("GameAssets/Map/Player.png");
-//        mushroomTree = new Texture("GameAssets/Map/MushroomTree.png");
-//        plain = new Texture("GameAssets/Map/Plain.png");
-//        abigail = new Texture("GameAssets/Map/Abigail.png");
-//        clint = new Texture("GameAssets/Map/Clint.png");
-//        gus = new Texture("GameAssets/Map/Gus.png");
-//        harvey = new Texture("GameAssets/Map/Harvey.png");
-//        leah = new Texture("GameAssets/Map/Leah.png");
-//        marnie = new Texture("GameAssets/Map/Marnie.png");
-//        morris = new Texture("GameAssets/Map/Morris.png");
-//        pierre = new Texture("GameAssets/Map/Pierre.png");
-//        robin = new Texture("GameAssets/Map/Robin.png");
-//        sebastian = new Texture("GameAssets/Map/Sebastian.png");
-//        willy = new Texture("GameAssets/Map/Willy.png");
-//
-//// Create Image objects for all textures
-//        farm_Background_img = new Image(new TextureRegionDrawable(farm_Background));
-//        empty_img = new Image(new TextureRegionDrawable(empty));
-//        null_img = new Image(new TextureRegionDrawable(null_txr));
-//        wall_img = new Image(new TextureRegionDrawable(wall));
-//        water_img = new Image(new TextureRegionDrawable(water));
-//        greenhouse_img = new Image(new TextureRegionDrawable(greenhouse));
-//        playerBuilding_img = new Image(new TextureRegionDrawable(playerBuilding));
-//        quarry_img = new Image(new TextureRegionDrawable(quarry));
-//        road_img = new Image(new TextureRegionDrawable(road));
-//        beach_img = new Image(new TextureRegionDrawable(beach));
-//        square_img = new Image(new TextureRegionDrawable(square));
-//        wateredFarm_img = new Image(new TextureRegionDrawable(wateredFarm));
-//        tree_img = new Image(new TextureRegionDrawable(tree));
-//        seed_img = new Image(new TextureRegionDrawable(seed));
-//        Crop_img = new Image(new TextureRegionDrawable(Crop));
-//        player_img = new Image(new TextureRegionDrawable(playerTexture));
-//        mushroomTree_img = new Image(new TextureRegionDrawable(mushroomTree));
-//        plain_img = new Image(new TextureRegionDrawable(plain));
-//        abigail_img = new Image(new TextureRegionDrawable(abigail));
-//        clint_img = new Image(new TextureRegionDrawable(clint));
-//        gus_img = new Image(new TextureRegionDrawable(gus));
-//        harvey_img = new Image(new TextureRegionDrawable(harvey));
-//        leah_img = new Image(new TextureRegionDrawable(leah));
-//        marnie_img = new Image(new TextureRegionDrawable(marnie));
-//        morris_img = new Image(new TextureRegionDrawable(morris));
-//        pierre_img = new Image(new TextureRegionDrawable(pierre));
-//        robin_img = new Image(new TextureRegionDrawable(robin));
-//        sebastian_img = new Image(new TextureRegionDrawable(sebastian));
-//        willy_img = new Image(new TextureRegionDrawable(willy));
-//
-//// Set sizes for all images (6x6)
-//        int n = 8;
-//        farm_Background_img.setSize(n, n);
-//        empty_img.setSize(n, n);
-//        null_img.setSize(n, n);
-//        wall_img.setSize(n, n);
-//        water_img.setSize(n, n);
-//        greenhouse_img.setSize(n, n);
-//        playerBuilding_img.setSize(n, n);
-//        quarry_img.setSize(n, n);
-//        road_img.setSize(n, n);
-//        beach_img.setSize(n, n);
-//        square_img.setSize(n, n);
-//        wateredFarm_img.setSize(n, n);
-//        tree_img.setSize(n, n);
-//        seed_img.setSize(n, n);
-//        Crop_img.setSize(n, n);
-//        player_img.setSize(n, n);
-//        mushroomTree_img.setSize(n, n);
-//        plain_img.setSize(n, n);
-//        abigail_img.setSize(n, n);
-//        clint_img.setSize(n, n);
-//        gus_img.setSize(n, n);
-//        harvey_img.setSize(n, n);
-//        leah_img.setSize(n, n);
-//        marnie_img.setSize(n, n);
-//        morris_img.setSize(n, n);
-//        pierre_img.setSize(n, n);
-//        robin_img.setSize(n, n);
-//        sebastian_img.setSize(n ,n);
-//        willy_img.setSize(n, n);
-//    }
+
 
 
     public void setFarms(ArrayList<Farm> farms) {

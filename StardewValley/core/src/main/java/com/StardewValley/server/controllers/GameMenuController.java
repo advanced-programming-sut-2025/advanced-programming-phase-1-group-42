@@ -433,7 +433,7 @@ public class GameMenuController extends Controller {
         game = wholeGameBuilder.getGame();
 
         WholeMapBuilder wholeMapBuilder = new WholeMapBuilder();
-        director.createNewMap(wholeMapBuilder, farms, tiles, players);
+        director.createNewMap(wholeMapBuilder, farms, tiles);
         game.setMap(wholeMapBuilder.getMap());
 
 
@@ -449,11 +449,6 @@ public class GameMenuController extends Controller {
         game.getMap().generateRandomMinerals(93, clientHandler);
         game.getMap().generateRandomForagingTrees(93, clientHandler);
         game.getMap().generateRandomGrassTrees(93, clientHandler);
-
-        // add Quests
-        for (QuestType type : QuestType.values()) {
-            game.getQuests().add(new Quest(type));
-        }
 
         return game.getGameID();
     }

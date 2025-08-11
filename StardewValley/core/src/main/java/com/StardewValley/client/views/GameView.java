@@ -2,10 +2,12 @@ package com.StardewValley.client.views;
 
 import com.StardewValley.client.Main;
 import com.StardewValley.client.AppClient;
+import com.StardewValley.models.Assets;
 import com.StardewValley.models.JSONUtils;
 import com.StardewValley.models.Message;
 import com.StardewValley.models.Pair;
 import com.StardewValley.models.enums.Season;
+import com.StardewValley.models.enums.TileAssets;
 import com.StardewValley.models.enums.TileType;
 import com.StardewValley.models.game_structure.*;
 import com.StardewValley.models.game_structure.Game;
@@ -58,6 +60,7 @@ import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Objects;
 
+import static com.StardewValley.models.game_structure.Map.findTile;
 import static java.lang.Math.abs;
 import static java.lang.Math.max;
 import static java.lang.Math.min;
@@ -441,6 +444,7 @@ public class GameView implements Screen, InputProcessor {
             gameBuildingTextures.put(gameBuilding.getName(), new Texture(
                 gameBuilding.getImagePath()));
         }
+
     }
 
     public ArrayList<Pair<Sprite, Sprite>> getPlayersSprite() {
@@ -451,7 +455,7 @@ public class GameView implements Screen, InputProcessor {
     public void show() {
         stage = new Stage(viewport);
         staticStage = new Stage(new ScreenViewport());
-
+        initMapUI();
         multiplexer = new InputMultiplexer();
         multiplexer.addProcessor(stage);
         multiplexer.addProcessor(staticStage);
@@ -503,6 +507,7 @@ public class GameView implements Screen, InputProcessor {
         }
 
         stage.act(min(Gdx.graphics.getDeltaTime(), 1 / 30f));
+        staticStage.act(min(Gdx.graphics.getDeltaTime(), 1 / 30f));
         stage.draw();
         staticStage.act(min(Gdx.graphics.getDeltaTime(), 1 / 30f));
         staticStage.draw();
@@ -1819,7 +1824,7 @@ public class GameView implements Screen, InputProcessor {
                 Coordinate coordinate = new Coordinate(x, y);
                 Tile tile = Map.findTile(coordinate, AppClient.getCurrentGame());
                 switch (tile.getTileType()) {
-                    case TileType.FARM, TileType.PLOWED_FARM, TileType.PLAIN, TileType.QUARRY -> {
+                    case TileType.FARM, TileType.PLOWED_FARM, TileType.PLAIN -> {
                         drawGood(tile);
                     }
                 }
@@ -2537,18 +2542,10 @@ public class GameView implements Screen, InputProcessor {
         return toolsWindow;
     }
 
-    public Stage getStage() {
-        return stage;
-    }
-
-    private ArrayList<ImageButton> mainInventoryElements;
     private Table mainTable;
-
-
     private Container<Window> windowContainer;
     public void initMainTable(int index) {
-        ArrayList<Window> inventoryWindows = viewController.getInventoryWindows();
-        mainInventoryElements = viewController.getMainInventoryElements();
+
         mainTable = new Table(skin);
         mainTable.setFillParent(true);
 
@@ -2568,16 +2565,24 @@ public class GameView implements Screen, InputProcessor {
         windowContainer = new Container<>(currentWindow);
         windowContainer.size(1000, 800);
 
-        mainTable.add(windowContainer).colspan(7); // Only add container to table
+        mainTable.add(windowContainer).colspan(7);
 
         staticStage.addActor(mainTable);
         setInputProcessor();
     }
 
+    private boolean mapWindowIsOpen = false;
     public void switchWindow(Window newWindow, int index) {
         viewController.setCurrentTab(index);
         currentWindow = newWindow;
-        windowContainer.setActor(currentWindow); // Replaces content without changing layout
+        windowContainer.setActor(currentWindow);
+        if(index == 3 && !mapWindowIsOpen) {
+            toggleMapVisibility();
+            mapWindowIsOpen = true;
+        } else if (mapWindowIsOpen) {
+            toggleMapVisibility();
+            mapWindowIsOpen = false;
+        }
     }
 
     private void setInputProcessor() {
@@ -3175,8 +3180,9 @@ public class GameView implements Screen, InputProcessor {
     Label feedbackLabel = new Label("", skin);
 
     private void initTradeInboxWindow() {
+        tradeInboxIsOpen = true;
         Window inboxWindow = new Window("Trade Inbox", skin, "Letter");
-        inboxWindow.setSize(1350, 800); // smaller width and height for a popup
+        inboxWindow.setSize(1350, 800);
         inboxWindow.setPosition(
             (staticStage.getWidth() - inboxWindow.getWidth()) / 2,
             (staticStage.getHeight() - inboxWindow.getHeight()) / 2
@@ -3186,13 +3192,12 @@ public class GameView implements Screen, InputProcessor {
 
         Table inboxTable = new Table(skin).pad(10);
 
-        java.util.List<Trade> tradeData = viewController.getRespondedTradesFor(AppClient.getCurrentPlayer());
+        java.util.List<Trade> tradeData = AppClient.getCurrentGame().getAllTrades();
 
-        Table tradesListTable = new Table(skin); // this table holds trade rows
+        Table tradesListTable = new Table(skin);
 
         boolean foundAny = false;
         for (Trade trade : tradeData) {
-            // Only show trades for current player and not responded
             if (trade.getReceiver().equals(AppClient.getCurrentPlayer()) && !trade.isResponded()) {
                 foundAny = true;
 
@@ -3268,6 +3273,7 @@ public class GameView implements Screen, InputProcessor {
             @Override
             public void clicked(InputEvent event, float x, float y) {
                 inboxWindow.remove();
+                tradeInboxIsOpen = false;
             }
         });
         TextButton historyBtn = new TextButton("History", skin);
@@ -3297,7 +3303,7 @@ public class GameView implements Screen, InputProcessor {
 
         Table inboxTable = new Table(skin).pad(10);
 
-        java.util.List<Trade> tradeData = viewController.getRespondedTradesFor(AppClient.getCurrentPlayer());
+        java.util.List<Trade> tradeData = AppClient.getCurrentGame().getAllTrades();
 
         Table tradesListTable = new Table(skin); // this table holds trade rows
 
@@ -3381,6 +3387,7 @@ public class GameView implements Screen, InputProcessor {
             @Override
             public void clicked(InputEvent event, float x, float y) {
                 inboxWindow.remove();
+                tradeInboxIsOpen = false;
             }
         });
         TextButton historyBtn = new TextButton("History", skin);
@@ -4594,8 +4601,8 @@ public class GameView implements Screen, InputProcessor {
 
     public void initPopupReactionWindow() {
         emojiWindow = new Window("Reactions", skin);
-        emojiWindow.setName("emojiWindow"); // Important for later reference
-        emojiWindow.setSize(520, 300); // Smaller height since we show fewer emotes
+        emojiWindow.setName("emojiWindow");
+        emojiWindow.setSize(520, 300);
         emojiWindow.setPosition(
             (staticStage.getWidth() - emojiWindow.getWidth()) / 2,
             (staticStage.getHeight() - emojiWindow.getHeight()) / 2 + 300
@@ -4604,14 +4611,12 @@ public class GameView implements Screen, InputProcessor {
         Table emojiTable = new Table();
         emojiTable.defaults().pad(10).size(80, 80);
 
-        // Add the 7 selected emotes
         for (int i = 0; i < EmoteManager.selectedEmotes.size; i++) {
             String emoteName = EmoteManager.selectedEmotes.get(i);
             emojiTable.add(createEmoteButton(getTextureForEmote(emoteName), emoteName));
             if ((i + 1) % 4 == 0 && i != 6) emojiTable.row(); // 4 per row
         }
 
-        // Add edit button in remaining space (8th slot)
         TextButton editBtn = new TextButton("Edit", skin);
         editBtn.addListener(new ClickListener() {
             @Override
@@ -4658,6 +4663,10 @@ public class GameView implements Screen, InputProcessor {
                 return AppClient.getAssets().getNotSure();
             case "Edit":
                 return AppClient.getAssets().getEdit();
+            case "Hi":
+                return AppClient.getAssets().getHi();
+            case "Bye":
+                return AppClient.getAssets().getBye();
             default:
                 return AppClient.getAssets().getLike();
         }
@@ -4676,7 +4685,6 @@ public class GameView implements Screen, InputProcessor {
         ScrollPane scrollPane = new ScrollPane(mainTable, skin);
         scrollPane.setFadeScrollBars(false);
 
-        // Create checkboxes for all emotes
         for (String emote : EmoteManager.ALL_EMOTES) {
             CheckBox checkBox = new CheckBox(emote, skin);
             checkBox.setChecked(EmoteManager.selectedEmotes.contains(emote, false));
@@ -4701,14 +4709,13 @@ public class GameView implements Screen, InputProcessor {
             mainTable.row();
         }
 
-        // Add save button
         TextButton saveBtn = new TextButton("Save", skin);
         saveBtn.addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y) {
                 EmoteManager.savePreferences();
                 selectionWindow.remove();
-                initPopupReactionWindow(); // Reopen main window with new selection
+                initPopupReactionWindow();
             }
         });
 
@@ -4720,17 +4727,14 @@ public class GameView implements Screen, InputProcessor {
     }
 
     private ImageButton createEmoteButton(Texture texture, final String emoteName) {
-        // Create drawable from texture
         TextureRegionDrawable drawable = new TextureRegionDrawable(new TextureRegion(texture));
 
-        // Create button style
         ImageButton.ImageButtonStyle style = new ImageButton.ImageButtonStyle();
         style.up = drawable;
         style.down = drawable;
         style.over = drawable;
-        // Create button
+
         ImageButton button = new ImageButton(style);
-        // Add click listener
         button.addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y) {
@@ -4753,7 +4757,7 @@ public class GameView implements Screen, InputProcessor {
         public static final String[] ALL_EMOTES = {
             "Like", "Dislike", "Heart", "Music", "UwU",
             "Question", "Angry", "Speechless", "Surprised",
-            "Sleepy", "Not Sure"
+            "Sleepy", "Not Sure" , "Hi" , "Bye"
         };
 
         public static Array<String> selectedEmotes = new Array<>(new String[]{
@@ -4801,14 +4805,11 @@ public class GameView implements Screen, InputProcessor {
         if (showEmote && emoteAnimation != null) {
             emoteStateTime += deltaTime;
             Texture currentFrame = emoteAnimation.getKeyFrame(emoteStateTime, false);
-            // Calculate position for center
-
             float x = AppClient.getCurrentPlayer().getCoordinate().getX()*40 - currentFrame.getWidth()/ 2;
             float y = AppClient.getCurrentPlayer().getCoordinate().getY()*40 - currentFrame.getHeight()/2 + 90;
 
             Main.getBatch().draw(currentFrame, x, y, 64, 64);
 
-            // Optionally hide animation when finished
             if (emoteAnimation.isAnimationFinished(emoteStateTime)) {
                 showEmote = false;
                 closePopupReactionWindow();
@@ -5214,6 +5215,8 @@ public class GameView implements Screen, InputProcessor {
         renderFlower(delta);
 
         renderClock();
+
+        checkInBox();
     }
 
 
@@ -5329,6 +5332,7 @@ public class GameView implements Screen, InputProcessor {
     public void renderClock() {
 
 
+
         String currentWeatherName = AppClient.getCurrentGame().getWeather().getName();
         String currentSeasonName = AppClient.getCurrentGame().getDateTime().getSeason().getName();
         String currentDayOfWeek = AppClient.getCurrentGame().getDateTime().getDayOfWeek();
@@ -5337,6 +5341,7 @@ public class GameView implements Screen, InputProcessor {
         int currentNetWorth = AppClient.getCurrentPlayer().getWallet().getBalance();
 
         clockHandImage.setRotation(180 - ((currentTimeOfDay - 9) * 14));
+
         if(currentNetWorth != lastNetWorth) {
             int netWorth = currentNetWorth;
             int num;
@@ -5410,12 +5415,10 @@ public class GameView implements Screen, InputProcessor {
         }
         else if (!currentWeatherName.equals(lastWeatherName)) {
             lastWeatherName = currentWeatherName;
-//            weatherTexture.dispose();
             weatherImage.setDrawable(AppClient.getAssets().getClockWeather(currentWeatherName));
         }
         else if (!currentSeasonName.equals(lastSeasonName)) {
             lastSeasonName = currentSeasonName;
-//            seasonTexture.dispose();
             seasonImage.setDrawable(AppClient.getAssets().getClockSeason(currentSeasonName));
         }
         else if (!currentDayOfWeek.equals(lastDayOfWeekName)) {
@@ -5457,7 +5460,6 @@ public class GameView implements Screen, InputProcessor {
         }
 
     }
-
 
     public void updateGame() {
         viewController.handleInput();
@@ -5541,6 +5543,228 @@ public class GameView implements Screen, InputProcessor {
                     AppClient.getCurrentGame().getWeather().thunder(storm.x[i][j] , storm.y[i][j]);
                 }
             }
+        }
+    }
+
+    private Table mapTable = new Table();;
+    private Stack[][] mapCells = new Stack[160][170];
+    public ScrollPane createGraphicalMap() {
+        mapTable.defaults().width(6).height(6);
+        rebuildMapTable();
+        ScrollPane scrollPane = new ScrollPane(mapTable, AppClient.getAssets().getSkin());
+        scrollPane.setFadeScrollBars(false);
+        scrollPane.setScrollingDisabled(true, false);
+        scrollPane.setForceScroll(false, true);
+        scrollPane.setSize(980, 780);
+
+        return scrollPane;
+    }
+
+    private void rebuildMapTable() {
+        mapTable.clear();
+
+        for (int j = 1; j < 161; j++) {
+            mapTable.row();
+            for (int i = 0; i < 150; i++) {
+                Coordinate coordinate = new Coordinate(i, 160 - j);
+                Tile tile = findTile(coordinate, AppClient.getCurrentGame());
+                Image img = AppClient.getAssets().getNullImg();
+
+                if (tile == null) {
+                    img = AppClient.getAssets().getEmptyImg();
+                } else {
+                    if (tile.isWatered()) {
+                        img = AppClient.getAssets().getWateredFarmImg();
+                    }
+
+                    for (Good good : tile.getGoods()) {
+                        if (good instanceof ForagingCrop) img = AppClient.getAssets().getCropImg();
+                        else if (good instanceof ForagingSeed) img = AppClient.getAssets().getSeedImg();
+                        else if ("Grass".equals(good.getName())) img = AppClient.getAssets().getTreeImg();
+                    }
+
+                    for (Player player : AppClient.getCurrentGame().getPlayers()) {
+                        if (player.getCoordinate().equals(coordinate)) img = AppClient.getAssets().getPlayerImg();
+                    }
+
+                    for (NPC npc : AppClient.getCurrentGame().getNPCs()) {
+                        if (npc.getType().getCoordinate().equals(coordinate)) {
+                            img = switch (npc.getType().getName()) {
+                                case "Abigail" -> AppClient.getAssets().getAbigailImg();
+                                case "Clint" -> AppClient.getAssets().getClintImg();
+                                case "Gus" -> AppClient.getAssets().getGusImg();
+                                case "Harvey" -> AppClient.getAssets().getHarveyImg();
+                                case "Leah" -> AppClient.getAssets().getLeahImg();
+                                case "Marnie" -> AppClient.getAssets().getMarnieImg();
+                                case "Morris" -> AppClient.getAssets().getMorrisImg();
+                                case "Pierre" -> AppClient.getAssets().getPierreImg();
+                                case "Robin" -> AppClient.getAssets().getRobinImg();
+                                case "Sebastian" -> AppClient.getAssets().getSebastianImg();
+                                case "Willy" -> AppClient.getAssets().getWillyImg();
+                                default -> AppClient.getAssets().getMushroomTreeImg();
+                            };
+                        }
+                    }
+
+                    for (Animal animal : AppClient.getCurrentGame().getMap().allAnimals()) {
+                        if (animal.getCoordinate().equals(coordinate)) {
+                            img = AppClient.getAssets().getMushroomTreeImg();
+                        }
+                    }
+                }
+
+                Stack cellStack = new Stack();
+                Image bg = new Image(determineTileBackground(tile).getDrawable());
+                Image fg = new Image(img.getDrawable());
+
+                bg.setSize(6, 6);
+                fg.setSize(6, 6);
+
+                cellStack.add(bg);
+                cellStack.add(fg);
+
+
+                mapCells[i][160 - j] = cellStack;
+                mapTable.add(cellStack).width(6).height(6);
+            }
+        }
+    }
+    public void updateMap() {
+        if (mapCells[AppClient.getCurrentPlayer().getCoordinate().getX()][AppClient.getCurrentPlayer().getCoordinate().getY()] != null) {
+            updateMapAround(AppClient.getCurrentPlayer().getLastCoordinate().getX() , AppClient.getCurrentPlayer().getLastCoordinate().getY());
+            updateMapAround(AppClient.getCurrentPlayer().getCoordinate().getX() , AppClient.getCurrentPlayer().getCoordinate().getY());
+        }
+    }
+    private void updateMapAround(int x , int y) {
+
+        Stack cellStack = mapCells[x][y];
+        cellStack.clearChildren(); // Remove all previous images in the stack
+
+        Coordinate coord = new Coordinate(x,  y);
+        Tile tile = findTile(coord, AppClient.getCurrentGame());
+
+        // Background image
+        Image bg = new Image(determineTileBackground(tile).getDrawable());
+        bg.setSize(6, 6);
+        cellStack.add(bg);
+
+        // Determine what foreground image to show:
+        Image fg = AppClient.getAssets().getNullImg(); // default
+
+        if (tile == null) {
+            fg = AppClient.getAssets().getEmptyImg();
+        } else {
+            if (tile.isWatered()) {
+                fg = AppClient.getAssets().getWateredFarmImg();
+            }
+
+            for (Good good : tile.getGoods()) {
+                if (good instanceof ForagingCrop) fg = AppClient.getAssets().getCropImg();
+                else if (good instanceof ForagingSeed) fg = AppClient.getAssets().getSeedImg();
+                else if ("Grass".equals(good.getName())) fg = AppClient.getAssets().getTreeImg();
+            }
+
+            for (Player player : AppClient.getCurrentGame().getPlayers()) {
+                if (player.getCoordinate().equals(coord)) {
+                    fg = AppClient.getAssets().getPlayerImg();;
+                }
+            }
+
+            for (NPC npc : AppClient.getCurrentGame().getNPCs()) {
+                if (npc.getType().getCoordinate().equals(coord)) {
+                    fg = switch (npc.getType().getName()) {
+                        case "Abigail" -> AppClient.getAssets().getAbigailImg();
+                        case "Clint" -> AppClient.getAssets().getClintImg();
+                        case "Gus" -> AppClient.getAssets().getGusImg();
+                        case "Harvey" -> AppClient.getAssets().getHarveyImg();
+                        case "Leah" -> AppClient.getAssets().getLeahImg();
+                        case "Marnie" -> AppClient.getAssets().getMarnieImg();
+                        case "Morris" -> AppClient.getAssets().getMorrisImg();
+                        case "Pierre" -> AppClient.getAssets().getPierreImg();
+                        case "Robin" -> AppClient.getAssets().getRobinImg();
+                        case "Sebastian" -> AppClient.getAssets().getSebastianImg();
+                        case "Willy" -> AppClient.getAssets().getWillyImg();
+                        default -> AppClient.getAssets().getMushroomTreeImg();
+                    };
+                }
+            }
+
+            for (Animal animal : AppClient.getCurrentGame().getMap().allAnimals()) {
+                if (animal.getCoordinate().equals(coord)) {
+                    fg = AppClient.getAssets().getMushroomTreeImg();
+                }
+            }
+        }
+
+        fg.setSize(6, 6);
+        cellStack.add(fg);
+
+    }
+    private Image determineTileBackground(Tile tile) {
+        if (tile == null) return AppClient.getAssets().getEmptyImg();
+        if (tile.isWatered()) return AppClient.getAssets().getWateredFarmImg();
+
+        return switch (tile.getTileType()) {
+            case FARM -> AppClient.getAssets().getFarmBackgroundImg();
+            case WATER -> AppClient.getAssets().getWaterImg();
+            case GREEN_HOUSE -> AppClient.getAssets().getGreenhouseImg();
+            case PLAYER_BUILDING -> AppClient.getAssets().getPlayerBuildingImg();
+            case ROAD -> AppClient.getAssets().getRoadImg();
+            case QUARRY -> AppClient.getAssets().getQuarryImg();
+            case BEACH -> AppClient.getAssets().getBeachImg();
+            case SQUARE -> AppClient.getAssets().getSquareImg();
+            case STONE_WALL -> AppClient.getAssets().getWallImg();
+            default -> AppClient.getAssets().getPlainImg();
+        };
+    }
+    private ScrollPane graphicalMap;
+    private boolean mapVisible = false;
+    private Container<Window> mapContainer;
+
+    public void initMapUI() {
+        graphicalMap = createGraphicalMap();
+
+        Window mapWindow = new Window("Map", skin);
+        mapWindow.add(new Label("Map", skin)).left().padBottom(10);
+        mapWindow.row();
+        mapWindow.add(graphicalMap).expand().fill().colspan(2);
+        mapWindow.row();
+
+        mapTable = new Table(skin);
+        mapTable.setFillParent(true);
+        mapContainer = new Container<>(mapWindow);
+        mapContainer.setVisible(false);
+        mapContainer.size(1000, 800);
+
+        mapTable.add(mapContainer).colspan(7);
+
+        staticStage.addActor(mapTable);
+        setInputProcessor();
+    }
+
+    public void toggleMapVisibility() {
+        mapVisible = !mapVisible;
+        mapContainer.setVisible(mapVisible);
+    }
+
+    private int tradeInboxSize = 0;
+    private Boolean tradeInboxIsOpen = false;
+    public void checkInBox() {
+        java.util.List<Trade> tradeData = AppClient.getCurrentGame().getAllTrades();
+        boolean foundAny = false;
+        for (Trade trade : tradeData) {
+            if (trade.getReceiver().equals(AppClient.getCurrentPlayer()) && !trade.isResponded()) {
+                foundAny = true;
+            }
+        }
+        if (foundAny) {
+            tradeInboxButton.setColor(Color.RED);
+        } else {
+            tradeInboxButton.setColor(Color.WHITE);
+        }
+        if(tradeData.size() != tradeInboxSize && tradeInboxIsOpen) {
+            tradeInboxSize = tradeData.size();
+            reInitTradeInboxWindow();
         }
     }
 }

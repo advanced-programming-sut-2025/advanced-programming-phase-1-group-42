@@ -254,7 +254,7 @@ public class GameViewController {
 //                    player.setPlayerDirection(0);
                 }
                 flag = true;
-                AppClient.getCurrentGame().getMap().updateMap();
+//                AppClient.getCurrentGame().getMap().updateMap();
             }
             if (Gdx.input.isKeyPressed(Input.Keys.A)) {
                 if (tileValidity(AppClient.getCurrentGame().getMap().findTileByXY(player.getCoordinate().getX() - 1, player.getCoordinate().getY()))) {
@@ -270,7 +270,7 @@ public class GameViewController {
 
                 }
                 flag = true;
-                AppClient.getCurrentGame().getMap().updateMap();
+//                AppClient.getCurrentGame().getMap().updateMap();
             }
             if (Gdx.input.isKeyPressed(Input.Keys.S)) {
                 if (tileValidity(AppClient.getCurrentGame().getMap().findTileByXY(player.getCoordinate().getX(), player.getCoordinate().getY() - 1))) {
@@ -288,7 +288,7 @@ public class GameViewController {
 
                 }
                 flag = true;
-                AppClient.getCurrentGame().getMap().updateMap();
+//                AppClient.getCurrentGame().getMap().updateMap();
             }
             if (Gdx.input.isKeyPressed(Input.Keys.D)) {
                 if (tileValidity(AppClient.getCurrentGame().getMap().findTileByXY(player.getCoordinate().getX() + 1, player.getCoordinate().getY()))) {
@@ -306,7 +306,7 @@ public class GameViewController {
 //                    player.setPlayerDirection(3);
                 }
                 flag = true;
-                AppClient.getCurrentGame().getMap().updateMap();
+//                AppClient.getCurrentGame().getMap().updateMap();
             }
             if (Gdx.input.isKeyJustPressed(Input.Keys.P)) {
 
@@ -344,13 +344,9 @@ public class GameViewController {
 
 
             if (Gdx.input.isKeyJustPressed(Input.Keys.M)) {
-                ArrayList<Window> inventoryWindows = createWindows();
-                setInventoryWindows(inventoryWindows);
-                if (gameView.getMainTable() == null)
-                    gameView.initMainTable(3);
-                else
-                    gameView.closeMainTable();
+                gameView.toggleMapVisibility();
             }
+
             if (Gdx.input.isKeyJustPressed(Input.Keys.TAB)) {
                 gameView.setTabClicked(!gameView.isTabClicked());
                 if (gameView.isTabClicked()) {
@@ -823,13 +819,8 @@ public class GameViewController {
                     window.add(MapscrollPane).expand().fill().colspan(2).padTop(10);
                     break;
                 case 3:
-                    window.clear();
-                    window.add(new Label("Map", skin)).left().padBottom(10);
-                    window.row();
 
-//                    ScrollPane mapPane = AppClient.getCurrentGame().getMap().createGraphicalMap();
-//                    window.add(mapPane).expand().fill().colspan(2);
-                    window.row();
+                    window.setVisible(false);
 
                     break;
                 case 4:
@@ -1237,4 +1228,5 @@ public class GameViewController {
     public boolean checkMessageValidity(Message message, Message.Type type) {
         return message.getType() == type;
     }
+
 }
