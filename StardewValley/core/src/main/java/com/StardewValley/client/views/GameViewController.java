@@ -346,8 +346,9 @@ public class GameViewController {
 
 
             if (Gdx.input.isKeyJustPressed(Input.Keys.M)) {
-
+                gameView.toggleMapVisibility();
             }
+
             if (Gdx.input.isKeyJustPressed(Input.Keys.TAB)) {
                 gameView.setTabClicked(!gameView.isTabClicked());
                 if (gameView.isTabClicked()) {
@@ -820,13 +821,8 @@ public class GameViewController {
                     window.add(MapscrollPane).expand().fill().colspan(2).padTop(10);
                     break;
                 case 3:
-                    window.clear();
-                    window.add(new Label("Map", skin)).left().padBottom(10);
-                    window.row();
 
-                    //ScrollPane mapPane = AppClient.getCurrentGame().getMap().createGraphicalMap();
-                    //window.add(mapPane).expand().fill().colspan(2);
-                    window.row();
+                    window.setVisible(false);
 
                     break;
                 case 4:

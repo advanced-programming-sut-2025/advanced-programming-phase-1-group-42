@@ -446,6 +446,7 @@ public class GameView implements Screen, InputProcessor {
             gameBuildingTextures.put(gameBuilding.getName(), new Texture(
                 gameBuilding.getImagePath()));
         }
+
     }
 
     public ArrayList<Pair<Sprite, Sprite>> getPlayersSprite() {
@@ -456,7 +457,7 @@ public class GameView implements Screen, InputProcessor {
     public void show() {
         stage = new Stage(viewport);
         staticStage = new Stage(new ScreenViewport());
-
+        initMapUI();
         multiplexer = new InputMultiplexer();
         multiplexer.addProcessor(stage);
         multiplexer.addProcessor(staticStage);
@@ -2467,8 +2468,6 @@ public class GameView implements Screen, InputProcessor {
 
     private ArrayList<ImageButton> mainInventoryElements;
     private Table mainTable;
-
-
     private Container<Window> windowContainer;
     public void initMainTable(int index) {
         ArrayList<Window> inventoryWindows = viewController.getInventoryWindows();
@@ -2498,10 +2497,18 @@ public class GameView implements Screen, InputProcessor {
         setInputProcessor();
     }
 
+    private boolean mapWindowIsOpen = false;
     public void switchWindow(Window newWindow, int index) {
         viewController.setCurrentTab(index);
         currentWindow = newWindow;
-        windowContainer.setActor(currentWindow); // Replaces content without changing layout
+        windowContainer.setActor(currentWindow);
+        if(index == 3) {
+            toggleMapVisibility();
+            mapWindowIsOpen = true;
+        } else if (mapWindowIsOpen) {
+            toggleMapVisibility();
+            mapWindowIsOpen = false;
+        }
     }
 
     private void setInputProcessor() {
@@ -5369,10 +5376,9 @@ public class GameView implements Screen, InputProcessor {
         this.playerTime = playerTime;
     }
 
-    private Table mapTable;
+    private Table mapTable = new Table();;
     private Stack[][] mapCells = new Stack[160][170];
     public ScrollPane createGraphicalMap() {
-        mapTable = new Table();
         mapTable.defaults().width(6).height(6);
         rebuildMapTable();
         ScrollPane scrollPane = new ScrollPane(mapTable, AppClient.getAssets().getSkin());
@@ -5541,7 +5547,35 @@ public class GameView implements Screen, InputProcessor {
             default -> AppClient.getAssets().getPlainImg();
         };
     }
+    private ScrollPane graphicalMap;
+    private boolean mapVisible = false;
+    private Container<Window> mapContainer;
 
+    public void initMapUI() {
+        graphicalMap = createGraphicalMap();
+
+        Window mapWindow = new Window("Map", skin);
+        mapWindow.add(new Label("Map", skin)).left().padBottom(10);
+        mapWindow.row();
+        mapWindow.add(graphicalMap).expand().fill().colspan(2);
+        mapWindow.row();
+
+        mapTable = new Table(skin);
+        mapTable.setFillParent(true);
+        mapContainer = new Container<>(mapWindow);
+        mapContainer.setVisible(false);
+        mapContainer.size(1000, 800);
+
+        mapTable.add(mapContainer).colspan(7);
+
+        staticStage.addActor(mapTable);
+        setInputProcessor();
+    }
+
+    public void toggleMapVisibility() {
+        mapVisible = !mapVisible;
+        mapContainer.setVisible(mapVisible);
+    }
 }
 
 enum TileTextures {
