@@ -5574,7 +5574,6 @@ public class GameView implements Screen, InputProcessor {
     public void checkInBox() {
         java.util.List<Trade> tradeData = AppClient.getCurrentGame().getAllTrades();
         boolean foundAny = false;
-        System.out.println(tradeData.size());
         for (Trade trade : tradeData) {
             if (trade.getReceiver().equals(AppClient.getCurrentPlayer()) && !trade.isResponded()) {
                 foundAny = true;
