@@ -15,6 +15,8 @@ import com.StardewValley.models.game_structure.weathers.Weather;
 import com.StardewValley.models.goods.Good;
 import com.StardewValley.models.goods.GoodType;
 import com.StardewValley.models.goods.craftings.Crafting;
+import com.StardewValley.models.goods.foragings.ForagingCrop;
+import com.StardewValley.models.goods.foragings.ForagingSeed;
 import com.StardewValley.models.goods.recipes.CookingRecipeType;
 import com.StardewValley.models.goods.recipes.CraftingRecipeType;
 import com.StardewValley.models.goods.tools.Tool;
@@ -56,6 +58,7 @@ import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Objects;
 
+import static com.StardewValley.models.game_structure.Map.findTile;
 import static java.lang.Math.abs;
 import static java.lang.Math.max;
 import static java.lang.Math.min;
@@ -567,10 +570,10 @@ public class GameView implements Screen, InputProcessor {
         int tileX = (int) (touchPos.x / scaledSize);
         int tileY = (int) (touchPos.y / scaledSize);
 
-        Tile playerTile = Map.findTile(AppClient.getCurrentPlayer().getCoordinate(),
+        Tile playerTile = findTile(AppClient.getCurrentPlayer().getCoordinate(),
             AppClient.getCurrentGame());
         Coordinate coordinate = new Coordinate(tileX, tileY);
-        Tile selectedTile = Map.findTile(coordinate, AppClient.getCurrentGame());
+        Tile selectedTile = findTile(coordinate, AppClient.getCurrentGame());
         if (selectedTile == null || playerTile == null)
             return false;
 
@@ -598,7 +601,7 @@ public class GameView implements Screen, InputProcessor {
             playerTile.getTileType() != TileType.PLAIN && selectedTile.getTileType() != TileType.GREEN_HOUSE &&
             playerTile.getTileType() != TileType.PLAYER_BUILDING) {
 
-            Tile tile = Map.findTile(coordinate, AppClient.getCurrentGame());
+            Tile tile = findTile(coordinate, AppClient.getCurrentGame());
 
             assert tile != null;
             Message message = new Message(new HashMap<>() {{
@@ -1665,7 +1668,7 @@ public class GameView implements Screen, InputProcessor {
         for (int x = max((midX - Gdx.graphics.getWidth() / 2) / scaledSize - 5, 0); x < min((midX + Gdx.graphics.getWidth() / 2) / scaledSize + 1, 150); x++) {
             for (int y = max((midY - Gdx.graphics.getHeight() / 2) / scaledSize - 5, 0); y < min((midY + Gdx.graphics.getHeight() / 2) / scaledSize + 1, 160); y++) {
                 Coordinate coordinate = new Coordinate(x, y);
-                Tile tile = Map.findTile(coordinate, AppClient.getCurrentGame());
+                Tile tile = findTile(coordinate, AppClient.getCurrentGame());
                 switch (tile.getTileType()) {
                     case TileType.QUARRY -> {
                         Main.getBatch().draw(TileTextures.QUARRY.getImage(), x * scaledSize, y * scaledSize, scaledSize, scaledSize);
@@ -1713,12 +1716,12 @@ public class GameView implements Screen, InputProcessor {
         for (int x = max((midX - Gdx.graphics.getWidth() / 2) / scaledSize - 5, 0); x < min((midX + Gdx.graphics.getWidth() / 2) / scaledSize + 1, 150); x++) {
             for (int y = max((midY - Gdx.graphics.getHeight() / 2) / scaledSize - 5, 0); y < min((midY + Gdx.graphics.getHeight() / 2) / scaledSize + 1, 160); y++) {
                 Coordinate coordinate = new Coordinate(x, y);
-                Tile tile = Map.findTile(coordinate, AppClient.getCurrentGame());
+                Tile tile = findTile(coordinate, AppClient.getCurrentGame());
                 switch (tile.getTileType()) {
                     case TileType.GAME_BUILDING -> {
-                        Tile backTile = Map.findTile(new Coordinate(coordinate.getX() - 1, coordinate.getY()),
+                        Tile backTile = findTile(new Coordinate(coordinate.getX() - 1, coordinate.getY()),
                             AppClient.getCurrentGame());
-                        Tile upTile = Map.findTile(new Coordinate(coordinate.getX(), coordinate.getY() - 1),
+                        Tile upTile = findTile(new Coordinate(coordinate.getX(), coordinate.getY() - 1),
                             AppClient.getCurrentGame());
                         if (backTile.getTileType() != TileType.GAME_BUILDING && upTile.getTileType() != TileType.GAME_BUILDING) {
                             GameBuilding gameBuilding = AppClient.getCurrentGame().getMap().findGameBuilding(coordinate);
@@ -1728,18 +1731,18 @@ public class GameView implements Screen, InputProcessor {
                         }
                     }
                     case TileType.PLAYER_BUILDING -> {
-                        Tile backTile = Map.findTile(new Coordinate(coordinate.getX() - 1, coordinate.getY()),
+                        Tile backTile = findTile(new Coordinate(coordinate.getX() - 1, coordinate.getY()),
                             AppClient.getCurrentGame());
-                        Tile upTile = Map.findTile(new Coordinate(coordinate.getX(), coordinate.getY() - 1),
+                        Tile upTile = findTile(new Coordinate(coordinate.getX(), coordinate.getY() - 1),
                             AppClient.getCurrentGame());
                         if (backTile.getTileType() != TileType.PLAYER_BUILDING && upTile.getTileType() != TileType.PLAYER_BUILDING) {
                             Main.getBatch().draw(TileTextures.HOUSE.getImage(), x * scaledSize, y * scaledSize, 10 * scaledSize, 10 * scaledSize);
                         }
                     }
                     case TileType.GREEN_HOUSE -> {
-                        Tile backTile = Map.findTile(new Coordinate(coordinate.getX() - 1, coordinate.getY()),
+                        Tile backTile = findTile(new Coordinate(coordinate.getX() - 1, coordinate.getY()),
                             AppClient.getCurrentGame());
-                        Tile upTile = Map.findTile(new Coordinate(coordinate.getX(), coordinate.getY() - 1),
+                        Tile upTile = findTile(new Coordinate(coordinate.getX(), coordinate.getY() - 1),
                             AppClient.getCurrentGame());
                         if (backTile.getTileType() != TileType.GREEN_HOUSE && upTile.getTileType() != TileType.GREEN_HOUSE) {
                             if (AppClient.getCurrentPlayer().getFarm().getGreenHouse().isAvailable())
@@ -1758,7 +1761,7 @@ public class GameView implements Screen, InputProcessor {
         for (int x = min((midX + Gdx.graphics.getWidth() / 2) / scaledSize + 1, 150) - 1; x >= max((midX - Gdx.graphics.getWidth() / 2) / scaledSize - 5, 0); x--) {
             for (int y = min((midY + Gdx.graphics.getHeight() / 2) / scaledSize + 1, 160) - 1; y >= max((midY - Gdx.graphics.getHeight() / 2) / scaledSize - 5, 0); y--) {
                 Coordinate coordinate = new Coordinate(x, y);
-                Tile tile = Map.findTile(coordinate, AppClient.getCurrentGame());
+                Tile tile = findTile(coordinate, AppClient.getCurrentGame());
                 switch (tile.getTileType()) {
                     case TileType.FARM, TileType.PLOWED_FARM, TileType.PLAIN -> {
                         drawGood(tile);
@@ -5365,6 +5368,180 @@ public class GameView implements Screen, InputProcessor {
     public void setPlayerTime(float playerTime) {
         this.playerTime = playerTime;
     }
+
+    private Table mapTable;
+    private Stack[][] mapCells = new Stack[160][170];
+    public ScrollPane createGraphicalMap() {
+        mapTable = new Table();
+        mapTable.defaults().width(6).height(6);
+        rebuildMapTable();
+        ScrollPane scrollPane = new ScrollPane(mapTable, AppClient.getAssets().getSkin());
+        scrollPane.setFadeScrollBars(false);
+        scrollPane.setScrollingDisabled(true, false);
+        scrollPane.setForceScroll(false, true);
+        scrollPane.setSize(980, 780);
+
+        return scrollPane;
+    }
+
+    private void rebuildMapTable() {
+        mapTable.clear();
+
+        for (int j = 1; j < 161; j++) {
+            mapTable.row();
+            for (int i = 0; i < 150; i++) {
+                Coordinate coordinate = new Coordinate(i, 160 - j);
+                Tile tile = findTile(coordinate, AppClient.getCurrentGame());
+                Image img = AppClient.getAssets().getNullImg();
+
+                if (tile == null) {
+                    img = AppClient.getAssets().getEmptyImg();
+                } else {
+                    if (tile.isWatered()) {
+                        img = AppClient.getAssets().getWateredFarmImg();
+                    }
+
+                    for (Good good : tile.getGoods()) {
+                        if (good instanceof ForagingCrop) img = AppClient.getAssets().getCropImg();
+                        else if (good instanceof ForagingSeed) img = AppClient.getAssets().getSeedImg();
+                        else if ("Grass".equals(good.getName())) img = AppClient.getAssets().getTreeImg();
+                    }
+
+                    for (Player player : AppClient.getCurrentGame().getPlayers()) {
+                        if (player.getCoordinate().equals(coordinate)) img = AppClient.getAssets().getPlayerImg();
+                    }
+
+                    for (NPC npc : AppClient.getCurrentGame().getNPCs()) {
+                        if (npc.getType().getCoordinate().equals(coordinate)) {
+                            img = switch (npc.getType().getName()) {
+                                case "Abigail" -> AppClient.getAssets().getAbigailImg();
+                                case "Clint" -> AppClient.getAssets().getClintImg();
+                                case "Gus" -> AppClient.getAssets().getGusImg();
+                                case "Harvey" -> AppClient.getAssets().getHarveyImg();
+                                case "Leah" -> AppClient.getAssets().getLeahImg();
+                                case "Marnie" -> AppClient.getAssets().getMarnieImg();
+                                case "Morris" -> AppClient.getAssets().getMorrisImg();
+                                case "Pierre" -> AppClient.getAssets().getPierreImg();
+                                case "Robin" -> AppClient.getAssets().getRobinImg();
+                                case "Sebastian" -> AppClient.getAssets().getSebastianImg();
+                                case "Willy" -> AppClient.getAssets().getWillyImg();
+                                default -> AppClient.getAssets().getMushroomTreeImg();
+                            };
+                        }
+                    }
+
+                    for (Animal animal : AppClient.getCurrentGame().getMap().allAnimals()) {
+                        if (animal.getCoordinate().equals(coordinate)) {
+                            img = AppClient.getAssets().getMushroomTreeImg();
+                        }
+                    }
+                }
+
+                Stack cellStack = new Stack();
+                Image bg = new Image(determineTileBackground(tile).getDrawable());
+                Image fg = new Image(img.getDrawable());
+
+                bg.setSize(6, 6);
+                fg.setSize(6, 6);
+
+                cellStack.add(bg);
+                cellStack.add(fg);
+
+
+                mapCells[i][160 - j] = cellStack;
+                mapTable.add(cellStack).width(6).height(6);
+            }
+        }
+    }
+    public void updateMap() {
+        if (mapCells[AppClient.getCurrentPlayer().getCoordinate().getX()][AppClient.getCurrentPlayer().getCoordinate().getY()] != null) {
+            updateMapAround(AppClient.getCurrentPlayer().getLastCoordinate().getX() , AppClient.getCurrentPlayer().getLastCoordinate().getY());
+            updateMapAround(AppClient.getCurrentPlayer().getCoordinate().getX() , AppClient.getCurrentPlayer().getCoordinate().getY());
+        }
+    }
+    private void updateMapAround(int x , int y) {
+
+        Stack cellStack = mapCells[x][y];
+        cellStack.clearChildren(); // Remove all previous images in the stack
+
+        Coordinate coord = new Coordinate(x,  y);
+        Tile tile = findTile(coord, AppClient.getCurrentGame());
+
+        // Background image
+        Image bg = new Image(determineTileBackground(tile).getDrawable());
+        bg.setSize(6, 6);
+        cellStack.add(bg);
+
+        // Determine what foreground image to show:
+        Image fg = AppClient.getAssets().getNullImg(); // default
+
+        if (tile == null) {
+            fg = AppClient.getAssets().getEmptyImg();
+        } else {
+            if (tile.isWatered()) {
+                fg = AppClient.getAssets().getWateredFarmImg();
+            }
+
+            for (Good good : tile.getGoods()) {
+                if (good instanceof ForagingCrop) fg = AppClient.getAssets().getCropImg();
+                else if (good instanceof ForagingSeed) fg = AppClient.getAssets().getSeedImg();
+                else if ("Grass".equals(good.getName())) fg = AppClient.getAssets().getTreeImg();
+            }
+
+            for (Player player : AppClient.getCurrentGame().getPlayers()) {
+                if (player.getCoordinate().equals(coord)) {
+                    fg = AppClient.getAssets().getPlayerImg();;
+                }
+            }
+
+            for (NPC npc : AppClient.getCurrentGame().getNPCs()) {
+                if (npc.getType().getCoordinate().equals(coord)) {
+                    fg = switch (npc.getType().getName()) {
+                        case "Abigail" -> AppClient.getAssets().getAbigailImg();
+                        case "Clint" -> AppClient.getAssets().getClintImg();
+                        case "Gus" -> AppClient.getAssets().getGusImg();
+                        case "Harvey" -> AppClient.getAssets().getHarveyImg();
+                        case "Leah" -> AppClient.getAssets().getLeahImg();
+                        case "Marnie" -> AppClient.getAssets().getMarnieImg();
+                        case "Morris" -> AppClient.getAssets().getMorrisImg();
+                        case "Pierre" -> AppClient.getAssets().getPierreImg();
+                        case "Robin" -> AppClient.getAssets().getRobinImg();
+                        case "Sebastian" -> AppClient.getAssets().getSebastianImg();
+                        case "Willy" -> AppClient.getAssets().getWillyImg();
+                        default -> AppClient.getAssets().getMushroomTreeImg();
+                    };
+                }
+            }
+
+            for (Animal animal : AppClient.getCurrentGame().getMap().allAnimals()) {
+                if (animal.getCoordinate().equals(coord)) {
+                    fg = AppClient.getAssets().getMushroomTreeImg();
+                }
+            }
+        }
+
+        fg.setSize(6, 6);
+        cellStack.add(fg);
+
+    }
+    private Image determineTileBackground(Tile tile) {
+        if (tile == null) return AppClient.getAssets().getEmptyImg();
+        if (tile.isWatered()) return AppClient.getAssets().getWateredFarmImg();
+
+        return switch (tile.getTileType()) {
+            case FARM -> AppClient.getAssets().getFarmBackgroundImg();
+            case WATER -> AppClient.getAssets().getWaterImg();
+            case GREEN_HOUSE -> AppClient.getAssets().getGreenhouseImg();
+            case PLAYER_BUILDING -> AppClient.getAssets().getPlayerBuildingImg();
+            case ROAD -> AppClient.getAssets().getRoadImg();
+            case QUARRY -> AppClient.getAssets().getQuarryImg();
+            case BEACH -> AppClient.getAssets().getBeachImg();
+            case SQUARE -> AppClient.getAssets().getSquareImg();
+            case STONE_WALL -> AppClient.getAssets().getWallImg();
+            default -> AppClient.getAssets().getPlainImg();
+        };
+    }
+
 }
 
 enum TileTextures {
