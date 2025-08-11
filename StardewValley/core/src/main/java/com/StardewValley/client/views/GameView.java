@@ -19,6 +19,8 @@ import com.StardewValley.models.goods.craftings.Crafting;
 import com.StardewValley.models.goods.farmings.Farming;
 import com.StardewValley.models.goods.foods.Food;
 import com.StardewValley.models.goods.foragings.Foraging;
+import com.StardewValley.models.goods.foragings.ForagingCrop;
+import com.StardewValley.models.goods.foragings.ForagingSeed;
 import com.StardewValley.models.goods.recipes.CookingRecipeType;
 import com.StardewValley.models.goods.recipes.CraftingRecipeType;
 import com.StardewValley.models.goods.tools.Tool;
