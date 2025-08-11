@@ -173,7 +173,7 @@ public class GameMenu implements AppMenu {
         else if ((matcher = GameMenuCommands.BUILD_BUILDING.matcher(input)) != null) {
             System.out.println(controller.buildBuilding(matcher.group("buildingName"), matcher.group("x"), matcher.group("y")));
         } else if ((matcher = GameMenuCommands.BUY_ANIMAL.matcher(input)) != null) {
-            System.out.println(controller.buyAnimal(matcher.group("animalName"), matcher.group("number")));
+//            System.out.println(controller.buyAnimal(matcher.group("animalName"), matcher.group("number")));
         } else if ((matcher = GameMenuCommands.PET_ANIMAL.matcher(input)) != null) {
             System.out.println(controller.petAnimal(matcher.group("petName")));
         } else if ((matcher = GameMenuCommands.ANIMAL_LIST.matcher(input)) != null) {

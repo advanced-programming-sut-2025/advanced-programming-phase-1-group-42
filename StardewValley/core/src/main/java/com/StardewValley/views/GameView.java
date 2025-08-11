@@ -169,6 +169,11 @@ public class GameView implements Screen, InputProcessor {
     private Label craftingMessageLabel;
     private Window questWindow = null;
 
+
+
+
+    private boolean inMarnieRanch = false;
+
     private boolean isTabClicked = false;
 
     TradeMenuController tradeController = new TradeMenuController();
@@ -501,6 +506,9 @@ public class GameView implements Screen, InputProcessor {
             closeButton.addListener(new ChangeListener() {
                 @Override
                 public void changed(ChangeEvent event, Actor actor) {
+                    if (inMarnieRanch) {
+                        inMarnieRanch = false;
+                    }
                     window.remove();
                     backgroundTexture.dispose();
                 }
@@ -837,11 +845,9 @@ public class GameView implements Screen, InputProcessor {
                                  Label info, int tileX, int tileY, MarnieRanch building, Label selectedNameLabel,
                                  Table itemsTable, Table counterPanel, Table selectedPanel, ScrollPane scrollPane, Table content) {
         final AnimalTypes[] selectedAnimal = {null};
+        inMarnieRanch = true;
         final ProductType[] selectedProductType = {null};
         final int[] selectedCount = {0};
-        TextField XField = new TextField(" " , skin);
-        TextField YField = new TextField(" " , skin);
-
         TextField animalName = new TextField("", skin);
 
         animalName.setDisabled(false);
@@ -868,12 +874,12 @@ public class GameView implements Screen, InputProcessor {
         });
 
 
+
         purchaseButton.addListener(new ChangeListener() {
             @Override
             public void changed(ChangeEvent changeEvent, Actor actor) {
                 if (selectedAnimal[0] != null && !animalName.getText().isEmpty()) {
-                    Result result = controller.buyAnimal(String.valueOf(selectedAnimal[0]), animalName.getText());
-                    System.out.println(result.message());
+                    Result result = controller.buyAnimal(selectedAnimal[0], animalName.getText());
                     info.setText(result.toString());
                 } else {
                     Result result = controller.purchase(String.valueOf(selectedProductType[0]),
@@ -1520,17 +1526,20 @@ public class GameView implements Screen, InputProcessor {
                         Tile upTile = Map.findTile(new Coordinate(coordinate.getX(), coordinate.getY() - 1));
                         if (backTile.getTileType() != TileType.GAME_BUILDING && upTile.getTileType() != TileType.GAME_BUILDING) {
                             GameBuilding gameBuilding = App.getCurrentGame().getMap().findGameBuilding(coordinate);
-                            Coordinate size = new Coordinate(gameBuilding.getEndCordinate().getX() - gameBuilding.getStartCordinate().getX(),
-                                gameBuilding.getEndCordinate().getY() - gameBuilding.getStartCordinate().getY());
-                            Main.getBatch().draw(gameBuilding.getTexture(), x * scaledSize, y * scaledSize, size.getX() * scaledSize, size.getY() * scaledSize);
+                            Main.getBatch().draw(gameBuilding.getTexture(), x * scaledSize, y * scaledSize, 10 * scaledSize, 10* scaledSize);
                         }
                     }
                     case TileType.PLAYER_BUILDING -> {
                         Tile backTile = Map.findTile(new Coordinate(coordinate.getX() - 1, coordinate.getY()));
                         Tile upTile = Map.findTile(new Coordinate(coordinate.getX(), coordinate.getY() - 1));
-//                        if (backTile.getTileType() != TileType.PLAYER_BUILDING && upTile.getTileType() != TileType.PLAYER_BUILDING) {
-//                            Main.getBatch().draw(TileAssets.HOUSE.getTexture(), x * scaledSize, y * scaledSize, 10 * scaledSize, 10 * scaledSize);
-//                        }
+                        if (backTile.getTileType() != TileType.PLAYER_BUILDING && upTile.getTileType() != TileType.PLAYER_BUILDING) {
+                            for (FarmBuilding farmBuilding : App.getCurrentGame().getCurrentPlayer().getFarm().getFarmBuildings()) {
+                                if (farmBuilding.isInsideBuilding(tile.getCordinate())) {
+                                    Main.getBatch().draw(farmBuilding.getType().getTexture(), x * scaledSize, y * scaledSize, 10 * scaledSize, 10 * scaledSize);
+                                }
+                            }
+                            //TileTextures.HOUSE.getImage()
+                        }
                         if (backTile.getTileType() != TileType.PLAYER_BUILDING && upTile.getTileType() != TileType.PLAYER_BUILDING) {
                             for (FarmBuilding farmBuilding : App.getCurrentGame().getCurrentPlayer().getFarm().getFarmBuildings()) {
                                 if (farmBuilding.isInsideBuilding(tile.getCordinate())) {
@@ -1558,6 +1567,9 @@ public class GameView implements Screen, InputProcessor {
             }
         }
 
+        drawFarmingBuilding();
+        drawAnimals();
+
         for (int x = min((midX + Gdx.graphics.getWidth() / 2) / scaledSize + 1, 150) - 1; x >= max((midX - Gdx.graphics.getWidth() / 2) / scaledSize - 5, 0); x--) {
             for (int y = min((midY + Gdx.graphics.getHeight() / 2) / scaledSize + 1, 160) - 1; y >= max((midY - Gdx.graphics.getHeight() / 2) / scaledSize - 5, 0); y--) {
                 Coordinate coordinate = new Coordinate(x, y);
@@ -1574,9 +1586,6 @@ public class GameView implements Screen, InputProcessor {
         drawInventory();
         drawNPCs();
         isPlayerMoved();
-        drawFarmingBuilding();
-        drawAnimals();
-
 
     }
 
@@ -1795,9 +1804,20 @@ public class GameView implements Screen, InputProcessor {
         for (Player player : App.getCurrentGame().getPlayers()) {
             for (FarmBuilding farmBuilding : player.getFarm().getFarmBuildings()) {
                 if (farmBuilding.getType() != FarmBuildingTypes.HOME) {
-                    Main.getBatch().draw(farmBuilding.getType().getInteriorTexture(), (float) (farmBuilding.getStartCordinate().getX() + farmBuilding.getEndCordinate().getX()) / 2 * scaledSize,
-                        (float) (farmBuilding.getStartCordinate().getY() + farmBuilding.getEndCordinate().getY()) / 2 * scaledSize,
-                        (float) (1.2 * farmBuilding.getType().getSize().second() * scaledSize), (float) (1.2 * farmBuilding.getType().getSize().first() * scaledSize));
+                    Texture texture = farmBuilding.getType().getInteriorTexture();
+
+                    TextureRegion region = new TextureRegion(texture);
+
+                    region.flip(false, true);
+
+                    float width = (float) (2 * farmBuilding.getType().getSize().second() * scaledSize);
+                    float height = (float) (2 * farmBuilding.getType().getSize().first() * scaledSize);
+
+                    float x = (float) ((farmBuilding.getStartCordinate().getX() + farmBuilding.getEndCordinate().getX()) / 2) * scaledSize - width / 2;
+                    float y = (float) ((farmBuilding.getStartCordinate().getY() + farmBuilding.getEndCordinate().getY()) / 2) * scaledSize - height / 2;
+
+                    Main.getBatch().draw(region, x, y, width, height);
+
                 }
             }
         }
@@ -5080,6 +5100,10 @@ public class GameView implements Screen, InputProcessor {
             timeOfDayLabel.setText(currentTimeOfDay + ":00");
         }
 
+    }
+
+    public boolean getInMarnieRanch() {
+        return inMarnieRanch;
     }
 }
 
