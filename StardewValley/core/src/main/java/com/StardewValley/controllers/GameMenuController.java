@@ -191,6 +191,10 @@ public class GameMenuController extends Controller {
         if (gameView.isTradeHasWindowOpened()){
             return;
         }
+
+        if (gameView.getInMarnieRanch() == true)
+            return;
+
         Player player = App.getCurrentGame().getCurrentPlayer();
         player.setPlayerDirection(-1);
 
@@ -1941,20 +1945,13 @@ public class GameMenuController extends Controller {
         return true;
     }
 
-    public Result buyAnimal(String animalType, String animalName) {
+    public Result buyAnimal(AnimalTypes animalType, String animalName) {
         Coordinate coordinate = App.getCurrentGame().getCurrentPlayer().getCoordinate();
-        Tile tile = App.getCurrentGame().getMap().findTile(coordinate);
-        if (tile.getTileType() != TileType.GAME_BUILDING)
-            return new Result(false, "You should be in a game building to show all products!");
-        if (!App.getCurrentGame().getMap().findGameBuilding(coordinate).isInWorkingHours()) {
-            return new Result(false, App.getCurrentGame().getMap().findGameBuilding(coordinate).getName() + " hours have ended for today!");
-        }
 
+//        if (!App.getCurrentGame().getMap().findGameBuilding(coordinate).isInWorkingHours()) {
+//            return new Result(false, App.getCurrentGame().getMap().findGameBuilding(coordinate).getName() + " hours have ended for today!");
+//        }
 
-        if (animalType == null || animalName == null || animalType.trim().isEmpty() || animalName.trim().isEmpty()) {
-            return new Result(false, "Invalid animal type or name");
-        }
-        animalType = animalType.trim();
         animalName = animalName.trim();
 
         MarnieRanch marnieRanch = (MarnieRanch) App.getCurrentGame().getMap().getMarnieRanch();
@@ -1962,23 +1959,14 @@ public class GameMenuController extends Controller {
             return new Result(false, "Store is not Open!\nWorking Time: " + marnieRanch.getHours().first()
                 + " ~ " + (marnieRanch.getHours().second()));
         }
-        AnimalTypes animalTypeEnum = null;
-        for (AnimalTypes type : marnieRanch.animals) {
-            if (type.getName().equals(animalType)) {
-                animalTypeEnum = type;
-                break;
-            }
-        }
-        if (animalTypeEnum == null) {
-            return new Result(false, "Animal type not found: " + animalType);
-        }
-        if (App.getCurrentGame().getCurrentPlayer().getWallet().getBalance() < animalTypeEnum.getPrice()) {
+
+        if (App.getCurrentGame().getCurrentPlayer().getWallet().getBalance() < animalType.getPrice()) {
             return new Result(false, "You don't have enough Money!");
         }
 
         FarmBuilding suitableBuilding = null;
         for (FarmBuilding farmBuilding : App.getCurrentGame().getCurrentPlayer().getFarm().getFarmBuildings()) {
-            if (farmBuilding.getType().equals(animalTypeEnum.getFarmBuildingTypes())) {
+            if (farmBuilding.getType().equals(animalType.getFarmBuildingTypes())) {
                 suitableBuilding = farmBuilding;
                 break;
             }
@@ -1987,16 +1975,23 @@ public class GameMenuController extends Controller {
             return new Result(false, "You don't have a suitable building for this animal!");
         }
 
-        Animal animal = marnieRanch.buildAnimal(animalTypeEnum, animalName);
+        Animal animal = marnieRanch.buildAnimal(animalType, animalName);
         if (!suitableBuilding.addAnimal(animal)) {
             return new Result(false, suitableBuilding.getName() + " is full");
         }
 
-        App.getCurrentGame().getCurrentPlayer().getWallet().decreaseBalance(animalTypeEnum.getPrice());
+        App.getCurrentGame().getCurrentPlayer().getWallet().decreaseBalance(animalType.getPrice());
         animal.setLocatedPLace(suitableBuilding);
         App.getCurrentGame().getMap().allAnimals().add(animal);
-        int x = (int) (suitableBuilding.getStartCordinate().getX() + Math.random() * 2);
-        int y = (int) (suitableBuilding.getEndCordinate().getY() - Math.random() * 2);
+        int minX = (int) suitableBuilding.getStartCordinate().getX();
+        int maxX = (int) suitableBuilding.getEndCordinate().getX();
+
+        int minY = (int) suitableBuilding.getStartCordinate().getY();
+        int maxY = (int) suitableBuilding.getEndCordinate().getY();
+
+        int x = minX + (int)(Math.random() * (maxX - minX + 1));
+        int y = minY + (int)(Math.random() * (maxY - minY + 1));
+
         animal.setCoordinate(new Coordinate(x, y));
 
         return new Result(true, "A " + animalType + " named " + animalName + " has been added to your farm!");
