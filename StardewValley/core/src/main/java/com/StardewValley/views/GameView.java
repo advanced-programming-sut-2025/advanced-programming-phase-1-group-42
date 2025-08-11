@@ -438,6 +438,17 @@ public class GameView implements Screen, InputProcessor {
             playerTile.getTileType() != TileType.PLAYER_BUILDING) {
 
             if (App.getCurrentGame().getCurrentPlayer().getInHandGood().getLast() instanceof Tool) {
+                if (App.getCurrentGame().getCurrentPlayer().getInHandGood().getLast().getName().equals("Training_Fishing_Pole")||
+                    App.getCurrentGame().getCurrentPlayer().getInHandGood().getLast().getName().equals("Bamboo_Fishing_Pole")||
+                    App.getCurrentGame().getCurrentPlayer().getInHandGood().getLast().getName().equals("Fiberglass_Fishing_Pole")||
+                    App.getCurrentGame().getCurrentPlayer().getInHandGood().getLast().getName().equals("Iridium_Fishing_Pole")) {
+                    float x = App.getCurrentGame().getCurrentPlayer().getInHandGoodSprite().getX();
+                    float y = App.getCurrentGame().getCurrentPlayer().getInHandGoodSprite().getY();
+                    App.getCurrentGame().getCurrentPlayer().getInHandGoodSprite().flip(true, false);
+                    controller.fishing(App.getCurrentGame().getCurrentPlayer().getInHandGood().getLast().getName());
+                    return true;
+                }
+
                 Tile tile = Map.findTile(coordinate);
 
                 assert tile != null;
@@ -449,8 +460,8 @@ public class GameView implements Screen, InputProcessor {
                 Tile tile = Map.findTile(coordinate);
 
                 assert tile != null;
-                controller.plantSeed(App.getCurrentGame().getCurrentPlayer().getInHandGood().getLast().getName(),
-                    Coordinate.getDirection(playerTile.getCordinate(), tile.getCordinate()).toString());
+                System.out.println(controller.plantSeed(App.getCurrentGame().getCurrentPlayer().getInHandGood().getLast().getName(),
+                    tile.getCordinate().toString()));
             }
             else if (App.getCurrentGame().getCurrentPlayer().getInHandGood().getLast().getType() == ProductType.SPEED_GRO ||
                 App.getCurrentGame().getCurrentPlayer().getInHandGood().getLast().getType() == ProductType.BASIC_RETAINING_SOIL ||
@@ -461,14 +472,14 @@ public class GameView implements Screen, InputProcessor {
 
                 assert tile != null;
                 controller.fertilize(App.getCurrentGame().getCurrentPlayer().getInHandGood().getLast().getName(),
-                    Coordinate.getDirection(playerTile.getCordinate(), tile.getCordinate()).toString());
+                    tile.getCordinate().toString());
             }
             else {
                 Tile tile = Map.findTile(coordinate);
 
                 assert tile != null;
                 controller.placeItem(App.getCurrentGame().getCurrentPlayer().getInHandGood().getLast().getName(),
-                    Coordinate.getDirection(playerTile.getCordinate(), tile.getCordinate()).toString());
+                    tile.getCordinate().toString());
 
             }
         }
@@ -1471,6 +1482,9 @@ public class GameView implements Screen, InputProcessor {
                         Main.getBatch().draw(TileAssets.QUARRY.getTexture(), x * scaledSize, y * scaledSize, scaledSize, scaledSize);
                     }
                     case TileType.FARM, TileType.PLAYER_BUILDING, TileType.GREEN_HOUSE -> {
+                        if(tile.isWatered()){
+
+                        }
                         if (App.getCurrentGame().getDateTime().getSeason() == Season.WINTER)
                             Main.getBatch().draw(TileAssets.FARM_WINTER.getTexture(), x * scaledSize, y * scaledSize, scaledSize, scaledSize);
                         else
@@ -2596,8 +2610,14 @@ public class GameView implements Screen, InputProcessor {
 
     final Label tradeInfoLabel = new Label("", skin);
     final Label tradeWithGoodsLabel = new Label("", skin);
+    boolean tradeHasWindowOpened = false;
+
+    public boolean isTradeHasWindowOpened() {
+        return tradeHasWindowOpened;
+    }
 
     private void initTradeWindow() {
+        tradeHasWindowOpened = true;
         this.tradeWindow = new Window("Trade", skin, "Letter");
         this.tradeWindow.setSize(1000, 560);
         this.tradeWindow.setResizable(false);
@@ -2646,6 +2666,7 @@ public class GameView implements Screen, InputProcessor {
             @Override
             public void clicked(InputEvent event, float x, float y) {
                 closeTradeWindow();
+                tradeHasWindowOpened = false;
             }
         });
         tradeTable.add(tradeBackButton).colspan(2).width(200).height(70).padTop(10).row();
@@ -2659,8 +2680,6 @@ public class GameView implements Screen, InputProcessor {
         tradeTable.remove();
         tradeWindow = null;
     }
-
-
 
     private void initPlayerTradeWithGoodsWindow(Player receiver) {
         Window window = new Window("New Goods Trade With " + receiver.getPlayerUsername(), skin);
@@ -2733,6 +2752,7 @@ public class GameView implements Screen, InputProcessor {
             @Override
             public void clicked(InputEvent event, float x, float y) {
                 window.remove();
+                tradeHasWindowOpened = false;
             }
         });
 
@@ -2862,6 +2882,7 @@ public class GameView implements Screen, InputProcessor {
             @Override
             public void clicked(InputEvent event, float x, float y) {
                 window.remove();
+                tradeHasWindowOpened = false;
             }
         });
 
@@ -4785,6 +4806,7 @@ public class GameView implements Screen, InputProcessor {
     private int lastDayOfMonthName;
     private int lastTimeOfDayName;
     private int lastNetWorth;
+    private Buff buffName;
     private DateTime currentTime;
     private Wallet currentWallet;
     private Weather currentWeather;
@@ -4812,7 +4834,7 @@ public class GameView implements Screen, InputProcessor {
         currentTime = App.getCurrentGame().getDateTime();
         currentWeather = App.getCurrentGame().getWeather();
         currentWallet = App.getCurrentGame().getCurrentPlayer().getWallet();
-
+        buffName = App.getCurrentGame().getCurrentPlayer().getBuff();
         lastNetWorth = currentWallet.getBalance();
         a = new Texture(Gdx.files.internal("GameAssets/Clock/Nan.png"));
         b = new Texture(Gdx.files.internal("GameAssets/Clock/Nan.png"));
@@ -4860,6 +4882,7 @@ public class GameView implements Screen, InputProcessor {
         staticStage.addActor(F);
         staticStage.addActor(G);
         staticStage.addActor(H);
+
     }
     public void setWeatherAndSeason(){
         seasonTexture = new Texture("GameAssets/Clock/" + currentTime.getSeason().getName() + ".png");
@@ -4883,11 +4906,15 @@ public class GameView implements Screen, InputProcessor {
         clockHandImage = new Image(new TextureRegionDrawable(new TextureRegion(handTexture)));
         clockFaceImage.setSize(clockFaceImage.getWidth() * 3, clockFaceImage.getHeight() * 3);
         clockHandImage.setSize(clockHandImage.getWidth() * 3, clockHandImage.getHeight() * 3);
-        clockFaceImage.setPosition(0 + x, Gdx.graphics.getHeight()-clockFaceImage.getHeight()); // base position (or center it if needed)
-        clockHandImage.setPosition(19 * 3 + x , 39 * 3 + Gdx.graphics.getHeight()-clockFaceImage.getHeight()); // adjust these if needed
+        clockFaceImage.setPosition(x, Gdx.graphics.getHeight()-clockFaceImage.getHeight());
+        clockHandImage.setPosition(19 * 3 + x , 39 * 3 + Gdx.graphics.getHeight()-clockFaceImage.getHeight());
         clockHandImage.setOrigin(clockHandImage.getWidth() / 2f, 0f);
         staticStage.addActor(clockFaceImage);
         staticStage.addActor(clockHandImage);
+
+        buffImg.setSize(buffImg.getWidth() * 2, buffImg.getHeight() * 2);
+        buffImg.setPosition(x - buffImg.getWidth(), Gdx.graphics.getHeight()-clockFaceImage.getHeight());
+        staticStage.addActor(buffImg);
     }
 
     public void setDays(){
@@ -4907,7 +4934,7 @@ public class GameView implements Screen, InputProcessor {
         staticStage.addActor(timeOfDayLabel);
     }
 
-    Label buffError = new Label("",skin);
+    Image buffImg = new Image(Assets.getInstance().getBuffNan());
 
     public void renderClock() {
 
@@ -4916,10 +4943,16 @@ public class GameView implements Screen, InputProcessor {
         String currentWeatherName = App.getCurrentGame().getWeather().getName();
         String currentSeasonName = App.getCurrentGame().getDateTime().getSeason().getName();
         String currentDayOfWeek = App.getCurrentGame().getDateTime().getDayOfWeek();
+        Buff currentBuffName = App.getCurrentGame().getCurrentPlayer().getBuff();
         int currentDayOfMonth = App.getCurrentGame().getDateTime().getDayOfSeason();
         int currentTimeOfDay = App.getCurrentGame().getDateTime().getTime();
         int currentNetWorth = App.getCurrentGame().getCurrentPlayer().getWallet().getBalance();
 
+        if(currentBuffName == null){
+            buffImg.setDrawable(Assets.getInstance().getBuffNan());
+        } else {
+            buffImg.setDrawable(Assets.getInstance().getBuff(currentBuffName.getType().name()));
+        }
 
         if(currentNetWorth != lastNetWorth) {
             int netWorth = currentNetWorth;
@@ -5081,6 +5114,7 @@ public class GameView implements Screen, InputProcessor {
         }
 
     }
+
 }
 
 

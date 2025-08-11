@@ -111,5 +111,16 @@ public class Coordinate {
         return newCoordinate;
     }
 
+    public static Coordinate fromString(String coordinateStr) {
+        java.util.regex.Pattern pattern = java.util.regex.Pattern.compile("\\(x:(-?\\d+), y:(-?\\d+)\\)");
+        java.util.regex.Matcher matcher = pattern.matcher(coordinateStr.trim());
+        if (!matcher.matches()) {
+            throw new IllegalArgumentException("Invalid coordinate: " + coordinateStr);
+        }
 
+        int x = Integer.parseInt(matcher.group(1));
+        int y = Integer.parseInt(matcher.group(2));
+
+        return new Coordinate(x, y);
+    }
 }

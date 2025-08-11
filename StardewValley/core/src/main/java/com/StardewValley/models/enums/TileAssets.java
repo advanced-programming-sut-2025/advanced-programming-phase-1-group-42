@@ -25,6 +25,7 @@ public enum TileAssets {
     CARPENTER_SHOP(new Texture("GameAssets/Game_Buildings/Carpenter_Shop.png")),
     FISH_SHOP(new Texture("GameAssets/Game_Buildings/Fish_Shop.png")),
     BROKEN_GREEN_HOUSE(new Texture("GameAssets/Greenhouse/Broken_Greenhouse.png")),
+    WATERED(new Texture("GameAssets/Flooring/Flooring_25.png")),
     THUNDER(new Texture("GameAssets/Thunder/Thunder.png"));
 
     private final Texture texture;

@@ -2,10 +2,7 @@ package com.StardewValley.models;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.audio.Music;
-import com.badlogic.gdx.graphics.Color;
-import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.Texture;
-import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
@@ -144,6 +141,36 @@ public class Assets {
     private Texture notSure = new Texture("GameAssets/Popup/notsure.png");
     private Texture edit = new Texture("GameAssets/Popup/edit.png");
 
+    private TextureRegionDrawable buffNan = new TextureRegionDrawable(new Texture("GameAssets\\Buff\\Nan.png"));
+    private TextureRegionDrawable buffFish = new TextureRegionDrawable(new Texture("GameAssets\\Buff\\Fishing_Skill_Icon.png"));
+    private TextureRegionDrawable buffMine = new TextureRegionDrawable(new Texture("GameAssets\\Buff\\Mining_Skill_Icon.png"));
+    private TextureRegionDrawable buffForage = new TextureRegionDrawable(new Texture("GameAssets\\Buff\\Foraging_Skill_Icon.png"));
+    private TextureRegionDrawable buffFarm =new TextureRegionDrawable(new Texture("GameAssets\\Buff\\Farming_Skill_Icon.png"));
+    private TextureRegionDrawable buffWeakness = new TextureRegionDrawable(new Texture("GameAssets\\Buff\\Weakness.png"));
+    private TextureRegionDrawable buffEnergy = new TextureRegionDrawable(new Texture("GameAssets\\Buff\\Max_Energy_Buff.png"));
+
+    public TextureRegionDrawable getBuffNan() {
+        return buffNan;
+    }
+
+    public TextureRegionDrawable getBuff(String buffName) {
+        switch(buffName) {
+            case "ENERGY_BUFF":
+                return buffEnergy;
+            case "FARMING_BUFF":
+                return buffFarm;
+            case "FORAGING_BUFF":
+                return buffForage;
+            case "FISHING_BUFF":
+                return buffFish;
+            case "MINING_BUFF":
+                return buffMine;
+            case "REJECT_BUFF":
+                return buffWeakness;
+            default:
+                return buffNan;
+        }
+    }
     public Texture getLike() {
         return like;
     }

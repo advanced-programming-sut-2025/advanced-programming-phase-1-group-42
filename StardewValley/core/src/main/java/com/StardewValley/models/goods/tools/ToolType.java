@@ -12,7 +12,7 @@ public enum ToolType implements GoodType {
     MILK_PAIL("Milk_Pail", 1000, 4,"GameAssets/Tools/Milk_Pail.png"),
     SHEAR("Shear", 1000, 4,"GameAssets/Tools/Shears.png"),
     TRASH_CAN("Trash_Can", 0,0,"GameAssets/Tools/Trash_Can.png"), //??
-    TRAINING_FISHING_POLE("Training_Fishing_Pole", 25, 8,"GameAssets/Tools/Training_Rod.png"),
+    TRAINING_FISHING_POLE("Training_Fishing_Pole", 25, 8,"GameAssets/Fishing_Pole/Training_Rod.png"),
     BAMBOO_FISHING_POLE("Bamboo_Fishing_Pole", 500, 8,"GameAssets/Fishing_Pole/Bamboo_Pole.png"),
     FIBERGLASS_FISHING_POLE("Fiberglass_Fishing_Pole", 1800, 6,"GameAssets/Fishing_Pole/Fiberglass_Rod.png"),
     IRIDIUM_FISHING_POLE("Iridium_Fishing_Pole", 7500, 4 , "GameAssets/Fishing_Pole/Iridium_Rod.png");

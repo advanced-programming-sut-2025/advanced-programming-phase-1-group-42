@@ -188,7 +188,9 @@ public class GameMenuController extends Controller {
     public void handleInput() {
         if (gameView.getCheatWindow() != null)
             return;
-
+        if (gameView.isTradeHasWindowOpened()){
+            return;
+        }
         Player player = App.getCurrentGame().getCurrentPlayer();
         player.setPlayerDirection(-1);
 
@@ -203,10 +205,14 @@ public class GameMenuController extends Controller {
         }
 
         if (gameView.getChatRoomWindow()==null) {
+
             if(Gdx.input.isKeyJustPressed(Input.Keys.U)) {
                 App.getCurrentGame().getCurrentPlayer().getWallet().increaseBalance(1000);
-                cheatAddItem("Wood" , String.valueOf(1000));
-                cheatAddItem("Stone" , String.valueOf(1000));
+                cheatAddItem("Wood" , String.valueOf(500));
+                cheatAddItem("Stone" , String.valueOf(500));
+                cheatAddItem("Farmers_Lunch" , String.valueOf(10));
+                cheatAddItem("Jazz_Seeds" , String.valueOf(10));
+
             }
 
         boolean flag = false;
@@ -1468,7 +1474,7 @@ public class GameMenuController extends Controller {
         seed = seed.trim();
         direction = direction.trim();
 
-        Coordinate coordinate = Coordinate.getDirection(direction);
+        Coordinate coordinate = Coordinate.fromString(direction);
         Tile tile = App.getCurrentGame().getCurrentPlayer().getFarm().checkInFarm(coordinate, App.getCurrentGame().getCurrentPlayer());
         if (tile == null)
             return new Result(false, "You don't have access to this tile!");
@@ -1560,7 +1566,7 @@ public class GameMenuController extends Controller {
         fertilizerName = fertilizerName.trim();
         direction = direction.trim();
 
-        Coordinate coordinate = Coordinate.getDirection(direction);
+        Coordinate coordinate = Coordinate.fromString(direction);
         Tile tile = App.getCurrentGame().getCurrentPlayer().getFarm().checkInFarm(coordinate,
             App.getCurrentGame().getCurrentPlayer());
 
@@ -1653,7 +1659,7 @@ public class GameMenuController extends Controller {
             return new Result(false, "Item " + itemName + " not found");
         }
 
-        Coordinate coordinate = Coordinate.getDirection(direction);
+        Coordinate coordinate = Coordinate.fromString(direction);
         switch (coordinate) {
             case null:
                 return new Result(false, "Direction not recognized");
