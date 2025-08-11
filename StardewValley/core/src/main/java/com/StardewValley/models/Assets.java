@@ -189,10 +189,17 @@ public class Assets {
     private Texture sleepy = new Texture("GameAssets/Popup/sleepy.png");
     private Texture notSure = new Texture("GameAssets/Popup/notsure.png");
     private Texture edit = new Texture("GameAssets/Popup/edit.png");
-
+    private Texture hi = new Texture("GameAssets/Popup/Hi.png");
+    private Texture bye = new Texture("GameAssets/Popup/Bye.png");
     public Texture getLike() {
         return like;
     }
+
+    public Texture getBye() {
+        return bye;
+    }
+
+    public Texture getHi() {return hi;}
 
     public Texture getUwu() {
         return uwu;

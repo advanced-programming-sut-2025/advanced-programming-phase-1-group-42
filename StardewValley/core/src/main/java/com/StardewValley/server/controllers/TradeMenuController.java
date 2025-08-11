@@ -45,6 +45,7 @@ public class TradeMenuController {
 
         Trade trade = TradeManager.createTrade(currentPlayer, receiverPlayer, type, item, amountInt, priceInt,
             null , null, clientHandler);
+        clientHandler.getClientGame().getAllTrades().add(trade);
         return new Result(true, "Trade created with ID: " + trade.getId());
     }
 
@@ -78,8 +79,8 @@ public class TradeMenuController {
 
         Trade trade = TradeManager.createTrade(currentPlayer, receiverPlayer, type, item, amountInt,
             null, targetItem , targetAmountInt, clientHandler);
+        clientHandler.getClientGame().getAllTrades().add(trade);
         return new Result(true, "Trade created with ID: " + trade.getId());
-
     }
 
     public Result tradeList(ClientHandler clientHandler) {

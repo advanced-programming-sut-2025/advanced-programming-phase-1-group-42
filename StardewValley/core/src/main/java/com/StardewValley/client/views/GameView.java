@@ -2462,16 +2462,10 @@ public class GameView implements Screen, InputProcessor {
         return toolsWindow;
     }
 
-    public Stage getStage() {
-        return stage;
-    }
-
-    private ArrayList<ImageButton> mainInventoryElements;
     private Table mainTable;
     private Container<Window> windowContainer;
     public void initMainTable(int index) {
-        ArrayList<Window> inventoryWindows = viewController.getInventoryWindows();
-        mainInventoryElements = viewController.getMainInventoryElements();
+
         mainTable = new Table(skin);
         mainTable.setFillParent(true);
 
@@ -2491,7 +2485,7 @@ public class GameView implements Screen, InputProcessor {
         windowContainer = new Container<>(currentWindow);
         windowContainer.size(1000, 800);
 
-        mainTable.add(windowContainer).colspan(7); // Only add container to table
+        mainTable.add(windowContainer).colspan(7);
 
         staticStage.addActor(mainTable);
         setInputProcessor();
@@ -2502,7 +2496,7 @@ public class GameView implements Screen, InputProcessor {
         viewController.setCurrentTab(index);
         currentWindow = newWindow;
         windowContainer.setActor(currentWindow);
-        if(index == 3) {
+        if(index == 3 && !mapWindowIsOpen) {
             toggleMapVisibility();
             mapWindowIsOpen = true;
         } else if (mapWindowIsOpen) {
@@ -3106,8 +3100,9 @@ public class GameView implements Screen, InputProcessor {
     Label feedbackLabel = new Label("", skin);
 
     private void initTradeInboxWindow() {
+        tradeInboxIsOpen = true;
         Window inboxWindow = new Window("Trade Inbox", skin, "Letter");
-        inboxWindow.setSize(1350, 800); // smaller width and height for a popup
+        inboxWindow.setSize(1350, 800);
         inboxWindow.setPosition(
             (staticStage.getWidth() - inboxWindow.getWidth()) / 2,
             (staticStage.getHeight() - inboxWindow.getHeight()) / 2
@@ -3117,13 +3112,12 @@ public class GameView implements Screen, InputProcessor {
 
         Table inboxTable = new Table(skin).pad(10);
 
-        java.util.List<Trade> tradeData = viewController.getRespondedTradesFor(AppClient.getCurrentPlayer());
+        java.util.List<Trade> tradeData = AppClient.getCurrentGame().getAllTrades();
 
-        Table tradesListTable = new Table(skin); // this table holds trade rows
+        Table tradesListTable = new Table(skin);
 
         boolean foundAny = false;
         for (Trade trade : tradeData) {
-            // Only show trades for current player and not responded
             if (trade.getReceiver().equals(AppClient.getCurrentPlayer()) && !trade.isResponded()) {
                 foundAny = true;
 
@@ -3199,6 +3193,7 @@ public class GameView implements Screen, InputProcessor {
             @Override
             public void clicked(InputEvent event, float x, float y) {
                 inboxWindow.remove();
+                tradeInboxIsOpen = false;
             }
         });
         TextButton historyBtn = new TextButton("History", skin);
@@ -3228,7 +3223,7 @@ public class GameView implements Screen, InputProcessor {
 
         Table inboxTable = new Table(skin).pad(10);
 
-        java.util.List<Trade> tradeData = viewController.getRespondedTradesFor(AppClient.getCurrentPlayer());
+        java.util.List<Trade> tradeData = AppClient.getCurrentGame().getAllTrades();
 
         Table tradesListTable = new Table(skin); // this table holds trade rows
 
@@ -3312,6 +3307,7 @@ public class GameView implements Screen, InputProcessor {
             @Override
             public void clicked(InputEvent event, float x, float y) {
                 inboxWindow.remove();
+                tradeInboxIsOpen = false;
             }
         });
         TextButton historyBtn = new TextButton("History", skin);
@@ -4468,8 +4464,8 @@ public class GameView implements Screen, InputProcessor {
 
     public void initPopupReactionWindow() {
         emojiWindow = new Window("Reactions", skin);
-        emojiWindow.setName("emojiWindow"); // Important for later reference
-        emojiWindow.setSize(520, 300); // Smaller height since we show fewer emotes
+        emojiWindow.setName("emojiWindow");
+        emojiWindow.setSize(520, 300);
         emojiWindow.setPosition(
             (staticStage.getWidth() - emojiWindow.getWidth()) / 2,
             (staticStage.getHeight() - emojiWindow.getHeight()) / 2 + 300
@@ -4478,14 +4474,12 @@ public class GameView implements Screen, InputProcessor {
         Table emojiTable = new Table();
         emojiTable.defaults().pad(10).size(80, 80);
 
-        // Add the 7 selected emotes
         for (int i = 0; i < EmoteManager.selectedEmotes.size; i++) {
             String emoteName = EmoteManager.selectedEmotes.get(i);
             emojiTable.add(createEmoteButton(getTextureForEmote(emoteName), emoteName));
             if ((i + 1) % 4 == 0 && i != 6) emojiTable.row(); // 4 per row
         }
 
-        // Add edit button in remaining space (8th slot)
         TextButton editBtn = new TextButton("Edit", skin);
         editBtn.addListener(new ClickListener() {
             @Override
@@ -4532,6 +4526,10 @@ public class GameView implements Screen, InputProcessor {
                 return AppClient.getAssets().getNotSure();
             case "Edit":
                 return AppClient.getAssets().getEdit();
+            case "Hi":
+                return AppClient.getAssets().getHi();
+            case "Bye":
+                return AppClient.getAssets().getBye();
             default:
                 return AppClient.getAssets().getLike();
         }
@@ -4550,7 +4548,6 @@ public class GameView implements Screen, InputProcessor {
         ScrollPane scrollPane = new ScrollPane(mainTable, skin);
         scrollPane.setFadeScrollBars(false);
 
-        // Create checkboxes for all emotes
         for (String emote : EmoteManager.ALL_EMOTES) {
             CheckBox checkBox = new CheckBox(emote, skin);
             checkBox.setChecked(EmoteManager.selectedEmotes.contains(emote, false));
@@ -4575,14 +4572,13 @@ public class GameView implements Screen, InputProcessor {
             mainTable.row();
         }
 
-        // Add save button
         TextButton saveBtn = new TextButton("Save", skin);
         saveBtn.addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y) {
                 EmoteManager.savePreferences();
                 selectionWindow.remove();
-                initPopupReactionWindow(); // Reopen main window with new selection
+                initPopupReactionWindow();
             }
         });
 
@@ -4594,17 +4590,14 @@ public class GameView implements Screen, InputProcessor {
     }
 
     private ImageButton createEmoteButton(Texture texture, final String emoteName) {
-        // Create drawable from texture
         TextureRegionDrawable drawable = new TextureRegionDrawable(new TextureRegion(texture));
 
-        // Create button style
         ImageButton.ImageButtonStyle style = new ImageButton.ImageButtonStyle();
         style.up = drawable;
         style.down = drawable;
         style.over = drawable;
-        // Create button
+
         ImageButton button = new ImageButton(style);
-        // Add click listener
         button.addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y) {
@@ -4620,7 +4613,7 @@ public class GameView implements Screen, InputProcessor {
         public static final String[] ALL_EMOTES = {
             "Like", "Dislike", "Heart", "Music", "UwU",
             "Question", "Angry", "Speechless", "Surprised",
-            "Sleepy", "Not Sure"
+            "Sleepy", "Not Sure" , "Hi" , "Bye"
         };
 
         public static Array<String> selectedEmotes = new Array<>(new String[]{
@@ -4668,14 +4661,11 @@ public class GameView implements Screen, InputProcessor {
         if (showEmote && emoteAnimation != null) {
             emoteStateTime += deltaTime;
             Texture currentFrame = emoteAnimation.getKeyFrame(emoteStateTime, false);
-            // Calculate position for center
-
             float x = AppClient.getCurrentPlayer().getCoordinate().getX()*40 - currentFrame.getWidth()/ 2;
             float y = AppClient.getCurrentPlayer().getCoordinate().getY()*40 - currentFrame.getHeight()/2 + 90;
 
             Main.getBatch().draw(currentFrame, x, y, 64, 64);
 
-            // Optionally hide animation when finished
             if (emoteAnimation.isAnimationFinished(emoteStateTime)) {
                 showEmote = false;
                 closePopupReactionWindow();
@@ -5081,6 +5071,8 @@ public class GameView implements Screen, InputProcessor {
         renderFlower(delta);
 
         renderClock();
+
+        checkInBox();
     }
 
 
@@ -5575,6 +5567,28 @@ public class GameView implements Screen, InputProcessor {
     public void toggleMapVisibility() {
         mapVisible = !mapVisible;
         mapContainer.setVisible(mapVisible);
+    }
+
+    private int tradeInboxSize = 0;
+    private Boolean tradeInboxIsOpen = false;
+    public void checkInBox() {
+        java.util.List<Trade> tradeData = AppClient.getCurrentGame().getAllTrades();
+        boolean foundAny = false;
+        System.out.println(tradeData.size());
+        for (Trade trade : tradeData) {
+            if (trade.getReceiver().equals(AppClient.getCurrentPlayer()) && !trade.isResponded()) {
+                foundAny = true;
+            }
+        }
+        if (foundAny) {
+            tradeInboxButton.setColor(Color.RED);
+        } else {
+            tradeInboxButton.setColor(Color.WHITE);
+        }
+        if(tradeData.size() != tradeInboxSize && tradeInboxIsOpen) {
+            tradeInboxSize = tradeData.size();
+            reInitTradeInboxWindow();
+        }
     }
 }
 

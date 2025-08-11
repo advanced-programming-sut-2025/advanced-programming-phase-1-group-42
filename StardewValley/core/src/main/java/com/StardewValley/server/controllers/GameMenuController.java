@@ -188,7 +188,7 @@ public class GameMenuController extends Controller {
                     Pair<Labi, ArrayList<Pair<User, Integer>>> selectedLabi = null;
                     for (Pair<Labi, ArrayList<Pair<User, Integer>>> waitingLabi : AppServer.getWaitingLabies()) {
                         if (waitingLabi.first().getID() == LabiID) {
-                            if (waitingLabi.second().size() < 1) {
+                            if (waitingLabi.second().size() < 2) {
                                 return new Message(new HashMap<>() {{
                                     put("success", false);
                                     put("message", "");
