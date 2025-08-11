@@ -30,6 +30,8 @@ public class AppServer {
 
     private final static ArrayList<Pair<Labi, ArrayList<Pair<User, Integer>>>> waitingLabies = new ArrayList<>();
 
+    private final static ArrayList<Pair<Game, ArrayList<User>>> loadWaitingGames = new ArrayList<>();
+
     private final static ArrayList<ClientHandler> clientHandlers = new ArrayList<>();
 
     private final static Object lock = new Object();
@@ -103,4 +105,9 @@ public class AppServer {
     public static HashMap<Game, ArrayList<Boolean>> getWaitTerminateGames() {
         return waitTerminateGames;
     }
+
+    public static ArrayList<Pair<Game, ArrayList<User>>> getLoadWaitingGames() {
+        return loadWaitingGames;
+    }
+
 }

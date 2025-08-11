@@ -73,8 +73,8 @@ public class GameMenuView implements Screen {
 
     private Window waitingWindow;
     private Label waitingLabel;
-    private TextButton waitingBackButton;
-    private boolean waitingBoolean = true;
+    private boolean waitingBoolean = false;
+    private int loadedGameID = 0;
 
     private Window passwordWindow;
     private Label passwordLabel;
@@ -505,14 +505,6 @@ public class GameMenuView implements Screen {
         }
 
         waitingWindow.add(waitingLabel).fillX().expandX().row();
-        waitingBackButton = new TextButton("Back", skin);
-        waitingBackButton.addListener(new ClickListener() {
-            @Override
-            public void clicked(InputEvent event, float x, float y) {
-                waitingBoolean = false;
-            }
-        });
-        waitingWindow.add(waitingBackButton).fillX().expandX().row();
 
         stage.addActor(waitingWindow);
         waitingWindow.top();
@@ -674,6 +666,7 @@ public class GameMenuView implements Screen {
                     return;
                 }
 
+                waitingBoolean = false;
                 initWaitWindow();
             }
         });
@@ -695,6 +688,7 @@ public class GameMenuView implements Screen {
                     return;
                 }
 
+                waitingBoolean = false;
                 initWaitWindow();
             }
         });
@@ -732,35 +726,16 @@ public class GameMenuView implements Screen {
         } else if (getLoadGameButton().isChecked()) {
             getLoadGameButton().setChecked(false);
 
-            boolean flag = true;
+            Message message = new Message(new HashMap<>() {{
+                put("function", "loadGame");
+                put("arguments", "");
+            }}, Message.Type.command);
+            Message responseMessage = AppClient.getServerHandler().sendAndWaitForResponse(message);
+            if (methodUseMessage(responseMessage, errorLabel)) return;
+            loadedGameID = responseMessage.getIntFromBody("message");
+
             waitingBoolean = true;
-            while (flag && waitingBoolean) {
-                Message message = new Message(new HashMap<>() {{
-                    put("function", "loadGame");
-                    put("arguments", new ArrayList<>(Arrays.asList(
-                        AppClient.getCurrentUser().getUsername()
-                    )));
-                }}, Message.Type.command);
-                Message responseMessage = AppClient.getServerHandler().sendAndWaitForResponse(message);
-                if (!checkMessageValidity(responseMessage, Message.Type.response)) {
-                    errorLabel.setText("Network error!");
-                    flag = false;
-                }
-                if(responseMessage.getBooleanFromBody("success")) {
-                    break;
-                }
-
-                initWaitWindow();
-            }
-
-            closeWaitWindow();
-            if (!flag || !waitingBoolean) {
-
-                return;
-            }
-
-            Main.getMain().getScreen().dispose();
-//            Main.getMain().setScreen(new GameView(new GameController(), AppClient.getAssets().getSkin()));
+            initWaitWindow();
         } else if (getNewGameButton().isChecked()) {
             getNewGameButton().setChecked(false);
 
@@ -832,7 +807,7 @@ public class GameMenuView implements Screen {
     }
 
     private void loadWaitingWindow() {
-        if (waitingWindow != null) {
+        if (waitingWindow != null && !waitingBoolean) {
             Message message = new Message(new HashMap<>() {{
                 put("function", "updateWait");
                 put("arguments", AppClient.getCurrentLabi().getID());
@@ -874,6 +849,48 @@ public class GameMenuView implements Screen {
             else {
                 initWaitWindow();
             }
+        }
+        else if (waitingWindow != null) {
+            Message message = new Message(new HashMap<>() {{
+                put("function", "loadWaiting");
+                put("arguments", loadedGameID);
+            }}, Message.Type.command);
+            Message responseMessage = AppClient.getServerHandler().sendAndWaitForResponse(message);
+            if (responseMessage.getFromBody("success")) {
+                int gameID = responseMessage.getIntFromBody("message");
+                Message message2 = new Message(new HashMap<>() {{
+                    put("function", "getNewGame");
+                    put("arguments", new ArrayList<>(Arrays.asList(
+                        String.valueOf(gameID),
+                        AppClient.getCurrentUser().getUsername()
+                    )));
+                }}, Message.Type.command);
+                Message responseMessage2 = AppClient.getServerHandler().sendAndWaitForResponse(message2);
+                Object msgObj = responseMessage2.getFromBody("message");
+                Game userGame;
+                if (msgObj instanceof String) {
+                    userGame = JSONUtils.fromJsonGame((String) msgObj);
+                } else {
+                    String json = JSONUtils.getGson().toJson(msgObj);
+                    userGame = JSONUtils.fromJsonGame(json);
+                }
+
+                AppClient.setCurrentGame(userGame);
+                for (Player player : userGame.getPlayers()) {
+                    if (player.getUsername().equals(AppClient.getCurrentUser().getUsername())) {
+                        AppClient.setCurrentPlayer(player);
+                        break;
+                    }
+                }
+
+                closeWaitWindow();
+                Main.getMain().getScreen().dispose();
+                Main.getMain().setScreen(new GameView(AppClient.getAssets().getSkin()));
+            }
+            else {
+                initWaitWindow();
+            }
+
         }
     }
 

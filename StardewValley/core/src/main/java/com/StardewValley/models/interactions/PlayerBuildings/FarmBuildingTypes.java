@@ -5,7 +5,7 @@ import com.badlogic.gdx.graphics.Texture;
 
 public enum FarmBuildingTypes {
 
-    HOME("Home", -1, new Pair<>(20, 20), -1, -1, -1, "GameAssets/Flooring/Flooring_14.png"
+    HOME("Home", -1, new Pair<>(20, 20), -1, -1, -1, "GameAssets/Player_Building/House.png"
     , "GameAssets/Flooring/Flooring_16.png"),
     BARN("Barn", 4, new Pair<>(7, 4), 6000, 350, 150, "GameAssets/FarmBuildings/Barn.png",
         "GameAssets/FarmBuildings/interior/Barn_Interior.png"),

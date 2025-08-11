@@ -2,12 +2,10 @@ package com.StardewValley.client.views;
 
 import com.StardewValley.client.Main;
 import com.StardewValley.client.AppClient;
-import com.StardewValley.models.Assets;
 import com.StardewValley.models.JSONUtils;
 import com.StardewValley.models.Message;
 import com.StardewValley.models.Pair;
 import com.StardewValley.models.enums.Season;
-import com.StardewValley.models.enums.TileAssets;
 import com.StardewValley.models.enums.TileType;
 import com.StardewValley.models.game_structure.*;
 import com.StardewValley.models.game_structure.Game;
@@ -233,8 +231,8 @@ public class GameView implements Screen, InputProcessor {
         this.table.add(journalButton).padLeft(-400).height(70).padTop(5).width(250).row();
         this.table.add(tradeButton).padLeft(-525).height(70).padTop(6).width(125);
         this.table.add(tradeInboxButton).padLeft(-1650).height(70).width(125).row();
-        this.table.add(inventoryTable).padTop(995).padBottom(-200).padLeft(-50);
-        this.table.add(viewController.getProgressBar()).padTop(300).padLeft(800);
+        this.table.add(inventoryTable).padTop(895).padBottom(-200).padLeft(-50);
+        this.table.add(viewController.getProgressBar()).padTop(200).padLeft(800);
         this.table.row();
 
 
@@ -636,7 +634,7 @@ public class GameView implements Screen, InputProcessor {
                     put("function", "plantSeed");
                     put("arguments", new ArrayList<>(Arrays.asList(
                         AppClient.getCurrentPlayer().getInHandGood().getLast().getName(),
-                        Coordinate.getDirection(playerTile.getCordinate(), tile.getCordinate()).toString())));
+                        tile.getCordinate().toString())));
                 }}, Message.Type.command);
                 Message responseMessage = AppClient.getServerHandler().sendAndWaitForResponse(message);
                 methodUseMessage(responseMessage);
@@ -653,7 +651,7 @@ public class GameView implements Screen, InputProcessor {
                     put("function", "fertilize");
                     put("arguments", new ArrayList<>(Arrays.asList(
                         AppClient.getCurrentPlayer().getInHandGood().getLast().getName(),
-                        Coordinate.getDirection(playerTile.getCordinate(), tile.getCordinate()).toString())));
+                        tile.getCordinate().toString().toString())));
                 }}, Message.Type.command);
                 Message responseMessage = AppClient.getServerHandler().sendAndWaitForResponse(message);
                 methodUseMessage(responseMessage);
@@ -666,7 +664,7 @@ public class GameView implements Screen, InputProcessor {
                     put("function", "placeItem");
                     put("arguments", new ArrayList<>(Arrays.asList(
                         AppClient.getCurrentPlayer().getInHandGood().getLast().getName(),
-                        Coordinate.getDirection(playerTile.getCordinate(), tile.getCordinate()).toString())));
+                        tile.getCordinate().toString().toString())));
                 }}, Message.Type.command);
                 Message responseMessage = AppClient.getServerHandler().sendAndWaitForResponse(message);
                 methodUseMessage(responseMessage);
@@ -1798,8 +1796,15 @@ public class GameView implements Screen, InputProcessor {
                             AppClient.getCurrentGame());
                         Tile upTile = Map.findTile(new Coordinate(coordinate.getX(), coordinate.getY() - 1),
                             AppClient.getCurrentGame());
+
                         if (backTile.getTileType() != TileType.PLAYER_BUILDING && upTile.getTileType() != TileType.PLAYER_BUILDING) {
-                            Main.getBatch().draw(TileTextures.HOUSE.getImage(), x * scaledSize, y * scaledSize, 10 * scaledSize, 10 * scaledSize);
+                            for (FarmBuilding farmBuilding : AppClient.getCurrentPlayer().getFarm().getFarmBuildings()) {
+                                if (farmBuilding.isInsideBuilding(tile.getCordinate())) {
+                                    Main.getBatch().draw(farmBuilding.getType().getTexture(), x * scaledSize,
+                                        y * scaledSize, 10 * scaledSize, 10 * scaledSize);
+                                }
+                            }
+                            //TileTextures.HOUSE.getImage()
                         }
                     }
                     case TileType.GREEN_HOUSE -> {
@@ -4130,6 +4135,8 @@ public class GameView implements Screen, InputProcessor {
                methodUseMessage(responseMessage);
 
                messageLabel.setText(responseMessage.getFromBody("message"));
+               Main.getMain().getScreen().dispose();
+               Main.getMain().setScreen(new MainMenuView(skin));
            }
         });
 
@@ -4342,7 +4349,7 @@ public class GameView implements Screen, InputProcessor {
                 AppClient.setCurrentPlayer(null);
 
                 Main.getMain().getScreen().dispose();
-                Main.getMain().setScreen(new GameMenuView(skin));
+                Main.getMain().setScreen(new MainMenuView(skin));
                 break;
             }
         }
@@ -5490,21 +5497,24 @@ public class GameView implements Screen, InputProcessor {
         }}, Message.Type.command);
         Message responseMessage2 = AppClient.getServerHandler().sendAndWaitForResponse(message2);
 
-        if (responseMessage2.getFromBody("message").equals("exitGame")) {
-            Message message = new Message(new HashMap<>() {{
-                put("function", "exitGame");
-                put("arguments", "");
-            }}, Message.Type.command);
-            Message responseMessage = AppClient.getServerHandler().sendAndWaitForResponse(message);
-            methodUseMessage(responseMessage);
+        if (responseMessage2.getFromBody("message") instanceof String &&
+            responseMessage2.getStringFromBody("message").equals("exitGame")) {
+//            Message message = new Message(new HashMap<>() {{
+//                put("function", "exitGame");
+//                put("arguments", "");
+//            }}, Message.Type.command);
+//            Message responseMessage = AppClient.getServerHandler().sendAndWaitForResponse(message);
+//            methodUseMessage(responseMessage);
 
             AppClient.setCurrentGame(null);
             AppClient.setCurrentPlayer(null);
             Main.getMain().getScreen().dispose();
-            Main.getMain().setScreen(new GameMenuView(skin));
+            Main.getMain().setScreen(new MainMenuView(skin));
+            System.out.println(1);
             return;
         }
-        if (responseMessage2.getFromBody("message").equals("forceTerminate")) {
+        if (responseMessage2.getFromBody("message") instanceof String &&
+            responseMessage2.getStringFromBody("message").equals("forceTerminate")) {
             initTerminateWindow();
             return;
         }

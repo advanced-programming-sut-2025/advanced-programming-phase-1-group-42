@@ -233,6 +233,85 @@ public class GameMenuController extends Controller {
                         put("message", finalGameID);
                     }}, Message.Type.response);
                 }
+                case "loadGame" -> {
+                    for (Pair<Game, ArrayList<User>> loadWaitingGame : AppServer.getLoadWaitingGames()) {
+                        for (Player player : loadWaitingGame.first().getPlayers()) {
+                            if (player.getUsername().equals(clientHandler.getClientUser().getUsername())) {
+                                loadWaitingGame.second().add(clientHandler.getClientUser());
+                                return new Message(new HashMap<>() {{
+                                    put("success", true);
+                                    put("message", loadWaitingGame.first().getGameID());
+                                }}, Message.Type.response);
+                            }
+                        }
+                    }
+
+                    Game userGame = null;
+                    for (Game game : AppServer.getOfflineGames()) {
+                        for (Player player : game.getPlayers()) {
+                            if (player.getUsername().equals(clientHandler.getClientUser().getUsername())) {
+                                game.setGameAdmin(player);
+                                userGame = game;
+                                break;
+                            }
+                        }
+                    }
+                    if (userGame == null) {
+                        return new Message(new HashMap<>() {{
+                            put("success", false);
+                            put("message", "you don't have a game to load!");
+                        }}, Message.Type.response);
+                    }
+                    AppServer.getOfflineGames().remove(userGame);
+                    AppServer.getLoadWaitingGames().add(new Pair<>(userGame, new ArrayList<>(Arrays.asList(
+                        clientHandler.getClientUser()
+                    ))));
+
+                    Game finalUserGame = userGame;
+                    return new Message(new HashMap<>() {{
+                        put("success", true);
+                        put("message", finalUserGame.getGameID());
+                    }}, Message.Type.response);
+                }
+                case "loadWaiting" -> {
+                    int gameID = message.getIntFromBody("arguments");
+                    Pair<Game, ArrayList<User>> userGame = null;
+                    for (Pair<Game, ArrayList<User>> loadWaitingGame : AppServer.getLoadWaitingGames()) {
+                        if (loadWaitingGame.first().getGameID() == gameID) {
+                            if (loadWaitingGame.second().size() < loadWaitingGame.first().getPlayers().size()) {
+                                return new Message(new HashMap<>() {{
+                                    put("success", false);
+                                    put("message", null);
+                                }}, Message.Type.response);
+                            }
+                            else {
+                                userGame = loadWaitingGame;
+                                break;
+                            }
+                        }
+                    }
+
+                    int loadedGameID = 0;
+                    if (userGame != null) {
+                        AppServer.getLoadWaitingGames().remove(userGame);
+                        AppServer.getGames().add(userGame.first());
+                        loadedGameID = userGame.first().getGameID();
+                    }
+                    else {
+                        for (Game game : AppServer.getGames()) {
+                            if (game.getGameID() == gameID) {
+                                loadedGameID = game.getGameID();
+                                break;
+                            }
+                        }
+                    }
+
+                    int finalLoadedGameID = loadedGameID;
+                    return new Message(new HashMap<>() {{
+                        put("success", true);
+                        put("message", finalLoadedGameID);
+                    }}, Message.Type.response);
+                }
                 case "getNewGame" -> {
                     ArrayList<String> arguments = message.getFromBody("arguments");
                     Game userGame = null;
@@ -433,7 +512,7 @@ public class GameMenuController extends Controller {
         game = wholeGameBuilder.getGame();
 
         WholeMapBuilder wholeMapBuilder = new WholeMapBuilder();
-        director.createNewMap(wholeMapBuilder, farms, tiles);
+        director.createNewMap(wholeMapBuilder, farms, tiles, players);
         game.setMap(wholeMapBuilder.getMap());
 
 
