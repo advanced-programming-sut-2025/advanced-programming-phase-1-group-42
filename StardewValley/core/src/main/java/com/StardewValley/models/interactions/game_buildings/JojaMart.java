@@ -12,6 +12,7 @@ import com.StardewValley.models.goods.foragings.ForagingSeedType;
 import com.StardewValley.models.goods.products.ProductType;
 import com.StardewValley.models.interactions.NPCs.NPC;
 import com.StardewValley.models.interactions.NPCs.NPCTypes;
+import com.StardewValley.models.interactions.Player;
 import com.StardewValley.server.ClientHandler;
 import com.badlogic.gdx.graphics.Texture;
 
@@ -26,10 +27,10 @@ public class JojaMart extends GameBuilding {
         return getTiles(tiles, new Coordinate(50, 60));
     }
 
-    public JojaMart(ArrayList<Tile> tiles) {
+    public JojaMart(ArrayList<Tile> tiles, ArrayList<Player> players) {
         super(tiles,
                 "JojaMart",
-                new NPC(NPCTypes.MORRIS),
+                new NPC(NPCTypes.MORRIS, players),
                 new Pair<>(9, 23),
                 new Coordinate(50, 60),
                 new Coordinate(60, 70),

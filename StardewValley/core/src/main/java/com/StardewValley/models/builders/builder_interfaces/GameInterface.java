@@ -13,6 +13,6 @@ public interface GameInterface {
     public void setWeather();
     public void setDateTime();
     public void setTomorrow();
-    public void setNPCs();
+    public void setNPCs(ArrayList<Player> players);
     public void setGameID(int gameID);
 }

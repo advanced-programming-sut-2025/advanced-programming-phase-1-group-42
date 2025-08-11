@@ -1142,6 +1142,7 @@ public class GameViewController {
                     player.getCoordinate().getY() * 40);
                 playerSprite.first().draw(Main.getBatch());
 
+
                 if (player.getPlayerDirection() != -1) {
                     if (player.getGender().getName().equals("Male")) {
                         animation(player, player.getPlayerDirection(), playerSprite.first());

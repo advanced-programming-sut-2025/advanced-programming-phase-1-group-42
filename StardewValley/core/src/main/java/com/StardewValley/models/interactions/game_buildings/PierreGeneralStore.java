@@ -15,6 +15,7 @@ import com.StardewValley.models.goods.products.ProductType;
 import com.StardewValley.models.goods.recipes.CraftingRecipeType;
 import com.StardewValley.models.interactions.NPCs.NPC;
 import com.StardewValley.models.interactions.NPCs.NPCTypes;
+import com.StardewValley.models.interactions.Player;
 import com.StardewValley.server.ClientHandler;
 import com.badlogic.gdx.graphics.Texture;
 
@@ -29,10 +30,10 @@ public class PierreGeneralStore extends GameBuilding {
         return getTiles(tiles, new Coordinate(80, 60));
     }
 
-    public PierreGeneralStore(ArrayList<Tile> tiles) {
+    public PierreGeneralStore(ArrayList<Tile> tiles, ArrayList<Player> players) {
         super(tiles,
                 "PierreGeneralStore",
-                new NPC(NPCTypes.PIERRE),
+                new NPC(NPCTypes.PIERRE, players),
                 new Pair<>(9, 17),
                 new Coordinate(80, 60),
                 new Coordinate(90, 70),

@@ -23,7 +23,7 @@ public class NPCRewardsFunctions {
     public static void sebastianRewards(int index, NPCFriendship npcFriendship, ClientHandler clientHandler) {
         Player player = clientHandler.getClientPlayer();
         //some types are not completed
-        ArrayList<Pair<GoodType, Integer>> requests = npcFriendship.getNpc().getType().getRequests();
+        ArrayList<Pair<GoodType, Integer>> requests = npcFriendship.getNpcTypes().getRequests();
         if (npcFriendship.getAvailableQuests().contains(1) &&
                 player.getInventory().howManyInInventoryByType
                         (requests.get(0).first()) >= requests.get(0).second()) {
@@ -67,7 +67,7 @@ public class NPCRewardsFunctions {
 
     public static void abigailRewards(int index, NPCFriendship npcFriendship, ClientHandler clientHandler) {
         Player player = clientHandler.getClientPlayer();
-        ArrayList<Pair<GoodType, Integer>> requests = npcFriendship.getNpc().getType().getRequests();
+        ArrayList<Pair<GoodType, Integer>> requests = npcFriendship.getNpcTypes().getRequests();
 
         if (npcFriendship.getAvailableQuests().contains(1) &&
                 player.getInventory().howManyInInventoryByType
@@ -103,7 +103,7 @@ public class NPCRewardsFunctions {
     }
 
     public static void harveyRewards(int index, NPCFriendship npcFriendship, ClientHandler clientHandler) {
-        ArrayList<Pair<GoodType, Integer>> requests = npcFriendship.getNpc().getType().getRequests();
+        ArrayList<Pair<GoodType, Integer>> requests = npcFriendship.getNpcTypes().getRequests();
         Player player = clientHandler.getClientPlayer();
 
         if (npcFriendship.getAvailableQuests().contains(1) &&
@@ -155,7 +155,7 @@ public class NPCRewardsFunctions {
     }
 
     public static void leahRewards(int index, NPCFriendship npcFriendship, ClientHandler clientHandler) {
-        ArrayList<Pair<GoodType, Integer>> requests = npcFriendship.getNpc().getType().getRequests();
+        ArrayList<Pair<GoodType, Integer>> requests = npcFriendship.getNpcTypes().getRequests();
         Player player = clientHandler.getClientPlayer();
 
         if (npcFriendship.getAvailableQuests().contains(1) &&
@@ -196,7 +196,7 @@ public class NPCRewardsFunctions {
     }
 
     public static void robinRewards(int index, NPCFriendship npcFriendship, ClientHandler clientHandler) {
-        ArrayList<Pair<GoodType, Integer>> requests = npcFriendship.getNpc().getType().getRequests();
+        ArrayList<Pair<GoodType, Integer>> requests = npcFriendship.getNpcTypes().getRequests();
         Player player = clientHandler.getClientPlayer();
 
         if (npcFriendship.getAvailableQuests().contains(1) &&

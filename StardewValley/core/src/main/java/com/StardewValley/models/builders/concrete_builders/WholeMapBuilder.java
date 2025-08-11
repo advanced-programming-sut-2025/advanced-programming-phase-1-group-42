@@ -33,15 +33,15 @@ public class WholeMapBuilder implements MapInterface {
     }
 
     @Override
-    public void setGameBuildings(ArrayList<Tile> tiles) {
+    public void setGameBuildings(ArrayList<Tile> tiles, ArrayList<Player> players) {
         ArrayList<GameBuilding> gameBuildings = new ArrayList<>();
-        gameBuildings.add(new Blacksmith(Blacksmith.getExpectedTiles(tiles)));
-        gameBuildings.add(new JojaMart(JojaMart.getExpectedTiles(tiles)));
-        gameBuildings.add(new PierreGeneralStore(PierreGeneralStore.getExpectedTiles(tiles)));
-        gameBuildings.add(new CarpenterShop(CarpenterShop.getExpectedTiles(tiles)));
-        gameBuildings.add(new FishShop(FishShop.getExpectedTiles(tiles)));
-        gameBuildings.add(new MarnieRanch(MarnieRanch.getExpectedTiles(tiles)));
-        gameBuildings.add(new TheStarDropSaloon(TheStarDropSaloon.getExpectedTiles(tiles)));
+        gameBuildings.add(new Blacksmith(Blacksmith.getExpectedTiles(tiles), players));
+        gameBuildings.add(new JojaMart(JojaMart.getExpectedTiles(tiles), players));
+        gameBuildings.add(new PierreGeneralStore(PierreGeneralStore.getExpectedTiles(tiles), players));
+        gameBuildings.add(new CarpenterShop(CarpenterShop.getExpectedTiles(tiles), players));
+        gameBuildings.add(new FishShop(FishShop.getExpectedTiles(tiles), players));
+        gameBuildings.add(new MarnieRanch(MarnieRanch.getExpectedTiles(tiles), players));
+        gameBuildings.add(new TheStarDropSaloon(TheStarDropSaloon.getExpectedTiles(tiles), players));
 
         this.map.setGameBuildings(gameBuildings);
     }

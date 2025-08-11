@@ -1,6 +1,7 @@
 package com.StardewValley.models.interactions.NPCs;
 
 import com.StardewValley.client.AppClient;
+import com.StardewValley.models.Message;
 import com.StardewValley.models.enums.Season;
 import com.StardewValley.models.game_structure.Coordinate;
 import com.StardewValley.models.game_structure.Game;
@@ -9,6 +10,7 @@ import com.StardewValley.models.interactions.Player;
 import com.StardewValley.server.ClientHandler;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.Random;
 
 
@@ -18,8 +20,12 @@ public class NPC {
     Coordinate coordinate;
     private boolean isFirstMeet = true;
 
-    public NPC(NPCTypes type) {
+    public NPC(NPCTypes type, ArrayList<Player> players) {
         this.type = type;
+
+        for (Player player : players) {
+            friendships.add(new NPCFriendship(player.getUsername(), this.getType()));
+        }
     }
 
     public NPCTypes getType() {
@@ -30,10 +36,10 @@ public class NPC {
         return friendships;
     }
 
-    public boolean isBirthdayToday() {
+    public boolean isBirthdayToday(ClientHandler clientHandler) {
 
-        return AppClient.getCurrentGame().getDateTime().getSeasonOfYear().equals(type.getBirthday().first())
-                && AppClient.getCurrentGame().getDateTime().getDayOfSeason()==type.getBirthday().second();
+        return clientHandler.getClientGame().getDateTime().getSeasonOfYear().equals(type.getBirthday().first())
+                && clientHandler.getClientGame().getDateTime().getDayOfSeason()==type.getBirthday().second();
     }
 
     public Coordinate getCoordinate() {
@@ -43,15 +49,16 @@ public class NPC {
 
     public String npcDialogs(ClientHandler clientHandler) {
         for (NPCFriendship friendship : friendships) {
-            if (friendship.getPlayer().equals(clientHandler.getClientPlayer())) {
+            if (friendship.getPlayerUsername().equals(clientHandler.getClientPlayer().getUsername())) {
                 if (friendship.getFirstMeetToday()){
-                    getFriendship(clientHandler.getClientPlayer()).setFriendshipPoints(20);
+                    getFriendship(clientHandler.getClientPlayer()).setFriendshipPoints(20,
+                        clientHandler.getClientGame());
                     friendship.setFirstMeetToday();
                 }
             }
         }
 
-        if (isBirthdayToday()) {
+        if (isBirthdayToday(clientHandler)) {
             return type.getDialogs().getFirst();
         }
 
@@ -104,17 +111,18 @@ public class NPC {
 
     public NPCFriendship getFriendship(Player player) {
         for (NPCFriendship friendship : friendships) {
-            if (friendship.getPlayer().equals(player)) {
+            if (friendship.getPlayerUsername().equals(player.getPlayerUsername())) {
                 return friendship;
             }
         }
+
         //TODO Nader
-        friendships.add(new NPCFriendship(player,this));
-        for (NPCFriendship friendship : friendships) {
-            if (friendship.getPlayer().equals(player)) {
-                return friendship;
-            }
-        }
+//        friendships.add(new NPCFriendship(player,this));
+//        for (NPCFriendship friendship : friendships) {
+//            if (friendship.getPlayer().equals(player)) {
+//                return friendship;
+//            }
+//        }
         return null;
     }
 
@@ -132,13 +140,14 @@ public class NPC {
         }
     }
 
-    public void getGift(Good good, Player player) {
+    public void getGift(Good good, ClientHandler clientHandler) {
+        Player player = clientHandler.getClientPlayer();
         getFriendship(player).getGifts().add(good);
         if (!getFriendship(player).getGotGiftToday()){
             if (type.getFavorites().contains(good.getType())){
-                getFriendship(player).setFriendshipPoints(200);
+                getFriendship(player).setFriendshipPoints(200, clientHandler.getClientGame() );
             } else {
-                getFriendship(player).setFriendshipPoints(50);
+                getFriendship(player).setFriendshipPoints(50, clientHandler.getClientGame() );
             }
             getFriendship(player).setGotGiftToday();
         }

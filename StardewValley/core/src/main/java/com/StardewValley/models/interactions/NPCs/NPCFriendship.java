@@ -8,8 +8,8 @@ import com.StardewValley.models.interactions.Player;
 import java.util.ArrayList;
 
 public class NPCFriendship {
-    private Player player;
-    private NPC npc;
+    private String playerUsername;
+    private NPCTypes npcTypes;
     private int friendshipPoints;
     private int friendshipLevel;
     private ArrayList<Good> gifts;
@@ -18,25 +18,25 @@ public class NPCFriendship {
     private boolean firstMeetToday = true;
     private boolean gotGiftToday = false;
 
-    public NPCFriendship(Player player , NPC npc) {
+    public NPCFriendship(String playerUsername , NPCTypes npcTypes) {
         friendshipPoints = 0;
         friendshipLevel = 0;
         gifts = new ArrayList<>();
         availableQuests.add(1);
-        this.player = player;
-        this.npc = npc;
-        firstMeetSeason = AppClient.getCurrentGame().getDateTime().getSeasonOfYearInt();
+        this.playerUsername = playerUsername;
+        this.npcTypes = npcTypes;
+        firstMeetSeason = 1;
     }
 
-    public Player getPlayer() {
-        return player;
+    public String getPlayerUsername() {
+        return playerUsername;
     }
 
     public int getFriendshipPoints() {
         return friendshipPoints;
     }
 
-    public void setFriendshipPoints(int friendshipPoints) {
+    public void setFriendshipPoints(int friendshipPoints, Game game) {
         this.friendshipPoints += friendshipPoints;
         if (friendshipPoints >= 799) {
             this.friendshipPoints = 799;
@@ -45,7 +45,7 @@ public class NPCFriendship {
         if (friendshipLevel == 1){
             getAvailableQuests().add(2);
         }
-        if (AppClient.getCurrentGame().getDateTime().getSeasonOfYearInt() == firstMeetSeason + 1){
+        if (game.getDateTime().getSeasonOfYearInt() == firstMeetSeason + 1){
             getAvailableQuests().add(3);
         }
     }
@@ -97,8 +97,8 @@ public class NPCFriendship {
         return firstMeetToday;
     }
 
-    public NPC getNpc() {
-        return npc;
+    public NPCTypes getNpcTypes() {
+        return npcTypes;
     }
 
     public void setFriendshipToday(){

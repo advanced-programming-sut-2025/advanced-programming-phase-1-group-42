@@ -4620,6 +4620,7 @@ public class GameView implements Screen, InputProcessor {
         button.addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y) {
+                //TODO Parsa
                 showEmote(emoteName);
                 button.getStage().getRoot().findActor("emojiWindow").remove(); // Close window
             }

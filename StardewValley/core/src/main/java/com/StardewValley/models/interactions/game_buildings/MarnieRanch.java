@@ -13,6 +13,7 @@ import com.StardewValley.models.interactions.Animals.Animal;
 import com.StardewValley.models.interactions.Animals.AnimalTypes;
 import com.StardewValley.models.interactions.NPCs.NPC;
 import com.StardewValley.models.interactions.NPCs.NPCTypes;
+import com.StardewValley.models.interactions.Player;
 import com.StardewValley.server.ClientHandler;
 import com.badlogic.gdx.graphics.Texture;
 
@@ -45,10 +46,10 @@ public class MarnieRanch extends GameBuilding {
     }
 
 
-    public MarnieRanch(ArrayList<Tile> tiles) {
+    public MarnieRanch(ArrayList<Tile> tiles, ArrayList<Player> players) {
         super(tiles,
                 "MarineRanch",
-                new NPC(NPCTypes.MARNIE),
+                new NPC(NPCTypes.MARNIE, players),
                 new Pair<>(9, 16),
                 new Coordinate(50, 90),
                 new Coordinate(60, 100),

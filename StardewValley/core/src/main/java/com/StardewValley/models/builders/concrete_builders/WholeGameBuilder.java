@@ -74,10 +74,10 @@ public class WholeGameBuilder implements GameInterface {
     }
 
     @Override
-    public void setNPCs() {
+    public void setNPCs(ArrayList<Player> players) {
         ArrayList<NPC> npcs = new ArrayList<>();
         for (NPCTypes value : NPCTypes.values()) {
-            npcs.add(new NPC(value));
+            npcs.add(new NPC(value, players));
         }
         this.game.setNPCs(npcs);
     }

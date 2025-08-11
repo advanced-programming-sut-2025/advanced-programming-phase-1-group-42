@@ -2160,7 +2160,7 @@ public class GameController extends Controller {
         }
         for (NPC npc : clientHandler.getClientGame().getNPCs()) {
             if (npc.getType().getName().equals(npcName)) {
-                npc.getGift(good, clientHandler.getClientPlayer());
+                npc.getGift(good, clientHandler);
                 return new Result(true, "You sent a " + itemName + " to " + npcName);
 
             }

@@ -17,14 +17,14 @@ public class Director {
         wholeGameBuilder.setWeather();
         wholeGameBuilder.setDateTime();
         wholeGameBuilder.setTomorrow();
-        wholeGameBuilder.setNPCs();
+        wholeGameBuilder.setNPCs(players);
     }
 
-    public void createNewMap(WholeMapBuilder wholeMapBuilder, ArrayList<Farm> farms, ArrayList<Tile> tiles) {
+    public void createNewMap(WholeMapBuilder wholeMapBuilder, ArrayList<Farm> farms, ArrayList<Tile> tiles, ArrayList<Player> players) {
         wholeMapBuilder.reset();
         wholeMapBuilder.setTiles(tiles);
         wholeMapBuilder.setFarms(farms);
-        wholeMapBuilder.setGameBuildings(tiles);
+        wholeMapBuilder.setGameBuildings(tiles, players);
         wholeMapBuilder.setShippingBins();
     }
 }

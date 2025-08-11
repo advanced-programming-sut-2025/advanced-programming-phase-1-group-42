@@ -10,6 +10,7 @@ import com.StardewValley.models.goods.foods.FoodType;
 import com.StardewValley.models.goods.recipes.CookingRecipeType;
 import com.StardewValley.models.interactions.NPCs.NPC;
 import com.StardewValley.models.interactions.NPCs.NPCTypes;
+import com.StardewValley.models.interactions.Player;
 import com.StardewValley.server.ClientHandler;
 import com.badlogic.gdx.graphics.Texture;
 
@@ -23,10 +24,10 @@ public class TheStarDropSaloon extends GameBuilding {
         return getTiles(tiles, new Coordinate(80, 90));
     }
 
-    public TheStarDropSaloon(ArrayList<Tile> tiles) {
+    public TheStarDropSaloon(ArrayList<Tile> tiles, ArrayList<Player> players) {
         super(tiles,
                 "TheStarDropSaloon",
-                new NPC(NPCTypes.GUS),
+                new NPC(NPCTypes.GUS, players),
                 new Pair<>(12, 24),
                 new Coordinate(80, 90),
                 new Coordinate(90, 100),

@@ -41,10 +41,10 @@ public class Blacksmith extends GameBuilding {
         return getTiles(tiles, new Coordinate(10, 60));
     }
 
-    public Blacksmith(ArrayList<Tile> tiles) {
+    public Blacksmith(ArrayList<Tile> tiles, ArrayList<Player> players) {
         super(tiles,
                 "Blacksmith",
-                new NPC(NPCTypes.CLINT),
+                new NPC(NPCTypes.CLINT, players),
                 new Pair<>(9, 16),
                 new Coordinate(10, 60),
                 new Coordinate(20, 70),

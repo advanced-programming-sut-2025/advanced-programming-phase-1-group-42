@@ -11,6 +11,7 @@ import com.StardewValley.models.goods.GoodType;
 import com.StardewValley.models.goods.products.ProductType;
 import com.StardewValley.models.interactions.NPCs.NPC;
 import com.StardewValley.models.interactions.NPCs.NPCTypes;
+import com.StardewValley.models.interactions.Player;
 import com.StardewValley.models.interactions.PlayerBuildings.FarmBuilding;
 import com.StardewValley.models.interactions.PlayerBuildings.FarmBuildingTypes;
 import com.StardewValley.server.ClientHandler;
@@ -30,10 +31,10 @@ public class CarpenterShop extends GameBuilding {
         return getTiles(tiles, new Coordinate(10, 90));
     }
 
-    public CarpenterShop(ArrayList<Tile> tiles) {
+    public CarpenterShop(ArrayList<Tile> tiles, ArrayList<Player> players) {
         super(tiles,
                 "CarpenterShop",
-                new NPC(NPCTypes.ROBIN),
+                new NPC(NPCTypes.ROBIN, players),
                 new Pair<>(9, 20),
                 new Coordinate(10, 90),
                 new Coordinate(20, 100),

@@ -433,7 +433,7 @@ public class GameMenuController extends Controller {
         game = wholeGameBuilder.getGame();
 
         WholeMapBuilder wholeMapBuilder = new WholeMapBuilder();
-        director.createNewMap(wholeMapBuilder, farms, tiles);
+        director.createNewMap(wholeMapBuilder, farms, tiles, players);
         game.setMap(wholeMapBuilder.getMap());
 
 

@@ -12,6 +12,7 @@ import com.StardewValley.models.goods.recipes.CraftingRecipeType;
 import com.StardewValley.models.goods.tools.ToolType;
 import com.StardewValley.models.interactions.NPCs.NPC;
 import com.StardewValley.models.interactions.NPCs.NPCTypes;
+import com.StardewValley.models.interactions.Player;
 import com.StardewValley.server.ClientHandler;
 import com.badlogic.gdx.graphics.Texture;
 
@@ -26,10 +27,10 @@ public class FishShop extends GameBuilding {
         return getTiles(tiles, new Coordinate(120, 60));
     }
 
-    public FishShop(ArrayList<Tile> tiles) {
+    public FishShop(ArrayList<Tile> tiles, ArrayList<Player> players) {
         super(tiles,
                 "FishShop",
-                new NPC(NPCTypes.WILLY),
+                new NPC(NPCTypes.WILLY, players),
                 new Pair<>(9, 17),
                 new Coordinate(120, 60),
                 new Coordinate(130, 70),
