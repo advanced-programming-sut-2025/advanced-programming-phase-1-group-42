@@ -735,6 +735,7 @@ public class GameMenuView implements Screen {
             loadedGameID = responseMessage.getIntFromBody("message");
 
             waitingBoolean = true;
+            menuWindow.setVisible(false);
             initWaitWindow();
         } else if (getNewGameButton().isChecked()) {
             getNewGameButton().setChecked(false);

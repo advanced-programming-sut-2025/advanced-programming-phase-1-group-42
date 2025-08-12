@@ -74,8 +74,8 @@ public class GameView implements Screen, InputProcessor {
     private final OrthographicCamera camera;
     private Viewport viewport;
     private int scaledSize;
-    private Table inventoryTable;
 
+    private Table inventoryTable;
     private InputMultiplexer multiplexer;
     private Stage staticStage;
     private Window toolsWindow;
@@ -167,6 +167,7 @@ public class GameView implements Screen, InputProcessor {
     private float playerTime = 0;
     private ArrayList<Pair<Sprite, Pair<TextButton, TextButton>>> npcSprites;
     private HashMap<String, Texture> gameBuildingTextures;
+    private boolean checkTermination = false;
 
     public GameView(Skin skin) {
 //        this.controller.initGameControllers();
@@ -479,7 +480,14 @@ public class GameView implements Screen, InputProcessor {
 //            updateGameObject();
 //        }
 
-
+        if (!checkExit())
+            return;
+        if (!checkTermination())
+            return;
+        if (checkTermination) {
+            if (updateTerminate())
+                return;
+        }
 
         Main.getBatch().begin();
 
@@ -4149,7 +4157,7 @@ public class GameView implements Screen, InputProcessor {
                 if (!AppClient.getCurrentPlayer().getPlayerUsername().equals(
                         AppClient.getCurrentGame().getGameAdmin().getUsername()
                 )) {
-                    messageLabel.setText("Admin player can just start the force terminate the game!");
+                    messageLabel.setText("Admin player can just start\n the force terminate the game!");
                     return;
                 }
 
@@ -4162,7 +4170,6 @@ public class GameView implements Screen, InputProcessor {
 
                 messageLabel.setText(responseMessage.getFromBody("message"));
 
-                closeMainTable();
                 initTerminateWindow();
             }
         });
@@ -4309,7 +4316,7 @@ public class GameView implements Screen, InputProcessor {
 
                 terminateWindow.remove();
                 terminateWindow = null;
-                updateTerminate();
+                checkTermination = true;
             }
         });
 
@@ -4325,34 +4332,33 @@ public class GameView implements Screen, InputProcessor {
 
                 terminateWindow.remove();
                 terminateWindow = null;
-                updateTerminate();
+                checkTermination = true;
             }
         });
 
         staticStage.addActor(terminateWindow);
     }
 
-    public void updateTerminate() {
-        while(true) {
-            Message message = new Message(new HashMap<>() {{
-                put("function", "getUpdatedTermination");
-                put("arguments", "");
-            }}, Message.Type.command);
-            Message responseMessage = AppClient.getServerHandler().sendAndWaitForResponse(message);
-            methodUseMessage(responseMessage);
+    public boolean updateTerminate() {
+        Message message = new Message(new HashMap<>() {{
+            put("function", "getUpdatedTermination");
+            put("arguments", "");
+        }}, Message.Type.command);
+        Message responseMessage = AppClient.getServerHandler().sendAndWaitForResponse(message);
+        methodUseMessage(responseMessage);
 
-            if (responseMessage.getFromBody("message").equals("Game will be alive!")) {
-                break;
-            }
-            if (responseMessage.getFromBody("message").equals("Game is terminated!")) {
-                AppClient.setCurrentGame(null);
-                AppClient.setCurrentPlayer(null);
-
-                Main.getMain().getScreen().dispose();
-                Main.getMain().setScreen(new MainMenuView(skin));
-                break;
-            }
+        if (responseMessage.getFromBody("message").equals("Game will be alive!")) {
+            checkTermination = false;
         }
+        if (responseMessage.getFromBody("message").equals("Game is terminated!")) {
+            AppClient.setCurrentGame(null);
+            AppClient.setCurrentPlayer(null);
+            checkTermination = false;
+            Main.getMain().getScreen().dispose();
+            Main.getMain().setScreen(new MainMenuView(skin));
+            return true;
+        }
+        return false;
     }
 
     public void initJournalWindow() {
@@ -5497,28 +5503,6 @@ public class GameView implements Screen, InputProcessor {
         }}, Message.Type.command);
         Message responseMessage2 = AppClient.getServerHandler().sendAndWaitForResponse(message2);
 
-        if (responseMessage2.getFromBody("message") instanceof String &&
-            responseMessage2.getStringFromBody("message").equals("exitGame")) {
-//            Message message = new Message(new HashMap<>() {{
-//                put("function", "exitGame");
-//                put("arguments", "");
-//            }}, Message.Type.command);
-//            Message responseMessage = AppClient.getServerHandler().sendAndWaitForResponse(message);
-//            methodUseMessage(responseMessage);
-
-            AppClient.setCurrentGame(null);
-            AppClient.setCurrentPlayer(null);
-            Main.getMain().getScreen().dispose();
-            Main.getMain().setScreen(new MainMenuView(skin));
-            System.out.println(1);
-            return;
-        }
-        if (responseMessage2.getFromBody("message") instanceof String &&
-            responseMessage2.getStringFromBody("message").equals("forceTerminate")) {
-            initTerminateWindow();
-            return;
-        }
-
         Object msgObj = responseMessage2.getFromBody("message");
         Game userGame;
         if (msgObj instanceof String) {
@@ -5778,6 +5762,41 @@ public class GameView implements Screen, InputProcessor {
             tradeInboxSize = tradeData.size();
             reInitTradeInboxWindow();
         }
+    }
+
+    public boolean checkExit() {
+        Message message = new Message(new HashMap<>() {{
+            put("function", "isExitGame");
+            put("arguments", "");
+        }}, Message.Type.command);
+        Message responseMessage = AppClient.getServerHandler().sendAndWaitForResponse(message);
+        methodUseMessage(responseMessage);
+
+        if (responseMessage.getBooleanFromBody("success")) {
+            AppClient.setCurrentGame(null);
+            AppClient.setCurrentPlayer(null);
+
+            Main.getMain().getScreen().dispose();
+            Main.getMain().setScreen(new MainMenuView(skin));
+            System.out.println(1);
+            return false;
+        }
+        return true;
+    }
+
+    public boolean checkTermination() {
+        Message message = new Message(new HashMap<>() {{
+            put("function", "isTerminateGame");
+            put("arguments", "");
+        }}, Message.Type.command);
+        Message responseMessage = AppClient.getServerHandler().sendAndWaitForResponse(message);
+        methodUseMessage(responseMessage);
+
+        if (responseMessage.getBooleanFromBody("success")) {
+            initTerminateWindow();
+            return true;
+        }
+        return true;
     }
 }
 

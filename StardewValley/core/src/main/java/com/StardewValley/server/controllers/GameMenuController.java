@@ -262,7 +262,9 @@ public class GameMenuController extends Controller {
                             put("message", "you don't have a game to load!");
                         }}, Message.Type.response);
                     }
+
                     AppServer.getOfflineGames().remove(userGame);
+                    userGame.setExit(false);
                     AppServer.getLoadWaitingGames().add(new Pair<>(userGame, new ArrayList<>(Arrays.asList(
                         clientHandler.getClientUser()
                     ))));
@@ -498,13 +500,13 @@ public class GameMenuController extends Controller {
             farms.add(new Farm(username.second(), farms.size(), tiles));
             players.getLast().setFarm(farms.getLast());
         }
-
-        for (int i = 0; i < 4 - players.size(); i++) {
-            players.add(new Player(new User("Guest", "Guest", "Guest",
-                "Guest", Gender.FEMALE, 1, "yes")));
-            farms.add(new Farm(0, farms.size(), tiles));
-            players.getLast().setFarm(farms.getLast());
-        }
+//
+//        for (int i = 0; i < 4 - players.size(); i++) {
+//            players.add(new Player(new User("Guest", "Guest", "Guest",
+//                "Guest", Gender.FEMALE, 1, "yes")));
+//            farms.add(new Farm(0, farms.size(), tiles));
+//            players.getLast().setFarm(farms.getLast());
+//        }
 
         Player adminPlayer = players.getFirst();
         WholeGameBuilder wholeGameBuilder = new WholeGameBuilder();

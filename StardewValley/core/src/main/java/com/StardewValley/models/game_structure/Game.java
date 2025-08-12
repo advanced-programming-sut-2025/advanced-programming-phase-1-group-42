@@ -43,6 +43,8 @@ public class Game {
     private ArrayList<Pair<Player, String>> publicChat = new ArrayList<>();
     private ArrayList<Quest> quests = new ArrayList<>();
     private final List<Trade> allTrades = new ArrayList<>();
+    private boolean isExit = false;
+    private boolean isTerminate = false;
 
     public static void writeIntoFile(String string) {
         try (FileWriter myWriter = new FileWriter("commands.txt", true)) {
@@ -53,6 +55,21 @@ public class Game {
         }
     }
 
+    public boolean isExit() {
+        return isExit;
+    }
+
+    public boolean isTerminate() {
+        return isTerminate;
+    }
+
+    public void setExit(boolean exit) {
+        isExit = exit;
+    }
+
+    public void setTerminate(boolean terminate) {
+        isTerminate = terminate;
+    }
 
     public void setPlayers(ArrayList<Player> players) {
         this.players.addAll(players);

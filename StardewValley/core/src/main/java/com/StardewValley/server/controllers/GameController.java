@@ -97,7 +97,9 @@ public class GameController extends Controller {
                 }
 
                 clientHandler.getClientGame().getDateTime().timeFlow(clientHandler);
-                clientHandler.getClientGame().getPlayers().forEach(player -> {player.setShowEmote("");});
+                clientHandler.getClientGame().getPlayers().forEach(player -> {
+                    player.setShowEmote("");
+                });
             }
         });
         timeFlowThread.start();
@@ -371,10 +373,9 @@ public class GameController extends Controller {
                 }
                 case "exitGame" -> {
                     String argument = message.getFromBody("arguments");
-                    if (argument != null && argument.equals("Admin")) {
-                        AppServer.getGames().remove(clientHandler.getClientGame());
-                        AppServer.getOfflineGames().add(clientHandler.getClientGame());
-                    }
+                    clientHandler.getClientGame().setExit(true);
+                    AppServer.getGames().remove(clientHandler.getClientGame());
+                    AppServer.getOfflineGames().add(clientHandler.getClientGame());
                     clientHandler.setClientPlayer(null);
                     clientHandler.setClientGame(null);
 
@@ -410,10 +411,7 @@ public class GameController extends Controller {
                         if (flag) {
                             AppServer.getWaitTerminateGames().remove(clientHandler.getClientGame());
 
-                            clientHandler.setCurrentController(new MainMenuController(clientHandler));
-                            clientHandler.setClientGame(null);
-                            clientHandler.setClientPlayer(null);
-                            isControllerEnded = true;
+                            clientHandler.getClientGame().setTerminate(true);
                             return sendResultMessage(new Result(true, "Your game has been terminated!"));
                         }
                         else {
@@ -426,37 +424,30 @@ public class GameController extends Controller {
 
                 }
                 case "getUpdatedTermination" -> {
-                        if (AppServer.getWaitTerminateGames().containsKey(clientHandler.getClientGame())) {
-                            return sendResultMessage(new Result(true, "Still waiting for others!"));
+                    if (AppServer.getWaitTerminateGames().containsKey(clientHandler.getClientGame())) {
+                        return sendResultMessage(new Result(true, "Still waiting for others!"));
+                    }
+                    else {
+                        if (!clientHandler.getClientGame().isTerminate()) {
+                            return sendResultMessage(new Result(true, "Game will be alive!"));
                         }
                         else {
-                            if (AppServer.getGames().contains(clientHandler.getClientGame())) {
-                                return sendResultMessage(new Result(true, "Game will be alive!"));
-                            }
-                            else {
-                                clientHandler.setCurrentController(new MainMenuController(clientHandler));
-                                clientHandler.setClientGame(null);
-                                clientHandler.setClientPlayer(null);
-                                isControllerEnded = true;
-                                return sendResultMessage(new Result(true, "Game is terminated!"));
-                            }
-                        }
-
-                }
-                case "getUpdatedGame" -> {
-                    boolean flag = false;
-                    for (Game game : AppServer.getGames()) {
-                        if (game.getGameID() == clientHandler.getClientGame().getGameID()) {
-                            flag = true;
-                            break;
-                        }
-                    }
-
-                    if (!flag) {
-                        Game game = clientHandler.getClientGame();
-                        if (AppServer.getOfflineGames().contains(game)) {
+                            clientHandler.setCurrentController(new MainMenuController(clientHandler));
                             clientHandler.setClientGame(null);
                             clientHandler.setClientPlayer(null);
+                            isControllerEnded = true;
+                            return sendResultMessage(new Result(true, "Game is terminated!"));
+                        }
+                    }
+                }
+                case "isExitGame" -> {
+                    if (clientHandler.getClientGame().isExit()) {
+                        Game game = clientHandler.getClientGame();
+                        if (AppServer.getOfflineGames().contains(game)) {
+                            clientHandler.setClientPlayer(null);
+                            clientHandler.setClientGame(null);
+
+                            isControllerEnded = true;
                             clientHandler.setCurrentController(new MainMenuController(clientHandler));
 
                             return new Message(new HashMap<>() {{
@@ -464,19 +455,29 @@ public class GameController extends Controller {
                                 put("message", "exitGame");
                             }}, Message.Type.response);
                         }
-                        if (AppServer.getWaitTerminateGames().get(game) != null) {
-                            return new Message(new HashMap<>() {{
-                                put("success", true);
-                                put("message", "forceTerminate");
-                            }}, Message.Type.response);
-//
-//                                ArrayList<Boolean> terminateArray = AppServer.getWaitTerminateGames().get(game);
-//                                if (terminateArray.size() < game.getPlayers().size()) {
-//
-//                                }
-                        }
                     }
 
+                    return new Message(new HashMap<>() {{
+                        put("success", false);
+                        put("message", "exitGame");
+                    }}, Message.Type.response);
+                }
+                case "isTerminateGame" -> {
+                    Game game = clientHandler.getClientGame();
+                    if (AppServer.getWaitTerminateGames().get(game) != null) {
+
+                        return new Message(new HashMap<>() {{
+                            put("success", true);
+                            put("message", "terminateGame");
+                        }}, Message.Type.response);
+                    }
+
+                    return new Message(new HashMap<>() {{
+                        put("success", false);
+                        put("message", "terminateGame");
+                    }}, Message.Type.response);
+                }
+                case "getUpdatedGame" -> {
                     return new Message(new HashMap<>() {{
                         put("success", true);
                         put("message", clientHandler.getClientGame());
