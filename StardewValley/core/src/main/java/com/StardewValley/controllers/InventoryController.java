@@ -4,8 +4,14 @@ import com.StardewValley.Main;
 import com.StardewValley.models.App;
 import com.StardewValley.models.Assets;
 import com.StardewValley.models.Pair;
+import com.StardewValley.models.Result;
 import com.StardewValley.models.game_structure.Coordinate;
+import com.StardewValley.models.game_structure.Game;
 import com.StardewValley.models.goods.Good;
+import com.StardewValley.models.goods.artisans.Artisan;
+import com.StardewValley.models.goods.farmings.FarmingCrop;
+import com.StardewValley.models.goods.foods.Food;
+import com.StardewValley.models.interactions.Animals.AnimalProduct;
 import com.StardewValley.models.interactions.game_buildings.Quadruple;
 import com.StardewValley.views.GameView;
 import com.badlogic.gdx.Gdx;
@@ -59,10 +65,14 @@ public class InventoryController {
                             quadruple.a.setChecked(true);
                             if (gameView.getFridgeOpen()) {
                                 if(!App.getCurrentGame().getCurrentPlayer().getInventory().getList().get(i).getFirst().getName().isEmpty()) {
-                                    App.getCurrentGame().getCurrentPlayer().getFridge().addItemToFridge(App.getCurrentGame().getCurrentPlayer().getInventory().getList().get(i).getFirst());
-                                    App.getCurrentGame().getCurrentPlayer().getInventory().removeItemsFromInventory
-                                        (App.getCurrentGame().getCurrentPlayer().getInventory().getList().get(i).getFirst().getType(), 1);
-                                    gameView.initFridgeWindow();
+                                    Good good = Good.newGood(App.getCurrentGame().getCurrentPlayer().getInventory().getList().get(i).getFirst().getType());
+                                    if ((good instanceof Food || good instanceof Artisan || good instanceof AnimalProduct
+                                        || good instanceof FarmingCrop)) {
+                                        App.getCurrentGame().getCurrentPlayer().getFridge().addItemToFridge(App.getCurrentGame().getCurrentPlayer().getInventory().getList().get(i).getFirst());
+                                        App.getCurrentGame().getCurrentPlayer().getInventory().removeItemsFromInventory
+                                            (App.getCurrentGame().getCurrentPlayer().getInventory().getList().get(i).getFirst().getType(), 1);
+                                        gameView.initFridgeWindow();
+                                    }
                                 }
                             } else {
                                 App.getCurrentGame().getCurrentPlayer().setInHandGood(
