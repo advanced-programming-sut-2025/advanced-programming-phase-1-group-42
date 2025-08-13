@@ -214,8 +214,8 @@ public class GameMenuController extends Controller {
                 App.getCurrentGame().getCurrentPlayer().getWallet().increaseBalance(1000);
                 cheatAddItem("Wood" , String.valueOf(500));
                 cheatAddItem("Stone" , String.valueOf(500));
-                cheatAddItem("Farmers_Lunch" , String.valueOf(10));
-                cheatAddItem("Jazz_Seeds" , String.valueOf(10));
+                cheatAddItem("Sunflower" , String.valueOf(10));
+                cheatAddItem("Wedding_Ring" , String.valueOf(10));
 
             }
 
